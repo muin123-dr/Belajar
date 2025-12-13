@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Balap Mobil - Level 2 (Tantangan Waktu)</title>
+    <title>Quiz Balap Mtk</title>
     <style>
         * {
             margin: 0;
@@ -238,7 +238,7 @@
             max-width: 80%;
         }
         
-        .start-btn, .retry-btn, .next-btn {
+        .start-btn, .retry-btn, .claim-btn {
             padding: 20px 50px;
             font-size: 32px;
             font-weight: bold;
@@ -253,7 +253,7 @@
         .start-btn { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .retry-btn { background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); }
         
-        .next-btn {
+        .claim-btn {
             background: linear-gradient(135deg, #42e695 0%, #3bb2b8 100%);
             font-size: 40px;
             animation: pulseBtn 1.5s infinite;
@@ -265,7 +265,7 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(66, 230, 149, 0); }
         }
         
-        .start-btn:hover, .retry-btn:hover, .next-btn:hover {
+        .start-btn:hover, .retry-btn:hover, .claim-btn:hover {
             transform: scale(1.1);
         }
         
@@ -360,7 +360,7 @@
     <div class="modal" id="startModal">
         <div class="modal-content">
             <h1>Quiz Balap Matematika</h1>
-            <p>Hati-hati! Jika salah, kucingmu melambat.<br>Anjing makin cepat setiap 10 detik!</p>
+            <p>Hati-hati! Jika salah, sepedamu melambat.<br>Sepeda musuh makin cepat setiap 10 detik!</p>
             <button class="start-btn" onclick="startGame()">MULAI!</button>
         </div>
     </div>
@@ -541,17 +541,22 @@
             oldBtns.forEach(btn => btn.remove());
 
             if (win) {
-                resultText.textContent = 'KAMU MENANG!';
+                resultText.textContent = 'ANDA DAPAT HADIAH';
                 resultText.className = 'result-text win';
                 document.getElementById('resultModal').classList.add('party-bg');
                 celebrate();
                 
-                // Tombol LANJUT
-                const nextBtn = document.createElement('button');
-                nextBtn.className = 'next-btn';
-                nextBtn.textContent = 'LANJUT >>';
-                nextBtn.onclick = () => window.location.href = 'https://muin123-dr.github.io/Belajar/mtk/hadiah1.html'; 
-                resultContent.appendChild(nextBtn);
+                // Tombol KLAIM
+                const claimBtn = document.createElement('button');
+                claimBtn.className = 'claim-btn';
+                claimBtn.textContent = 'KLAIM';
+                claimBtn.onclick = function() {
+                    const phoneNumber = '+62882003037794';
+                    const message = 'ALHAMDULILLAH SAYA DAPAT HADIAH 5.000 Ustadz!';
+                    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                };
+                resultContent.appendChild(claimBtn);
                 
             } else {
                 resultText.textContent = 'KAMU KALAH';
