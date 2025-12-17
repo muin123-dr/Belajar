@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Pendakian Off-Road Matematika</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- GAYA UMUM --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none; 
+        }
+        
+        body {
+            background-color: #e3f2fd;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background-color: #0288d1;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        /* --- BAGIAN BUKIT --- */
+        .hill-section {
+            background-color: #b3e5fc; 
+            position: relative;
+            height: 250px; 
+            overflow: hidden;
+        }
+        
+        .hill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #4caf50, #2e7d32);
+            z-index: 1;
+            clip-path: polygon(0% 100%, 100% 100%, 100% 30%); 
+        }
+        
+        .flag {
+            position: absolute;
+            top: 40px; 
+            right: 20px;
+            z-index: 10;
+            font-size: 2.5rem;
+            color: #d32f2f;
+            transform: rotate(-10deg);
+        }
+        
+        /* Container utama penggerak */
+        .hiker {
+            position: absolute;
+            bottom: 20px; 
+            left: 20px;  
+            z-index: 5;
+            transition: left 0.1s linear, bottom 0.1s linear; 
+        }
+        
+        /* --- INDIKATOR ENERGI (BENSIN) --- */
+        .hiker-energy-indicator {
+            position: absolute;
+            top: -35px; /* Posisi di atas mobil */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .energy-bar-mini {
+            height: 5px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 2px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .energy-fill-mini {
+            height: 100%;
+            width: 100%;
+            background-color: #4caf50;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .energy-text-mini {
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 1px 1px 2px white;
+        }
+
+        /* --- KARAKTER MOBIL OFF-ROAD --- */
+        
+        .car-wrapper {
+            display: inline-block;
+            transform: rotate(-20deg); /* Miring mengikuti bukit */
+            position: relative;
+        }
+
+        .car-icon {
+            font-size: 3.5rem; /* Ukuran Mobil */
+            color: #d84315; /* Warna Merah Bata / Oranye Gelap */
+            filter: drop-shadow(2px 5px 4px rgba(0,0,0,0.3));
+        }
+
+        /* Animasi Suspensi (Memantul saat jalan) */
+        @keyframes suspensionBounce {
+            0%, 100% { transform: rotate(-20deg) translateY(0); }
+            50% { transform: rotate(-20deg) translateY(-3px); }
+        }
+
+        /* Terapkan animasi saat class 'walk-animation' aktif */
+        .walk-animation .car-wrapper {
+            animation: suspensionBounce 0.3s infinite ease-in-out;
+        }
+        
+        
+        .speed-indicator-simple {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #555;
+            font-weight: bold;
+            z-index: 20;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        /* --- QUIZ --- */
+        .quiz-section {
+            padding: 25px;
+        }
+        
+        .score-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .score-item {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .score-item span {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #0288d1;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .options-container {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .option {
+            background-color: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            background-color: #e1f5fe;
+            border-color: #81d4fa;
+            transform: translateY(-2px);
+        }
+        
+        .option.correct {
+            background-color: #c8e6c9 !important;
+            border-color: #4caf50 !important;
+            color: #2e7d32;
+        }
+        
+        .option.incorrect {
+            background-color: #ffcdd2 !important;
+            border-color: #e53935 !important;
+            color: #c62828;
+        }
+        
+        .option-letter {
+            font-weight: bold;
+            margin-right: 15px;
+            color: #0288d1;
+            width: 25px;
+        }
+        
+        /* --- HASIL --- */
+        .result-screen {
+            text-align: center;
+            padding: 50px 30px;
+            display: none;
+        }
+        
+        .result-icon { font-size: 5rem; margin-bottom: 20px; }
+        .win-icon { color: #ffc107; }
+        .lose-icon { color: #757575; }
+        
+        .result-title { font-size: 2.5rem; margin-bottom: 10px; }
+        .win-title { color: #0288d1; }
+        .lose-title { color: #d32f2f; }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover { transform: scale(1.05); }
+        
+        .btn-next-level {
+            background: linear-gradient(to right, #4caf50, #2e7d32);
+        }
+        
+        .btn-restart {
+            background: linear-gradient(to right, #f44336, #d32f2f);
+        }
+
+        @media (max-width: 600px) {
+            .hill-section { height: 200px; }
+            .hiker { transform: scale(0.8); } 
+            .flag { right: 10px; top: 30px; transform: scale(0.8) rotate(-10deg); }
+            .question-text { font-size: 1.2rem; }
+            .option { padding: 12px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>OFF-ROAD MATH QUIZ</h1>
+        </div>
+        
+        <div class="game-container">
+            <div class="hill-section">
+                <div class="hill"></div>
+                <div class="flag"><i class="fas fa-flag"></i></div>
+                
+                <div class="speed-indicator-simple">
+                    Speed: <span id="speed-value">0.3x</span>
+                </div>
+                
+                <div class="hiker" id="hiker">
+                    <div class="hiker-energy-indicator">
+                        <div class="energy-bar-mini">
+                            <div class="energy-fill-mini" id="energy-fill"></div>
+                        </div>
+                        <div class="energy-text-mini" id="energy-value">100%</div>
+                    </div>
+                    
+                    <div class="car-wrapper">
+                        <i class="fas fa-truck-monster car-icon"></i>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="quiz-section" id="quiz-screen">
+                <div class="score-container">
+                    <div class="score-item">Soal <span id="current-question">1/15</span></div>
+                    <div class="score-item" style="color: #4caf50;">Benar <span id="score">0</span></div>
+                    <div class="score-item" style="color: #e53935;">Salah <span id="wrong">0</span></div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+                    <div class="options-container" id="options-container">
+                        </div>
+                </div>
+                
+                </div>
+        </div>
+        
+        <div class="result-screen" id="result-screen">
+            <div id="win-screen" style="display: none;">
+                <div class="result-icon win-icon"><i class="fas fa-trophy"></i></div>
+                <h1 class="result-title win-title">PUNCAK TERSENTUH!</h1>
+                <p class="result-message">Mobil off-road berhasil menaklukkan bukit!</p>
+                <button class="btn btn-next-level" id="continue-btn">
+                    NEXT LEVEL &nbsp; <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div id="lose-screen" style="display: none;">
+                <div class="result-icon lose-icon"><i class="fas fa-oil-can"></i></div>
+                <h1 class="result-title lose-title">MOGOK!</h1>
+                <p class="result-message">Mesin mati di tengah jalan. Coba lagi!</p>
+                <button class="btn btn-restart" id="retry-btn">
+                    <i class="fas fa-redo"></i> &nbsp; ULANGI
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data pertanyaan
+        const quizQuestions = [
+            { question: "1 x 5 = ?", options: ["3", "2", "9", "5"], correct: 3 },
+            { question: "2 x 5 = ?", options: ["40", "27", "10", "30"], correct: 2 },
+            { question: "5 x 3 = ?", options: ["15", "18", "45", "54"], correct: 0 },
+            { question: "5 x 8 = ?", options: ["25", "90", "40", "33"], correct: 2 },
+            { question: "4 x 5 = ?", options: ["40", "24", "29", "53"], correct: 2 },
+            { question: "5 x 5 = ?", options: ["11", "64", "40", "25"], correct: 3 },
+            { question: "5 x 0 = ?", options: ["81", "10", "0", "2"], correct: 2 },
+            { question: "7 x 5 = ?", options: ["35", "57", "56", "85"], correct: 0 },
+            { question: "5 x 9 = ?", options: ["88", "10", "45", "93"], correct: 2 },
+            { question: "6 x 5 = ?", options: ["27", "76", "30", "45"], correct: 2 },
+            { question: "6 x 4 = ?", options: ["20", "24", "27", "16"], correct: 1 },
+            { question: "3 x 6 = ?", options: ["18", "8", "13", "15"], correct: 0 },
+            { question: "7 x 6 = ?", options: ["28", "57", "42", "96"], correct: 2 },
+            { question: "6 x 9 = ?", options: ["74", "69", "54", "36"], correct: 2 },
+            { question: "6 x 5 = ?", options: ["90", "100", "30", "60"], correct: 2 },
+            { question: "6 x 8 = ?", options: ["55", "46", "48", "64"], correct: 2 },
+            { question: "6 x 0 = ?", options: ["0", "6", "60", "23"], correct: 0 },
+            { question: "6 x 2 = ?", options: ["16", "12", "6", "5"], correct: 1 },
+            { question: "6 x 1 = ?", options: ["6", "10", "0", "12"], correct: 0 },
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let isAnswering = false; 
+        let gameActive = true;
+        
+        // Variabel karakter
+        let energy = 100;
+        let speed = 0.33;
+        
+        // Posisi
+        let hikerX = 0;
+        const startX = 20; 
+        const endX = 700;  
+        
+        let energyInterval;
+        let moveInterval;
+
+        // Elemen
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const winScreen = document.getElementById('win-screen');
+        const loseScreen = document.getElementById('lose-screen');
+        const currentQuestionElement = document.getElementById('current-question');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const scoreElement = document.getElementById('score');
+        const wrongElement = document.getElementById('wrong');
+        const continueButton = document.getElementById('continue-btn');
+        const retryButton = document.getElementById('retry-btn');
+        // ID tetap hiker untuk JS
+        const hikerElement = document.getElementById('hiker');
+        const energyFillElement = document.getElementById('energy-fill');
+        const energyValueElement = document.getElementById('energy-value');
+        const speedValueElement = document.getElementById('speed-value');
+        const hillSection = document.querySelector('.hill-section');
+
+        function startGame() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            isAnswering = false;
+            gameActive = true;
+            
+            energy = 100;
+            speed = 0.33;
+            hikerX = startX;
+            
+            updateHikerPosition();
+            // Memicu animasi suspensi
+            hikerElement.classList.add('walk-animation');
+            updateEnergyDisplay();
+            updateSpeedDisplay();
+            
+            quizScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+            
+            clearInterval(energyInterval);
+            clearInterval(moveInterval);
+            
+            energyInterval = setInterval(reduceEnergy, 7000); 
+            moveInterval = setInterval(gameLoop, 100);
+            
+            updateQuiz();
+        }
+
+        function reduceEnergy() {
+            if (!gameActive) return;
+            energy -= 10;
+            if (energy < 0) energy = 0;
+            updateEnergyDisplay();
+            if (energy <= 0) gameOver();
+        }
+
+        function updateEnergyDisplay() {
+            energyFillElement.style.width = energy + '%';
+            energyValueElement.textContent = energy + '%';
+            
+            if (energy > 50) energyFillElement.style.backgroundColor = "#4caf50";
+            else if (energy > 20) energyFillElement.style.backgroundColor = "#ff9800";
+            else energyFillElement.style.backgroundColor = "#f44336";
+        }
+
+        function updateSpeedDisplay() {
+            speedValueElement.textContent = speed.toFixed(1) + "x";
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+            
+            hikerX += speed * 0.25;
+            
+            const containerWidth = hillSection.offsetWidth;
+            const targetX = containerWidth - 80; 
+
+            if (hikerX > targetX) hikerX = targetX;
+            
+            updateHikerPosition();
+            
+            if (hikerX >= targetX) winGame();
+        }
+
+        function updateHikerPosition() {
+            hikerElement.style.left = hikerX + 'px';
+            
+            const progress = (hikerX - startX) / (endX - startX); 
+            const cleanProgress = Math.min(Math.max(progress, 0), 1);
+            
+            const hikerY = 20 + (cleanProgress * 150); 
+            
+            hikerElement.style.bottom = hikerY + 'px';
+        }
+
+        function updateQuiz() {
+            currentQuestionElement.textContent = `${currentQuestion + 1}/15`;
+            scoreElement.textContent = correctAnswers;
+            wrongElement.textContent = wrongAnswers;
+            
+            const question = quizQuestions[currentQuestion];
+            questionTextElement.textContent = question.question;
+            
+            optionsContainer.innerHTML = '';
+            const optionLetters = ['A', 'B', 'C', 'D'];
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `<span class="option-letter">${optionLetters[index]}.</span> ${option}`;
+                optionElement.addEventListener('click', () => handleAnswer(index, optionElement));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            isAnswering = false;
+        }
+
+        function handleAnswer(selectedIndex, optionElement) {
+            if (isAnswering || !gameActive) return;
+            isAnswering = true;
+            
+            const correctIndex = quizQuestions[currentQuestion].correct;
+            const isCorrect = selectedIndex === correctIndex;
+            
+            if (isCorrect) {
+                optionElement.classList.add('correct');
+                correctAnswers++;
+                speed += 0.28;
+            } else {
+                optionElement.classList.add('incorrect');
+                const allOptions = document.querySelectorAll('.option');
+                allOptions[correctIndex].classList.add('correct');
+                
+                wrongAnswers++;
+                speed -= 0.2;
+                if (speed < 0.3) speed = 0.3;
+            }
+            
+            updateSpeedDisplay();
+            scoreElement.textContent = correctAnswers;
+            wrongElement.textContent = wrongAnswers;
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizQuestions.length) {
+                    updateQuiz();
+                } else {
+                    questionTextElement.textContent = "Semua soal terjawab! Gaspol ke puncak...";
+                    optionsContainer.innerHTML = "";
+                    speed = 2.0; 
+                }
+            }, 1000); 
+        }
+
+        function winGame() {
+            gameActive = false;
+            clearInterval(energyInterval);
+            clearInterval(moveInterval);
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            winScreen.style.display = 'block';
+            loseScreen.style.display = 'none';
+            hikerElement.classList.remove('walk-animation');
+        }
+
+        function gameOver() {
+            gameActive = false;
+            clearInterval(energyInterval);
+            clearInterval(moveInterval);
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            winScreen.style.display = 'none';
+            loseScreen.style.display = 'block';
+            hikerElement.classList.remove('walk-animation');
+        }
+
+        continueButton.addEventListener('click', () => {
+   	 window.location.href = 'https://muin123-dr.github.io/Belajar/mtk/025.html';
+        });
+        retryButton.addEventListener('click', startGame);
+        document.addEventListener('DOMContentLoaded', startGame);
+    </script>
+</body>
+</html>
