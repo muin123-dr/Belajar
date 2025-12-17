@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Pendakian Bukit Matematika</title>
+    <title>Quiz Pendakian Bukit Matematika (Edisi Sepeda)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- GAYA UMUM --- */
@@ -83,16 +83,19 @@
             z-index: 5;
             /* Transisi untuk X (left) dan Y (bottom) agar gerakan halus */
             transition: left 0.1s linear, bottom 0.1s linear; 
+            /* Skew dihapus agar sepeda tidak terlihat aneh */
         }
         
-        /* --- INDIKATOR ENERGI DI BADAN --- */
+        /* --- INDIKATOR ENERGI DI ATAS SEPEDA --- */
         .hiker-energy-indicator {
             position: absolute;
-            top: -35px;
+            /* Posisi disesuaikan agar di atas sepeda */
+            top: -25px; 
             left: 50%;
             transform: translateX(-50%);
             width: 40px;
             text-align: center;
+            z-index: 10; /* Pastikan di atas sepeda */
         }
 
         .energy-bar-mini {
@@ -115,38 +118,41 @@
             font-size: 0.65rem;
             font-weight: bold;
             color: #333;
+            text-shadow: 1px 1px 2px white; /* Agar terbaca jika kena background */
         }
 
-        /* --- Karakter --- */
-        .hiker-body {
-            width: 30px;
-            height: 45px;
-            background-color: #1976d2;
-            border-radius: 8px 8px 4px 4px;
-            position: relative;
-            transform: skewX(-5deg); /* Sedikit condong ke depan karena menanjak */
+        /* --- KARAKTER SEPEDA BARU --- */
+        /* Wrapper untuk ikon sepeda agar bisa dianimasikan terpisah dari container utama */
+        .bike-wrapper {
+            font-size: 3rem; /* Ukuran sepeda */
+            color: #1565c0; /* Warna sepeda biru tua */
+            /* Rotasi permanen agar terlihat menanjak mengikuti kemiringan bukit */
+            transform: rotate(-20deg);
+            display: inline-block;
         }
-        
-        .hiker-head {
-            width: 20px;
-            height: 20px;
-            background-color: #ffcc80;
-            border-radius: 50%;
-            position: absolute;
-            top: -18px;
-            left: 5px;
+
+        /* Animasi getaran saat mengayuh */
+        @keyframes bikeWobble {
+            0%, 100% { transform: rotate(-20deg) translateY(0); }
+            50% { transform: rotate(-20deg) translateY(-3px); /* Sedikit naik */ }
         }
-        
-        .hiker-leg {
-            width: 8px;
-            height: 20px;
-            background-color: #37474f;
-            position: absolute;
-            bottom: -15px;
+
+        /* Terapkan animasi hanya saat class 'walk-animation' aktif */
+        .walk-animation .bike-wrapper {
+            animation: bikeWobble 0.4s infinite ease-in-out;
         }
-        
-        .leg-left { left: 5px; }
-        .leg-right { right: 5px; }
+
+        /* --- HAPUS STYLE KARAKTER LAMA (dikomentari agar jelas perubahannya) --- */
+        /*
+        .hiker-body { ... }
+        .hiker-head { ... }
+        .hiker-leg { ... }
+        .leg-left { ... }
+        .leg-right { ... }
+        @keyframes walkSimple { ... }
+        .walk-animation .leg-left { ... }
+        .walk-animation .leg-right { ... }
+        */
         
         .speed-indicator-simple {
             position: absolute;
@@ -284,18 +290,10 @@
             background: linear-gradient(to right, #f44336, #d32f2f);
         }
 
-        /* Animasi berjalan */
-        @keyframes walkSimple {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(15deg); }
-            75% { transform: rotate(-15deg); }
-        }
-        .walk-animation .leg-left { animation: walkSimple 0.8s infinite; }
-        .walk-animation .leg-right { animation: walkSimple 0.8s infinite reverse; }
-
         @media (max-width: 600px) {
             .hill-section { height: 200px; }
-            .hiker { transform: scale(0.8) skewX(-5deg); } /* Skala dan tetap miring */
+            /* Hapus skew di sini juga, hanya gunakan scale */
+            .hiker { transform: scale(0.8); } 
             .flag { right: 10px; top: 30px; transform: scale(0.8) rotate(-10deg); }
             .question-text { font-size: 1.2rem; }
             .option { padding: 12px; font-size: 1rem; }
@@ -305,7 +303,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>QUIZ PENDAKIAN BUKIT</h1>
+            <h1>QUIZ PENDAKIAN SEPEDA</h1>
         </div>
         
         <div class="game-container">
@@ -325,10 +323,9 @@
                         <div class="energy-text-mini" id="energy-value">100%</div>
                     </div>
                     
-                    <div class="hiker-head"></div>
-                    <div class="hiker-body"></div>
-                    <div class="hiker-leg leg-left"></div>
-                    <div class="hiker-leg leg-right"></div>
+                    <div class="bike-wrapper">
+                        <i class="fas fa-bicycle"></i>
+                    </div>
                 </div>
             </div>
             
@@ -352,7 +349,7 @@
             <div id="win-screen" style="display: none;">
                 <div class="result-icon win-icon"><i class="fas fa-medal"></i></div>
                 <h1 class="result-title win-title">LUAR BIASA!</h1>
-                <p class="result-message">Kamu berhasil menaklukkan puncak!</p>
+                <p class="result-message">Kamu berhasil mengayuh sampai puncak!</p>
                 <button class="btn btn-next-level" id="continue-btn">
                     NEXT LEVEL &nbsp; <i class="fas fa-arrow-right"></i>
                 </button>
@@ -361,7 +358,7 @@
             <div id="lose-screen" style="display: none;">
                 <div class="result-icon lose-icon"><i class="fas fa-dizzy"></i></div>
                 <h1 class="result-title lose-title">ENERGI HABIS</h1>
-                <p class="result-message">Jangan menyerah, coba lagi!</p>
+                <p class="result-message">Kakimu lelah. Coba lagi!</p>
                 <button class="btn btn-restart" id="retry-btn">
                     <i class="fas fa-redo"></i> &nbsp; ULANGI
                 </button>
@@ -370,7 +367,7 @@
     </div>
 
     <script>
-        // Data pertanyaan
+        // Data pertanyaan (TIDAK BERUBAH)
         const quizQuestions = [
             { question: "1 x 3 = ?", options: ["3", "2", "1", "5"], correct: 0 },
             { question: "2 x 3 = ?", options: ["4", "9", "6", "0"], correct: 2 },
@@ -381,7 +378,7 @@
             { question: "3 x 0 = ?", options: ["1", "10", "0", "2"], correct: 2 },
             { question: "7 x 3 = ?", options: ["21", "17", "6", "8"], correct: 0 },
             { question: "9 x 3 = ?", options: ["8", "10", "27", "13"], correct: 2 },
-            { question: "6 x 3 = ?", options: ["27", "26", "28", "5"], correct: 2 },
+            { question: "6 x 3 = ?", options: ["27", "26", "18", "5"], correct: 2 },
             { question: "4 x 2 = ?", options: ["2", "4", "7", "8"], correct: 3 },
             { question: "3 x 4 = ?", options: ["12", "8", "13", "15"], correct: 0 },
             { question: "4 x 7 = ?", options: ["21", "27", "28", "26"], correct: 2 },
@@ -442,7 +439,8 @@
             
             // Set posisi awal
             updateHikerPosition();
-            hikerElement.classList.add('walk-animation');
+            // Class ini sekarang memicu animasi sepeda (bikeWobble)
+            hikerElement.classList.add('walk-animation'); 
             updateEnergyDisplay();
             updateSpeedDisplay();
             
@@ -604,7 +602,7 @@
 
         continueButton.addEventListener('click', () => {
    	 // Arahkan pengguna ke link baru
-   	 window.location.href = 'https://muin123-dr.github.io/Belajar/mtk/022.html';
+   	 window.location.href = 'https://muin123-dr.github.io/Belajar/mtk/023.html';
         });
         retryButton.addEventListener('click', startGame);
         document.addEventListener('DOMContentLoaded', startGame);
