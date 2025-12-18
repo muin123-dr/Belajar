@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Bom vs Monster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', 'Chilanka', cursive, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            border: 8px solid #ff4757;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #ff6b6b, #ff4757);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            text-shadow: 3px 3px 0 #ff0000;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .header::before, .header::after {
+            content: "💣";
+            position: absolute;
+            top: 15px;
+            font-size: 2rem;
+        }
+        
+        .header::before {
+            left: 20px;
+        }
+        
+        .header::after {
+            right: 20px;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .animation-section {
+            background: linear-gradient(to bottom, #2d3436 0%, #636e72 100%);
+            padding: 20px;
+            border-bottom: 5px solid #ff4757;
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+        
+        .monster-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 25%; /* 1/4 tinggi kolom */
+            z-index: 2;
+        }
+        
+        .monster {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, #00b894 0%, #55efc4 50%, #81ecec 100%);
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: 
+                0 0 30px 15px rgba(0, 184, 148, 0.7),
+                0 0 60px 30px rgba(85, 239, 196, 0.5);
+            animation: monsterGlow 1s infinite alternate;
+            transform-origin: bottom;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .monster-face {
+            position: absolute;
+            top: 30%;
+            width: 80px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .monster-eyes {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        
+        .monster-eye {
+            width: 20px;
+            height: 30px;
+            background-color: #ff4757;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .monster-eye::after {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .monster-mouth {
+            width: 40px;
+            height: 20px;
+            background-color: #ff4757;
+            border-radius: 0 0 20px 20px;
+            margin-top: 5px;
+        }
+        
+        .monster-base {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 30px;
+            background: linear-gradient(to top, #2d3436 0%, #636e72 100%);
+            border-radius: 50% 50% 0 0;
+            z-index: 1;
+        }
+        
+        .bomb-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 100%;
+            z-index: 3;
+        }
+        
+        .bomb {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 30% 30%, #2d3436 0%, #1a1a2e 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 10px rgba(255, 71, 87, 0.8),
+                inset 0 0 10px rgba(255, 71, 87, 0.5);
+            animation: bombDrop 9s linear infinite;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .bomb::after {
+            content: "💣";
+            font-size: 20px;
+            position: absolute;
+        }
+        
+        .bomb-fuse {
+            position: absolute;
+            top: -15px;
+            width: 5px;
+            height: 15px;
+            background: linear-gradient(to top, #ff6b6b, #ff4757);
+            border-radius: 2px;
+        }
+        
+        .explosion {
+            position: absolute;
+            bottom: 25%; /* Di atas monster */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.9) 0%, rgba(255, 71, 87, 0.7) 30%, rgba(255, 71, 87, 0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 4;
+        }
+        
+        .stats-top {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 150px;
+            border: 2px solid #ff4757;
+        }
+        
+        .stat-top-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stat-top-label {
+            font-weight: bold;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .stat-top-value {
+            font-weight: bold;
+            font-size: 1rem;
+            min-width: 50px;
+            text-align: right;
+        }
+        
+        .monster-value {
+            color: #00b894;
+        }
+        
+        .bomb-speed-value {
+            color: #ff9ff3;
+        }
+        
+        .quiz-section {
+            padding: 30px;
+            flex: 1;
+            background-color: #f8f9fa;
+        }
+        
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            background-color: #2d3436;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 3px solid #ff4757;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .score-box {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .score-box h3 {
+            color: #ff9ff3;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #feca57;
+        }
+        
+        .question-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-number {
+            background-color: #ff4757;
+            color: white;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .question-text {
+            font-size: 1.5rem;
+            color: #2d3436;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .option {
+            background-color: white;
+            border: 3px solid #ff9ff3;
+            border-radius: 15px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(255, 159, 243, 0.3);
+            background-color: #ffeaa7;
+        }
+        
+        .option.selected {
+            background-color: #ff9ff3;
+            border-color: #ff4757;
+            color: white;
+        }
+        
+        .option.correct {
+            background-color: #55efc4;
+            border-color: #00b894;
+            color: #2d3436;
+        }
+        
+        .option.incorrect {
+            background-color: #ff6b6b;
+            border-color: #ff4757;
+            color: white;
+        }
+        
+        .option-letter {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: #ff4757;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .result-screen {
+            text-align: center;
+            padding: 40px 30px;
+            display: none;
+            background-color: #f8f9fa;
+        }
+        
+        .result-title {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            text-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .win-title {
+            color: #00b894;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .lose-title {
+            color: #ff4757;
+        }
+        
+        .result-message {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #2d3436;
+        }
+        
+        .trophy {
+            font-size: 8rem;
+            color: #feca57;
+            margin: 20px 0;
+            text-shadow: 5px 5px 0 rgba(254, 202, 87, 0.3);
+            animation: bounce 2s infinite;
+        }
+        
+        .monster-icon {
+            font-size: 8rem;
+            color: #00b894;
+            margin: 20px 0;
+            animation: monsterGlow 1s infinite alternate;
+        }
+        
+        .restart-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .btn-restart {
+            background: linear-gradient(to right, #ff6b6b, #ff4757);
+            color: white;
+            padding: 16px 35px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-restart:hover {
+            background: linear-gradient(to right, #ff5252, #ff3838);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        @keyframes monsterGlow {
+            0% { 
+                filter: drop-shadow(0 0 10px rgba(0, 184, 148, 0.7));
+                transform: scale(1);
+            }
+            100% { 
+                filter: drop-shadow(0 0 20px rgba(0, 184, 148, 0.9));
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes bombDrop {
+            0% {
+                top: 10px;
+                opacity: 1;
+                transform: translateX(-50%) rotate(0deg);
+            }
+            90% {
+                opacity: 1;
+                transform: translateX(-50%) rotate(180deg);
+            }
+            95% {
+                opacity: 0.8;
+                transform: translateX(-50%) rotate(200deg) scale(1.1);
+            }
+            100% {
+                top: calc(25% - 40px); /* Sampai di atas monster */
+                opacity: 0;
+                transform: translateX(-50%) rotate(220deg) scale(1);
+            }
+        }
+        
+        @keyframes explosion {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+            }
+            50% {
+                width: 100px;
+                height: 100px;
+                opacity: 0.6;
+            }
+            100% {
+                width: 150px;
+                height: 150px;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .animation-section {
+                height: 250px;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-text {
+                font-size: 1.3rem;
+            }
+            
+            .option {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+            
+            .result-title {
+                font-size: 3rem;
+            }
+            
+            .trophy, .monster-icon {
+                font-size: 6rem;
+            }
+            
+            .stats-top {
+                min-width: 120px;
+                padding: 8px 12px;
+            }
+            
+            .stat-top-label {
+                font-size: 0.8rem;
+            }
+            
+            .stat-top-value {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>QUIZ BOM vs MONSTER</h1>
+            <p>Jawab pertanyaan dengan benar agar bom cepat jatuh ke monster!</p>
+        </div>
+        
+        <div class="game-container">
+            <div class="animation-section">
+                <div class="stats-top">
+                    <div class="stat-top-item">
+                        <div class="stat-top-label">MONSTER:</div>
+                        <div class="stat-top-value monster-value" id="monster-percent">25%</div>
+                    </div>
+                    
+                    <div class="stat-top-item">
+                        <div class="stat-top-label">KEC. BOM:</div>
+                        <div class="stat-top-value bomb-speed-value" id="bomb-speed">1.0x</div>
+                    </div>
+                </div>
+                
+                <div class="monster-container">
+                    <div class="monster-base"></div>
+                    <div class="monster" id="monster">
+                        <div class="monster-face">
+                            <div class="monster-eyes">
+                                <div class="monster-eye"></div>
+                                <div class="monster-eye"></div>
+                            </div>
+                            <div class="monster-mouth"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bomb-container">
+                    <div class="bomb" id="bomb">
+                        <div class="bomb-fuse"></div>
+                    </div>
+                    <div class="explosion" id="explosion"></div>
+                </div>
+            </div>
+            
+            <div class="quiz-section" id="quiz-screen">
+                <div class="score-container">
+                    <div class="score-box">
+                        <h3>SOAL</h3>
+                        <div class="score-value" id="current-question">1/15</div>
+                    </div>
+                    <div class="score-box">
+                        <h3>BENAR</h3>
+                        <div class="score-value" id="score">0</div>
+                    </div>
+                    <div class="score-box">
+                        <h3>SALAH</h3>
+                        <div class="score-value" id="wrong">0</div>
+                    </div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-number">Pertanyaan <span id="question-number">1</span></div>
+                    <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+                    
+                    <div class="options-container" id="options-container">
+                        <!-- Opsi akan diisi oleh JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="result-screen" id="result-screen">
+            <div id="win-screen" style="display: none;">
+                <div class="trophy"><i class="fas fa-trophy"></i></div>
+                <h1 class="result-title win-title">KAMU MENANG!</h1>
+                <p class="result-message">Selamat! Kamu berhasil mengalahkan monster!</p>
+                <div class="restart-container">
+                    <button class="btn-restart" id="continue-btn">
+                        <i class="fas fa-redo-alt"></i> &nbsp; MAIN LAGI
+                    </button>
+                </div>
+            </div>
+            
+            <div id="lose-screen" style="display: none;">
+                <div class="monster-icon"><i class="fas fa-dragon"></i></div>
+                <h1 class="result-title lose-title">KAMU KALAH!</h1>
+                <p class="result-message">Monster terlalu besar! Coba lagi!</p>
+                <div class="restart-container">
+                    <button class="btn-restart" id="retry-btn">
+                        <i class="fas fa-redo-alt"></i> &nbsp; COBA LAGI
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data pertanyaan untuk quiz
+        const quizQuestions = [
+            {
+                question: "Apa warna daun yang sehat?",
+                options: ["Merah", "Hijau", "Biru", "Ungu"],
+                correct: 1
+            },
+            {
+                question: "Berapa jumlah kaki kucing?",
+                options: ["2", "4", "6", "8"],
+                correct: 1
+            },
+            {
+                question: "Hewan apa yang bisa terbang?",
+                options: ["Ikan", "Burung", "Kucing", "Kuda"],
+                correct: 1
+            },
+            {
+                question: "Benda apa yang digunakan untuk menulis?",
+                options: ["Pensil", "Penghapus", "Penggaris", "Buku"],
+                correct: 0
+            },
+            {
+                question: "Buah apa yang berwarna kuning dan berbentuk melengkung?",
+                options: ["Apel", "Jeruk", "Pisang", "Anggur"],
+                correct: 2
+            },
+            {
+                question: "Apa yang kita gunakan untuk melihat bintang di malam hari?",
+                options: ["Mikroskop", "Teleskop", "Kaca Pembesar", "Kamera"],
+                correct: 1
+            },
+            {
+                question: "Hewan apa yang memiliki belalai panjang?",
+                options: ["Jerapah", "Gajah", "Zebra", "Singa"],
+                correct: 1
+            },
+            {
+                question: "Planet apa yang paling dekat dengan matahari?",
+                options: ["Bumi", "Mars", "Venus", "Merkurius"],
+                correct: 3
+            },
+            {
+                question: "Berapa jumlah sisi pada segitiga?",
+                options: ["2", "3", "4", "5"],
+                correct: 1
+            },
+            {
+                question: "Apa warna langit di siang hari yang cerah?",
+                options: ["Hitam", "Merah", "Biru", "Hijau"],
+                correct: 2
+            },
+            {
+                question: "Hewan apa yang dikenal karena memiliki punuk?",
+                options: ["Unta", "Kuda", "Sapi", "Kerbau"],
+                correct: 0
+            },
+            {
+                question: "Alat musik apa yang dimainkan dengan ditiup?",
+                options: ["Gitar", "Piano", "Seruling", "Drum"],
+                correct: 2
+            },
+            {
+                question: "Buah apa yang memiliki duri di kulitnya?",
+                options: ["Semangka", "Durian", "Mangga", "Pepaya"],
+                correct: 1
+            },
+            {
+                question: "Apa yang dihasilkan oleh lebah?",
+                options: ["Susu", "Madu", "Mentega", "Keju"],
+                correct: 1
+            },
+            {
+                question: "Berapa jumlah bulan dalam satu tahun?",
+                options: ["10", "11", "12", "13"],
+                correct: 2
+            }
+        ];
+
+        // Variabel state game
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let gameActive = true;
+        
+        // Variabel monster dan bom
+        let monsterSize = 25; // % awal (1/4 dari tinggi kolom)
+        const initialMonsterSize = 25;
+        let bombSpeed = 1.0; // kecepatan awal (1 bom per 9 detik)
+        const initialBombInterval = 9000; // 9 detik
+        let bombInterval = initialBombInterval;
+        let monsterGrowthInterval;
+        let bombDropInterval;
+        let dropAnimation;
+
+        // Elemen DOM
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const winScreen = document.getElementById('win-screen');
+        const loseScreen = document.getElementById('lose-screen');
+        const questionNumberElement = document.getElementById('question-number');
+        const currentQuestionElement = document.getElementById('current-question');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const scoreElement = document.getElementById('score');
+        const wrongElement = document.getElementById('wrong');
+        const continueButton = document.getElementById('continue-btn');
+        const retryButton = document.getElementById('retry-btn');
+        const monsterElement = document.getElementById('monster');
+        const monsterPercentElement = document.getElementById('monster-percent');
+        const bombSpeedElement = document.getElementById('bomb-speed');
+        const bombElement = document.getElementById('bomb');
+        const explosionElement = document.getElementById('explosion');
+
+        // Fungsi untuk memulai game
+        function startGame() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            gameActive = true;
+            
+            // Reset monster dan bom
+            monsterSize = initialMonsterSize;
+            bombSpeed = 1.0;
+            bombInterval = initialBombInterval;
+            
+            // Reset tampilan
+            updateMonsterDisplay();
+            updateBombDisplay();
+            scoreElement.textContent = correctAnswers;
+            wrongElement.textContent = wrongAnswers;
+            
+            // Tampilkan layar quiz
+            quizScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+            winScreen.style.display = 'none';
+            loseScreen.style.display = 'none';
+            
+            // Mulai interval untuk menambah monster
+            clearInterval(monsterGrowthInterval);
+            clearInterval(bombDropInterval);
+            
+            monsterGrowthInterval = setInterval(increaseMonster, 5000); // Monster bertambah setiap 5 detik
+            
+            // Mulai animasi bom
+            startBombDropAnimation();
+            
+            updateQuiz();
+        }
+
+        // Fungsi untuk menambah ukuran monster
+        function increaseMonster() {
+            if (!gameActive) return;
+            
+            // Monster bertambah 5% dari ukuran semula
+            monsterSize += initialMonsterSize * 0.05;
+            
+            updateMonsterDisplay();
+            
+            // Cek jika monster mencapai 200% (kalah)
+            if (monsterSize >= 200) {
+                loseGame();
+            }
+        }
+
+        // Fungsi untuk mengurangi ukuran monster saat terkena bom
+        function reduceMonster() {
+            if (!gameActive) return;
+            
+            // Monster berkurang 5% dari ukuran sebelumnya
+            monsterSize *= 0.95;
+            
+            updateMonsterDisplay();
+            
+            // Cek jika monster mencapai 0% (menang)
+            if (monsterSize <= 0) {
+                monsterSize = 0;
+                winGame();
+            }
+            
+            // Tampilkan efek ledakan
+            showExplosion();
+        }
+
+        // Fungsi untuk memperbarui tampilan monster
+        function updateMonsterDisplay() {
+            // Batasi ukuran monster minimal 5% dan maksimal 200%
+            if (monsterSize < 5) monsterSize = 5;
+            if (monsterSize > 200) monsterSize = 200;
+            
+            // Update tinggi monster
+            monsterElement.style.height = monsterSize + '%';
+            
+            // Update persentase monster
+            monsterPercentElement.textContent = Math.round(monsterSize) + '%';
+            
+            // Ubah warna monster berdasarkan ukuran
+            if (monsterSize <= 25) {
+                monsterElement.style.background = "linear-gradient(to top, #00b894 0%, #55efc4 50%, #81ecec 100%)";
+            } else if (monsterSize <= 100) {
+                monsterElement.style.background = "linear-gradient(to top, #00a085 0%, #00cec9 50%, #00b7b7 100%)";
+            } else {
+                monsterElement.style.background = "linear-gradient(to top, #008b74 0%, #00a8a8 50%, #009999 100%)";
+            }
+            
+            // Ubah ekspresi monster berdasarkan ukuran
+            const monsterEyes = document.querySelectorAll('.monster-eye');
+            const monsterMouth = document.querySelector('.monster-mouth');
+            
+            if (monsterSize > 100) {
+                // Monster besar - marah
+                monsterEyes.forEach(eye => {
+                    eye.style.backgroundColor = '#ff0000';
+                    eye.style.width = '25px';
+                    eye.style.height = '35px';
+                });
+                monsterMouth.style.backgroundColor = '#ff0000';
+                monsterMouth.style.height = '25px';
+            } else if (monsterSize > 50) {
+                // Monster sedang - waspada
+                monsterEyes.forEach(eye => {
+                    eye.style.backgroundColor = '#ff6b6b';
+                    eye.style.width = '22px';
+                    eye.style.height = '32px';
+                });
+                monsterMouth.style.backgroundColor = '#ff6b6b';
+                monsterMouth.style.height = '22px';
+            } else {
+                // Monster kecil - normal
+                monsterEyes.forEach(eye => {
+                    eye.style.backgroundColor = '#ff4757';
+                    eye.style.width = '20px';
+                    eye.style.height = '30px';
+                });
+                monsterMouth.style.backgroundColor = '#ff4757';
+                monsterMouth.style.height = '20px';
+            }
+        }
+
+        // Fungsi untuk memperbarui tampilan bom
+        function updateBombDisplay() {
+            // Update kecepatan bom
+            bombSpeedElement.textContent = bombSpeed.toFixed(1) + 'x';
+            
+            // Update animasi bom
+            updateBombAnimation();
+        }
+
+        // Fungsi untuk memulai animasi bom
+        function startBombDropAnimation() {
+            // Hapus animasi sebelumnya
+            if (dropAnimation) {
+                clearInterval(dropAnimation);
+            }
+            
+            // Hitung interval berdasarkan kecepatan
+            const currentInterval = bombInterval / bombSpeed;
+            
+            // Mulai animasi bom
+            dropAnimation = setInterval(() => {
+                // Kurangi monster saat bom mengenai monster
+                reduceMonster();
+            }, currentInterval);
+            
+            // Update animasi CSS
+            updateBombAnimation();
+        }
+
+        // Fungsi untuk memperbarui animasi bom
+        function updateBombAnimation() {
+            // Hitung durasi animasi berdasarkan kecepatan
+            const animationDuration = 9 / bombSpeed;
+            
+            // Terapkan durasi animasi baru
+            bombElement.style.animationDuration = animationDuration + 's';
+        }
+
+        // Fungsi untuk menampilkan efek ledakan
+        function showExplosion() {
+            // Reset animasi
+            explosionElement.style.animation = 'none';
+            explosionElement.offsetHeight; // Trigger reflow
+            explosionElement.style.animation = 'explosion 0.8s ease-out';
+            
+            // Tambah efek suara visual
+            setTimeout(() => {
+                explosionElement.style.animation = 'none';
+            }, 800);
+        }
+
+        // Fungsi untuk memperbarui tampilan quiz
+        function updateQuiz() {
+            // Update informasi soal
+            questionNumberElement.textContent = currentQuestion + 1;
+            currentQuestionElement.textContent = `${currentQuestion + 1}/15`;
+            scoreElement.textContent = correctAnswers;
+            wrongElement.textContent = wrongAnswers;
+            
+            // Tampilkan pertanyaan saat ini
+            const question = quizQuestions[currentQuestion];
+            questionTextElement.textContent = question.question;
+            
+            // Kosongkan kontainer opsi
+            optionsContainer.innerHTML = '';
+            
+            // Buat elemen untuk setiap opsi jawaban
+            const optionLetters = ['A', 'B', 'C', 'D'];
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${optionLetters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                
+                // Tambahkan event listener untuk memilih opsi
+                optionElement.addEventListener('click', () => selectOption(index, optionElement));
+                
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        // Fungsi untuk memilih opsi
+        function selectOption(optionIndex, optionElement) {
+            // Jika game tidak aktif, jangan lakukan apa-apa
+            if (!gameActive) return;
+            
+            // Tandai opsi yang dipilih
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            optionElement.classList.add('selected');
+            
+            // Periksa apakah jawaban benar
+            const isCorrect = optionIndex === quizQuestions[currentQuestion].correct;
+            
+            // Tandai jawaban yang benar dan salah
+            const correctIndex = quizQuestions[currentQuestion].correct;
+            
+            options.forEach((option, index) => {
+                if (index === correctIndex) {
+                    option.classList.add('correct');
+                } else if (index === optionIndex && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Update statistik berdasarkan jawaban
+            if (isCorrect) {
+                correctAnswers++;
+                scoreElement.textContent = correctAnswers;
+                
+                // Tambah kecepatan bom 0.5x jika jawaban benar
+                bombSpeed += 0.5;
+                updateBombDisplay();
+                startBombDropAnimation();
+            } else {
+                wrongAnswers++;
+                wrongElement.textContent = wrongAnswers;
+                
+                // Kurangi kecepatan bom 0.3x jika jawaban salah
+                bombSpeed -= 0.3;
+                if (bombSpeed < 0.5) bombSpeed = 0.5;
+                updateBombDisplay();
+                startBombDropAnimation();
+            }
+            
+            // Tunggu 1 detik sebelum melanjutkan
+            setTimeout(() => {
+                // Lanjut ke soal berikutnya atau cek jika sudah selesai
+                currentQuestion++;
+                
+                if (currentQuestion < quizQuestions.length) {
+                    updateQuiz();
+                } else {
+                    // Jika semua soal terjawab, biarkan game berlanjut
+                    // sampai monster mati atau terlalu besar
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk menang
+        function winGame() {
+            gameActive = false;
+            clearInterval(monsterGrowthInterval);
+            clearInterval(bombDropInterval);
+            
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            winScreen.style.display = 'block';
+            loseScreen.style.display = 'none';
+            
+            // Tampilkan efek ledakan besar
+            explosionElement.style.width = '200px';
+            explosionElement.style.height = '200px';
+            explosionElement.style.background = 'radial-gradient(circle, rgba(255, 107, 107, 1) 0%, rgba(255, 71, 87, 0.8) 30%, rgba(255, 71, 87, 0) 70%)';
+            showExplosion();
+        }
+
+        // Fungsi untuk kalah
+        function loseGame() {
+            gameActive = false;
+            clearInterval(monsterGrowthInterval);
+            clearInterval(bombDropInterval);
+            
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            winScreen.style.display = 'none';
+            loseScreen.style.display = 'block';
+        }
+
+        // Event listeners untuk tombol
+        continueButton.addEventListener('click', startGame);
+        retryButton.addEventListener('click', startGame);
+
+        // Mulai game saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', startGame);
+    </script>
+</body>
+</html>

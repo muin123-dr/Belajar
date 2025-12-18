@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Latihan Perkalian Dasar Seru!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', cursive, sans-serif;
+            background: linear-gradient(to bottom, #98FB98, #90EE90); /* Hijau cerah segar */
+            background-image: url('https://png.pngtree.com/background/20210710/original/pngtree-cute-cartoon-children-s-day-green-background-picture-image_1029639.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center;
+            margin: 0;
+            padding: 10px 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-x: hidden;
+        }
+        h1 {
+            color: #FF4500; /* Oranye menyala */
+            font-size: 11vw;
+            font-weight: bold;
+            margin: 10px 10px 5px;
+            text-shadow: 
+                4px 4px 0 #FFFF00,
+                -2px -2px 0 #FFFF00,
+                2px -2px 0 #FFFF00,
+                -2px 2px 0 #FFFF00;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 25px;
+            padding: 15px 20px;
+            display: inline-block;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        #soal {
+            font-size: 9vw;
+            font-weight: bold;
+            color: #8B00FF; /* Ungu cerah */
+            margin: 5px auto 0;
+            background-color: rgba(255,255,255,0.9);
+            padding: 12px 25px;
+            border: 7px solid #00FFFF;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            display: inline-block;
+            max-width: 90%;
+        }
+        #jawaban-container {
+            margin: 5px auto 10px;
+            width: 70vw;
+            max-width: 300px;
+        }
+        #jawaban {
+            font-size: 10vw;
+            font-weight: bold;
+            color: #008000;
+            border: 6px solid #00FFFF;
+            padding: 10px;
+            margin: 0 auto;
+            height: 15vw;
+            max-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #FFFFFF;
+            border-radius: 18px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        #notifikasi {
+            font-size: 6vw;
+            font-weight: bold;
+            min-height: 40px;
+            margin: 8px 0;
+            color: #FF0000;
+        }
+        #tombol-hapus {
+            display: none;
+            font-size: 5.5vw;
+            padding: 10px 25px;
+            background-color: #FF1493;
+            color: white;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            margin: 10px 0;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        .keyboard {
+            margin: 10px auto 20px;
+            padding: 5px;
+            max-width: 95%;
+        }
+        .tombol-angka {
+            font-size: 8vw;
+            font-weight: bold;
+            width: 15vw;
+            height: 15vw;
+            max-width: 75px;
+            max-height: 75px;
+            margin: 6px;
+            background-color: #FF69B4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+        .tombol-angka:active {
+            transform: scale(0.95);
+            background-color: #00FFFF;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+
+        .ornamen {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 10s ease-in-out infinite;
+            font-size: 12vw;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+        #bunga1 { top: 5%; left: 5%; animation-delay: 0s; color: #FF69B4; }
+        #bunga2 { bottom: 10%; right: 10%; animation-delay: 2s; color: #FFFF00; }
+        #kupukupu { top: 10%; left: 20%; animation-delay: 1s; }
+        #kelinci { bottom: 15%; left: 10%; animation-delay: 3s; }
+        #burung { top: 15%; right: 10%; animation-delay: 4s; color: #00FFFF; }
+        #apel { top: 30%; right: 30%; animation-delay: 1.5s; color: #FF0000; }
+    </style>
+</head>
+<body>
+    <h1>Latihan Perkalian<br>Dasar Seru!</h1>
+    
+    <div id="soal">1 × 1 = ?</div>
+    
+    <div id="jawaban-container">
+        <div id="jawaban"> </div>
+        <div id="notifikasi"></div>
+        <button id="tombol-hapus" onclick="hapusJawaban()">Hapus</button>
+    </div>
+    
+    <div class="keyboard">
+        <div class="row">
+            <button class="tombol-angka" onclick="tambahAngka('1')">1</button>
+            <button class="tombol-angka" onclick="tambahAngka('2')">2</button>
+            <button class="tombol-angka" onclick="tambahAngka('3')">3</button>
+            <button class="tombol-angka" onclick="tambahAngka('4')">4</button>
+            <button class="tombol-angka" onclick="tambahAngka('5')">5</button>
+        </div>
+        <div class="row">
+            <button class="tombol-angka" onclick="tambahAngka('6')">6</button>
+            <button class="tombol-angka" onclick="tambahAngka('7')">7</button>
+            <button class="tombol-angka" onclick="tambahAngka('8')">8</button>
+            <button class="tombol-angka" onclick="tambahAngka('9')">9</button>
+            <button class="tombol-angka" onclick="tambahAngka('0')">0</button>
+        </div>
+    </div>
+
+    <!-- Ornamen baru yang lucu dan segar -->
+    <div class="ornamen" id="bunga1">🌸</div>
+    <div class="ornamen" id="bunga2">🌼</div>
+    <div class="ornamen" id="kupukupu">🦋</div>
+    <div class="ornamen" id="kelinci">🐰</div>
+    <div class="ornamen" id="burung">🦜</div>
+    <div class="ornamen" id="apel">🍎</div>
+
+    <script>
+        let soalSekarang = 0;
+        let jawabanPengguna = '';
+        let modeAcak = false;
+        let soalList = [];
+
+        // Generate soal perkalian dasar 1-9 × 1-9
+        for (let i = 1; i <= 9; i++) {
+            for (let j = 1; j <= 9; j++) {
+                soalList.push({a: i, b: j});
+            }
+        }
+
+        function shuffle(array) {
+            let arr = array.slice();
+            for (let i = arr.length - 1; i > 0; i--) {
+                let k = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[k]] = [arr[k], arr[i]];
+            }
+            return arr;
+        }
+
+        tampilkanSoal();
+
+        function tampilkanSoal() {
+            if (soalSekarang >= soalList.length) {
+                if (!modeAcak) {
+                    modeAcak = true;
+                    soalList = shuffle(soalList);
+                    soalSekarang = 0;
+                    document.getElementById('notifikasi').innerText = 'Sekarang latihan acak ya! 💪';
+                    document.getElementById('notifikasi').style.color = '#00AA00';
+                    setTimeout(() => { document.getElementById('notifikasi').innerText = ''; }, 4000);
+                } else {
+                    document.getElementById('notifikasi').innerText = 'KAMU HEBAT SEKALI! BELAJAR TERUS YA! 🎉🏆';
+                    document.getElementById('notifikasi').style.color = '#FF4500';
+                    document.getElementById('notifikasi').style.fontSize = '7vw';
+                    return;
+                }
+            }
+            const soal = soalList[soalSekarang];
+            document.getElementById('soal').innerText = `${soal.a} × ${soal.b} = ?`;
+            jawabanPengguna = '';
+            document.getElementById('jawaban').innerText = ' ';
+            document.getElementById('notifikasi').innerText = '';
+            document.getElementById('tombol-hapus').style.display = 'none';
+        }
+
+        function tambahAngka(angka) {
+            if (jawabanPengguna.length < 2) { // Max 9×9=81 (2 digit)
+                jawabanPengguna += angka;
+                document.getElementById('jawaban').innerText = jawabanPengguna || ' ';
+                cekJawaban();
+            }
+        }
+
+        function cekJawaban() {
+            if (jawabanPengguna === '') return;
+            const soal = soalList[soalSekarang];
+            const jawabanBenar = soal.a * soal.b;
+            const jawabanInt = parseInt(jawabanPengguna);
+
+            if (jawabanInt === jawabanBenar) {
+                document.getElementById('notifikasi').innerText = 'Kamu Pintar Sekali! 🌟✨';
+                document.getElementById('notifikasi').style.color = '#00AA00';
+                setTimeout(() => {
+                    soalSekarang++;
+                    tampilkanSoal();
+                }, 2000);
+            } else if (jawabanPengguna.length >= jawabanBenar.toString().length) {
+                document.getElementById('notifikasi').innerText = 'SALAH! Coba lagi ya 😊';
+                document.getElementById('notifikasi').style.color = '#FF0000';
+                document.getElementById('tombol-hapus').style.display = 'inline-block';
+            }
+        }
+
+        function hapusJawaban() {
+            jawabanPengguna = '';
+            document.getElementById('jawaban').innerText = ' ';
+            document.getElementById('tombol-hapus').style.display = 'none';
+            document.getElementById('notifikasi').innerText = '';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Latihan Penjumlahan Seru!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #00bfff;
+            --secondary-color: #ff69b4;
+            --correct-color: #28a745;
+            --wrong-color: #dc3545;
+            --bg-color: #fffacd;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', cursive, sans-serif;
+            background-color: var(--bg-color);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .header-logo {
+            margin-top: 15px;
+            max-width: 120px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            color: #ff4500;
+            font-size: 8vw;
+            margin: 10px 0;
+            text-shadow: 2px 2px #ffd700;
+        }
+
+        #soal-container {
+            background: white;
+            border: 6px solid var(--secondary-color);
+            border-radius: 30px;
+            padding: 20px;
+            margin: 15px auto;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        #soal {
+            font-size: 12vw;
+            font-weight: bold;
+            color: #0000ff;
+        }
+
+        #jawaban-display {
+            font-size: 14vw;
+            font-weight: bold;
+            color: var(--correct-color);
+            min-height: 1.2em;
+            margin: 10px 0;
+            border-bottom: 4px dashed #ccc;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        #notifikasi {
+            font-size: 5vw;
+            font-weight: bold;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+
+        /* Keyboard Modern */
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 15px;
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tombol-angka {
+            aspect-ratio: 1/1;
+            font-size: 8vw;
+            font-weight: bold;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 0 #0099cc;
+            cursor: pointer;
+            transition: all 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tombol-angka:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #0099cc;
+            background: var(--secondary-color);
+        }
+
+        .tombol-hapus {
+            grid-column: span 5;
+            padding: 15px;
+            font-size: 6vw;
+            background: var(--wrong-color);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            margin-top: 5px;
+            box-shadow: 0 5px 0 #a92533;
+            font-family: inherit;
+        }
+
+        /* Modal Popup */
+        #modal-quiz {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 400px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .btn-quiz {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 5vw;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+        }
+
+        .btn-ikut { background: #ffcc00; color: #333; }
+        .btn-lanjut { background: #eee; color: #777; }
+
+        /* Ornamen */
+        .ornamen {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.3;
+            font-size: 10vw;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        @media (min-width: 600px) {
+            h1 { font-size: 40px; }
+            #soal { font-size: 60px; }
+            .tombol-angka { font-size: 30px; }
+            .btn-quiz { font-size: 20px; }
+            #notifikasi { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" alt="Logo" class="header-logo">
+    
+    <h1>Penjumlahan Seru!</h1>
+    
+    <div id="soal-container">
+        <div id="soal">1 + 1 = ?</div>
+        <div id="jawaban-display">&nbsp;</div>
+        <div id="notifikasi"></div>
+    </div>
+    
+    <div class="keyboard">
+        <button class="tombol-angka" onclick="tambahAngka('1')">1</button>
+        <button class="tombol-angka" onclick="tambahAngka('2')">2</button>
+        <button class="tombol-angka" onclick="tambahAngka('3')">3</button>
+        <button class="tombol-angka" onclick="tambahAngka('4')">4</button>
+        <button class="tombol-angka" onclick="tambahAngka('5')">5</button>
+        <button class="tombol-angka" onclick="tambahAngka('6')">6</button>
+        <button class="tombol-angka" onclick="tambahAngka('7')">7</button>
+        <button class="tombol-angka" onclick="tambahAngka('8')">8</button>
+        <button class="tombol-angka" onclick="tambahAngka('9')">9</button>
+        <button class="tombol-angka" onclick="tambahAngka('0')">0</button>
+        <button class="tombol-hapus" onclick="hapusJawaban()">HAPUS</button>
+    </div>
+
+    <div id="modal-quiz">
+        <div class="modal-content">
+            <h2 style="color: #ff4500;">🎉 HEBAT! 🎉</h2>
+            <p style="font-size: 18px;">Kamu sudah menjawab 30 soal dengan benar!</p>
+            <h3 style="margin-bottom: 25px;">Mau ikut QUIZ BERHADIAH?</h3>
+            <button class="btn-quiz btn-ikut" onclick="keQuiz()">IKUT QUIZ</button>
+            <button class="btn-quiz btn-lanjut" onclick="tutupModal()">TIDAK, Lanjut latihan</button>
+        </div>
+    </div>
+
+    <div class="ornamen" style="top:10%; left:5%;">🚀</div>
+    <div class="ornamen" style="top:60%; right:5%; animation-delay: 1s;">🎨</div>
+    <div class="ornamen" style="bottom:10%; left:10%; animation-delay: 2s;">🌈</div>
+
+    <script>
+        let soalSekarang = 0;
+        let jawabanPengguna = '';
+        let totalBenar = 0;
+        let soalList = [];
+        let sudahTampilQuiz = false;
+
+        // Inisialisasi Soal
+        function initSoal() {
+            for (let i = 1; i <= 9; i++) {
+                for (let j = 1; j <= 9; j++) {
+                    soalList.push({a: i, b: j});
+                }
+            }
+            shuffle(soalList);
+            tampilkanSoal();
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function tampilkanSoal() {
+            if (soalSekarang >= soalList.length) {
+                soalSekarang = 0;
+                shuffle(soalList);
+            }
+            
+            const soal = soalList[soalSekarang];
+            document.getElementById('soal').innerText = `${soal.a} + ${soal.b} = ?`;
+            jawabanPengguna = '';
+            document.getElementById('jawaban-display').innerText = ' ';
+            document.getElementById('jawaban-display').style.color = 'var(--correct-color)';
+            document.getElementById('notifikasi').innerText = '';
+        }
+
+        function tambahAngka(angka) {
+            if (jawabanPengguna.length < 2) {
+                jawabanPengguna += angka;
+                document.getElementById('jawaban-display').innerText = jawabanPengguna;
+                cekJawaban();
+            }
+        }
+
+        function cekJawaban() {
+            const soal = soalList[soalSekarang];
+            const jawabanBenar = soal.a + soal.b;
+            
+            // Jika panjang jawaban sudah mencukupi
+            if (jawabanPengguna.length >= jawabanBenar.toString().length) {
+                if (parseInt(jawabanPengguna) === jawabanBenar) {
+                    aksiBenar();
+                } else {
+                    aksiSalah();
+                }
+            }
+        }
+
+        function aksiBenar() {
+            totalBenar++;
+            document.getElementById('notifikasi').innerText = 'KAMU PINTAR! 🌟';
+            document.getElementById('notifikasi').style.color = 'var(--correct-color)';
+            
+            // Animasi Konfeti
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff']
+            });
+
+            setTimeout(() => {
+                if (totalBenar === 30 && !sudahTampilQuiz) {
+                    tampilkanModal();
+                } else {
+                    soalSekarang++;
+                    tampilkanSoal();
+                }
+            }, 1500);
+        }
+
+        function aksiSalah() {
+            document.getElementById('notifikasi').innerText = 'SALAH, COBA LAGI!';
+            document.getElementById('notifikasi').style.color = 'var(--wrong-color)';
+            document.getElementById('jawaban-display').style.color = 'var(--wrong-color)';
+            
+            // Getar sedikit jika salah (hanya di hp yang support)
+            if (navigator.vibrate) navigator.vibrate(200);
+        }
+
+        function hapusJawaban() {
+            jawabanPengguna = '';
+            document.getElementById('jawaban-display').innerText = ' ';
+            document.getElementById('jawaban-display').style.color = 'var(--correct-color)';
+            document.getElementById('notifikasi').innerText = '';
+        }
+
+        // Fungsi Modal & Quiz
+        function tampilkanModal() {
+            document.getElementById('modal-quiz').style.display = 'flex';
+            sudahTampilQuiz = true;
+        }
+
+        function tutupModal() {
+            document.getElementById('modal-quiz').style.display = 'none';
+            soalSekarang++;
+            tampilkanSoal();
+        }
+
+        function keQuiz() {
+            window.location.href = 'https://muin123-dr.github.io/Belajar/mtk/021.html';
+        }
+
+        // Mulai aplikasi
+        initSoal();
+    </script>
+</body>
+</html>
