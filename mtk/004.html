@@ -41,13 +41,8 @@
             border-radius: 10px;
         }
         
-        .track1 {
-            top: 20%;
-        }
-        
-        .track2 {
-            top: 60%;
-        }
+        .track1 { top: 20%; }
+        .track2 { top: 60%; }
         
         .track::before {
             content: '';
@@ -79,11 +74,9 @@
             justify-content: center;
         }
         
-        /* Start Position di Kanan (95%) */
         .car-red { left: 95%; }
         .car-blue { left: 95%; }
         
-        /* Finish Line di KIRI */
         .finish-line {
             position: absolute;
             left: 20px;
@@ -127,29 +120,46 @@
         .quiz-section {
             height: 50vh;
             display: flex;
-            background: #f0f0f0;
+            background: #333; /* Border pemisah */
         }
         
         .question-panel {
             width: 50%;
-            padding: 40px;
-            background: white;
-            border-right: 3px solid #333;
+            padding: 20px;
+            background: #ffffff; /* Warna panel pertanyaan */
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
+            border-right: 2px solid #ddd;
+        }
+
+        .question-logo {
+            width: 100px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 20px;
+            border: 3px dashed #764ba2;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            width: 90%;
+            text-align: center;
         }
         
         .question-text {
-            font-size: 48px;
+            font-size: 30px;
             font-weight: bold;
             color: #2c3e50;
-            text-align: center;
         }
         
         .answer-panel {
             width: 50%;
             padding: 40px;
+            background: #e9ecef; /* Warna panel jawaban (berbeda) */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -183,7 +193,6 @@
             animation: wrongAnim 0.5s;
         }
         
-        /* Speed indicator toast */
         .speed-toast {
             position: absolute;
             top: 20%;
@@ -212,7 +221,6 @@
             75% { transform: translateX(10px); }
         }
         
-        /* Modal Styles */
         .modal {
             position: fixed;
             top: 0;
@@ -252,7 +260,6 @@
 
         .start-btn { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .retry-btn { background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); }
-        
         .claim-btn {
             background: linear-gradient(135deg, #42e695 0%, #3bb2b8 100%);
             font-size: 40px;
@@ -265,74 +272,27 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(66, 230, 149, 0); }
         }
         
-        .start-btn:hover, .retry-btn:hover, .claim-btn:hover {
-            transform: scale(1.1);
-        }
-        
         .result-text {
             font-size: 64px;
             font-weight: bold;
             margin-bottom: 10px;
         }
         
-        .win {
-            color: #27ae60;
-            text-shadow: 3px 3px 0px #fff, 5px 5px 10px rgba(0,0,0,0.2);
-        }
-        
+        .win { color: #27ae60; text-shadow: 3px 3px 0px #fff; }
         .lose { color: #e74c3c; }
         
-        /* Animations: Fireworks, Balloons, Confetti */
-        .firework {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: fireworkAnim 1s ease-out forwards;
-            z-index: 1100;
-        }
+        /* Efek Animasi Perayaan */
+        .firework { position: fixed; width: 8px; height: 8px; border-radius: 50%; animation: fireworkAnim 1s ease-out forwards; z-index: 1100; }
+        @keyframes fireworkAnim { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-500px) scale(0); opacity: 0; } }
         
-        @keyframes fireworkAnim {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-500px) scale(0); opacity: 0; }
-        }
+        .balloon { position: fixed; font-size: 60px; animation: balloonAnim 4s ease-in forwards; z-index: 1100; }
+        @keyframes balloonAnim { 0% { transform: translateY(110vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
         
-        .balloon {
-            position: fixed;
-            font-size: 60px;
-            animation: balloonAnim 4s ease-in forwards;
-            z-index: 1100;
-        }
-        
-        @keyframes balloonAnim {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-        
-        .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            animation: confettiAnim 3s ease-out forwards;
-            z-index: 1100;
-        }
-        
-        @keyframes confettiAnim {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
+        .confetti { position: fixed; width: 15px; height: 15px; animation: confettiAnim 3s ease-out forwards; z-index: 1100; }
+        @keyframes confettiAnim { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        .party-bg {
-            animation: disco 0.5s infinite;
-        }
-
-        @keyframes disco {
-            0% { background: rgba(255, 0, 0, 0.2); }
-            25% { background: rgba(0, 255, 0, 0.2); }
-            50% { background: rgba(0, 0, 255, 0.2); }
-            75% { background: rgba(255, 255, 0, 0.2); }
-            100% { background: rgba(255, 0, 255, 0.2); }
-        }
+        .party-bg { animation: disco 0.5s infinite; }
+        @keyframes disco { 0% { background: rgba(255, 0, 0, 0.2); } 50% { background: rgba(0, 0, 255, 0.2); } 100% { background: rgba(255, 0, 255, 0.2); } }
     </style>
 </head>
 <body>
@@ -351,7 +311,10 @@
         
         <div class="quiz-section">
             <div class="question-panel">
-                <div class="question-text" id="questionText"></div>
+                <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" alt="Logo" class="question-logo">
+                <div class="question-card">
+                    <div class="question-text" id="questionText">Menunggu...</div>
+                </div>
             </div>
             <div class="answer-panel" id="answerPanel"></div>
         </div>
@@ -359,6 +322,7 @@
     
     <div class="modal" id="startModal">
         <div class="modal-content">
+            <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" alt="Logo" style="width: 150px;">
             <h1>Quiz Balap Matematika</h1>
             <p>Hati-hati! Jika salah, sepedamu melambat.<br>Sepeda musuh makin cepat setiap 10 detik!</p>
             <button class="start-btn" onclick="startGame()">MULAI!</button>
@@ -372,7 +336,6 @@
     </div>
 
     <script>
-        // Database Soal
         const questions = [
             { q: "3 + 4 = ?", a: 7, options: [6, 7, 9] },
             { q: "1 + 5 = ?", a: 6, options: [6, 8, 7] },
@@ -395,17 +358,13 @@
         let redCarPos = 95;
         let blueCarPos = 95;
         
-        // KONFIGURASI KECEPATAN
-        const initialBlueSpeed = 0.005; // Sangat pelan
+        const initialBlueSpeed = 0.005; 
         let currentBlueSpeed = initialBlueSpeed;
-        
-        const initialRedSpeed = 0.029; // Sedikit lebih cepat dari blue awal
+        const initialRedSpeed = 0.029; 
         let currentRedSpeed = initialRedSpeed;
         
         let gameStarted = false;
-        let redCarInterval;
-        let redAccelInterval; // Interval untuk menambah kecepatan merah
-        let blueCarInterval;
+        let redCarInterval, redAccelInterval, blueCarInterval;
         let raceFinished = false;
         
         const redCar = document.querySelector('.car-red');
@@ -421,74 +380,42 @@
         }
         
         function startRedCar() {
-            const fps = 60;
-            const intervalTime = 1000 / fps;
-            
-            // Interval Pergerakan Mobil Merah
             redCarInterval = setInterval(() => {
-                if (raceFinished) { clearInterval(redCarInterval); return; }
-                
+                if (raceFinished) return;
                 redCarPos -= currentRedSpeed;
                 redCar.style.left = redCarPos + '%';
-                
-                if (redCarPos <= finishLinePos) {
-                    clearInterval(redCarInterval);
-                    clearInterval(redAccelInterval);
-                    endGame(false);
-                }
-            }, intervalTime);
+                if (redCarPos <= finishLinePos) endGame(false);
+            }, 1000/60);
 
-            // Interval Akselerasi Mobil Merah (Setiap 10 Detik)
             redAccelInterval = setInterval(() => {
                 if (raceFinished) return;
-                
-                // Bertambah 0.65 (65%) dari kecepatan dasar
-                const speedBoost = initialRedSpeed * 0.65;
-                currentRedSpeed += speedBoost;
-                
-                // Efek visual pemberitahuan
+                currentRedSpeed += (initialRedSpeed * 0.65);
                 const toast = document.getElementById('speedToast');
                 toast.style.opacity = 1;
                 setTimeout(() => toast.style.opacity = 0, 2000);
-                
-                console.log("Red car accelerates! Current speed: " + currentRedSpeed);
-            }, 10000); // 10000 ms = 10 detik
+            }, 10000);
         }
         
         function startBlueCar() {
-            const fps = 60;
-            const intervalTime = 1000 / fps;
-            
             blueCarInterval = setInterval(() => {
-                if (raceFinished) { clearInterval(blueCarInterval); return; }
-                
+                if (raceFinished) return;
                 blueCarPos -= currentBlueSpeed;
                 blueCar.style.left = blueCarPos + '%';
-                
-                if (blueCarPos <= finishLinePos) {
-                    clearInterval(blueCarInterval);
-                    clearInterval(redAccelInterval);
-                    endGame(true);
-                }
-            }, intervalTime);
+                if (blueCarPos <= finishLinePos) endGame(true);
+            }, 1000/60);
         }
         
         function showQuestion() {
-            if (currentQuestion >= questions.length) return;
-            
+            if (currentQuestion >= questions.length) currentQuestion = 0;
             const q = questions[currentQuestion];
             document.getElementById('questionText').textContent = q.q;
-            
             const answerPanel = document.getElementById('answerPanel');
             answerPanel.innerHTML = '';
-            
             const shuffled = [...q.options].sort(() => Math.random() - 0.5);
-            const letters = ['A', 'B', 'C'];
-            
             shuffled.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'answer-btn';
-                btn.textContent = `${letters[idx]}. ${opt}`;
+                btn.textContent = `${['A','B','C'][idx]}. ${opt}`;
                 btn.onclick = () => checkAnswer(opt, q.a, btn);
                 answerPanel.appendChild(btn);
             });
@@ -497,26 +424,17 @@
         function checkAnswer(selected, correct, btn) {
             const allBtns = document.querySelectorAll('.answer-btn');
             allBtns.forEach(b => b.style.pointerEvents = 'none');
-            
             if (selected === correct) {
                 btn.classList.add('correct');
-                // BONUS: Jika benar tetap ditambah sedikit agar game bisa dimenangkan
                 currentBlueSpeed += (initialBlueSpeed * 1.5);
-                
                 setTimeout(() => {
                     currentQuestion++;
-                    if (currentQuestion < questions.length) showQuestion();
+                    showQuestion();
                 }, 1000);
             } else {
                 btn.classList.add('wrong');
-                
-                // LOGIKA PENGURANGAN KECEPATAN (Request User)
-                // Berkurang 0.5 dari kecepatan awal
                 currentBlueSpeed -= (initialBlueSpeed * 0.5);
-                
-                // Mencegah kecepatan negatif (mobil mundur)
                 if (currentBlueSpeed < 0) currentBlueSpeed = 0;
-                
                 setTimeout(() => {
                     btn.classList.remove('wrong');
                     allBtns.forEach(b => b.style.pointerEvents = 'auto');
@@ -533,12 +451,8 @@
             const resultModal = document.getElementById('resultModal');
             const resultText = document.getElementById('resultText');
             const resultContent = document.getElementById('resultContent');
-            
             resultModal.style.display = 'flex';
-            
-            // Bersihkan tombol lama
-            const oldBtns = resultContent.querySelectorAll('button');
-            oldBtns.forEach(btn => btn.remove());
+            resultContent.querySelectorAll('button').forEach(btn => btn.remove());
 
             if (win) {
                 resultText.textContent = 'ANDA DAPAT HADIAH';
@@ -546,24 +460,33 @@
                 document.getElementById('resultModal').classList.add('party-bg');
                 celebrate();
                 
-                // Tombol KLAIM
                 const claimBtn = document.createElement('button');
                 claimBtn.className = 'claim-btn';
                 claimBtn.textContent = 'KLAIM';
                 claimBtn.onclick = function() {
                     const phoneNumber = '+62882003037794';
-                    const message = 'ALHAMDULILLAH SAYA DAPAT HADIAH 5.000 Ustadz!';
-                    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                    window.open(whatsappUrl, '_blank');
+                    const now = new Date();
+                    const tgl = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+                    const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    
+                    // Mencoba mendapatkan lokasi
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition((position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            const mapUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+                            sendWhatsApp(phoneNumber, tgl, jam, mapUrl);
+                        }, () => {
+                            sendWhatsApp(phoneNumber, tgl, jam, "Lokasi tidak diizinkan");
+                        });
+                    } else {
+                        sendWhatsApp(phoneNumber, tgl, jam, "GPS tidak didukung");
+                    }
                 };
                 resultContent.appendChild(claimBtn);
-                
             } else {
                 resultText.textContent = 'KAMU KALAH';
                 resultText.className = 'result-text lose';
-                document.getElementById('resultModal').classList.remove('party-bg');
-                
-                // Tombol ULANGI
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'retry-btn';
                 retryBtn.textContent = 'ULANGI';
@@ -571,46 +494,22 @@
                 resultContent.appendChild(retryBtn);
             }
         }
+
+        function sendWhatsApp(num, tgl, jam, map) {
+            const message = `ALHAMDULILLAH SAYA DAPAT HADIAH 5.000 Ustadz!\n\n📅 Tanggal: ${tgl}\n⏰ Jam: ${jam} WIB\n📍 Map: ${map}`;
+            window.open(`https://wa.me/${num}?text=${encodeURIComponent(message)}`, '_blank');
+        }
         
         function celebrate() {
-            // Fireworks
-            for (let i = 0; i < 80; i++) {
+            for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
-                    const firework = document.createElement('div');
-                    firework.className = 'firework';
-                    firework.style.left = Math.random() * window.innerWidth + 'px';
-                    firework.style.top = window.innerHeight + 'px';
-                    firework.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                    document.body.appendChild(firework);
-                    setTimeout(() => firework.remove(), 1000);
-                }, i * 50);
-            }
-            
-            // Balloons & Confetti (sama seperti sebelumnya)
-            const balloonEmojis = ['🎈', '🎉', '🎊', '🎁', '⭐', '✨', '🏆'];
-            for (let i = 0; i < 40; i++) {
-                setTimeout(() => {
-                    const balloon = document.createElement('div');
-                    balloon.className = 'balloon';
-                    balloon.textContent = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
-                    balloon.style.left = Math.random() * window.innerWidth + 'px';
-                    balloon.style.top = window.innerHeight + 'px';
-                    document.body.appendChild(balloon);
-                    setTimeout(() => balloon.remove(), 4000);
+                    const f = document.createElement('div');
+                    f.className = 'firework';
+                    f.style.left = Math.random() * 100 + 'vw';
+                    f.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    document.body.appendChild(f);
+                    setTimeout(() => f.remove(), 1000);
                 }, i * 100);
-            }
-            
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-            for (let i = 0; i < 150; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * window.innerWidth + 'px';
-                    confetti.style.top = '-10px';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 20);
             }
         }
     </script>
