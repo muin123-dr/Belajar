@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Real-time Berbasis Lokasi</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #45a049; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .map-link { margin-top: 5px; display: block; }
+        .error { color: red; }
+        .notification { margin: 15px 0; padding: 10px; border-radius: 4px; font-weight: bold; }
+        .success { background-color: #d4edda; color: #155724; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        .info { background-color: #cce5ff; color: #004085; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistem Absensi Real-time</h1>
+        
+        <div class="form-group">
+            <label for="id">ID Karyawan:</label>
+            <select id="id" required>
+                <option value="100">100</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="nama">Nama:</label>
+            <select id="nama" required>
+                <option value="si A">si A</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="absensi">Jenis Absensi:</label>
+            <select id="absensi" required>
+                <option value="datang">Datang</option>
+                <option value="pergi">Pergi</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="keterangan">Keterangan:</label>
+            <select id="keterangan" required>
+                <option value="awal_masuk">Awal Masuk</option>
+                <option value="pulang">Pulang</option>
+                <option value="ijin_keluar">Ijin Keluar</option>
+                <option value="datang_lagi">Datang Lagi</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Lokasi:</label>
+            <button onclick="getLocation()">Dapatkan Lokasi Saat Ini</button>
+            <div id="lokasi"></div>
+            <div id="mapError" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <button id="submitBtn" onclick="submitAbsensi()">Absen Sekarang</button>
+        </div>
+        
+        <div id="notification" class="notification"></div>
+        
+        <h2>Riwayat Absensi</h2>
+        <table id="absensiTable">
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Jenis Absensi</th>
+                    <th>Keterangan</th>
+                    <th>Lokasi</th>
+                </tr>
+            </thead>
+            <tbody id="absensiData">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        // --- KONFIGURASI SINKRONISASI ---
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5kUoQEeOjvJ6aY6ou7YKegX3_7BsCjmiMQxJmy7Nw1DwX_TFVKHxFO48375k-90KPqw/exec'; // GANTI DENGAN URL APPS SCRIPT ANDA
+
+        let currentLocation = null;
+        const absensiData = [];
+
+        // Ambil lokasi pengguna
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        currentLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        const mapLink = `https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lng}`;
+                        document.getElementById('lokasi').innerHTML = `
+                            <a href="${mapLink}" target="_blank" class="map-link">
+                                Lihat di Peta
+                            </a>
+                        `;
+                        document.getElementById('mapError').textContent = '';
+                    },
+                    error => {
+                        let errorMsg = '';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMsg = "Akses lokasi ditolak. Harap izinkan akses lokasi.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMsg = "Lokasi tidak tersedia.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMsg = "Permintaan lokasi timeout.";
+                                break;
+                            default:
+                                errorMsg = "Terjadi kesalahan saat mendapatkan lokasi.";
+                        }
+                        document.getElementById('mapError').textContent = errorMsg;
+                    }
+                );
+            } else {
+                document.getElementById('mapError').textContent = "Geolokasi tidak didukung oleh browser ini.";
+            }
+        }
+
+        // Submit absensi
+        async function submitAbsensi() {
+            const id = document.getElementById('id').value;
+            const nama = document.getElementById('nama').value;
+            const absensi = document.getElementById('absensi').value;
+            const keterangan = document.getElementById('keterangan').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const notificationDiv = document.getElementById('notification');
+            
+            if (!id || !nama || !absensi || !keterangan || !currentLocation) {
+                alert('Harap isi semua field dan dapatkan lokasi terlebih dahulu!');
+                return;
+            }
+
+            // Nonaktifkan tombol saat loading
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Mengirim...";
+
+            const waktu = new Date();
+            const tanggal = `${waktu.getDate()}-${waktu.getMonth()+1}-${waktu.getFullYear()}`;
+            const jam = `${String(waktu.getHours()).padStart(2, '0')}:${String(waktu.getMinutes()).padStart(2, '0')}:${String(waktu.getSeconds()).padStart(2, '0')}`;
+            const mapLink = `https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lng}`;
+            
+            const dataKirim = {
+                tanggal: tanggal,
+                jam: jam,
+                id: id,
+                nama: nama,
+                absensi: absensi,
+                keterangan: getKeteranganText(keterangan),
+                lokasi: mapLink
+            };
+
+            try {
+                // Kirim data ke Google Sheets
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(dataKirim)
+                });
+
+                // Jika sukses, tambahkan ke tabel lokal
+                absensiData.unshift(dataKirim);
+                updateTable();
+                
+                notificationDiv.textContent = 'Absensi berhasil tersimpan di database!';
+                notificationDiv.className = 'notification success';
+                
+                // Reset form
+                resetForm();
+            } catch (error) {
+                console.error('Error:', error);
+                notificationDiv.textContent = 'Gagal mengirim data ke server.';
+                notificationDiv.className = 'notification error';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Absen Sekarang";
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('id').value = '100';
+            document.getElementById('nama').value = 'si A';
+            document.getElementById('absensi').value = 'datang';
+            document.getElementById('keterangan').value = 'awal_masuk';
+            document.getElementById('lokasi').innerHTML = '';
+            currentLocation = null;
+        }
+
+        // Update tabel absensi
+        function updateTable() {
+            const tbody = document.getElementById('absensiData');
+            tbody.innerHTML = '';
+            
+            absensiData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.tanggal}</td>
+                    <td>${data.jam}</td>
+                    <td>${data.id}</td>
+                    <td>${data.nama}</td>
+                    <td>${data.absensi === 'datang' ? 'Datang' : 'Pergi'}</td>
+                    <td>${data.keterangan}</td>
+                    <td>
+                        <a href="${data.lokasi}" target="_blank">Lokasi</a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Konversi keterangan ke text
+        function getKeteranganText(key) {
+            const keteranganMap = {
+                'awal_masuk': 'Awal Masuk',
+                'pulang': 'Pulang',
+                'ijin_keluar': 'Ijin Keluar',
+                'datang_lagi': 'Datang Lagi'
+            };
+            return keteranganMap[key] || key;
+        }
+    </script>
+</body>
+</html>
