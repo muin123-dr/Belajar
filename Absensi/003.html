@@ -1,138 +1,375 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absensi - Bu Faiz</title>
+    <title>Form Absensi Guru</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; background-color: #f4f7f6; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; font-size: 24px; }
-        .profile-info { background: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #3498db; }
-        .profile-info p { margin: 5px 0; font-weight: bold; color: #2c3e50; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
-        select { width: 100%; padding: 12px; border: 1px solid #dcdde1; border-radius: 6px; font-size: 16px; background: white; }
+        /* Style untuk Form Absensi */
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #f0f2f5; 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px; 
+            margin: 0;
+        }
+        .card { 
+            background: white; 
+            width: 100%; 
+            max-width: 400px; 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        h2 { text-align: center; color: #1a73e8; margin-bottom: 20px; }
+        .info-box { 
+            background: #e8f0fe; 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            line-height: 1.6; 
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        select, button { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
+        button { 
+            background: #1a73e8; 
+            color: white; 
+            border: none; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            margin-top: 10px; 
+        }
+        button:hover { background: #1557b0; }
+        button:disabled { background: #ccc; }
+        #status { text-align: center; margin-top: 15px; font-weight: bold; }
         
-        button { padding: 12px 24px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; transition: all 0.3s; width: 100%; }
-        button:hover { background: #45a049; }
-        button:disabled { background: #bdc3c7; cursor: not-allowed; }
-
-        .loader { display: none; width: 18px; height: 18px; border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 10px; vertical-align: middle; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        #lokasi { margin-top: 10px; font-weight: bold; color: #2980b9; text-align: center; }
-        .notification { margin: 15px 0; padding: 15px; border-radius: 6px; font-weight: bold; text-align: center; }
-        .success { background-color: #d4edda; color: #155724; }
-        .error-msg { background-color: #f8d7da; color: #721c24; }
+        /* Style untuk Riwayat Absensi */
+        .card-riwayat { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            max-width: 900px; 
+            margin: auto; 
+            display: none;
+        }
+        .nav-periode { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+            background: #fff; 
+            padding: 10px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+        }
+        .nav-btn { 
+            background: #1a73e8; 
+            color: white; 
+            border: none; 
+            padding: 8px 5px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 40px; /* Lebih pendek */
+            min-width: 40px; /* Tidak mengecil */
+            flex-shrink: 0; /* Tidak menyusut */
+        }
+        .nav-btn:hover { background: #1557b0; }
+        #displayPeriode { 
+            font-weight: bold; 
+            color: #2c3e50; 
+            font-size: 14px; 
+            text-align: center; 
+            flex-grow: 1; /* Mengisi ruang yang tersedia */
+            margin: 0 10px; /* Memberi jarak dari tombol */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 14px; 
+            margin-top: 15px;
+        }
+        th { 
+            background: #1a73e8; 
+            color: white; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        td { 
+            padding: 12px; 
+            border-bottom: 1px solid #ddd; 
+        }
+        .terlambat { 
+            color: #d93025; 
+            font-weight: bold; 
+            background-color: #fce8e6; 
+        }
+        .map-link { 
+            background: #1a73e8; 
+            color: white; 
+            padding: 5px 10px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-size: 12px; 
+        }
+        .summary { 
+            margin-top: 20px; 
+            padding: 15px; 
+            background: #eef2f7; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            border-left: 4px solid #3498db; 
+        }
+        .summary p { margin: 5px 0; }
+        .summary span { color: #d93025; }
+        
+        /* Tombol Tambahan */
+        .btn-riwayat {
+            background: #34a853;
+            margin-top: 15px;
+        }
+        .btn-riwayat:hover {
+            background: #2d8b47;
+        }
+        .btn-kembali {
+            background: #5f6368;
+            margin-bottom: 15px;
+        }
+        .btn-kembali:hover {
+            background: #4a4d52;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Absensi Guru STCM</h1>
+    <!-- Form Absensi (Tampilan Utama) -->
+    <div class="card" id="formSection">
+        <h2>Presensi Guru</h2>
         
-        <div class="profile-info">
-            <p>Nama: <span>Ustadzah Faizah</span></p>
-            <p>ID: <span>103</span></p>
+        <div class="info-box">
+            <div>📅 <span id="txtTanggal">...</span></div>
+            <div>⏰ <span id="txtJam">...</span></div>
+            <hr>
+            <div>👤 <b><span id="txtNama">...</span></b> (ID: <span id="txtID">...</span>)</div>
         </div>
-        
+
         <div class="form-group">
-            <label for="keterangan">Pilih Keterangan:</label>
-            <select id="keterangan" required>
-                <option value="Awal Masuk">Awal Masuk</option>
+            <label>Keterangan</label>
+            <select id="keterangan">
+                <option value="Masuk">Masuk</option>
                 <option value="Pulang">Pulang</option>
-                <option value="Ijin Keluar">Ijin Keluar</option>
-                <option value="Datang Lagi">Datang Lagi</option>
+                <option value="Izin keluar">Izin keluar</option>
+                <option value="Datang lagi">Datang lagi</option>
             </select>
         </div>
+
+        <button id="btnLoc" onclick="getLocation()">📍 Ambil Lokasi GPS</button>
+        <button id="btnSubmit" onclick="kirimData()" disabled>Kirim Absensi</button>
         
-        <div class="form-group">
-            <button id="locationBtn" onclick="getLocation()">
-                <span id="btnText">📍 Dapatkan Lokasi</span>
-                <div id="btnLoader" class="loader"></div>
-            </button>
-            <div id="lokasi"></div>
+        <!-- Tombol untuk menampilkan riwayat -->
+        
+        
+        <div id="status"></div>
+
+        <!-- Garis pemisah sebelum tombol Riwayat -->
+        <hr style="margin: 20px 0; border: none; height: 1px; background-color: #ddd;">
+
+        <button class="btn-riwayat" onclick="tampilkanRiwayat()">📋 Riwayat Absensi</button>
         </div>
+
+    <!-- Riwayat Absensi (Tersembunyi Awalnya) -->
+    <div class="card-riwayat" id="riwayatSection">
+        <button class="btn-kembali" onclick="tampilkanForm()">← Kembali ke Form</button>
         
-        <div class="form-group">
-            <button id="submitBtn" onclick="submitAbsensi()" style="background-color: #3498db;">Kirim Absensi Sekarang</button>
+        <div class="nav-periode">
+            <button class="nav-btn" onclick="changeCycle(-1)">◀</button>
+            <div id="displayPeriode">Menghitung...</div>
+            <button class="nav-btn" onclick="changeCycle(1)">▶</button>
         </div>
-        
-        <div id="notification" class="notification"></div>
+
+        <table id="tabelAbsen">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Tanggal</th>
+                    <th>Waktu</th>
+                    <th>Ket</th>
+                    <th>Map</th>
+                </tr>
+            </thead>
+            <tbody id="isiTabel">
+                <tr><td colspan="5" style="text-align:center">Memuat data...</td></tr>
+            </tbody>
+        </table>
+
+        <div class="summary">
+            <p>Masuk: <span id="resMasuk" style="color:#1a73e8">0</span> hari</p>
+            <p>Terlambat: <span id="resTerlambat">0</span> kali</p>
+            <p>Ijin keluar: <span id="resIjin" style="color:#1a73e8">0</span> kali</p>
+        </div>
     </div>
 
     <script>
-        // GANTI DENGAN URL WEB APP ANDA
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5kUoQEeOjvJ6aY6ou7YKegX3_7BsCjmiMQxJmy7Nw1DwX_TFVKHxFO48375k-90KPqw/exec';
-        
+        // --- EDIT BAGIAN INI UNTUK TIAP USER ---
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQVweOfvArqRChxEuS1fky2Io4cfcTFNtNDuE632h2WeBVBE0wHLLyjekwe0kRn6jR/exec";
         const USER_ID = "103";
         const USER_NAMA = "Ustadzah Faizah";
+        // ---------------------------------------
 
-        let currentLocation = null;
+        let coords = "";
+        document.getElementById('txtNama').innerText = USER_NAMA;
+        document.getElementById('txtID').innerText = USER_ID;
+
+        // Update Jam & Tanggal Realtime (Teks)
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('txtTanggal').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'2-digit', year:'numeric'}).replace(/\//g, '-');
+            document.getElementById('txtJam').innerText = now.toLocaleTimeString('id-ID', {hour12:false});
+        }, 1000);
 
         function getLocation() {
-            const btn = document.getElementById('locationBtn');
-            const btnText = document.getElementById('btnText');
-            const loader = document.getElementById('btnLoader');
-
-            btn.disabled = true;
-            btnText.innerText = "Mencari GPS...";
-            loader.style.display = "inline-block";
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        currentLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-                        document.getElementById('lokasi').innerHTML = "✅ Lokasi Terdeteksi";
-                        btn.disabled = false;
-                        btnText.innerText = "Update Lokasi";
-                        loader.style.display = "none";
-                    },
-                    error => {
-                        btn.disabled = false;
-                        btnText.innerText = "Dapatkan Lokasi";
-                        loader.style.display = "none";
-                        alert("Gagal ambil lokasi. Pastikan GPS HP aktif!");
-                    },
-                    { enableHighAccuracy: true, timeout: 10000 }
-                );
-            }
+            const btn = document.getElementById('btnLoc');
+            btn.innerText = "Mencari...";
+            navigator.geolocation.getCurrentPosition(pos => {
+                coords = `${pos.coords.latitude},${pos.coords.longitude}`;
+                btn.innerText = "✅ Lokasi Terkunci";
+                document.getElementById('btnSubmit').disabled = false;
+            }, err => {
+                alert("Gagal ambil lokasi. Pastikan GPS aktif!");
+                btn.innerText = "📍 Ambil Lokasi GPS";
+            });
         }
 
-        async function submitAbsensi() {
-            if (!currentLocation) { alert('Ambil lokasi dulu!'); return; }
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const notificationDiv = document.getElementById('notification');
-            const ketSelect = document.getElementById('keterangan');
+        async function kirimData() {
+            const btn = document.getElementById('btnSubmit');
+            const status = document.getElementById('status');
+            btn.disabled = true;
+            status.innerText = "Mengirim...";
 
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Proses Mengirim...";
-
-            const waktuNow = new Date();
-            const dataKirim = {
-                tanggal: `${waktuNow.getDate()}-${waktuNow.getMonth()+1}-${waktuNow.getFullYear()}`,
-                jam: waktuNow.getHours().toString().padStart(2, '0') + ":" + waktuNow.getMinutes().toString().padStart(2, '0') + ":" + waktuNow.getSeconds().toString().padStart(2, '0'),
+            const payload = {
+                tanggal: document.getElementById('txtTanggal').innerText,
+                jam: document.getElementById('txtJam').innerText,
                 id: USER_ID,
                 nama: USER_NAMA,
-                keterangan: ketSelect.value,
-                lokasi: `https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lng}`
+                keterangan: document.getElementById('keterangan').value,
+                lokasi: `https://www.google.com/maps?q=${coords}`
             };
 
             try {
-                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dataKirim) });
-                notificationDiv.textContent = '✅ Absen Berhasil Tersimpan!';
-                notificationDiv.className = 'notification success';
-                document.getElementById('lokasi').innerHTML = '';
-                currentLocation = null;
+                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+                status.style.color = "green";
+                status.innerText = "✅ Berhasil Terkirim!";
             } catch (e) {
-                notificationDiv.textContent = '❌ Gagal Terkirim!';
-                notificationDiv.className = 'notification error-msg';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Kirim Absensi Sekarang";
+                status.style.color = "red";
+                status.innerText = "❌ Gagal Mengirim!";
+                btn.disabled = false;
             }
         }
+
+        // Fungsi untuk Riwayat Absensi
+        let currentOffset = 0; // 0 = siklus sekarang, -1 = siklus lalu, dst.
+
+        function getCycleRange(offset) {
+            const today = new Date();
+            // Atur ke tanggal 16 bulan ini/lalu berdasarkan hari ini
+            let baseDate = new Date(today.getFullYear(), today.getMonth() + offset, 16);
+            
+            // Jika hari ini belum tanggal 16, secara default kita di siklus yang mulai bulan lalu
+            if (today.getDate() < 16 && offset === 0) {
+                baseDate.setMonth(baseDate.getMonth() - 1);
+            }
+
+            let start = new Date(baseDate.getFullYear(), baseDate.getMonth(), 16);
+            let end = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 15);
+            
+            return { start, end };
+        }
+
+        function changeCycle(direction) {
+            currentOffset += direction;
+            loadData();
+        }
+
+        async function loadData() {
+            const tbody = document.getElementById('isiTabel');
+            const cycle = getCycleRange(currentOffset);
+            
+            const options = { day: 'numeric', month: 'short' };
+            document.getElementById('displayPeriode').innerText = 
+                `${cycle.start.toLocaleDateString('id-ID', options)} - ${cycle.end.toLocaleDateString('id-ID', options)} (${cycle.start.getFullYear()})`;
+
+            try {
+                const res = await fetch(`${SCRIPT_URL}?id=${USER_ID}`);
+                const allData = await res.json();
+                
+                let html = "";
+                let countMasukDays = new Set();
+                let countTerlambat = 0;
+                let countIjin = 0;
+
+                // Filter data yang hanya masuk dalam siklus yang dipilih
+                const filteredData = allData.filter(item => {
+                    const parts = item.tgl.split('-');
+                    const d = new Date(parts[2], parts[1] - 1, parts[0]);
+                    return d >= cycle.start && d <= cycle.end;
+                });
+
+                if(filteredData.length === 0) {
+                    html = "<tr><td colspan='5' style='text-align:center'>Tidak ada data pada periode ini.</td></tr>";
+                } else {
+                    filteredData.forEach((item, index) => {
+                        const isMasuk = item.ket.toLowerCase().includes("masuk");
+                        const isLate = item.jam > "07:00:00"; 
+                        
+                        if (isMasuk) {
+                            countMasukDays.add(item.tgl);
+                            if (isLate) countTerlambat++;
+                        }
+                        if (item.ket.toLowerCase().includes("izin keluar")) countIjin++;
+
+                        const rowClass = (isMasuk && isLate) ? 'class="terlambat"' : '';
+                        html += `<tr ${rowClass}>
+                            <td>${index + 1}</td>
+                            <td>${item.tgl}</td>
+                            <td>${item.jam}</td>
+                            <td>${item.ket}</td>
+                            <td><a class="map-link" href="${item.map}" target="_blank">Map</a></td>
+                        </tr>`;
+                    });
+                }
+                
+                tbody.innerHTML = html;
+                document.getElementById('resMasuk').textContent = countMasukDays.size;
+                document.getElementById('resTerlambat').textContent = countTerlambat;
+                document.getElementById('resIjin').textContent = countIjin;
+
+            } catch (e) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>Gagal memuat!</td></tr>";
+            }
+        }
+
+        // Fungsi untuk menampilkan/sembunyikan form dan riwayat
+        function tampilkanRiwayat() {
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('riwayatSection').style.display = 'block';
+            loadData(); // Muat data riwayat saat ditampilkan
+        }
+
+        function tampilkanForm() {
+            document.getElementById('riwayatSection').style.display = 'none';
+            document.getElementById('formSection').style.display = 'block';
+        }
+
+        // Inisialisasi
+        loadData(); // Muat data riwayat pertama kali (saat halaman dimuat)
     </script>
 </body>
 </html>
+[file content end]
