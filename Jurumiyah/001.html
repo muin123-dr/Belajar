@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - 60 Soal</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Layar Utama */
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #1e2f5a;
+      letter-spacing: 1px;
+    }
+
+    .main-menu .level-badge {
+      background: #f6d365;
+      color: #1e3c72;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 30px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #b68b40;
+    }
+
+    .btn-mulai {
+      background: #f6d365;
+      border: none;
+      color: #1e3c72;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #b68b40, 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #b68b40, 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Layar Quiz */
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .quiz-header .level-small {
+      background: #f6d365;
+      color: #1e3c72;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 40px;
+    }
+
+    /* Tombol navigasi grid */
+    .nav-grid-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .question-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #fff5e0;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255,255,255,0.35);
+      border-color: #f6d365;
+    }
+
+    .option-item.selected {
+      background: #f6d365;
+      color: #1e3c72;
+      font-weight: 700;
+      border-color: #f6d365;
+      box-shadow: 0 0 15px #f6d365;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #1e3c72;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #b68b40;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+
+    /* Notifikasi */
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: white;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+      animation: pop 0.3s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      border: 4px solid #2e7d32;
+    }
+
+    .notification-card.salah {
+      background: linear-gradient(145deg, #ffcdd2, #ef9a9a);
+      border: 4px solid #b71c1c;
+    }
+
+    .notification-card.selesai {
+      background: linear-gradient(145deg, #bbdefb, #90caf9);
+      border: 4px solid #1565c0;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn-next {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: white;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: white;
+    }
+
+    .btn-level2 {
+      background: #7b1fa2;
+      color: white;
+    }
+
+    .explanation-box {
+      background: #fff3e0;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #1e3c72;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #ffb74d;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Panel navigasi grid */
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #1e3c72;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #f6d365;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #f6d365;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #2e7d32;
+      border-color: #81c784;
+    }
+
+    .nav-item.unanswered {
+      background: #b71c1c;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #f6d365;
+    }
+
+    .btn-tutup-panel {
+      background: #f6d365;
+      border: none;
+      color: #1e3c72;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <!-- Layar Utama -->
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> Level 1-3 <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">60 soal pilihan ganda • bab al-Kalam</div>
+  </div>
+
+  <!-- Layar Quiz (awalnya tersembunyi) -->
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> 60 Soal</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+
+    <div class="footer">— ‏شرح الكلام وأقسامه لابن عثيمين ‏—</div>
+  </div>
+</div>
+
+<!-- Panel Navigasi Grid -->
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<!-- Notifikasi (popup) -->
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- DATA SOAL (60 soal) ----------
+    const questions = [
+      // Soal 1 (mudah)
+      {
+        question: "ما تعريف الكلام عند النحويين؟",
+        options: ["اللفظ المفيد", "اللفظ المركب المفيد بالوضع", "اللفظ المركب", "ما أفاد معنى"],
+        correct: 1,
+        explanation: "Analisis: الكلام هو اللفظ المركب المفيد بالوضع. هذه الأربعة قيود لا بد منها: اللفظ، التركيب، الإفادة، والوضع العربي."
+      },
+      // Soal 2 (mudah)
+      {
+        question: "كم أقسام الكلام عند النحويين؟",
+        options: ["قسمان", "ثلاثة", "أربعة", "خمسة"],
+        correct: 1,
+        explanation: "Analisis: أقسام الكلام ثلاثة: اسم وفعل وحرف جاء لمعنى."
+      },
+      // Soal 3 (mudah)
+      {
+        question: "أي من التالي ليس من علامات الاسم؟",
+        options: ["الخفض", "التنوين", "تاء التأنيث الساكنة", "دخول الألف واللام"],
+        correct: 2,
+        explanation: "Analisis: تاء التأنيث الساكنة من علامات الفعل. علامات الاسم: الخفض، التنوين، دخول الألف واللام، وحروف الخفض."
+      },
+      // Soal 4 (mudah)
+      {
+        question: "كم عدد حروف الخفض التي ذكرها المؤلف؟",
+        options: ["سبعة", "ثمانية", "تسعة", "عشرة"],
+        correct: 2,
+        explanation: "Analisis: حروف الخفض تسعة: من، إلى، عن، على، في، رب، الباء، الكاف، اللام."
+      },
+      // Soal 5 (mudah)
+      {
+        question: "ما معنى 'المفيد' في تعريف الكلام؟",
+        options: ["ما كان طويلاً", "ما أفاد السامع بحيث لا يتشوف بعده إلى غيره", "ما كان مفهومًا", "ما كان عربياً"],
+        correct: 1,
+        explanation: "Analisis: المفيد هو ما أفاد السامع فائدة يحسن السكوت عليها ولا يتشوف بعدها إلى شيء."
+      },
+      // Soal 6 (mudah)
+      {
+        question: "أي من التالي يعتبر كلامًا عند النحويين؟",
+        options: ["الإشارة باليد", "الكتابة على الورق", "قول 'قام زيد'", "الإيماء بالرأس"],
+        correct: 2,
+        explanation: "Analisis: الكلام عند النحويين لا بد أن يكون لفظًا، فالإشارة والكتابة لا تسمى كلامًا."
+      },
+      // Soal 7 (mudah)
+      {
+        question: "'قد' من علامات أي قسم؟",
+        options: ["الاسم", "الفعل", "الحرف", "الاسم والفعل معًا"],
+        correct: 1,
+        explanation: "Analisis: 'قد' من علامات الفعل، تدخل على الماضي والمضارع."
+      },
+      // Soal 8 (mudah)
+      {
+        question: "حروف القسم هي:",
+        options: ["الواو والباء والتاء", "من وإلى وعن", "في ورب والكاف", "اللام والباء والكاف"],
+        correct: 0,
+        explanation: "Analisis: حروف القسم: الواو، الباء، التاء."
+      },
+      // Soal 9 (mudah)
+      {
+        question: "ماذا يسمى الخفض عند البصريين؟",
+        options: ["الخفض", "الجر", "الإعراب", "الإضافة"],
+        correct: 1,
+        explanation: "Analisis: البصريون يعبرون عن الخفض بالجر، والكوفيون يقولون خفض."
+      },
+      // Soal 10 (mudah)
+      {
+        question: "'رب' من حروف:",
+        options: ["القسم فقط", "الخفض فقط", "الخفض والقسم معًا", "النصب"],
+        correct: 1,
+        explanation: "Analisis: 'رب' من حروف الخفض وليست من حروف القسم."
+      },
+      // Soal 11 (mudah)
+      {
+        question: "ما علامة الحرف عند النحويين؟",
+        options: ["دخول الألف واللام", "قبول التنوين", "عدم قبول علامات الاسم والفعل", "دخول حروف الجر"],
+        correct: 2,
+        explanation: "Analisis: الحرف هو ما لا يصلح معه دليل الاسم ولا دليل الفعل."
+      },
+      // Soal 12 (mudah)
+      {
+        question: "'السين' و'سوف' تدخلان على:",
+        options: ["الاسم", "الفعل الماضي", "الفعل المضارع", "الحرف"],
+        correct: 2,
+        explanation: "Analisis: السين وسوف تختصان بالفعل المضارع."
+      },
+      // Soal 13 (mudah)
+      {
+        question: "'تاء التأنيث الساكنة' تختص بـ:",
+        options: ["الاسم", "الفعل الماضي", "الفعل المضارع", "الحرف"],
+        correct: 1,
+        explanation: "Analisis: تاء التأنيث الساكنة تختص بالفعل الماضي، مثل 'قالت'."
+      },
+      // Soal 14 (mudah)
+      {
+        question: "مثال على الكلمة التي فيها علامة الخفض فقط:",
+        options: ["رجلٌ", "الكتابُ", "بزيدٍ", "يكتبُ"],
+        correct: 2,
+        explanation: "Analisis: 'بزيد'، كلمة 'زيد' مجرورة بالباء، وهذا يدل على أنها اسم."
+      },
+      // Soal 15 (mudah)
+      {
+        question: "'من' حرف جر يفيد:",
+        options: ["الانتهاء", "الابتداء", "الاستعلاء", "التشبيه"],
+        correct: 1,
+        explanation: "Analisis: 'من' للابتداء، مثل 'خرجت من البصرة'."
+      },
+      // Soal 16 (mudah)
+      {
+        question: "'إلى' حرف جر يفيد:",
+        options: ["الابتداء", "الانتهاء", "الاستعلاء", "الظرفية"],
+        correct: 1,
+        explanation: "Analisis: 'إلى' للانتهاء، مثل 'خرجت من مكة إلى المدينة'."
+      },
+      // Soal 17 (mudah)
+      {
+        question: "'على' حرف جر يفيد:",
+        options: ["الابتداء", "الانتهاء", "الاستعلاء", "التبعية"],
+        correct: 2,
+        explanation: "Analisis: 'على' للاستعلاء، مثل 'على السطح'."
+      },
+      // Soal 18 (mudah)
+      {
+        question: "الكاف من حروف الخفض وتفيد:",
+        options: ["الاستعلاء", "التشبيه", "الظرفية", "القسم"],
+        correct: 1,
+        explanation: "Analisis: الكاف تفيد التشبيه، مثل 'فلان كالبحر'."
+      },
+      // Soal 19 (mudah)
+      {
+        question: "أي من التالية ليست من حروف القسم؟",
+        options: ["الواو", "الباء", "التاء", "الكاف"],
+        correct: 3,
+        explanation: "Analisis: حروف القسم هي الواو والباء والتاء فقط."
+      },
+      // Soal 20 (mudah)
+      {
+        question: "'ال' التي للتعريف تدخل على:",
+        options: ["الأفعال فقط", "الأسماء فقط", "الحروف فقط", "الأسماء والأفعال"],
+        correct: 1,
+        explanation: "Analisis: الألف واللام من علامات الاسم، فلا تدخل إلا على الأسماء."
+      },
+      // Soal 21 (sedang)
+      {
+        question: "ما الدليل على أن أقسام الكلام ثلاثة؟",
+        options: ["القرآن الكريم", "السنة النبوية", "الإجماع والقياس", "التتبع والاستقراء"],
+        correct: 3,
+        explanation: "Analisis: دليل هذا التقسيم هو التتبع والاستقراء لكلام العرب."
+      },
+      // Soal 22 (sedang)
+      {
+        question: "'إن اجتهدت' هل تعتبر كلامًا عند النحويين؟",
+        options: ["نعم، لأنه مركب من كلمتين", "لا، لأنه غير مفيد", "نعم، لأنه لفظ", "لا، لأنه ليس بالوضع العربي"],
+        correct: 1,
+        explanation: "Analisis: 'إن اجتهدت' مركب لكنه غير مفيد، لأن السامع يتشوف إلى جواب الشرط."
+      },
+      // Soal 23 (sedang)
+      {
+        question: "أي العلامات الأربع للاسم لا يمكن اجتماعها مع التنوين؟",
+        options: ["الخفض", "دخول الألف واللام", "حروف الخفض", "حروف القسم"],
+        correct: 1,
+        explanation: "Analisis: التنوين والألف واللام لا يجتمعان أبدًا."
+      },
+      // Soal 24 (sedang)
+      {
+        question: "كم يصبح عدد حروف الخفض إذا أضفنا حروف القسم إليها؟",
+        options: ["9 أحرف", "10 أحرف", "11 حرفًا", "12 حرفًا"],
+        correct: 3,
+        explanation: "Analisis: حروف الخفض 9 + حروف القسم 3 = 12، مع ملاحظة أن الباء مشتركة."
+      },
+      // Soal 25 (sedang)
+      {
+        question: "لماذا لا تعتبر 'شجرة' فعلاً مع وجود تاء التأنيث؟",
+        options: ["لأنها اسم", "لأن تاءها متحركة وليست ساكنة", "لأنها ثلاثية", "لأنها مؤنثة"],
+        correct: 1,
+        explanation: "Analisis: شرط علامة الفعل أن تكون تاء التأنيث ساكنة، وتاء 'شجرة' متحركة."
+      },
+      // Soal 26 (sedang)
+      {
+        question: "ماذا يسمى 'قم' من حيث التركيب؟",
+        options: ["مفرد غير مركب", "مركب تحقيقًا", "مركب تقديرًا", "غير كلام"],
+        correct: 2,
+        explanation: "Analisis: 'قم' مركب تقديرًا لأن فيه ضميرًا مستترًا."
+      },
+      // Soal 27 (sedang)
+      {
+        question: "ما الفرق بين البصريين والكوفيين في تسمية 'ال'؟",
+        options: ["البصريون يقولون 'آل' والكوفيون 'الألف واللام'", "البصريون 'الألف واللام' والكوفيون 'ال'", "البصريون 'ال' والكوفيون 'الألف واللام'", "كلاهما يقول 'ال'"],
+        correct: 2,
+        explanation: "Analisis: البصريون ينطقون بلفظها 'ال'، والكوفيون ينطقون باسمها 'الألف واللام'."
+      },
+      // Soal 28 (sedang)
+      {
+        question: "قوله تعالى: ﴿وَاللَّهِ لَأَكِيدَنَّ أَصْنَامَكُمْ﴾ كلمة 'الله' فيها من علامات الاسم:",
+        options: ["الألف واللام فقط", "الخفض ودخول حرف القسم والألف واللام", "التنوين والخفض", "حرف القسم فقط"],
+        correct: 1,
+        explanation: "Analisis: دخل عليها حرف القسم (الواو) فخفضت، وفيها الألف واللام، فاجتمعت ثلاث علامات."
+      },
+      // Soal 29 (sedang)
+      {
+        question: "لماذا قال المؤلف 'حرف جاء لمعنى'؟",
+        options: ["ليخرج الحروف الهجائية", "ليشمل جميع الحروف", "ليدخل الأفعال", "ليميز الحروف العاملة"],
+        correct: 0,
+        explanation: "Analisis: قيد 'جاء لمعنى' ليخرج الحروف التي لا معنى لها مثل حروف الهجاء."
+      },
+      // Soal 30 (sedang)
+      {
+        question: "إذا قال قائل: 'السماء فوقنا' هل هذا كلام مفيد؟",
+        options: ["لا، لأنه معلوم", "نعم، مع أنه معلوم", "لا، لأنه غير مركب", "نعم، لأنه لفظ"],
+        correct: 1,
+        explanation: "Analisis: ولا فرق بين أن تكون الفائدة جديدة أو معلومة."
+      },
+      // Soal 31 (sedang)
+      {
+        question: "ما معنى 'بالوضع' في تعريف الكلام؟",
+        options: ["أن يكون المتكلم جالسًا", "أن يكون الكلام موضوعًا في مكانه", "أمران: قصد المتكلم وأن يكون بالوضع العربي", "أن يكون الكلام مكتوبًا"],
+        correct: 2,
+        explanation: "Analisis: 'بالوضع' تعني: أن يكون الواضع قاصدًا للكلام، وأن يكون باللغة العربية."
+      },
+      // Soal 32 (sedang)
+      {
+        question: "أي من التالية ليس من علامات الفعل؟",
+        options: ["تاء التأنيث الساكنة", "التنوين", "السين", "قد"],
+        correct: 1,
+        explanation: "Analisis: التنوين من علامات الاسم."
+      },
+      // Soal 33 (sedang)
+      {
+        question: "لماذا يعتبر 'الرجل القدير البارع' ليس كلامًا؟",
+        options: ["لأنه ليس لفظًا", "لأنه غير مركب", "لأنه غير مفيد", "لأنه ليس بالوضع العربي"],
+        correct: 2,
+        explanation: "Analisis: لأنه غير مفيد، السامع لا يزال يتشوف إلى شيء."
+      },
+      // Soal 34 (sedang)
+      {
+        question: "هل تجتمع علامات الاسم الأربع في كلمة واحدة؟",
+        options: ["نعم، دائمًا", "لا، أبدًا", "نعم، أحيانًا", "يجتمع ثلاث منها فقط"],
+        correct: 3,
+        explanation: "Analisis: لا يمكن اجتماع الأربع لأن التنوين والألف واللام لا يجتمعان."
+      },
+      // Soal 35 (sedang)
+      {
+        question: "'رب رجل لقيته' كلمة 'رجل' فيها من علامات الاسم:",
+        options: ["التنوين فقط", "الخفض فقط", "الخفض والتنوين ودخول حرف الخفض", "الألف واللام فقط"],
+        correct: 2,
+        explanation: "Analisis: دخلت عليها 'رب' (حرف خفض) فخفضتها، وفيها تنوين، فاجتمعت ثلاث علامات."
+      },
+      // Soal 36 (sedang)
+      {
+        question: "ما حكم من قال: 'على العرش' بجر العرش؟",
+        options: ["خطأ", "صحيح", "جائز", "ممنوع"],
+        correct: 1,
+        explanation: "Analisis: صحيح لأن 'على' حرف خفض يجب أن يخفض ما بعده."
+      },
+      // Soal 37 (sedang)
+      {
+        question: "كلمة 'سحر' هل تدل على أنها فعل بدخول السين؟",
+        options: ["نعم، لأن فيها سينًا", "لا، لأن السين من بنية الكلمة", "نعم، لأن السين في أولها", "لا، لأنها اسم"],
+        correct: 1,
+        explanation: "Analisis: السين التي هي علامة فعل يجب أن تكون زائدة، أما 'سحر' فالسين أصلية."
+      },
+      // Soal 38 (sedang)
+      {
+        question: "اللام في قوله تعالى: ﴿إِنَّهُ لَحُبُّ الْخَيْرِ لَشَدِيدٌ﴾ هي:",
+        options: ["حرف جر", "حرف توكيد", "حرف قسم", "حرف نصب"],
+        correct: 1,
+        explanation: "Analisis: اللام هنا للتوكيد وليست حرف جر، بدليل أنها دخلت على 'حب' وهو مرفوع."
+      },
+      // Soal 39 (sedang)
+      {
+        question: "كم علامة للفعل ذكرها المؤلف؟",
+        options: ["ثلاث", "أربع", "خمس", "ست"],
+        correct: 1,
+        explanation: "Analisis: أربع علامات: قد، والسين، وسوف، وتاء التأنيث الساكنة."
+      },
+      // Soal 40 (sedang)
+      {
+        question: "'ال' في 'الشمس' تعتبر:",
+        options: ["قمرية", "شمسية", "مقطوعة", "موصولة"],
+        correct: 1,
+        explanation: "Analisis: اللام في 'الشمس' مدغمة في الشين، فهي شمسية."
+      },
+      // Soal 41 (sulit)
+      {
+        question: "ما الفرق بين الكلام في اصطلاح النحويين والكلام في الشرع؟",
+        options: ["لا فرق", "النحويون يشترطون اللفظ والشرع لا يشترطه", "النحويون لا يعتبرون الكتابة كلامًا والشرع يعتبرها كلامًا", "كلاهما يشترط اللفظ"],
+        correct: 2,
+        explanation: "Analisis: الكتابة تسمى كلامًا في الشرع، لكنها لا تسمى كلامًا في اصطلاح النحويين."
+      },
+      // Soal 42 (sulit)
+      {
+        question: "هل يعتبر كلام السكران كلامًا عند النحويين؟",
+        options: ["نعم، لأنه لفظ", "لا، لأنه ليس بقصد الواضع", "نعم، إذا كان مفيدًا", "لا، لأنه غير عربي"],
+        correct: 1,
+        explanation: "Analisis: شرط 'بالوضع' يتضمن أن يكون المتكلم قاصدًا للكلام."
+      },
+      // Soal 43 (sulit)
+      {
+        question: "'بسم الله الرحمن الرحيم' هل تعتبر كلامًا عند النحويين؟",
+        options: ["لا، لأنها ناقصة", "نعم، وهي مركبة تحقيقًا", "نعم، وهي مركبة تقديرًا", "لا، لأنها ليست مفيدة"],
+        correct: 2,
+        explanation: "Analisis: 'بسم الله' كلام مفيد، وهي مركبة تقديرًا لأن التقدير: 'بسم الله أقرأ'."
+      },
+      // Soal 44 (sulit)
+      {
+        question: "لماذا جعلوا علامة الحرف أمرًا عدميًا؟",
+        options: ["لأن الحرف لا قيمة له", "لأنه إذا كان الشيء محصورًا صحت العلامة العدمية", "لأنهم عجزوا عن وضع علامة وجودية", "لأن الحرف ليس له معنى"],
+        correct: 1,
+        explanation: "Analisis: لأنه محصور بين الاسم والفعل، فصح أن تكون علامته عدمية."
+      },
+      // Soal 45 (sulit)
+      {
+        question: "قوله تعالى: ﴿وَأَنْتُمْ عَاكِفُونَ فِي الْمَسَاجِدِ﴾ كلمة 'المساجد' فيها من علامات الاسم:",
+        options: ["علامتان: الألف واللام والخفض", "ثلاث علامات: حرف الخفض والألف واللام والخفض", "علامة واحدة: الألف واللام", "أربع علامات"],
+        correct: 1,
+        explanation: "Analisis: دخلت عليها 'في' (حرف خفض)، وفيها الألف واللام، وهي مخفوضة، فاجتمعت ثلاث علامات."
+      },
+      // Soal 46 (sulit)
+      {
+        question: "إذا قال أعرابي: 'ربما تكره النفوس من الأمر له فرجة كحل العقال' ما الغرض من هذه القصة؟",
+        options: ["بيان بلاغة العرب", "بيان أن علماء النحو كانوا يتتبعون كلام العرب الأقحاح", "بيان قسوة الحجاج", "بيان معنى البيت"],
+        correct: 1,
+        explanation: "Analisis: القصة تبين كيف كان علماء اللغة يذهبون إلى البوادي ويتتبعون كلام العرب الأقحاح."
+      },
+      // Soal 47 (sulit)
+      {
+        question: "أي من التالية يعتبر حرفًا جاء لمعنى؟",
+        options: ["الميم في 'من'", "'من' بكاملها", "الراء في 'رب'", "الألف في 'ال'"],
+        correct: 1,
+        explanation: "Analisis: الحرف المصطلح هو الذي له معنى، فـ'من' بكاملها حرف جر."
+      },
+      // Soal 48 (sulit)
+      {
+        question: "قوله: 'وَالْحَرْفُ مَا لا يَصْلُحُ مَعَهُ دَلِيلُ الاسْمِ وَلا دَلِيلُ الْفِعْلِ' هذا تعريف:",
+        options: ["منطقي", "بالرسم", "بالحد", "بالعلامة"],
+        correct: 3,
+        explanation: "Analisis: المؤلف حده بالعلامة أي بالحكم والعلامة التي يعرف بها."
+      },
+      // Soal 49 (sulit)
+      {
+        question: "ما رأي المؤلف في قول بعضهم: 'النحو صعب وطويل سلمه'؟",
+        options: ["يوافق عليه", "يرفضه ويعتبره غير صحيح", "يتركه دون تعليق", "يوافق عليه بشروط"],
+        correct: 1,
+        explanation: "Analisis: قال المؤلف: 'هذا ليس بصحيح، نحن لا نوافق على هذا'."
+      },
+      // Soal 50 (sulit)
+      {
+        question: "'أفلم ينظروا إلى السماء فوقهم' كلمة 'السماء' فيها من علامات الاسم:",
+        options: ["الألف واللام فقط", "الخفض فقط", "حرف الخفض والألف واللام والخفض", "التنوين فقط"],
+        correct: 2,
+        explanation: "Analisis: دخلت عليها 'إلى' (حرف خفض)، وفيها الألف واللام، وهي مخفوضة."
+      },
+      // Soal 51 (sulit)
+      {
+        question: "كم حرف خفض ذكرها المؤلف صراحة بلفظها وكم ذكرها باسمها؟",
+        options: ["ستة بلفظها وثلاثة باسمها", "خمسة بلفظها وأربعة باسمها", "سبعة بلفظها واثنان باسمها", "ثمانية بلفظها وواحد باسمها"],
+        correct: 0,
+        explanation: "Analisis: الحروف التي على حرفين فأكثر ذكرها بلفظها: من، إلى، عن، على، في، رب. والتي على حرف واحد ذكرها باسمها: الباء، الكاف، اللام."
+      },
+      // Soal 52 (sulit)
+      {
+        question: "ما المراد بقوله 'بالوضع' في تعريف الكلام؟",
+        options: ["أن يكون الكلام موضوعًا في الجملة", "أمران: قصد المتكلم والوضع العربي", "أن يكون الكلام معروفًا عند العرب", "أن يكون الكلام مكتوبًا"],
+        correct: 1,
+        explanation: "Analisis: فسّر المؤلف 'بالوضع' بأمرين: قصد المتكلم، والوضع العربي."
+      },
+      // Soal 53 (sulit)
+      {
+        question: "'من' حرف جر له معان متعددة، في قوله تعالى: ﴿حَتَّى يُعْطُوا الْجِزْيَةَ عَن يَدٍ﴾ 'عن' تفيد:",
+        options: ["الابتداء", "الانتهاء", "المجاوزة", "الاستعلاء"],
+        correct: 2,
+        explanation: "Analisis: 'عن' في الآية تفيد المجاوزة، أي تنتقل من أيديهم."
+      },
+      // Soal 54 (sulit)
+      {
+        question: "لماذا لا يصح أن تقول 'على العرش' بضم الراء أو فتحها؟",
+        options: ["لأنه خطأ نحوي", "لأن 'على' حرف خفض يجب أن يخفض ما بعده", "لأن العرش مرفوع", "لأنها جملة غير مفيدة"],
+        correct: 1,
+        explanation: "Analisis: حرف الخفض يوجب خفض الاسم الذي بعده."
+      },
+      // Soal 55 (sulit)
+      {
+        question: "'قالَتِ الْأَعْرَابُ' كلمة 'قالت' فعل بدليل:",
+        options: ["السين", "قد", "تاء التأنيث الساكنة", "سوف"],
+        correct: 2,
+        explanation: "Analisis: 'قالت' مختوم بتاء التأنيث الساكنة."
+      },
+      // Soal 56 (sulit)
+      {
+        question: "قوله تعالى: ﴿وَلَكُمْ نِصْفُ مَا تَرَكَ أَزْوَاجُكُمْ﴾ اللام في 'لكم' هي:",
+        options: ["حرف جر للقسم", "حرف جر للتمليك", "حرف جر للانتهاء", "حرف توكيد"],
+        correct: 1,
+        explanation: "Analisis: اللام هنا للتمليك، أي ملك لكم."
+      },
+      // Soal 57 (sulit)
+      {
+        question: "إذا قال قائل: كيف تجعلون علامة الحرف عدمية والعلامة لا بد أن تكون أمرًا وجوديًا؟",
+        options: ["هذا اعتراض صحيح", "الجواب: أنه إذا كان الشيء محصورًا صحت العلامة العدمية", "الجواب: لأن الحرف لا قيمة له", "هذا غير صحيح"],
+        correct: 1,
+        explanation: "Analisis: هذا هو الجواب الذي ذكره المؤلف."
+      },
+      // Soal 58 (sulit)
+      {
+        question: "'ال' في 'القمر' تعتبر:",
+        options: ["شمسية", "قمرية", "مكسورة", "مفتوحة"],
+        correct: 1,
+        explanation: "Analisis: اللام في 'القمر' ظاهرة غير مدغمة، فهي قمرية."
+      },
+      // Soal 59 (sulit)
+      {
+        question: "كم حرفًا من حروف الخفض مشترك بين حروف الخفض وحروف القسم؟",
+        options: ["حرف واحد هو الباء", "حرفان هما الباء والواو", "ثلاثة هي الباء والواو والتاء", "لا يوجد اشتراك"],
+        correct: 0,
+        explanation: "Analisis: الباء مشتركة."
+      },
+      // Soal 60 (sulit)
+      {
+        question: "ما الفائدة من دراسة علم النحو حسب ما ذكره المؤلف في التمهيد؟",
+        options: ["لفهم الشعر العربي فقط", "لفهم كتاب الله وسنة رسوله وإقامة اللسان العربي", "للتباهي بالعلم", "للإعراب فقط"],
+        correct: 1,
+        explanation: "Analisis: لفهم كتاب الله وسنة رسوله، وإقامة اللسان على اللسان العربي."
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    // State
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1); // -1 = belum dijawab
+    let answerSubmitted = false;
+
+    // Fungsi simpan jawaban
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    // Fungsi tampilkan soal dengan status jawaban
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      // Jika sudah dijawab, nonaktifkan semua opsi
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    // Event listener untuk memilih opsi
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      // Simpan jawaban
+      saveAnswer(currentIndex, selectedIdx);
+
+      // Nonaktifkan semua option
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+
+      // Beri kelas selected pada yang dipilih
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    // Notifikasi benar
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    // Notifikasi salah
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    // Notifikasi selesai semua soal
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah!';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      // Kembali ke soal sama, hapus jawaban sebelumnya
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        // Semua soal selesai
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    // Navigasi grid
+    function openNavPanel() {
+      // Buat grid nomor
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    // Event klik pada grid nomor
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    // Buka panel saat tombol grid diklik
+    openNavGrid.addEventListener('click', openNavPanel);
+
+    // Tutup panel dengan tombol tutup
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    // Tutup panel jika klik di luar area panel (overlay)
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    // Mulai quiz
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1); // reset jawaban
+      loadQuestion();
+    });
+
+    // Inisialisasi awal
+    // (kosong)
+  })();
+</script>
+</body>
+</html>

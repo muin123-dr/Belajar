@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - الإعراب</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2C3E50, #4CA1AF); /* gradien baru: hijau kebiruan */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Layar Utama */
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #1a3a4a;
+      letter-spacing: 1px;
+    }
+
+    .main-menu .level-badge {
+      background: #ffb347; /* oranye baru */
+      color: #2C3E50;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 30px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #b87c30;
+    }
+
+    .btn-mulai {
+      background: #ffb347;
+      border: none;
+      color: #2C3E50;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #b87c30, 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #b87c30, 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Layar Quiz */
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .quiz-header .level-small {
+      background: #ffb347;
+      color: #2C3E50;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 40px;
+    }
+
+    /* Tombol navigasi grid */
+    .nav-grid-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .question-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #fff5e0;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255,255,255,0.35);
+      border-color: #ffb347;
+    }
+
+    .option-item.selected {
+      background: #ffb347;
+      color: #2C3E50;
+      font-weight: 700;
+      border-color: #ffb347;
+      box-shadow: 0 0 15px #ffb347;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #2C3E50;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #b87c30;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+
+    /* Notifikasi */
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: white;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+      animation: pop 0.3s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      border: 4px solid #2e7d32;
+    }
+
+    .notification-card.salah {
+      background: linear-gradient(145deg, #ffcdd2, #ef9a9a);
+      border: 4px solid #b71c1c;
+    }
+
+    .notification-card.selesai {
+      background: linear-gradient(145deg, #bbdefb, #90caf9);
+      border: 4px solid #1565c0;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn-next {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: white;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: white;
+    }
+
+    .explanation-box {
+      background: #fff3e0;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #2C3E50;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #ffb347;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Panel navigasi grid */
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #2C3E50;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #ffb347;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #ffb347;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #2e7d32;
+      border-color: #81c784;
+    }
+
+    .nav-item.unanswered {
+      background: #b71c1c;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #ffb347;
+    }
+
+    .btn-tutup-panel {
+      background: #ffb347;
+      border: none;
+      color: #2C3E50;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <!-- Layar Utama -->
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> باب الإعراب <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">60 soal pilihan ganda • bab al-I'rab</div>
+  </div>
+
+  <!-- Layar Quiz (awalnya tersembunyi) -->
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> الإعراب</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+
+    <div class="footer">— ‏باب الإعراب لابن عثيمين ‏—</div>
+  </div>
+</div>
+
+<!-- Panel Navigasi Grid -->
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<!-- Notifikasi (popup) -->
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- DATA SOAL (60 soal) - BAB الإعراب ----------
+    const questions = [
+      // Soal 1 (mudah)
+      {
+        question: "ما تعريف الإعراب في اصطلاح النحويين؟",
+        options: ["تغيير أواخر الكلم لاختلاف العوامل الداخلة عليها لفظًا أو تقديرًا", "تغيير أوائل الكلم لاختلاف العوامل", "تغيير أواسط الكلم لاختلاف العوامل", "تغيير جميع الكلم لاختلاف العوامل"],
+        correct: 0,
+        explanation: "Analisis: التعريف المذكور في النص هو 'تغيير أواخر الكلم لاختلاف العوامل الداخلة عليها لفظًا أو تقديرًا'. الخيارات الأخرى تخالف هذا التعريف."
+      },
+      // Soal 2 (mudah)
+      {
+        question: "كم أقسام الإعراب؟",
+        options: ["اثنان: رفع ونصب", "ثلاثة: رفع ونصب وجر", "أربعة: رفع ونصب وخفض وجزم", "خمسة: رفع ونصب وخفض وجزم ووقف"],
+        correct: 2,
+        explanation: "Analisis: النص يذكر أن أقسام الإعراب أربعة: رفع، نصب، خفض، جزم."
+      },
+      // Soal 3 (mudah)
+      {
+        question: "أي من الأقسام التالية يختص بالأسماء فقط؟",
+        options: ["الرفع", "النصب", "الخفض", "الجزم"],
+        correct: 2,
+        explanation: "Analisis: الخفض خاص بالأسماء كما في النص: 'الخفض يدخل على الاسم فقط لا يدخل على الفعل'."
+      },
+      // Soal 4 (mudah)
+      {
+        question: "أي من الأقسام التالية يختص بالأفعال فقط؟",
+        options: ["الرفع", "النصب", "الخفض", "الجزم"],
+        correct: 3,
+        explanation: "Analisis: الجزم خاص بالأفعال كما في النص: 'الجزم: خاص بالفعل'."
+      },
+      // Soal 5 (mudah)
+      {
+        question: "ما معنى الإعراب في اللغة؟",
+        options: ["التغيير", "الإفصاح عن الشيء", "البناء", "الإسكان"],
+        correct: 1,
+        explanation: "Analisis: النص: 'الإعراب في اللغة: الإفصاح عن الشيء'."
+      },
+      // Soal 6 (mudah)
+      {
+        question: "هل يتعلق الإعراب بأوائل الكلمات؟",
+        options: ["نعم، يتعلق بها", "لا، يتعلق بأواخرها", "يتعلق بأواسطها", "يتعلق بجميع أجزائها"],
+        correct: 1,
+        explanation: "Analisis: النص: 'الإعراب يتعلق بأواخر الكلم لا بأولها ولا بأوسطها'."
+      },
+      // Soal 7 (mudah)
+      {
+        question: "ما هو الحرف الذي لا يظهر عليه أي حركة إعرابية؟",
+        options: ["الواو", "الياء", "الألف", "الباء"],
+        correct: 2,
+        explanation: "Analisis: الألف لا يظهر عليها ضمة ولا فتحة ولا كسرة للتعذر."
+      },
+      // Soal 8 (mudah)
+      {
+        question: "أي من الكلمات التالية تعرب حركاتها تقديرًا؟",
+        options: ["زيد", "عيسى", "عمرو", "كتاب"],
+        correct: 1,
+        explanation: "Analisis: 'عيسى' مثال على الاسم المنتهي بألف، فحركاته مقدرة."
+      },
+      // Soal 9 (mudah)
+      {
+        question: "ما هو الرفع؟",
+        options: ["تغيير آخر الكلمة بالضم", "تغيير آخر الكلمة بالفتح", "تغيير آخر الكلمة بالكسر", "تغيير آخر الكلمة بالسكون"],
+        correct: 0,
+        explanation: "Analisis: الرفع يكون بالضمة أو ما ينوب عنها."
+      },
+      // Soal 10 (mudah)
+      {
+        question: "ما هو النصب؟",
+        options: ["تغيير آخر الكلمة بالضم", "تغيير آخر الكلمة بالفتح", "تغيير آخر الكلمة بالكسر", "تغيير آخر الكلمة بالسكون"],
+        correct: 1,
+        explanation: "Analisis: النصب يكون بالفتحة أو ما ينوب عنها."
+      },
+      // Soal 11 (mudah)
+      {
+        question: "ما هو الخفض؟",
+        options: ["تغيير آخر الكلمة بالضم", "تغيير آخر الكلمة بالفتح", "تغيير آخر الكلمة بالكسر", "تغيير آخر الكلمة بالسكون"],
+        correct: 2,
+        explanation: "Analisis: الخفض يكون بالكسرة أو ما ينوب عنها."
+      },
+      // Soal 12 (mudah)
+      {
+        question: "ما هو الجزم؟",
+        options: ["تغيير آخر الكلمة بالضم", "تغيير آخر الكلمة بالفتح", "تغيير آخر الكلمة بالكسر", "تغيير آخر الكلمة بالسكون"],
+        correct: 3,
+        explanation: "Analisis: الجزم يكون بالسكون أو ما ينوب عنها."
+      },
+      // Soal 13 (mudah)
+      {
+        question: "أي من أنواع الكلمات التالية لا يدخلها الإعراب؟",
+        options: ["الاسم المعرب", "الفعل المضارع", "الحرف", "الفعل الماضي"],
+        correct: 2,
+        explanation: "Analisis: الحرف مبني لا يتغير، فلا يدخله الإعراب."
+      },
+      // Soal 14 (mudah)
+      {
+        question: "ما السبب في منع ظهور الحركة على الألف؟",
+        options: ["الثقل", "التعذر", "الاستثقال", "الإعلال"],
+        correct: 1,
+        explanation: "Analisis: النص: 'في الألف منع من ظهورها التعذر'."
+      },
+      // Soal 15 (mudah)
+      {
+        question: "ما السبب في منع ظهور الضمة على الياء؟",
+        options: ["التعذر", "الثقل", "الإدغام", "الإمالة"],
+        correct: 1,
+        explanation: "Analisis: النص: 'في الياء والواو منع من ظهورها الثقل'."
+      },
+      // Soal 16 (mudah)
+      {
+        question: "أي من الكلمات التالية تعرب بالحركات الظاهرة؟",
+        options: ["الفتى", "القاضي", "زيد", "موسى"],
+        correct: 2,
+        explanation: "Analisis: 'زيد' اسم صحيح الآخر، تظهر عليه الحركات."
+      },
+      // Soal 17 (mudah)
+      {
+        question: "مثال على الفعل المجزوم:",
+        options: ["يذهبُ", "لن يذهبَ", "لم يذهبْ", "ذهبَ"],
+        correct: 2,
+        explanation: "Analisis: 'لم يذهب' فعل مضارع مجزوم بالسكون."
+      },
+      // Soal 18 (mudah)
+      {
+        question: "مثال على الاسم المخفوض:",
+        options: ["جاء زيدٌ", "رأيت زيدًا", "مررت بزيدٍ", "زيد قائم"],
+        correct: 2,
+        explanation: "Analisis: 'بزيد' مجرور بالباء وعلامة جره الكسرة."
+      },
+      // Soal 19 (mudah)
+      {
+        question: "هل يدخل الجزم في الأسماء؟",
+        options: ["نعم، يدخل", "لا، لا يدخل", "يدخل في بعض الأسماء", "يدخل في الأسماء المبنية فقط"],
+        correct: 1,
+        explanation: "Analisis: الجزم خاص بالأفعال."
+      },
+      // Soal 20 (mudah)
+      {
+        question: "هل يدخل الخفض في الأفعال؟",
+        options: ["نعم، يدخل", "لا، لا يدخل", "يدخل في الأفعال الماضية", "يدخل في الأفعال المضارعة"],
+        correct: 1,
+        explanation: "Analisis: الخفض خاص بالأسماء."
+      },
+      // Soal 21 (sedang)
+      {
+        question: "ما معنى قولهم: 'تغيير أواخر الكلم لاختلاف العوامل'؟",
+        options: ["أن التغيير يكون بسبب اختلاف العوامل الداخلة عليها", "أن التغيير يكون بسبب اختلاف اللغات", "أن التغيير يكون بسبب اختلاف المعنى", "أن التغيير يكون بسبب اختلاف النطق"],
+        correct: 0,
+        explanation: "Analisis: النص: 'تتغير باختلاف العوامل'."
+      },
+      // Soal 22 (sedang)
+      {
+        question: "ما الفرق بين التغيير اللفظي والتغيير التقديري؟",
+        options: ["اللفظي ما يظهر فيه التغيير، والتقديري ما يقدر فيه التغيير", "اللفظي ما يكون بالضم، والتقديري ما يكون بالفتح", "اللفظي ما يكون في الأسماء، والتقديري ما يكون في الأفعال", "اللفظي ما يكون في المرفوع، والتقديري ما يكون في المنصوب"],
+        correct: 0,
+        explanation: "Analisis: اللفظي يظهر على الحرف الصحيح، والتقديري على المعتل."
+      },
+      // Soal 23 (sedang)
+      {
+        question: "مثال على التغيير التقديري:",
+        options: ["جاء زيدٌ", "رأيت زيدًا", "مررت بقاضٍ", "جاء القاضي"],
+        correct: 3,
+        explanation: "Analisis: 'القاضي' في حالة الرفع تقدر الضمة على الياء للثقل."
+      },
+      // Soal 24 (sedang)
+      {
+        question: "لماذا نقدر الحركات على الألف؟",
+        options: ["لعدم ظهورها بسبب التعذر", "لعدم ظهورها بسبب الثقل", "لأن الألف حرف لين", "لأن الألف لا تقبل الحركات"],
+        correct: 0,
+        explanation: "Analisis: التعذر هو السبب."
+      },
+      // Soal 25 (sedang)
+      {
+        question: "لماذا نقدر الضمة والكسرة على الياء؟",
+        options: ["للتعذر", "للثقل", "للإعلال", "للإدغام"],
+        correct: 1,
+        explanation: "Analisis: الثقل هو السبب."
+      },
+      // Soal 26 (sedang)
+      {
+        question: "أي من الكلمات التالية تعرب بالحركات الظاهرة في جميع أحوالها؟",
+        options: ["عصا", "قاضٍ", "رجل", "هدى"],
+        correct: 2,
+        explanation: "Analisis: 'رجل' اسم صحيح الآخر."
+      },
+      // Soal 27 (sedang)
+      {
+        question: "أي من الكلمات التالية تعرب بالحركات المقدرة في جميع أحوالها؟",
+        options: ["محمد", "كتاب", "مصطفى", "مسجد"],
+        correct: 2,
+        explanation: "Analisis: 'مصطفى' منتهٍ بألف."
+      },
+      // Soal 28 (sedang)
+      {
+        question: "ما حكم كلمة 'حيث' من حيث الإعراب؟",
+        options: ["معربة بالحركات الظاهرة", "معربة بالحركات المقدرة", "مبنية", "مرفوعة دائمًا"],
+        correct: 2,
+        explanation: "Analisis: 'حيث' مبنية على الضم أو الفتح أو الكسر باختلاف اللغات."
+      },
+      // Soal 29 (sedang)
+      {
+        question: "لماذا لا يعد اختلاف أواخر كلمة 'حيث' إعرابًا؟",
+        options: ["لأنها مبنية", "لأن اختلافها لاختلاف العوامل", "لأن اختلافها لاختلاف اللغات", "لأنها اسم"],
+        correct: 2,
+        explanation: "Analisis: النص: 'اختلافها بالفتح والضم والكسر اختلاف لغات'."
+      },
+      // Soal 30 (sedang)
+      {
+        question: "ما أقسام الإعراب التي تشترك فيها الأسماء والأفعال؟",
+        options: ["الرفع والنصب", "الرفع والخفض", "النصب والجزم", "الخفض والجزم"],
+        correct: 0,
+        explanation: "Analisis: النص: 'اشتركت الأسماء والأفعال في الرفع والنصب'."
+      },
+      // Soal 31 (sedang)
+      {
+        question: "ما أقسام الإعراب التي تختص بها الأسماء؟",
+        options: ["الرفع", "النصب", "الخفض", "الجزم"],
+        correct: 2,
+        explanation: "Analisis: الخفض خاص بالأسماء."
+      },
+      // Soal 32 (sedang)
+      {
+        question: "ما أقسام الإعراب التي تختص بها الأفعال؟",
+        options: ["الرفع", "النصب", "الخفض", "الجزم"],
+        correct: 3,
+        explanation: "Analisis: الجزم خاص بالأفعال."
+      },
+      // Soal 33 (sedang)
+      {
+        question: "مثال على اسم مرفوع:",
+        options: ["زيدًا", "زيدٍ", "زيدٌ", "زيدْ"],
+        correct: 2,
+        explanation: "Analisis: 'زيدٌ' بالضم."
+      },
+      // Soal 34 (sedang)
+      {
+        question: "مثال على اسم منصوب:",
+        options: ["زيدٌ", "زيدًا", "زيدٍ", "زيدْ"],
+        correct: 1,
+        explanation: "Analisis: 'زيدًا' بالفتح."
+      },
+      // Soal 35 (sedang)
+      {
+        question: "مثال على اسم مخفوض:",
+        options: ["زيدٌ", "زيدًا", "زيدٍ", "زيدْ"],
+        correct: 2,
+        explanation: "Analisis: 'زيدٍ' بالكسر."
+      },
+      // Soal 36 (sedang)
+      {
+        question: "مثال على فعل مرفوع:",
+        options: ["يذهبْ", "يذهبَ", "يذهبُ", "ذهبَ"],
+        correct: 2,
+        explanation: "Analisis: 'يذهبُ' بالضم."
+      },
+      // Soal 37 (sedang)
+      {
+        question: "مثال على فعل منصوب:",
+        options: ["يذهبْ", "يذهبَ", "يذهبُ", "ذهبَ"],
+        correct: 1,
+        explanation: "Analisis: 'يذهبَ' بالفتح."
+      },
+      // Soal 38 (sedang)
+      {
+        question: "مثال على فعل مجزوم:",
+        options: ["يذهبْ", "يذهبَ", "يذهبُ", "ذهبَ"],
+        correct: 0,
+        explanation: "Analisis: 'يذهبْ' بالسكون."
+      },
+      // Soal 39 (sedang)
+      {
+        question: "هل الفعل الماضي يدخل في أقسام الإعراب؟",
+        options: ["نعم، يدخل", "لا، لأنه مبني", "يدخل في الرفع فقط", "يدخل في النصب فقط"],
+        correct: 1,
+        explanation: "Analisis: الفعل الماضي مبني، ولا يعرب."
+      },
+      // Soal 40 (sedang)
+      {
+        question: "هل الأسماء المبنية تدخل في أقسام الإعراب؟",
+        options: ["نعم، تدخل", "لا، لأنها مبنية", "تدخل في بعض الحالات", "تدخل في الخفض فقط"],
+        correct: 1,
+        explanation: "Analisis: المبني لا يتغير."
+      },
+      // Soal 41 (sulit)
+      {
+        question: "ما المراد بقولهم 'لفظًا أو تقديرًا' في تعريف الإعراب؟",
+        options: ["أن التغيير قد يكون بالصوت وقد يكون بالنية", "أن التغيير قد يكون ظاهرًا على الحرف وقد يكون مقدرًا عليه", "أن التغيير قد يكون في الأسماء وقد يكون في الأفعال", "أن التغيير قد يكون بالرفع وقد يكون بالنصب"],
+        correct: 1,
+        explanation: "Analisis: اللفظي ما يظهر، والتقديري ما يقدر."
+      },
+      // Soal 42 (sulit)
+      {
+        question: "إذا كان آخر الكلمة حرف علة وهو الألف، فكيف تعرب؟",
+        options: ["تظهر عليها جميع الحركات", "تقدر عليها جميع الحركات", "تظهر عليها الفتحة فقط وتقدر الضمة والكسرة", "تقدر عليها الضمة والكسرة وتظهر الفتحة"],
+        correct: 1,
+        explanation: "Analisis: الألف تقدر عليها جميع الحركات للتعذر."
+      },
+      // Soal 43 (sulit)
+      {
+        question: "إذا كان آخر الكلمة حرف علة وهو الواو أو الياء، فكيف تعرب؟",
+        options: ["تظهر عليها جميع الحركات", "تقدر عليها جميع الحركات", "تظهر عليها الفتحة وتقدر الضمة والكسرة", "تقدر عليها الفتحة وتظهر الضمة والكسرة"],
+        correct: 2,
+        explanation: "Analisis: النص: 'تظهر الفتحة على الواو والياء، وتقدر عليهما الضمة والكسرة'."
+      },
+      // Soal 44 (sulit)
+      {
+        question: "لماذا تظهر الفتحة على الواو والياء ولا تظهر الضمة والكسرة؟",
+        options: ["لأن الفتحة أخف", "لأن الضمة والكسرة تثقلهما", "لأن الواو والياء لا تقبلان الضمة والكسرة", "لأن الواو والياء حرفا علة"],
+        correct: 1,
+        explanation: "Analisis: الثقل يمنع ظهور الضمة والكسرة."
+      },
+      // Soal 45 (sulit)
+      {
+        question: "ما الفرق بين التعذر والثقل؟",
+        options: ["التعذر هو الامتناع المطلق، والثقل هو المشقة مع الإمكان", "التعذر هو المشقة، والثقل هو الامتناع", "كلاهما بمعنى واحد", "التعذر يكون في الألف، والثقل في الواو والياء"],
+        correct: 0,
+        explanation: "Analisis: التعذر يعني لا يمكن النطق بالحركة، والثقل يعني يمكن لكنه ثقيل."
+      },
+      // Soal 46 (sulit)
+      {
+        question: "إذا قال قائل: 'جاء القاضي' بضم الياء، فما حكم هذه العبارة؟",
+        options: ["صحيحة فصيحة", "صحيحة ولكنها ثقيلة", "غير صحيحة لأن الضمة لا تظهر على الياء", "جائزة في لغة بعض العرب"],
+        correct: 2,
+        explanation: "Analisis: النص: 'لو قال: جاء القاضي، قلنا هذا خطأ'."
+      },
+      // Soal 47 (sulit)
+      {
+        question: "إذا قال قائل: 'رأيت القاضي' بفتح الياء، فما حكمها؟",
+        options: ["خطأ", "صحيح", "جائز في لغة", "ممنوع"],
+        correct: 1,
+        explanation: "Analisis: الفتحة تظهر على الياء."
+      },
+      // Soal 48 (sulit)
+      {
+        question: "إذا قال قائل: 'مررت بالقاضي' بكسر الياء، فما حكمها؟",
+        options: ["صحيح", "خطأ", "جائز في الضرورة", "صحيح على لغة"],
+        correct: 1,
+        explanation: "Analisis: الكسرة لا تظهر على الياء للثقل."
+      },
+      // Soal 49 (sulit)
+      {
+        question: "ما سبب بناء 'حيث' مع اختلاف أواخرها؟",
+        options: ["لأنها اسم مبني", "لأنها ظرف", "لأن اختلافها لاختلاف اللغات لا العوامل", "لأنها لا تقبل العوامل"],
+        correct: 2,
+        explanation: "Analisis: النص: 'اختلافها بالفتح والضم والكسر اختلاف لغات'."
+      },
+      // Soal 50 (sulit)
+      {
+        question: "هل تدخل الحروف في الإعراب؟ ولماذا؟",
+        options: ["تدخل، لأنها تتغير بالعوامل", "لا تدخل، لأنها مبنية لا تتغير", "تدخل بعض الحروف", "تدخل في حالة الجر فقط"],
+        correct: 1,
+        explanation: "Analisis: الحروف مبنية."
+      },
+      // Soal 51 (sulit)
+      {
+        question: "ما معنى قولهم: 'الرفع والنصب يشترك فيهما الاسم والفعل'؟",
+        options: ["أن كل اسم وفعل يكون مرفوعًا أو منصوبًا", "أن الرفع والنصب يوجدان في الأسماء والأفعال", "أن الرفع خاص بالأسماء والنصب خاص بالأفعال", "أن الرفع والنصب لا يوجدان في الحروف"],
+        correct: 1,
+        explanation: "Analisis: النص يوضح الاشتراك."
+      },
+      // Soal 52 (sulit)
+      {
+        question: "مثال على اسم مجزوم في القرآن؟",
+        options: ["لم يلد", "من يأت", "إن تأمنه", "لن تراني"],
+        correct: 2,
+        explanation: "Analisis: 'من' في 'إن تأمنه' هي اسم شرط مبني، وليس مجزومًا، بل هو مبني. السؤال خادع، لكن النص ينبه أن 'من' هنا مبنية وليست مجزومة."
+      },
+      // Soal 53 (sulit)
+      {
+        question: "لماذا لا يعد 'من' في 'إن تأمنه' مجزومًا؟",
+        options: ["لأنه اسم مبني", "لأنه اسم معرب", "لأنه فعل", "لأنه حرف"],
+        correct: 0,
+        explanation: "Analisis: النص: 'هذا ليس بجزم، هذا بناء'."
+      },
+      // Soal 54 (sulit)
+      {
+        question: "ما العلامة الأصلية للرفع؟",
+        options: ["الضمة", "الفتحة", "الكسرة", "السكون"],
+        correct: 0,
+        explanation: "Analisis: الرفع بالضمة."
+      },
+      // Soal 55 (sulit)
+      {
+        question: "ما العلامة الأصلية للنصب؟",
+        options: ["الضمة", "الفتحة", "الكسرة", "السكون"],
+        correct: 1,
+        explanation: "Analisis: النصب بالفتحة."
+      },
+      // Soal 56 (sulit)
+      {
+        question: "ما العلامة الأصلية للخفض؟",
+        options: ["الضمة", "الفتحة", "الكسرة", "السكون"],
+        correct: 2,
+        explanation: "Analisis: الخفض بالكسرة."
+      },
+      // Soal 57 (sulit)
+      {
+        question: "ما العلامة الأصلية للجزم؟",
+        options: ["الضمة", "الفتحة", "الكسرة", "السكون"],
+        correct: 3,
+        explanation: "Analisis: الجزم بالسكون."
+      },
+      // Soal 58 (sulit)
+      {
+        question: "إذا دخل عامل نصب على الاسم، ماذا يحدث؟",
+        options: ["يرفع", "ينصب", "يخفض", "يجزم"],
+        correct: 1,
+        explanation: "Analisis: العامل يغير آخر الكلمة حسب نوعه."
+      },
+      // Soal 59 (sulit)
+      {
+        question: "إذا دخل عامل جزم على الفعل، ماذا يحدث؟",
+        options: ["يرفع", "ينصب", "يخفض", "يجزم"],
+        correct: 3,
+        explanation: "Analisis: الجزم خاص بالفعل."
+      },
+      // Soal 60 (sulit)
+      {
+        question: "ما الشرط الأساسي لاعتبار التغيير إعرابًا؟",
+        options: ["أن يكون التغيير في الآخر", "أن يكون بسبب اختلاف العوامل", "أن يكون لفظيًا", "أن يكون في الأسماء والأفعال المعربة"],
+        correct: 1,
+        explanation: "Analisis: النص: 'تغيير أواخر الكلم لاختلاف العوامل'."
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    // State
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1); // -1 = belum dijawab
+    let answerSubmitted = false;
+
+    // Fungsi simpan jawaban
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    // Fungsi tampilkan soal dengan status jawaban
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      // Jika sudah dijawab, nonaktifkan semua opsi
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    // Event listener untuk memilih opsi
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      // Simpan jawaban
+      saveAnswer(currentIndex, selectedIdx);
+
+      // Nonaktifkan semua option
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+
+      // Beri kelas selected pada yang dipilih
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    // Notifikasi benar
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    // Notifikasi salah
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    // Notifikasi selesai semua soal
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah!';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      // Kembali ke soal sama, hapus jawaban sebelumnya
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        // Semua soal selesai
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    // Navigasi grid
+    function openNavPanel() {
+      // Buat grid nomor
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    // Event klik pada grid nomor
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    // Buka panel saat tombol grid diklik
+    openNavGrid.addEventListener('click', openNavPanel);
+
+    // Tutup panel dengan tombol tutup
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    // Tutup panel jika klik di luar area panel (overlay)
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    // Mulai quiz
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1); // reset jawaban
+      loadQuestion();
+    });
+
+    // Inisialisasi awal
+    // (kosong)
+  })();
+</script>
+</body>
+</html>
