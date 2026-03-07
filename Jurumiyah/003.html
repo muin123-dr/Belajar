@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - الإعراب</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1B5E20, #4CAF50); /* gradien hijau */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Layar Utama */
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #1B5E20;
+      letter-spacing: 1px;
+    }
+
+    .main-menu .level-badge {
+      background: #4CAF50; /* hijau */
+      color: white;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 30px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #1B5E20;
+    }
+
+    .btn-mulai {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #1B5E20, 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #1B5E20, 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Layar Quiz */
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .quiz-header .level-small {
+      background: #4CAF50;
+      color: white;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 40px;
+    }
+
+    /* Tombol navigasi grid */
+    .nav-grid-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .question-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #fff5e0;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255,255,255,0.35);
+      border-color: #4CAF50;
+    }
+
+    .option-item.selected {
+      background: #4CAF50;
+      color: white;
+      font-weight: 700;
+      border-color: #4CAF50;
+      box-shadow: 0 0 15px #4CAF50;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #1B5E20;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #2e7d32;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+
+    /* Notifikasi */
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: white;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+      animation: pop 0.3s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      border: 4px solid #2e7d32;
+    }
+
+    .notification-card.salah {
+      background: linear-gradient(145deg, #ffcdd2, #ef9a9a);
+      border: 4px solid #b71c1c;
+    }
+
+    .notification-card.selesai {
+      background: linear-gradient(145deg, #bbdefb, #90caf9);
+      border: 4px solid #1565c0;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn-next {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: white;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: white;
+    }
+
+    .explanation-box {
+      background: #fff3e0;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #1B5E20;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #4CAF50;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Panel navigasi grid */
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #1B5E20;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #4CAF50;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #4CAF50;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #2e7d32;
+      border-color: #81c784;
+    }
+
+    .nav-item.unanswered {
+      background: #b71c1c;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #4CAF50;
+    }
+
+    .btn-tutup-panel {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <!-- Layar Utama -->
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> باب معرفة علامات الإعراب <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">60 soal pilihan ganda • berdasarkan teks Ibnu Utsaimin</div>
+  </div>
+
+  <!-- Layar Quiz (awalnya tersembunyi) -->
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> علامات الإعراب</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+
+    <div class="footer">— ‏باب معرفة علامات الإعراب لابن عثيمين ‏—</div>
+  </div>
+</div>
+
+<!-- Panel Navigasi Grid -->
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<!-- Notifikasi (popup) -->
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- DATA SOAL (60 soal) - BAB معرفة علامات الإعراب ----------
+    const questions = [
+      // SOAL 1 (Mudah)
+      {
+        question: "كم علامة للرفع ذكرها المؤلف؟",
+        options: ["ثلاث علامات", "أربع علامات", "خمس علامات", "علامتان"],
+        correct: 1,
+        explanation: "Analisis: المؤلف ذكر أن للرفع أربع علامات: الضمة والواو والألف والنون."
+      },
+      // SOAL 2 (Mudah)
+      {
+        question: "ما هي علامة الرفع الأصلية؟",
+        options: ["الواو", "الألف", "النون", "الضمة"],
+        correct: 3,
+        explanation: "Analisis: الضمة هي الأصل، والباقي نيابة عنها."
+      },
+      // SOAL 3 (Mudah)
+      {
+        question: "في كم موضع تكون الضمة علامة للرفع؟",
+        options: ["موضعين", "ثلاثة مواضع", "أربعة مواضع", "خمسة مواضع"],
+        correct: 2,
+        explanation: "Analisis: في الاسم المفرد، جمع التكسير، جمع المؤنث السالم، والفعل المضارع الذي لم يتصل بآخره شيء."
+      },
+      // SOAL 4 (Mudah)
+      {
+        question: "أي من التالي يرفع بالضمة؟",
+        options: ["جمع المذكر السالم", "المثنى", "الاسم المفرد", "الأسماء الخمسة"],
+        correct: 2,
+        explanation: "Analisis: الاسم المفرد يرفع بالضمة."
+      },
+      // SOAL 5 (Mudah)
+      {
+        question: "مثال على اسم مفرد:",
+        options: ["رجل", "رجال", "مسلمون", "مسلمات"],
+        correct: 0,
+        explanation: "Analisis: 'رجل' اسم مفرد، والباقي جمع."
+      },
+      // SOAL 6 (Mudah)
+      {
+        question: "ما هو جمع التكسير؟",
+        options: ["ما دل على ثلاثة فأكثر مع تغير بناء مفرده", "ما دل على اثنين", "ما جمع بالواو والنون", "ما جمع بالألف والتاء"],
+        correct: 0,
+        explanation: "Analisis: تعريف جمع التكسير: ما دل على ثلاثة فأكثر مع تغير بناء مفرده."
+      },
+      // SOAL 7 (Mudah)
+      {
+        question: "مثال على جمع تكسير:",
+        options: ["مسلمون", "مسلمات", "رجال", "هندات"],
+        correct: 2,
+        explanation: "Analisis: 'رجال' جمع تكسير لمفرده 'رجل'."
+      },
+      // SOAL 8 (Mudah)
+      {
+        question: "ما هو جمع المؤنث السالم؟",
+        options: ["ما جمع بألف وتاء مزيدتين", "ما دل على اثنين", "ما تغير بناء مفرده", "ما جمع بالواو والنون"],
+        correct: 0,
+        explanation: "Analisis: جمع المؤنث السالم: ما جمع بألف وتاء مزيدتين على مفرده."
+      },
+      // SOAL 9 (Mudah)
+      {
+        question: "أي من التالي جمع مؤنث سالم؟",
+        options: ["مسلمون", "مسلمات", "رجال", "أقلام"],
+        correct: 1,
+        explanation: "Analisis: 'مسلمات' جمع مؤنث سالم."
+      },
+      // SOAL 10 (Mudah)
+      {
+        question: "الفعل المضارع يرفع بالضمة إذا:",
+        options: ["اتصل بآخره شيء", "لم يتصل بآخره شيء", "كان مبنيًا", "كان معتل الآخر"],
+        correct: 1,
+        explanation: "Analisis: النص: 'الفعل المضارع الذي لم يتصل بآخره شيء' يرفع بالضمة."
+      },
+      // SOAL 11 (Mudah)
+      {
+        question: "أي فعل يرفع بالضمة؟",
+        options: ["يذهب", "يذهبون", "اذهب", "ذهب"],
+        correct: 0,
+        explanation: "Analisis: 'يذهب' فعل مضارع لم يتصل به شيء، فهو مرفوع بالضمة."
+      },
+      // SOAL 12 (Mudah)
+      {
+        question: "لماذا لا يرفع 'يقومون' بالضمة؟",
+        options: ["لأنه ماض", "لأنه اتصل بآخره شيء", "لأنه مبني", "لأنه أمر"],
+        correct: 1,
+        explanation: "Analisis: 'يقومون' اتصلت به واو الجماعة، فهو من الأفعال الخمسة."
+      },
+      // SOAL 13 (Mudah)
+      {
+        question: "مثال على الفعل المضارع المعتل الآخر بالألف:",
+        options: ["يخشى", "يدعو", "يرمي", "يقوم"],
+        correct: 0,
+        explanation: "Analisis: 'يخشى' معتل الآخر بالألف."
+      },
+      // SOAL 14 (Mudah)
+      {
+        question: "الفعل 'يدعو' علامة رفعه:",
+        options: ["ضمة ظاهرة", "ضمة مقدرة على الواو", "ثبوت النون", "الواو"],
+        correct: 1,
+        explanation: "Analisis: 'يدعو' فعل مضارع معتل بالواو، ترفع بالضمة المقدرة للثقل."
+      },
+      // SOAL 15 (Mudah)
+      {
+        question: "الواو تكون علامة للرفع في موضعين، هما:",
+        options: ["جمع المذكر السالم والأسماء الخمسة", "المثنى وجمع المؤنث السالم", "جمع التكسير والاسم المفرد", "الفعل المضارع وجمع المذكر السالم"],
+        correct: 0,
+        explanation: "Analisis: الواو تنوب عن الضمة في جمع المذكر السالم والأسماء الخمسة."
+      },
+      // SOAL 16 (Mudah)
+      {
+        question: "أي من الأسماء الخمسة التالية ترفع بالواو؟",
+        options: ["أبوك", "أبيك", "أباك", "أب"],
+        correct: 0,
+        explanation: "Analisis: 'أبوك' مرفوع بالواو."
+      },
+      // SOAL 17 (Mudah)
+      {
+        question: "شرط رفع الأسماء الخمسة بالواو أن تكون:",
+        options: ["مفردة مكبرة مضافة", "جمعًا", "مصغرة", "منونة"],
+        correct: 0,
+        explanation: "Analisis: يجب أن تكون مفردة، مكبرة، مضافة (لغير ياء المتكلم)."
+      },
+      // SOAL 18 (Mudah)
+      {
+        question: "إذا أضيف الاسم الخمسة إلى ياء المتكلم فإنه يرفع بـ:",
+        options: ["الواو", "الألف", "ضمة مقدرة", "النون"],
+        correct: 2,
+        explanation: "Analisis: مثل 'أبي' ترفع بضمة مقدرة."
+      },
+      // SOAL 19 (Mudah)
+      {
+        question: "مثال على جمع مذكر سالم:",
+        options: ["مسلمون", "مسلمات", "رجال", "مساجد"],
+        correct: 0,
+        explanation: "Analisis: 'مسلمون' جمع مذكر سالم."
+      },
+      // SOAL 20 (Mudah)
+      {
+        question: "ما علامة رفع جمع المذكر السالم؟",
+        options: ["الضمة", "الواو", "الألف", "النون"],
+        correct: 1,
+        explanation: "Analisis: جمع المذكر السالم يرفع بالواو."
+      },
+      // SOAL 21 (Sedang)
+      {
+        question: "الألف تكون علامة للرفع في:",
+        options: ["المثنى", "جمع المذكر السالم", "الأسماء الخمسة", "الفعل المضارع"],
+        correct: 0,
+        explanation: "Analisis: المثنى يرفع بالألف نيابة عن الضمة."
+      },
+      // SOAL 22 (Sedang)
+      {
+        question: "مثال على المثنى:",
+        options: ["رجلان", "رجال", "مسلمون", "مسلمات"],
+        correct: 0,
+        explanation: "Analisis: 'رجلان' مثنى."
+      },
+      // SOAL 23 (Sedang)
+      {
+        question: "النون تكون علامة للرفع في:",
+        options: ["الأفعال الخمسة", "المثنى", "جمع المذكر السالم", "الأسماء الخمسة"],
+        correct: 0,
+        explanation: "Analisis: الأفعال الخمسة ترفع بثبوت النون."
+      },
+      // SOAL 24 (Sedang)
+      {
+        question: "أي من الأفعال التالية من الأفعال الخمسة؟",
+        options: ["يفعلان", "يفعل", "افعل", "فعل"],
+        correct: 0,
+        explanation: "Analisis: 'يفعلان' اتصلت به ألف الاثنين، فهو من الأفعال الخمسة."
+      },
+      // SOAL 25 (Sedang)
+      {
+        question: "الفعل 'تكتبين' مرفوع بعلامة:",
+        options: ["الضمة", "ثبوت النون", "الواو", "الألف"],
+        correct: 1,
+        explanation: "Analisis: 'تكتبين' من الأفعال الخمسة، علامة رفعه ثبوت النون."
+      },
+      // SOAL 26 (Sedang)
+      {
+        question: "لماذا قُدرت الضمة على الألف في 'يسعى'؟",
+        options: ["للتعذر", "للثقل", "للبناء", "للسكون"],
+        correct: 0,
+        explanation: "Analisis: الألف لا يقبل الحركة، فتقدر الضمة تعذرًا."
+      },
+      // SOAL 27 (Sedang)
+      {
+        question: "لماذا قُدرت الضمة على الياء في 'يقضي'؟",
+        options: ["للتعذر", "للثقل", "للبناء", "للسكون"],
+        correct: 1,
+        explanation: "Analisis: الياء تقبل الحركة لكنها ثقيلة، فتقدر الضمة للثقل."
+      },
+      // SOAL 28 (Sedang)
+      {
+        question: "إذا قلت: 'جاء أبوك'، فأبوك:",
+        options: ["فاعل مرفوع بالواو", "مبتدأ مرفوع بالواو", "خبر مرفوع بالواو", "مفعول به منصوب"],
+        correct: 0,
+        explanation: "Analisis: 'أبوك' فاعل مرفوع بالواو نيابة عن الضمة."
+      },
+      // SOAL 29 (Sedang)
+      {
+        question: "جملة 'المسلمون منتصرون'، 'المسلمون' مرفوع بـ:",
+        options: ["الضمة", "الواو", "الألف", "النون"],
+        correct: 1,
+        explanation: "Analisis: جمع مذكر سالم يرفع بالواو."
+      },
+      // SOAL 30 (Sedang)
+      {
+        question: "جملة 'جاءت المسلمات'، 'المسلمات' مرفوع بـ:",
+        options: ["الضمة", "الواو", "الألف", "النون"],
+        correct: 0,
+        explanation: "Analisis: جمع مؤنث سالم يرفع بالضمة."
+      },
+      // SOAL 31 (Sedang)
+      {
+        question: "مثال على اسم مفرد معتل الآخر بالياء:",
+        options: ["القاضي", "زيد", "رجل", "كتاب"],
+        correct: 0,
+        explanation: "Analisis: 'القاضي' اسم منقوص، آخره ياء لازمة."
+      },
+      // SOAL 32 (Sedang)
+      {
+        question: "علامة رفع 'القاضي' في جملة 'جاء القاضي':",
+        options: ["ضمة ظاهرة", "ضمة مقدرة على الياء", "الواو", "الألف"],
+        correct: 1,
+        explanation: "Analisis: تقدر الضمة على الياء للثقل."
+      },
+      // SOAL 33 (Sedang)
+      {
+        question: "الفعل 'يدنو' في قولك 'يدنو الليل' علامة رفعه:",
+        options: ["ضمة ظاهرة على الواو", "ضمة مقدرة على الواو", "الواو", "النون"],
+        correct: 1,
+        explanation: "Analisis: الفعل معتل بالواو، تقدر الضمة للثقل."
+      },
+      // SOAL 34 (Sedang)
+      {
+        question: "ما شرط 'فو' ليرفع بالواو؟",
+        options: ["أن تكون خالية من الميم", "أن تكون مع الميم", "أن تكون مكبرة", "أن تكون مصغرة"],
+        correct: 0,
+        explanation: "Analisis: إذا دخلت الميم على 'فم' تعرب بالضمة كاسم مفرد."
+      },
+      // SOAL 35 (Sedang)
+      {
+        question: "إذا قلت 'هذا فمٌ'، فـ'فم' مرفوع بـ:",
+        options: ["الضمة", "الواو", "الألف", "النون"],
+        correct: 0,
+        explanation: "Analisis: لأن فيه ميمًا، فهو اسم مفرد."
+      },
+      // SOAL 36 (Sedang)
+      {
+        question: "جملة 'جاء ذو علم'، 'ذو' مرفوع بـ:",
+        options: ["الضمة", "الواو", "الألف", "النون"],
+        correct: 1,
+        explanation: "Analisis: 'ذو' من الأسماء الخمسة بشرط أن تكون بمعنى صاحب."
+      },
+      // SOAL 37 (Sedang)
+      {
+        question: "ما معنى 'ذو' في الأسماء الخمسة؟",
+        options: ["صاحب", "الذي", "التي", "الذين"],
+        correct: 0,
+        explanation: "Analisis: 'ذو' بمعنى صاحب، مثل 'ذو مال'."
+      },
+      // SOAL 38 (Sedang)
+      {
+        question: "الأسماء الخمسة ترفع بالواو إذا كانت مضافة إلى:",
+        options: ["غير ياء المتكلم", "ياء المتكلم", "اسم ظاهر فقط", "ضمير فقط"],
+        correct: 0,
+        explanation: "Analisis: إذا أضيفت إلى ياء المتكلم تعرب بالحركات المقدرة."
+      },
+      // SOAL 39 (Sedang)
+      {
+        question: "جملة 'رأيت أباك'، علامة نصب 'أباك':",
+        options: ["الفتحة", "الألف", "الياء", "الكسرة"],
+        correct: 1,
+        explanation: "Analisis: الأسماء الخمسة تنصب بالألف."
+      },
+      // SOAL 40 (Sedang)
+      {
+        question: "جملة 'مررت بأخيك'، علامة جر 'أخيك':",
+        options: ["الكسرة", "الياء", "الفتحة", "الواو"],
+        correct: 1,
+        explanation: "Analisis: الأسماء الخمسة تجر بالياء."
+      },
+      // SOAL 41 (Sulit)
+      {
+        question: "ما دليل حصر علامات الرفع في أربع؟",
+        options: ["التتبع والاستقراء", "القياس", "الرأي", "الإجماع"],
+        correct: 0,
+        explanation: "Analisis: النص: 'الدليل على ذلك التتبع والاستقراء'."
+      },
+      // SOAL 42 (Sulit)
+      {
+        question: "مثال على جمع تكسير تغير بناء مفرده بالنقص:",
+        options: ["أعراب (مفرد: أعرابي)", "رجال (مفرد: رجل)", "بيوت (مفرد: بيت)", "أقلام (مفرد: قلم)"],
+        correct: 0,
+        explanation: "Analisis: 'أعراب' أقل من مفرده 'أعرابي' (نقص)."
+      },
+      // SOAL 43 (Sulit)
+      {
+        question: "مثال على جمع تكسير تغير بناء مفرده بالزيادة:",
+        options: ["رجال (مفرد: رجل)", "أعراب (مفرد: أعرابي)", "كتب (مفرد: كتاب)", "رسل (مفرد: رسول)"],
+        correct: 0,
+        explanation: "Analisis: 'رجال' زاد على مفرده 'رجل'."
+      },
+      // SOAL 44 (Sulit)
+      {
+        question: "لماذا لا يعد 'أبيات' جمع مؤنث سالمًا؟",
+        options: ["لأن التاء أصلية", "لأنه جمع تكسير", "لأنه مذكر", "لأنه مفرد"],
+        correct: 0,
+        explanation: "Analisis: التاء في 'أبيات' أصلية، وليست زائدة."
+      },
+      // SOAL 45 (Sulit)
+      {
+        question: "متى تظهر الفتحة على الواو والياء في الفعل المضارع؟",
+        options: ["في حالة الرفع", "في حالة النصب", "في حالة الجزم", "في حالة الجر"],
+        correct: 1,
+        explanation: "Analisis: عند النصب تظهر الفتحة على الواو والياء، مثل 'لن يدعوَ'."
+      },
+      // SOAL 46 (Sulit)
+      {
+        question: "لماذا لا تظهر الضمة على الياء في 'يقضي'؟",
+        options: ["للتعذر", "للثقل", "لأنها مبنية", "لأنها مجزومة"],
+        correct: 1,
+        explanation: "Analisis: الضمة ثقيلة على الياء."
+      },
+      // SOAL 47 (Sulit)
+      {
+        question: "إذا قلت 'الرجال يقومون'، لماذا لا ترفع 'يقومون' بالضمة؟",
+        options: ["لأنه اتصل بآخره شيء", "لأنه مبني", "لأنه أمر", "لأنه ماض"],
+        correct: 0,
+        explanation: "Analisis: اتصلت به واو الجماعة، فهو من الأفعال الخمسة."
+      },
+      // SOAL 48 (Sulit)
+      {
+        question: "ما حكم قول 'جاء القاضي' بضم الياء؟",
+        options: ["صحيح فصيح", "خطأ", "جائز في لغة", "نادر"],
+        correct: 1,
+        explanation: "Analisis: النص: 'لو قال: جاء القاضي، قلنا هذا خطأ'."
+      },
+      // SOAL 49 (Sulit)
+      {
+        question: "كم عدد شروط إعراب الأسماء الخمسة بالواو؟",
+        options: ["أربعة مشتركة واثنان خاصان", "ثلاثة عامة", "خمسة", "ستة كلها عامة"],
+        correct: 0,
+        explanation: "Analisis: أربعة مشتركة: الإفراد، التكبير، الإضافة، الإضافة لغير ياء المتكلم. واثنان خاصان: فوك خال من الميم، وذو بمعنى صاحب."
+      },
+      // SOAL 50 (Sulit)
+      {
+        question: "مثال على 'ذو' التي بمعنى الذي في لغة طيئ:",
+        options: ["ذو مال", "ذو حفرت", "ذو علم", "ذو قلم"],
+        correct: 1,
+        explanation: "Analisis: مثل قول الشاعر: 'وبئري ذو حفرت' أي الذي حفرت."
+      },
+      // SOAL 51 (Sulit)
+      {
+        question: "إذا قلت 'جاء أب'، فـ'أب' مرفوع بـ:",
+        options: ["الواو", "الضمة", "الألف", "النون"],
+        correct: 1,
+        explanation: "Analisis: لأنه غير مضاف، فهو اسم مفرد."
+      },
+      // SOAL 52 (Sulit)
+      {
+        question: "لماذا لا يرفع 'أبوك' بالواو إذا كان مصغرًا؟",
+        options: ["لأن التصغير يمنع الإعراب بالواو", "لأن المصغر يرفع بالضمة", "لأن التصغير يغير الوزن", "كل ما سبق"],
+        correct: 0,
+        explanation: "Analisis: من شروط الرفع بالواو أن تكون مكبرة."
+      },
+      // SOAL 53 (Sulit)
+      {
+        question: "جملة 'جاء أبو زيدٍ'، 'أبو' مرفوع بالواو لأنه:",
+        options: ["مضاف إلى اسم ظاهر", "مضاف إلى ضمير", "مثنى", "جمع"],
+        correct: 0,
+        explanation: "Analisis: يجوز الإضافة إلى ظاهر أو ضمير."
+      },
+      // SOAL 54 (Sulit)
+      {
+        question: "ما علامة رفع 'أب' إذا أضيف إلى ياء المتكلم؟",
+        options: ["ضمة مقدرة", "واو", "ألف", "نون"],
+        correct: 0,
+        explanation: "Analisis: مثل 'أبي'، ترفع بضمة مقدرة."
+      },
+      // SOAL 55 (Sulit)
+      {
+        question: "الفعل 'ترمين' مرفوع بعلامة:",
+        options: ["الضمة", "ثبوت النون", "الياء", "الألف"],
+        correct: 1,
+        explanation: "Analisis: 'ترمين' من الأفعال الخمسة، علامة رفعه ثبوت النون."
+      },
+      // SOAL 56 (Sulit)
+      {
+        question: "جملة 'الرجال يقومون'، الفعل 'يقومون' مرفوع بـ:",
+        options: ["الضمة", "ثبوت النون", "الواو", "الألف"],
+        correct: 1,
+        explanation: "Analisis: من الأفعال الخمسة، يرفع بثبوت النون."
+      },
+      // SOAL 57 (Sulit)
+      {
+        question: "ما السبب في منع ظهور الضمة على الواو في 'يدعو'؟",
+        options: ["التعذر", "الثقل", "الإعلال", "الإدغام"],
+        correct: 1,
+        explanation: "Analisis: الثقل هو المانع."
+      },
+      // SOAL 58 (Sulit)
+      {
+        question: "إذا قلت 'هذا فوك'، فعلامة رفع 'فوك' هي:",
+        options: ["الواو", "الضمة", "الألف", "النون"],
+        correct: 0,
+        explanation: "Analisis: لأنه من الأسماء الخمسة وخال من الميم."
+      },
+      // SOAL 59 (Sulit)
+      {
+        question: "إذا قلت 'جاء حموك'، فـ'حموك' تعني:",
+        options: ["أخو زوجتك", "أبوك", "عمك", "خالك"],
+        correct: 0,
+        explanation: "Analisis: 'الحمو' هو قريب الزوج، عادة أخو الزوج."
+      },
+      // SOAL 60 (Sulit)
+      {
+        question: "لماذا قدم المؤلف الواو بعد الضمة في ذكر العلامات؟",
+        options: ["لأن الضمة إذا أشبعت تولد منها واو", "لأن الواو أكثر استعمالًا", "لأن الواو علامة أصلية", "لأن الواو تسبق الألف"],
+        correct: 0,
+        explanation: "Analisis: النص: 'لأن الضمة إذا أشبعت تولد منها واو'."
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    // State
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1); // -1 = belum dijawab
+    let answerSubmitted = false;
+
+    // Fungsi simpan jawaban
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    // Fungsi tampilkan soal dengan status jawaban
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      // Jika sudah dijawab, nonaktifkan semua opsi
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    // Event listener untuk memilih opsi
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      // Simpan jawaban
+      saveAnswer(currentIndex, selectedIdx);
+
+      // Nonaktifkan semua option
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+
+      // Beri kelas selected pada yang dipilih
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    // Notifikasi benar
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    // Notifikasi salah
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    // Notifikasi selesai semua soal
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-level2" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/003.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      // Kembali ke soal sama, hapus jawaban sebelumnya
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        // Semua soal selesai
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    // Navigasi grid
+    function openNavPanel() {
+      // Buat grid nomor
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    // Event klik pada grid nomor
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    // Buka panel saat tombol grid diklik
+    openNavGrid.addEventListener('click', openNavPanel);
+
+    // Tutup panel dengan tombol tutup
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    // Tutup panel jika klik di luar area panel (overlay)
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    // Mulai quiz
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1); // reset jawaban
+      loadQuestion();
+    });
+
+    // Inisialisasi awal
+    // (kosong)
+  })();
+</script>
+</body>
+</html>

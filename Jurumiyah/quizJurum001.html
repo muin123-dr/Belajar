@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Layar Utama */
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #1e2f5a;
+      letter-spacing: 1px;
+    }
+
+    .main-menu .level-badge {
+      background: #f6d365;
+      color: #1e3c72;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 30px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #b68b40;
+    }
+
+    .btn-mulai {
+      background: #f6d365;
+      border: none;
+      color: #1e3c72;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #b68b40, 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #b68b40, 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Layar Quiz */
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .quiz-header .level-small {
+      background: #f6d365;
+      color: #1e3c72;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 40px;
+    }
+
+    .question-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #fff5e0;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255,255,255,0.35);
+      border-color: #f6d365;
+    }
+
+    .option-item.selected {
+      background: #f6d365;
+      color: #1e3c72;
+      font-weight: 700;
+      border-color: #f6d365;
+      box-shadow: 0 0 15px #f6d365;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #1e3c72;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #b68b40;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+
+    /* Notifikasi */
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: white;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+      animation: pop 0.3s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      border: 4px solid #2e7d32;
+    }
+
+    .notification-card.salah {
+      background: linear-gradient(145deg, #ffcdd2, #ef9a9a);
+      border: 4px solid #b71c1c;
+    }
+
+    .notification-card.selesai {
+      background: linear-gradient(145deg, #bbdefb, #90caf9);
+      border: 4px solid #1565c0;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn-next {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: white;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: white;
+    }
+
+    .btn-level2 {
+      background: #7b1fa2;
+      color: white;
+    }
+
+    .explanation-box {
+      background: #fff3e0;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #1e3c72;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #ffb74d;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <!-- Layar Utama -->
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> Level 1 <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">45 soal pilihan ganda • bab al-Kalam</div>
+  </div>
+
+  <!-- Layar Quiz (awalnya tersembunyi) -->
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> Level 1</span>
+      <span class="progress" id="progressIndicator">1/45</span>
+    </div>
+
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+
+    <div class="footer">— ‏باب الكلام وأقسامه ‏—</div>
+  </div>
+</div>
+
+<!-- Notifikasi (popup) -->
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- DATA SOAL (45 soal) ----------
+    const questions = [
+      { //1
+        question: "ما هو تعريف الكلام في اصطلاح النحويين؟",
+        options: ["هو كل ما يُكتب بالقلم", "هو اللفظ المفرد غير المركب", "هو اللفظ المركب المفيد بالوضع", "هو الإشارة المفهمة"],
+        correct: 2,
+        explanation: "Analisis: Ini adalah definisi langsung dari teks. Penulis secara eksplisit menyatakan: 'الْكَلَامُ هُوَ اللَّفْظُ الْمُرَكَّبُ المُفِيدُ بالوَضْعِ'. Empat syarat ini (lafaz, murakkab, mufid, bil-wadh'i) adalah kunci utama definisi kalam."
+      },
+      { //2
+        question: "كم أقسام الكلام عند النحويين؟",
+        options: ["قسمان: اسم وفعل", "ثلاثة: اسم وفعل وحرف", "أربعة: اسم وفعل وحرف وصفة", "خمسة: اسم وفعل وحرف وظرف وأداة"],
+        correct: 1,
+        explanation: "Analisis: Teks dengan jelas menyebutkan: 'وَأَقْسَامُهُ ثَلَاثَةٌ: اسْمٌ، وَفِعْلٌ، وَحَرْفٌ'. Ini adalah pembagian fundamental dalam ilmu nahwu."
+      },
+      { //3
+        question: "ما هو اللفظ في تعريف الكلام؟",
+        options: ["الكتابة بالقلم", "الإشارة باليد", "النطق باللسان", "الرسم على الورق"],
+        correct: 2,
+        explanation: "Analisis: Dalam penjelasan, disebutkan: 'و اللفظ معناه: هو النطق باللسان'. Lawannya adalah kitabah (tulisan) dan isyarah (isyarat)."
+      },
+      { //4
+        question: "أي من التالية تعتبر من حروف الخفض؟",
+        options: ["إنّ وأنّ وكأنّ", "قد وسوف والسين", "من وإلى وعن وعلى", "هل وأم وبل"],
+        correct: 2,
+        explanation: "Analisis: Teks menyebutkan: 'وَهِيَ مِنْ، وَإِلَى، وَعَنْ، وَعَلَى، وَفِي، وَرُبَّ، وَالبَاءُ، وَالْكَافُ، واللام'. Opsi C berisi 4 di antaranya."
+      },
+      { //5
+        question: "بم يعرف الاسم؟",
+        options: ["بالرفع والنصب والجزم", "بالخفض والتنوين ودخول الألف واللام", "بقد والسين وسوف", "بتاء الفاعل وياء المخاطبة"],
+        correct: 1,
+        explanation: "Analisis: Teks menyebutkan: 'فَالْاسْمُ يُعْرَفُ بالخَفْضِ، والتنوين، ودخول الألف واللام'. Ini adalah tiga tanda utama isim."
+      },
+      { //6
+        question: "ما هي حروف القسم التي ذكرها المؤلف؟",
+        options: ["الواو والباء والتاء", "من وإلى وعن", "في وربّ والكاف", "لم ولن ولا"],
+        correct: 0,
+        explanation: "Analisis: Teks menyebutkan: 'وحُرُوفِ الْقَسَمِ وَهِيَ الْوَاوُ، والباء، والتاء'."
+      },
+      { //7
+        question: "أي مما يلي يعتبر كلامًا عند النحويين؟",
+        options: ["الإشارة باليد للجلوس", "كتابة 'اجلس' على ورقة", "قول 'قام زيد'", "الرسم على السبورة"],
+        correct: 2,
+        explanation: "Analisis: 'قام زيد' adalah contoh klasik kalam: lafaz (diucapkan), murakkab (terdiri dari dua kata), mufid (memberi faedah), dan bil-wadh'i (mengikuti kaidah bahasa Arab)."
+      },
+      { //8
+        question: "ما معنى 'المفيد' في تعريف الكلام؟",
+        options: ["ما كان طويلاً", "ما أفاد فائدة يحسن السكوت عليها", "ما كان مفهومًا بالإشارة", "ما كان مكتوبًا بالخط الجميل"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan: 'المفيد: ما أفاد السامع بحيث لا يتشوف بعده إلى غيره' atau dalam redaksi lain 'فائدة يحسن السكوت عليها'."
+      },
+      { //9
+        question: "كم حرف خفض ذكرها المؤلف في المتن؟",
+        options: ["7 حروف", "9 حروف", "5 حروف", "12 حرفًا"],
+        correct: 1,
+        explanation: "Analisis: Mari kita hitung: مِنْ، إِلَى، عَنْ، عَلَى، فِي، رُبَّ، البَاءُ، الْكَافُ، اللام. Total 9 huruf jar."
+      },
+      { //10
+        question: "أي من التالية تعتبر من علامات الاسم؟",
+        options: ["دخول لم عليه", "دخول قد عليه", "التنوين", "دخول سوف عليه"],
+        correct: 2,
+        explanation: "Analisis: Tanwin adalah salah satu tanda isim yang disebutkan. Opsi A, B, D (dkhul lam, qad, saufa) adalah tanda fi'il, bukan isim."
+      },
+      { //11
+        question: "إن نجح الطالب - لماذا لا يعتبر هذا الكلام كلامًا عند النحويين؟",
+        options: ["لأنه ليس بلفظ", "لأنه ليس مركبًا", "لأنه غير مفيد", "لأنه ليس بالوضع العربي"],
+        correct: 2,
+        explanation: "Analisis: Kalimat 'إن نجح الطالب' (Jika siswa itu berhasil) adalah kalimat syarat yang belum sempurna. Pendengar akan bertanya: 'Lalu apa yang terjadi jika dia berhasil?'. Karena itu tidak memenuhi syarat 'mufid'."
+      },
+      { //12
+        question: "ما الفرق بين الكلام عند النحويين والكلام عند الفقهاء؟",
+        options: ["لا فرق بينهما", "النحويون لا يعتبرون الكتابة كلامًا بينما الفقهاء يعتبرونها كلامًا في بعض الأحكام", "النحويون يعتبرون الإشارة كلامًا والفقهاء لا يعتبرونها", "الفقهاء لا يعتبرون اللفظ كلامًا"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan menyebutkan bahwa tulisan dan isyarat bukan kalam menurut nahwu. Namun dalam syariat (fikih), wasiat tertulis dianggap seperti wasiat lisan berdasarkan hadits Nabi."
+      },
+      { //13
+        question: "بسم الله الرحمن الرحيم - كيف تعرب من حيث التركيب؟",
+        options: ["هي كلام تام مركب تركيبًا إسناديًا حقيقيًا", "هي كلام ناقص غير مفيد", "هي كلام تقديري لأن التقدير 'بسم الله أقرأ'", "ليست كلامًا لأنها مكتوبة وليست منطوقة"],
+        correct: 2,
+        explanation: "Analisis: Basmalah secara lahir hanya satu kata (bismi) yang disandarkan kepada Allah. Namun secara makna, ia membutuhkan fi'il atau sesuatu yang di-ta'liq-kan kepadanya, seperti 'aqra'u' (aku membaca). Jadi ia kalam secara taqdir (perkiraan), bukan hakiki."
+      },
+      { //14
+        question: "أي من التالية يعتبر كلامًا مركبًا تركيبًا إسناديًا؟",
+        options: ["غلام زيد", "كتاب محمد", "قام زيد", "باب المدرسة"],
+        correct: 2,
+        explanation: "Analisis: 'قام زيد' adalah jumlah fi'liyyah yang tersusun dari fi'il dan fa'il, ini adalah susunan isnadi (predikatif). Opsi A, B, D adalah susunan idhafi (penyandaran) yang tidak disebut kalam."
+      },
+      { //15
+        question: "لماذا لا يعتبر لفظ 'هل' كلامًا عند النحويين؟",
+        options: ["لأنه ليس بلفظ", "لأنه غير مركب", "لأنه غير مفيد بالوضع", "لأنه حرف وليس اسمًا"],
+        correct: 1,
+        explanation: "Analisis: 'Hal' adalah lafaz (diucapkan) tapi hanya satu kata. Syarat kalam harus murakkab (tersusun) dari dua kata atau lebih."
+      },
+      { //16
+        question: "السماء فوقنا - هل يعتبر هذا الكلام كلامًا مع أن المعلوم أن السماء فوقنا؟",
+        options: ["لا يعتبر لأنه معلوم عند الجميع", "يعتبر لأنه مفيد فائدة يحسن السكوت عليها", "لا يعتبر لأنه ليس مركبًا", "يعتبر فقط إذا كان المخاطب لا يعلم ذلك"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan menegaskan: 'ولو كان بفائدة معلومة فلا بأس، يسمى كلامًا'. Yang penting adalah struktur kalimatnya sempurna dan pendengar tidak menanti kelanjutan, meskipun informasinya sudah diketahui."
+      },
+      { //17
+        question: "ما الفرق بين التركيب الإضافي والتركيب الإسنادي؟",
+        options: ["كلاهما يعتبر كلامًا عند النحويين", "التركيب الإضافي ليس بكلام والتركيب الإسنادي هو الكلام", "التركيب الإضافي هو الكلام والتركيب الإسنادي ليس بكلام", "لا فرق بينهما"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan menyebutkan: 'بخلاف المركب تركيبا إضافيا هذا ليس بكلام، لا بد أن يكون تركيبا إسناديا'."
+      },
+      { //18
+        question: "أي من التالية ليست من حروف الخفض؟",
+        options: ["الكاف", "اللام", "الباء", "إنّ"],
+        correct: 3,
+        explanation: "Analisis: Inna termasuk huruf nashb dan taukid, bukan huruf jar. Huruf jar yang disebut adalah min, ila, 'an, 'ala, fi, rubba, ba', kaf, lam."
+      },
+      { //19
+        question: "قام - هذا اللفظ يعتبر كلامًا عند النحويين لأن:",
+        options: ["هو لفظ مفرد", "فيه ضمير مستتر تقديره 'هو'", "هو مكتوب", "هو مفهوم بالإشارة"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan menyebutkan bahwa 'qum' (berdiri) secara taqdir terdiri dari dua kata karena mengandung dhamir mustatir. Demikian pula 'qama' mengandung dhamir 'huwa' (dia)."
+      },
+      { //20
+        question: "ما معنى 'بالوضع' في تعريف الكلام؟",
+        options: ["أن يكون الكلام موضوعًا على الأرض", "أن يكون الكلام مقصودًا من المتكلم وباللغة العربية", "أن يكون الكلام مكتوبًا في موضع معين", "أن يكون الكلام مسموعًا"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan merinci dua makna 'bil-wadh'i': (1) Al-wadhi'u lahu qasid (yang mengucapkan bermaksud), (2) Bil-wadh'i al-'arabi (mengikuti peletakan bahasa Arab)."
+      },
+      { //21
+        question: "كيف نعرف أن كلمة 'مسجدٍ' هي اسم؟",
+        options: ["بدخول لم عليها", "بدخول قد عليها", "بالتنوين في آخرها", "بزيادة الألف في أولها"],
+        correct: 2,
+        explanation: "Analisis: Kata 'masjidin' memiliki tanwin (masjid-in). Tanwin adalah salah satu tanda isim. Opsi A dan B (lam dan qad) adalah tanda fi'il."
+      },
+      { //22
+        question: "أي من التالية تعتبر من حروف القسم؟",
+        options: ["لعلّ", "ليت", "التاء", "لولا"],
+        correct: 2,
+        explanation: "Analisis: Huruf qasam ada tiga: waw, ba', ta'. Contoh ta': 'tallahi' (demi Allah)."
+      },
+      { //23
+        question: "إذا ارْتَقَى فِيهِ الَّذِي لَا يَفْهَمُهُ - ما معنى كلمة 'فِيهِ' في هذا البيت؟",
+        options: ["في النحو", "في البيت", "في السلم", "في العلم"],
+        correct: 2,
+        explanation: "Analisis: Bait syair tersebut berbicara tentang 'sullamuhu' (tangganya). Maka kata 'fihi' merujuk kepada 'as-sullam' (tangga) yang merupakan metafora untuk tingkatan-tingkatan dalam belajar nahwu."
+      },
+      { //24
+        question: "ما هو البيت الذي ضرب به المثل لصعوبة النحو في أوله؟",
+        options: ["بيت من حجر وبابه من خشب", "بيت من قصب وبابه من حديد", "بيت من طين وبابه من ذهب", "بيت من لبن وبابه من فضة"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan menyebutkan: 'وقد مثل: ببيت من قصب وبابه من حديد'. Maksudnya sulit masuk (pintu besi) tapi mudah di dalam (dinding tebu)."
+      },
+      { //25
+        question: "أي من التالية تعتبر من علامات الاسم؟",
+        options: ["دخول سوف", "دخول لم", "دخول قد", "دخول الألف واللام"],
+        correct: 3,
+        explanation: "Analisis: Alif lam (ال) hanya masuk pada isim. Opsi A, B, C (saufa, lam, qad) adalah tanda fi'il."
+      },
+      { //26
+        question: "قال شخص: 'أكل الولد التفاحة' وقال آخر: 'أكل التفاحة الولد' - أي الجملتين تعتبر كلامًا عند النحويين؟",
+        options: ["الأولى فقط لأنها مركبة تركيبًا إسناديًا صحيحًا", "الثانية فقط لأن الفاعل مؤخر", "كلتاهما كلام لأنهما مركبتان إسناديًا ومفيدتان", "لا تعتبر أي منهما كلامًا"],
+        correct: 2,
+        explanation: "Analisis: Dalam bahasa Arab, susunan kalimat bisa mendahulukan fi'il (jumlah fi'liyyah) atau mendahulukan mubtada' (jumlah ismiyyah). Selama tersusun secara isnadi (ada musnad dan musnad ilaih) dan memberi faedah, maka itu kalam, meskipun urutannya berbeda."
+      },
+      { //27
+        question: "إن قام زيد وإن قعد عمرو - هل يعتبر هذا الكلام كلامًا واحدًا أم كلامين؟",
+        options: ["كلام واحد لأنه مركب من عدة كلمات", "كلامان لأن كل جملة مستقلة", "ليس بكلام لأنه غير مفيد", "كلام واحد إذا كان بالواو وإلا فلا"],
+        correct: 2,
+        explanation: "Analisis: Kalimat 'In qama Zaidun wa in qa'ada 'Amrun' (Jika Zaid berdiri dan jika 'Amr duduk) adalah kalimat syarat yang tidak sempurna. Pendengar masih menanti jawab syarat. Maka ia ghairu mufid."
+      },
+      { //28
+        question: "إذا كتب شخص على ورقة: 'الطالب مجتهد' وهو نائم، فهل يعتبر هذا الكلام كلامًا عند النحويين؟",
+        options: ["يعتبر كلامًا لأنه مكتوب", "يعتبر كلامًا لأنه مركب مفيد", "لا يعتبر كلامًا لأنه ليس بلفظ", "لا يعتبر كلامًا لأن واضعه غير قاصد له (نائم)"],
+        correct: 3,
+        explanation: "Analisis: Syarat 'bil-wadh'i' mencakup makna pertama: bahwa orang yang mengucapkan (atau menulis) harus bermaksud/qasid. Ucapan orang tidur, gila, mabuk tidak termasuk kalam karena tidak ada qasd."
+      },
+      { //29
+        question: "ما الفرق بين قولنا 'زيد قائم' وقولنا 'إن زيدًا قائم' من حيث كونه كلامًا؟",
+        options: ["كلاهما كلام لأنه مفيد", "الأول كلام والثاني ليس بكلام", "الثاني كلام والأول ليس بكلام", "كلاهما ليس بكلام"],
+        correct: 0,
+        explanation: "Analisis: 'Zaidun qa'imun' adalah jumlah ismiyyah yang sempurna. 'Inna Zaidan qa'imun' juga sempurna dan mufid. Namun dalam konteks 'in syarthiyyah' (إن شرطية) seperti contoh sebelumnya, ia tidak sempurna. Tapi dengan 'inna' (إنّ) ia tetap kalam. (Catatan: Soal ini menggunakan 'إن زيدًا' dengan kemungkinan 'inna', sehingga keduanya kalam.)"
+      },
+      { //30
+        question: "كلمة 'ربَّ' في قوله تعالى: 'رُبَّمَا يَوَدُّ الَّذِينَ كَفَرُوا' - ما نوع هذه الكلمة؟",
+        options: ["اسم", "فعل", "حرف جر", "حرف نصب"],
+        correct: 2,
+        explanation: "Analisis: 'Rubba' termasuk huruf jar yang disebut dalam teks. Ia berfungsi untuk makna 'banyak sedikit' atau 'seringkali' dan hanya masuk pada isim nakirah."
+      },
+      { //31
+        question: "كيف تعرب كلمة 'الله' في 'تالله'؟",
+        options: ["مرفوعة بالضمة", "منصوبة بالفتحة", "مجرورة بالكسرة", "مبنية على الضم"],
+        correct: 2,
+        explanation: "Analisis: 'Ta' dalam 'tallahi' adalah huruf qasam (sumpah) yang termasuk huruf jar. Maka kata setelahnya (Allah) menjadi majrur."
+      },
+      { //32
+        question: "إذا قال قائل: 'الكتاب' فقط، فهل يعتبر هذا الكلام كلامًا؟",
+        options: ["نعم، لأنه اسم معرف بالألف واللام", "نعم، لأنه لفظ", "لا، لأنه غير مركب", "لا، لأنه غير مفيد بالوضع"],
+        correct: 2,
+        explanation: "Analisis: 'Al-Kitabu' hanya satu kata (isim). Meskipun ma'rifah, ia belum tersusun (murakkab). Kalam harus tersusun dari dua kata atau lebih."
+      },
+      { //33
+        question: "ما الفرق بين التنوين الذي يكون علامة للاسم والتنوين الذي يكون في بعض الأسماء المبنية؟",
+        options: ["لا فرق بينهما", "التنوين في الأسماء المبنية ليس علامة على الاسم بل هو من بنية الكلمة", "التنوين في الأسماء المبنية أقوى", "التنوين في الأسماء المعربة فقط هو علامة الاسم"],
+        correct: 1,
+        explanation: "Analisis: Ada tanwin yang menjadi bagian dari struktur kata (seperti tanwin pada 'حينئذٍ' atau 'سيبويهِ'). Ini disebut tanwin 'iwadh. Jadi tidak semua tanwin mutlak menunjukkan isim."
+      },
+      { //34
+        question: "لماذا لا يعتبر كلام السكران كلامًا عند النحويين؟",
+        options: ["لأنه ليس بلفظ", "لأنه ليس مركبًا", "لأنه غير مفيد", "لأن واضعه غير قاصد له"],
+        correct: 3,
+        explanation: "Analisis: Syarat 'bil-wadh'i' mencakup adanya qasd (kesengajaan) dari mutakallim. Orang mabuk tidak sadar, maka tidak ada qasd."
+      },
+      { //35
+        question: "كلمة 'الرجل' في جملة 'الرجل قائم' - ما علامة كونها اسمًا؟",
+        options: ["بدخول ال التعريف عليها", "وقوعها مبتدأ", "رفعها بالضمة", "جميع ما سبق صحيح"],
+        correct: 3,
+        explanation: "Analisis: Kata 'ar-rajulu' memiliki beberapa tanda isim: (1) Dukhul alif lam, (2) Waq'nya sebagai mubtada', (3) I'rab rafa' dengan dhammah. Semua adalah qarinah."
+      },
+      { //36
+        question: "أي من التالية تعتبر حروف جر وحروف قسم في نفس الوقت؟",
+        options: ["من وإلى", "الواو والباء", "في وربّ", "الكاف واللام"],
+        correct: 1,
+        explanation: "Analisis: Waw dan Ba' disebut sebagai huruf jar dalam daftar huruf khafadh, dan juga disebut sebagai huruf qasam. Jadi mereka berfungsi ganda."
+      },
+      { //37
+        question: "إذا تكلم شخص بلغة أعجمية مفهومة، فهل يعتبر كلامه كلامًا عند النحويين؟",
+        options: ["نعم، لأنه مفيد", "نعم، لأنه لفظ", "لا، لأنه ليس بالوضع العربي", "لا، لأنه ليس مركبًا"],
+        correct: 2,
+        explanation: "Analisis: Syarat 'bil-wadh'i' yang kedua adalah bahwa kalam harus mengikuti peletakan (kaidah) bahasa Arab. Ucapan dalam bahasa asing tidak disebut kalam dalam istilah nahwu."
+      },
+      { //38
+        question: "ما هو الشرط الرابع في تعريف الكلام عند النحويين؟",
+        options: ["اللفظ", "التركيب", "الإفادة", "الوضع العربي"],
+        correct: 3,
+        explanation: "Analisis: Empat syarat kalam: (1) Al-lafzh, (2) At-tarkib, (3) Al-ifadah, (4) Al-wadh'u (dengan dua maknanya: qasd dan 'urubah). Maka yang keempat adalah al-wadh'u."
+      },
+      { //39
+        question: "كيف نعرف أن كلمة 'باء' في قوله 'والباء' هي من حروف الخفض؟",
+        options: ["بدخول الواو عليها", "بدخول ال التعريف عليها", "بدخول التنوين عليها", "بذكرها في النص مع حروف الخفض"],
+        correct: 3,
+        explanation: "Analisis: Kita mengetahui status kata berdasarkan nash (teks) ulama yang menyebutkannya dalam daftar huruf jar."
+      },
+      { //40
+        question: "إن نجح غلام غلام عبد الله الطيب الطاهر - هذا التركيب يعتبر:",
+        options: ["كلامًا تامًا مفيدًا", "كلامًا ناقصًا غير مفيد", "ليس بكلام لأنه غير مركب", "كلامًا تقديريًا"],
+        correct: 1,
+        explanation: "Analisis: Kalimat ini panjang tapi tidak sempurna. 'In najaha ghulamu ghulami 'Abdillah...' adalah syarat yang belum ada jawabnya. Pendengar menanti: 'Apa yang terjadi jika dia berhasil?' Maka ia ghairu mufid."
+      },
+      { //41
+        question: "ما الحكمة من بدء المؤلف النحو بالكلام؟",
+        options: ["لأن الكلام أسهل الأبواب", "لأن النحو لإقامة الكلام", "لأن الكلام أول ما يتعلمه الطالب", "لأن الكلام أشرف الموضوعات"],
+        correct: 1,
+        explanation: "Analisis: Penjelasan menyebutkan: 'بدأ المؤلف - رحمه الله - بالكلام؛ لأن النحو لإقامة الكلام'."
+      },
+      { //42
+        question: "إذا قال شخص: 'الماء من حولنا والناس جلوس حول الماء' - هل يعتبر هذا الكلام كلامًا؟",
+        options: ["لا، لأنه تحصيل حاصل", "نعم، لأنه مركب مفيد بالوضع", "لا، لأنه غير مركب إسناديًا", "نعم، لأنه طويل"],
+        correct: 1,
+        explanation: "Analisis: Meskipun informasi sudah jelas, secara struktur ia sempurna: 'Al-ma'u min haulina' (mubtada' + khabar), 'an-nasu julusun haulal ma'i' (mubtada' + khabar). Maka ia mufid."
+      },
+      { //43
+        question: "كلمة 'باء' في 'الباء' - هل هي اسم أم حرف؟",
+        options: ["اسم لأن عليها ال التعريف", "حرف لأنها في الأصل حرف جر", "اسم لأنها مقصودة باللفظ", "حرف لأنها لا تقبل التنوين"],
+        correct: 0,
+        explanation: "Analisis: Kata 'al-ba'u' di sini adalah lafzh al-jar. Karena dimasuki alif lam, ia menjadi isim (dalam pembahasan lafzh)."
+      },
+      { //44
+        question: "ما الفرق بين القيدين 'المفيد' و'بالوضع' في تعريف الكلام؟",
+        options: ["هما قيد واحد بمعنى واحد", "المفيد للفائدة، والوضع للغة العربية والقصد", "المفيد للتركيب، والوضع للإعراب", "المفيد للمعنى، والوضع للفظ"],
+        correct: 1,
+        explanation: "Analisis: Al-mufid berkaitan dengan makna (memberi faedah pada pendengar). Al-wadh'u berkaitan dengan bentuk (bahasa Arab) dan niat (qasd)."
+      },
+      { //45
+        question: "إذا قال شخص: 'زيد' ثم سكت، ثم قال: 'قائم' بعد دقيقة، فهل يعتبر هذا كلامًا واحدًا؟",
+        options: ["نعم، لأنه مركب من كلمتين", "لا، لأنه لم يكن متصلاً في النطق", "نعم، إذا كان القصد واحدًا", "لا، لأنه غير مفيد"],
+        correct: 1,
+        explanation: "Analisis: Kalam dalam nahwu adalah satu kesatuan ucapan. Jika ada jeda panjang, maka itu dua kalam yang terpisah. Kalam harus muttasil (bersambung)."
+      }
+    ];
+
+  // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+
+    // State
+    let currentIndex = 0;
+    let selectedOption = null;
+    let answerSubmitted = false; // untuk mencegah double klik
+
+    // Fungsi tampilkan soal
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        optionsHtml += `
+          <div class="option-item" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+      answerSubmitted = false;
+    }
+
+    // Event listener untuk memilih opsi (langsung proses)
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return; // sudah menjawab
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      // langsung proses jawaban
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      // nonaktifkan semua option
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    // Notifikasi benar
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    // Notifikasi salah
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    /// Notifikasi selesai semua soal
+function showCompletionNotification() {
+  notificationCard.className = 'notification-card selesai';
+  notifIcon.innerHTML = '🏆';
+  notifTitle.textContent = 'Alhamdulillah!';
+  notifButtons.innerHTML = `
+    <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+    <button class="notif-btn btn-level2" id="btnLevel2"><i class="fas fa-star"></i> Level 2</button>
+  `;
+  explanationArea.classList.add('hidden');
+  showNotification();
+
+  document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+    hideNotification();
+    currentIndex = 0;
+    mainMenu.classList.add('hidden');
+    quizScreen.classList.remove('hidden');
+    loadQuestion();
+  });
+
+  document.getElementById('btnLevel2').addEventListener('click', () => {
+    hideNotification();
+    // Ganti dengan URL yang Anda inginkan, misalnya "level2.html"
+    window.location.href = 'level2.html'; 
+    // Jika ingin membuka di tab baru: window.open('level2.html', '_blank');
+  });
+}
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      // mengulang soal yang sama
+      answerSubmitted = false;
+      // aktifkan option kembali
+      document.querySelectorAll('.option-item').forEach(el => el.classList.remove('disabled-option'));
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        // Semua soal selesai
+        quizScreen.classList.add('hidden'); // sembunyikan layar quiz
+        showCompletionNotification();
+      }
+    }
+
+    // Mulai quiz
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      loadQuestion();
+    });
+
+    // Tutup notifikasi jika klik di luar (opsional)
+    notificationOverlay.addEventListener('click', (e) => {
+      if (e.target === notificationOverlay) {
+        // tidak menutup otomatis, biarkan user memilih tombol
+      }
+    });
+
+    // Inisialisasi awal
+    // (kosong)
+  })();
+</script>
+</body>
+</html>
