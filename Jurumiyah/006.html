@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - علامتا الجزم</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1B5E20, #4CAF50);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #1B5E20;
+      letter-spacing: 1px;
+    }
+
+    .main-menu .level-badge {
+      background: #4CAF50;
+      color: white;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 30px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #1B5E20;
+    }
+
+    .btn-mulai {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #1B5E20, 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #1B5E20, 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .quiz-header .level-small {
+      background: #4CAF50;
+      color: white;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 40px;
+    }
+
+    .nav-grid-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .question-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #fff5e0;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255,255,255,0.35);
+      border-color: #4CAF50;
+    }
+
+    .option-item.selected {
+      background: #4CAF50;
+      color: white;
+      font-weight: 700;
+      border-color: #4CAF50;
+      box-shadow: 0 0 15px #4CAF50;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #1B5E20;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #2e7d32;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: white;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+      animation: pop 0.3s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      border: 4px solid #2e7d32;
+    }
+
+    .notification-card.salah {
+      background: linear-gradient(145deg, #ffcdd2, #ef9a9a);
+      border: 4px solid #b71c1c;
+    }
+
+    .notification-card.selesai {
+      background: linear-gradient(145deg, #bbdefb, #90caf9);
+      border: 4px solid #1565c0;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn-next {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: white;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: white;
+    }
+
+    .explanation-box {
+      background: #fff3e0;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #1B5E20;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #4CAF50;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #1B5E20;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #4CAF50;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #4CAF50;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #2e7d32;
+      border-color: #81c784;
+    }
+
+    .nav-item.unanswered {
+      background: #b71c1c;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #4CAF50;
+    }
+
+    .btn-tutup-panel {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> علامتا الجزم <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">30 soal pilihan ganda • berdasarkan teks Ibnu Utsaimin</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> علامتا الجزم</span>
+      <span class="progress" id="progressIndicator">1/30</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— ‏باب علامتا الجزم لابن عثيمين ‏—</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 30 SOAL - BAB علامتا الجزم
+    const questions = [
+      // ========== SOAL MUDAH (1-10) ==========
+      {
+        question: "كم علامة للجزم؟",
+        options: ["علامة واحدة", "علامتان", "ثلاث علامات", "أربع علامات"],
+        correct: 1,
+        explanation: "للجزم علامتان: السكون والحذف. (Jazm memiliki dua tanda: sukun dan hadzf.)"
+      },
+      {
+        question: "ما العلامة الأصلية للجزم؟",
+        options: ["السكون", "الحذف", "الفتحة", "الكسرة"],
+        correct: 0,
+        explanation: "الأصل في الجزم هو السكون. (Asal tanda jazm adalah sukun.)"
+      },
+      {
+        question: "في أي نوع من الكلمات يدخل الجزم؟",
+        options: ["الأسماء", "الفعل الماضي", "الفعل المضارع", "الحروف"],
+        correct: 2,
+        explanation: "الجزم يدخل في الفعل المضارع فقط بشروط. (Jazm hanya masuk pada fi'il mudhari' dengan syarat.)"
+      },
+      {
+        question: "متى يكون السكون علامة للجزم؟",
+        options: ["في الفعل المضارع المعتل الآخر", "في الفعل المضارع الصحيح الآخر", "في الفعل الماضي", "في اسم الفعل"],
+        correct: 1,
+        explanation: "السكون يكون علامة للجزم في الفعل المضارع الصحيح الآخر غير المبني. (Sukun menjadi tanda jazm pada fi'il mudhari' shahih akhir yang tidak mabni.)"
+      },
+      {
+        question: "مثال على فعل مضارع صحيح الآخر مجزوم بالسكون:",
+        options: ["لم يكتبْ", "لم يكتبُ", "لم يكتبَ", "لم يكتبا"],
+        correct: 0,
+        explanation: "\"لم يكتبْ\" مجزوم بالسكون. (Lam yaktub, dijazm dengan sukun.)"
+      },
+      {
+        question: "متى يكون الحذف علامة للجزم؟",
+        options: ["في الفعل المضارع الصحيح الآخر", "في الفعل المضارع المعتل الآخر والأفعال الخمسة", "في الفعل الماضي", "في الاسم المفرد"],
+        correct: 1,
+        explanation: "الحذف يكون علامة للجزم في الفعل المضارع المعتل الآخر وفي الأفعال الخمسة. (Hadzf menjadi tanda jazm pada fi'il mudhari' mu'tal akhir dan af'al khamsah.)"
+      },
+      {
+        question: "أي من الأفعال التالية من الأفعال الخمسة؟",
+        options: ["يفعلان", "فعل", "يفعل", "افعل"],
+        correct: 0,
+        explanation: "\"يفعلان\" من الأفعال الخمسة. (Yaf'alāni termasuk af'al khamsah.)"
+      },
+      {
+        question: "كيف تجزم الفعل \"يفعلان\"؟",
+        options: ["لم يفعلان", "لم يفعلا", "لم يفعلون", "لم يفعلين"],
+        correct: 1,
+        explanation: "تجزم بحذف النون: لم يفعلا. (Dijazm dengan membuang nun: lam yaf'alā.)"
+      },
+      {
+        question: "ما علامة جزم الفعل المعتل الآخر بالألف مثل \"يسعى\"؟",
+        options: ["السكون", "حذف الألف", "حذف النون", "الكسرة"],
+        correct: 1,
+        explanation: "يجزم بحذف الألف: لم يسعَ. (Dijazm dengan membuang alif: lam yas'a.)"
+      },
+      {
+        question: "أداة من أدوات الجزم:",
+        options: ["لن", "لم", "إن", "أن"],
+        correct: 1,
+        explanation: "\"لم\" من أدوات الجزم. (Lam termasuk adawāt al-jazm.)"
+      },
+      // ========== SOAL SEDANG (11-20) ==========
+      {
+        question: "لماذا لا يجزم الفعل \"يقومن\" في قولك: \"لا يقومن زيد\"؟",
+        options: ["لأنه مبني لاتصاله بنون التوكيد", "لأنه معتل الآخر", "لأنه مرفوع", "لأنه منصوب"],
+        correct: 0,
+        explanation: "\"يقومن\" مبني لاتصاله بنون التوكيد، فلا يدخله الجزم. (Yaqumna mabni karena bertemu nun taukid, tidak bisa dijazm.)"
+      },
+      {
+        question: "ما إعراب \"يدع\" في قوله تعالى: (ومن يدع مع الله إلها آخر)؟",
+        options: ["فعل مضارع مرفوع", "فعل مضارع منصوب", "فعل مضارع مجزوم بحذف الواو", "فعل ماض"],
+        correct: 2,
+        explanation: "\"يدع\" مجزوم بحذف الواو، وأصله يدعو. (Yad'u dijazm dengan membuang waw, asalnya yad'ū.)"
+      },
+      {
+        question: "ما أصل الفعل \"يقض\" في قوله تعالى: (كلا لما يقض ما أمره)؟",
+        options: ["يقضي", "يقضى", "يقضُ", "يقضَ"],
+        correct: 0,
+        explanation: "أصله يقضي، حذفت الياء للجزم. (Asalnya yaqḍī, dibuang ya' karena jazm.)"
+      },
+      {
+        question: "كيف تعرب \"تفعلوا\" في قوله تعالى: (فإن لم تفعلوا)؟",
+        options: ["فعل مضارع مرفوع بثبوت النون", "فعل مضارع منصوب", "فعل مضارع مجزوم بحذف النون", "فعل ماض"],
+        correct: 2,
+        explanation: "\"تفعلوا\" مجزوم بـ\"لم\" وعلامة جزمه حذف النون. (Taf'alū dijazm dengan lam, tanda jazmnya membuang nun.)"
+      },
+      {
+        question: "ما علامة جزم الفعل المعتل بالياء مثل \"يرمي\"؟",
+        options: ["السكون", "حذف الياء", "حذف الألف", "حذف النون"],
+        correct: 1,
+        explanation: "يجزم بحذف الياء: لم يرمِ. (Dijazm dengan membuang ya': lam yarmi.)"
+      },
+      {
+        question: "أي من الأفعال التالية مجزوم بشكل صحيح؟",
+        options: ["لم يرمي", "لم يرمِ", "لم يرمُ", "لم يرمًا"],
+        correct: 1,
+        explanation: "الصحيح: لم يرمِ، بحذف الياء. (Yang benar: lam yarmi, dengan membuang ya'.)"
+      },
+      {
+        question: "ما إعراب \"تسع\" في قولك: \"لم تسعَ\"؟",
+        options: ["فعل مضارع مرفوع", "فعل مضارع مجزوم بحذف الألف", "فعل مضارع منصوب", "فعل أمر"],
+        correct: 1,
+        explanation: "\"تسع\" مجزوم بحذف الألف، وأصله تسعى. (Tas'a dijazm dengan membuang alif, asalnya tas'ā.)"
+      },
+      {
+        question: "كيف تجزم الفعل \"يدعوان\"؟",
+        options: ["لم يدعوان", "لم يدعوا", "لم يدعو", "لم يدعون"],
+        correct: 1,
+        explanation: "\"يدعوان\" من الأفعال الخمسة، تجزم بحذف النون: لم يدعوا. (Yad'uwāni dari af'al khamsah, dijazm dengan membuang nun: lam yad'uwā.)"
+      },
+      {
+        question: "ما الفرق بين \"لم يدعوا\" و\"لم يدعو\"؟",
+        options: ["الأول للاثنين والثاني للواحد", "الأول للواحد والثاني للجمع", "كلاهما للواحد", "كلاهما للجمع"],
+        correct: 0,
+        explanation: "\"لم يدعوا\" بالألف: للمثنى، و\"لم يدعو\" بالواو: لجمع المذكر. (Lam yad'uwā untuk mutsanna, lam yad'ū untuk jamak.)"
+      },
+      {
+        question: "أي من الأفعال التالية معتل الآخر بالواو؟",
+        options: ["يسعى", "يرمي", "يدعو", "يقضي"],
+        correct: 2,
+        explanation: "\"يدعو\" معتل بالواو. (Yad'ū mu'tal dengan waw.)"
+      },
+      // ========== SOAL SULIT (21-30) ==========
+      {
+        question: "لماذا بقي الفتح قبل الألف في \"لم يرض\" دليلاً على الألف المحذوفة؟",
+        options: ["لأن الألف لا تظهر عليها الحركة", "لأن الفتحة تناسب الألف", "لأن الألف أصلها ياء", "لأن الفعل مبني"],
+        correct: 1,
+        explanation: "الفتحة قبل الألف دليل على الألف المحذوفة، لأن الألف لا يقبل الحركة. (Fathah sebelum alif menjadi bukti alif yang dibuang.)"
+      },
+      {
+        question: "ما إعراب \"تخش\" في قوله تعالى: (فلا تخشوهم واخشون)؟",
+        options: ["فعل مضارع مجزوم بحذف الألف", "فعل مضارع مرفوع", "فعل أمر", "فعل مضارع منصوب"],
+        correct: 0,
+        explanation: "\"تخش\" مجزوم بـ\"لا\" الناهية، وعلامة جزمه حذف الألف، والفتحة دليل عليها. (Takhsya dijazm dengan la nāhiyah, tanda jazmnya membuang alif.)"
+      },
+      {
+        question: "كيف تفرق بين \"لم يدعوا\" (للواحد) و\"لم يدعوا\" (للجمع) في الرسم؟",
+        options: ["للواحد تكتب بدون ألف، للجمع تكتب بألف", "للواحد تكتب بألف، للجمع تكتب بواو", "كلاهما يكتبان بنفس الطريقة", "الفرق بالشكل فقط"],
+        correct: 0,
+        explanation: "\"لم يدع\" للواحد (بدون ألف بعد الواو)، و\"لم يدعوا\" للجمع (بألف بعد الواو). (Lam yad'u untuk mufrad, lam yad'ū untuk jamak.)"
+      },
+      {
+        question: "أي من الأفعال التالية لا يجوز جزمه؟",
+        options: ["يقوم", "يقومان", "يقومن", "يقوموا"],
+        correct: 2,
+        explanation: "\"يقومن\" مبني لاتصاله بنون النسوة، فلا يجزم. (Yaqumna mabni karena nun niswah, tidak bisa dijazm.)"
+      },
+      {
+        question: "ما أصل الفعل \"يأت\" في قوله تعالى: (ولما يأتهم تأويله)؟",
+        options: ["يأتي", "يأتو", "يأتى", "يأتُ"],
+        correct: 0,
+        explanation: "أصله يأتي، حذفت الياء للجزم. (Asalnya ya'tī, dibuang ya' karena jazm.)"
+      },
+      {
+        question: "كيف تعرب \"تدع\" في قوله تعالى: (لا تدع مع الله إلها آخر)؟",
+        options: ["فعل مضارع مجزوم بحذف الواو", "فعل مضارع مرفوع", "فعل أمر", "فعل مضارع منصوب"],
+        correct: 0,
+        explanation: "\"تدع\" مجزوم بـ\"لا\" الناهية، وأصله تدعو، حذفت الواو. (Tad'u dijazm dengan la nāhiyah, asalnya tad'ū.)"
+      },
+      {
+        question: "ما علامة جزم الفعل \"تستعجلونِ\" في قوله تعالى: (فلا تستعجلونِ) مع وجود النون؟",
+        options: ["السكون", "حذف النون", "حذف الواو", "لا جزم هنا لأن النون نون وقاية"],
+        correct: 3,
+        explanation: "النون في \"تستعجلونِ\" نون وقاية وليست نون إعراب، والفعل مبني؟ (Sebenarnya ini pengecualian: النون نون وقاية، والفعل مبني في محل جزم.)"
+      },
+      {
+        question: "إذا كان الفعل معتلاً بالواو مثل \"يدعو\"، فما الذي يبقى بعد حذف الواو في الجزم؟",
+        options: ["الفتحة", "الضمة", "الكسرة", "السكون"],
+        correct: 1,
+        explanation: "تبقى الضمة دليلاً على الواو المحذوفة. (Dhammah menjadi bukti waw yang dibuang.)"
+      },
+      {
+        question: "إذا كان الفعل معتلاً بالياء مثل \"يقضي\"، فما الذي يبقى بعد حذف الياء في الجزم؟",
+        options: ["الفتحة", "الضمة", "الكسرة", "السكون"],
+        correct: 2,
+        explanation: "تبقى الكسرة دليلاً على الياء المحذوفة. (Kasrah menjadi bukti ya' yang dibuang.)"
+      },
+      {
+        question: "لماذا لا يصح قول: \"لم يقمُ\"؟",
+        options: ["لأن الفعل صحيح الآخر يجب جزمه بالسكون", "لأن الفعل معتل", "لأنه منصوب", "لأنه مبني"],
+        correct: 0,
+        explanation: "الفعل الصحيح الآخر إذا جزم يجب أن يكون ساكن الآخر، لا مضمومًا. (Fi'il shahih akhir jika dijazm harus sukun.)"
+      },
+      {
+        question: "أي من العبارات التالية صحيحة نحويًا؟",
+        options: ["لم يرمِ", "لم يرمي", "لم يرمُ", "لم يرمًا"],
+        correct: 0,
+        explanation: "الصحيح: لم يرمِ، بحذف الياء وإبقاء الكسرة. (Yang benar: lam yarmi, dengan membuang ya' dan menyisakan kasrah.)"
+      }
+    ];
+
+    // Elemen DOM (sama seperti sebelumnya)
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-level2" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/007.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>

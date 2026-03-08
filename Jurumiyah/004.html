@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - علامات الإعراب</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1B5E20, #4CAF50);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #1B5E20;
+      letter-spacing: 1px;
+    }
+
+    .main-menu .level-badge {
+      background: #4CAF50;
+      color: white;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 30px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #1B5E20;
+    }
+
+    .btn-mulai {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #1B5E20, 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #1B5E20, 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .quiz-header .level-small {
+      background: #4CAF50;
+      color: white;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 40px;
+    }
+
+    .nav-grid-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    .question-box {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #fff5e0;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255,255,255,0.35);
+      border-color: #4CAF50;
+    }
+
+    .option-item.selected {
+      background: #4CAF50;
+      color: white;
+      font-weight: 700;
+      border-color: #4CAF50;
+      box-shadow: 0 0 15px #4CAF50;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #1B5E20;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #2e7d32;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: white;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+      animation: pop 0.3s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+      border: 4px solid #2e7d32;
+    }
+
+    .notification-card.salah {
+      background: linear-gradient(145deg, #ffcdd2, #ef9a9a);
+      border: 4px solid #b71c1c;
+    }
+
+    .notification-card.selesai {
+      background: linear-gradient(145deg, #bbdefb, #90caf9);
+      border: 4px solid #1565c0;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .btn-next {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: white;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: white;
+    }
+
+    .explanation-box {
+      background: #fff3e0;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #1B5E20;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #4CAF50;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #1B5E20;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #4CAF50;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #4CAF50;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #2e7d32;
+      border-color: #81c784;
+    }
+
+    .nav-item.unanswered {
+      background: #b71c1c;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #4CAF50;
+    }
+
+    .btn-tutup-panel {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> باب معرفة علامات الإعراب <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">60 soal pilihan ganda • berdasarkan teks Ibnu Utsaimin</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> علامات الإعراب</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— ‏باب معرفة علامات الإعراب لابن عثيمين ‏—</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 60 SOAL BARU - BAB معرفة علامات الإعراب (الرفع والنصب)
+    const questions = [
+      // 1 (Mudah)
+      {
+        question: "ما علامة الرفع في المثنى؟",
+        options: ["الضمة", "الواو", "الألف", "النون"],
+        correct: 2,
+        explanation: "الألف تكون علامة للرفع في تثنية الأسماء خاصة. (Alif adalah tanda rafa' khusus untuk isim mutsanna.)"
+      },
+      // 2 (Mudah)
+      {
+        question: "ما تعريف المثنى؟",
+        options: ["ما دل على واحد بزيادة", "ما دل على اثنين أو اثنتين بزيادة أغنت عن متعاطفين متماثلين", "ما دل على ثلاثة فأكثر مع تغير بناء مفرده", "ما دل على اثنين بدون زيادة"],
+        correct: 1,
+        explanation: "المثنى هو ما دل على اثنين أو اثنتين بزيادة أغنت عن متعاطفين متماثلين. (Mutsanna adalah kata yang menunjukkan dua dengan tambahan yang menggantikan dua kata yang sama.)"
+      },
+      // 3 (Mudah)
+      {
+        question: "أي من الأسماء التالية يعرب إعراب المثنى؟",
+        options: ["رجلان", "رجال", "مسلمون", "مسلمات"],
+        correct: 0,
+        explanation: "\"رجلان\" مثنى حقيقي، يرفع بالألف وينصب ويجر بالياء. (Rajulān adalah mutsanna hakiki, dirafa' dengan alif, dinasab dan dijar dengan ya'.)"
+      },
+      // 4 (Mudah)
+      {
+        question: "ما علامة رفع الأفعال الخمسة؟",
+        options: ["الضمة", "الواو", "الألف", "ثبوت النون"],
+        correct: 3,
+        explanation: "الأفعال الخمسة ترفع بثبوت النون. (Fi'il lima dirafa' dengan tetapnya nun.)"
+      },
+      // 5 (Mudah)
+      {
+        question: "أي من الأفعال التالية من الأفعال الخمسة؟",
+        options: ["يفعلان", "يفعل", "فعل", "افعل"],
+        correct: 0,
+        explanation: "\"يفعلان\" من الأفعال الخمسة؛ لأنه اتصل به ضمير التثنية. (Yaf'alān termasuk fi'il lima karena dihubungkan dengan dhamir tasniyah.)"
+      },
+      // 6 (Mudah)
+      {
+        question: "كم علامة للنصب؟",
+        options: ["ثلاث", "أربع", "خمس", "ست"],
+        correct: 2,
+        explanation: "للنصب خمس علامات: الفتحة، الألف، الكسرة، الياء، حذف النون. (Nasb memiliki lima tanda: fathah, alif, kasrah, ya', dan membuang nun.)"
+      },
+      // 7 (Mudah)
+      {
+        question: "ما العلامة الأصلية للنصب؟",
+        options: ["الفتحة", "الألف", "الكسرة", "حذف النون"],
+        correct: 0,
+        explanation: "الفتحة هي الأصل في النصب، والباقي نيابة عنها. (Fathah adalah tanda asli nasb, lainnya sebagai pengganti.)"
+      },
+      // 8 (Mudah)
+      {
+        question: "في أي موضع تكون الفتحة علامة للنصب؟",
+        options: ["في الاسم المفرد وجمع التكسير والفعل المضارع الذي لم يتصل بآخره شيء ودخل عليه ناصب", "في الأسماء الخمسة", "في جمع المؤنث السالم", "في المثنى"],
+        correct: 0,
+        explanation: "الفتحة تكون علامة للنصب في ثلاثة مواضع: الاسم المفرد، جمع التكسير، والفعل المضارع بشروط. (Fathah menjadi tanda nasb di tiga tempat: ism mufrad, jam' taksir, dan fi'il mudhari' dengan syarat.)"
+      },
+      // 9 (Mudah)
+      {
+        question: "مثال على اسم مفرد منصوب بالفتحة:",
+        options: ["رأيت زيدًا", "رأيت زيدٍ", "رأيت زيدٌ", "رأيت زيدْ"],
+        correct: 0,
+        explanation: "\"زيدًا\" منصوب بالفتحة لأنه اسم مفرد. (Zaidan dinasab dengan fathah karena ism mufrad.)"
+      },
+      // 10 (Mudah)
+      {
+        question: "مثال على جمع تكسير منصوب بالفتحة:",
+        options: ["رأيت الرجالَ", "رأيت الرجالِ", "رأيت الرجالُ", "رأيت الرجالْ"],
+        correct: 0,
+        explanation: "\"الرجالَ\" جمع تكسير منصوب بالفتحة. (Ar-rijāla jam' taksir dinasab dengan fathah.)"
+      },
+      // 11 (Mudah)
+      {
+        question: "ما علامة نصب الأسماء الخمسة؟",
+        options: ["الفتحة", "الألف", "الكسرة", "الياء"],
+        correct: 1,
+        explanation: "الأسماء الخمسة تنصب بالألف. (Isim lima dinasab dengan alif.)"
+      },
+      // 12 (Mudah)
+      {
+        question: "أي من الأسماء التالية من الأسماء الخمسة؟",
+        options: ["أبوك", "كتابك", "مسلمون", "رجلان"],
+        correct: 0,
+        explanation: "\"أبوك\" من الأسماء الخمسة (أب، أخ، حم، فو، ذو). (Abūka termasuk isim lima.)"
+      },
+      // 13 (Mudah)
+      {
+        question: "ما علامة نصب جمع المؤنث السالم؟",
+        options: ["الفتحة", "الألف", "الكسرة", "الياء"],
+        correct: 2,
+        explanation: "جمع المؤنث السالم ينصب بالكسرة نيابة عن الفتحة. (Jam' mu'annath sālim dinasab dengan kasrah.)"
+      },
+      // 14 (Mudah)
+      {
+        question: "مثال على جمع مؤنث سالم منصوب:",
+        options: ["أكرمت المسلماتِ", "أكرمت المسلماتَ", "أكرمت المسلماتُ", "أكرمت المسلماتْ"],
+        correct: 0,
+        explanation: "\"المسلماتِ\" منصوب بالكسرة. (Al-Muslimāti dinasab dengan kasrah.)"
+      },
+      // 15 (Mudah)
+      {
+        question: "ما علامة نصب المثنى؟",
+        options: ["الفتحة", "الألف", "الكسرة", "الياء"],
+        correct: 3,
+        explanation: "المثنى ينصب بالياء. (Mutsanna dinasab dengan ya'.)"
+      },
+      // 16 (Mudah)
+      {
+        question: "مثال على مثنى منصوب:",
+        options: ["رأيت الرجلين", "رأيت الرجلان", "رأيت الرجلون", "رأيت الرجلي"],
+        correct: 0,
+        explanation: "\"الرجلين\" مثنى منصوب بالياء. (Ar-rajulaini mutsanna dinasab dengan ya'.)"
+      },
+      // 17 (Mudah)
+      {
+        question: "ما علامة نصب جمع المذكر السالم؟",
+        options: ["الفتحة", "الألف", "الكسرة", "الياء"],
+        correct: 3,
+        explanation: "جمع المذكر السالم ينصب بالياء. (Jam' mudhakkar sālim dinasab dengan ya'.)"
+      },
+      // 18 (Mudah)
+      {
+        question: "مثال على جمع مذكر سالم منصوب:",
+        options: ["رأيت المسلمين", "رأيت المسلمون", "رأيت المسلمات", "رأيت المسلمي"],
+        correct: 0,
+        explanation: "\"المسلمين\" جمع مذكر سالم منصوب بالياء. (Al-Muslimīna jam' mudhakkar sālim dinasab dengan ya'.)"
+      },
+      // 19 (Mudah)
+      {
+        question: "ما علامة نصب الأفعال الخمسة؟",
+        options: ["الفتحة", "الألف", "الكسرة", "حذف النون"],
+        correct: 3,
+        explanation: "الأفعال الخمسة تنصب بحذف النون. (Fi'il lima dinasab dengan membuang nun.)"
+      },
+      // 20 (Mudah)
+      {
+        question: "مثال على فعل من الأفعال الخمسة منصوب:",
+        options: ["لن يفعلا", "لن يفعلان", "لن يفعلون", "لن يفعلين"],
+        correct: 0,
+        explanation: "\"لن يفعلا\" منصوب بحذف النون؛ أصله \"يفعلان\". (Lan yaf'alā dinasab dengan membuang nun, asalnya yaf'alāni.)"
+      },
+      // 21 (Sedang)
+      {
+        question: "ما شرط المثنى الحقيقي؟",
+        options: ["أن يدل على اثنين بزيادة أغنت عن متعاطفين متماثلين", "أن يدل على اثنين ولو بدون زيادة", "أن يدل على اثنين مع تغير بناء المفرد", "أن يدل على اثنين مع زيادة بشرط أن يكون المفرد معتل الآخر"],
+        correct: 0,
+        explanation: "المثنى الحقيقي هو ما دل على اثنين بزيادة أغنت عن متعاطفين متماثلين لفظًا ومعنى. (Mutsanna hakiki adalah yang menunjukkan dua dengan tambahan yang menggantikan dua kata yang sama lafal dan makna.)"
+      },
+      // 22 (Sedang)
+      {
+        question: "أي من الأسماء التالية ملحق بالمثنى وليس بمثنى حقيقي؟",
+        options: ["رجلان", "اثنان", "قلمان", "كتابان"],
+        correct: 1,
+        explanation: "\"اثنان\" ملحق بالمثنى لأنه لا مفرد له من لفظه. (Ithnān mulhaq bi al-muthannā karena tidak memiliki bentuk tunggal dari lafal yang sama.)"
+      },
+      // 23 (Sedang)
+      {
+        question: "متى تكون \"كلا\" و\"كلتا\" ملحقتين بالمثنى؟",
+        options: ["إذا أضيفتا إلى اسم ظاهر", "إذا أضيفتا إلى ضمير", "إذا كانتا منونتين", "إذا كانتا مرفوعتين"],
+        correct: 1,
+        explanation: "\"كلا\" و\"كلتا\" إذا أضيفتا إلى الضمير تعربان إعراب المثنى (ملحق)، وإذا أضيفتا إلى الظاهر تعربان إعراب الاسم المقصور. (Kilā dan kitā jika diidhafahkan kepada dhamir, dii'rab seperti mutsanna; jika kepada isim zhahir, dii'rab seperti isim maqshur.)"
+      },
+      // 24 (Sedang)
+      {
+        question: "ما إعراب \"كلتا\" في قوله تعالى: \"كلتا الجنتين آتت أكلها\"؟",
+        options: ["مبتدأ مرفوع بضمة مقدرة على الألف", "مبتدأ مرفوع بالألف نيابة عن الضمة", "فاعل مرفوع بالضمة", "توكيد مرفوع بالألف"],
+        correct: 0,
+        explanation: "\"كلتا\" هنا مضافة إلى اسم ظاهر \"الجنتين\" فتعرب إعراب الاسم المقصور بضمة مقدرة. (Kitā di sini mudhaf kepada isim zhahir, sehingga dii'rab seperti isim maqshur dengan dhammah muqaddarah.)"
+      },
+      // 25 (Sedang)
+      {
+        question: "إذا قصدت بالقمرين الشمس والقمر، فما حكم \"القمران\"؟",
+        options: ["مثنى حقيقي", "ملحق بالمثنى", "جمع تكسير", "اسم مفرد"],
+        correct: 1,
+        explanation: "إذا أريد بالقمرين الشمس والقمر فهما غير متماثلين، فهو ملحق بالمثنى. (Jika yang dimaksud dengan al-qamarān adalah matahari dan bulan, keduanya tidak sama, maka ia mulhaq bi al-muthannā.)"
+      },
+      // 26 (Sedang)
+      {
+        question: "أي من الأفعال التالية ليس من الأفعال الخمسة؟",
+        options: ["تفعلان", "يفعلون", "تفعلين", "تفعل"],
+        correct: 3,
+        explanation: "الأفعال الخمسة هي: يفعلان، تفعلان، يفعلون، تفعلون، تفعلين. \"تفعل\" ليس منها. (Fi'il lima adalah: yaf'alāni, taf'alāni, yaf'alūna, taf'alūna, taf'alīna. \"Taf'alu\" tidak termasuk.)"
+      },
+      // 27 (Sedang)
+      {
+        question: "ما علامة رفع الفعل \"تفعلين\"؟",
+        options: ["الضمة الظاهرة", "الضمة المقدرة", "ثبوت النون", "الواو"],
+        correct: 2,
+        explanation: "\"تفعلين\" من الأفعال الخمسة، ترفع بثبوت النون. (Taf'alīna termasuk fi'il lima, dirafa' dengan tetapnya nun.)"
+      },
+      // 28 (Sedang)
+      {
+        question: "كيف تنصب الفعل \"تفعلون\"؟",
+        options: ["تفعلون", "تفعلوا", "تفعلونَ", "تفعلونِ"],
+        correct: 1,
+        explanation: "تنصب بحذف النون: \"لن تفعلوا\". (Dinasab dengan membuang nun: \"lan taf'alū\".)"
+      },
+      // 29 (Sedang)
+      {
+        question: "ما شرط نصب الفعل المضارع بالفتحة؟",
+        options: ["أن يكون صحيح الآخر", "أن يدخل عليه ناصب ولم يتصل بآخره شيء", "أن يكون معتل الآخر", "أن يتصل به ضمير رفع"],
+        correct: 1,
+        explanation: "ينصب بالفتحة إذا دخل عليه ناصب ولم يتصل بآخره شيء (لا نون توكيد ولا نون نسوة). (Dinasab dengan fathah jika kemasuki 'amil nasab dan tidak diakhiri dengan sesuatu (nun taukid atau nun niswah).)"
+      },
+      // 30 (Sedang)
+      {
+        question: "لماذا لا ينصب الفعل \"يقمن\" بالفتحة؟",
+        options: ["لأنه مبني", "لأنه اتصل به نون النسوة", "لأنه معتل الآخر", "لأنه مرفوع"],
+        correct: 1,
+        explanation: "\"يقمن\" اتصل به نون النسوة، فلا ينصب بالفتحة. (Yaqumna dihubungkan dengan nun an-niswah, tidak dinasab dengan fathah.)"
+      },
+      // 31 (Sedang)
+      {
+        question: "ما علامة نصب جمع المؤنث السالم؟",
+        options: ["الفتحة", "الكسرة", "الياء", "الألف"],
+        correct: 1,
+        explanation: "ينصب بالكسرة نيابة عن الفتحة. (Dinasab dengan kasrah sebagai pengganti fathah.)"
+      },
+      // 32 (Sedang)
+      {
+        question: "أي من الكلمات التالية جمع مؤنث سالم ينصب بالكسرة؟",
+        options: ["مسلمات", "مسلمين", "مسلمون", "مسلمي"],
+        correct: 0,
+        explanation: "\"مسلمات\" جمع مؤنث سالم، ينصب بالكسرة. (Muslimāt jam' mu'annath sālim, dinasab dengan kasrah.)"
+      },
+      // 33 (Sedang)
+      {
+        question: "ما إعراب \"عرفات\" في قولك: \"رأيت عرفات\"؟",
+        options: ["مفعول به منصوب بالكسرة لأنه جمع مؤنث سالم", "مفعول به منصوب بالفتحة لأنه اسم علم", "مفعول به منصوب بالكسرة لأنه ملحق بجمع المؤنث السالم", "مبني على الكسر في محل نصب"],
+        correct: 2,
+        explanation: "\"عرفات\" اسم علم لموضع وليس جمعًا حقيقيًا، فهو ملحق بجمع المؤنث السالم وينصب بالكسرة. ('Arafāt adalah nama tempat, bukan jamak sejati, ia mulhaq dan dinasab dengan kasrah.)"
+      },
+      // 34 (Sedang)
+      {
+        question: "متى تنصب الأسماء الخمسة بالألف؟",
+        options: ["إذا كانت مضافة إلى غير ياء المتكلم ومكبرة ومفردة", "إذا كانت منونة", "إذا كانت مضافة إلى ياء المتكلم", "إذا كانت مصغرة"],
+        correct: 0,
+        explanation: "تنصب بالألف إذا توفرت فيها شروط الإعراب بالحروف: الإفراد، التكبير، الإضافة لغير ياء المتكلم، وغيرها. (Dinasab dengan alif jika memenuhi syarat: mufrad, mukabbar, mudhaf kepada selain ya' mutakallim, dll.)"
+      },
+      // 35 (Sedang)
+      {
+        question: "ما علامة نصب \"أباك\" في جملة \"أكرمت أباك\"؟",
+        options: ["الفتحة", "الألف", "الياء", "الكسرة"],
+        correct: 1,
+        explanation: "\"أباك\" من الأسماء الخمسة منصوب بالألف. (Abāka termasuk isim lima, dinasab dengan alif.)"
+      },
+      // 36 (Sedang)
+      {
+        question: "أي من الأسماء التالية يعرب إعراب المثنى في حالة النصب؟",
+        options: ["اثنين", "اثنان", "اثنون", "اثنَين"],
+        correct: 0,
+        explanation: "\"اثنين\" ملحق بالمثنى في حالة النصب والجر، وينصب بالياء. (Ithnaini mulhaq bi al-muthannā dalam nasab dan jar, dinasab dengan ya'.)"
+      },
+      // 37 (Sedang)
+      {
+        question: "ما الفرق بين \"الأبوان\" إذا أريد بهما الأب والأم؟",
+        options: ["مثنى حقيقي", "ملحق بالمثنى", "جمع تكسير", "اسم مفرد"],
+        correct: 1,
+        explanation: "إذا أريد بالأبوين الأب والأم فهما مختلفان، فهو ملحق بالمثنى. (Jika al-abawān berarti ayah dan ibu, keduanya berbeda, maka mulhaq.)"
+      },
+      // 38 (Sedang)
+      {
+        question: "أي من الأفعال التالية ينصب بحذف النون؟",
+        options: ["يكتبان", "يكتب", "كتب", "اكتب"],
+        correct: 0,
+        explanation: "\"يكتبان\" من الأفعال الخمسة، ينصب بحذف النون. (Yaktubāni termasuk fi'il lima, dinasab dengan membuang nun.)"
+      },
+      // 39 (Sedang)
+      {
+        question: "ما إعراب \"تفعلوا\" في قوله تعالى: \"ولن تفعلوا\"؟",
+        options: ["فعل مضارع مرفوع بثبوت النون", "فعل مضارع منصوب بحذف النون", "فعل مضارع مجزوم بحذف النون", "فعل ماض مبني"],
+        correct: 1,
+        explanation: "\"لن\" تنصب الفعل المضارع، و\"تفعلوا\" منصوب بحذف النون. (Lan menasabkan fi'il mudhari', \"taf'alū\" dinasab dengan membuang nun.)"
+      },
+      // 40 (Sedang)
+      {
+        question: "ما العلامة التي تنوب عن الفتحة في نصب جمع المؤنث السالم؟",
+        options: ["الياء", "الألف", "الكسرة", "حذف النون"],
+        correct: 2,
+        explanation: "الكسرة تنوب عن الفتحة في نصب جمع المؤنث السالم. (Kasrah menggantikan fathah dalam nasb jam' mu'annath sālim.)"
+      },
+      // 41 (Sulit)
+      {
+        question: "ما سبب منع إعراب \"اثنان\" بالمثنى الحقيقي؟",
+        options: ["لأنه لا مفرد له من لفظه", "لأنه يدل على اثنين بدون زيادة", "لأنه جمع", "لأنه ملحق"],
+        correct: 0,
+        explanation: "\"اثنان\" ليس له مفرد من لفظه؛ لأن مفرده \"واحد\" وليس \"اثن\"، فلا يصدق عليه تعريف المثنى. (Ithnān tidak memiliki bentuk tunggal dari lafal yang sama; karena bentuk tunggalnya \"wāhid\" bukan \"ithn\", sehingga tidak memenuhi definisi mutsanna.)"
+      },
+      // 42 (Sulit)
+      {
+        question: "إذا قلت: \"جاء العمران\" تريد أبا بكر وعمر، فما إعراب \"العمران\"؟",
+        options: ["فاعل مرفوع بالألف؛ لأنه مثنى", "فاعل مرفوع بالألف؛ لأنه ملحق بالمثنى", "فاعل مرفوع بالضمة؛ لأنه جمع تكسير", "مبتدأ مرفوع بالألف"],
+        correct: 1,
+        explanation: "إذا أريد بالعمران شخصان مختلفان، فهو ملحق بالمثنى، ويعرب إعرابه. (Jika yang dimaksud dengan al-'Umarān dua orang berbeda, ia mulhaq, dii'rab seperti mutsanna.)"
+      },
+      // 43 (Sulit)
+      {
+        question: "متى تعرب \"كلا\" إعراب الاسم المقصور؟",
+        options: ["إذا أضيفت إلى الضمير", "إذا أضيفت إلى الاسم الظاهر", "إذا كانت منصوبة", "إذا كانت مرفوعة"],
+        correct: 1,
+        explanation: "إذا أضيفت إلى اسم ظاهر، تعرب بحركات مقدرة على الألف، مثل: \"كلا الرجلين\". (Jika diidhafahkan kepada isim zhahir, dii'rab dengan harakat muqaddarah di atas alif, seperti \"kalā ar-rajulaini\".)"
+      },
+      // 44 (Sulit)
+      {
+        question: "ما علامة رفع \"كلاهما\" في قولك: \"جاء الرجلان كلاهما\"؟",
+        options: ["الضمة المقدرة على الألف", "الألف نيابة عن الضمة", "الواو", "الضمة الظاهرة"],
+        correct: 1,
+        explanation: "\"كلاهما\" توكيد مرفوع بالألف لأنه ملحق بالمثنى (مضافة إلى ضمير). (Kilāhumā ta'kid marfū' dengan alif karena mulhaq bi al-muthannā, mudhaf kepada dhamir.)"
+      },
+      // 45 (Sulit)
+      {
+        question: "لماذا لا ينصب الفعل \"يذهبن\" بالفتحة؟",
+        options: ["لأنه اتصل به نون التوكيد", "لأنه فعل ماض", "لأنه مبني", "لأنه مجزوم"],
+        correct: 0,
+        explanation: "\"يذهبن\" اتصل به نون التوكيد الثقيلة أو الخفيفة، فلا يدخله النصب بالفتحة. (Yadzhabna dihubungkan dengan nun taukid, tidak bisa dinasab dengan fathah.)"
+      },
+      // 46 (Sulit)
+      {
+        question: "ما إعراب \"المسلمات\" في جملة \"أكرمت المسلمات\"؟",
+        options: ["مفعول به منصوب بالكسرة نيابة عن الفتحة", "مفعول به منصوب بالفتحة", "فاعل مرفوع بالضمة", "مجرو بالكسرة"],
+        correct: 0,
+        explanation: "\"المسلمات\" جمع مؤنث سالم، منصوب بالكسرة. (Al-Muslimāti jam' mu'annath sālim, dinasab dengan kasrah.)"
+      },
+      // 47 (Sulit)
+      {
+        question: "ما الفرق بين \"الأبوان\" إذا أريد بهما الأب والأم، و\"الأبوان\" إذا أريد بهما الأب والجد؟",
+        options: ["الأول مثنى، والثاني ملحق", "الأول ملحق، والثاني مثنى", "كلاهما مثنى", "كلاهما ملحق"],
+        correct: 1,
+        explanation: "إذا أريد الأب والأم فهما مختلفان فملحق؛ وإذا أريد الأب والجد (أب وأب) فهما متماثلان فمثنى. (Jika ayah dan ibu, berbeda -> mulhaq; jika ayah dan kakek, sama-sama ayah -> mutsanna.)"
+      },
+      // 48 (Sulit)
+      {
+        question: "أي من الأفعال التالية ليس من الأفعال الخمسة مع أنه اتصل به ضمير؟",
+        options: ["يفعلان", "يفعلون", "تفعلين", "يفعلْنَ"],
+        correct: 3,
+        explanation: "\"يفعلن\" اتصل به نون النسوة، وهو مبني على السكون، وليس من الأفعال الخمسة. (Yaf'alna dihubungkan dengan nun an-niswah, ia mabni, bukan termasuk fi'il lima.)"
+      },
+      // 49 (Sulit)
+      {
+        question: "ما علامة نصب الفعل \"تدعو\" في قولك: \"لن تدعو\"؟",
+        options: ["الفتحة الظاهرة", "الفتحة المقدرة على الواو", "حذف النون", "الياء"],
+        correct: 1,
+        explanation: "\"تدعو\" فعل مضارع معتل الآخر بالواو، ينصب بالفتحة المقدرة على الواو. (Tad'ū fi'il mudhari' mu'tal akhir dengan waw, dinasab dengan fathah muqaddarah di atas waw.)"
+      },
+      // 50 (Sulit)
+      {
+        question: "ما إعراب \"الزيدان\" إذا قصد بهما زيد وزيد؟",
+        options: ["مثنى مرفوع بالألف", "ملحق بالمثنى مرفوع بالألف", "جمع مذكر سالم مرفوع بالواو", "مفرد مرفوع بالضمة"],
+        correct: 0,
+        explanation: "إذا قصد بهما شخصان اسمهما زيد، فهما متماثلان، فهو مثنى حقيقي. (Jika maksudnya dua orang bernama Zaid, keduanya sama, maka mutsanna hakiki.)"
+      },
+      // 51 (Sulit)
+      {
+        question: "ما علامة نصب \"فو\" في قولك: \"رأيت فاك\"؟",
+        options: ["الفتحة", "الألف", "الياء", "الكسرة"],
+        correct: 1,
+        explanation: "\"فاك\" من الأسماء الخمسة (فو) منصوب بالألف. (Fāka termasuk isim lima (fū) dinasab dengan alif.)"
+      },
+      // 52 (Sulit)
+      {
+        question: "إذا قلت: \"مررت بأخيك\" فعلامة جر \"أخيك\" هي:",
+        options: ["الياء", "الألف", "الكسرة", "الفتحة"],
+        correct: 0,
+        explanation: "الأسماء الخمسة تجر بالياء. (Isim lima dijar dengan ya'.)"
+      },
+      // 53 (Sulit)
+      {
+        question: "ما إعراب \"اثنتي عشرة\" في قولك: \"رأيت اثنتي عشرة امرأة\"؟",
+        options: ["مفعول به منصوب بالياء؛ لأنه ملحق بالمثنى", "مفعول به منصوب بالفتحة", "مفعول به منصوب بالكسرة", "مبني على السكون"],
+        correct: 0,
+        explanation: "\"اثنتي\" جزء من عدد مركب، وهو ملحق بالمثنى، فينصب بالياء. (Ithnatā 'asyrata, \"ithnatī\" adalah bagian dari bilangan, mulhaq bi al-muthannā, dinasab dengan ya'.)"
+      },
+      // 54 (Sulit)
+      {
+        question: "أي من الجمل التالية صحيحة من حيث النصب؟",
+        options: ["لن يذهبنَ", "لن يذهبا", "لن يذهبون", "لن تذهبان"],
+        correct: 1,
+        explanation: "\"لن يذهبا\" صحيح، وهو منصوب بحذف النون. (Lan yadzhabā benar, dinasab dengan membuang nun.)"
+      },
+      // 55 (Sulit)
+      {
+        question: "لماذا لا يصح قول: \"لن تفعلان\"؟",
+        options: ["لأن \"تفعلان\" مرفوع بثبوت النون", "لأن \"لن\" تنصب بحذف النون", "لأن \"تفعلان\" مبني", "لأن \"لن\" تجزم"],
+        correct: 1,
+        explanation: "\"لن\" تنصب الفعل المضارع، و\"تفعلان\" من الأفعال الخمسة، فيجب حذف النون: \"لن تفعلا\". (Lan menasabkan fi'il mudhari', dan taf'alāni termasuk fi'il lima, wajib membuang nun menjadi \"lan taf'alā\".)"
+      },
+      // 56 (Sulit)
+      {
+        question: "ما إعراب \"الطلبة\" في قولك: \"أكرمت الطلبة\" إذا كان جمع تكسير لـ\"طالب\"؟",
+        options: ["مفعول به منصوب بالفتحة", "مفعول به منصوب بالكسرة", "مفعول به منصوب بالياء", "مفعول به منصوب بالألف"],
+        correct: 0,
+        explanation: "\"الطلبة\" جمع تكسير، فينصب بالفتحة. (Ath-thalabah jam' taksir, dinasab dengan fathah.)"
+      },
+      // 57 (Sulit)
+      {
+        question: "ما الفرق بين \"المسلمين\" في حالة النصب و\"المسلمون\" في حالة الرفع؟",
+        options: ["النصب بالياء والرفع بالواو", "النصب بالفتحة والرفع بالضمة", "النصب بالألف والرفع بالواو", "النصب بالكسرة والرفع بالضمة"],
+        correct: 0,
+        explanation: "جمع المذكر السالم يرفع بالواو وينصب بالياء. (Jam' mudhakkar sālim dirafa' dengan waw, dinasab dengan ya'.)"
+      },
+      // 58 (Sulit)
+      {
+        question: "إذا قلت: \"جاء الزيدان\" ثم أردت توكيده بـ\"كلاهما\"، فتقول:",
+        options: ["جاء الزيدان كلاهما", "جاء الزيدان كليهما", "جاء الزيدان كلاهما", "جاء الزيدان كلتاهما"],
+        correct: 0,
+        explanation: "\"كلاهما\" توكيد معنوي للمثنى يرفع بالألف. (Kilāhumā ta'kid ma'nawi untuk mutsanna, marfū' dengan alif.)"
+      },
+      // 59 (Sulit)
+      {
+        question: "ما علامة نصب \"الفتيين\" في قولك: \"رأيت الفتيين\"؟",
+        options: ["الياء", "الألف", "الفتحة", "الكسرة"],
+        correct: 0,
+        explanation: "\"الفتيين\" مثنى منصوب بالياء. (Al-fatayaini mutsanna mansub dengan ya'.)"
+      },
+      // 60 (Sulit)
+      {
+        question: "ما إعراب \"أذرعات\" في قولك: \"سافرت إلى أذرعات\"؟",
+        options: ["اسم مجرور بالكسرة؛ لأنه جمع مؤنث سالم", "اسم مجرور بالكسرة؛ لأنه ملحق بجمع المؤنث السالم", "اسم مجرور بالفتحة؛ لأنه ممنوع من الصرف", "مبني على الكسر في محل جر"],
+        correct: 1,
+        explanation: "\"أذرعات\" اسم بلد، وهو ملحق بجمع المؤنث السالم، فيجر بالكسرة. (Adhuru'āt nama tempat, mulhaq bi jam' mu'annath sālim, dijarr dengan kasrah.)"
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    // State
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-level2" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/005.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>
