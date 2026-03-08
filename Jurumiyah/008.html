@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - نواصب المضارع وجوازمه</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a1f44; /* biru tua */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(10, 30, 60, 0.9);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      border: 1px solid #ffc107;
+    }
+
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #b8860b;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+
+    .main-menu .level-badge {
+      background: #ffc107;
+      color: #0a1f44;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 30px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #b8860b;
+    }
+
+    .btn-mulai {
+      background: #ffc107;
+      border: none;
+      color: #0a1f44;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #b8860b, 0 8px 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #b8860b, 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #ffc107;
+    }
+
+    .quiz-header .level-small {
+      background: #ffc107;
+      color: #0a1f44;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: #ffc107;
+      border: 1px solid #ffc107;
+    }
+
+    .nav-grid-btn {
+      background: rgba(255, 193, 7, 0.2);
+      border: 1px solid #ffc107;
+      color: #ffc107;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(255, 193, 7, 0.4);
+    }
+
+    .question-box {
+      background: rgba(20, 40, 70, 0.95);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid #ffc107;
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #ffc107;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(50, 70, 100, 0.9);
+      border: 2px solid #ffc107;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255, 193, 7, 0.3);
+      border-color: #ffc107;
+    }
+
+    .option-item.selected {
+      background: #ffc107;
+      color: #0a1f44;
+      font-weight: 700;
+      border-color: #ffc107;
+      box-shadow: 0 0 15px #ffc107;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #b8860b;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: #0a1f44;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #0a1f44;
+      color: #ffc107;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #ffc107;
+      font-size: 0.9rem;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: #1e2a4a;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8);
+      animation: pop 0.3s;
+      border: 2px solid #ffc107;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: #1e3a1e;
+      border: 4px solid #ffc107;
+    }
+
+    .notification-card.salah {
+      background: #3a1e1e;
+      border: 4px solid #ff8a80;
+    }
+
+    .notification-card.selesai {
+      background: #1e1e4a;
+      border: 4px solid #ffc107;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #ffc107;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-next {
+      background: #ffc107;
+      color: #0a1f44;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: #0a1f44;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: #fff;
+    }
+
+    .explanation-box {
+      background: #2a3a5a;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #ffc107;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #ffc107;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #1a2a4a;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #ffc107;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #ffc107;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffc107;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #b8860b;
+      border-color: #ffc107;
+      color: #0a1f44;
+    }
+
+    .nav-item.unanswered {
+      background: #4a1e1e;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #ffc107;
+      background: #ffc107;
+      color: #0a1f44;
+    }
+
+    .btn-tutup-panel {
+      background: #ffc107;
+      border: none;
+      color: #0a1f44;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> نواصب المضارع وجوازمه <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">60 soal pilihan ganda • berdasarkan penjelasan Ibnu Utsaimin</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> نواصب وجوازم</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— ‏نواصب المضارع وجوازمه - شرح ابن عثيمين ‏—</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 60 SOAL - نواصب المضارع وجوازمه (20 mudah, 20 sedang, 20 sulit)
+    const questions = [
+      // ========== SOAL MUDAH (1-20) ==========
+      {
+        question: "كم عدد النواصب التي تنصب الفعل المضارع؟",
+        options: ["ثمانية", "عشرة", "اثنا عشر", "سبعة"],
+        correct: 1,
+        explanation: "ذكر المؤلف أن النواصب عشرة، وقد حصرها بالتتبع والاستقراء. (Penulis menyebutkan bahwa nawashib ada sepuluh, berdasarkan penelusuran dan induksi.)"
+      },
+      {
+        question: "أي من الحروف التالية من النواصب؟",
+        options: ["لم", "لن", "لا الناهية", "لام الأمر"],
+        correct: 1,
+        explanation: "\"لن\" من النواصب العشرة، وهي تنصب الفعل المضارع. (Lan termasuk nawashib yang sepuluh, ia menashabkan fi'il mudhari'.)"
+      },
+      {
+        question: "ما معنى \"أن\" المصدرية؟",
+        options: ["حرف نفي", "حرف مصدر ينصب الفعل المضارع", "حرف جر", "حرف عطف"],
+        correct: 1,
+        explanation: "\"أن\" حرف مصدري ينصب الفعل المضارع، وتؤول هي والفعل بمصدر. (An adalah huruf mashdari yang menashabkan fi'il mudhari', dan bersama fi'ilnya ditakwilkan sebagai mashdar.)"
+      },
+      {
+        question: "مثال على فعل مضارع منصوب بـ \"لن\":",
+        options: ["لن يكتبُ", "لن يكتبَ", "لن يكتبْ", "لن يكتبًا"],
+        correct: 1,
+        explanation: "\"لن يكتبَ\" الفعل منصوب بفتحة ظاهرة. (Lan yaktuba fi'il dinashab dengan fathah dhahirah.)"
+      },
+      {
+        question: "ما الشرط الأول لنصب \"إذن\"؟",
+        options: ["أن تكون في وسط الكلام", "أن تكون في أول الجملة", "أن يسبقها حرف جر", "أن يكون الفعل ماضياً"],
+        correct: 1,
+        explanation: "من شروط \"إذن\" أن تكون مصدرة (في أول الجملة). (Syarat idzan harus berada di awal kalimat.)"
+      },
+      {
+        question: "\"كي\" من النواصب، مثالها:",
+        options: ["جئت كي أقرأَ", "جئت كي أقرأُ", "جئت كي أقرأْ", "جئت كي قرأتُ"],
+        correct: 0,
+        explanation: "\"كي أقرأَ\" الفعل منصوب بكي. (Kay aqra'a fi'il dinashab oleh kay.)"
+      },
+      {
+        question: "لام الجحود تأتي بعد:",
+        options: ["فعل ماض مثبت", "كان المنفية", "اسم فاعل", "حرف جر"],
+        correct: 1,
+        explanation: "لام الجحود تأتي بعد \"ما كان\" أو \"لم يكن\" للنفي. (Lam al-juhud datang setelah ma kana atau lam yakun yang bermakna negatif.)"
+      },
+      {
+        question: "\"حتى\" تنصب الفعل المضارع مثل:",
+        options: ["حتى يخرجَ", "حتى يخرجُ", "حتى يخرجْ", "حتى خرج"],
+        correct: 0,
+        explanation: "\"حتى يخرجَ\" فعل مضارع منصوب بحتى. (Hatta yakhruja fi'il mudhari' dinashab oleh hatta.)"
+      },
+      {
+        question: "كم عدد الجوازم التي تجزم فعلاً واحداً؟",
+        options: ["ثمانية", "عشرة", "ثمانية عشر", "ستة"],
+        correct: 0,
+        explanation: "الجوازم التي تجزم فعلاً واحداً ثمانية: لم، لما، ألم، ألما، لام الأمر، لام الدعاء، لا الناهية، لا الدعائية. (Jawazim yang menjazmkan satu fi'il ada delapan: lam, lamma, alam, alamma, lam al-amr, lam al-du'a, la al-nahi, la al-du'a.)"
+      },
+      {
+        question: "\"لم\" من أدوات الجزم، وتفيد:",
+        options: ["النفي والجزم فقط", "النفي والجزم والقلب إلى الماضي", "النفي والاستقبال", "النصب والجزم"],
+        correct: 1,
+        explanation: "\"لم\" تنفي وتجزم وتقلب المضارع إلى الماضي. (Lam menafikan, menjazmkan, dan mengubah mudhari' menjadi makna lampau.)"
+      },
+      {
+        question: "\"لما\" تختلف عن \"لم\" في:",
+        options: ["النفي", "الجزم", "توقع النفي", "القلب"],
+        correct: 2,
+        explanation: "\"لما\" تفيد نفيًا يتوقع حصوله، بخلاف \"لم\". (Lamma menunjukkan negasi yang diharapkan terjadi, berbeda dengan lam.)"
+      },
+      {
+        question: "\"ألم\" هي:",
+        options: ["همزة استفهام دخلت على \"لم\"", "أداة مستقلة", "حرف نصب", "حرف عطف"],
+        correct: 0,
+        explanation: "\"ألم\" مكونة من همزة الاستفهام و\"لم\"، لكن المؤلف سهلها وجعلها أداة واحدة. (Alam terdiri dari hamzah istifham dan lam, namun penulis memudahkannya sebagai satu alat.)"
+      },
+      {
+        question: "لام الأمر مثل قوله تعالى:",
+        options: ["لِيُنفِقْ", "لِيُنفِقَ", "لِيُنفِقُ", "لِيُنفِقًا"],
+        correct: 0,
+        explanation: "\"لِيُنفِقْ\" مجزوم بلام الأمر، وعلامة جزمه السكون. (Liunfiq dijazm oleh lam al-amr, tanda jazmnya sukun.)"
+      },
+      {
+        question: "\"لا\" الناهية تدخل على:",
+        options: ["الفعل الماضي", "الفعل المضارع", "الاسم", "الحرف"],
+        correct: 1,
+        explanation: "\"لا\" الناهية تجزم الفعل المضارع. (La an-nahiyah menjazmkan fi'il mudhari'.)"
+      },
+      {
+        question: "مثال على \"لا\" الدعائية:",
+        options: ["لا تقم", "لا تقوم", "رَبَّنَا لا تُؤَاخِذْنَا", "لا تضرب"],
+        correct: 2,
+        explanation: "\"لا تُؤَاخِذْنَا\" دعاء، وليست نهياً. (La tu'akhidzna adalah doa, bukan larangan.)"
+      },
+      {
+        question: "\"إن\" من الجوازم التي تجزم:",
+        options: ["فعلاً واحداً", "فعلين", "ثلاثة أفعال", "اسماً"],
+        correct: 1,
+        explanation: "\"إن\" الشرطية تجزم فعل الشرط وجوابه. (In syarthiyyah menjazmkan fi'il syarth dan jawabnya.)"
+      },
+      {
+        question: "\"مَنْ\" من أدوات الشرط تجزم فعلين، مثل:",
+        options: ["مَنْ يَقُمْ أَقُمْ", "مَنْ يَقُومُ أَقُومُ", "مَنْ قَامَ أَقُومُ", "مَنْ يَقُمْ أَقُومُ"],
+        correct: 0,
+        explanation: "\"مَنْ يَقُمْ أَقُمْ\" كلا الفعلين مجزوم. (Man yaqum aqum kedua fi'il dijazm.)"
+      },
+      {
+        question: "\"أين\" من أدوات الشرط تجزم فعلين، وتعرب:",
+        options: ["اسم شرط جازم في محل نصب", "اسم شرط جازم في محل رفع", "حرف شرط", "اسم موصول"],
+        correct: 0,
+        explanation: "\"أين\" اسم شرط جازم مبني على الفتح في محل نصب على الظرفية. (Aina adalah isim syarth jazm mabni 'ala al-fath fi mahall nashab 'ala adh-dharfiyyah.)"
+      },
+      {
+        question: "\"إذا\" في الشعر خاصة تجزم فعلين، مثل:",
+        options: ["إذا طلعت الشمس فاستيقظ", "إذا تُكْرِمْ تُكْرَمْ", "إذا جئت أكرمتك", "إذا زرتني أكرمك"],
+        correct: 1,
+        explanation: "\"إذا\" في الشعر قد تجزم، وليست من أدوات الشرط الجازمة في النثر. (Idza dalam puisi dapat menjazmkan, dan bukan termasuk adawat syarth jazimah dalam prosa.)"
+      },
+      {
+        question: "\"كيفما\" من أدوات الشرط تجزم فعلين، مثل:",
+        options: ["كيفما تفعل أفعل", "كيفما تفعلُ أفعلُ", "كيفما تفعلْ أفعلْ", "كيفما تفعلًا أفعلًا"],
+        correct: 2,
+        explanation: "\"كيفما تفعلْ أفعلْ\" كلا الفعلين مجزوم بالسكون. (Kayfama taf'al af'al kedua fi'il dijazm dengan sukun.)"
+      },
+      // ========== SOAL SEDANG (21-40) ==========
+      {
+        question: "ما الفرق بين \"لن\" و\"لم\" من حيث الزمن؟",
+        options: ["\"لن\" للماضي، \"لم\" للمستقبل", "\"لن\" للمستقبل، \"لم\" للماضي", "كلاهما للماضي", "كلاهما للمستقبل"],
+        correct: 1,
+        explanation: "\"لن\" تنفي المستقبل، و\"لم\" تنفي الماضي. (Lan menafikan masa depan, lam menafikan masa lampau.)"
+      },
+      {
+        question: "\"إذن\" تنصب الفعل المضارع بثلاثة شروط، ما هي؟",
+        options: ["أن تكون مصدرة، متصلة، والفعل مستقبل", "أن تكون مسبوقة باستفهام", "أن يسبقها حرف جر", "أن يكون الفعل ماضياً"],
+        correct: 0,
+        explanation: "شروط \"إذن\": أن تكون في أول الكلام، وأن لا يفصل بينها وبين الفعل إلا القسم، وأن يكون الفعل مستقبلاً. (Syarat idzan: harus di awal, tidak ada pemisah kecuali sumpah, dan fi'il menunjukkan masa depan.)"
+      },
+      {
+        question: "أي من العبارات التالية صحيحة باستخدام \"إذن\"؟",
+        options: ["إني إذن أكرمك", "إذن والله أكرمَك", "إذن الآن أكرمك", "إذن زرتني أكرمك"],
+        correct: 1,
+        explanation: "يجوز الفصل بالقسم، فـ\"إذن والله أكرمَك\" صحيحة، والفعل منصوب. (Pemisahan dengan sumpah diperbolehkan, jadi idzan wallahi akramaka benar, fi'il dinashab.)"
+      },
+      {
+        question: "\"كي\" عند البصريين تنصب الفعل بـ:",
+        options: ["نفسها", "\"أن\" مضمرة", "الجر", "العطف"],
+        correct: 1,
+        explanation: "البصريون يرون أن \"كي\" حرف جر، والناصب \"أن\" مضمرة بعدها. (Ulama Bashrah berpendapat bahwa kay adalah huruf jar, yang menashabkan adalah an yang disembunyikan setelahnya.)"
+      },
+      {
+        question: "\"لام الجحود\" تأتي بعد نفي بكون عام، مثل:",
+        options: ["ما كان الله ليعذبهم", "كان الله ليعذبهم", "ما زال الله ليعذبهم", "ليس الله ليعذبهم"],
+        correct: 0,
+        explanation: "\"ما كان\" نفي، و\"ليعذبهم\" منصوب بلام الجحود. (Ma kana adalah negasi, dan liyu'adzdzibahum dinashab oleh lam al-juhud.)"
+      },
+      {
+        question: "\"حتى\" إذا دخلت على الاسم تكون:",
+        options: ["حرف نصب", "حرف جر", "حرف عطف", "حرف استقبال"],
+        correct: 1,
+        explanation: "\"حتى\" تكون حرف جر إذا دخلت على الاسم، مثل: \"حتى مطلع الفجر\". (Hatta menjadi huruf jar jika masuk pada isim, contoh: hatta mathla'il fajr.)"
+      },
+      {
+        question: "ما معنى \"الجواب بالفاء\" في النواصب؟",
+        options: ["الفاء التي تأتي بعد اسم", "الفاء السببية التي تنصب الفعل في جواب الطلب", "الفاء العاطفة", "الفاء الاستئنافية"],
+        correct: 1,
+        explanation: "الفاء السببية تنصب الفعل المضارع إذا وقعت جواباً لأمر أو دعاء أو نهي أو استفهام أو غيره. (Fa' sababiyah menashabkan fi'il mudhari' jika jatuh sebagai jawaban untuk perintah, doa, larangan, pertanyaan, dll.)"
+      },
+      {
+        question: "\"لا تأكل السمك وتشربَ اللبن\" ما إعراب \"تشرب\"؟",
+        options: ["مرفوع", "منصوب بالواو", "مجزوم", "مبني"],
+        correct: 1,
+        explanation: "الواو للمعية، والفعل بعدها منصوب، والمعنى: لا تجمع بين الأكل والشرب. (Waw mu'iyah, fi'il setelahnya dinashab, artinya jangan kumpulkan makan dan minum.)"
+      },
+      {
+        question: "\"ألم\" و\"ألما\" سهّل المؤلف اعتبارهما أدوات مستقلة لـ:",
+        options: ["التخفيف على المبتدئ", "لأنهما حرفان مختلفان", "لعدم وجود همزة", "لأنهما من النواصب"],
+        correct: 0,
+        explanation: "جعل المؤلف \"ألم\" و\"ألما\" أدوات مستقلة تسهيلاً للمبتدئ، مع أن الأصل همزة استفهام دخلت على \"لم\" و\"لما\". (Penulis menjadikan alam dan alamma sebagai alat tersendiri untuk memudahkan pemula, padahal asalnya hamzah istifham masuk pada lam dan lamma.)"
+      },
+      {
+        question: "\"ربنا لا تؤاخذنا\" ما نوع \"لا\" هنا؟",
+        options: ["ناهية", "دعائية", "نافية", "عاطفة"],
+        correct: 1,
+        explanation: "لأنها موجهة إلى الله، فهي دعاء وليست نهياً. (Karena ditujukan kepada Allah, maka ia adalah doa, bukan larangan.)"
+      },
+      {
+        question: "\"لم يضرب\" و\"لم يضربوا\" ما علامة الجزم في الثاني؟",
+        options: ["السكون", "حذف النون", "الفتحة", "الكسرة"],
+        correct: 1,
+        explanation: "\"يضربوا\" من الأفعال الخمسة، فجزمها بحذف النون. (Yadhribu termasuk af'al khamsah, jazmnya dengan membuang nun.)"
+      },
+      {
+        question: "\"أينما تذهبوا أذهب\" ما إعراب \"تذهبوا\"؟",
+        options: ["فعل مضارع مجزوم بحذف النون", "فعل مضارع مرفوع بثبوت النون", "فعل مضارع منصوب", "فعل ماض"],
+        correct: 0,
+        explanation: "\"أينما\" أداة شرط جازمة، و\"تذهبوا\" مجزوم بحذف النون لأنه من الأفعال الخمسة. (Aynamaa adalah alat syarth jazimah, tadzhabuu dijazm dengan membuang nun karena termasuk af'al khamsah.)"
+      },
+      {
+        question: "\"إن تحسنوا يحسن الله إليكم\" ما نوع \"إن\"؟",
+        options: ["شرطية جازمة", "نافية", "مصدرية", "زائدة"],
+        correct: 0,
+        explanation: "\"إن\" حرف شرط جازم يجزم فعلين. (In adalah huruf syarth jazim yang menjazmkan dua fi'il.)"
+      },
+      {
+        question: "\"مهما تفعل من خير تجده\" ما إعراب \"تفعل\"؟",
+        options: ["مرفوع", "منصوب", "مجزوم", "مبني"],
+        correct: 2,
+        explanation: "\"مهما\" اسم شرط جازم، و\"تفعل\" فعل الشرط مجزوم. (Mahma isim syarth jazim, taf'al fi'il syarth dijazm.)"
+      },
+      {
+        question: "\"متى تسافر أسافر معك\" \"تسافر\" هنا:",
+        options: ["مرفوع بالضمة", "منصوب بالفتحة", "مجزوم بالسكون", "مجزوم بحذف حرف العلة"],
+        correct: 2,
+        explanation: "\"تسافر\" فعل مضارع صحيح الآخر، مجزوم بالسكون. (Tusafir fi'il mudhari' shahih akhir, dijazm dengan sukun.)"
+      },
+      {
+        question: "\"أيان يخرج زيد أخرج\" ما إعراب \"يخرج\"؟",
+        options: ["مرفوع", "منصوب", "مجزوم", "مبني"],
+        correct: 2,
+        explanation: "\"أيان\" اسم شرط جازم، و\"يخرج\" فعل الشرط مجزوم. (Ayyaana isim syarth jazim, yakhruj fi'il syarth dijazm.)"
+      },
+      {
+        question: "\"حيثما تستقم يقدر لك النجاح\" ما إعراب \"تستقم\"؟",
+        options: ["مجزوم بحذف حرف العلة", "مجزوم بالسكون", "مرفوع", "منصوب"],
+        correct: 0,
+        explanation: "\"تستقم\" أصله تستقيم، حذفت الياء للجزم. (Tastaqim asalnya tastaqiimu, ya' dibuang karena jazm.)"
+      },
+      {
+        question: "\"كيفما تعامل الناس يعاملوك\" ما علامة جزم \"يعاملوك\"؟",
+        options: ["حذف النون", "السكون", "حذف حرف العلة", "الفتحة"],
+        correct: 0,
+        explanation: "\"يعاملوك\" من الأفعال الخمسة، فجزمها بحذف النون. (Yu'amiluuk termasuk af'al khamsah, jazmnya dengan membuang nun.)"
+      },
+      {
+        question: "\"إذا\" في الشعر تجزم فعلين، مثال ذلك:",
+        options: ["إذا جئت أكرمتك", "إذا تُكْرِمْ تُكْرَمْ", "إذا زرتني تكرمني", "إذا الشمس طلعت"],
+        correct: 1,
+        explanation: "\"إذا\" في هذا البيت تعمل عمل الشرط الجازم، وهو خاص بالشعر. (Idza dalam bait ini berfungsi seperti syarth jazim, khusus dalam puisi.)"
+      },
+      {
+        question: "\"لما\" تدل على نفي الفعل مع:",
+        options: ["توقع حدوثه في المستقبل", "عدم توقع حدوثه", "حدوثه في الماضي", "النفي المطلق"],
+        correct: 0,
+        explanation: "\"لما\" تنفي الفعل مع توقع حدوثه، مثل: \"لما يأتِ زيد\". (Lamma menafikan fi'il dengan harapan akan terjadi, contoh: lamma ya'ti Zaidun.)"
+      },
+      // ========== SOAL SULIT (41-60) ==========
+      {
+        question: "\"ألم نشرح لك صدرك\" على تسهيل المؤلف، ما إعراب \"نشرح\"؟",
+        options: ["مرفوع", "منصوب", "مجزوم بألم", "مجزوم بلم"],
+        correct: 2,
+        explanation: "المؤلف يعتبر \"ألم\" أداة واحدة جازمة، فنقول: \"نشرح\" فعل مضارع مجزوم بألم. (Penulis menganggap alam sebagai satu alat jazm, jadi nasyrah fi'il mudhari' majzum bi-alam.)"
+      },
+      {
+        question: "\"لما يذوقوا عذاب\" لماذا نصبت \"يذوقوا\"؟",
+        options: ["بلام الجحود", "بـ \"لما\" الناصبة", "بـ \"لما\" الجازمة", "بأن مضمرة"],
+        correct: 2,
+        explanation: "\"لما\" هنا جازمة، و\"يذوقوا\" مجزوم بحذف النون. (Lamma di sini adalah jazimah, yadzuquu dijazm dengan membuang nun.)"
+      },
+      {
+        question: "\"رب أوزعني أن أشكر نعمتك\" ما إعراب \"أشكر\"؟",
+        options: ["مرفوع", "منصوب بأن", "مجزوم بلام الأمر", "منصوب بلام التعليل"],
+        correct: 1,
+        explanation: "\"أن\" مصدرية ناصبة، و\"أشكر\" منصوب بها. (An mashdariyah nashab, asykura dinashab olehnya.)"
+      },
+      {
+        question: "\"لا تدن من الأسد فتسلم\" ما إعراب \"تسلم\"؟",
+        options: ["مرفوع", "منصوب بفاء السببية", "مجزوم", "مبني"],
+        correct: 1,
+        explanation: "\"تسلم\" فعل مضارع منصوب بفاء السببية في جواب النهي. (Taslam fi'il mudhari' dinashab oleh fa' sababiyah dalam jawaban larangan.)"
+      },
+      {
+        question: "\"لا تأكل السمك وتشرب اللبن\" إذا أردت النهي عن الجمع بينهما، فما إعراب \"تشرب\"؟",
+        options: ["مرفوع", "منصوب بالواو", "مجزوم", "مجزوم بحذف النون"],
+        correct: 1,
+        explanation: "الواو للمعية تنصب الفعل، والمعنى: لا تجمع بين الأكل والشرب. (Waw mu'iyah menashabkan fi'il, artinya jangan kumpulkan makan dan minum.)"
+      },
+      {
+        question: "\"لولا أنتم لكنا مؤمنين\" ما نوع \"لولا\"؟",
+        options: ["شرطية جازمة", "حرف تحضيض", "حرف امتناع لوجود", "حرف نفي"],
+        correct: 2,
+        explanation: "\"لولا\" حرف امتناع لوجود، تدخل على المبتدأ والخبر، وليس لها عمل في الجزم. (Lau la adalah huruf imtina' li wujud, masuk pada mubtada' dan khabar, tidak berfungsi menjazmkan.)"
+      },
+      {
+        question: "\"والذين كفروا لهم نار جهنم لا يقضى عليهم فيموتوا\" ما إعراب \"يموتوا\"؟",
+        options: ["مرفوع", "منصوب بالفاء في جواب النفي", "مجزوم", "معطوف"],
+        correct: 1,
+        explanation: "\"يموتوا\" منصوب بفاء السببية في جواب النفي (لا يقضى)، وعلامة نصبه حذف النون. (Yamutu dinashab oleh fa' sababiyah dalam jawaban negasi, tanda nashabnya membuang nun.)"
+      },
+      {
+        question: "\"ربِّ ارجعون لعلي أعمل صالحاً\" ما نوع اللام في \"لعلي\"؟",
+        options: ["لام التعليل", "لام الجحود", "لام الابتداء", "لام الأمر"],
+        correct: 0,
+        explanation: "اللام في \"لعلي\" للتعليل، وهي حرف جر، و\"علي\" اسم مجرور. (Lam dalam la'allii adalah lam ta'lil, ia huruf jar, allii isim majrur.)"
+      },
+      {
+        question: "\"لئن أشركت ليحبطن عملك\" ما إعراب \"ليحبطن\"؟",
+        options: ["فعل مضارع مرفوع", "فعل مضارع مجزوم بلام الأمر", "فعل مضارع مبني على الفتح لاتصاله بنون التوكيد", "فعل ماض"],
+        correct: 2,
+        explanation: "\"ليحبطن\" اتصلت به نون التوكيد، فهو مبني على الفتح، واللام للقسم. (Liyahbithanna bertemu nun taukid, ia mabni 'ala al-fath, lam adalah lam qasam.)"
+      },
+      {
+        question: "\"فإما ترين من البشر أحداً\" ما إعراب \"ترين\"؟",
+        options: ["مرفوع بثبوت النون", "مجزوم بحذف النون", "منصوب", "مبني"],
+        correct: 0,
+        explanation: "\"ترين\" من الأفعال الخمسة، وهي مرفوعة بثبوت النون، ولم تجزم لأن \"إن\" هنا شرطية خفيفة لا تجزم. (Taraina termasuk af'al khamsah, marfu' dengan tetapnya nun, tidak dijazm karena in di sini adalah syarthiyah khafifah yang tidak menjazmkan.)"
+      },
+      {
+        question: "\"وما كان الله ليعذبهم\" ما نوع اللام؟",
+        options: ["لام الأمر", "لام الجحود", "لام التعليل", "لام الابتداء"],
+        correct: 1,
+        explanation: "جاءت بعد \"ما كان\" المنفية، فهي لام الجحود الناصبة للفعل. (Datang setelah ma kana yang dinafikan, ia adalah lam al-juhud yang menashabkan fi'il.)"
+      },
+      {
+        question: "\"حتى يرجِع إلينا موسى\" ما إعراب \"يرجع\"؟",
+        options: ["مجزوم", "منصوب بحتى", "مرفوع", "مبني"],
+        correct: 1,
+        explanation: "\"حتى\" حرف غاية ونصب، و\"يرجع\" فعل مضارع منصوب بها. (Hatta huruf ghayah wa nashab, yarji'a fi'il mudhari' dinashab olehnya.)"
+      },
+      {
+        question: "\"لن تنالوا البر حتى تنفقوا\" ما إعراب \"تنفقوا\"؟",
+        options: ["مرفوع", "منصوب بحتى", "مجزوم", "مجزوم بحذف النون"],
+        correct: 1,
+        explanation: "\"حتى\" هنا ناصبة، و\"تنفقوا\" منصوب بحذف النون. (Hatta di sini nashab, tunfiquu dinashab dengan membuang nun.)"
+      },
+      {
+        question: "\"لا تعبدوا الشيطان إنه لكم عدو مبين\" ما إعراب \"تعبدوا\"؟",
+        options: ["مجزوم بلا الناهية", "منصوب", "مرفوع", "مجزوم بلم"],
+        correct: 0,
+        explanation: "\"لا\" ناهية جازمة، و\"تعبدوا\" مجزوم بحذف النون. (La nahiyah jazimah, ta'buduu dijazm dengan membuang nun.)"
+      },
+      {
+        question: "\"إنما يخشى الله من عباده العلماء\" ما إعراب \"يخشى\"؟",
+        options: ["مرفوع", "منصوب", "مجزوم", "مبني"],
+        correct: 0,
+        explanation: "\"يخشى\" فعل مضارع مرفوع بضمة مقدرة، وليس قبله ناصب ولا جازم. (Yakhsya fi'il mudhari' marfu' dengan dhammah muqaddarah, tidak ada 'amil nashab atau jazm sebelumnya.)"
+      },
+      {
+        question: "\"فبشر عباد الذين يستمعون القول فيتبعون أحسنه\" ما إعراب \"يتبعون\"؟",
+        options: ["مرفوع", "منصوب بالفاء في جواب", "مجزوم", "منصوب بالعطف"],
+        correct: 0,
+        explanation: "\"يتبعون\" معطوف على \"يستمعون\" وهو مرفوع، وليس جواباً للشرط. (Yattabi'uuna ma'thuf 'ala yastami'uuna dan marfu', bukan jawaban syarth.)"
+      },
+      {
+        question: "\"وأنفقوا من ما رزقناكم من قبل أن يأتي أحدكم الموت\" ما إعراب \"يأتي\"؟",
+        options: ["مجزوم", "منصوب بأن", "مرفوع", "مبني"],
+        correct: 1,
+        explanation: "\"أن\" مصدرية ناصبة، و\"يأتي\" منصوب بها. (An mashdariyah nashab, ya'tiya dinashab olehnya.)"
+      },
+      {
+        question: "\"قالوا لن نبرح عليه عاكفين حتى يرجع إلينا موسى\" ما إعراب \"يرجع\"؟",
+        options: ["مرفوع", "منصوب بحتى", "مجزوم", "مبني"],
+        correct: 1,
+        explanation: "\"حتى\" ناصبة، و\"يرجع\" منصوب بها. (Hatta nashab, yarji'a dinashab olehnya.)"
+      },
+      {
+        question: "\"فأما الذين اسودت وجوههم أكفرتم بعد إيمانكم\" ما إعراب \"أكفرتم\"؟",
+        options: ["فعل ماض مبني", "فعل مضارع مرفوع", "فعل مضارع مجزوم", "فعل أمر"],
+        correct: 0,
+        explanation: "\"أكفرتم\" فعل ماض مبني على السكون لاتصاله بضمير الرفع المتحرك. (Akafartum fi'il madhi mabni 'ala as-sukun karena bertemu dhamir rafa' mutaharrik.)"
+      },
+      {
+        question: "\"ألم تر كيف فعل ربك بأصحاب الفيل\" ما إعراب \"تر\"؟",
+        options: ["مرفوع", "منصوب", "مجزوم بألم", "مبني"],
+        correct: 2,
+        explanation: "\"ألم\" أداة جزم، و\"تر\" فعل مضارع مجزوم بحذف حرف العلة. (Alam alat jazm, tara fi'il mudhari' majzum dengan membuang huruf 'illat.)"
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-level2" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/009.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>
