@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - منصوبات الأسماء</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #0a1a3a, #1a2f4f); /* biru tua */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(10, 30, 50, 0.9); /* biru pekat transparan */
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      border: 1px solid #ffaa00;
+    }
+
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #b37b0e;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+
+    .main-menu .level-badge {
+      background: #ffaa00;
+      color: #0a1a3a;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #b37b0e;
+      word-break: break-word;
+    }
+
+    .btn-mulai {
+      background: #ffaa00;
+      border: none;
+      color: #0a1a3a;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #b37b0e, 0 8px 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #b37b0e, 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #ffaa00;
+    }
+
+    .quiz-header .level-small {
+      background: #ffaa00;
+      color: #0a1a3a;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: #ffaa00;
+      border: 1px solid #ffaa00;
+    }
+
+    .nav-grid-btn {
+      background: rgba(255, 170, 0, 0.2);
+      border: 1px solid #ffaa00;
+      color: #ffaa00;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(255, 170, 0, 0.4);
+    }
+
+    .question-box {
+      background: rgba(20, 40, 60, 0.95);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid #ffaa00;
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #ffaa00;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(30, 50, 70, 0.9);
+      border: 2px solid #ffaa00;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(255, 170, 0, 0.3);
+      border-color: #ffaa00;
+    }
+
+    .option-item.selected {
+      background: #ffaa00;
+      color: #0a1a3a;
+      font-weight: 700;
+      border-color: #ffaa00;
+      box-shadow: 0 0 15px #ffaa00;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #b37b0e;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: #0a1a3a;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #0a1a3a;
+      color: #ffaa00;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #ffaa00;
+      font-size: 0.9rem;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: #1e3a5e;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8);
+      animation: pop 0.3s;
+      border: 2px solid #ffaa00;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: #1e5e1e;
+      border: 4px solid #ffaa00;
+    }
+
+    .notification-card.salah {
+      background: #5e1e1e;
+      border: 4px solid #ff8a80;
+    }
+
+    .notification-card.selesai {
+      background: #1e3b5e;
+      border: 4px solid #ffaa00;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #ffaa00;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-next {
+      background: #ffaa00;
+      color: #0a1a3a;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: #0a1a3a;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: #fff;
+    }
+
+    .explanation-box {
+      background: #2a4a6a;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #ffaa00;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #ffaa00;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #1e3a5e;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #ffaa00;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #ffaa00;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffaa00;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #b37b0e;
+      border-color: #ffaa00;
+      color: #0a1a3a;
+    }
+
+    .nav-item.unanswered {
+      background: #4a1e1e;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #ffaa00;
+      background: #ffaa00;
+      color: #0a1a3a;
+    }
+
+    .btn-tutup-panel {
+      background: #ffaa00;
+      border: none;
+      color: #0a1a3a;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> منصوبات الأسماء <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">60 soal pilihan ganda • berdasarkan penjelasan ulama nahwu</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> منصوبات</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— منصوبات الأسماء - شرح المتون النحوية —</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 60 SOAL - Manshubat al-Asma (20 mudah, 20 sedang, 20 sulit)
+    const questions = [
+      // ========== MUDAH (1-20) ==========
+      {
+        question: "أي من المفاعيل التالية يسمى المفعول به؟",
+        options: ["الاسم المنصوب الذي وقع عليه فعل الفاعل", "الاسم المنصوب الذي يبين هيئة الفاعل", "الاسم المنصوب الذي يبين العدد", "الاسم المنصوب الذي يبين السبب"],
+        correct: 0,
+        explanation: "المفعول به هو الاسم المنصوب الذي وقع عليه فعل الفاعل. (Maf'ul bih adalah isim manshub yang dikenai perbuatan fail.)"
+      },
+      {
+        question: "\"ضربت زيداً\" كلمة \"زيداً\" منصوبة وعلامة نصبها...",
+        options: ["الفتحة الظاهرة", "الفتحة المقدرة", "الياء", "الكسرة"],
+        correct: 0,
+        explanation: "زيداً منصوب بالفتحة الظاهرة لأنه اسم مفرد. (Zaidan manshub dengan fathah zhahirah karena isim mufrad.)"
+      },
+      {
+        question: "المفعول المطلق هو...",
+        options: ["الاسم المنصوب الذي يبين نوع الفعل", "الاسم المنصوب الذي يبين عدد مرات الفعل", "الاسم المنصوب الذي يؤكد الفعل أو يبين نوعه أو عدده", "الاسم المنصوب الذي وقع عليه الفعل"],
+        correct: 2,
+        explanation: "المفعول المطلق هو مصدر منصوب يؤكد الفعل أو يبين نوعه أو عدده. (Maf'ul mutlaq adalah mashdar manshub yang menguatkan fi'il atau menjelaskan jenis atau jumlahnya.)"
+      },
+      {
+        question: "\"أكرمت إكراماً\" كلمة \"إكراماً\" تعرب...",
+        options: ["مفعول به", "مفعول مطلق", "حال", "تمييز"],
+        correct: 1,
+        explanation: "إكراماً مفعول مطلق لأنه مصدر منصوب يؤكد الفعل. (Ikhraman maf'ul mutlaq karena mashdar manshub yang menguatkan fi'il.)"
+      },
+      {
+        question: "الحال هو...",
+        options: ["اسم منصوب يبين هيئة صاحبه عند وقوع الفعل", "اسم منصوب يبين العدد", "اسم منصوب يبين السبب", "اسم منصوب يبين المكان"],
+        correct: 0,
+        explanation: "الحال اسم منصوب يبين هيئة صاحبه (الفاعل أو المفعول) عند وقوع الفعل. (Hal adalah isim manshub yang menjelaskan keadaan pemiliknya saat terjadinya perbuatan.)"
+      },
+      {
+        question: "\"جاء الرجل ضاحكاً\" كلمة \"ضاحكاً\" تعرب...",
+        options: ["مفعول به", "حال", "تمييز", "مفعول مطلق"],
+        correct: 1,
+        explanation: "ضاحكاً حال منصوب بالفتحة، تبين هيئة الرجل. (Dlahikan hal manshub, menjelaskan keadaan laki-laki itu.)"
+      },
+      {
+        question: "التمييز هو...",
+        options: ["اسم نكرة منصوب يفسر المبهم من الذات أو النسبة", "اسم معرفة منصوب يبين الهيئة", "اسم مجرور يبين العدد", "اسم مرفوع يبين الفاعل"],
+        correct: 0,
+        explanation: "التمييز اسم نكرة منصوب يزيل الإبهام عن ذات أو نسبة. (Tamyiz adalah isim nakirah manshub yang menghilangkan ketidakjelasan pada dzat atau nisbah.)"
+      },
+      {
+        question: "\"اشتريت عشرين كتاباً\" كلمة \"كتاباً\" تعرب...",
+        options: ["تمييز", "مفعول به", "حال", "مفعول مطلق"],
+        correct: 0,
+        explanation: "كتاباً تمييز منصوب للعدد عشرين. (Kitaban tamyiz manshub untuk bilangan dua puluh.)"
+      },
+      {
+        question: "\"إنَّ\" من أخوات إنَّ تنصب...",
+        options: ["الاسم وترفع الخبر", "الاسم والخبر", "الخبر فقط", "الاسم فقط"],
+        correct: 0,
+        explanation: "إنَّ وأخواتها تنصب الاسم (المبتدأ) وترفع الخبر. (Inna dan saudarinya menashabkan isim dan merafa'kan khabar.)"
+      },
+      {
+        question: "\"إنَّ اللهَ غفورٌ\" كلمة \"اللهَ\" منصوبة بـ...",
+        options: ["الفتحة الظاهرة", "الفتحة المقدرة", "الكسرة", "الياء"],
+        correct: 0,
+        explanation: "اللهَ اسم إن منصوب بالفتحة الظاهرة. (Allaha isim inna manshub dengan fathah zhahirah.)"
+      },
+      {
+        question: "\"كان\" وأخواتها ترفع...",
+        options: ["الاسم وتنصب الخبر", "الاسم والخبر", "الخبر فقط", "الاسم فقط"],
+        correct: 0,
+        explanation: "كان وأخواتها ترفع الاسم (المبتدأ) وتنصب الخبر. (Kaana dan saudarinya merafa'kan isim dan menashabkan khabar.)"
+      },
+      {
+        question: "\"كان الجوُّ معتدلاً\" كلمة \"معتدلاً\" منصوبة بـ...",
+        options: ["الفتحة الظاهرة", "الفتحة المقدرة", "الياء", "الكسرة"],
+        correct: 0,
+        explanation: "معتدلاً خبر كان منصوب بالفتحة الظاهرة. (Mu'tadilan khabar kaana manshub dengan fathah zhahirah.)"
+      },
+      {
+        question: "المفعول فيه (الظرف) هو...",
+        options: ["اسم منصوب يبين زمان الفعل أو مكانه", "اسم منصوب يبين سبب الفعل", "اسم منصوب يبين هيئة الفاعل", "اسم منصوب يبين العدد"],
+        correct: 0,
+        explanation: "المفعول فيه هو الظرف، اسم منصوب يدل على زمان أو مكان الفعل. (Maf'ul fih adalah zharaf, isim manshub yang menunjukkan waktu atau tempat.)"
+      },
+      {
+        question: "\"صمت يومَ الجمعة\" كلمة \"يومَ\" منصوبة على...",
+        options: ["الظرفية الزمانية", "المفعول به", "الحال", "التمييز"],
+        correct: 0,
+        explanation: "يومَ منصوب على الظرفية الزمانية. (Yauma manshub sebagai zharaf zaman.)"
+      },
+      {
+        question: "المفعول لأجله هو...",
+        options: ["اسم منصوب يبين سبب وقوع الفعل", "اسم منصوب يبين زمان الفعل", "اسم منصوب يبين مكان الفعل", "اسم منصوب يبين هيئة الفاعل"],
+        correct: 0,
+        explanation: "المفعول لأجله (أو المفعول له) اسم منصوب يذكر لبيان سبب الفعل. (Maf'ul li ajlih adalah isim manshub yang menjelaskan alasan terjadinya perbuatan.)"
+      },
+      {
+        question: "\"قمت إجلالاً لك\" كلمة \"إجلالاً\" تعرب...",
+        options: ["مفعول لأجله", "مفعول مطلق", "حال", "تمييز"],
+        correct: 0,
+        explanation: "إجلالاً مفعول لأجله منصوب، يبين سبب القيام. (Ijlanan maf'ul li ajlih, menjelaskan sebab berdiri.)"
+      },
+      {
+        question: "المستثنى بـ\"إلا\" في الإيجاب يكون منصوباً إذا كانت الجملة...",
+        options: ["تامة موجبة", "تامة منفية", "ناقصة منفية", "ناقصة موجبة"],
+        correct: 0,
+        explanation: "في الاستثناء التام الموجب، يجب نصب المستثنى بـ\"إلا\". (Pada istitsna tam muthbat, mustatsna wajib dibaca nashab dengan illa.)"
+      },
+      {
+        question: "\"جاء القوم إلا زيداً\" كلمة \"زيداً\" منصوبة على...",
+        options: ["الاستثناء", "المفعول به", "الحال", "التمييز"],
+        correct: 0,
+        explanation: "زيداً مستثنى منصوب. (Zaidan mustatsna manshub.)"
+      },
+      {
+        question: "المنادى في \"يا عبدَ الله\" منصوب لأنه...",
+        options: ["مضاف", "شبيه بالمضاف", "نكرة مقصودة", "نكرة غير مقصودة"],
+        correct: 0,
+        explanation: "المنادى المضاف يكون منصوباً، مثل \"يا عبدَ الله\". (Munada mudhaf dibaca nashab, seperti \"Ya 'abdallah\".)"
+      },
+      {
+        question: "\"يا طالباً العلم\" كلمة \"طالباً\" منصوبة لأنها...",
+        options: ["شبيهة بالمضاف", "مضاف", "نكرة مقصودة", "نكرة غير مقصودة"],
+        correct: 0,
+        explanation: "المنادى الشبيه بالمضاف منصوب، و\"طالباً العلم\" شبيه بالمضاف. (Munada syabih bil mudhaf dibaca nashab, seperti \"thaliban al-'ilma\".)"
+      },
+      // ========== SEDANG (21-40) ==========
+      {
+        question: "في جملة \"ضربت زيداً ضرباً شديداً\"، كلمة \"شديداً\" تعرب...",
+        options: ["نعت (صفة) للمفعول المطلق منصوب", "حال", "تمييز", "مفعول به ثان"],
+        correct: 0,
+        explanation: "شديداً صفة لـ\"ضرباً\" منصوبة بالفتحة. (Syadidan sifat bagi dhabran, manshub.)"
+      },
+      {
+        question: "\"رأيت الفرسَ مسرعاً\" كلمة \"مسرعاً\" تعرب...",
+        options: ["حال", "مفعول به", "تمييز", "نعت"],
+        correct: 0,
+        explanation: "مسرعاً حال منصوب من الفرس. (Musri'an hal manshub dari al-faras.)"
+      },
+      {
+        question: "\"أعجبني الرجلُ علماً\" كلمة \"علماً\" تعرب...",
+        options: ["تمييز", "حال", "مفعول به", "مفعول مطلق"],
+        correct: 0,
+        explanation: "علماً تمييز منصوب، يبين ما أعجب من الرجل. ('Ilman tamyiz manshub, menjelaskan kekaguman.)"
+      },
+      {
+        question: "\"اشتريت رطلاً زيتاً\" كلمة \"زيتاً\" تعرب...",
+        options: ["تمييز", "مفعول به", "حال", "بدل"],
+        correct: 0,
+        explanation: "زيتاً تمييز منصوب للمقدار (رطلاً). (Zaitan tamyiz manshub untuk ukuran.)"
+      },
+      {
+        question: "\"إنَّ زيداً قائمٌ\" بعد دخول \"كان\" على الجملة تصبح \"كان زيدٌ قائماً\". علامة نصب \"قائماً\"...",
+        options: ["الفتحة الظاهرة", "الفتحة المقدرة", "الياء", "الكسرة"],
+        correct: 0,
+        explanation: "قائماً خبر كان منصوب بالفتحة الظاهرة. (Qaiman khabar kaana manshub dengan fathah.)"
+      },
+      {
+        question: "\"لعلَّ السفرَ قريبٌ\" إعراب \"السفرَ\"...",
+        options: ["اسم لعل منصوب بالفتحة", "خبر لعل مرفوع", "مفعول به", "مبتدأ مرفوع"],
+        correct: 0,
+        explanation: "السفرَ اسم لعل منصوب بالفتحة. (As-safara isim la'alla manshub dengan fathah.)"
+      },
+      {
+        question: "\"ما زال المطرُ نازلاً\" كلمة \"نازلاً\" تعرب...",
+        options: ["خبر ما زال منصوب", "حال", "تمييز", "مفعول به"],
+        correct: 0,
+        explanation: "نازلاً خبر ما زال منصوب بالفتحة. (Nazilan khabar ma zala manshub.)"
+      },
+      {
+        question: "\"ليس المجتهدُ مقصراً\" كلمة \"مقصراً\"...",
+        options: ["خبر ليس منصوب", "اسم ليس مرفوع", "حال", "تمييز"],
+        correct: 0,
+        explanation: "مقصراً خبر ليس منصوب بالفتحة. (Muqshiran khabar laisa manshub.)"
+      },
+      {
+        question: "\"جئت مسرعاً\" كلمة \"مسرعاً\" حال من...",
+        options: ["الفاعل (التاء في جئت)", "المفعول به", "الفعل نفسه", "الزمان"],
+        correct: 0,
+        explanation: "مسرعاً حال من فاعل \"جئت\" وهو التاء. (Musri'an hal dari fa'il \"ji'tu\" yaitu ta'.)"
+      },
+      {
+        question: "\"رأيت الهلالَ بين السحاب\" كلمة \"بين\" منصوبة على...",
+        options: ["الظرفية المكانية", "المفعول به", "الحال", "التمييز"],
+        correct: 0,
+        explanation: "بين ظرف مكان منصوب بالفتحة. (Baina zharaf makan manshub.)"
+      },
+      {
+        question: "\"ضربته ضرباً\" المفعول المطلق هنا يؤكد...",
+        options: ["نوع الفعل", "عدد الفعل", "ذات الفعل", "سبب الفعل"],
+        correct: 2,
+        explanation: "ضرباً مفعول مطلق مؤكد للفعل. (Dhabran maf'ul mutlaq muakkid li al-fi'il.)"
+      },
+      {
+        question: "\"ضربته ضرب الأمير\" كلمة \"الأمير\" تعرب...",
+        options: ["مضاف إليه مجرور", "مفعول به", "نعت", "بدل"],
+        correct: 0,
+        explanation: "الأمير مضاف إليه مجرور بالكسرة. (Al-amiru mudhaf ilaih majrur.)"
+      },
+      {
+        question: "\"إنما أنت ناصحٌ\" كلمة \"ناصحٌ\" مرفوعة لأن...",
+        options: ["إنما لا تعمل", "إنما تنصب الاسم وترفع الخبر", "إنما ترفع الاسم وتنصب الخبر", "إنما حرف نفي"],
+        correct: 0,
+        explanation: "إنما كافة ومكفوفة، لا عمل لها، فناصح خبر مرفوع. (Innama kaffah wa makfufah, la 'amala laha.)"
+      },
+      {
+        question: "\"يا أيها الرجلُ\" كلمة \"الرجلُ\" مرفوعة على...",
+        options: ["البدلية أو العطف البيان", "النصب", "الجر", "الرفع بالابتداء"],
+        correct: 0,
+        explanation: "أيها: \"أي\" منادى مبني على الضم، و\"ها\" للتنبيه، و\"الرجل\" صفة أو بدل مرفوع. (Ar-rajulu sifat atau badal marfu'.)"
+      },
+      {
+        question: "\"كان زيدٌ أبوه منطلقٌ\" إعراب \"أبوه\"...",
+        options: ["مبتدأ مرفوع", "فاعل مرفوع", "خبر كان مرفوع", "اسم كان مرفوع"],
+        correct: 0,
+        explanation: "أبوه مبتدأ مرفوع بالواو، وجملة \"أبوه منطلق\" في محل نصب خبر كان. (Abuuhu mubtada marfu'.)"
+      },
+      {
+        question: "\"إنَّ زيداً أبوه قائمٌ\" كلمة \"أبوه\"...",
+        options: ["مبتدأ مرفوع", "فاعل مرفوع", "اسم إن منصوب", "خبر إن مرفوع"],
+        correct: 0,
+        explanation: "أبوه مبتدأ مرفوع، والجملة الاسمية في محل رفع خبر إن. (Abuuhu mubtada, jumlah ismiyyah fi mahal rafa' khabar inna.)"
+      },
+      {
+        question: "\"ضربت الذي ضربته\" كلمة \"الذي\"...",
+        options: ["اسم موصول مبني على السكون في محل نصب مفعول به", "اسم موصول مبني على السكون في محل رفع فاعل", "اسم موصول مبني على الفتح في محل نصب", "حرف لا محل له"],
+        correct: 0,
+        explanation: "الذي اسم موصول مبني في محل نصب مفعول به. (Alladzi mabni di mahal nashab maf'ul bih.)"
+      },
+      {
+        question: "\"ما أحسنَ زيداً\" إعراب \"زيداً\"...",
+        options: ["مفعول به منصوب", "تمييز منصوب", "حال منصوب", "اسم ما المنصوب"],
+        correct: 0,
+        explanation: "ما التعجبية، وفعل التعجب \"أحسن\" وفاعله مستتر، وزيداً مفعول به. (Zaidan maf'ul bih.)"
+      },
+      {
+        question: "\"أكرمْ بزيدٍ\" إعراب \"زيدٍ\"...",
+        options: ["فاعل مرفوع بضمة مقدرة", "مفعول به منصوب", "اسم مجرور لفظاً مرفوع محلاً", "مبتدأ مرفوع"],
+        correct: 2,
+        explanation: "في أسلوب التعجب \"أفعل به\"، الباء حرف جر زائد، و\"زيد\" اسم مجرور لفظاً مرفوع محلاً على أنه فاعل. (Zaidin majrur lafzhan marfu' mahallan.)"
+      },
+      {
+        question: "\"حسبك زيدٌ\" كلمة \"زيدٌ\"...",
+        options: ["فاعل مرفوع", "مبتدأ مرفوع", "خبر مرفوع", "تمييز منصوب"],
+        correct: 0,
+        explanation: "حسبك فعل ماض بمعنى يكفي، وزيد فاعل. (Zaidun fail marfu'.)"
+      },
+      // ========== SULIT (41-60) ==========
+      {
+        question: "في الآية \"إِنَّ اللَّهَ اشْتَرَىٰ مِنَ الْمُؤْمِنِينَ أَنفُسَهُمْ وَأَمْوَالَهُم بِأَنَّ لَهُمُ الْجَنَّةَ\" كلمة \"أنفسهم\" منصوبة بـ...",
+        options: ["اشترى", "إن", "الباء", "على أنها مفعول به ثان"],
+        correct: 0,
+        explanation: "أنفسهم مفعول به أول لـ\"اشترى\". (Anfusahum maf'ul bih awwal li isytara.)"
+      },
+      {
+        question: "\"وَلَمَّا جَاءَ مُوسَىٰ لِمِيقَاتِنَا وَكَلَّمَهُ رَبُّهُ\" كلمة \"موسى\" هنا...",
+        options: ["فاعل مرفوع بضمة مقدرة", "مفعول به منصوب بفتحة مقدرة", "مبتدأ مرفوع", "اسم كان منصوب"],
+        correct: 0,
+        explanation: "موسى فاعل مرفوع بضمة مقدرة على الألف. (Musa fail marfu' dengan dhammah muqaddarah.)"
+      },
+      {
+        question: "\"وَاتَّخَذَ اللَّهُ إِبْرَاهِيمَ خَلِيلاً\" كلمة \"خليلاً\" تعرب...",
+        options: ["مفعول به ثان", "حال", "تمييز", "مفعول مطلق"],
+        correct: 0,
+        explanation: "خليلاً مفعول به ثان لـ\"اتخذ\" لأنها تنصب مفعولين. (Khalilan maf'ul bih tsani li ittakhadza.)"
+      },
+      {
+        question: "\"ظننتُ زيداً أخاك\" كلمة \"أخاك\" منصوبة بـ...",
+        options: ["الياء نيابة عن الفتحة", "الألف نيابة عن الفتحة", "الفتحة الظاهرة", "الكسرة"],
+        correct: 0,
+        explanation: "أخاك مفعول به ثان منصوب بالياء لأنه من الأسماء الخمسة. (Akhaka maf'ul bih tsani manshub dengan ya'.)"
+      },
+      {
+        question: "\"إنَّ أخاك قادمٌ\" كلمة \"أخاك\" منصوبة بـ...",
+        options: ["الياء", "الألف", "الفتحة المقدرة", "الكسرة"],
+        correct: 0,
+        explanation: "أخاك اسم إن منصوب بالياء لأنه من الأسماء الخمسة. (Akhaka isim inna manshub dengan ya'.)"
+      },
+      {
+        question: "\"كان أبوك كريماً\" كلمة \"أبوك\" مرفوع بالواو لأنه...",
+        options: ["اسم كان", "خبر كان", "فاعل", "مبتدأ"],
+        correct: 0,
+        explanation: "أبوك اسم كان مرفوع بالواو. (Abuka isim kaana marfu' dengan waw.)"
+      },
+      {
+        question: "\"ضربت اللصين\" كلمة \"اللصين\" منصوبة بـ...",
+        options: ["الياء", "الألف", "الفتحة", "الكسرة"],
+        correct: 0,
+        explanation: "اللصين مفعول به منصوب بالياء لأنه مثنى. (Al-lisshaini maf'ul bih manshub dengan ya' karena mutsanna.)"
+      },
+      {
+        question: "\"مررت باللصين\" كلمة \"اللصين\" مجرورة بـ...",
+        options: ["الياء", "الألف", "الفتحة", "الكسرة"],
+        correct: 0,
+        explanation: "اللصين اسم مجرور بالياء لأنه مثنى. (Al-lisshaini majrur dengan ya'.)"
+      },
+      {
+        question: "\"جاءني الذي ضربته\" كلمة \"الذي\" في محل رفع فاعل. ما نوع \"الذي\"؟",
+        options: ["اسم موصول مبني", "اسم موصول معرب", "حرف موصول", "اسم إشارة"],
+        correct: 0,
+        explanation: "الذي اسم موصول مبني على السكون في محل رفع فاعل. (Alladzi mabni di mahal rafa' fail.)"
+      },
+      {
+        question: "\"جاء الذين ضربتهم\" كلمة \"الذين\"...",
+        options: ["اسم موصول مبني على الفتح في محل رفع", "اسم موصول مبني على السكون", "اسم موصول معرب", "حرف"],
+        correct: 0,
+        explanation: "الذين اسم موصول مبني على الفتح في محل رفع فاعل. (Alladzina mabni 'ala al-fath di mahal rafa'.)"
+      },
+      {
+        question: "\"يا زيدُ\" إذا ناديت \"زيد\" بدون تنوين، فهذا يدل على أنه...",
+        options: ["نكرة مقصودة مبنية على الضم", "معرفة منصوبة", "نكرة غير مقصودة منصوبة", "مضاف منصوب"],
+        correct: 0,
+        explanation: "المنادى العلم المفرد يبنى على الضم في محل نصب. (Munada 'alam mufrad mabni 'ala al-dhamm fi mahal nashab.)"
+      },
+      {
+        question: "\"يا طالباً علماً\" كلمة \"طالباً\" منصوبة وعلامة نصبها...",
+        options: ["الفتحة الظاهرة", "الفتحة المقدرة", "الياء", "الألف"],
+        correct: 0,
+        explanation: "طالباً منصوب بالفتحة الظاهرة لأنه شبيه بالمضاف. (Thaliban manshub dengan fathah.)"
+      },
+      {
+        question: "\"إنما يخشى اللهَ من عباده العلماءُ\" كلمة \"اللهَ\" منصوبة بـ...",
+        options: ["يخشى", "إنما", "من", "العلماء"],
+        correct: 0,
+        explanation: "اللهَ مفعول به مقدم لـ\"يخشى\". (Allaha maf'ul bih muqaddam li yakhsya.)"
+      },
+      {
+        question: "\"وَكَلَّمَ اللَّهُ مُوسَىٰ تَكْلِيماً\" كلمة \"تكليماً\"...",
+        options: ["مفعول مطلق", "مفعول به", "حال", "تمييز"],
+        correct: 0,
+        explanation: "تكليماً مفعول مطلق مؤكد. (Takliman maf'ul mutlaq muakkid.)"
+      },
+      {
+        question: "\"وَلَوْ تَرَىٰ إِذِ الْمُجْرِمُونَ نَاكِسُو رُءُوسِهِمْ\" كلمة \"رءوسهم\"...",
+        options: ["مضاف إليه مجرور", "مفعول به", "تمييز منصوب", "حال منصوب"],
+        correct: 0,
+        explanation: "رءوسهم مضاف إليه مجرور بالكسرة، و\"ناكسي\" مضاف. (Ru'usihim mudhaf ilaih majrur.)"
+      },
+      {
+        question: "\"إِنَّ هَٰذَا لَهُوَ الْفَوْزُ الْعَظِيمُ\" كلمة \"هو\" هنا...",
+        options: ["ضمير فصل لا محل له", "مبتدأ مرفوع", "خبر إن مرفوع", "توكيد"],
+        correct: 0,
+        explanation: "هو ضمير فصل لا محل له من الإعراب. (Dhamir fashl la mahalla lahu.)"
+      },
+      {
+        question: "\"وَأَنَّ الْمَسَاجِدَ لِلَّهِ\" كلمة \"المساجد\"...",
+        options: ["اسم أن منصوب بالفتحة", "خبر أن مرفوع", "مبتدأ مرفوع", "مفعول به"],
+        correct: 0,
+        explanation: "المساجد اسم أن منصوب بالفتحة الظاهرة. (Al-masajida isim anna manshub.)"
+      },
+      {
+        question: "\"وَمَا كَانَ اللَّهُ لِيُعَذِّبَهُمْ\" كلمة \"اللهُ\"...",
+        options: ["اسم كان مرفوع", "فاعل مرفوع", "مبتدأ مرفوع", "نائب فاعل مرفوع"],
+        correct: 0,
+        explanation: "الله اسم كان مرفوع بالضمة. (Allahu isim kaana marfu'.)"
+      },
+      {
+        question: "\"وَكَفَىٰ بِاللَّهِ شَهِيداً\" كلمة \"شهيداً\"...",
+        options: ["تمييز منصوب", "حال منصوب", "مفعول مطلق", "خبر كان منصوب"],
+        correct: 0,
+        explanation: "شهيداً تمييز منصوب. (Syahidan tamyiz manshub.)"
+      },
+      {
+        question: "\"إِنَّ اللَّهَ لَذُو فَضْلٍ عَلَى النَّاسِ\" كلمة \"ذو\"...",
+        options: ["خبر إن مرفوع بالواو", "اسم إن منصوب بالألف", "صفة مرفوعة", "بدل مرفوع"],
+        correct: 0,
+        explanation: "ذو خبر إن مرفوع بالواو لأنه من الأسماء الخمسة. (Dzu khabar inna marfu' dengan waw.)"
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-level2" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        // Ganti dengan link pelajaran selanjutnya jika ada
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/011.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>
