@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - أدوات الشرط الجازمة</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #0d3b2a, #1b5e3f); /* hijau tua */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(10, 50, 30, 0.9); /* hijau pekat transparan */
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      border: 1px solid #f5b81b;
+    }
+
+    .main-menu {
+      text-align: center;
+      color: white;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #b37b0e;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+
+    .main-menu .level-badge {
+      background: #f5b81b;
+      color: #0d3b2a;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #b37b0e;
+      word-break: break-word;
+    }
+
+    .btn-mulai {
+      background: #f5b81b;
+      border: none;
+      color: #0d3b2a;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #b37b0e, 0 8px 20px rgba(0, 0, 0, 0.5);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #b37b0e, 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .quiz-screen {
+      color: white;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #f5b81b;
+    }
+
+    .quiz-header .level-small {
+      background: #f5b81b;
+      color: #0d3b2a;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: #f5b81b;
+      border: 1px solid #f5b81b;
+    }
+
+    .nav-grid-btn {
+      background: rgba(245, 184, 27, 0.2);
+      border: 1px solid #f5b81b;
+      color: #f5b81b;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: rgba(245, 184, 27, 0.4);
+    }
+
+    .question-box {
+      background: rgba(20, 60, 40, 0.95);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid #f5b81b;
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #f5b81b;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: rgba(30, 70, 45, 0.9);
+      border: 2px solid #f5b81b;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: rgba(245, 184, 27, 0.3);
+      border-color: #f5b81b;
+    }
+
+    .option-item.selected {
+      background: #f5b81b;
+      color: #0d3b2a;
+      font-weight: 700;
+      border-color: #f5b81b;
+      box-shadow: 0 0 15px #f5b81b;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #b37b0e;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: #0d3b2a;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #0d3b2a;
+      color: #f5b81b;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #f5b81b;
+      font-size: 0.9rem;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: #1e4a2e;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8);
+      animation: pop 0.3s;
+      border: 2px solid #f5b81b;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: #1e5e1e;
+      border: 4px solid #f5b81b;
+    }
+
+    .notification-card.salah {
+      background: #5e1e1e;
+      border: 4px solid #ff8a80;
+    }
+
+    .notification-card.selesai {
+      background: #1e3b5e;
+      border: 4px solid #f5b81b;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #f5b81b;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-next {
+      background: #f5b81b;
+      color: #0d3b2a;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: #0d3b2a;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: #fff;
+    }
+
+    .explanation-box {
+      background: #2a5a3a;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #f5b81b;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #f5b81b;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #1e4a2a;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #f5b81b;
+      box-shadow: 0 20px 40px black;
+    }
+
+    .nav-panel h3 {
+      color: #f5b81b;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #f5b81b;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #b37b0e;
+      border-color: #f5b81b;
+      color: #0d3b2a;
+    }
+
+    .nav-item.unanswered {
+      background: #4a1e1e;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #f5b81b;
+      background: #f5b81b;
+      color: #0d3b2a;
+    }
+
+    .btn-tutup-panel {
+      background: #f5b81b;
+      border: none;
+      color: #0d3b2a;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> أدوات الشرط الجازمة <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.8;">30 soal pilihan ganda • berdasarkan penjelasan Ibnu Utsaimin</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> أدوات الشرط</span>
+      <span class="progress" id="progressIndicator">1/30</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— أدوات الشرط الجازمة - شرح ابن عثيمين —</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 30 SOAL - أدوات الشرط الجازمة (10 mudah, 10 sedang, 10 sulit)
+    const questions = [
+      // ========== MUDAH (1-10) ==========
+      {
+        question: "أي من الأدوات التالية من أدوات الشرط الجازمة؟",
+        options: ["إن", "هل", "قد", "سوف"],
+        correct: 0,
+        explanation: "\"إن\" هي حرف شرط جازم يجزم فعلين. أما \"هل\" فحرف استفهام، و\"قد\" للتحقيق، و\"سوف\" للاستقبال. (In adalah huruf syarat jazm yang menjazmkan dua fi'il.)"
+      },
+      {
+        question: "\"مَنْ\" في النحو تعد من:",
+        options: ["أسماء الشرط الجازمة", "حروف الشرط الجازمة", "أسماء الاستفهام", "حروف النفي"],
+        correct: 0,
+        explanation: "\"مَنْ\" اسم شرط جازم يجزم فعلين، كما في قوله تعالى: \"مَنْ يَعْمَلْ سُوءًا يُجْزَ بِهِ\". (Man adalah isim syarth jazm yang menjazmkan dua fi'il.)"
+      },
+      {
+        question: "ما هو فعل الشرط في جملة \"إنْ تَجْتَهِدْ تَنْجَحْ\"؟",
+        options: ["تَجْتَهِدْ", "تَنْجَحْ", "إنْ", "تَجْتَهِدْ وتَنْجَحْ"],
+        correct: 0,
+        explanation: "الفعل الأول بعد أداة الشرط يسمى فعل الشرط، وهو هنا \"تَجْتَهِدْ\". (Fi'il pertama setelah alat syarat disebut fi'il syarth, yaitu tajtahid.)"
+      },
+      {
+        question: "أي من الأدوات التالية لا تجزم إلا في الشعر؟",
+        options: ["إذا", "إن", "مهما", "حيثما"],
+        correct: 0,
+        explanation: "\"إذا\" تجزم فعلين في الشعر خاصة، كما في بيت الشاهد. (Idza dapat menjazmkan hanya dalam syair.)"
+      },
+      {
+        question: "ما علامة جزم الفعل المضارع الصحيح الآخر؟",
+        options: ["السكون", "حذف النون", "حذف حرف العلة", "الفتحة"],
+        correct: 0,
+        explanation: "الفعل المضارع الصحيح الآخر يُجزم بالسكون، مثل \"لَمْ يَكْتُبْ\". (Fi'il mudhari' shahih akhir dijazmkan dengan sukun.)"
+      },
+      {
+        question: "الأفعال الخمسة تُجزم بحذف:",
+        options: ["النون", "الألف", "الواو", "الياء"],
+        correct: 0,
+        explanation: "الأفعال الخمسة تُجزم بحذف النون، مثل \"لَمْ يَفْعَلُوا\". (Af'al khamsah dijazmkan dengan membuang nun.)"
+      },
+      {
+        question: "\"أَيَّانَ\" من أدوات الشرط الجازمة، وتفيد:",
+        options: ["الزمان", "المكان", "الشخص", "الحال"],
+        correct: 0,
+        explanation: "\"أيان\" اسم شرط جازم للزمان، مثل \"أَيَّانَ تَجْلِسْ أَجْلِسْ\". (Ayyana adalah isim syarth jazm yang menunjukkan waktu.)"
+      },
+      {
+        question: "متى يجب اقتران جواب الشرط بالفاء؟",
+        options: ["إذا كان جملة اسمية", "إذا كان فعلاً مضارعاً", "إذا كان فعلاً ماضياً", "إذا كان فعلاً أمراً"],
+        correct: 0,
+        explanation: "إذا كان جواب الشرط جملة اسمية وجب اقترانه بالفاء، مثل: \"إن تجتهد فأنت ناجح\". (Jika jawab berupa jumlah ismiyyah, wajib disertai fa'.)"
+      },
+      {
+        question: "أي من الأدوات التالية ليست من أدوات الشرط الجازمة؟",
+        options: ["حيثما", "لعل", "كيفما", "متى"],
+        correct: 1,
+        explanation: "\"لعل\" حرف ترجٍّ وليس من أدوات الشرط. (Lalla adalah huruf tarajji, bukan alat syarth.)"
+      },
+      {
+        question: "إذا كان فعل الشرط ماضياً، فإن إعرابه يكون:",
+        options: ["مجزوماً بعلامة أصلية", "مبنياً في محل جزم", "منصوباً", "مرفوعاً"],
+        correct: 1,
+        explanation: "الفعل الماضي يبقى مبنياً ويكون في محل جزم فعل الشرط. (Fi'il madhi tetap mabni dan berada di mahal jazm.)"
+      },
+      // ========== SEDANG (11-20) ==========
+      {
+        question: "في الآية \"أَيْنَ مَا تَكُونُوا يَأْتِ بِكُمُ اللَّهُ\"، علامة جزم \"يَأْتِ\" هي:",
+        options: ["السكون", "حذف النون", "حذف حرف العلة (الياء)", "الكسرة"],
+        correct: 2,
+        explanation: "\"يَأْتِ\" فعل مضارع معتل الآخر بالياء، مجزوم بحذف حرف العلة، والأصل \"يَأْتِي\". (Yakhtimu bi-hazf harf al-'illah.)"
+      },
+      {
+        question: "\"إنْ يَقُمْ زَيْدٌ يَقُمْ عَمْرٌو\" حسب المقال، هذه الجملة:",
+        options: ["صحيحة", "ضعيفة أو خطأ", "واجبة", "ممنوعة"],
+        correct: 1,
+        explanation: "هذه الجملة ضعيفة أو خطأ لأن الصواب جزم الفعلين معاً كما هو مذكور في المقال. (Kalimat ini lemah atau salah karena seharusnya kedua fi'il dijazmkan.)"
+      },
+      {
+        question: "\"مَا تَفْعَلُوا مِنْ خَيْرٍ يَعْلَمْهُ اللَّهُ\"، كلمة \"تَفْعَلُوا\" مجزومة بـ:",
+        options: ["السكون", "حذف النون", "حذف حرف العلة", "الفتحة"],
+        correct: 1,
+        explanation: "\"تفعلوا\" فعل مضارع من الأفعال الخمسة مجزوم بحذف النون. (Termasuk af'al khamsah, dijazm dengan membuang nun.)"
+      },
+      {
+        question: "إذا كان فعل الشرط ماضياً وجواب الشرط مضارعاً، فجواب الشرط:",
+        options: ["يجب جزمه", "يجوز جزمه أو رفعه", "يجب رفعه", "يجب نصبه"],
+        correct: 1,
+        explanation: "إذا كان فعل الشرط ماضياً والجواب مضارعاً، يجوز جزمه أو رفعه. (Boleh dijazm atau dirafa'.)"
+      },
+      {
+        question: "\"إنْ جَاءَكَ ضَيْفٌ فَأَكْرِمْهُ\"، كلمة \"فَأَكْرِمْهُ\" هي:",
+        options: ["فعل الشرط", "جواب الشرط", "فعل مجزوم", "فعل مبني"],
+        correct: 1,
+        explanation: "\"فأكرمه\" جواب الشرط وهو فعل أمر، واقترن بالفاء لأنه جملة طلبية. (Jawab syarth berupa fi'il amar, wajib disertai fa'.)"
+      },
+      {
+        question: "\"إذْ مَا تَجْلِسْ أَجْلِسْ\"، هذه الجملة صحيحة إذا:",
+        options: ["جزم الفعلان", "رفع الأول وجزم الثاني", "جزم الأول ورفع الثاني", "رفع الفعلان"],
+        correct: 0,
+        explanation: "\"إذ ما\" أداة شرط جازمة، فيجب جزم الفعلين. (Idz ma adalah alat syarth jazim, kedua fi'il harus dijazm.)"
+      },
+      {
+        question: "في الآية \"فَإِن يَكْفُرْ بِهَا هَٰؤُلَاءِ فَقَدْ وَكَلْنَا\"، اقترن جواب الشرط بالفاء لأن:",
+        options: ["الجواب فعل ماض", "الجواب مسبوق بـ\"قد\"", "الجواب جملة اسمية", "الجواب جملة طلبية"],
+        correct: 1,
+        explanation: "جواب الشرط إذا صدر بـ\"قد\" وجب اقترانه بالفاء. (Jawab yang didahului qad wajib disertai fa'.)"
+      },
+      {
+        question: "\"مَتَى تَقُمْ أَقُمْ\"، إعراب \"تَقُمْ\" هو:",
+        options: ["فعل مضارع مرفوع", "فعل مضارع مجزوم", "فعل ماض مبني", "فعل أمر"],
+        correct: 1,
+        explanation: "\"تقم\" فعل مضارع مجزوم بـ\"متى\" وهو فعل الشرط. (Fi'il mudhari' majzum sebagai fi'il syarth.)"
+      },
+      {
+        question: "إذا كان جواب الشرط فعلاً جامداً مثل \"ليس\"، فإنه يجب اقترانه بـ:",
+        options: ["اللام", "الفاء", "الواو", "ثم"],
+        correct: 1,
+        explanation: "جواب الشرط إذا كان فعلاً جامداً وجب اقترانه بالفاء، مثل \"فليس بضارك\". (Jika jawab berupa fi'il jamid, wajib disertai fa'.)"
+      },
+      {
+        question: "\"أَيَّانَ تَجْلِسْ أَجْلِسْ\"، \"أَيَّانَ\" هنا:",
+        options: ["اسم شرط جازم للزمان", "اسم شرط جازم للمكان", "حرف شرط جازم", "اسم استفهام"],
+        correct: 0,
+        explanation: "\"أيان\" اسم شرط جازم للزمان. (Ayyana isim syarth jazm li al-zaman.)"
+      },
+      // ========== SULIT (21-30) ==========
+      {
+        question: "في الآية \"وَإِن تُعْرِضْ عَنْهُمْ فَلَن يَضُرُّوكَ شَيْئًا\"، لماذا اقترن الجواب بالفاء؟",
+        options: ["لأنه فعل مضارع", "لأنه مبدوء بـ\"لن\"", "لأنه جملة اسمية", "لأنه جملة طلبية"],
+        correct: 1,
+        explanation: "جواب الشرط إذا صدر بـ\"لن\" وجب اقترانه بالفاء. (Jawab yang didahului lan wajib disertai fa'.)"
+      },
+      {
+        question: "\"إنْ سَافَرْتَ فَهَلْ تُوَدِّعُ إِخْوَانَكَ\"، إعراب \"تُوَدِّعُ\" هو:",
+        options: ["فعل مضارع مرفوع", "فعل مضارع مجزوم", "فعل ماض مبني", "فعل أمر"],
+        correct: 0,
+        explanation: "\"تودع\" فعل مضارع مرفوع لأنه لم يسبقه جازم، والجملة في محل جزم جواب الشرط. (Marfu' karena tidak ada jazm, namun secara mahal di mahal jazm.)"
+      },
+      {
+        question: "في بيت الشعر \"وَمَهْمَا تَكُنْ عِنْدَ امْرِئٍ مِنْ خَلِيقَةٍ ... تُعْلَمِ\"، حركت \"تُعْلَمِ\" بالكسر مع أنها مجزومة، والسبب:",
+        options: ["لأنها معتلة الآخر", "لأجل الروي في الشعر", "لأنها من الأفعال الخمسة", "لأنها مبنية"],
+        correct: 1,
+        explanation: "في الشعر قد يُحرك السكون لأجل الروي، والأصل \"تُعْلَمْ\" بالسكون. (Demi ritme syair, asalnya sukun menjadi kasrah.)"
+      },
+      {
+        question: "\"أَيَّ كِتَابٍ تَقْرَأْ أَقْرَأْهُ\"، هذه الجملة صحيحة لأن:",
+        options: ["جواب الشرط متضمن ضميراً يعود على \"أي\"", "جواب الشرط فعل لازم", "جواب الشرط بدون ضمير", "جواب الشرط جملة اسمية"],
+        correct: 0,
+        explanation: "\"أي\" تحتاج في جوابها إلى ضمير يعود عليها، وفي المثال \"أقرأه\" الضمير عائد على \"أي كتاب\". (Jawab harus mengandung dhamir yang kembali pada ayy.)"
+      },
+      {
+        question: "إذا كان فعل الشرط وجواب الشرط ماضيين، فإن إعرابهما يكون:",
+        options: ["مجزومين بعلامة أصلية", "مبنيين في محل جزم", "مرفوعين", "منصوبين"],
+        correct: 1,
+        explanation: "إذا كان فعل الشرط والجواب ماضيين، يبنيان على ما هما عليه ويكونان في محل جزم. (Keduanya mabni di mahal jazm.)"
+      },
+      {
+        question: "\"إنْ يَدْرُسْ زَيْدٌ يَنْجَحْ\" بعد إدخال \"لَمْ\" على الجواب تصبح \"إنْ يَدْرُسْ زَيْدٌ لَمْ يَنْجَحْ\". هذه الجملة:",
+        options: ["صحيحة لأن \"لم\" تجزم", "خاطئة لأن الجواب لا يسبق بـ\"لم\"", "صحيحة لأن \"لم\" لا تؤثر", "خاطئة ويجب اقتران الجواب بالفاء"],
+        correct: 3,
+        explanation: "إذا دخلت \"لم\" على جواب الشرط، وجب اقترانه بالفاء، فالصواب \"فلم ينجح\". (Jika jawab didahului lam, wajib disertai fa'.)"
+      },
+      {
+        question: "\"حَيْثُمَا تَسْتَقِمْ يُقَدِّرْ لَكَ اللَّهُ نَجَاحًا\"، علامة جزم \"تَسْتَقِمْ\" هي:",
+        options: ["السكون", "حذف حرف العلة", "حذف النون", "الفتحة"],
+        correct: 1,
+        explanation: "\"تستقم\" أصله \"تستقيم\"، حذفت الياء للجزم. (Asalnya tastaqiimu, ya' dibuang karena jazm.)"
+      },
+      {
+        question: "الفرق بين \"إن\" و\"إذا\" في الشرط هو:",
+        options: ["\"إن\" لا تجزم، \"إذا\" تجزم", "\"إن\" تجزم، \"إذا\" لا تجزم إلا في الشعر", "\"إن\" للمستقبل، \"إذا\" للماضي", "\"إن\" حرف، \"إذا\" اسم"],
+        correct: 1,
+        explanation: "\"إن\" حرف شرط جازم، و\"إذا\" لا تجزم إلا في الشعر. (In huruf syarth jazim, idza hanya menjazm dalam puisi.)"
+      },
+      {
+        question: "في الآية \"ثُمَّ لْيَقْضُوا تَفَثَهُمْ\"، \"لْيَقْضُوا\" مجزوم بـ:",
+        options: ["أداة شرط", "لام الأمر", "لم", "لا الناهية"],
+        correct: 1,
+        explanation: "\"ليقضوا\" فعل مضارع مجزوم بلام الأمر، وليس بأداة شرط. (Dijazm oleh lam amr, bukan alat syarth.)"
+      },
+      {
+        question: "\"وَمَا تَفْعَلُوا مِنْ خَيْرٍ يَعْلَمْهُ اللَّهُ\"، الفعل \"يَعْلَمْهُ\" مجزوم وعلامة جزمه:",
+        options: ["السكون", "حذف النون", "حذف حرف العلة", "الفتحة"],
+        correct: 0,
+        explanation: "\"يعلمه\" فعل مضارع صحيح الآخر، مجزوم بالسكون. (Fi'il mudhari' shahih, dijazm dengan sukun.)"
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-level2" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/010.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>
