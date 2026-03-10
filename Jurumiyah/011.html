@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - نواسخ المبتدأ والخبر</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f4f8;  /* soft light background */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;  /* white card */
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid #ffaa00;
+    }
+
+    .main-menu {
+      text-align: center;
+      color: #1e2b3a;  /* dark text */
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #ffdd99;
+      letter-spacing: 1px;
+      color: #1e2b3a;
+    }
+
+    .main-menu .level-badge {
+      background: #ffaa00;
+      color: #1e2b3a;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #cc8800;
+      word-break: break-word;
+    }
+
+    .btn-mulai {
+      background: #ffaa00;
+      border: none;
+      color: #1e2b3a;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #cc8800, 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #cc8800, 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-screen {
+      color: #1e2b3a;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #ffaa00;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .quiz-header .level-small {
+      background: #ffaa00;
+      color: #1e2b3a;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: #f0f4f8;
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: #1e2b3a;
+      border: 1px solid #ffaa00;
+    }
+
+    .nav-grid-btn {
+      background: #fff2dd;
+      border: 1px solid #ffaa00;
+      color: #1e2b3a;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: #ffe4b3;
+    }
+
+    .question-box {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid #ffaa00;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #1e2b3a;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: #f9f9f9;
+      border: 2px solid #ffaa00;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: #1e2b3a;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: #ffeedd;
+      border-color: #ffaa00;
+    }
+
+    .option-item.selected {
+      background: #ffaa00;
+      color: #1e2b3a;
+      font-weight: 700;
+      border-color: #ffaa00;
+      box-shadow: 0 0 15px #ffaa00;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #cc8800;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #1e2b3a;
+      color: #ffaa00;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #1e2b3a;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
+      animation: pop 0.3s;
+      border: 2px solid #ffaa00;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: #e6ffe6;
+      border: 4px solid #ffaa00;
+    }
+
+    .notification-card.salah {
+      background: #ffe6e6;
+      border: 4px solid #ff8a80;
+    }
+
+    .notification-card.selesai {
+      background: #e6f0ff;
+      border: 4px solid #ffaa00;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1e2b3a;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+    }
+
+    .btn-next {
+      background: #ffaa00;
+      color: #1e2b3a;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: #1e2b3a;
+    }
+
+    .btn-penjelasan {
+      background: #2196f3;
+      color: #fff;
+    }
+
+    .explanation-box {
+      background: #f0f4f8;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #1e2b3a;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #ffaa00;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #ffaa00;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .nav-panel h3 {
+      color: #1e2b3a;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f4f8;
+      border: 2px solid #ffaa00;
+      border-radius: 12px;
+      color: #1e2b3a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #cc8800;
+      border-color: #ffaa00;
+      color: #ffffff;
+    }
+
+    .nav-item.unanswered {
+      background: #ffe6e6;
+      border-color: #ff8a80;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #ffaa00;
+      background: #ffaa00;
+      color: #1e2b3a;
+    }
+
+    .btn-tutup-panel {
+      background: #ffaa00;
+      border: none;
+      color: #1e2b3a;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> نواسخ المبتدأ والخبر <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.7;">60 soal • berdasarkan penjelasan ulama nahwu</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> نواسخ</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— نواسخ المبتدأ والخبر - شرح المتون النحوية —</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 60 SOAL - نواسخ المبتدأ والخبر (20 mudah, 20 sedang, 20 sulit)
+    const questions = [
+      // ========== MUDAH (1-20) ==========
+      {
+        question: "ما هي النواسخ الداخلة على المبتدأ والخبر؟",
+        options: ["كان وأخواتها فقط", "إن وأخواتها فقط", "ظن وأخواتها فقط", "كان وأخواتها، وإن وأخواتها، وظن وأخواتها"],
+        correct: 3,
+        explanation: "النواسخ ثلاثة أنواع: كان وأخواتها (ترفع الاسم وتنصب الخبر)، وإن وأخواتها (تنصب الاسم وترفع الخبر)، وظن وأخواتها (تنصب الاسم والخبر معاً). (Nawasikh ada tiga: Kaana & saudaranya merafa'kan isim dan menasabkan khabar; Inna & saudaranya menasabkan isim dan merafa'kan khabar; Zhanna & saudaranya menasabkan keduanya.)"
+      },
+      {
+        question: "ما عمل كان وأخواتها؟",
+        options: ["ترفع الاسم وتنصب الخبر", "تنصب الاسم وترفع الخبر", "تنصب الاسم والخبر", "ترفع الاسم والخبر"],
+        correct: 0,
+        explanation: "كان وأخواتها ترفع المبتدأ (ويسمى اسمها) وتنصب الخبر (ويسمى خبرها)، مثل: كان زيدٌ قائماً. (Kaana merafa'kan mubtada' dan menasabkan khabar.)"
+      },
+      {
+        question: "كم عدد أخوات إن؟",
+        options: ["خمسة", "ستة", "سبعة", "ثمانية"],
+        correct: 1,
+        explanation: "أخوات إن ستة أدوات هي: إن، أن، لكن، كأن، ليت، لعل. (Saudara Inna ada enam.)"
+      },
+      {
+        question: "ما معنى ليت؟",
+        options: ["التوكيد", "التشبيه", "التمني", "الاستدراك"],
+        correct: 2,
+        explanation: "ليت للتمني، وهو طلب ما لا يرتجى حصوله أو ما يصعب حصوله. (Layta untuk tamanni, mengharapkan sesuatu yang sulit.)"
+      },
+      {
+        question: "أي من الأفعال التالية من أخوات ظن؟",
+        options: ["كان", "صار", "علمت", "ليت"],
+        correct: 2,
+        explanation: "علمت من أخوات ظن التي تنصب المبتدأ والخبر مفعولين لها. ('Alimtu termasuk saudara Zhanna.)"
+      },
+      {
+        question: "ما عمل إن وأخواتها؟",
+        options: ["ترفع الاسم وتنصب الخبر", "تنصب الاسم وترفع الخبر", "تنصب الاسم والخبر", "ترفع الاسم والخبر"],
+        correct: 1,
+        explanation: "إن وأخواتها تنصب المبتدأ (ويسمى اسمها) وترفع الخبر (ويسمى خبرها)، مثل: إن زيداً قائمٌ. (Inna menasabkan isim dan merafa'kan khabar.)"
+      },
+      {
+        question: "ما معنى كأن؟",
+        options: ["التوكيد", "التشبيه", "التمني", "الترجي"],
+        correct: 1,
+        explanation: "كأن للتشبيه، مثل: كأن العلمَ نورٌ. (Ka'anna untuk tasybih.)"
+      },
+      {
+        question: "أي من هذه الأفعال من أخوات كان؟",
+        options: ["ظننت", "حسبت", "أصبح", "لعل"],
+        correct: 2,
+        explanation: "أصبح من أخوات كان التي ترفع الاسم وتنصب الخبر. (Ashbaha saudara Kaana.)"
+      },
+      {
+        question: "ما عمل ظن وأخواتها؟",
+        options: ["ترفع الاسم وتنصب الخبر", "تنصب الاسم وترفع الخبر", "تنصب المبتدأ والخبر مفعولين لها", "ترفع الاسم والخبر"],
+        correct: 2,
+        explanation: "ظن وأخواتها تنصب المبتدأ والخبر على أنهما مفعولان لها. (Zhanna menasabkan mubtada' dan khabar sebagai dua maf'ul.)"
+      },
+      {
+        question: "ما معنى لعل؟",
+        options: ["التوكيد", "التشبيه", "التمني", "الترجي والتوقع"],
+        correct: 3,
+        explanation: "لعل للترجي والتوقع، مثل: لعل المطرَ نازلٌ. (La'alla untuk tarajji dan tawaqqu')"
+      },
+      {
+        question: "أي من هذه الحروف للاستدراك؟",
+        options: ["إن", "أن", "لكن", "ليت"],
+        correct: 2,
+        explanation: "لكن للاستدراك، وهي تأتي بعد كلام لنفي أو إثبات للاستدراك عليه. (Lakinna untuk istidrak.)"
+      },
+      {
+        question: "ما إعراب 'زيد' في جملة 'كان زيدٌ قائماً'؟",
+        options: ["مبتدأ مرفوع", "اسم كان مرفوع", "خبر كان منصوب", "مفعول به منصوب"],
+        correct: 1,
+        explanation: "زيد اسم كان مرفوع بها وعلامة رفعه الضمة. (Zaid isim Kaana marfu'.)"
+      },
+      {
+        question: "ما إعراب 'قائماً' في جملة 'كان زيدٌ قائماً'؟",
+        options: ["خبر مرفوع", "خبر كان منصوب", "مفعول به منصوب", "حال منصوب"],
+        correct: 1,
+        explanation: "قائماً خبر كان منصوب بها وعلامة نصبه الفتحة. (Qa'im khabar Kaana manshub.)"
+      },
+      {
+        question: "أي من هذه الحروف يفيد التوكيد؟",
+        options: ["لكن", "ليت", "إن", "لعل"],
+        correct: 2,
+        explanation: "إن وأن تفيدان التوكيد، مثل: إن اللهَ غفورٌ رحيمٌ. (Inna dan Anna untuk taukid.)"
+      },
+      {
+        question: "كم عدد أخوات ظن التي ذكرها المؤلف؟",
+        options: ["خمسة", "سبعة", "عشرة", "اثنا عشر"],
+        correct: 2,
+        explanation: "ذكر المؤلف عشرة أفعال هي: ظننت، حسبت، خلت، زعمت، رأيت، علمت، وجدت، اتخذت، جعلت، سمعت. (Sepuluh fi'il.)"
+      },
+      {
+        question: "ما إعراب 'الله' في جملة 'إن اللهَ غفورٌ رحيمٌ'؟",
+        options: ["مبتدأ مرفوع", "اسم إن منصوب", "فاعل مرفوع", "مفعول به منصوب"],
+        correct: 1,
+        explanation: "الله اسم إن منصوب بها وعلامة نصبه الفتحة. (Allah isim Inna manshub.)"
+      },
+      {
+        question: "ما معنى 'أمسى' من أخوات كان؟",
+        options: ["دخل في الصباح", "دخل في المساء", "دخل في الضحى", "تحول من شيء لآخر"],
+        correct: 1,
+        explanation: "أمسى معناه دخل في المساء، مثل: أمسى الجوُّ حاراً. (Amsa = masuk petang.)"
+      },
+      {
+        question: "أي من هذه الأفعال ليس من أخوات كان؟",
+        options: ["صار", "بات", "ظل", "ضل (بالضاد)"],
+        correct: 3,
+        explanation: "ضل بالضاد بمعنى الضلال ليست من أخوات كان، أما ظل بالظاء فمن أخواتها. (Dhalla (dengan dhād) bukan saudara Kaana.)"
+      },
+      {
+        question: "ما إعراب 'الطالب' في جملة 'ليت الطالبَ ناجحٌ'؟",
+        options: ["مبتدأ مرفوع", "اسم ليت منصوب", "خبر ليت مرفوع", "مفعول به منصوب"],
+        correct: 1,
+        explanation: "الطالب اسم ليت منصوب بها وعلامة نصبه الفتحة. (At-thalib isim Layta manshub.)"
+      },
+      {
+        question: "ما شرط عمل 'زال' وأخواتها؟",
+        options: ["أن تسبق بنفي أو شبه نفي", "أن تسبق بما المصدرية", "أن تكون بمعنى صار", "أن تكون ماضية فقط"],
+        correct: 0,
+        explanation: "زال وأخواتها (برح، انفك، فتي) لا تعمل إلا بشرط أن يسبقها نفي أو شبه نفي. (Zala dan saudaranya memerlukan nafi.)"
+      },
+      // ========== SEDANG (21-40) ==========
+      {
+        question: "أي الجمل التالية صحيحة من حيث عمل كان؟",
+        options: ["كان زيدٌ قائمٌ", "كان زيداً قائماً", "كان زيدٌ قائماً", "كان زيداً قائمٌ"],
+        correct: 2,
+        explanation: "الصواب 'كان زيدٌ قائماً' لأن كان ترفع الاسم (زيدٌ) وتنصب الخبر (قائماً). (Yang benar: Kaana Zaidun qa'iman.)"
+      },
+      {
+        question: "ما إعراب 'المسلمين' في جملة 'كان المسلمون مخلصين'؟",
+        options: ["اسم كان مرفوع بالواو", "اسم كان منصوب بالياء", "خبر كان منصوب بالياء", "خبر كان مرفوع بالواو"],
+        correct: 2,
+        explanation: "مخلصين خبر كان منصوب وعلامة نصبه الياء نيابة عن الفتحة لأنه جمع مذكر سالم. (Mukhlisin khabar Kaana manshub dengan ya.)"
+      },
+      {
+        question: "أي الجمل التالية صحيحة من حيث عمل إن؟",
+        options: ["إن زيدٌ قائمٌ", "إن زيداً قائمٌ", "إن زيداً قائماً", "إن زيدٌ قائماً"],
+        correct: 1,
+        explanation: "الصواب 'إن زيداً قائمٌ' لأن إن تنصب الاسم (زيداً) وترفع الخبر (قائمٌ). (Inna Zaidan qa'imun.)"
+      },
+      {
+        question: "ما نوع خبر كان في جملة 'كان زيد في المسجد'؟",
+        options: ["مفرد", "جملة", "شبه جملة (جار ومجرور)", "ظرف"],
+        correct: 2,
+        explanation: "خبر كان هنا شبه جملة من الجار والمجرور 'في المسجد' في محل نصب. (Khabar berupa syibh jumlah.)"
+      },
+      {
+        question: "أي من هذه الأفعال تعمل عمل ظن بشرط أن تكون للقلب؟",
+        options: ["رأيت إذا كانت بمعنى أبصرت", "رأيت إذا كانت بمعنى علمت", "رأيت إذا كانت بمعنى ضربت الرئة", "جميع ما سبق"],
+        correct: 1,
+        explanation: "رأيت تعمل عمل ظن إذا كانت بمعنى علمت أو ظننت، أما إذا كانت بصرية فتنصب مفعولاً واحداً. (Ra'aitu bermakna 'ilm atau zhann termasuk saudara Zhanna.)"
+      },
+      {
+        question: "ما إعراب 'مسلمات' في جملة 'صار النساء مسلمات'؟",
+        options: ["خبر صار مرفوع بالضمة", "خبر صار منصوب بالفتحة", "خبر صار منصوب بالكسرة نيابة عن الفتحة", "خبر صار مرفوع بالواو"],
+        correct: 2,
+        explanation: "مسلمات خبر صار منصوب وعلامة نصبه الكسرة نيابة عن الفتحة لأنه جمع مؤنث سالم. (Muslimat khabar Shara manshub dengan kasrah.)"
+      },
+      {
+        question: "أي الجمل التالية صحيحة في تقديم خبر إن؟",
+        options: ["إن زيداً في البيت", "إن في البيت زيداً", "كلاهما صحيح", "كلاهما خطأ"],
+        correct: 2,
+        explanation: "يجوز تقديم خبر إن على اسمها إذا كان الخبر ظرفاً أو جاراً ومجروراً، فكلاهما صحيح. (Boleh mendahulukan khabar Inna jika berupa zharf atau jar-majrur.)"
+      },
+      {
+        question: "ما معنى 'ما فتئ' من أخوات كان؟",
+        options: ["ما زال", "ما انفك", "ما برح", "جميع ما سبق بمعنى الاستمرار"],
+        correct: 3,
+        explanation: "ما فتئ مثل ما زال وما انفك وما برح، كلها أفعال استمرار بمعنى لم يزل. (Semua adalah fi'il istimrar.)"
+      },
+      {
+        question: "ما إعراب 'البر' في قوله تعالى 'ليس البر أن تولوا وجوهكم'؟",
+        options: ["اسم ليس مرفوع", "خبر ليس مقدم منصوب", "اسم ليس مؤخر مرفوع", "مبتدأ مرفوع"],
+        correct: 1,
+        explanation: "البر خبر ليس مقدم منصوب، والتقدير: ليس توليتكم وجوهكم هو البر. (Al-birra khabar Laisa muqaddam manshub.)"
+      },
+      {
+        question: "أي من هذه الأفعال يشترط لعملها أن تسبق بما المصدرية الظرفية؟",
+        options: ["زال", "برح", "دام", "انفك"],
+        correct: 2,
+        explanation: "دام يشترط أن تسبقها 'ما' المصدرية الظرفية، مثل: لا أخرج ما دام المطر نازلاً. (Dama harus didahului ma mashdariyyah.)"
+      },
+      {
+        question: "ما نوع 'ما' في قوله تعالى 'ما دمت حياً'؟",
+        options: ["نافية", "مصدرية ظرفية", "موصولة", "زائدة"],
+        correct: 1,
+        explanation: "ما هنا مصدرية ظرفية تؤول مع الفعل بمصدر في محل نصب على الظرفية. (Ma mashdariyyah zharfiyyah.)"
+      },
+      {
+        question: "أي الجمل التالية صحيحة في عمل ظن؟",
+        options: ["ظننت زيدٌ منطلقٌ", "ظننت زيداً منطلقاً", "ظننت زيدٌ منطلقاً", "ظننت زيداً منطلقٌ"],
+        correct: 1,
+        explanation: "الصواب 'ظننت زيداً منطلقاً' لأن ظن تنصب المبتدأ والخبر معاً مفعولين. (Zhannantu Zaidan munthaliqan.)"
+      },
+      {
+        question: "ما إعراب 'إبراهيم' في قوله تعالى 'واتخذ الله إبراهيم خليلاً'؟",
+        options: ["فاعل مرفوع", "مفعول به أول منصوب", "مفعول به ثان منصوب", "اسم إن منصوب"],
+        correct: 1,
+        explanation: "إبراهيم مفعول به أول لاتخذ منصوب بالفتحة، وخليلاً مفعول به ثان. (Ibrahim maf'ul bih awwal.)"
+      },
+      {
+        question: "ما معنى 'بات' من أخوات كان؟",
+        options: ["دخل في الليل", "دخل في الصباح", "دخل في المساء", "تحول"],
+        correct: 0,
+        explanation: "بات معناه دخل في الليل أو صار في الليل، مثل: بات الحارس نائماً. (Bata = masuk malam.)"
+      },
+      {
+        question: "أي من هذه الأفعال ليس من أخوات ظن عند الجمهور؟",
+        options: ["حسبت", "خلت", "سمعت (عند بعض النحاة)", "زعمت"],
+        correct: 2,
+        explanation: "سمعت مختلف فيها، فبعض النحاة لا يعتبرونها من أخوات ظن لأنها لا تنصب مفعولين بل تنصب مفعولاً واحداً وما بعدها حال. (Sami'tu diperselisihkan.)"
+      },
+      {
+        question: "ما إعراب 'شاخصاً' في جملة 'ليس عمرو شاخصاً'؟",
+        options: ["خبر ليس مرفوع", "خبر ليس منصوب", "اسم ليس مرفوع", "حال منصوب"],
+        correct: 1,
+        explanation: "شاخصاً خبر ليس منصوب بها وعلامة نصبه الفتحة. (Syakhishan khabar Laisa manshub.)"
+      },
+      {
+        question: "أي من هذه الحروف لا يسبق باسم صريح غالباً؟",
+        options: ["إن", "أن", "لكن", "ليت"],
+        correct: 2,
+        explanation: "لكن لا يسبق باسم صريح غالباً، بل تدخل على الجملة بعد كلام سابق للاستدراك. (Lakinna biasanya tanpa isim sesudahnya.)"
+      },
+      {
+        question: "ما نوع خبر كان في جملة 'كان زيد أبوه قائم'؟",
+        options: ["مفرد", "جملة اسمية", "جملة فعلية", "شبه جملة"],
+        correct: 1,
+        explanation: "خبر كان هنا جملة اسمية 'أبوه قائم' في محل نصب. (Khabar berupa jumlah ismiyyah.)"
+      },
+      {
+        question: "أي الجمل التالية صحيحة في تقديم خبر كان؟",
+        options: ["كان زيد قائماً", "كان قائماً زيد", "كلاهما صحيح", "كلاهما خطأ"],
+        correct: 2,
+        explanation: "يجوز تقديم خبر كان على اسمها، فكلاهما صحيح. (Boleh mendahulukan khabar Kaana.)"
+      },
+      {
+        question: "ما الفرق بين 'ظل' بالظاء و'ضل' بالضاد؟",
+        options: ["كلاهما من أخوات كان", "ظل من أخوات كان، وضل بمعنى ضل الطريق", "ضل من أخوات كان، وظل بمعنى الاستمرار", "كلاهما ليس من أخوات كان"],
+        correct: 1,
+        explanation: "ظل بالظاء من أخوات كان بمعنى صار أو استمر، وضل بالضاد بمعنى ضل الطريق وليست من أخوات كان. (Zhalla (dengan zha') saudara Kaana, Dhalla (dengan dhad) bukan.)"
+      },
+      // ========== SULIT (41-60) ==========
+      {
+        question: "ما إعراب 'رسول' في جملة 'سمعت رسول الله يقول' على القول بأن سمع من أخوات ظن؟",
+        options: ["مفعول به أول منصوب", "مفعول به ثان منصوب", "فاعل مرفوع", "مبتدأ مرفوع"],
+        correct: 0,
+        explanation: "على القول بأن سمع من أخوات ظن، رسول مفعول به أول، وجملة 'يقول' في محل نصب مفعول ثان. والراجح أنها مفعول به واحد وما بعده حال. (Menurut pendapat yang menganggap Sami'tu termasuk saudara Zhanna, Rasul maf'ul awwal, jumlah yaqulu maf'ul tsani.)"
+      },
+      {
+        question: "أي من هذه الأفعال تعمل عمل كان بشرط أن تكون بمعنى صار؟",
+        options: ["بات", "أمسى", "ظل", "أصبح"],
+        correct: 2,
+        explanation: "ظل يشترط لعملها أن تكون بمعنى صار، ولها استعمالات أخرى لا تعمل فيها عمل كان. (Zhalla disyaratkan bermakna shara.)"
+      },
+      {
+        question: "ما إعراب 'حقاً' في قوله تعالى 'وكان حقاً علينا نصر المؤمنين'؟",
+        options: ["اسم كان مرفوع", "خبر كان مقدم منصوب", "مفعول مطلق منصوب", "حال منصوب"],
+        correct: 1,
+        explanation: "حقاً خبر كان مقدم منصوب، ونصر المؤمنين اسم كان مؤخر مرفوع. (Haqqan khabar Kaana muqaddam manshub.)"
+      },
+      {
+        question: "أي من هذه الأفعال من أفعال الاستمرار التي تشترط النفي؟",
+        options: ["أضحى", "أمسى", "ما انفك", "صار"],
+        correct: 2,
+        explanation: "أفعال الاستمرار هي: زال، برح، انفك، فتى، وتشترط النفي أو شبهه للعمل. (Af'al istimrar memerlukan nafi.)"
+      },
+      {
+        question: "ما الفرق بين إن وأن من حيث المعنى والاستعمال؟",
+        options: ["كلاهما للتوكيد ولكن إن بالكسر وأن بالفتح", "إن للتوكيد وأن للتشبيه", "إن للاستدراك وأن للتوكيد", "كلاهما للتمني"],
+        correct: 0,
+        explanation: "إن وأن كلاهما للتوكيد، لكن إن تكون مكسورة الهمزة في أول الكلام وبعد القول والقسم، وأن تكون مفتوحة الهمزة حيث تؤول مع جملتها بمصدر. (Inna dan Anna sama-sama taukid, beda tempat.)"
+      },
+      {
+        question: "ما إعراب 'البارحة' في جملة 'ما زال المطر نازلاً البارحة'؟",
+        options: ["خبر ما زال منصوب", "ظرف زمان منصوب", "مفعول فيه منصوب", "اسم ما زال مرفوع"],
+        correct: 1,
+        explanation: "البارحة ظرف زمان منصوب على الظرفية، وليس لها علاقة بعمل ما زال. (Al-bariha zharf zaman.)"
+      },
+      {
+        question: "أي الجمل التالية صحيحة في عمل 'لا زال'؟",
+        options: ["لا زال المطر نازلاً", "لا زال المطر نازلٌ", "لا زال المطرُ نازلٌ", "لا زال المطراً نازلاً"],
+        correct: 0,
+        explanation: "'لا زال' صحيحة لأن 'لا' نافية تعمل مع 'زال' عملها، فيرفع الاسم (المطرُ) وينصب الخبر (نازلاً). (La zala benar dengan la nafi.)"
+      },
+      {
+        question: "ما إعراب 'عاكفين' في قوله تعالى 'لن تبرح عليه عاكفين'؟",
+        options: ["خبر تبرح منصوب بالياء", "حال منصوب بالياء", "مفعول به منصوب بالياء", "تمييز منصوب بالياء"],
+        correct: 0,
+        explanation: "عاكفين خبر تبرح منصوب وعلامة نصبه الياء نيابة عن الفتحة لأنه جمع مذكر سالم. ('Akifin khabar Tabraha manshub dengan ya.)"
+      },
+      {
+        question: "أي من هذه الأفعال يمكن أن يكون تاماً وناقصاً؟",
+        options: ["كان", "ليت", "إن", "ظن"],
+        correct: 0,
+        explanation: "كان تكون ناقصة تحتاج إلى اسم وخبر، وتكون تامة بمعنى حدث وقع فتكتفي بفاعل، مثل: 'وإن كان ذو عسرة' أي حدث وقع. (Kaana bisa tamm dan naqish.)"
+      },
+      {
+        question: "ما إعراب 'السماء' في قول الشاعر: 'كأنما السماءُ بعد رحيلهم'؟",
+        options: ["اسم كأن منصوب", "مبتدأ مرفوع", "فاعل مرفوع", "خبر كأن مرفوع"],
+        correct: 1,
+        explanation: "إذا دخلت 'ما' الكافة على إن وأخواتها تكفها عن العمل، فتبطل عملها، فترفع السماء على الابتداء. (Kannama dengan ma kaffah membatalkan 'amal.)"
+      },
+      {
+        question: "أي من هذه الأفعال ينصب ثلاثة مفاعيل؟",
+        options: ["ظن", "علم", "رأى", "أنبأ وأعلم"],
+        correct: 3,
+        explanation: "أفعال مثل أنبأ وأعلم وخبرى تنصب ثلاثة مفاعيل، أما ظن وأخواتها فتنصب مفعولين فقط. (Anba'a, a'lama menasabkan tiga maf'ul.)"
+      },
+      {
+        question: "ما إعراب 'مسروراً' في جملة 'كان زيد مسروراً يكون أخوه مسروراً'؟",
+        options: ["خبر كان الأول منصوب", "خبر كان الأول مرفوع", "خبر كان الثاني منصوب", "مفعول به منصوب"],
+        correct: 2,
+        explanation: "مسروراً في الجملة الأولى خبر كان الأول، وفي الجملة الثانية خبر كان الثاني، كلاهما منصوب. (Masruran khabar Kaana kedua.)"
+      },
+      {
+        question: "ما الفرق بين 'وجد' بمعنى العلم و'وجد' بمعنى الوجدان؟",
+        options: ["الأولى تنصب مفعولين، والثانية تنصب مفعولاً واحداً", "كلاهما ينصب مفعولين", "كلاهما ينصب مفعولاً واحداً", "الأولى تنصب مفعولاً واحداً والثانية تنصب مفعولين"],
+        correct: 0,
+        explanation: "وجد بمعنى العلم (اعتقد) تنصب مفعولين، ووجد بمعنى الوجدان (اللقاء) تنصب مفعولاً واحداً. (Wajada bermakna 'ilm dua maf'ul, bermakna wijdan satu maf'ul.)"
+      },
+      {
+        question: "أي الجمل التالية صحيحة في إعراب 'إنما'؟",
+        options: ["إنما زيداً قائمٌ", "إنما زيدٌ قائمٌ", "إنما زيداً قائماً", "إنما زيدٌ قائماً"],
+        correct: 1,
+        explanation: "'إنما' مكونة من إن وما الكافة، وما الكافة أبطلت عمل إن، فترفع زيد على الابتداء، وقائم خبره. (Innama dengan ma kaffah membatalkan 'amal.)"
+      },
+      {
+        question: "ما إعراب 'ليتما' في جملة 'ليتما التلميذ ناجح' على القول بإعمالها؟",
+        options: ["حرف تمن ونصب مبني على الفتح", "ليت حرف تمن وما زائدة", "ليتما اسم شرط", "ليتما فعل ماض"],
+        correct: 1,
+        explanation: "على القول بإعمال ليت مع 'ما' فإن 'ما' زائدة وليت تعمل عملها، فتنصب التلميذ وترفع ناجح. (Layta dengan ma zaidah tetap berfungsi.)"
+      },
+      {
+        question: "أي من هذه الأفعال من أخوات ظن التي تدل على الرجحان؟",
+        options: ["علمت", "حسبت", "وجدت", "اتخذت"],
+        correct: 1,
+        explanation: "حسبت تدل على الرجحان (الظن الراجح)، بينما علمت تدل على اليقين. (Hasibtu untuk dugaan kuat, 'alimtu untuk yakin.)"
+      },
+      {
+        question: "ما إعراب 'البارد' في جملة 'أصبح الجو شديد البرد'؟",
+        options: ["خبر أصبح منصوب", "نعت منصوب", "مضاف إليه مجرور", "تمييز منصوب"],
+        correct: 2,
+        explanation: "البرد مضاف إليه مجرور، وشديد خبر أصبح منصوب، وشديد مضاف والبرد مضاف إليه. (Al-bardi mudhaf ilaih majrur.)"
+      },
+      {
+        question: "ما الفرق بين 'لعل' و'ليت' من حيث المعنى؟",
+        options: ["ليت للممكن ولعل للمستحيل", "ليت للتمني (المستحيل أو المتعذر) ولعل للترجي (الممكن)", "كلاهما للتمني", "كلاهما للترجي"],
+        correct: 1,
+        explanation: "ليت للتمني وهو طلب ما لا يرجى حصوله أو يصعب، ولعل للترجي وهو طلب ما يسهل حصوله. (Layta untuk mustahil/sulit, la'alla untuk yang mungkin.)"
+      },
+      {
+        question: "أي من هذه الأفعال من أخوات كان التي تدل على التحول؟",
+        options: ["صار", "أمسى", "أصبح", "بات"],
+        correct: 0,
+        explanation: "صار تدل على التحول من حال إلى حال، مثل: صار الطين إبريقاً. (Shara menunjukkan perubahan.)"
+      },
+      {
+        question: "ما إعراب 'الموظفون' في جملة 'لعل الموظفين مجتهدون'؟",
+        options: ["اسم لعل منصوب بالياء", "اسم لعل منصوب بالواو", "اسم لعل مرفوع بالواو", "مبتدأ مرفوع بالواو"],
+        correct: 0,
+        explanation: "الموظفين اسم لعل منصوب وعلامة نصبه الياء نيابة عن الفتحة لأنه جمع مذكر سالم، ومجتهدون خبر لعل مرفوع بالواو. (Al-muwazzhafin isim la'alla manshub dengan ya.)"
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-level2" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        // Ganti dengan link pelajaran selanjutnya jika ada
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/012.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>

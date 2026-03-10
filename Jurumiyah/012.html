@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - النعت والعطف</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #e8f0fe;  /* soft blue background */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid #2196f3;
+    }
+
+    .main-menu {
+      text-align: center;
+      color: #1e2b3a;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #bbdefb;
+      letter-spacing: 1px;
+      color: #1e2b3a;
+    }
+
+    .main-menu .level-badge {
+      background: #2196f3;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #0b5e9e;
+      word-break: break-word;
+    }
+
+    .btn-mulai {
+      background: #2196f3;
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #0b5e9e, 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #0b5e9e, 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-screen {
+      color: #1e2b3a;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #2196f3;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .quiz-header .level-small {
+      background: #2196f3;
+      color: #ffffff;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: #e8f0fe;
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: #1e2b3a;
+      border: 1px solid #2196f3;
+    }
+
+    .nav-grid-btn {
+      background: #e3f2fd;
+      border: 1px solid #2196f3;
+      color: #1e2b3a;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: #bbdefb;
+    }
+
+    .question-box {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid #2196f3;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #1e2b3a;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: #f9f9f9;
+      border: 2px solid #2196f3;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: #1e2b3a;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: #e3f2fd;
+      border-color: #2196f3;
+    }
+
+    .option-item.selected {
+      background: #2196f3;
+      color: #ffffff;
+      font-weight: 700;
+      border-color: #2196f3;
+      box-shadow: 0 0 15px #2196f3;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #0b5e9e;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #ffffff;
+      color: #2196f3;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #1e2b3a;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
+      animation: pop 0.3s;
+      border: 2px solid #2196f3;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: #e6ffe6;
+      border: 4px solid #4caf50;
+    }
+
+    .notification-card.salah {
+      background: #ffe6e6;
+      border: 4px solid #f44336;
+    }
+
+    .notification-card.selesai {
+      background: #e6f0ff;
+      border: 4px solid #2196f3;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1e2b3a;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+    }
+
+    .btn-next {
+      background: #2196f3;
+      color: #ffffff;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: #ffffff;
+    }
+
+    .btn-penjelasan {
+      background: #9c27b0;
+      color: #ffffff;
+    }
+
+    .explanation-box {
+      background: #f0f4f8;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #1e2b3a;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #2196f3;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #2196f3;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .nav-panel h3 {
+      color: #1e2b3a;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f4f8;
+      border: 2px solid #2196f3;
+      border-radius: 12px;
+      color: #1e2b3a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #4caf50;
+      border-color: #388e3c;
+      color: #ffffff;
+    }
+
+    .nav-item.unanswered {
+      background: #ffe6e6;
+      border-color: #f44336;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #2196f3;
+      background: #2196f3;
+      color: #ffffff;
+    }
+
+    .btn-tutup-panel {
+      background: #2196f3;
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> النعت والعطف <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.7;">60 soal • berdasarkan penjelasan ulama nahwu</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> النعت والعطف</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— النعت والعطف - شرح المتون النحوية —</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 60 SOAL - النعت والعطف (20 mudah, 20 sedang, 20 sulit)
+    const questions = [
+      // ========== MUDAH (1-20) ==========
+      {
+        question: "ما هو النعت؟",
+        options: ["تابع يذكر بعد المنعوت لبيان صفته", "اسم يدل على الفاعل", "فعل يدل على حدث", "حرف يربط الكلمات"],
+        correct: 0,
+        explanation: "النعت هو وصف يذكر بعد المنعوت لبيان صفته، وهو تابع له في الإعراب والتعريف والتنكير والتذكير والتأنيث والإفراد والتثنية والجمع. (Na'at adalah sifat yang disebutkan setelah man'ut untuk menjelaskan sifatnya, dan ia mengikuti man'ut dalam i'rab, definisi, indefinisi, mudzakkar-muannats, dan jumlah.)"
+      },
+      {
+        question: "كم عدد حروف العطف التي ذكرها المؤلف؟",
+        options: ["خمسة", "سبعة", "عشرة", "اثنا عشر"],
+        correct: 2,
+        explanation: "ذكر المؤلف أن حروف العطف عشرة، وهي: الواو، والفاء، وثم، وأو، وأم، وإما، وبل، ولا، ولكن، وحتى في بعض المواضع. (Penulis menyebutkan bahwa huruf 'athaf ada sepuluh.)"
+      },
+      {
+        question: "أي من التالية يعرب تابعاً للمعطوف عليه في الإعراب؟",
+        options: ["المعطوف", "المنعوت", "النعت", "الفعل"],
+        correct: 0,
+        explanation: "المعطوف يتبع المعطوف عليه في الإعراب، فإذا كان المعطوف عليه مرفوعاً كان المعطوف مرفوعاً، وإذا كان منصوباً كان منصوباً، وهكذا. (Ma'thuf mengikuti ma'thuf 'alaih dalam i'rab.)"
+      },
+      {
+        question: "\"قام زيدٌ العاقلُ\" إعراب \"العاقلُ\" هو:",
+        options: ["نعت مرفوع", "نعت منصوب", "نعت مجرور", "خبر مرفوع"],
+        correct: 0,
+        explanation: "\"العاقلُ\" نعت لـ \"زيدٌ\" وهو مرفوع مثله، لأن النعت يتبع المنعوت في الرفع. (Al-'aaqilu adalah na'at bagi Zaidun dan ia marfu'.)"
+      },
+      {
+        question: "أي من هذه الحروف يفيد الترتيب مع التعقيب؟",
+        options: ["الواو", "الفاء", "ثم", "أو"],
+        correct: 1,
+        explanation: "الفاء تفيد الترتيب مع التعقيب، أي أن ما بعدها يقع مباشرة بعد ما قبلها دون تأخير. (Fa' menunjukkan urutan dengan segera.)"
+      },
+      {
+        question: "\"مررتُ بزيدٍ العاقلِ\" إعراب \"العاقلِ\" هو:",
+        options: ["نعت مرفوع", "نعت منصوب", "نعت مجرور", "بدل مجرور"],
+        correct: 2,
+        explanation: "\"العاقلِ\" نعت لـ \"زيدٍ\" وهو مجرور مثله، لأن النعت يتبع المنعوت في الجر. (Al-'aaqili adalah na'at bagi Zaidin dan ia majrur.)"
+      },
+      {
+        question: "ما معنى \"أو\" في قولك: \"تزوج هندا أو أختها\"؟",
+        options: ["الشك", "الإباحة", "التخيير", "التحيير"],
+        correct: 2,
+        explanation: "\"أو\" هنا تفيد التخيير، أي أن المخاطب مخير بين الأمرين ولا يجوز الجمع بينهما في هذا السياق. (Au di sini menunjukkan makna takhyir.)"
+      },
+      {
+        question: "كم أنواع المعرفة التي ذكرها المؤلف؟",
+        options: ["ثلاثة", "أربعة", "خمسة", "ستة"],
+        correct: 2,
+        explanation: "ذكر المؤلف أن المعرفة خمسة أشياء: الاسم المضمر، والاسم العلم، والاسم المبهم، والاسم الذي فيه الألف واللام، وما أضيف إلى واحد من هذه الأربعة. (Penulis menyebutkan bahwa ma'rifah ada lima.)"
+      },
+      {
+        question: "\"رأيتُ زيداً العاقلَ\" إعراب \"العاقلَ\" هو:",
+        options: ["نعت مرفوع", "نعت منصوب", "نعت مجرور", "حال منصوب"],
+        correct: 1,
+        explanation: "\"العاقلَ\" نعت لـ \"زيداً\" وهو منصوب مثله، لأن النعت يتبع المنعوت في النصب. (Al-'aaqila adalah na'at bagi Zaidan dan ia manshub.)"
+      },
+      {
+        question: "أي حرف من حروف العطف يفيد الترتيب مع التراخي؟",
+        options: ["الواو", "الفاء", "ثم", "حتى"],
+        correct: 2,
+        explanation: "\"ثم\" تفيد الترتيب مع التراخي، أي أن ما بعدها يقع بعد ما قبلها مع وجود مهلة أو تأخير. (Tsumma menunjukkan urutan dengan selang waktu.)"
+      },
+      {
+        question: "\"جاء الرجلُ الفاضلُ\" هذه العبارة:",
+        options: ["صحيحة", "خاطئة لأن النعت نكرة والمنعوت معرفة", "خاطئة لأن النعت مرفوع والمنعوت منصوب", "خاطئة لأن النعت مجرور والمنعوت مرفوع"],
+        correct: 0,
+        explanation: "العبارة صحيحة لأن النعت \"الفاضل\" تابع للمنعوت \"الرجل\" في الرفع والتعريف. (Kalimat ini benar karena na'at mengikuti man'ut dalam rafa' dan ta'rif.)"
+      },
+      {
+        question: "أي من هذه الكلمات تعتبر نكرة؟",
+        options: ["أنا", "زيد", "رجل", "الذي"],
+        correct: 2,
+        explanation: "\"رجل\" نكرة لأنه اسم شائع في جنسه لا يختص به واحد دون آخر، ويصح دخول الألف واللام عليه. (Rajulun adalah nakirah.)"
+      },
+      {
+        question: "\"قام زيدٌ وعمرواً\" هذه العبارة:",
+        options: ["صحيحة", "خاطئة لأن المعطوف يجب أن يكون مرفوعاً", "خاطئة لأن المعطوف يجب أن يكون منصوباً", "خاطئة لأن المعطوف يجب أن يكون مجروراً"],
+        correct: 1,
+        explanation: "العبارة خاطئة لأن \"عمراً\" منصوب بالفتحة، والصواب \"وعمروٌ\" بالرفع، لأنه معطوف على مرفوع. (Kalimat salah, seharusnya 'Amrun marfu'.)"
+      },
+      {
+        question: "ما هو النعت السببي؟",
+        options: ["نعت يصف المنعوت نفسه", "نعت يصف اسماً ظاهراً بعد المنعوت", "نعت يصف المنعوت ويتبعه في كل شيء", "نعت يصف المنعوت ويخالفه في التذكير والتأنيث"],
+        correct: 1,
+        explanation: "النعت السببي هو ما يصف اسماً ظاهراً بعد المنعوت، مثل: \"مررت بامرأةٍ قائمٍ أبوها\"، فهو يتبع المنعوت في الإعراب فقط، ويتبع ما بعده في التذكير والتأنيث. (Na'at sababi mensifati isim setelah man'ut.)"
+      },
+      {
+        question: "\"ما قام زيدٌ لكنْ عمروٌ\" ما نوع \"لكن\" هنا؟",
+        options: ["حرف استدراك وعطف", "حرف نصب", "حرف جر", "حرف نفي"],
+        correct: 0,
+        explanation: "\"لكن\" هنا حرف عطف واستدراك، تفيد إثبات الحكم لما بعدها بعد نفيه عما قبلها. (Lakin di sini huruf 'athaf dan istidrak.)"
+      },
+      {
+        question: "\"جاء الذي فهم الدرسَ\" \"الذي\" هنا:",
+        options: ["نكرة", "معرفة", "اسم موصول مبهم", "اسم إشارة"],
+        correct: 1,
+        explanation: "\"الذي\" اسم موصول، وهو من الأسماء المبهمة التي تعتبر معرفة، لأنه يعين مدلوله بالصلة. (Alladzi ism maushul, ma'rifah.)"
+      },
+      {
+        question: "\"اشتريتُ كتاباً مفيداً\" إعراب \"مفيداً\" هو:",
+        options: ["نعت منصوب", "نعت مرفوع", "نعت مجرور", "حال منصوب"],
+        correct: 0,
+        explanation: "\"مفيداً\" نعت لـ \"كتاباً\" وهو منصوب مثله، لأن النعت يتبع المنعوت في النصب. (Mufidan na'at manshub.)"
+      },
+      {
+        question: "أي من هذه الحروف ليس من حروف العطف؟",
+        options: ["الواو", "الفاء", "ثم", "إن"],
+        correct: 3,
+        explanation: "\"إن\" ليست من حروف العطف، بل هي حرف شرط جازم أو حرف توكيد ناصب. (In bukan huruf 'athaf.)"
+      },
+      {
+        question: "\"مررتُ برجلٍ فاضلٍ\" هذه العبارة:",
+        options: ["صحيحة", "خاطئة لأن النعت معرفة والمنعوت نكرة", "خاطئة لأن النعت مجرور والمنعوت مرفوع", "خاطئة لأن النعت منصوب والمنعوت مجرور"],
+        correct: 0,
+        explanation: "العبارة صحيحة لأن النعت \"فاضل\" نكرة تابع للمنعوت \"رجل\" في الجر والتنكير. (Kalimat benar.)"
+      },
+      {
+        question: "ما معنى \"بل\" في قولك: \"جاء زيدٌ بل عمروٌ\"؟",
+        options: ["الإضراب عن الأول وإثبات الثاني", "التشكيك", "التخيير", "النفي"],
+        correct: 0,
+        explanation: "\"بل\" هنا تفيد الإضراب، أي إلغاء الحكم عن الأول وإثباته للثاني. (Bal untuk idhrab.)"
+      },
+      // ========== SEDANG (21-40) ==========
+      {
+        question: "\"جاء زيدٌ العاقلُ أبوهُ\" ما نوع النعت هنا؟",
+        options: ["نعت حقيقي", "نعت سببي", "نعت منصوب", "نعت مجرور"],
+        correct: 1,
+        explanation: "هذا نعت سببي، لأنه وصف لـ \"أبوه\" وليس لـ \"زيد\" مباشرة. (Na'at sababi.)"
+      },
+      {
+        question: "أي من هذه العبارات صحيحة من حيث النعت؟",
+        options: ["مررتُ بامرأةٍ قائمٍ أبوها", "مررتُ بامرأةٍ قائمةٍ أبوها", "مررتُ بامرأةٍ قائمٌ أبوها", "مررتُ بامرأةٍ قائمةٌ أبوها"],
+        correct: 0,
+        explanation: "الصحيح هو \"مررتُ بامرأةٍ قائمٍ أبوها\" لأن النعت السببي يتبع المنعوت في الإعراب فقط، فيكون \"قائم\" مجروراً، ولكنه يذكر لأنه وصف للأب المذكر. (Yang benar adalah 'qa'im' majrur dan mudzakkar.)"
+      },
+      {
+        question: "\"قام زيدٌ وعمروٌ\" ما إعراب \"عمرو\"؟",
+        options: ["فاعل مرفوع", "معطوف على زيد مرفوع", "مبتدأ مرفوع", "خبر مرفوع"],
+        correct: 1,
+        explanation: "\"عمرو\" معطوف على \"زيد\" بحرف العطف \"الواو\"، والمعطوف على المرفوع مرفوع. (Ma'thuf marfu'.)"
+      },
+      {
+        question: "\"رأيتُ زيداً والعاقلَ\" هذه العبارة:",
+        options: ["صحيحة", "خاطئة لأن العطف بالواو لا يصح هنا", "خاطئة لأن المعطوف يجب أن يكون منصوباً مثل المعطوف عليه", "خاطئة لأن \"العاقل\" نعت وليس معطوفاً"],
+        correct: 3,
+        explanation: "العبارة خاطئة لأن \"العاقل\" هنا ليس معطوفاً بل هو نعت، والصواب \"رأيتُ زيداً العاقلَ\" بحذف الواو. (Salah, karena 'al-'aaqil' adalah na'at, bukan ma'thuf.)"
+      },
+      {
+        question: "ما الفرق بين \"أم\" المتصلة والمنقطعة؟",
+        options: ["المتصلة بمعنى \"أو\"، والمنقطعة بمعنى \"بل\"", "المتصلة بمعنى \"بل\"، والمنقطعة بمعنى \"أو\"", "المتصلة تفيد التخيير، والمنقطعة تفيد الإضراب", "كلاهما بمعنى واحد"],
+        correct: 0,
+        explanation: "\"أم\" المتصلة تكون بمعنى \"أو\" وتأتي بعد همزة التسوية، والمنقطعة تكون بمعنى \"بل\" وتفيد الإضراب. (Am muttashilah = au, munqathi'ah = bal.)"
+      },
+      {
+        question: "\"أكلتُ السمكةَ حتى رأسَها\" إذا كانت \"حتى\" حرف عطف، فما معنى الجملة؟",
+        options: ["الرأس غير مأكول", "الرأس مأكول", "الرأس مأكول إذا كان صغيراً", "الجملة خاطئة"],
+        correct: 1,
+        explanation: "إذا كانت \"حتى\" حرف عطف، فإن \"رأسها\" معطوف على \"السمكة\" فيكون الرأس مأكولاً مثل السمكة. (Jika hatta 'athaf, kepala ikut dimakan.)"
+      },
+      {
+        question: "\"أكلتُ السمكةَ حتى رأسِها\" إذا كانت \"حتى\" حرف جر، فما معنى الجملة؟",
+        options: ["الرأس مأكول", "الرأس غير مأكول", "الرأس مأكول جزئياً", "الجملة خاطئة"],
+        correct: 1,
+        explanation: "إذا كانت \"حتى\" حرف جر، فإن \"رأسها\" مجرور، والمعنى أن الأكل استمر إلى الرأس دون أكله، لأن ابتداء الغاية داخل وانتهاءها غير داخل. (Jika hatta jar, kepala tidak dimakan.)"
+      },
+      {
+        question: "\"جاء زيدٌ لا عمروٌ\" ما إعراب \"عمرو\"؟",
+        options: ["معطوف على زيد مرفوع", "مفعول به منصوب", "مبتدأ مرفوع", "فاعل مرفوع"],
+        correct: 0,
+        explanation: "\"عمرو\" معطوف على \"زيد\" بحرف العطف \"لا\"، والمعطوف على المرفوع مرفوع. (Ma'thuf marfu' dengan 'la'.)"
+      },
+      {
+        question: "أي من هذه الكلمات معرفة بالإضافة؟",
+        options: ["كتابُ زيدٍ", "رجلٌ", "شمسٌ", "قمرٌ"],
+        correct: 0,
+        explanation: "\"كتابُ زيدٍ\" معرفة بالإضافة، لأن \"كتاب\" أضيف إلى المعرفة \"زيد\"، فصار معرفة. (Kitaabu Zaidin ma'rifah karena idhafah.)"
+      },
+      {
+        question: "\"مررتُ برجلٍ قائمٍ أبوهُ\" إعراب \"أبوه\" هو:",
+        options: ["فاعل مرفوع بالواو", "مفعول به منصوب", "مبتدأ مرفوع بالضمة", "نعت مرفوع"],
+        correct: 0,
+        explanation: "\"أبوه\" فاعل لاسم الفاعل \"قائم\" مرفوع وعلامة رفعه الواو لأنه من الأسماء الخمسة. (Abuhu fa'il marfu' dengan wawu.)"
+      },
+      {
+        question: "\"جاء زيدٌ ثم عمروٌ\" ما معنى \"ثم\" هنا؟",
+        options: ["الترتيب مع التعقيب", "الترتيب مع التراخي", "مطلق الجمع", "التخيير"],
+        correct: 1,
+        explanation: "\"ثم\" تفيد الترتيب مع التراخي، أي أن مجيء عمرو كان بعد مجيء زيد بفاصل زمني. (Tsumma untuk tartib dengan tarakhi.)"
+      },
+      {
+        question: "\"ما قام زيدٌ لكنْ عمروٌ\" ما إعراب \"عمرو\"؟",
+        options: ["معطوف على زيد مرفوع", "مبتدأ مرفوع", "فاعل مرفوع", "خبر مرفوع"],
+        correct: 0,
+        explanation: "\"عمرو\" معطوف على \"زيد\" بحرف العطف \"لكن\"، والمعطوف على المرفوع مرفوع. (Ma'thuf marfu'.)"
+      },
+      {
+        question: "\"الاسم المبهم\" يشمل:",
+        options: ["أسماء الإشارة فقط", "الأسماء الموصولة فقط", "أسماء الإشارة والأسماء الموصولة", "الضمائر فقط"],
+        correct: 2,
+        explanation: "الاسم المبهم يشمل اسم الإشارة والاسم الموصول، كما ذكر المؤلف. (Ism mubham mencakup isim isyarah dan isim maushul.)"
+      },
+      {
+        question: "\"جاء الذي فهم الدرسَ\" إعراب \"الذي\" هو:",
+        options: ["اسم موصول مبني على السكون في محل رفع فاعل", "اسم موصول مبني على الفتح في محل رفع مبتدأ", "اسم موصول معرب مرفوع", "اسم إشارة مبني"],
+        correct: 0,
+        explanation: "\"الذي\" اسم موصول مبني على السكون في محل رفع فاعل، لأنه وقع بعد فعل تام. (Alladzi mabni, mahall rafa' fa'il.)"
+      },
+      {
+        question: "\"مررتُ بزيدٍ الفاضلِ\" إعراب \"الفاضل\" هو:",
+        options: ["نعت مجرور بالكسرة", "نعت منصوب بالفتحة", "نعت مرفوع بالضمة", "بدل مجرور"],
+        correct: 0,
+        explanation: "\"الفاضل\" نعت لـ \"زيد\" وهو مجرور مثله، وعلامة جره الكسرة الظاهرة. (Na'at majrur.)"
+      },
+      {
+        question: "أي من هذه الحروف يفيد التخيير؟",
+        options: ["الواو", "الفاء", "أو", "ثم"],
+        correct: 2,
+        explanation: "\"أو\" تفيد التخيير إذا كان الكلام يقتضي اختيار واحد من شيئين دون الجمع بينهما. (Au untuk takhyir.)"
+      },
+      {
+        question: "\"رأيتُ زيداً والعاقلَ\" لماذا هذه العبارة خاطئة؟",
+        options: ["لأن \"العاقل\" لا يصح عطفه على زيد", "لأن المعطوف يجب أن يكون منصوباً مثل المعطوف عليه، و\"العاقل\" منصوب أصلاً", "لأن \"العاقل\" هنا نعت وليس معطوفاً، والصواب حذف الواو", "لأن العطف بالواو لا يجوز مع النعت"],
+        correct: 2,
+        explanation: "العبارة خاطئة لأن \"العاقل\" هو نعت لـ \"زيد\" وليس معطوفاً، فالصواب \"رأيتُ زيداً العاقلَ\" بدون واو. (Salah, karena 'al-'aaqil' na'at, bukan ma'thuf.)"
+      },
+      {
+        question: "\"جاء الرجلُ الفاضلُ أبوهُ\" إعراب \"الفاضل\" هو:",
+        options: ["نعت حقيقي مرفوع", "نعت سببي مرفوع", "نعت سببي مجرور", "خبر مرفوع"],
+        correct: 1,
+        explanation: "\"الفاضل\" نعت سببي مرفوع، وهو يتبع المنعوت \"الرجل\" في الرفع، ولكنه يصف \"أبوه\" المذكور بعده. (Na'at sababi marfu'.)"
+      },
+      {
+        question: "\"اشتريتُ كتاباً مفيداً\" إذا أردنا جعله معرفة، نقول:",
+        options: ["اشتريتُ الكتابَ مفيداً", "اشتريتُ كتاباً المفيدَ", "اشتريتُ الكتابَ المفيدَ", "اشتريتُ كتابٍ المفيدِ"],
+        correct: 2,
+        explanation: "الصحيح \"اشتريتُ الكتابَ المفيدَ\" لأن النعت يجب أن يتبع المنعوت في التعريف. (Harus na'at ma'rifah.)"
+      },
+      {
+        question: "\"مررتُ برجلٍ الفاضلِ\" هذه العبارة:",
+        options: ["صحيحة", "خاطئة لأن النعت معرفة والمنعوت نكرة", "خاطئة لأن النعت مجرور والمنعوت مرفوع", "خاطئة لأن النعت منصوب والمنعوت مجرور"],
+        correct: 1,
+        explanation: "العبارة خاطئة لأن \"الفاضل\" معرفة و\"رجل\" نكرة، والنعت يجب أن يتبع المنعوت في التعريف والتنكير. (Salah, na'at ma'rifah, man'ut nakirah.)"
+      },
+      // ========== SULIT (41-60) ==========
+      {
+        question: "\"جاء زيدٌ العاقلُ أبوهُ\" ما إعراب \"العاقل\" و\"أبوه\"؟",
+        options: ["العاقل: نعت حقيقي مرفوع، وأبوه: فاعل مرفوع", "العاقل: نعت سببي مرفوع، وأبوه: فاعل مرفوع", "العاقل: نعت سببي مرفوع، وأبوه: مبتدأ مرفوع", "العاقل: خبر مرفوع، وأبوه: مبتدأ مرفوع"],
+        correct: 1,
+        explanation: "\"العاقل\" نعت سببي مرفوع لأنه تابع للمنعوت \"زيد\" في الرفع، و\"أبوه\" فاعل لاسم الفاعل \"العاقل\" مرفوع بالواو. (Na'at sababi marfu', abuhu fa'il.)"
+      },
+      {
+        question: "\"مررتُ بامرأةٍ قائمٍ أبوها\" لماذا كان \"قائم\" مجروراً ومذكراً؟",
+        options: ["لأنه نعت سببي يتبع المنعوت في الجر، ويذكر لأنه يصف الأب المذكر", "لأنه نعت حقيقي يتبع المنعوت في الجر والتذكير", "لأنه خبر لمبتدأ محذوف", "لأنه حال منصوب"],
+        correct: 0,
+        explanation: "\"قائم\" نعت سببي مجرور لأنه يتبع المنعوت \"امرأة\" في الجر، ولكنه مذكر لأنه يصف \"أبوها\" المذكر. (Na'at sababi majrur, mudzakkar karena mensifati ayah.)"
+      },
+      {
+        question: "\"جاء زيدٌ وعمروٌ إلا بكراً\" ما إعراب \"بكراً\"؟",
+        options: ["مستثنى منصوب", "معطوف على زيد منصوب", "نعت منصوب", "مفعول به منصوب"],
+        correct: 0,
+        explanation: "\"بكراً\" مستثنى بإلا منصوب، وليس معطوفاً، لأن الاستثناء له حكم خاص. (Mustatsna dengan illa manshub.)"
+      },
+      {
+        question: "\"رأيتُ الذي فهم الدرسَ\" إعراب \"الذي\" هنا هو:",
+        options: ["اسم موصول مبني على السكون في محل نصب مفعول به", "اسم موصول مبني على الفتح في محل رفع فاعل", "اسم موصول معرب منصوب", "اسم إشارة مبني"],
+        correct: 0,
+        explanation: "\"الذي\" اسم موصول مبني على السكون في محل نصب مفعول به، لأنه وقع بعد فعل متعدٍ. (Mabni, mahall nashab maf'ul bih.)"
+      },
+      {
+        question: "\"سواء عليهم أأنذرتهم أم لم تنذرهم\" ما نوع \"أم\" هنا؟",
+        options: ["منقطعة بمعنى بل", "متصلة بمعنى أو", "متصلة بمعنى الواو", "منقطعة بمعنى لكن"],
+        correct: 1,
+        explanation: "\"أم\" هنا متصلة بمعنى \"أو\"، لأنها جاءت بعد همزة التسوية \"أأنذرتهم\"، وهي تعادل ما قبلها وما بعدها. (Am muttashilah = au.)"
+      },
+      {
+        question: "\"أم يقولون شاعر\" ما نوع \"أم\" هنا؟",
+        options: ["متصلة بمعنى أو", "منقطعة بمعنى بل", "متصلة بمعنى الواو", "منقطعة بمعنى لكن"],
+        correct: 1,
+        explanation: "\"أم\" هنا منقطعة بمعنى \"بل\" للإضراب، لأن ما بعدها غير معادل لما قبلها. (Am munqathi'ah = bal.)"
+      },
+      {
+        question: "\"جاء زيدٌ الفاضلُ\" إذا أردنا جعل \"الفاضل\" نعتاً سببياً لمنعوت محذوف، نقول:",
+        options: ["جاء زيدٌ الفاضلُ أبوهُ", "جاء زيدٌ الفاضلَ أبوهُ", "جاء زيدٌ الفاضلِ أبوهُ", "جاء زيدٌ فاضلٌ أبوهُ"],
+        correct: 0,
+        explanation: "الصحيح \"جاء زيدٌ الفاضلُ أبوهُ\" لأن النعت السببي يتبع المنعوت في الرفع، فيكون \"الفاضل\" مرفوعاً. (Na'at sababi marfu'.)"
+      },
+      {
+        question: "\"مررتُ بزيدٍ الفاضلِ أبوهُ\" لماذا كان \"الفاضل\" مجروراً؟",
+        options: ["لأنه نعت حقيقي مجرور", "لأنه نعت سببي يتبع المنعوت في الجر", "لأنه مضاف إليه مجرور", "لأنه بدل مجرور"],
+        correct: 1,
+        explanation: "\"الفاضل\" نعت سببي مجرور لأنه يتبع المنعوت \"زيد\" في الجر، مع أنه يصف \"أبوه\" المذكور بعده. (Na'at sababi majrur.)"
+      },
+      {
+        question: "\"جاء الذي فهم الدرسَ\" إذا أردنا نعته، نقول:",
+        options: ["جاء الذي فهم الدرسَ الفاضلُ", "جاء الفاضلُ الذي فهم الدرسَ", "جاء الذي الفاضلُ فهم الدرسَ", "جاء الذي فهم الدرسَ الفاضلَ"],
+        correct: 0,
+        explanation: "الصحيح \"جاء الذي فهم الدرسَ الفاضلُ\" لأن النعت \"الفاضل\" يجب أن يتبع المنعوت \"الذي\" في الرفع، فيكون مرفوعاً. (Na'at mengikuti man'ut dalam rafa'.)"
+      },
+      {
+        question: "\"رأيتُ زيداً العاقلَ\" إذا أردنا جعل \"العاقل\" نعتاً سببياً، نقول:",
+        options: ["رأيتُ زيداً العاقلَ أبوهُ", "رأيتُ زيداً العاقلُ أبوهُ", "رأيتُ زيداً العاقلِ أبوهُ", "رأيتُ زيداً عاقلاً أبوهُ"],
+        correct: 0,
+        explanation: "الصحيح \"رأيتُ زيداً العاقلَ أبوهُ\" لأن النعت السببي يتبع المنعوت في النصب، فيكون \"العاقل\" منصوباً. (Na'at sababi manshub.)"
+      },
+      {
+        question: "\"مررتُ بامرأةٍ قائمةٍ أمها\" ما إعراب \"قائمة\"؟",
+        options: ["نعت حقيقي مجرور", "نعت سببي مجرور", "نعت سببي منصوب", "نعت حقيقي منصوب"],
+        correct: 0,
+        explanation: "\"قائمة\" نعت حقيقي مجرور لأنه يصف \"امرأة\" نفسها، وهو مؤنث تابع للمنعوت في التأنيث. (Na'at haqiqi majrur.)"
+      },
+      {
+        question: "\"مررتُ بامرأةٍ قائمٍ أبوها\" ما إعراب \"قائم\"؟",
+        options: ["نعت حقيقي مجرور", "نعت سببي مجرور", "نعت سببي مرفوع", "حال منصوب"],
+        correct: 1,
+        explanation: "\"قائم\" نعت سببي مجرور لأنه يتبع المنعوت \"امرأة\" في الجر، ولكنه يصف \"أبوها\" المذكر. (Na'at sababi majrur.)"
+      },
+      {
+        question: "\"جاء الرجلُ الفاضلُ ابنُهُ\" ما نوع النعت؟",
+        options: ["نعت حقيقي", "نعت سببي", "نعت منصوب", "نعت مجرور"],
+        correct: 1,
+        explanation: "هذا نعت سببي، لأن \"الفاضل\" يصف \"ابنه\" وليس \"الرجل\" مباشرة. (Na'at sababi.)"
+      },
+      {
+        question: "\"رأيتُ الرجلَ الفاضلَ ابنَهُ\" إعراب \"الفاضل\" هو:",
+        options: ["نعت حقيقي منصوب", "نعت سببي منصوب", "نعت سببي مرفوع", "نعت حقيقي مرفوع"],
+        correct: 1,
+        explanation: "\"الفاضل\" نعت سببي منصوب، لأنه يتبع المنعوت \"الرجل\" في النصب، ويصف \"ابنه\" المذكور بعده. (Na'at sababi manshub.)"
+      },
+      {
+        question: "\"مررتُ بزيدٍ العاقلِ أبيهِ\" إعراب \"العاقل\" هو:",
+        options: ["نعت حقيقي مجرور", "نعت سببي مجرور", "نعت سببي منصوب", "نعت حقيقي منصوب"],
+        correct: 1,
+        explanation: "\"العاقل\" نعت سببي مجرور، يتبع المنعوت \"زيد\" في الجر، ويصف \"أبيه\" المذكور بعده. (Na'at sababi majrur.)"
+      },
+      {
+        question: "\"جاء زيدٌ وعمروٌ ثم بكرٌ\" ما الفرق بين \"ثم\" هنا وبين \"الفاء\" لو حلت محلها؟",
+        options: ["\"ثم\" تفيد التراخي، والفاء تفيد التعقيب", "\"ثم\" تفيد التعقيب، والفاء تفيد التراخي", "كلاهما يفيد الترتيب المطلق", "كلاهما يفيد الجمع المطلق"],
+        correct: 0,
+        explanation: "\"ثم\" تفيد الترتيب مع التراخي (تأخير)، بينما الفاء تفيد الترتيب مع التعقيب (فوراً). (Tsumma = tarakhi, fa' = ta'qib.)"
+      },
+      {
+        question: "\"أكرمتُ زيداً فأباه\" إعراب \"أباه\" هو:",
+        options: ["معطوف على زيد منصوب بالألف", "مفعول به منصوب بالفتحة", "نعت منصوب", "بدل منصوب"],
+        correct: 0,
+        explanation: "\"أباه\" معطوف على \"زيداً\" بحرف العطف \"الفاء\"، والمعطوف على المنصوب منصوب، وعلامة نصبه الألف لأنه من الأسماء الخمسة. (Ma'thuf manshub dengan alif.)"
+      },
+      {
+        question: "\"ما قام زيدٌ لكنْ عمروٌ\" ما إعراب \"عمرو\" هنا؟",
+        options: ["مبتدأ مرفوع", "معطوف على زيد مرفوع", "فاعل مرفوع", "خبر مرفوع"],
+        correct: 1,
+        explanation: "\"عمرو\" معطوف على \"زيد\" بحرف العطف \"لكن\"، والمعطوف على المرفوع مرفوع. (Ma'thuf marfu'.)"
+      },
+      {
+        question: "\"جاء زيدٌ العاقلُ\" إذا أردنا جعل \"العاقل\" نعتاً لزيد مع إضافة وصف آخر، أي العبارات التالية صحيحة؟",
+        options: ["جاء زيدٌ العاقلُ الكريمُ", "جاء زيدٌ العاقلَ الكريمَ", "جاء زيدٌ العاقلُ الكريمَ", "جاء زيدٌ العاقلَ الكريمُ"],
+        correct: 0,
+        explanation: "الصحيح \"جاء زيدٌ العاقلُ الكريمُ\" لأن النعتين يتبعان المنعوت في الرفع، فيكونان مرفوعين. (Keduanya na'at marfu'.)"
+      },
+      {
+        question: "\"مررتُ بامرأةٍ قائمٍ أبوها وقاعدةٍ أمها\" هذه الجملة:",
+        options: ["صحيحة", "خاطئة لأن \"قاعدة\" يجب أن تكون مرفوعة", "خاطئة لأن \"قاعدة\" يجب أن تكون مجرورة", "خاطئة لأن \"قاعدة\" يجب أن تكون منصوبة"],
+        correct: 0,
+        explanation: "الجملة صحيحة، لأن \"قائم\" نعت سببي مجرور يصف الأب، و\"قاعدة\" نعت سببي مجرور يصف الأم، وكلاهما تابع للمنعوت \"امرأة\" في الجر. (Kalimat benar, keduanya na'at sababi majrur.)"
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-next" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        // Ganti dengan link pelajaran selanjutnya jika ada
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/013.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>
