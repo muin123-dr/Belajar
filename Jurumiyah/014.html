@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Quiz Al-Ajurumiyah - المصدر والظرف والحال والتمييز</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f3e5f5;  /* soft purple background */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(142, 68, 173, 0.2);
+      border: 1px solid #8e44ad;
+    }
+
+    .main-menu {
+      text-align: center;
+      color: #4a235a;
+      padding: 30px 16px;
+    }
+
+    .main-menu h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 4px 4px 0 #d2b4de;
+      letter-spacing: 1px;
+      color: #4a235a;
+    }
+
+    .main-menu .level-badge {
+      background: #8e44ad;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      margin: 16px 0 30px;
+      box-shadow: 0 8px 0 #5e2a73;
+      word-break: break-word;
+    }
+
+    .btn-mulai {
+      background: #8e44ad;
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #5e2a73, 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.1s ease;
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-mulai:active {
+      transform: translateY(8px);
+      box-shadow: 0 4px 0 #5e2a73, 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-screen {
+      color: #4a235a;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid #8e44ad;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .quiz-header .level-small {
+      background: #8e44ad;
+      color: #ffffff;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-header .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      background: #f3e5f5;
+      padding: 6px 16px;
+      border-radius: 40px;
+      color: #4a235a;
+      border: 1px solid #8e44ad;
+    }
+
+    .nav-grid-btn {
+      background: #f3e5f5;
+      border: 1px solid #8e44ad;
+      color: #4a235a;
+      font-size: 1.2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-grid-btn:hover {
+      background: #d2b4de;
+    }
+
+    .question-box {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 24px 18px;
+      margin-bottom: 20px;
+      border: 1px solid #8e44ad;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+    }
+
+    .question-text {
+      font-family: 'Amiri', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #4a235a;
+      word-break: break-word;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-item {
+      background: #f9f9f9;
+      border: 2px solid #8e44ad;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-family: 'Amiri', serif;
+      font-size: 1.2rem;
+      color: #4a235a;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: right;
+      direction: rtl;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .option-item:hover:not(.disabled-option) {
+      background: #f3e5f5;
+      border-color: #5e2a73;
+    }
+
+    .option-item.selected {
+      background: #8e44ad;
+      color: #ffffff;
+      font-weight: 700;
+      border-color: #8e44ad;
+      box-shadow: 0 0 15px #8e44ad;
+    }
+
+    .disabled-option {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .option-prefix {
+      background: #5e2a73;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .selected .option-prefix {
+      background: #ffffff;
+      color: #8e44ad;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #4a235a;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .notification-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .notification-card {
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 28px 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
+      animation: pop 0.3s;
+      border: 2px solid #8e44ad;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .notification-card.benar {
+      background: #e6ffe6;
+      border: 4px solid #4caf50;
+    }
+
+    .notification-card.salah {
+      background: #ffe6e6;
+      border: 4px solid #f44336;
+    }
+
+    .notification-card.selesai {
+      background: #f3e5f5;
+      border: 4px solid #8e44ad;
+    }
+
+    .notif-icon {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .notif-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #4a235a;
+    }
+
+    .notif-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .notif-btn {
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+    }
+
+    .notif-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+    }
+
+    .btn-next {
+      background: #8e44ad;
+      color: #ffffff;
+    }
+
+    .btn-ulangi {
+      background: #ff9800;
+      color: #ffffff;
+    }
+
+    .btn-penjelasan {
+      background: #9c27b0;
+      color: #ffffff;
+    }
+
+    .explanation-box {
+      background: #f0f4f8;
+      border-radius: 24px;
+      padding: 18px;
+      margin-top: 24px;
+      text-align: left;
+      color: #4a235a;
+      font-size: 0.95rem;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 2px solid #8e44ad;
+      direction: ltr;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .nav-panel-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .nav-panel {
+      background: #ffffff;
+      border-radius: 40px;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid #8e44ad;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .nav-panel h3 {
+      color: #4a235a;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .nav-item {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f4f8;
+      border: 2px solid #8e44ad;
+      border-radius: 12px;
+      color: #4a235a;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-item.answered {
+      background: #4caf50;
+      border-color: #388e3c;
+      color: #ffffff;
+    }
+
+    .nav-item.unanswered {
+      background: #ffe6e6;
+      border-color: #f44336;
+    }
+
+    .nav-item:hover {
+      transform: scale(1.05);
+      border-color: #8e44ad;
+      background: #8e44ad;
+      color: #ffffff;
+    }
+
+    .btn-tutup-panel {
+      background: #8e44ad;
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appContainer">
+  <div id="mainMenu" class="main-menu">
+    <h1>Quiz Al-Ajurumiyah</h1>
+    <div class="level-badge"><i class="fas fa-star"></i> المصدر والظرف والحال والتمييز <i class="fas fa-star"></i></div>
+    <button class="btn-mulai" id="btnMulai"><i class="fas fa-play"></i> Mulai</button>
+    <div style="margin-top: 30px; font-size: 0.85rem; opacity: 0.7;">60 soal • berdasarkan penjelasan ulama nahwu</div>
+  </div>
+
+  <div id="quizScreen" class="quiz-screen hidden">
+    <div class="quiz-header">
+      <span class="level-small"><i class="fas fa-flag"></i> المصدر والظرف والحال والتمييز</span>
+      <span class="progress" id="progressIndicator">1/60</span>
+      <button class="nav-grid-btn" id="openNavGrid"><i class="fas fa-th"></i></button>
+    </div>
+    <div class="question-box">
+      <div class="question-text" id="questionText">Memuat soal...</div>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="footer">— المصدر والظرف والحال والتمييز - شرح المتون النحوية —</div>
+  </div>
+</div>
+
+<div id="navPanelOverlay" class="nav-panel-overlay hidden">
+  <div class="nav-panel">
+    <h3><i class="fas fa-list"></i> Pilih Soal</h3>
+    <div class="nav-grid" id="navGrid"></div>
+    <button class="btn-tutup-panel" id="closeNavPanel"><i class="fas fa-times"></i> Tutup</button>
+  </div>
+</div>
+
+<div id="notificationOverlay" class="notification-overlay hidden">
+  <div class="notification-card" id="notificationCard">
+    <div class="notif-icon" id="notifIcon">✅</div>
+    <div class="notif-title" id="notifTitle">Benar</div>
+    <div class="notif-buttons" id="notifButtons"></div>
+    <div id="explanationArea" class="explanation-box hidden"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 60 SOAL - المصدر، ظرف الزمان والمكان، الحال، التمييز (20 mudah, 20 sedang, 20 sulit)
+    const questions = [
+      // ========== MUDAH (1-20) ==========
+      {
+        question: "ما هو المصدر في اللغة العربية؟",
+        options: ["اسم يدل على حدث مجرد من الزمن", "اسم يدل على زمان الفعل", "اسم يدل على مكان الفعل", "اسم يدل على هيئة الفاعل"],
+        correct: 0,
+        explanation: "المصدر هو اسم يدل على حدث غير مقترن بزمن، وهو أصل الاشتقاق كما في النص: 'المصدر هو الاسم المنصوب الذي يجيء ثالثاً في تصريف الفعل'. (Masdar adalah isim yang menunjukkan kejadian tanpa waktu, dan merupakan asal derivasi.)"
+      },
+      {
+        question: "كم قسمًا للمصدر ذكره المؤلف؟",
+        options: ["قسمان: لفظي ومعنوي", "ثلاثة أقسام", "أربعة أقسام", "خمسة أقسام"],
+        correct: 0,
+        explanation: "قال المؤلف: 'وهو قسمان: لفظي ومعنوي'. (Penulis menyebutkan dua macam: lafdzi dan ma'nawi.)"
+      },
+      {
+        question: "أي من الأمثلة التالية مصدر لفظي؟",
+        options: ["جلست قعوداً", "قمت وقوفاً", "ضربت ضرباً", "ذهبت ذهاباً"],
+        correct: 2,
+        explanation: "المصدر اللفظي هو ما وافق فعله في لفظه ومعناه، و'ضربت ضرباً' وافق الفعل في المادة. (Masdar lafdzi sesuai dengan fi'ilnya dalam lafal dan makna, contoh 'dharabtu dharaban'.)"
+      },
+      {
+        question: "\"جلست قعوداً\" هذا المصدر يعتبر:",
+        options: ["لفظي", "معنوي", "نائب عن المصدر", "ظرف زمان"],
+        correct: 1,
+        explanation: "لأنه وافق الفعل في المعنى دون اللفظ، فالفعل 'جلس' والمصدر 'قعوداً' مختلفان لفظاً. (Karena sesuai makna tapi berbeda lafal, fi'il 'jalasa' dan masdar 'qu'udan' berbeda.)"
+      },
+      {
+        question: "ما هو ظرف الزمان؟",
+        options: ["اسم الزمان المنصوب بتقدير 'في'", "اسم المكان المنصوب بتقدير 'في'", "اسم يدل على حدث", "اسم يدل على هيئة"],
+        correct: 0,
+        explanation: "ظرف الزمان هو اسم الزمان المنصوب بتقدير 'في' كما في النص. (Zharf zaman adalah isim zaman yang dinashabkan dengan taqdir 'fi'.)"
+      },
+      {
+        question: "أي من التالية ظرف مكان؟",
+        options: ["اليوم", "الليلة", "أمام", "غداً"],
+        correct: 2,
+        explanation: "'أمام' من أسماء المكان المنصوبة على الظرفية. ('Amama' adalah isim makan yang dinashabkan sebagai zharf.)"
+      },
+      {
+        question: "\"صمت يوماً\" كلمة \"يوماً\" هنا:",
+        options: ["ظرف زمان", "مفعول به", "مصدر", "حال"],
+        correct: 1,
+        explanation: "لأنها لم تنصب على تقدير 'في'، بل هي مفعول به لفعل الصوم. (Karena tidak dinashabkan dengan taqdir 'fi', melainkan maf'ul bih.)"
+      },
+      {
+        question: "ما هو الحال؟",
+        options: ["الاسم المنصوب المفسر لهيئة الفاعل أو المفعول", "الاسم المنصوب المفسر للذوات", "الاسم المجرور", "الاسم المرفوع"],
+        correct: 0,
+        explanation: "الحال هو الاسم المنصوب المفسر لما انبهم من الهيئات. (Hal adalah isim manshub yang menjelaskan keadaan.)"
+      },
+      {
+        question: "\"جاء زيد راكباً\" كلمة \"راكباً\" تعرب:",
+        options: ["حال منصوب", "نعت منصوب", "مفعول به", "خبر"],
+        correct: 0,
+        explanation: "'راكباً' حال من الفاعل 'زيد' منصوب بالفتحة. ('Rakiban' adalah hal dari fa'il 'Zaid', manshub.)"
+      },
+      {
+        question: "لا يكون الحال إلا:",
+        options: ["نكرة", "معرفة", "مرفوعاً", "مجروراً"],
+        correct: 0,
+        explanation: "نص المؤلف: 'ولا يكون الحال إلا نكرة'. (Penulis menyatakan bahwa hal harus nakirah.)"
+      },
+      {
+        question: "ما هو التمييز؟",
+        options: ["الاسم المنصوب المفسر للذوات", "الاسم المنصوب المفسر للهيئات", "الاسم المجرور", "الاسم المرفوع"],
+        correct: 0,
+        explanation: "التمييز هو الاسم المنصوب المفسر لما انبهم من الذوات. (Tamyiz adalah isim manshub yang menjelaskan dzat.)"
+      },
+      {
+        question: "\"تصبب زيد عرقاً\" كلمة \"عرقاً\" تعرب:",
+        options: ["تمييز منصوب", "حال منصوب", "مفعول به", "مصدر"],
+        correct: 0,
+        explanation: "'عرقاً' تمييز محول عن الفاعل، أصله 'تصبب عرق زيد'. ('Araqan' adalah tamyiz yang ditransfer dari fa'il.)"
+      },
+      {
+        question: "أي من هذه ألفاظ الظرفية؟",
+        options: ["ثم (بفتح الثاء)", "ثم (بضم الثاء)", "هنا", "كلاهما صحيح"],
+        correct: 3,
+        explanation: "'ثم' بفتح الثاء ظرف مكان للبعيد، و'هنا' ظرف مكان للقريب. (Tsumma (dengan fathah) zharf untuk tempat jauh, 'huna' untuk dekat.)"
+      },
+      {
+        question: "\"وحدك\" في قول \"اجتهد وحدك\" يعرب:",
+        options: ["حال", "تمييز", "مفعول مطلق", "نعت"],
+        correct: 0,
+        explanation: "هي حال مؤولة بمعنى 'منفرداً' مع أنها معرفة. (Ini hal yang ditakwilkan dengan 'munfaridan' meskipun ma'rifah.)"
+      },
+      {
+        question: "\"اشتريت عشرين كتاباً\" كلمة \"كتاباً\" تعرب:",
+        options: ["تمييز منصوب", "مفعول به", "حال", "نعت"],
+        correct: 0,
+        explanation: "تمييز العدد بعد 'عشرين' منصوب. (Tamyiz bilangan setelah 'isyrina' manshub.)"
+      },
+      {
+        question: "\"زيد أكرم منك أباً\" كلمة \"أباً\" تعرب:",
+        options: ["تمييز منصوب", "مفعول به", "حال", "بدل"],
+        correct: 0,
+        explanation: "تمييز بعد اسم التفضيل. (Tamyiz setelah isim tafdhil.)"
+      },
+      {
+        question: "ما هو المصدر المعنوي؟",
+        options: ["ما وافق فعله في لفظه ومعناه", "ما وافق فعله في معناه دون لفظه", "ما دل على زمان", "ما دل على مكان"],
+        correct: 1,
+        explanation: "المصدر المعنوي يوافق الفعل في المعنى فقط. (Masdar ma'nawi hanya sesuai makna dengan fi'ilnya.)"
+      },
+      {
+        question: "\"ضربت أشد الضرب\" كلمة \"أشد\" تعرب:",
+        options: ["نائب عن المصدر منصوب", "مصدر منصوب", "مفعول به", "حال"],
+        correct: 0,
+        explanation: "'أشد' نائب عن المصدر لأنه مضاف إلى المصدر. ('Asyadd' adalah na'ib (pengganti) masdar karena mudhaf ke masdar.)"
+      },
+      {
+        question: "\"وقفت خلف الباب\" كلمة \"خلف\" تعرب:",
+        options: ["ظرف مكان منصوب", "مفعول به", "مصدر", "حال"],
+        correct: 0,
+        explanation: "ظرف مكان منصوب على الظرفية. (Zharf makan manshub.)"
+      },
+      {
+        question: "\"ركبت الفرس مسرجاً\" كلمة \"مسرجاً\" تعرب:",
+        options: ["حال من المفعول به", "نعت", "تمييز", "مصدر"],
+        correct: 0,
+        explanation: "حال من الفرس (المفعول به) منصوب. (Hal dari al-faras (maf'ul bih) manshub.)"
+      },
+      // ========== SEDANG (21-40) ==========
+      {
+        question: "أي من الجمل التالية تحتوي على مصدر لفظي؟",
+        options: ["جلست قعوداً", "قمت وقوفاً", "أكلت أكلاً", "ذهبت إياباً"],
+        correct: 2,
+        explanation: "'أكلت أكلاً' وافق الفعل في المادة (أ-ك-ل)، فهو لفظي. ('Akaltu aklan' sesuai dengan fi'il dalam materi huruf, jadi lafdzi.)"
+      },
+      {
+        question: "\"أنبتكم نباتاً\" ما نوع \"نباتاً\"؟",
+        options: ["مصدر لفظي", "مصدر معنوي", "اسم مصدر", "ظرف"],
+        correct: 2,
+        explanation: "قال النحاة: إذا لم يوافق المصدر فعله في الحروف فهو اسم مصدر، فـ 'نباتاً' اسم مصدر لأن فعله 'أنبت' ومصدره 'إنبات'. (Ini isim masdar karena tidak sesuai huruf dengan fi'ilnya.)"
+      },
+      {
+        question: "\"صليت قدام المأمومين\" كلمة \"قدام\" تعرب:",
+        options: ["ظرف مكان منصوب بالفتحة", "ظرف مكان منصوب بالفتحة المقدرة", "مفعول به", "حال"],
+        correct: 0,
+        explanation: "'قدام' ظرف مكان منصوب بالفتحة الظاهرة، وهو مضاف و'المأمومين' مضاف إليه مجرور بالياء. ('Quddama' zharf makan manshub dengan fathah, mudhaf, dan 'al-ma'mumin' mudhaf ilaih majrur.)"
+      },
+      {
+        question: "\"جلست تحت الشجرة\" كلمة \"تحت\" تعرب:",
+        options: ["ظرف مكان منصوب", "مفعول به", "اسم مجرور", "مبتدأ"],
+        correct: 0,
+        explanation: "'تحت' ظرف مكان منصوب بالفتحة. ('Tahta' zharf makan manshub.)"
+      },
+      {
+        question: "\"مررت بامرأة قائمة\" كلمة \"قائمة\" هنا:",
+        options: ["حال", "نعت", "تمييز", "مفعول به"],
+        correct: 1,
+        explanation: "لأنها نعت لـ 'امرأة' مجرورة، وليست حالاً لأنها ليست منصوبة. (Ini na'at karena mengikuti man'ut dalam jar, bukan hal karena tidak manshub.)"
+      },
+      {
+        question: "\"جاء زيد يضحك\" جملة \"يضحك\" في محل:",
+        options: ["نصب حال", "رفع خبر", "جر مضاف إليه", "نصب مفعول به"],
+        correct: 0,
+        explanation: "الجملة الفعلية في محل نصب حال. (Jumlah fi'liyah di tempat nashab sebagai hal.)"
+      },
+      {
+        question: "\"شربت اللبن ساخناً\" كلمة \"ساخناً\" تعرب:",
+        options: ["حال من اللبن", "نعت", "تمييز", "مفعول به"],
+        correct: 0,
+        explanation: "حال من المفعول به 'اللبن' منصوب. (Hal dari maf'ul bih 'al-laban' manshub.)"
+      },
+      {
+        question: "\"زيد أكثر منك مالاً\" كلمة \"مالاً\" تعرب:",
+        options: ["تمييز منصوب", "مفعول به", "حال", "مصدر"],
+        correct: 0,
+        explanation: "تمييز بعد اسم التفضيل. (Tamyiz setelah isim tafdhil.)"
+      },
+      {
+        question: "\"اشتريت ملء الصاع براً\" كلمة \"براً\" تعرب:",
+        options: ["تمييز منصوب", "مفعول به", "حال", "بدل"],
+        correct: 0,
+        explanation: "تمييز لنوع الملء. (Tamyiz untuk jenis al-mal'u.)"
+      },
+      {
+        question: "\"وَفَجَّرْنَا الْأَرْضَ عُيُونًا\" كلمة \"عيوناً\" تعرب:",
+        options: ["تمييز محول عن المفعول به", "مفعول به", "حال", "بدل"],
+        correct: 0,
+        explanation: "تمييز محول عن المفعول به، والأصل 'فجرنا عيون الأرض'. (Tamyiz muhawwal 'an al-maf'ul bih.)"
+      },
+      {
+        question: "\"هذا بابٌ حديدٌ\" كلمة \"حديد\" تعرب:",
+        options: ["نعت", "حال", "تمييز", "بدل"],
+        correct: 0,
+        explanation: "نعت لـ 'باب' لأنه وصفه. (Na'at karena mensifati 'bab'.)"
+      },
+      {
+        question: "\"ضربت ضرباً شديداً\" كلمة \"شديداً\" تعرب:",
+        options: ["نعت للمصدر", "حال", "تمييز", "مفعول به"],
+        correct: 0,
+        explanation: "نعت منصوب للمصدر 'ضرباً'. (Na'at manshub untuk masdar 'dharaban'.)"
+      },
+      {
+        question: "\"اجتهد وحدك\" كلمة \"وحدك\" تعرب:",
+        options: ["حال", "تمييز", "مفعول مطلق", "نعت"],
+        correct: 0,
+        explanation: "حال منصوب بمعنى 'منفرداً'. (Hal manshub dengan arti 'munfaridan'.)"
+      },
+      {
+        question: "\"عندي درهم\" كلمة \"عندي\" تعرب:",
+        options: ["ظرف مكان منصوب", "مفعول به", "مبتدأ", "خبر"],
+        correct: 0,
+        explanation: "'عند' ظرف مكان منصوب على الظرفية، والياء مضاف إليه. ('Inda' zharf makan manshub, ya' mudhaf ilaih.)"
+      },
+      {
+        question: "\"مررت بزيد قائماً\" هذه الجملة:",
+        options: ["صحيحة", "خاطئة لأن الحال لا تأتي من المجرور", "خاطئة لأن صاحب الحال مجرور", "صحيحة لأن الحال تأتي من المجرور"],
+        correct: 3,
+        explanation: "الحال تأتي من المجرور، كما في النص: 'نظرت إلى الشجرة مزهرة'. (Hal bisa berasal dari majrur.)"
+      },
+      {
+        question: "\"اشتريت عشرين كتاباً\" لماذا نصبت \"كتاباً\"؟",
+        options: ["لأنه تمييز للعدد", "لأنه مفعول به", "لأنه حال", "لأنه مصدر"],
+        correct: 0,
+        explanation: "تمييز العدد منصوب بعد 'عشرين' وأخواتها. (Tamyiz bilangan manshub setelah 'isyrina'.)"
+      },
+      {
+        question: "\"قُمْ وقوفاً\" هذا المصدر:",
+        options: ["لفظي", "معنوي", "نائب عن المصدر", "ظرف"],
+        correct: 1,
+        explanation: "'وقوفاً' معنوي لأنه يخالف الفعل 'قام' في اللفظ. (Ma'nawi karena berbeda lafal dengan fi'il 'qama'.)"
+      },
+      {
+        question: "\"أكلت كل الأكل\" كلمة \"كل\" تعرب:",
+        options: ["نائب عن المصدر منصوب", "مفعول به", "توكيد", "مضاف إليه"],
+        correct: 0,
+        explanation: "'كل' نائب عن المصدر لأنه مضاف إلى المصدر 'الأكل'. ('Kull' adalah na'ib 'an al-masdar karena mudhaf ke masdar.)"
+      },
+      {
+        question: "\"أعجبني أخوك إعجاباً\" كلمة \"إعجاباً\" تعرب:",
+        options: ["مصدر لفظي", "مصدر معنوي", "تمييز", "حال"],
+        correct: 0,
+        explanation: "مصدر لفظي لأن الفعل 'أعجب' والمصدر 'إعجاباً' من مادة واحدة. (Masdar lafdzi karena fi'il dan masdar satu materi.)"
+      },
+      {
+        question: "\"بيتنا حذاء المسجد\" كلمة \"حذاء\" تعرب:",
+        options: ["ظرف مكان منصوب", "مفعول به", "خبر", "نعت"],
+        correct: 0,
+        explanation: "'حذاء' ظرف مكان منصوب بالفتحة. ('Hadza'a' zharf makan manshub.)"
+      },
+      // ========== SULIT (41-60) ==========
+      {
+        question: "\"ضربت أشد الضرب\" ما إعراب \"أشد\"؟",
+        options: ["مفعول مطلق منصوب", "نائب عن المصدر منصوب", "مفعول به منصوب", "حال منصوب"],
+        correct: 1,
+        explanation: "'أشد' نائب عن المصدر لأنه مضاف إلى المصدر 'الضرب'، وهو منصوب بالفتحة. ('Asyadd' na'ib 'an al-masdar karena mudhaf ke masdar, manshub.)"
+      },
+      {
+        question: "\"وَفَجَّرْنَا الْأَرْضَ عُيُونًا\" ما نوع التمييز هنا؟",
+        options: ["تمييز العدد", "تمييز محول عن الفاعل", "تمييز محول عن المفعول به", "تمييز بعد اسم التفضيل"],
+        correct: 2,
+        explanation: "محول عن المفعول به، لأن الأصل 'فجرنا عيون الأرض'. (Muhawwal 'an al-maf'ul bih, asalnya 'fajjarna 'uyun al-ardh'.)"
+      },
+      {
+        question: "\"تصبب زيد عرقاً\" إذا حولته إلى فاعل تصبح:",
+        options: ["تصبب عرق زيد", "تصبب زيد عرقاً", "عرق زيد تصبب", "تصبب عرقاً زيد"],
+        correct: 0,
+        explanation: "التحويل: 'تصبب عرق زيد' فيكون 'عرق' فاعلاً. (Menjadi 'tashabbaba 'arqu Zaidin' maka 'arqu' menjadi fa'il.)"
+      },
+      {
+        question: "\"زيد أكرم منك أباً\" لماذا لم تنصب \"أباً\" بالألف مع أنه من الأسماء الخمسة؟",
+        options: ["لأنه ليس مضافاً", "لأنه نكرة", "لأنه تمييز", "لأنه مفرد"],
+        correct: 0,
+        explanation: "شروط الأسماء الخمسة أن تكون مضافة، و'أباً' هنا ليس مضافاً بل تمييز منصوب بالفتحة. (Syarat asmaul khamsah adalah mudhaf, sedangkan 'aban' di sini bukan mudhaf.)"
+      },
+      {
+        question: "\"جاء زيد راكباً\" و \"جاء زيد راكب\" ما الفرق؟",
+        options: ["الأولى حال والثانية نعت", "الأولى نعت والثانية حال", "كلاهما حال", "كلاهما نعت"],
+        correct: 0,
+        explanation: "'راكباً' حال منصوب، و'راكب' بالرفع نعت لأن المنعوت مرفوع. ('Rakiban' hal manshub, 'rakib' na'at marfu'.)"
+      },
+      {
+        question: "\"مررت بامرأة قائمٍ أبوها\" إعراب \"قائم\" هو:",
+        options: ["نعت حقيقي مجرور", "نعت سببي مجرور", "حال منصوب", "تمييز منصوب"],
+        correct: 1,
+        explanation: "نعت سببي مجرور يتبع المنعوت في الجر، وهو مذكر لأنه يصف الأب. (Na'at sababi majrur, mudzakkar karena mensifati ayah.)"
+      },
+      {
+        question: "\"أكلت السمكة حتى رأسها\" إذا كانت \"حتى\" حرف عطف، فما إعراب \"رأسها\"؟",
+        options: ["مفعول به منصوب", "معطوف على السمكة منصوب", "مجرور بحتى", "بدل منصوب"],
+        correct: 1,
+        explanation: "تكون 'رأسها' معطوفاً على 'السمكة' منصوباً. (Menjadi ma'thuf 'ala as-samakah manshub.)"
+      },
+      {
+        question: "\"أكلت السمكة حتى رأسِها\" إذا كانت \"حتى\" حرف جر، فما معنى الجملة؟",
+        options: ["الرأس مأكول", "الرأس غير مأكول", "الرأس مأكول جزئياً", "الجملة خاطئة"],
+        correct: 1,
+        explanation: "إذا كانت 'حتى' جر، فالرأس غير مأكول، لأن نهاية الغاية غير داخلة. (Jika 'hatta' jar, maka kepala tidak dimakan.)"
+      },
+      {
+        question: "\"ضربت ضرباً\" و \"ضربت ضرب\" ما الفرق؟",
+        options: ["الأولى صحيحة والثانية خطأ لأن المصدر منصوب", "كلاهما صحيح", "الأولى خطأ والثانية صحيحة", "كلاهما خطأ"],
+        correct: 0,
+        explanation: "المصدر يجب أن يكون منصوباً، فـ 'ضرب' بالرفع خطأ. (Masdar harus manshub, 'dharab' dengan rafa' salah.)"
+      },
+      {
+        question: "\"اشتريت العبد فتاك\" كلمة \"فتاك\" تعرب:",
+        options: ["بدل منصوب بفتحة مقدرة", "نعت منصوب", "تمييز منصوب", "حال منصوب"],
+        correct: 0,
+        explanation: "بدل كل من كل منصوب بفتحة مقدرة على الألف. (Badal kull min kull manshub dengan fathah muqaddarah.)"
+      },
+      {
+        question: "\"أكرمت إياك\" لماذا هذه العبارة غير صحيحة؟",
+        options: ["لأن 'إياك' ضمير منفصل والمقام يقتضي المتصل", "لأن 'أكرمت' تحتاج إلى مفعولين", "لأن 'إياك' مبنية على السكون", "لأن الضمير لا يكون مفعولاً به"],
+        correct: 0,
+        explanation: "إذا أمكن الإتيان بالضمير المتصل امتنع المنفصل، والصواب 'أكرمتك'. (Jika bisa menggunakan dhamir muttashil, maka munfashil dilarang.)"
+      },
+      {
+        question: "\"جاء القوم كلهم أجمعون\" ما إعراب \"أجمعون\"؟",
+        options: ["توكيد أول مرفوع بالواو", "توكيد ثان مرفوع بالواو", "بدل مرفوع بالواو", "نعت مرفوع بالواو"],
+        correct: 1,
+        explanation: "توكيد ثان بعد 'كلهم' مرفوع بالواو لأنه ملحق بجمع المذكر السالم. (Tawkiid kedua setelah 'kulluhum' marfu' dengan waw.)"
+      },
+      {
+        question: "\"مررتُ بامرأةٍ قائمٍ أبوها وقاعدةٍ أمها\" هذه الجملة:",
+        options: ["صحيحة", "خاطئة لأن 'قاعدة' يجب أن تكون مرفوعة", "خاطئة لأن 'قاعدة' يجب أن تكون مجرورة", "خاطئة لأن 'قاعدة' يجب أن تكون منصوبة"],
+        correct: 0,
+        explanation: "صحيحة، لأن 'قائم' نعت سببي مجرور للأب، و'قاعدة' نعت سببي مجرور للأم، وكلاهما تابع للمنعوت في الجر. (Benar, keduanya na'at sababi majrur.)"
+      },
+      {
+        question: "\"إِنَّ اللَّهَ غَفُورٌ رَحِيمٌ\" ما إعراب \"رَحِيمٌ\"؟",
+        options: ["خبر ثانٍ لإن مرفوع", "نعت لـ 'غفور' مرفوع", "بدل من 'غفور' مرفوع", "توكيد لـ 'غفور' مرفوع"],
+        correct: 0,
+        explanation: "خبر ثانٍ لإن مرفوع بالضمة. (Khabar kedua dari inna marfu'.)"
+      },
+      {
+        question: "\"فَسَجَدَ الْمَلَائِكَةُ كُلُّهُمْ أَجْمَعُونَ\" ما فائدة توكيد \"كلهم\" بـ \"أجمعون\"؟",
+        options: ["زيادة التوكيد والمبالغة", "التنويع في اللفظ", "بيان أن الملائكة كلهم سجدوا", "لا فائدة بل هو تكرار"],
+        correct: 0,
+        explanation: "التوكيد بـ 'كل' ثم بـ 'أجمع' يفيد زيادة التوكيد والمبالغة. (Pengukuhan dengan 'kull' kemudian 'ajma' memberikan penekanan tambahan.)"
+      },
+      {
+        question: "\"وَمَنْ يَفْعَلْ ذَلِكَ يَلْقَ أَثَامًا * يُضَاعَفْ لَهُ الْعَذَابُ\" ما إعراب \"يُضَاعَفْ\"؟",
+        options: ["فعل مضارع مجزوم بدل من 'يلق'", "فعل مضارع مرفوع", "فعل مضارع منصوب", "فعل ماض مبني"],
+        correct: 0,
+        explanation: "'يضاعف' بدل من 'يلق' في محل جزم. ('Yudha'af' badal dari 'yalqa' di tempat jazm.)"
+      },
+      {
+        question: "\"أكرمت زيداً وعمراً\" إذا أردت جعل \"عمراً\" بدلاً من \"زيداً\" فكيف تقول؟",
+        options: ["أكرمت زيداً عمراً", "أكرمت زيداً وعمراً", "أكرمت عمراً لا زيداً", "أكرمت زيداً ثم عمراً"],
+        correct: 0,
+        explanation: "بحذف حرف العطف، فتكون 'عمراً' بدلاً منصوباً. (Dengan membuang huruf 'athaf, maka 'Amran' menjadi badal manshub.)"
+      },
+      {
+        question: "\"اشتريت سكيناً مدية\" إذا كان السكين هو المدية، فما نوع البدل؟",
+        options: ["بدل كل من كل", "بدل بعض من كل", "بدل اشتمال", "بدل غلط"],
+        correct: 0,
+        explanation: "بدل كل من كل لأنهما متساويان. (Badal kull min kull karena keduanya sama.)"
+      },
+      {
+        question: "\"ضربت زيداً ضربت عمراً\" ما نوع هذا البدل؟",
+        options: ["بدل فعل من فعل", "بدل اشتمال", "بدل كل من كل", "بدل غلط"],
+        correct: 0,
+        explanation: "بدل فعل من فعل، والفعلان ماضيان. (Badal fi'il min fi'il, kedua fi'il madhi.)"
+      },
+      {
+        question: "\"إِيَّاكَ أَعْنِي وَاسْمَعِي يَا جَارَةُ\" ما إعراب \"إِيَّاكَ\"؟",
+        options: ["مفعول به منصوب مقدم", "مبتدأ مرفوع", "توكيد منصوب", "منادى منصوب"],
+        correct: 0,
+        explanation: "'إيا' ضمير منفصل مبني على السكون في محل نصب مفعول به مقدم. ('Iyya' dhamir munfashil mabni sukun di tempat nashab sebagai maf'ul bih yang didahulukan.)"
+      }
+    ];
+
+    // Elemen DOM
+    const mainMenu = document.getElementById('mainMenu');
+    const quizScreen = document.getElementById('quizScreen');
+    const btnMulai = document.getElementById('btnMulai');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressIndicator = document.getElementById('progressIndicator');
+    const notificationOverlay = document.getElementById('notificationOverlay');
+    const notificationCard = document.getElementById('notificationCard');
+    const notifIcon = document.getElementById('notifIcon');
+    const notifTitle = document.getElementById('notifTitle');
+    const notifButtons = document.getElementById('notifButtons');
+    const explanationArea = document.getElementById('explanationArea');
+    const openNavGrid = document.getElementById('openNavGrid');
+    const navPanelOverlay = document.getElementById('navPanelOverlay');
+    const navGrid = document.getElementById('navGrid');
+    const closeNavPanel = document.getElementById('closeNavPanel');
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(-1);
+    let answerSubmitted = false;
+
+    function saveAnswer(index, selectedIdx) {
+      userAnswers[index] = selectedIdx;
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      questionText.textContent = q.question;
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        const selectedClass = (userAnswers[currentIndex] === idx) ? ' selected' : '';
+        optionsHtml += `
+          <div class="option-item${selectedClass}" data-opt-index="${idx}">
+            <span class="option-prefix">${String.fromCharCode(65+idx)}</span>
+            <span style="flex:1">${opt}</span>
+          </div>
+        `;
+      });
+      optionsContainer.innerHTML = optionsHtml;
+      progressIndicator.textContent = `${currentIndex+1}/${questions.length}`;
+
+      if (userAnswers[currentIndex] !== -1) {
+        document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+        answerSubmitted = true;
+      } else {
+        answerSubmitted = false;
+      }
+    }
+
+    optionsContainer.addEventListener('click', (e) => {
+      const optDiv = e.target.closest('.option-item');
+      if (!optDiv) return;
+      if (answerSubmitted) return;
+
+      const idx = optDiv.dataset.optIndex;
+      if (idx === undefined) return;
+
+      answerSubmitted = true;
+      const selectedIdx = parseInt(idx);
+      const q = questions[currentIndex];
+      const isCorrect = (selectedIdx === q.correct);
+
+      saveAnswer(currentIndex, selectedIdx);
+      document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled-option'));
+      optDiv.classList.add('selected');
+
+      if (isCorrect) {
+        showCorrectNotification();
+      } else {
+        showWrongNotification();
+      }
+    });
+
+    function showCorrectNotification() {
+      notificationCard.className = 'notification-card benar';
+      notifIcon.innerHTML = '✅';
+      notifTitle.textContent = 'Benar!';
+      notifButtons.innerHTML = `<button class="notif-btn btn-next" id="btnNext"><i class="fas fa-arrow-right"></i> Soal Berikutnya</button>`;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnNext').addEventListener('click', () => {
+        hideNotification();
+        moveToNextQuestion();
+      });
+    }
+
+    function showWrongNotification() {
+      notificationCard.className = 'notification-card salah';
+      notifIcon.innerHTML = '❌';
+      notifTitle.textContent = 'Salah';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangi"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-penjelasan" id="btnPenjelasan"><i class="fas fa-info-circle"></i> Penjelasan</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangi').addEventListener('click', () => {
+        hideNotification();
+        resetForRetry();
+      });
+
+      document.getElementById('btnPenjelasan').addEventListener('click', () => {
+        if (explanationArea.classList.contains('hidden')) {
+          explanationArea.innerHTML = `<strong>Analisis:</strong> ${questions[currentIndex].explanation}`;
+          explanationArea.classList.remove('hidden');
+        } else {
+          explanationArea.classList.add('hidden');
+        }
+      });
+    }
+
+    function showCompletionNotification() {
+      notificationCard.className = 'notification-card selesai';
+      notifIcon.innerHTML = '🏆';
+      notifTitle.textContent = 'Alhamdulillah sudah selesai';
+      notifButtons.innerHTML = `
+        <button class="notif-btn btn-ulangi" id="btnUlangiSemua"><i class="fas fa-redo"></i> Ulangi</button>
+        <button class="notif-btn btn-next" id="btnPelajaranBerikutnya"><i class="fas fa-arrow-right"></i> Pelajaran Berikutnya</button>
+      `;
+      explanationArea.classList.add('hidden');
+      showNotification();
+
+      document.getElementById('btnUlangiSemua').addEventListener('click', () => {
+        hideNotification();
+        currentIndex = 0;
+        userAnswers.fill(-1);
+        mainMenu.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+      });
+
+      document.getElementById('btnPelajaranBerikutnya').addEventListener('click', () => {
+        // Ganti dengan link pelajaran selanjutnya jika ada
+        window.location.href = 'https://muin123-dr.github.io/Belajar/Jurumiyah/015.html';
+      });
+    }
+
+    function showNotification() {
+      notificationOverlay.classList.remove('hidden');
+    }
+
+    function hideNotification() {
+      notificationOverlay.classList.add('hidden');
+    }
+
+    function resetForRetry() {
+      userAnswers[currentIndex] = -1;
+      answerSubmitted = false;
+      loadQuestion();
+    }
+
+    function moveToNextQuestion() {
+      if (currentIndex + 1 < questions.length) {
+        currentIndex++;
+        loadQuestion();
+      } else {
+        quizScreen.classList.add('hidden');
+        showCompletionNotification();
+      }
+    }
+
+    function openNavPanel() {
+      let gridHtml = '';
+      for (let i = 0; i < questions.length; i++) {
+        const answered = userAnswers[i] !== -1;
+        gridHtml += `<div class="nav-item ${answered ? 'answered' : 'unanswered'}" data-q-index="${i}">${i+1}</div>`;
+      }
+      navGrid.innerHTML = gridHtml;
+      navPanelOverlay.classList.remove('hidden');
+    }
+
+    navGrid.addEventListener('click', (e) => {
+      const item = e.target.closest('.nav-item');
+      if (!item) return;
+      const index = item.dataset.qIndex;
+      if (index !== undefined) {
+        currentIndex = parseInt(index);
+        loadQuestion();
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    openNavGrid.addEventListener('click', openNavPanel);
+    closeNavPanel.addEventListener('click', () => {
+      navPanelOverlay.classList.add('hidden');
+    });
+
+    navPanelOverlay.addEventListener('click', (e) => {
+      if (e.target === navPanelOverlay) {
+        navPanelOverlay.classList.add('hidden');
+      }
+    });
+
+    btnMulai.addEventListener('click', () => {
+      mainMenu.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentIndex = 0;
+      userAnswers.fill(-1);
+      loadQuestion();
+    });
+  })();
+</script>
+</body>
+</html>
