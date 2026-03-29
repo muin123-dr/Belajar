@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>UTBK SNBT 2024 | 155 Soal | Timer 195 Menit | Konfirmasi + Analisis Dropdown</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+        }
+        body {
+            background: #eef2f7;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        /* Header */
+        .exam-header {
+            background: #0a2b3e;
+            color: white;
+            padding: 16px 28px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 4px solid #ffb74d;
+        }
+        .title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .title p {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        .timer-box {
+            background: #00000033;
+            backdrop-filter: blur(4px);
+            padding: 6px 20px;
+            border-radius: 60px;
+            text-align: center;
+        }
+        .timer-box span {
+            font-size: 1.9rem;
+            font-weight: 700;
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        .score-preview {
+            background: #ffb74d;
+            color: #0a2b3e;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .score-preview:hover {
+            background: #ffa01e;
+        }
+        /* Body: Sidebar + Soal (default tampil) */
+        .exam-body {
+            display: flex;
+            flex-wrap: wrap;
+            transition: all 0.2s;
+        }
+        .nav-sidebar {
+            width: 300px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            padding: 20px 16px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .soal-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px 6px;
+        }
+        .nav-item {
+            background: #eef2ff;
+            border-radius: 12px;
+            text-align: center;
+            padding: 8px 0;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 1px solid transparent;
+        }
+        .nav-item:hover { background: #cbd5e1; transform: scale(0.96); }
+        .nav-item.active { background: #0f3b5c; color: white; border-color: #ffb74d; }
+        .nav-item.done { background: #2e7d32; color: white; }
+        .nav-item.done.active { background: #1b5e20; border: 2px solid gold; }
+        .question-area {
+            flex: 1;
+            padding: 30px 35px;
+            background: white;
+            min-height: 65vh;
+        }
+        .soal-card { animation: fade 0.2s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateX(8px);} to { opacity: 1; transform: translateX(0);} }
+        .soal-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 24px;
+        }
+        .options { display: flex; flex-direction: column; gap: 14px; margin: 20px 0; }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 60px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .option:hover { background: #eef2ff; border-color: #ff9800; }
+        .option input { width: 18px; height: 18px; accent-color: #0f3b5c; cursor: pointer; }
+        .option label { font-size: 0.95rem; font-weight: 500; width: 100%; cursor: pointer; }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+            gap: 15px;
+        }
+        button {
+            background: #0f3b5c;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover { background: #ff8c42; transform: translateY(-2px); }
+        .btn-submit { background: #2e7d32; }
+        .btn-submit:hover { background: #1b5e20; }
+        /* Panel hasil (muncul setelah selesai) */
+        .result-fullscreen {
+            padding: 30px 40px;
+            background: white;
+        }
+        .score-badge {
+            font-size: 2rem;
+            font-weight: 800;
+            background: #0a2b3e;
+            display: inline-block;
+            padding: 8px 30px;
+            border-radius: 60px;
+            color: #ffb74d;
+            margin: 15px 0;
+        }
+        .analysis-btn {
+            background: #ff9800;
+            margin-top: 12px;
+        }
+        /* accordion style */
+        .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            background: white;
+        }
+        .accordion-header {
+            background: #f1f5f9;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.1s;
+        }
+        .accordion-header:hover { background: #e2e8f0; }
+        .accordion-header .status {
+            font-size: 0.8rem;
+            font-weight: normal;
+            padding: 2px 10px;
+            border-radius: 30px;
+            background: #ddd;
+        }
+        .status.correct { background: #2e7d32; color: white; }
+        .status.wrong { background: #c62828; color: white; }
+        .accordion-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #ffffff;
+            border-top: none;
+        }
+        .accordion-content.show {
+            max-height: 800px;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .analysis-detail {
+            margin-top: 20px;
+        }
+        footer {
+            background: #eef2ff;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.7rem;
+            color: #334155;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<div class="app-container" id="appRoot">
+    <div class="exam-header">
+        <div class="title">
+            <h1>📚 SIMULASI UTBK SNBT 2024/2025</h1>
+            <p>155 Soal | 7 Subtes | Durasi 195 Menit</p>
+        </div>
+        <div class="timer-box">
+            <label>⏱️ Sisa Waktu</label>
+            <span id="timerDisplay">03:15:00</span>
+        </div>
+        <div class="score-preview" id="previewScoreBtn">🎯 Selesai & Skor</div>
+    </div>
+    
+    <!-- Area soal + navigasi (awal tampil) -->
+    <div id="examBodyWrapper" class="exam-body">
+        <div class="nav-sidebar" id="navSidebar">
+            <h3>📌 Navigasi Soal (hijau = terjawab)</h3>
+            <div class="soal-grid" id="soalNavGrid"></div>
+            <p style="font-size:11px; margin-top:12px;">✅ Klik nomor soal untuk berpindah</p>
+        </div>
+        <div class="question-area" id="questionArea">
+            <div id="dynamicSoal"></div>
+            <div class="nav-buttons">
+                <button id="prevBtn">◀ Sebelumnya</button>
+                <button id="nextBtn">Berikutnya ▶</button>
+                <button id="submitExamBtn" class="btn-submit">✅ Selesai & Hitung Skor</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Panel hasil (awal tersembunyi) -->
+    <div id="resultPanel" style="display: none;" class="result-fullscreen"></div>
+    
+    <footer>⚠️ Soal mengacu kisi UTBK 2023-2024. Tekan Selesai & konfirmasi untuk mengakhiri ujian & lihat analisis dropdown per soal.</footer>
+</div>
+
+<script>
+    // ======================= PEMBANGKIT 155 SOAL =======================
+    const TOTAL_SOAL = 155;
+    let soalData = [];
+    let userAnswers = new Array(TOTAL_SOAL).fill(null);
+    let currentIndex = 0;
+    let timerSeconds = 195 * 60;
+    let timerInterval = null;
+    let examFinished = false;
+
+    // Fungsi generate soal sesuai subtes (sama seperti sebelumnya, dengan variasi agar total 155)
+    function generateAllSoal() {
+        const bank = [];
+        // 1. Penalaran Umum (30)
+        const puTemplates = [
+            { text: "Semua seniman adalah kreatif. Sebagian pekerja seni adalah seniman. Simpulan tepat?", options: ["Sebagian pekerja seni kreatif", "Semua pekerja seni kreatif", "Tidak ada pekerja seni kreatif", "Semua seniman pekerja seni", "Kreatif pasti seniman"], correct: 0, explanation: "Silogisme: sebagian pekerja seni adalah seniman, semua seniman kreatif => sebagian pekerja seni kreatif." },
+            { text: "Jika hujan maka tanah basah. Tanah tidak basah. Kesimpulan?", options: ["Hujan tidak turun", "Hujan turun", "Tanah basah karena hujan", "Tidak bisa disimpulkan", "Ada faktor lain"], correct: 0, explanation: "Modus Tollens." },
+            { text: "Analogi: DOKTER : RUMAH SAKIT :: GURU : ...", options: ["SEKOLAH", "PUSTAKAWAN", "SISWA", "KELAS", "MENGAJAR"], correct: 0, explanation: "Tempat kerja." },
+            { text: "Semua yang merah adalah buah. Sebagian apel merah. Maka?", options: ["Sebagian apel buah", "Semua apel merah", "Semua buah merah", "Tidak ada apel buah", "Apel bukan buah"], correct: 0, explanation: "Sebagian apel merah & merah buah => sebagian apel buah." }
+        ];
+        for (let i = 0; i < 30; i++) {
+            let tpl = puTemplates[i % puTemplates.length];
+            bank.push({ ...tpl, id: i+1, subtes: "PU", text: tpl.text + ` (${i+1})` });
+        }
+        // 2. PPU (20)
+        const ppuBank = [
+            { text: "Presiden pertama Indonesia?", options: ["Soekarno", "Soeharto", "Habibie", "Gus Dur", "Megawati"], correct: 0, explanation: "Ir. Soekarno" },
+            { text: "Lambang sila ke-3 Pancasila?", options: ["Bintang", "Rantai", "Pohon Beringin", "Kepala Banteng", "Padi Kapas"], correct: 2, explanation: "Pohon beringin" },
+            { text: "Gunung tertinggi di Indonesia?", options: ["Kerinci", "Rinjani", "Semeru", "Puncak Jaya", "Merbabu"], correct: 3, explanation: "Puncak Jaya 4884 mdpl" }
+        ];
+        for (let i = 0; i < 20; i++) {
+            let tpl = ppuBank[i % ppuBank.length];
+            bank.push({ ...tpl, id: 30+i+1, subtes: "PPU", text: tpl.text });
+        }
+        // 3. PBM (20)
+        const pbmBank = [
+            { text: "Kalimat efektif: 'Para tamu undangan dipersilakan untuk menempati tempat duduk.' Perbaikan?", options: ["Tamu undangan dipersilakan menempati tempat duduk", "Para tamu dipersilakan duduk", "Kepada tamu undangan dipersilakan duduk", "Tamu undangan dipersilakan untuk duduk", "Para tamu undangan menempati duduk"], correct: 0, explanation: "Hilangkan 'para' dan 'untuk'." },
+            { text: "Kata baku: a) nasehat b) nasihat c) naschat d) nasehat e) nasihat", options: ["a", "b", "c", "d", "e"], correct: 1, explanation: "Baku: nasihat." }
+        ];
+        for (let i = 0; i < 20; i++) {
+            let tpl = pbmBank[i % pbmBank.length];
+            bank.push({ ...tpl, id: 50+i+1, subtes: "PBM", text: tpl.text });
+        }
+        // 4. PK (15)
+        const pkBank = [
+            { text: "2⁵ + 3³ = ?", options: ["32", "27", "59", "61", "43"], correct: 2, explanation: "32+27=59" },
+            { text: "20% dari suatu bilangan = 50, bilangan itu?", options: ["200", "250", "300", "150", "100"], correct: 1, explanation: "0.2x=50 => x=250" }
+        ];
+        for (let i = 0; i < 15; i++) {
+            let tpl = pkBank[i % pkBank.length];
+            bank.push({ ...tpl, id: 70+i+1, subtes: "PK", text: tpl.text });
+        }
+        // 5. Literasi Indonesia (30)
+        const indoBank = [
+            { text: "Ide pokok: 'Banjir tahun ini lebih parah karena curah hujan ekstrem'", options: ["Perbandingan banjir", "Curah hujan", "Dampak banjir", "Banjir tahun lalu", "Solusi banjir"], correct: 0, explanation: "Membandingkan keparahan." },
+            { text: "Sinonim 'kompleks'", options: ["Rumit", "Sederhana", "Mudah", "Teratur", "Ringkas"], correct: 0, explanation: "Kompleks = rumit." }
+        ];
+        for (let i = 0; i < 30; i++) {
+            let tpl = indoBank[i % indoBank.length];
+            bank.push({ ...tpl, id: 85+i+1, subtes: "Literasi Indonesia", text: tpl.text });
+        }
+        // 6. Literasi Inggris (20)
+        const inggrisBank = [
+            { text: "Synonym of 'fast'?", options: ["Slow", "Quick", "Lazy", "Heavy", "Light"], correct: 1, explanation: "Fast = quick" },
+            { text: "She ... to school every day", options: ["go", "goes", "going", "went", "gone"], correct: 1, explanation: "She + goes" }
+        ];
+        for (let i = 0; i < 20; i++) {
+            let tpl = inggrisBank[i % inggrisBank.length];
+            bank.push({ ...tpl, id: 115+i+1, subtes: "Literasi Inggris", text: tpl.text });
+        }
+        // 7. Penalaran Matematika (20)
+        const pmBank = [
+            { text: "f(x)=2x+1, g(x)=x², (f∘g)(3)=?", options: ["19", "17", "20", "18", "16"], correct: 0, explanation: "g(3)=9, f(9)=19" },
+            { text: "Rata-rata 5,7,9,11,x =9, x=?", options: ["13", "12", "10", "14", "15"], correct: 0, explanation: "(32+x)/5=9 => x=13" },
+            { text: "sin 30° + cos 60° = ?", options: ["1", "0.5", "1.5", "0.75", "1.25"], correct: 0, explanation: "0.5+0.5=1" }
+        ];
+        for (let i = 0; i < 20; i++) {
+            let tpl = pmBank[i % pmBank.length];
+            bank.push({ ...tpl, id: 135+i+1, subtes: "PM", text: tpl.text });
+        }
+        return bank.slice(0, TOTAL_SOAL);
+    }
+    soalData = generateAllSoal();
+
+    // ================ RENDER NAVIGASI DAN SOAL ================
+    function renderNav() {
+        const container = document.getElementById('soalNavGrid');
+        if (!container) return;
+        let html = '';
+        for (let i = 0; i < TOTAL_SOAL; i++) {
+            const isDone = userAnswers[i] !== null;
+            const activeClass = (currentIndex === i) ? 'active' : '';
+            const doneClass = isDone ? 'done' : '';
+            html += `<div class="nav-item ${activeClass} ${doneClass}" data-idx="${i}">${i+1}</div>`;
+        }
+        container.innerHTML = html;
+        document.querySelectorAll('.nav-item').forEach(el => {
+            el.addEventListener('click', () => {
+                if (examFinished) return;
+                const idx = parseInt(el.getAttribute('data-idx'));
+                if (!isNaN(idx)) { currentIndex = idx; renderSoal(); renderNav(); }
+            });
+        });
+    }
+
+    function renderSoal() {
+        if (examFinished) return;
+        const soal = soalData[currentIndex];
+        if (!soal) return;
+        const currentAnswer = userAnswers[currentIndex];
+        let optionsHtml = '';
+        soal.options.forEach((opt, idx) => {
+            const checked = (currentAnswer === idx) ? 'checked' : '';
+            optionsHtml += `
+                <div class="option" data-opt-index="${idx}">
+                    <input type="radio" name="soalRadio" value="${idx}" id="opt_${idx}" ${checked}>
+                    <label for="opt_${idx}">${String.fromCharCode(65+idx)}. ${opt}</label>
+                </div>
+            `;
+        });
+        const subtesLabel = `<span style="background:#e2e3e8; padding:4px 12px; border-radius:20px; font-size:0.7rem;">${soal.subtes}</span>`;
+        const html = `
+            <div class="soal-card">
+                <div class="soal-text">
+                    <strong>Soal ${currentIndex+1}/${TOTAL_SOAL} ${subtesLabel}</strong><br><br>
+                    ${soal.text}
+                </div>
+                <div class="options" id="optionsContainer">${optionsHtml}</div>
+            </div>
+        `;
+        document.getElementById('dynamicSoal').innerHTML = html;
+        document.querySelectorAll('.option input').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (examFinished) return;
+                const val = parseInt(e.target.value);
+                userAnswers[currentIndex] = val;
+                renderNav();
+            });
+        });
+        document.querySelectorAll('.option').forEach(optDiv => {
+            optDiv.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'INPUT') {
+                    const radio = optDiv.querySelector('input');
+                    if (radio && !examFinished) radio.checked = true;
+                    const evt = new Event('change');
+                    radio?.dispatchEvent(evt);
+                }
+            });
+        });
+    }
+
+    function hitungSkor() {
+        let correct = 0;
+        for (let i = 0; i < TOTAL_SOAL; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === soalData[i].correct) correct++;
+        }
+        return { correct, total: TOTAL_SOAL, percentage: (correct / TOTAL_SOAL) * 100 };
+    }
+
+    // Fungsi menampilkan hasil dengan accordion per soal dan menyembunyikan area soal
+    function tampilkanHasilDanSembunyikanSoal() {
+        const { correct, total, percentage } = hitungSkor();
+        // Sembunyikan area soal & navigasi
+        const examBody = document.getElementById('examBodyWrapper');
+        if (examBody) examBody.style.display = 'none';
+        // Tampilkan panel hasil
+        const panel = document.getElementById('resultPanel');
+        panel.style.display = 'block';
+        
+        // Buat tampilan skor + tombol analisis
+        let accordionHtml = `<div class="result-section" style="text-align:center;">
+            <div>🏆 SKOR UTBK SIMULASI 🏆</div>
+            <div class="score-badge">${correct} / ${total}  (${Math.round(percentage)}%)</div>
+            <button id="analysisTriggerBtn" class="analysis-btn">📊 Tampilkan Analisis Lengkap (Dropdown per Soal)</button>
+            <div id="analysisContainer" style="margin-top: 25px;"></div>
+        </div>`;
+        panel.innerHTML = accordionHtml;
+        
+        // Event untuk menampilkan analisis (accordion)
+        document.getElementById('analysisTriggerBtn')?.addEventListener('click', () => {
+            const container = document.getElementById('analysisContainer');
+            if (container.innerHTML !== "") {
+                // toggle: jika sudah ada, bisa disembunyikan? tapi kita refresh saja agar user bisa tutup/buka? Lebih baik rebuild setiap klik? 
+                // Agar konsisten: setiap klik tombol analisis, tampilkan lagi (jika sudah ada bisa di-refresh).
+                container.innerHTML = "";
+            }
+            let accordionsHtml = `<div class="analysis-detail"><h3>🔍 Pembahasan Setiap Soal (Klik judul untuk buka/tutup)</h3>`;
+            for (let i = 0; i < TOTAL_SOAL; i++) {
+                const soal = soalData[i];
+                const userAns = userAnswers[i];
+                const isCorrect = (userAns === soal.correct);
+                const userLetter = (userAns !== null) ? String.fromCharCode(65+userAns) : 'Tidak dijawab';
+                const correctLetter = String.fromCharCode(65+soal.correct);
+                const statusClass = isCorrect ? 'correct' : 'wrong';
+                const statusText = isCorrect ? '✓ Benar' : '✗ Salah';
+                accordionsHtml += `
+                    <div class="accordion-item">
+                        <div class="accordion-header" data-idx="${i}">
+                            <span><strong>Soal ${i+1} (${soal.subtes})</strong>: ${soal.text.substring(0, 80)}${soal.text.length > 80 ? '…' : ''}</span>
+                            <span class="status ${statusClass}">${statusText} | Jawaban Anda: ${userLetter}</span>
+                        </div>
+                        <div class="accordion-content" id="accordionContent-${i}">
+                            <div><strong>✅ Jawaban Benar:</strong> ${correctLetter}. ${soal.options[soal.correct]}</div>
+                            <div class="${isCorrect ? 'user-correct' : 'user-wrong'}"><strong>📌 Jawaban Anda:</strong> ${userLetter} ${!isCorrect ? '(Salah)' : '(Benar)'}</div>
+                            <div><strong>📖 Penjelasan:</strong> ${soal.explanation}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            accordionsHtml += `</div>`;
+            container.innerHTML = accordionsHtml;
+            // Pasang event listener untuk setiap header accordion
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                header.addEventListener('click', function(e) {
+                    const idx = this.getAttribute('data-idx');
+                    const content = document.getElementById(`accordionContent-${idx}`);
+                    if (content) {
+                        content.classList.toggle('show');
+                    }
+                });
+            });
+        });
+    }
+
+    function finishExam() {
+        if (examFinished) return;
+        examFinished = true;
+        if (timerInterval) clearInterval(timerInterval);
+        // nonaktifkan semua radio (optional, tapi karena soal akan disembunyikan, tidak masalah)
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+        const btnSubmit = document.getElementById('submitExamBtn');
+        if (btnSubmit) btnSubmit.disabled = true;
+        // Tampilkan hasil + sembunyikan soal
+        tampilkanHasilDanSembunyikanSoal();
+    }
+
+    // Timer
+    function updateTimerDisplay() {
+        const hours = Math.floor(timerSeconds / 3600);
+        const mins = Math.floor((timerSeconds % 3600) / 60);
+        const secs = timerSeconds % 60;
+        document.getElementById('timerDisplay').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        if (timerSeconds <= 0 && !examFinished) {
+            // waktu habis langsung selesai tanpa konfirmasi
+            finishExam();
+        }
+    }
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (!examFinished && timerSeconds > 0) {
+                timerSeconds--;
+                updateTimerDisplay();
+                if (timerSeconds === 0) finishExam();
+            } else if (timerSeconds <= 0) clearInterval(timerInterval);
+        }, 1000);
+    }
+
+    // ================ Event handlers dengan konfirmasi ================
+    document.getElementById('prevBtn')?.addEventListener('click', () => {
+        if (examFinished) return;
+        if (currentIndex > 0) { currentIndex--; renderSoal(); renderNav(); }
+    });
+    document.getElementById('nextBtn')?.addEventListener('click', () => {
+        if (examFinished) return;
+        if (currentIndex < TOTAL_SOAL - 1) { currentIndex++; renderSoal(); renderNav(); }
+    });
+    
+    // Tombol Selesai & Hitung Skor (di bawah)
+    document.getElementById('submitExamBtn')?.addEventListener('click', () => {
+        if (examFinished) return;
+        const userConfirmed = confirm("Anda yakin menyelesaikan tes? Jawaban yang sudah diisi akan dinilai.");
+        if (userConfirmed) {
+            finishExam();
+        }
+        // jika tidak, tidak terjadi apa-apa
+    });
+    
+    // Tombol Selesai & Skor di header
+    document.getElementById('previewScoreBtn')?.addEventListener('click', () => {
+        if (examFinished) return;
+        const userConfirmed = confirm("Anda yakin menyelesaikan tes? Jawaban yang sudah diisi akan dinilai.");
+        if (userConfirmed) {
+            finishExam();
+        }
+    });
+
+    // Inisialisasi awal
+    renderNav();
+    renderSoal();
+    startTimer();
+    updateTimerDisplay();
+</script>
+</body>
+</html>
