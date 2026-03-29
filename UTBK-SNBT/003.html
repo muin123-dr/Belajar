@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulasi UTBK SNBT 2023</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a3c6e;
+    --accent: #e8a020;
+    --accent2: #2ecc71;
+    --danger: #e74c3c;
+    --bg: #f0f4fb;
+    --surface: #ffffff;
+    --text: #1a1f36;
+    --text-light: #6b7394;
+    --border: #dde3f0;
+    --answered: #2ecc71;
+    --unanswered: #dde3f0;
+    --current: #1a3c6e;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(26,60,110,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  .header {
+    background: var(--primary); color: #fff;
+    padding: 0 32px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 16px rgba(26,60,110,0.18);
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo-badge { background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; padding: 5px 12px; border-radius: 6px; }
+  .header-title { font-size: 16px; font-weight: 700; }
+  .timer-box { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20); border-radius: 10px; padding: 8px 18px; }
+  .timer-icon { font-size: 18px; }
+  #timer-display { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: 2px; color: #fff; transition: color 0.3s; }
+  #timer-display.warning { color: var(--accent); }
+  #timer-display.danger { color: #ff6b6b; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  /* LAYOUT */
+  .main-wrap { display: grid; grid-template-columns: 1fr 280px; gap: 24px; max-width: 1200px; margin: 28px auto; padding: 0 20px; }
+  @media(max-width:900px){ .main-wrap { grid-template-columns: 1fr; } .sidebar { order: -1; } }
+
+  /* SIDEBAR */
+  .sidebar-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
+  .sidebar-title { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-light); margin-bottom: 14px; }
+  .section-tabs { display: flex; flex-direction: column; gap: 6px; }
+  .section-tab { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; border: 2px solid var(--border); background: transparent; color: var(--text); transition: all 0.2s; }
+  .section-tab.active { border-color: var(--primary); background: #e8f0fb; color: var(--primary); }
+  .section-tab .badge { font-size: 11px; background: var(--border); border-radius: 50px; padding: 2px 8px; font-weight: 700; }
+  .section-tab.active .badge { background: var(--primary); color: #fff; }
+  .nav-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .nav-btn { width: 100%; aspect-ratio: 1; border-radius: 7px; border: none; font-size: 12px; font-weight: 700; cursor: pointer; background: var(--unanswered); color: var(--text-light); transition: all 0.18s; position: relative; }
+  .nav-btn.answered { background: var(--answered); color: #fff; }
+  .nav-btn.current { background: var(--current); color: #fff; box-shadow: 0 0 0 3px rgba(26,60,110,0.25); transform: scale(1.12); z-index: 1; }
+  .nav-btn.answered.current { background: var(--primary); }
+  .progress-wrap { margin-top: 10px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px; }
+  .progress-bar { background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #1a3c6e, #2ecc71); border-radius: 99px; transition: width 0.4s ease; }
+
+  /* QUESTION CARD */
+  .question-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px 36px; min-height: 500px; display: flex; flex-direction: column; position: relative; z-index: 1; }
+  .q-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+  .q-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .q-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 12px; border-radius: 50px; border: 1.5px solid var(--border); color: var(--text-light); }
+  .q-badge.pu  { border-color: #6c63ff; color: #6c63ff; }
+  .q-badge.ppu { border-color: #e8a020; color: #e8a020; }
+  .q-badge.pbm { border-color: #9b59b6; color: #9b59b6; }
+  .q-badge.pk  { border-color: #2ecc71; color: #1a8a4a; }
+  .q-badge.lbi { border-color: #3498db; color: #1a6ea8; }
+  .q-badge.lbe { border-color: #e74c3c; color: #e74c3c; }
+  .q-badge.pm  { border-color: #16a085; color: #0e6655; }
+  .q-number-display { font-size: 13px; font-weight: 700; color: var(--text-light); white-space: nowrap; }
+  .passage-box { background: #f7f9fc; border-left: 4px solid var(--primary); border-radius: 0 10px 10px 0; padding: 18px 22px; margin-bottom: 24px; font-family: 'Lora', serif; font-size: 15px; line-height: 1.85; color: #2a3050; }
+  .passage-title { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-light); margin-bottom: 10px; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .q-text { font-size: 15.5px; line-height: 1.8; color: var(--text); margin-bottom: 28px; font-weight: 500; flex: 1; }
+  .q-text strong { font-weight: 700; }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option { display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.18s; font-size: 14.5px; font-weight: 500; color: var(--text); background: transparent; text-align: left; line-height: 1.6; }
+  .option:hover { border-color: var(--primary); background: #e8f0fb; }
+  .option.selected { border-color: var(--primary); background: #ddeafb; color: var(--primary); font-weight: 600; }
+  .option.correct { border-color: #2ecc71; background: #e8faf1; color: #166534; }
+  .option.wrong { border-color: #e74c3c; background: #fdf0ef; color: #7f1d1d; }
+  .opt-key { min-width: 30px; height: 30px; border-radius: 50%; background: var(--border); color: var(--text-light); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; transition: all 0.18s; margin-top: 1px; }
+  .option.selected .opt-key { background: var(--primary); color: #fff; }
+  .option.correct .opt-key { background: #2ecc71; color: #fff; }
+  .option.wrong .opt-key { background: #e74c3c; color: #fff; }
+  .q-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .btn { padding: 11px 24px; border-radius: 9px; border: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.18s; }
+  .btn-prev { background: var(--border); color: var(--text-light); }
+  .btn-prev:hover { background: #c8d0e0; color: var(--text); }
+  .btn-next { background: var(--primary); color: #fff; }
+  .btn-next:hover { background: #122d55; }
+  .btn-finish { background: linear-gradient(135deg, #e8a020, #f5c842); color: #fff; font-size: 15px; padding: 13px 32px; box-shadow: 0 4px 16px rgba(232,160,32,0.35); }
+  .btn-finish:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,160,32,0.4); }
+
+  /* SCORE OVERLAY */
+  .overlay { position: fixed; inset: 0; background: rgba(15,25,50,0.75); backdrop-filter: blur(6px); z-index: 999; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .score-card { background: var(--surface); border-radius: 20px; padding: 48px 52px; max-width: 580px; width: 90%; text-align: center; animation: slideUp 0.4s ease; position: relative; max-height: 90vh; overflow-y: auto; }
+  @keyframes slideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .score-icon { font-size: 64px; margin-bottom: 16px; }
+  .score-title { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+  .score-subtitle { color: var(--text-light); font-size: 14px; margin-bottom: 32px; }
+  .score-big { font-size: 88px; font-weight: 800; background: linear-gradient(135deg, var(--primary), #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 8px; }
+  .score-max { font-size: 15px; color: var(--text-light); margin-bottom: 28px; }
+  .score-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 32px; }
+  .stat-box { background: var(--bg); border-radius: 12px; padding: 16px 10px; }
+  .stat-num { font-size: 26px; font-weight: 800; }
+  .stat-num.correct { color: #2ecc71; }
+  .stat-num.wrong { color: #e74c3c; }
+  .stat-num.skip { color: var(--text-light); }
+  .stat-label { font-size: 12px; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+  .section-scores { text-align: left; margin-bottom: 32px; }
+  .section-score-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 8px; background: var(--bg); margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+  .section-score-val { font-weight: 800; color: var(--primary); }
+  .btn-analysis { width: 100%; background: linear-gradient(135deg, #1a3c6e, #3a7bd5); color: #fff; border: none; border-radius: 12px; padding: 16px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; margin-bottom: 10px; }
+  .btn-analysis:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,60,110,0.3); }
+  .btn-retry { width: 100%; background: var(--border); color: var(--text); border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .btn-retry:hover { background: #c8d0e0; }
+
+  /* ANALYSIS OVERLAY */
+  .analysis-overlay { position: fixed; inset: 0; background: rgba(15,25,50,0.82); backdrop-filter: blur(6px); z-index: 1000; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 32px 16px 48px; }
+  .analysis-container { background: var(--surface); border-radius: 20px; max-width: 820px; width: 100%; overflow: visible; position: relative; }
+  .analysis-header { background: var(--primary); color: #fff; padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; border-radius: 20px 20px 0 0; position: sticky; top: 0; z-index: 10; }
+  .analysis-header h2 { font-size: 20px; font-weight: 800; }
+  .btn-close { background: rgba(255,255,255,0.15); border: none; color: #fff; cursor: pointer; border-radius: 8px; padding: 8px 16px; font-family: inherit; font-size: 14px; font-weight: 700; transition: all 0.2s; }
+  .btn-close:hover { background: rgba(255,255,255,0.25); }
+  .analysis-body { padding: 24px 32px; }
+  .analysis-item { border: 1.5px solid var(--border); border-radius: 14px; margin-bottom: 20px; overflow: hidden; transition: all 0.2s; }
+  .analysis-item.correct-item { border-color: #2ecc71; }
+  .analysis-item.wrong-item { border-color: #e74c3c; }
+  .analysis-item.skip-item { border-color: var(--border); }
+  .analysis-toggle { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; cursor: pointer; background: transparent; user-select: none; }
+  .analysis-toggle:hover { background: var(--bg); }
+  .a-toggle-left { display: flex; align-items: center; gap: 12px; }
+  .a-num { font-size: 13px; font-weight: 800; color: var(--text-light); min-width: 24px; }
+  .a-qtext { font-size: 14px; font-weight: 600; line-height: 1.4; max-width: 500px; }
+  .a-status { font-size: 11px; font-weight: 800; letter-spacing: 0.8px; padding: 4px 12px; border-radius: 50px; text-transform: uppercase; }
+  .a-status.correct { background: #e8faf1; color: #166534; }
+  .a-status.wrong { background: #fdf0ef; color: #7f1d1d; }
+  .a-status.skip { background: var(--bg); color: var(--text-light); }
+  .a-arrow { font-size: 16px; color: var(--text-light); transition: transform 0.3s; }
+  .analysis-item.open .a-arrow { transform: rotate(180deg); }
+  .analysis-content { display: none; padding: 0 22px 22px; border-top: 1px solid var(--border); }
+  .analysis-item.open .analysis-content { display: block; }
+  .a-your-answer { font-size: 13px; margin: 14px 0 8px; color: var(--text-light); font-weight: 600; }
+  .a-correct-answer { font-size: 13px; margin-bottom: 14px; color: #166534; font-weight: 600; }
+  .a-explanation { background: #f7f9fc; border-left: 3px solid var(--primary); padding: 14px 18px; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.75; color: #2a3050; }
+  .a-explanation strong { color: var(--primary); }
+
+  /* CONFIRM MODAL */
+  .confirm-overlay { position: fixed; inset: 0; background: rgba(15,25,50,0.65); backdrop-filter: blur(4px); z-index: 1100; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
+  .confirm-box { background: var(--surface); border-radius: 18px; padding: 40px 36px 32px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.25); animation: slideUp 0.25s ease; }
+  .confirm-icon { font-size: 52px; margin-bottom: 14px; }
+  .confirm-title { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+  .confirm-msg { font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 8px; }
+  .confirm-stats { display: flex; justify-content: center; gap: 24px; background: var(--bg); border-radius: 12px; padding: 14px 20px; margin: 18px 0 26px; }
+  .confirm-stat-item { text-align: center; }
+  .confirm-stat-num { font-size: 22px; font-weight: 800; }
+  .confirm-stat-num.answered { color: #2ecc71; }
+  .confirm-stat-num.unanswered { color: #e74c3c; }
+  .confirm-stat-label { font-size: 11px; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+  .confirm-actions { display: flex; gap: 12px; }
+  .confirm-btn-cancel { flex: 1; padding: 13px; border-radius: 10px; border: 2px solid var(--border); background: transparent; color: var(--text); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.18s; }
+  .confirm-btn-cancel:hover { background: var(--border); }
+  .confirm-btn-ok { flex: 1; padding: 13px; border-radius: 10px; border: none; background: linear-gradient(135deg, #e8a020, #f5c842); color: #fff; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.18s; box-shadow: 0 4px 14px rgba(232,160,32,0.35); }
+  .confirm-btn-ok:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(232,160,32,0.45); }
+
+  /* MISC */
+  .math-inline { font-style: italic; }
+  sub { font-size: 11px; } sup { font-size: 11px; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 14px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .data-table th { background: var(--primary); color: #fff; padding: 10px 14px; text-align: left; font-weight: 700; font-size: 13px; }
+  .data-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: var(--bg); }
+  @media(max-width:600px){ .question-card { padding: 20px 16px; } .score-card { padding: 32px 22px; } .score-big { font-size: 64px; } .analysis-body { padding: 16px; } .header { padding: 0 16px; } .header-title { font-size: 13px; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo-badge">SNBT</div>
+    <div class="header-title">Simulasi UTBK SNBT 2023</div>
+  </div>
+  <div class="timer-box">
+    <span class="timer-icon">⏱</span>
+    <span id="timer-display">195:00</span>
+  </div>
+</div>
+
+<div class="main-wrap">
+  <div>
+    <div class="question-card" id="question-card"></div>
+    <div style="margin-top:16px;display:flex;justify-content:flex-end;position:relative;z-index:10;">
+      <button class="btn btn-finish" onclick="confirmFinish()">⚑ Selesai &amp; Lihat Nilai</button>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Subtes</div>
+      <div class="section-tabs" id="section-tabs"></div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-title">Navigasi Soal</div>
+      <div class="nav-grid" id="nav-grid"></div>
+      <div class="progress-wrap" style="margin-top:16px;">
+        <div class="progress-label"><span>Progres</span><span id="progress-text">0 / 0</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="score-overlay" style="display:none;">
+  <div class="score-card">
+    <div class="score-icon" id="score-icon">🎯</div>
+    <div class="score-title">Hasil Ujian</div>
+    <div class="score-subtitle">Simulasi UTBK SNBT 2023</div>
+    <div class="score-big" id="score-big">0</div>
+    <div class="score-max">dari 1000 (estimasi skor UTBK)</div>
+    <div class="score-stats">
+      <div class="stat-box"><div class="stat-num correct" id="stat-correct">0</div><div class="stat-label">Benar</div></div>
+      <div class="stat-box"><div class="stat-num wrong" id="stat-wrong">0</div><div class="stat-label">Salah</div></div>
+      <div class="stat-box"><div class="stat-num skip" id="stat-skip">0</div><div class="stat-label">Kosong</div></div>
+    </div>
+    <div class="section-scores" id="section-scores-detail"></div>
+    <button class="btn-analysis" onclick="showAnalysis()">📊 Lihat Analisis &amp; Pembahasan</button>
+    <button class="btn-retry" onclick="retryExam()">🔄 Ulangi Ujian</button>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirm-overlay" style="display:none;">
+  <div class="confirm-box">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title">Akhiri Ujian?</div>
+    <div class="confirm-msg">Apakah Anda yakin ingin mengakhiri menjawab soal?</div>
+    <div class="confirm-stats">
+      <div class="confirm-stat-item"><div class="confirm-stat-num answered" id="confirm-answered">0</div><div class="confirm-stat-label">Terjawab</div></div>
+      <div class="confirm-stat-item"><div class="confirm-stat-num unanswered" id="confirm-unanswered">0</div><div class="confirm-stat-label">Belum Dijawab</div></div>
+      <div class="confirm-stat-item"><div class="confirm-stat-num" style="color:var(--primary)" id="confirm-total">0</div><div class="confirm-stat-label">Total Soal</div></div>
+    </div>
+    <div class="confirm-actions">
+      <button class="confirm-btn-cancel" onclick="closeConfirm()">Kembali</button>
+      <button class="confirm-btn-ok" onclick="doFinish()">Ya, Selesai</button>
+    </div>
+  </div>
+</div>
+
+<div class="analysis-overlay" id="analysis-overlay" style="display:none;">
+  <div class="analysis-container">
+    <div class="analysis-header">
+      <h2>📊 Analisis &amp; Pembahasan Jawaban</h2>
+      <button class="btn-close" onclick="closeAnalysis()">✕ Tutup</button>
+    </div>
+    <div class="analysis-body" id="analysis-body"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// SECTIONS — UTBK SNBT 2023
+// ============================================================
+const sections = [
+  { id: 'pu',  name: 'Penalaran Umum',                    abbr: 'PU',  count: 30, durasi: 30  },
+  { id: 'ppu', name: 'Pengetahuan & Pemahaman Umum',      abbr: 'PPU', count: 20, durasi: 15  },
+  { id: 'pbm', name: 'Memahami Bacaan & Menulis',         abbr: 'PBM', count: 20, durasi: 25  },
+  { id: 'pk',  name: 'Pengetahuan Kuantitatif',           abbr: 'PK',  count: 15, durasi: 20  },
+  { id: 'lbi', name: 'Literasi Bahasa Inggris',           abbr: 'LBI', count: 20, durasi: 15  },
+  { id: 'lbe', name: 'Literasi Bahasa Indonesia',         abbr: 'LBI', count: 30, durasi: 45  },
+  { id: 'pm',  name: 'Penalaran Matematika',              abbr: 'PM',  count: 20, durasi: 45  },
+];
+
+// ============================================================
+// SOAL — 155 SOAL UTBK SNBT 2023
+// ============================================================
+const questions = [
+
+// ============================================================
+// PENALARAN UMUM (PU) — 30 Soal
+// ============================================================
+
+// Bacaan 1: Ekonomi Hijau (PU 1-5)
+{
+  section:'pu', passageTitle:'Bacaan 1 — Ekonomi Hijau',
+  passage:`Ekonomi hijau merupakan sistem ekonomi yang bertujuan meningkatkan kesejahteraan manusia dan kesetaraan sosial, sekaligus secara signifikan mengurangi risiko lingkungan dan kelangkaan ekologi. Dalam ekonomi hijau, pertumbuhan pendapatan dan lapangan kerja didorong oleh investasi publik dan swasta yang mengurangi emisi karbon, meningkatkan efisiensi energi dan sumber daya, serta mencegah hilangnya keanekaragaman hayati dan jasa ekosistem.
+
+Indonesia sebagai negara kepulauan dengan kekayaan hayati terbesar kedua di dunia memiliki potensi besar dalam pengembangan ekonomi hijau. Hutan tropis, laut, dan ekosistem lainnya menjadi modal utama yang harus dikelola secara berkelanjutan. Namun, tekanan pembangunan dan eksploitasi sumber daya alam yang berlebihan masih menjadi tantangan utama.
+
+Pemerintah Indonesia telah menetapkan target pengurangan emisi gas rumah kaca sebesar 29% secara mandiri dan 41% dengan dukungan internasional pada tahun 2030 melalui dokumen Nationally Determined Contribution (NDC). Berbagai kebijakan mendukung transisi menuju ekonomi hijau, termasuk pengembangan energi terbarukan, moratorium izin perkebunan kelapa sawit baru, dan program rehabilitasi mangrove seluas 600.000 hektar.`,
+  question: 'Berdasarkan teks, apa yang menjadi modal utama Indonesia dalam pengembangan ekonomi hijau?',
+  options: ['Investasi publik dan swasta yang besar', 'Hutan tropis, laut, dan ekosistem lainnya', 'Target NDC sebesar 29% pengurangan emisi', 'Program rehabilitasi mangrove 600.000 hektar', 'Kebijakan moratorium perkebunan kelapa sawit'],
+  answer: 1,
+  explanation: 'Teks secara eksplisit menyatakan "Hutan tropis, laut, dan ekosistem lainnya menjadi modal utama" Indonesia dalam pengembangan ekonomi hijau.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Manakah pernyataan yang TIDAK sesuai dengan isi bacaan?',
+  options: ['Indonesia memiliki kekayaan hayati terbesar kedua di dunia', 'Ekonomi hijau bertujuan meningkatkan kesejahteraan manusia', 'Target NDC mandiri Indonesia adalah pengurangan 41% emisi', 'Pemerintah menetapkan moratorium izin perkebunan sawit baru', 'Ekonomi hijau mengurangi risiko lingkungan dan kelangkaan ekologi'],
+  answer: 2,
+  explanation: 'Target 41% adalah dengan dukungan internasional, bukan mandiri. Target mandiri adalah 29%. Pilihan C keliru karena membalik kedua angka tersebut.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Apa tujuan utama dari ekonomi hijau berdasarkan paragraf pertama?',
+  options: ['Meningkatkan pertumbuhan ekonomi setinggi-tingginya', 'Meningkatkan investasi sektor energi fosil', 'Meningkatkan kesejahteraan manusia dan kesetaraan sosial sambil mengurangi risiko lingkungan', 'Menghentikan seluruh eksploitasi sumber daya alam', 'Memperluas perkebunan kelapa sawit secara berkelanjutan'],
+  answer: 2,
+  explanation: 'Paragraf pertama secara jelas mendefinisikan ekonomi hijau sebagai sistem yang bertujuan "meningkatkan kesejahteraan manusia dan kesetaraan sosial, sekaligus secara signifikan mengurangi risiko lingkungan dan kelangkaan ekologi."'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Kata "berkelanjutan" dalam teks memiliki makna yang paling tepat adalah…',
+  options: ['Terus menerus tanpa henti', 'Dikelola agar tidak habis dan tetap lestari untuk generasi mendatang', 'Dilanjutkan kembali setelah berhenti', 'Dikembangkan secara masif dan cepat', 'Dipertahankan dalam kondisi aslinya tanpa perubahan'],
+  answer: 1,
+  explanation: '"Berkelanjutan" dalam konteks lingkungan dan sumber daya alam berarti dikelola sedemikian rupa agar tidak habis dan tetap bisa dimanfaatkan oleh generasi mendatang — konsep inti dari pembangunan berkelanjutan (sustainable development).'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Berdasarkan bacaan, tantangan utama Indonesia dalam menerapkan ekonomi hijau adalah…',
+  options: ['Kurangnya investasi dari luar negeri', 'Tidak adanya kebijakan pemerintah yang mendukung', 'Tekanan pembangunan dan eksploitasi sumber daya alam yang berlebihan', 'Minimnya keanekaragaman hayati yang dimiliki', 'Rendahnya target pengurangan emisi gas rumah kaca'],
+  answer: 2,
+  explanation: 'Teks secara eksplisit menyebutkan "tekanan pembangunan dan eksploitasi sumber daya alam yang berlebihan masih menjadi tantangan utama" bagi Indonesia.'
+},
+
+// Bacaan 2: Kecerdasan Buatan (PU 6-10)
+{
+  section:'pu', passageTitle:'Bacaan 2 — Kecerdasan Buatan dan Masa Depan Pekerjaan',
+  passage:`Revolusi industri keempat yang ditandai oleh kecerdasan buatan (artificial intelligence/AI) dan otomasi telah mengubah lanskap pekerjaan secara fundamental. Menurut laporan World Economic Forum (WEF) 2023, sekitar 23% pekerjaan akan mengalami perubahan signifikan dalam lima tahun ke depan akibat AI dan otomasi. Di satu sisi, sekitar 69 juta pekerjaan baru akan tercipta; di sisi lain, sekitar 83 juta pekerjaan lama akan hilang.
+
+Pekerjaan yang paling rentan terdisrupsi adalah pekerjaan yang bersifat repetitif dan berbasis data, seperti operator entri data, kasir, dan petugas administrasi. Sementara pekerjaan yang membutuhkan kreativitas tinggi, empati, dan kemampuan berpikir kritis—seperti seniman, psikolog, dan peneliti—cenderung lebih aman dari disrupsi AI.
+
+Kunci menghadapi era ini adalah adaptasi dan peningkatan kompetensi (upskilling dan reskilling). Laporan yang sama menyebut kemampuan analitis, kreativitas, fleksibilitas, dan literasi teknologi sebagai keterampilan yang paling dibutuhkan di masa depan. Pemerintah, institusi pendidikan, dan perusahaan perlu berkolaborasi untuk memastikan tenaga kerja siap menghadapi perubahan ini.`,
+  question: 'Menurut laporan WEF 2023, berapa perkiraan pekerjaan baru yang akan tercipta akibat AI dan otomasi?',
+  options: ['23 juta', '83 juta', '69 juta', '100 juta', '46 juta'],
+  answer: 2,
+  explanation: 'Teks menyebutkan "sekitar 69 juta pekerjaan baru akan tercipta" sebagai efek positif dari AI dan otomasi menurut laporan WEF 2023.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Pekerjaan manakah yang menurut teks paling AMAN dari disrupsi AI?',
+  options: ['Operator entri data', 'Kasir supermarket', 'Petugas administrasi', 'Psikolog klinis', 'Petugas loket bank'],
+  answer: 3,
+  explanation: 'Teks menyebutkan pekerjaan yang membutuhkan "kreativitas tinggi, empati, dan kemampuan berpikir kritis—seperti seniman, psikolog, dan peneliti—cenderung lebih aman dari disrupsi AI." Psikolog termasuk kategori ini.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Apakah kunci utama menghadapi era kecerdasan buatan menurut paragraf ketiga?',
+  options: ['Menolak penggunaan teknologi AI', 'Meningkatkan jumlah pekerjaan repetitif', 'Adaptasi dan peningkatan kompetensi (upskilling dan reskilling)', 'Membatasi investasi asing di bidang teknologi', 'Memperbanyak regulasi yang membatasi otomasi'],
+  answer: 2,
+  explanation: 'Paragraf ketiga secara eksplisit menyebutkan "Kunci menghadapi era ini adalah adaptasi dan peningkatan kompetensi (upskilling dan reskilling)."'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Berdasarkan teks, siapa saja yang perlu berkolaborasi untuk mempersiapkan tenaga kerja menghadapi AI?',
+  options: ['Hanya pemerintah dan perusahaan', 'Pemerintah, institusi pendidikan, dan perusahaan', 'Hanya institusi pendidikan dan perusahaan', 'Individu, keluarga, dan masyarakat', 'Organisasi internasional dan PBB'],
+  answer: 1,
+  explanation: 'Teks secara jelas menyebutkan "Pemerintah, institusi pendidikan, dan perusahaan perlu berkolaborasi untuk memastikan tenaga kerja siap menghadapi perubahan ini."'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Kata "disrupsi" dalam konteks teks memiliki makna…',
+  options: ['Pengembangan secara signifikan', 'Gangguan atau perubahan besar yang mengubah cara kerja yang ada', 'Pelarangan secara hukum', 'Pertumbuhan yang pesat dan tak terkendali', 'Kerjasama yang erat antara dua pihak'],
+  answer: 1,
+  explanation: '"Disrupsi" (disruption) dalam konteks teknologi dan bisnis berarti gangguan atau perubahan besar yang mengubah cara kerja, model bisnis, atau industri yang sudah ada — sering kali secara radikal dan tidak terduga.'
+},
+
+// Bacaan 3: Perubahan Iklim (PU 11-15)
+{
+  section:'pu', passageTitle:'Bacaan 3 — Perubahan Iklim dan Ketahanan Pangan',
+  passage:`Perubahan iklim mengancam ketahanan pangan global secara serius. Kenaikan suhu rata-rata bumi, perubahan pola curah hujan, dan meningkatnya frekuensi bencana iklim ekstrem—seperti kekeringan dan banjir—berdampak langsung pada produktivitas pertanian. FAO memperkirakan bahwa tanpa langkah adaptasi yang serius, hasil panen tanaman pangan utama seperti padi, jagung, dan gandum dapat turun hingga 25% pada tahun 2050.
+
+Indonesia sebagai negara agraris dengan lebih dari 100 juta jiwa bergantung pada sektor pertanian—baik secara langsung maupun tidak langsung—sangat rentan terhadap dampak ini. Anomali cuaca El Niño yang semakin intens menyebabkan musim kemarau berkepanjangan di beberapa wilayah, sementara La Niña memicu banjir dan tanah longsor di wilayah lain.
+
+Para ilmuwan pertanian mendorong pengembangan varietas tanaman tahan kekeringan, efisiensi irigasi, diversifikasi pangan, dan penerapan pertanian presisi berbasis data. Pemerintah Indonesia melalui Kementerian Pertanian juga sedang mendorong pengembangan lahan rawa dan gambut untuk memperluas areal tanam, meskipun kebijakan ini menuai kritik dari kalangan lingkungan hidup karena berpotensi merusak ekosistem kritis.`,
+  question: 'Berapa estimasi penurunan hasil panen tanaman pangan utama pada 2050 menurut FAO jika tidak ada adaptasi?',
+  options: ['10%', '15%', '20%', '25%', '30%'],
+  answer: 3,
+  explanation: 'Teks secara eksplisit menyatakan "hasil panen tanaman pangan utama seperti padi, jagung, dan gandum dapat turun hingga 25% pada tahun 2050" menurut perkiraan FAO.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Fenomena iklim manakah yang dikaitkan dengan musim kemarau berkepanjangan di Indonesia?',
+  options: ['La Niña', 'El Niño', 'Indian Ocean Dipole', 'Monsun Asia', 'Badai tropis'],
+  answer: 1,
+  explanation: 'Teks menyebutkan "Anomali cuaca El Niño yang semakin intens menyebabkan musim kemarau berkepanjangan di beberapa wilayah." La Niña justru dikaitkan dengan banjir dan tanah longsor.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Mengapa kebijakan pengembangan lahan rawa dan gambut menuai kritik?',
+  options: ['Karena dinilai tidak efektif meningkatkan produksi pangan', 'Karena berpotensi merusak ekosistem kritis', 'Karena terlalu mahal untuk diimplementasikan', 'Karena melanggar perjanjian internasional tentang iklim', 'Karena tidak didukung oleh ilmuwan pertanian'],
+  answer: 1,
+  explanation: 'Teks menyatakan kebijakan ini "menuai kritik dari kalangan lingkungan hidup karena berpotensi merusak ekosistem kritis."'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Manakah solusi yang TIDAK disebutkan dalam teks sebagai upaya adaptasi perubahan iklim di sektor pertanian?',
+  options: ['Varietas tanaman tahan kekeringan', 'Efisiensi irigasi', 'Diversifikasi pangan', 'Pertanian presisi berbasis data', 'Penggunaan pupuk kimia intensif'],
+  answer: 4,
+  explanation: 'Teks menyebutkan empat solusi: varietas tahan kekeringan, efisiensi irigasi, diversifikasi pangan, dan pertanian presisi berbasis data. Penggunaan pupuk kimia intensif tidak disebutkan sama sekali.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Simpulan yang paling tepat dari bacaan di atas adalah…',
+  options: ['Perubahan iklim tidak berdampak signifikan pada ketahanan pangan Indonesia', 'Indonesia tidak perlu khawatir karena memiliki lahan pertanian yang luas', 'Perubahan iklim mengancam ketahanan pangan dan memerlukan adaptasi pertanian yang serius', 'Pengembangan lahan rawa adalah solusi terbaik untuk ketahanan pangan Indonesia', 'FAO telah menjamin ketersediaan pangan global hingga tahun 2050'],
+  answer: 2,
+  explanation: 'Inti dari seluruh bacaan adalah bahwa perubahan iklim menjadi ancaman serius bagi ketahanan pangan (paragraf 1 dan 2) dan berbagai upaya adaptasi diperlukan (paragraf 3). Simpulan C merangkum hal ini dengan tepat.'
+},
+
+// Penalaran Logis (PU 16-22)
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Semua mahasiswa berprestasi mendapatkan beasiswa. Budi adalah mahasiswa berprestasi. Kesimpulan yang tepat adalah…',
+  options: ['Budi tidak mendapatkan beasiswa', 'Budi mungkin mendapatkan beasiswa', 'Budi pasti mendapatkan beasiswa', 'Hanya Budi yang mendapatkan beasiswa', 'Beasiswa hanya untuk mahasiswa bernama Budi'],
+  answer: 2,
+  explanation: 'Ini adalah silogisme sederhana: Premis 1: Semua mahasiswa berprestasi → beasiswa. Premis 2: Budi = mahasiswa berprestasi. Kesimpulan: Budi → beasiswa (pasti mendapat beasiswa).'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Jika hujan, maka jalanan basah. Jalanan tidak basah. Kesimpulan yang logis adalah…',
+  options: ['Pasti hujan', 'Mungkin hujan', 'Tidak hujan', 'Jalanan selalu basah', 'Hujan tidak ada hubungannya dengan jalanan'],
+  answer: 2,
+  explanation: 'Ini adalah modus tollens: Jika P → Q, dan ¬Q, maka ¬P. Jika hujan (P) → jalanan basah (Q). Jalanan tidak basah (¬Q). Kesimpulan: Tidak hujan (¬P).'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Di antara pilihan berikut, manakah yang merupakan analogi yang tepat untuk hubungan antara "Dokter : Pasien"?',
+  options: ['Guru : Buku', 'Pengacara : Klien', 'Polisi : Hukum', 'Petani : Sawah', 'Hakim : Penjara'],
+  answer: 1,
+  explanation: 'Dokter melayani/membantu Pasien. Analogi yang tepat adalah Pengacara : Klien, di mana pengacara memberikan layanan profesional kepada kliennya — pola hubungan profesional–penerima jasa yang sama.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Lima orang duduk berjajar: Ani, Budi, Cici, Deni, Eka. Ani di sebelah kiri Budi. Cici di antara Budi dan Deni. Eka di paling kanan. Siapa yang duduk di posisi paling kiri?',
+  options: ['Ani', 'Budi', 'Cici', 'Deni', 'Eka'],
+  answer: 0,
+  explanation: 'Dari informasi: Eka di paling kanan (posisi 5). Cici di antara Budi dan Deni. Ani di kiri Budi. Urutan yang mungkin: Ani-Budi-Cici-Deni-Eka atau Deni-Cici-Budi-Ani... tetapi Ani harus di kiri Budi. Urutan: Ani(1)-Budi(2)-Cici(3)-Deni(4)-Eka(5). Jadi Ani di posisi paling kiri.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Dalam sebuah kelas, 60% siswa menyukai Matematika, 50% menyukai Bahasa Indonesia, dan 20% menyukai keduanya. Berapa persen siswa yang tidak menyukai keduanya?',
+  options: ['10%', '20%', '30%', '40%', '50%'],
+  answer: 0,
+  explanation: 'Gunakan rumus gabungan: P(M∪B) = P(M) + P(B) - P(M∩B) = 60% + 50% - 20% = 90%. Siswa yang tidak menyukai keduanya = 100% - 90% = 10%.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Pola bilangan: 2, 6, 12, 20, 30, … Bilangan berikutnya adalah…',
+  options: ['36', '40', '42', '44', '48'],
+  answer: 2,
+  explanation: 'Pola selisih: 6-2=4, 12-6=6, 20-12=8, 30-20=10. Selisih bertambah 2 setiap langkah. Selisih berikutnya adalah 12. Jadi 30+12=42.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Jika semua A adalah B, dan beberapa B adalah C, maka…',
+  options: ['Semua A adalah C', 'Beberapa A adalah C', 'Tidak ada A yang adalah C', 'Semua C adalah A', 'Tidak dapat ditentukan hubungan A dan C'],
+  answer: 4,
+  explanation: 'Dari premis "semua A adalah B" dan "beberapa B adalah C", kita tidak bisa menentukan apakah A yang menjadi bagian dari B tersebut termasuk ke dalam "beberapa B" yang adalah C atau tidak. Hubungan A dan C tidak dapat ditentukan.'
+},
+
+// Penalaran Analitis (PU 23-30)
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Sebuah pabrik memproduksi 240 unit barang per hari. Jika efisiensi mesin meningkat 25%, berapa unit yang diproduksi per hari?',
+  options: ['250', '260', '280', '300', '320'],
+  answer: 3,
+  explanation: 'Produksi baru = 240 × (1 + 25%) = 240 × 1,25 = 300 unit per hari.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Manakah pernyataan yang merupakan fakta (bukan opini)?',
+  options: ['Indonesia adalah negara terbaik di Asia Tenggara', 'Bahasa Indonesia adalah bahasa yang paling mudah dipelajari', 'Indonesia merdeka pada 17 Agustus 1945', 'Budaya Indonesia lebih kaya dibanding negara lain', 'Pemerintah Indonesia seharusnya lebih memperhatikan rakyat kecil'],
+  answer: 2,
+  explanation: 'Fakta adalah pernyataan yang dapat diverifikasi kebenarannya secara objektif. "Indonesia merdeka pada 17 Agustus 1945" adalah fakta sejarah yang terverifikasi. Pilihan lain mengandung penilaian subjektif (terbaik, paling mudah, lebih kaya, seharusnya).'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Grafik menunjukkan penjualan produk A naik dari 1.000 unit (Jan) menjadi 1.500 unit (Jun), turun ke 1.200 unit (Sep), lalu naik ke 1.800 unit (Des). Pernyataan yang benar adalah…',
+  options: ['Penjualan terus meningkat sepanjang tahun', 'Penjualan tertinggi terjadi pada bulan Juni', 'Penjualan mengalami penurunan antara Juni dan September', 'Penjualan pada Desember sama dengan Juni', 'Penjualan pada Januari lebih tinggi dari September'],
+  answer: 2,
+  explanation: 'Data menunjukkan penjualan turun dari 1.500 unit (Jun) ke 1.200 unit (Sep). Jadi pernyataan "penjualan mengalami penurunan antara Juni dan September" adalah benar.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Seorang peneliti menyimpulkan bahwa "mendengarkan musik klasik meningkatkan kecerdasan anak" berdasarkan studi pada 20 anak selama 2 minggu. Kelemahan utama dari kesimpulan tersebut adalah…',
+  options: ['Musik klasik tidak baik untuk anak', 'Sampel terlalu kecil dan waktu terlalu singkat untuk membuat kesimpulan umum', 'Peneliti tidak kompeten di bidangnya', 'Kecerdasan tidak bisa diukur', 'Anak-anak tidak suka musik klasik'],
+  answer: 1,
+  explanation: 'Kelemahan metodologis utama adalah: sampel hanya 20 anak (terlalu kecil, tidak representatif) dan durasi hanya 2 minggu (terlalu singkat untuk mengukur perubahan kecerdasan). Kesimpulan yang kuat memerlukan sampel besar dan waktu yang cukup.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Dari pernyataan "Jika tidak belajar, maka tidak lulus", manakah yang merupakan kontraposisi yang benar?',
+  options: ['Jika lulus, maka belajar', 'Jika belajar, maka lulus', 'Jika tidak lulus, maka tidak belajar', 'Jika lulus, maka tidak belajar', 'Jika belajar, maka tidak lulus'],
+  answer: 0,
+  explanation: 'Kontraposisi dari "Jika P maka Q" adalah "Jika tidak Q maka tidak P". Dari "Jika tidak belajar (¬B) maka tidak lulus (¬L)", kontraposisinya adalah "Jika lulus (L) maka belajar (B)".'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Sebuah tim terdiri dari 4 orang: Ari, Bimo, Citra, Dina. Setiap proyek membutuhkan tepat 2 orang. Berapa banyak kombinasi tim yang mungkin dibentuk?',
+  options: ['4', '6', '8', '10', '12'],
+  answer: 1,
+  explanation: 'Kombinasi C(4,2) = 4!/(2!×2!) = (4×3)/(2×1) = 6. Pasangan yang mungkin: Ari-Bimo, Ari-Citra, Ari-Dina, Bimo-Citra, Bimo-Dina, Citra-Dina.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Rata-rata nilai ujian 10 siswa adalah 75. Jika seorang siswa baru bergabung dengan nilai 95, berapa rata-rata nilai baru?',
+  options: ['76,8', '77,3', '78,2', '79,5', '80,0'],
+  answer: 1,
+  explanation: 'Total nilai 10 siswa = 75 × 10 = 750. Setelah siswa baru: total = 750 + 95 = 845, jumlah siswa = 11. Rata-rata baru = 845 ÷ 11 ≈ 76,8.'
+},
+{
+  section:'pu', passageTitle:null, passage:null,
+  question: 'Manakah argumen yang menggunakan logika yang SALAH (fallacy)?',
+  options: ['"Hujan menyebabkan jalan basah, jalan basah, jadi pasti hujan" — ini fallacy karena jalanan bisa basah karena sebab lain', '"Semua kucing adalah mamalia, Pusi adalah kucing, jadi Pusi adalah mamalia"', '"Jika belajar maka bisa, Budi bisa, jadi Budi belajar" — ini fallacy', '"2 + 2 = 4, maka pernyataan ini benar"', 'A dan C adalah fallacy'],
+  answer: 4,
+  explanation: 'Pilihan A mengandung fallacy "affirming the consequent": P→Q, Q, maka P (salah). Pilihan C juga fallacy yang sama. Jadi A dan C keduanya fallacy, sehingga jawaban E ("A dan C adalah fallacy") adalah yang paling tepat.'
+},
+
+// ============================================================
+// PENGETAHUAN & PEMAHAMAN UMUM (PPU) — 20 Soal
+// ============================================================
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Siapakah yang memproklamasikan kemerdekaan Indonesia pada 17 Agustus 1945?',
+  options: ['Soeharto dan Adam Malik', 'Soekarno dan Mohammad Hatta', 'Mohammad Yamin dan Soepomo', 'Sutan Sjahrir dan Agus Salim', 'Wahid Hasyim dan Ki Hajar Dewantara'],
+  answer: 1,
+  explanation: 'Kemerdekaan Indonesia diproklamasikan oleh Ir. Soekarno (Presiden pertama RI) dan Drs. Mohammad Hatta (Wakil Presiden pertama RI) pada 17 Agustus 1945 di Jalan Pegangsaan Timur No. 56, Jakarta.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Organ tubuh manakah yang berfungsi memompa darah ke seluruh tubuh?',
+  options: ['Paru-paru', 'Hati', 'Ginjal', 'Jantung', 'Limpa'],
+  answer: 3,
+  explanation: 'Jantung adalah organ yang berfungsi sebagai pompa untuk mengalirkan darah ke seluruh tubuh melalui sistem peredaran darah.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Konferensi Asia-Afrika pertama diselenggarakan di kota…',
+  options: ['Jakarta', 'Surabaya', 'Bandung', 'Yogyakarta', 'Medan'],
+  answer: 2,
+  explanation: 'Konferensi Asia-Afrika pertama diselenggarakan di Bandung pada 18-24 April 1955, menghasilkan Dasasila Bandung dan menjadi tonggak gerakan Non-Blok.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Apa nama proses fotosintesis yang menghasilkan gula dari CO₂ dan H₂O menggunakan energi cahaya?',
+  options: ['Respirasi aerob', 'Fermentasi', 'Fotosintesis', 'Glikolisis', 'Siklus Krebs'],
+  answer: 2,
+  explanation: 'Fotosintesis adalah proses biokimia di mana tumbuhan menggunakan energi cahaya matahari untuk mengubah CO₂ dan H₂O menjadi glukosa (gula) dan oksigen: 6CO₂ + 6H₂O + cahaya → C₆H₁₂O₆ + 6O₂.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Sistem ekonomi yang diterapkan Indonesia berdasarkan UUD 1945 adalah…',
+  options: ['Sistem ekonomi liberal', 'Sistem ekonomi komando/terpusat', 'Sistem ekonomi Pancasila/kerakyatan', 'Sistem ekonomi kapitalis murni', 'Sistem ekonomi sosialis'],
+  answer: 2,
+  explanation: 'Berdasarkan Pasal 33 UUD 1945, Indonesia menerapkan sistem ekonomi kerakyatan (sering disebut ekonomi Pancasila) yang berasaskan kekeluargaan dan kebersamaan, di mana cabang produksi penting dikuasai negara untuk kemakmuran rakyat.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Unsur kimia dengan simbol Au adalah…',
+  options: ['Perak', 'Aluminium', 'Emas', 'Tembaga', 'Besi'],
+  answer: 2,
+  explanation: 'Au berasal dari bahasa Latin "Aurum" yang berarti Emas. Emas memiliki nomor atom 79 dalam tabel periodik.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Siapakah tokoh yang dikenal sebagai "Bapak Pendidikan Nasional" Indonesia?',
+  options: ['Mohammad Hatta', 'Soekarno', 'Ki Hajar Dewantara', 'Ahmad Dahlan', 'Wahidin Sudirohusodo'],
+  answer: 2,
+  explanation: 'Ki Hajar Dewantara (Raden Mas Soewardi Soerjaningrat) adalah tokoh pendidikan Indonesia yang mendirikan Taman Siswa dan dikenal sebagai Bapak Pendidikan Nasional. Tanggal lahirnya, 2 Mei, diperingati sebagai Hari Pendidikan Nasional.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Planet terbesar dalam tata surya kita adalah…',
+  options: ['Saturnus', 'Uranus', 'Neptunus', 'Jupiter', 'Bumi'],
+  answer: 3,
+  explanation: 'Jupiter adalah planet terbesar dalam tata surya dengan diameter sekitar 142.984 km — lebih dari 11 kali diameter Bumi. Jupiter juga memiliki jumlah bulan terbanyak di tata surya.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Peristiwa Rengasdengklok pada 16 Agustus 1945 bertujuan untuk…',
+  options: ['Merencanakan serangan ke markas Jepang', 'Mendesak Soekarno-Hatta segera memproklamasikan kemerdekaan', 'Menyusun teks proklamasi kemerdekaan', 'Mengadakan rapat darurat PPKI', 'Memindahkan ibu kota ke Yogyakarta'],
+  answer: 1,
+  explanation: 'Peristiwa Rengasdengklok terjadi ketika golongan pemuda (Chaerul Saleh, Wikana, Sukarni) "menculik" Soekarno dan Hatta ke Rengasdengklok untuk mendesak agar kemerdekaan segera diproklamasikan tanpa menunggu keputusan Jepang.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Hukum Newton I (hukum inersia) menyatakan…',
+  options: ['F = m × a', 'Setiap aksi ada reaksi yang sama besar dan berlawanan arah', 'Benda yang diam akan tetap diam dan benda yang bergerak akan tetap bergerak lurus beraturan jika tidak ada gaya luar', 'Energi tidak dapat diciptakan dan tidak dapat dimusnahkan', 'Gaya gravitasi berbanding terbalik dengan kuadrat jarak'],
+  answer: 2,
+  explanation: 'Hukum Newton I (hukum inersia) menyatakan bahwa benda yang diam akan tetap diam dan benda yang bergerak akan tetap bergerak dengan kecepatan konstan dalam garis lurus, kecuali ada gaya luar yang bekerja padanya.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Bahasa resmi PBB yang digunakan dalam sidang-sidangnya berjumlah…',
+  options: ['3', '4', '5', '6', '7'],
+  answer: 3,
+  explanation: 'PBB memiliki 6 bahasa resmi: Arab, Mandarin (Cina), Inggris, Prancis, Rusia, dan Spanyol. Bahasa-bahasa ini digunakan dalam semua pertemuan dan dokumen resmi PBB.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Apa yang dimaksud dengan "trias politica" dalam sistem pemerintahan?',
+  options: ['Tiga tingkatan pemerintahan: pusat, provinsi, kabupaten', 'Pemisahan kekuasaan menjadi legislatif, eksekutif, dan yudikatif', 'Tiga partai politik terbesar dalam parlemen', 'Tiga prinsip demokrasi: kebebasan, kesetaraan, keadilan', 'Sistem pemilihan umum tiga putaran'],
+  answer: 1,
+  explanation: 'Trias politica adalah konsep pemisahan kekuasaan yang dikemukakan oleh Montesquieu, yaitu: kekuasaan legislatif (membuat undang-undang), eksekutif (menjalankan pemerintahan), dan yudikatif (menegakkan hukum).'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Sungai terpanjang di dunia adalah…',
+  options: ['Amazon', 'Mississippi', 'Yangtze', 'Nil', 'Congo'],
+  answer: 3,
+  explanation: 'Sungai Nil di Afrika dengan panjang sekitar 6.650 km umumnya diakui sebagai sungai terpanjang di dunia, mengalir melalui 11 negara dari Tanzania hingga Mesir.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Apa yang dimaksud dengan inflasi dalam ekonomi?',
+  options: ['Kenaikan nilai mata uang suatu negara', 'Penurunan harga barang dan jasa secara umum', 'Kenaikan harga barang dan jasa secara umum dan terus-menerus', 'Peningkatan produksi barang dan jasa', 'Penurunan tingkat pengangguran'],
+  answer: 2,
+  explanation: 'Inflasi adalah kenaikan harga barang dan jasa secara umum dan terus-menerus dalam suatu periode tertentu, yang menyebabkan daya beli uang menurun. Kebalikannya adalah deflasi (penurunan harga umum).'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Piagam Jakarta ditandatangani pada tanggal…',
+  options: ['17 Agustus 1945', '22 Juni 1945', '1 Juni 1945', '18 Agustus 1945', '28 Oktober 1928'],
+  answer: 1,
+  explanation: 'Piagam Jakarta (Jakarta Charter) ditandatangani pada 22 Juni 1945 oleh Panitia Sembilan. Piagam ini menjadi cikal bakal Pembukaan UUD 1945, dengan perubahan pada sila pertama Pancasila.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Proses perpindahan panas tanpa medium perantara disebut…',
+  options: ['Konduksi', 'Konveksi', 'Radiasi', 'Evaporasi', 'Kondensasi'],
+  answer: 2,
+  explanation: 'Radiasi adalah perpindahan panas melalui gelombang elektromagnetik tanpa memerlukan medium perantara. Contoh: panas dari matahari sampai ke bumi melalui ruang hampa. Konduksi memerlukan kontak langsung, konveksi melalui aliran fluida.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Lembaga negara yang berwenang menguji undang-undang terhadap UUD 1945 di Indonesia adalah…',
+  options: ['Mahkamah Agung (MA)', 'Mahkamah Konstitusi (MK)', 'Komisi Yudisial (KY)', 'Dewan Perwakilan Rakyat (DPR)', 'Majelis Permusyawaratan Rakyat (MPR)'],
+  answer: 1,
+  explanation: 'Mahkamah Konstitusi (MK) memiliki kewenangan untuk menguji undang-undang terhadap UUD 1945 (judicial review), memutus sengketa kewenangan antar lembaga negara, dan memutus sengketa hasil pemilu.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Karya sastra "Tenggelamnya Kapal Van der Wijck" ditulis oleh…',
+  options: ['Pramoedya Ananta Toer', 'Chairil Anwar', 'Hamka', 'Sutan Takdir Alisjahbana', 'Marah Rusli'],
+  answer: 2,
+  explanation: '"Tenggelamnya Kapal Van der Wijck" adalah novel karya Hamka (Haji Abdul Malik Karim Amrullah) yang diterbitkan tahun 1939, berkisah tentang cinta yang terhalang perbedaan adat dan strata sosial.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Rumus kimia air adalah…',
+  options: ['CO₂', 'H₂O₂', 'H₂O', 'NaCl', 'O₂'],
+  answer: 2,
+  explanation: 'Rumus kimia air adalah H₂O, terdiri dari dua atom hidrogen (H) dan satu atom oksigen (O). H₂O₂ adalah hidrogen peroksida (air oksigen), bukan air biasa.'
+},
+{
+  section:'ppu', passageTitle:null, passage:null,
+  question: 'Organisasi ASEAN didirikan pada tahun…',
+  options: ['1945', '1955', '1967', '1971', '1975'],
+  answer: 2,
+  explanation: 'ASEAN (Association of Southeast Asian Nations) didirikan pada 8 Agustus 1967 melalui Deklarasi Bangkok, ditandatangani oleh 5 negara pendiri: Indonesia, Malaysia, Filipina, Singapura, dan Thailand.'
+},
+
+// ============================================================
+// MEMAHAMI BACAAN & MENULIS (PBM) — 20 Soal
+// ============================================================
+{
+  section:'pbm', passageTitle:'Teks 1 — Dampak Media Sosial',
+  passage:`Media sosial telah menjadi bagian tak terpisahkan dari kehidupan modern. Platform seperti Instagram, TikTok, Twitter, dan YouTube diakses oleh miliaran pengguna di seluruh dunia setiap harinya. Di satu sisi, media sosial membuka peluang komunikasi yang tidak pernah ada sebelumnya: menghubungkan keluarga yang berjauhan, memfasilitasi gerakan sosial, dan memberikan platform bagi suara-suara yang sebelumnya tidak terdengar.
+
+Namun di sisi lain, sejumlah penelitian menunjukkan korelasi antara penggunaan media sosial yang berlebihan dengan masalah kesehatan mental, terutama pada remaja. Fenomena perbandingan sosial (social comparison), cyberbullying, dan paparan konten negatif menjadi perhatian para ahli psikologi. Sebuah studi dari Universitas Pennsylvania menemukan bahwa membatasi penggunaan media sosial hingga 30 menit per hari secara signifikan mengurangi perasaan kesepian dan depresi pada mahasiswa.
+
+Literasi digital menjadi kunci dalam menghadapi tantangan ini. Kemampuan untuk memilah informasi yang akurat, mengenali konten manipulatif, dan menggunakan media sosial secara bijak merupakan keterampilan esensial abad ke-21. Orang tua, pendidik, dan pemerintah perlu bekerja sama untuk meningkatkan literasi digital di tengah masyarakat.`,
+  question: 'Ide pokok paragraf kedua teks di atas adalah…',
+  options: ['Media sosial menghubungkan keluarga yang berjauhan', 'Media sosial membuka peluang komunikasi baru', 'Penggunaan media sosial berlebihan berkorelasi dengan masalah kesehatan mental', 'Literasi digital adalah keterampilan esensial abad ke-21', 'Pemerintah perlu membatasi penggunaan media sosial'],
+  answer: 2,
+  explanation: 'Ide pokok paragraf kedua adalah dampak negatif media sosial terhadap kesehatan mental: "sejumlah penelitian menunjukkan korelasi antara penggunaan media sosial yang berlebihan dengan masalah kesehatan mental." Kalimat-kalimat selanjutnya mendukung ide ini.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Berdasarkan teks, temuan studi Universitas Pennsylvania menunjukkan bahwa…',
+  options: ['Media sosial harus dilarang sepenuhnya', 'Membatasi media sosial 30 menit/hari mengurangi kesepian dan depresi', 'Semua remaja mengalami depresi karena media sosial', 'TikTok lebih berbahaya dari Instagram', 'Literasi digital tidak efektif mengatasi masalah media sosial'],
+  answer: 1,
+  explanation: 'Teks secara eksplisit menyebutkan hasil studi: "membatasi penggunaan media sosial hingga 30 menit per hari secara signifikan mengurangi perasaan kesepian dan depresi pada mahasiswa."'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Kata "korelasi" dalam teks bermakna…',
+  options: ['Sebab-akibat yang pasti', 'Hubungan atau keterkaitan antara dua hal', 'Perbedaan yang signifikan', 'Persamaan yang identik', 'Penolakan terhadap suatu fenomena'],
+  answer: 1,
+  explanation: 'Korelasi berarti hubungan atau keterkaitan antara dua variabel. Penting dicatat bahwa korelasi tidak selalu berarti kausalitas (sebab-akibat) — dua hal bisa berkorelasi tanpa salah satunya menyebabkan yang lain.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Penulisan kalimat yang BAKU adalah…',
+  options: ['Dia sudah makan siang tadi.', 'Dia sudah makan siang tadi', 'Dia udah makan siang tadi.', 'Beliau sudah di makan siang tadi.', 'Dia sudah dimakan siang tadi.'],
+  answer: 0,
+  explanation: '"Dia sudah makan siang tadi." adalah kalimat yang baku dan lengkap dengan tanda titik di akhir. Pilihan lain memiliki masalah: tidak ada tanda baca (B), penggunaan kata tidak baku "udah" (C), penggunaan kata "di makan" yang salah (D), dan "dimakan" yang mengubah makna (E).'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Manakah penggunaan tanda baca yang BENAR?',
+  options: ['Ayah membeli; buku, pensil, dan penghapus.', 'Ayah membeli buku, pensil, dan penghapus.', 'Ayah membeli buku: pensil, dan penghapus.', 'Ayah membeli buku; pensil; dan penghapus.', 'Ayah membeli, buku, pensil, dan penghapus.'],
+  answer: 1,
+  explanation: '"Ayah membeli buku, pensil, dan penghapus." adalah kalimat dengan tanda baca yang benar. Tanda koma digunakan untuk memisahkan unsur-unsur dalam deret/seri.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Kalimat manakah yang menggunakan kata hubung (konjungsi) dengan TEPAT?',
+  options: ['Dia rajin belajar, tetapi dia mendapat nilai bagus.', 'Dia rajin belajar, sehingga dia mendapat nilai bagus.', 'Dia rajin belajar, karena dia mendapat nilai bagus.', 'Dia rajin belajar, supaya dia mendapat nilai bagus (digunakan untuk pernyataan fakta).', 'Dia rajin belajar, walaupun dia mendapat nilai bagus.'],
+  answer: 1,
+  explanation: '"Sehingga" menyatakan akibat/hasil. "Dia rajin belajar, sehingga dia mendapat nilai bagus" — rajin belajar adalah sebab, nilai bagus adalah akibat. Ini logis dan tepat. "Tetapi" menyatakan pertentangan, "karena" menyatakan sebab, "supaya" menyatakan tujuan — ketiganya tidak tepat dalam konteks ini.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Manakah yang merupakan paragraf deduktif (kalimat utama di awal)?',
+  options: ['Buah mangga sangat manis. Selain itu, kulitnya tipis dan mudah dikupas. Karena itu, mangga menjadi buah favorit banyak orang.', 'Di pasar banyak dijual mangga, durian, dan rambutan. Buah-buahan tropis ini sangat digemari masyarakat Indonesia.', 'Padi tumbuh di sawah. Jagung tumbuh di ladang. Sayuran tumbuh di kebun. Tumbuhan sangat bergantung pada lingkungannya.', 'Langit mendung. Angin bertiup kencang. Petir menyambar. Hujan lebat pun turun dengan deras.', 'Rumahnya besar dan megah. Mobilnya mewah. Pakaiannya mahal. Dia adalah orang yang sangat kaya.'],
+  answer: 0,
+  explanation: 'Paragraf deduktif memiliki kalimat utama di awal, diikuti kalimat penjelas. Pilihan A: "Buah mangga sangat manis" (kalimat utama/umum) → diikuti perincian (tipis, mudah dikupas) → simpulan. Ini pola deduktif.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Penulisan kata serapan yang BENAR adalah…',
+  options: ['Aktifitas', 'Kwalitas', 'Sistim', 'Efektif', 'Nopember'],
+  answer: 3,
+  explanation: '"Efektif" adalah penulisan yang benar dalam KBBI. Pilihan lain salah: "Aktifitas" → Aktivitas, "Kwalitas" → Kualitas, "Sistim" → Sistem, "Nopember" → November.'
+},
+{
+  section:'pbm', passageTitle:'Teks 2 — Sumpah Pemuda',
+  passage:`Sumpah Pemuda yang dikumandangkan pada 28 Oktober 1928 merupakan tonggak sejarah penting dalam perjalanan bangsa Indonesia. Dalam kongres pemuda kedua di Batavia (kini Jakarta), para pemuda dari berbagai daerah dan latar belakang bersatu menyatakan satu tanah air, satu bangsa, dan satu bahasa: Indonesia.
+
+Peristiwa ini memiliki makna yang jauh melampaui sekadar deklarasi. Sumpah Pemuda melambangkan kesadaran kolektif bahwa perbedaan suku, agama, dan adat istiadat bukanlah penghalang, melainkan kekayaan yang mempersatukan. Semangat persatuan inilah yang kemudian menjadi fondasi bagi proklamasi kemerdekaan tujuh belas tahun kemudian.
+
+Di era modern, semangat Sumpah Pemuda perlu dimaknai ulang. Tantangan seperti polarisasi politik, intoleransi, dan hoaks yang viral di media sosial mengancam kohesi sosial bangsa. Generasi muda masa kini dipanggil untuk menjadi perekat, bukan pemecah persatuan.`,
+  question: 'Manakah simpulan yang paling tepat dari teks di atas?',
+  options: ['Sumpah Pemuda hanya relevan untuk tahun 1928', 'Generasi muda tidak perlu mempelajari sejarah Sumpah Pemuda', 'Semangat Sumpah Pemuda tetap relevan dan perlu diwujudkan generasi muda masa kini', 'Perbedaan suku dan agama selalu menjadi penghalang persatuan', 'Media sosial harus dilarang untuk menjaga persatuan'],
+  answer: 2,
+  explanation: 'Simpulan yang tepat mencakup pesan utama dari seluruh teks: Sumpah Pemuda adalah tonggak sejarah (paragraf 1), maknanya mendalam dan relevan (paragraf 2), dan generasi muda masa kini harus melanjutkan semangatnya (paragraf 3).'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Kata "kohesi" dalam teks bermakna…',
+  options: ['Konflik internal', 'Kepaduan dan keterikatan', 'Perpecahan mendalam', 'Keseragaman budaya', 'Pertumbuhan ekonomi'],
+  answer: 1,
+  explanation: '"Kohesi sosial" (social cohesion) berarti kepaduan, keterikatan, dan kerekatan hubungan antar anggota masyarakat. Kohesi sosial yang kuat berarti masyarakat bersatu padu dan saling mendukung.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Kalimat yang menggunakan ejaan yang DISEMPURNAKAN (EYD/PUEBI) dengan benar adalah…',
+  options: ['Presiden Republik Indonesia berkunjung ke jawa tengah.', 'presiden Republik indonesia berkunjung ke Jawa Tengah.', 'Presiden Republik Indonesia berkunjung ke Jawa Tengah.', 'Presiden republik indonesia berkunjung ke jawa tengah.', 'PRESIDEN REPUBLIK INDONESIA berkunjung ke Jawa Tengah.'],
+  answer: 2,
+  explanation: '"Presiden Republik Indonesia berkunjung ke Jawa Tengah." — Penulisan yang benar: jabatan diikuti nama negara menggunakan huruf kapital, nama wilayah resmi (Jawa Tengah) menggunakan huruf kapital.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Manakah kalimat yang TIDAK mengandung pleonasme (penggunaan kata berlebihan)?',
+  options: ['Dia naik ke atas lantai dua.', 'Mereka turun ke bawah menggunakan lift.', 'Kami maju ke depan untuk menerima penghargaan.', 'Dia berjalan kaki menuju kantor.', 'Para hadirin sekalian yang terhormat.'],
+  answer: 3,
+  explanation: '"Dia berjalan kaki menuju kantor" tidak mengandung pleonasme. Pilihan lain pleonastis: "naik ke atas" (naik sudah berarti ke atas), "turun ke bawah" (turun sudah berarti ke bawah), "maju ke depan" (maju sudah berarti ke depan), "para hadirin sekalian" (para dan sekalian bermakna jamak).'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Untuk membuat tulisan lebih kohesif, kata penghubung yang tepat untuk melanjutkan kalimat "Cuaca hari ini sangat panas. ___ banyak warga yang memilih berdiam di rumah." adalah…',
+  options: ['Namun', 'Oleh karena itu', 'Meskipun demikian', 'Selain itu', 'Bahkan'],
+  answer: 1,
+  explanation: '"Oleh karena itu" menyatakan hubungan sebab-akibat: cuaca panas (sebab) → warga berdiam di rumah (akibat). Ini adalah konjungsi antarkalimat yang paling tepat untuk menyambungkan kedua kalimat tersebut.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Manakah penulisan daftar pustaka yang BENAR sesuai format Indonesia?',
+  options: ['Soekarno. (1963). Dibawah Bendera Revolusi. Jakarta: Panitia Penerbit.', 'Soekarno. 1963. Di bawah Bendera Revolusi. Jakarta: Panitia Penerbit.', 'Soekarno, 1963, Di bawah Bendera Revolusi, Jakarta, Panitia Penerbit.', 'Soekarno (1963) "Di bawah Bendera Revolusi" Jakarta Panitia Penerbit.', 'SOEKARNO. 1963. Di Bawah Bendera Revolusi. JAKARTA: Panitia Penerbit.'],
+  answer: 1,
+  explanation: 'Format penulisan daftar pustaka: Nama Penulis. Tahun. Judul Buku (cetak miring/italic). Kota: Penerbit. Pilihan B menggunakan format yang paling mendekati standar.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Kalimat efektif adalah kalimat yang…',
+  options: ['Menggunakan banyak kata untuk kejelasan', 'Menggunakan bahasa yang indah dan puitis', 'Tepat menyampaikan gagasan sesuai yang dimaksud penutur dengan kaidah yang benar', 'Selalu menggunakan kosakata baku dan formal', 'Mengandung banyak anak kalimat'],
+  answer: 2,
+  explanation: 'Kalimat efektif adalah kalimat yang mampu menyampaikan pesan/gagasan secara tepat, jelas, dan sesuai dengan maksud penutur atau penulis, dengan menggunakan kaidah bahasa yang benar dan ekonomis (tidak berlebihan).'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Manakah paragraf yang memiliki koherensi yang baik?',
+  options: ['Saya suka makan nasi. Langit berwarna biru. Kucing itu lucu. Jakarta adalah ibu kota.', 'Belajar bahasa asing memiliki banyak manfaat. Pertama, meningkatkan kemampuan kognitif. Kedua, membuka peluang karier lebih luas. Ketiga, memudahkan komunikasi antarbangsa.', 'Pohon mangga berbuah lebat. Kemarin hujan deras. Adik saya suka bermain bola. Ibu memasak gulai.', 'Teknologi berkembang pesat. Saya suka tidur siang. Harga beras naik. Teman saya sakit.', 'Matahari terbit di timur. Air mengalir ke bawah. Anjing menggonggong. Bunga mekar di musim semi.'],
+  answer: 1,
+  explanation: 'Koherensi adalah kepaduan dan kesinambungan antarkalimat. Pilihan B memiliki koherensi baik: kalimat utama (manfaat belajar bahasa asing) diikuti kalimat penjelas yang berurutan dan saling berkaitan (pertama, kedua, ketiga).'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Penggunaan huruf kapital yang SALAH terdapat pada kalimat…',
+  options: ['Dia belajar di Universitas Indonesia.', 'Saya tinggal di Jalan Sudirman No. 5.', 'Kami merayakan hari kemerdekaan Indonesia.', 'Presiden Joko Widodo menghadiri acara tersebut.', 'Bahasa indonesia digunakan oleh ratusan juta orang.'],
+  answer: 4,
+  explanation: '"Bahasa indonesia" salah — seharusnya "Bahasa Indonesia" dengan huruf kapital pada kata "Indonesia" karena merupakan nama bahasa nasional. Nama bahasa, bangsa, dan suku bangsa ditulis dengan huruf kapital.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Sinonim kata "antusias" yang paling tepat adalah…',
+  options: ['Malas', 'Bersemangat', 'Takut', 'Bingung', 'Lelah'],
+  answer: 1,
+  explanation: '"Antusias" berarti memiliki minat dan semangat yang besar, penuh gairah. Sinonim yang paling tepat adalah "bersemangat" atau "bergairah".'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Kalimat pasif yang benar adalah…',
+  options: ['Buku itu dibaca oleh Ani.', 'Ani membaca buku itu.', 'Buku itu Ani membaca.', 'Dibaca Ani buku itu.', 'Ani dibaca buku itu.'],
+  answer: 0,
+  explanation: '"Buku itu dibaca oleh Ani" adalah kalimat pasif yang benar. Pola kalimat pasif: Objek + kata kerja pasif (di-) + oleh + Subjek. Pilihan B adalah kalimat aktif, dan pilihan C, D, E memiliki struktur yang tidak baku.'
+},
+{
+  section:'pbm', passageTitle:null, passage:null,
+  question: 'Antonim kata "eksplisit" adalah…',
+  options: ['Jelas', 'Tegas', 'Implisit', 'Langsung', 'Nyata'],
+  answer: 2,
+  explanation: '"Eksplisit" berarti tersurat, jelas, langsung dinyatakan. Antonimnya adalah "implisit" yang berarti tersirat, tidak langsung dinyatakan, tersembunyi dalam makna.'
+},
+
+// ============================================================
+// PENGETAHUAN KUANTITATIF (PK) — 15 Soal
+// ============================================================
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Jika 3x + 7 = 22, maka nilai x adalah…',
+  options: ['3', '4', '5', '6', '7'],
+  answer: 2,
+  explanation: '3x + 7 = 22 → 3x = 22 - 7 = 15 → x = 15 ÷ 3 = 5.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Hasil dari 2³ × 2⁴ adalah…',
+  options: ['2⁶', '2⁷', '2⁸', '2¹²', '4⁷'],
+  answer: 1,
+  explanation: 'Mengalikan bilangan berpangkat dengan basis yang sama: aᵐ × aⁿ = aᵐ⁺ⁿ. Jadi 2³ × 2⁴ = 2³⁺⁴ = 2⁷.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Sebuah persegi panjang memiliki panjang 12 cm dan lebar 8 cm. Luas perseginya adalah…',
+  options: ['20 cm²', '40 cm²', '80 cm²', '96 cm²', '100 cm²'],
+  answer: 3,
+  explanation: 'Luas persegi panjang = panjang × lebar = 12 × 8 = 96 cm².'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Jika harga suatu barang naik 20% menjadi Rp 240.000, berapa harga awal barang tersebut?',
+  options: ['Rp 180.000', 'Rp 192.000', 'Rp 200.000', 'Rp 210.000', 'Rp 220.000'],
+  answer: 2,
+  explanation: 'Harga awal × (1 + 20%) = 240.000. Harga awal = 240.000 ÷ 1,2 = 200.000.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Nilai dari √144 + √25 adalah…',
+  options: ['13', '14', '17', '19', '22'],
+  answer: 2,
+  explanation: '√144 = 12 (karena 12² = 144). √25 = 5 (karena 5² = 25). Jadi √144 + √25 = 12 + 5 = 17.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Dalam sebuah kelas, perbandingan siswa laki-laki dan perempuan adalah 3:5. Jika total siswa 40 orang, berapa siswa perempuan?',
+  options: ['15', '20', '25', '28', '30'],
+  answer: 2,
+  explanation: 'Total bagian = 3 + 5 = 8. Siswa perempuan = (5/8) × 40 = 25 orang.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Jika A = {1,2,3,4,5} dan B = {3,4,5,6,7}, maka A ∩ B adalah…',
+  options: ['{1,2}', '{6,7}', '{3,4,5}', '{1,2,3,4,5,6,7}', '{1,2,6,7}'],
+  answer: 2,
+  explanation: 'A ∩ B (irisan) adalah himpunan elemen yang ada di A DAN di B. Elemen yang ada di keduanya: 3, 4, 5. Jadi A ∩ B = {3,4,5}.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Sebuah pekerjaan dapat diselesaikan oleh Andi dalam 6 hari dan oleh Budi dalam 12 hari. Jika mereka bekerja bersama, berapa hari pekerjaan itu selesai?',
+  options: ['3 hari', '4 hari', '5 hari', '6 hari', '9 hari'],
+  answer: 1,
+  explanation: 'Kemampuan Andi per hari = 1/6, Budi = 1/12. Bersama = 1/6 + 1/12 = 2/12 + 1/12 = 3/12 = 1/4. Jadi waktu yang diperlukan = 4 hari.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Jika diketahui data: 4, 7, 9, 11, 14. Nilai median dari data tersebut adalah…',
+  options: ['7', '9', '10', '11', '45'],
+  answer: 1,
+  explanation: 'Data sudah terurut: 4, 7, 9, 11, 14. Jumlah data = 5 (ganjil). Median = nilai tengah = data ke-3 = 9.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Keliling lingkaran dengan diameter 14 cm adalah… (π = 22/7)',
+  options: ['22 cm', '44 cm', '88 cm', '154 cm', '196 cm'],
+  answer: 1,
+  explanation: 'Keliling lingkaran = π × d = (22/7) × 14 = 22 × 2 = 44 cm.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Dari tabel berikut, produk mana yang memiliki persentase keuntungan tertinggi?\nProduk A: Modal Rp100.000, Jual Rp130.000\nProduk B: Modal Rp200.000, Jual Rp250.000\nProduk C: Modal Rp50.000, Jual Rp70.000',
+  options: ['Produk A (30%)', 'Produk B (25%)', 'Produk C (40%)', 'Semua sama', 'Tidak dapat ditentukan'],
+  answer: 2,
+  explanation: '% keuntungan = (untung/modal) × 100%. A: (30.000/100.000)×100% = 30%. B: (50.000/200.000)×100% = 25%. C: (20.000/50.000)×100% = 40%. Produk C tertinggi (40%).'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Sebuah kendaraan menempuh jarak 360 km dalam waktu 4 jam. Berapa kecepatan rata-ratanya?',
+  options: ['80 km/jam', '90 km/jam', '100 km/jam', '110 km/jam', '120 km/jam'],
+  answer: 1,
+  explanation: 'Kecepatan = Jarak ÷ Waktu = 360 ÷ 4 = 90 km/jam.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Nilai dari (x + y)² jika x = 3 dan y = 2 adalah…',
+  options: ['10', '13', '25', '30', '36'],
+  answer: 2,
+  explanation: '(x + y)² = (3 + 2)² = 5² = 25.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Deret aritmatika: 5, 9, 13, 17, … Suku ke-10 adalah…',
+  options: ['37', '39', '41', '43', '45'],
+  answer: 2,
+  explanation: 'Suku pertama (a) = 5, beda (b) = 4. Suku ke-n = a + (n-1)b. Suku ke-10 = 5 + (10-1)×4 = 5 + 36 = 41.'
+},
+{
+  section:'pk', passageTitle:null, passage:null,
+  question: 'Sebuah bak mandi bervolume 1.500 liter. Keran mengisi 50 liter/menit, lubang pembuangan mengeluarkan 20 liter/menit. Jika keran dan lubang pembuangan terbuka bersamaan, berapa menit untuk penuh?',
+  options: ['25 menit', '30 menit', '40 menit', '50 menit', '75 menit'],
+  answer: 3,
+  explanation: 'Laju pengisian bersih = 50 - 20 = 30 liter/menit. Waktu = 1.500 ÷ 30 = 50 menit.'
+},
+
+// ============================================================
+// LITERASI BAHASA INGGRIS (LBI) — 20 Soal
+// ============================================================
+{
+  section:'lbi', passageTitle:'Reading Passage 1 — Climate Change',
+  passage:`Climate change represents one of the most pressing challenges of our time. Scientists have documented a clear trend: global average temperatures have risen by approximately 1.1°C since the pre-industrial era, primarily due to the burning of fossil fuels and deforestation. The consequences are far-reaching and include rising sea levels, more frequent extreme weather events, shifts in precipitation patterns, and threats to biodiversity.
+
+The Paris Agreement, adopted in 2015, established the goal of limiting global warming to well below 2°C above pre-industrial levels, with efforts to limit warming to 1.5°C. To achieve this, countries must transition rapidly from fossil fuels to renewable energy sources such as solar, wind, and hydropower. Additionally, protecting and restoring natural carbon sinks—forests, wetlands, and oceans—is crucial.
+
+Individual actions also play a role: reducing meat consumption, using public transportation, minimizing single-use plastics, and supporting sustainable businesses all contribute to mitigating climate change. However, systemic change driven by government policy and corporate responsibility remains the most powerful lever for meaningful impact.`,
+  question: 'According to the passage, by how much has global temperature risen since the pre-industrial era?',
+  options: ['0.5°C', '1.0°C', '1.1°C', '1.5°C', '2.0°C'],
+  answer: 2,
+  explanation: 'The passage states: "global average temperatures have risen by approximately 1.1°C since the pre-industrial era."'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'The word "pressing" in the first paragraph most nearly means…',
+  options: ['Physical pressing', 'Urgent and important', 'Stressful emotionally', 'Relating to the press/media', 'Easy to solve'],
+  answer: 1,
+  explanation: 'In context, "pressing" means urgent, requiring immediate attention. "One of the most pressing challenges" means one of the most urgent/critical challenges.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'What was the goal established by the Paris Agreement?',
+  options: ['Eliminate all fossil fuels by 2020', 'Limit warming to well below 2°C with efforts toward 1.5°C', 'Reduce emissions by 50% by 2030', 'Protect all existing forests globally', 'Switch entirely to solar energy'],
+  answer: 1,
+  explanation: 'The passage states: "The Paris Agreement...established the goal of limiting global warming to well below 2°C above pre-industrial levels, with efforts to limit warming to 1.5°C."'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'According to the passage, which is described as "the most powerful lever" for meaningful impact on climate change?',
+  options: ['Individual lifestyle changes', 'Reducing meat consumption', 'Using public transportation', 'Systemic change driven by government policy and corporate responsibility', 'Minimizing single-use plastics'],
+  answer: 3,
+  explanation: 'The passage explicitly states: "systemic change driven by government policy and corporate responsibility remains the most powerful lever for meaningful impact."'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'The word "mitigating" in the last paragraph is closest in meaning to…',
+  options: ['Worsening', 'Studying', 'Reducing the severity of', 'Ignoring', 'Accelerating'],
+  answer: 2,
+  explanation: '"Mitigating" means reducing the severity, seriousness, or painfulness of something. In context, "mitigating climate change" means reducing the severity of climate change impacts.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Choose the grammatically correct sentence:',
+  options: ['She have been studying for three hours.', 'They has finished their homework.', 'He has been working here since 2015.', 'We has gone to the market yesterday.', 'I has a new bicycle.'],
+  answer: 2,
+  explanation: '"He has been working here since 2015" is grammatically correct — present perfect continuous tense for an action that started in the past and continues now. Other options incorrectly use "have/has" with wrong subjects.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Which sentence uses the correct form of conditional (if-clause)?',
+  options: ['If it will rain, we will stay inside.', 'If it rains, we will stay inside.', 'If it rained, we will stay inside.', 'If it rain, we stayed inside.', 'If it would rain, we will stay inside.'],
+  answer: 1,
+  explanation: 'Type 1 conditional (real/likely situation): If + present simple, will + base verb. "If it rains, we will stay inside" is correct.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'The word "biodiversity" refers to…',
+  options: ['Biological diversity — the variety of life on Earth', 'A type of renewable energy', 'The study of ancient civilizations', 'Chemical compounds in the atmosphere', 'Economic diversity in developing countries'],
+  answer: 0,
+  explanation: 'Biodiversity (biological diversity) refers to the variety of life on Earth at all its levels — from genes to ecosystems — and the ecological and evolutionary processes that sustain it.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Choose the best synonym for "crucial" as used in the passage:',
+  options: ['Optional', 'Beneficial', 'Essential/vital', 'Interesting', 'Complicated'],
+  answer: 2,
+  explanation: '"Crucial" means extremely important or necessary — essential, vital, critical. In the passage, "crucial" means that protecting natural carbon sinks is absolutely essential, not just beneficial.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Choose the sentence with the correct use of articles (a/an/the):',
+  options: ['She is a honest person.', 'I saw an dog in the park.', 'He is the best student in a class.', 'She bought a new phone at the mall.', 'They live in an house near school.'],
+  answer: 3,
+  explanation: '"She bought a new phone at the mall" — "a" is correctly used before "new phone" (singular, consonant sound), "the" before "mall" (specific mall). Other options incorrectly use articles: "a honest" should be "an honest" (vowel sound), "an dog" should be "a dog", "a class" should be "the class", "an house" should be "a house".'
+},
+{
+  section:'lbi', passageTitle:'Reading Passage 2 — Artificial Intelligence',
+  passage:`Artificial intelligence (AI) is no longer science fiction — it is reshaping industries, economies, and daily life at an unprecedented pace. From facial recognition software to recommendation algorithms on streaming platforms, AI systems are making decisions that affect millions of people every day.
+
+One of the most significant recent developments is generative AI, exemplified by large language models. These systems can produce text, images, music, and even computer code with remarkable quality. They are being used in education, healthcare, creative industries, and scientific research.
+
+However, AI also raises serious ethical concerns. Issues of bias, privacy, accountability, and the potential for misuse demand careful regulation. There is also the question of AI's impact on employment — while new jobs will be created, many routine tasks will be automated, potentially displacing workers who lack the skills to adapt.`,
+  question: 'What does "generative AI" refer to according to the passage?',
+  options: ['AI used only in scientific research', 'AI systems that can produce text, images, music, and code', 'AI designed for facial recognition', 'AI used exclusively in education', 'AI that automates factory production'],
+  answer: 1,
+  explanation: 'The passage states: "One of the most significant recent developments is generative AI, exemplified by large language models. These systems can produce text, images, music, and even computer code."'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'The phrase "at an unprecedented pace" means…',
+  options: ['More slowly than before', 'At the same rate as always', 'Faster than has ever happened before', 'At a pace that can be predicted', 'Gradually and carefully'],
+  answer: 2,
+  explanation: '"Unprecedented" means never having happened before. "At an unprecedented pace" means faster or at a rate that has never been seen before in history.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Which of the following is NOT mentioned as an ethical concern related to AI in the passage?',
+  options: ['Bias', 'Privacy', 'Accountability', 'Environmental impact', 'Potential for misuse'],
+  answer: 3,
+  explanation: 'The passage mentions bias, privacy, accountability, and potential for misuse as ethical concerns. Environmental impact of AI is NOT mentioned in the passage.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'The word "displacing" in the last paragraph is closest in meaning to…',
+  options: ['Promoting', 'Replacing or forcing out', 'Educating', 'Supporting', 'Entertaining'],
+  answer: 1,
+  explanation: '"Displacing workers" means forcing workers out of their jobs, replacing them. In context, automation may displace (replace/force out) workers who cannot adapt to new skill requirements.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Based on the passage, which statement about AI\'s impact on employment is true?',
+  options: ['AI will only create new jobs, with no jobs being lost', 'All jobs will be automated by AI', 'While new jobs will be created, many routine tasks will be automated and may displace some workers', 'AI has no significant impact on employment', 'Only factory workers will be affected by AI automation'],
+  answer: 2,
+  explanation: 'The passage states: "while new jobs will be created, many routine tasks will be automated, potentially displacing workers who lack the skills to adapt" — a balanced view acknowledging both job creation and displacement.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Select the sentence that uses the passive voice correctly:',
+  options: ['The report was written by the team yesterday.', 'The team was written the report yesterday.', 'The report written by the team yesterday.', 'The team is written the report yesterday.', 'Yesterday the report writing by the team.'],
+  answer: 0,
+  explanation: '"The report was written by the team yesterday" is the correct passive voice: Subject (report) + was/were + past participle (written) + by + agent (the team).'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Which is the correct comparative form: "This problem is ___ than I expected."',
+  options: ['more complex', 'most complex', 'complexer', 'more complexer', 'the most complex'],
+  answer: 0,
+  explanation: '"Complex" is an adjective with 2+ syllables, so it takes "more" to form the comparative: "more complex." "Complexer" is incorrect; "most complex" is superlative, not comparative.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'What is the main idea of the passage about Artificial Intelligence?',
+  options: ['AI is dangerous and should be banned', 'AI is only useful in scientific research', 'AI is transforming society with significant benefits and ethical challenges that require attention', 'AI will replace all human workers within ten years', 'Generative AI is the only important form of AI'],
+  answer: 2,
+  explanation: 'The main idea encompasses the entire passage: AI is reshaping life at unprecedented pace (para 1), generative AI has remarkable capabilities (para 2), but raises serious ethical concerns and employment challenges (para 3). The balanced view in option C best captures this.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'Choose the sentence with the correct subject-verb agreement:',
+  options: ['The committee have decided to postpone the meeting.', 'Neither the students nor the teacher are ready.', 'Each of the participants have submitted their form.', 'The news is very alarming.', 'Mathematics are my favorite subject.'],
+  answer: 3,
+  explanation: '"The news is very alarming" — collective nouns referring to a single concept (news, mathematics, physics) take singular verbs. "News" is singular despite ending in -s.'
+},
+{
+  section:'lbi', passageTitle:null, passage:null,
+  question: 'The opposite of "transparent" as used in governance/business contexts is…',
+  options: ['Clear', 'Honest', 'Opaque/secretive', 'Colorful', 'Efficient'],
+  answer: 2,
+  explanation: 'In governance/business, "transparent" means open, clear, and not hiding information. Its opposite is "opaque" (or "secretive") — not clear, not open, hiding information from the public.'
+},
+
+// ============================================================
+// LITERASI BAHASA INDONESIA (LBE) — 30 Soal
+// ============================================================
+{
+  section:'lbe', passageTitle:'Teks 1 — Transformasi Digital UMKM',
+  passage:`Usaha Mikro, Kecil, dan Menengah (UMKM) memegang peranan vital dalam perekonomian Indonesia. Data Kementerian Koperasi dan UKM menunjukkan bahwa UMKM menyumbang sekitar 61% dari Produk Domestik Bruto (PDB) nasional dan menyerap lebih dari 97% tenaga kerja Indonesia. Dengan jumlah unit usaha mencapai lebih dari 65 juta, UMKM menjadi tulang punggung ekonomi kerakyatan.
+
+Namun, di era digital ini, banyak UMKM yang masih tertinggal dalam adopsi teknologi. Hanya sekitar 19% UMKM yang telah memanfaatkan platform digital untuk pemasaran dan transaksi. Hambatan utamanya meliputi keterbatasan akses internet, rendahnya literasi digital pelaku usaha, dan biaya adopsi teknologi yang masih dianggap terlalu tinggi.
+
+Pemerintah melalui berbagai program berupaya mengakselerasi digitalisasi UMKM. Program seperti "UMKM Go Digital" menargetkan onboarding 30 juta UMKM ke platform digital pada tahun 2024. Berbagai marketplace seperti Tokopedia, Shopee, dan Bukalapak juga aktif bermitra dengan pemerintah untuk melatih dan mendampingi UMKM dalam transformasi digital ini. Dengan transformasi yang berhasil, UMKM Indonesia diharapkan mampu bersaing tidak hanya di pasar domestik, tetapi juga di pasar ekspor global.`,
+  question: 'Berapa persen kontribusi UMKM terhadap PDB nasional Indonesia menurut teks?',
+  options: ['19%', '30%', '61%', '65%', '97%'],
+  answer: 2,
+  explanation: 'Teks secara eksplisit menyebutkan "UMKM menyumbang sekitar 61% dari Produk Domestik Bruto (PDB) nasional."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Apa hambatan utama digitalisasi UMKM yang disebutkan dalam teks?',
+  options: ['Persaingan dengan perusahaan asing', 'Keterbatasan akses internet, rendahnya literasi digital, dan biaya adopsi teknologi tinggi', 'Kurangnya produk berkualitas dari UMKM', 'Tidak adanya dukungan pemerintah', 'Terlalu banyaknya jumlah UMKM'],
+  answer: 1,
+  explanation: 'Teks menyebutkan tiga hambatan: "keterbatasan akses internet, rendahnya literasi digital pelaku usaha, dan biaya adopsi teknologi yang masih dianggap terlalu tinggi."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Program "UMKM Go Digital" menargetkan berapa UMKM yang masuk ke platform digital?',
+  options: ['19 juta', '20 juta', '25 juta', '30 juta', '65 juta'],
+  answer: 3,
+  explanation: 'Teks menyebutkan "Program seperti \'UMKM Go Digital\' menargetkan onboarding 30 juta UMKM ke platform digital pada tahun 2024."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Kata "mengakselerasi" dalam teks bermakna…',
+  options: ['Menghentikan secara tiba-tiba', 'Mempercepat', 'Mempersulit', 'Mengevaluasi', 'Membatasi'],
+  answer: 1,
+  explanation: '"Mengakselerasi" berasal dari kata "akselerasi" yang berarti percepatan. Dalam konteks teks, "mengakselerasi digitalisasi UMKM" berarti mempercepat proses digitalisasi UMKM.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Berdasarkan teks, manakah pernyataan yang BENAR?',
+  options: ['Semua UMKM sudah menggunakan platform digital', 'UMKM hanya menyerap 3% tenaga kerja Indonesia', 'Tokopedia, Shopee, dan Bukalapak bermitra dengan pemerintah untuk digitalisasi UMKM', 'UMKM hanya berkontribusi 19% terhadap PDB nasional', 'Tidak ada program pemerintah untuk digitalisasi UMKM'],
+  answer: 2,
+  explanation: 'Teks secara eksplisit menyebutkan "Berbagai marketplace seperti Tokopedia, Shopee, dan Bukalapak juga aktif bermitra dengan pemerintah untuk melatih dan mendampingi UMKM."'
+},
+{
+  section:'lbe', passageTitle:'Teks 2 — Pendidikan Karakter',
+  passage:`Pendidikan tidak hanya tentang transfer pengetahuan dan keterampilan akademis. Di jantung pendidikan sejati terdapat pembentukan karakter—nilai-nilai moral, etika, dan kepribadian yang akan menentukan bagaimana seseorang bertindak dalam kehidupan nyata. Ki Hajar Dewantara, Bapak Pendidikan Nasional Indonesia, telah lama menekankan pentingnya "pendidikan budi pekerti" sebagai inti dari seluruh proses pendidikan.
+
+Kurikulum Merdeka yang diterapkan pemerintah Indonesia saat ini menempatkan Profil Pelajar Pancasila sebagai tujuan utama pendidikan. Profil ini mencakup enam dimensi: beriman dan bertakwa kepada Tuhan, berkebhinekaan global, bergotong royong, kreatif, bernalar kritis, dan mandiri. Keenam dimensi ini bukan hanya target akademis, melainkan gambaran manusia Indonesia seutuhnya yang diharapkan lahir dari proses pendidikan.
+
+Implementasi pendidikan karakter menghadapi berbagai tantangan. Lingkungan sosial yang semakin individualistis, pengaruh media sosial yang tidak terkontrol, dan tekanan akademis yang berlebihan kerap menjadi penghambat. Namun, kolaborasi antara sekolah, orang tua, dan masyarakat tetap menjadi kunci keberhasilan pembentukan karakter generasi penerus bangsa.`,
+  question: 'Menurut Ki Hajar Dewantara, apa inti dari seluruh proses pendidikan?',
+  options: ['Transfer pengetahuan akademis', 'Keterampilan vokasional', 'Pendidikan budi pekerti', 'Kurikulum berbasis kompetensi', 'Nilai-nilai global dan modern'],
+  answer: 2,
+  explanation: 'Teks menyebutkan: "Ki Hajar Dewantara...telah lama menekankan pentingnya \'pendidikan budi pekerti\' sebagai inti dari seluruh proses pendidikan."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Berapa dimensi yang tercakup dalam Profil Pelajar Pancasila?',
+  options: ['3', '4', '5', '6', '7'],
+  answer: 3,
+  explanation: 'Teks menyebutkan "Profil ini mencakup enam dimensi: beriman dan bertakwa kepada Tuhan, berkebhinekaan global, bergotong royong, kreatif, bernalar kritis, dan mandiri."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Manakah yang bukan tantangan implementasi pendidikan karakter menurut teks?',
+  options: ['Lingkungan sosial yang semakin individualistis', 'Pengaruh media sosial yang tidak terkontrol', 'Tekanan akademis yang berlebihan', 'Kurangnya dukungan dari pemerintah', 'Semua disebutkan dalam teks'],
+  answer: 3,
+  explanation: 'Teks menyebutkan tiga tantangan: lingkungan individualistis, pengaruh media sosial tidak terkontrol, dan tekanan akademis berlebihan. "Kurangnya dukungan dari pemerintah" tidak disebutkan sebagai tantangan — justru pemerintah aktif melalui Kurikulum Merdeka.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Tujuan utama Kurikulum Merdeka berdasarkan teks adalah…',
+  options: ['Meningkatkan nilai ujian nasional siswa', 'Mewujudkan Profil Pelajar Pancasila', 'Mempersiapkan siswa untuk dunia kerja internasional', 'Menghapuskan kesenjangan pendidikan antar daerah', 'Meningkatkan anggaran pendidikan nasional'],
+  answer: 1,
+  explanation: 'Teks menyatakan: "Kurikulum Merdeka...menempatkan Profil Pelajar Pancasila sebagai tujuan utama pendidikan."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Kata "individualistis" dalam teks memiliki makna…',
+  options: ['Mengutamakan kepentingan kelompok di atas segalanya', 'Mengutamakan kepentingan dan kepuasan pribadi, kurang peduli dengan orang lain', 'Sangat religius dan spiritual', 'Bersemangat dalam kegiatan komunitas', 'Mandiri dalam arti positif'],
+  answer: 1,
+  explanation: '"Individualistis" berasal dari individualisme — paham yang mengutamakan kepentingan individu/pribadi, sering kali dengan mengesampingkan kepentingan bersama atau kurang peduli terhadap orang lain di sekitarnya.'
+},
+{
+  section:'lbe', passageTitle:'Teks 3 — Kesehatan Mental Remaja',
+  passage:`Kesehatan mental remaja di Indonesia tengah berada dalam sorotan. Data Riset Kesehatan Dasar (Riskesdas) 2018 menunjukkan prevalensi gangguan mental emosional pada penduduk berusia 15 tahun ke atas mencapai 9,8%, meningkat dari 6% pada survei 2013. Pandemi COVID-19 yang melanda sejak 2020 diperkirakan memperburuk kondisi ini secara signifikan.
+
+Berbagai faktor berkontribusi pada masalah kesehatan mental remaja: tekanan akademis yang tinggi, problematika hubungan sosial, masalah keluarga, ketidakpastian ekonomi, dan paparan konten negatif di media sosial. Stigma terhadap gangguan mental masih kuat di masyarakat Indonesia—banyak remaja yang enggan mencari bantuan karena takut dianggap "gila" atau lemah.
+
+Kesadaran pentingnya kesehatan mental mulai meningkat, terutama di kalangan generasi muda yang lebih terbuka. Sekolah-sekolah mulai menyediakan layanan konseling, pemerintah menggalakkan program kesehatan jiwa komunitas, dan komunitas online mendukung sesama yang sedang berjuang. Namun, akses terhadap layanan kesehatan mental yang terjangkau masih menjadi tantangan besar, terutama di luar kota-kota besar.`,
+  question: 'Berapa prevalensi gangguan mental emosional di Indonesia menurut Riskesdas 2018?',
+  options: ['6,0%', '7,5%', '8,2%', '9,8%', '12,5%'],
+  answer: 3,
+  explanation: 'Teks secara eksplisit menyebutkan "prevalensi gangguan mental emosional pada penduduk berusia 15 tahun ke atas mencapai 9,8%" menurut Riskesdas 2018.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Apa yang dimaksud dengan "stigma" terhadap gangguan mental dalam konteks teks?',
+  options: ['Dukungan positif dari masyarakat', 'Pandangan negatif dan cap buruk dari masyarakat terhadap orang dengan gangguan mental', 'Kebijakan pemerintah tentang kesehatan mental', 'Simptom atau gejala dari gangguan mental itu sendiri', 'Obat-obatan untuk mengobati gangguan mental'],
+  answer: 1,
+  explanation: '"Stigma" adalah pandangan negatif, prasangka, atau cap buruk yang dilekatkan masyarakat terhadap seseorang atau kelompok. Dalam konteks ini, stigma terhadap gangguan mental membuat remaja takut dianggap "gila" atau lemah sehingga enggan mencari bantuan.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Berdasarkan teks, manakah upaya yang sudah dilakukan untuk mengatasi masalah kesehatan mental remaja?',
+  options: ['Hanya program pemerintah saja', 'Sekolah menyediakan konseling, pemerintah menggalakkan program jiwa komunitas, dan komunitas online saling mendukung', 'Membentuk undang-undang khusus kesehatan mental', 'Menghapuskan semua media sosial yang berbahaya', 'Memberikan subsidi langsung kepada remaja bermasalah'],
+  answer: 1,
+  explanation: 'Teks menyebutkan tiga upaya: "Sekolah-sekolah mulai menyediakan layanan konseling, pemerintah menggalakkan program kesehatan jiwa komunitas, dan komunitas online mendukung sesama yang sedang berjuang."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Tantangan terbesar dalam layanan kesehatan mental yang disebutkan teks adalah…',
+  options: ['Kurangnya tenaga profesional kesehatan mental', 'Akses terhadap layanan kesehatan mental yang terjangkau, terutama di luar kota besar', 'Penolakan remaja terhadap layanan konseling', 'Kurangnya penelitian tentang kesehatan mental', 'Tidak adanya program dari pemerintah'],
+  answer: 1,
+  explanation: 'Teks menyebutkan: "akses terhadap layanan kesehatan mental yang terjangkau masih menjadi tantangan besar, terutama di luar kota-kota besar."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Simpulan terbaik dari seluruh teks tentang kesehatan mental remaja adalah…',
+  options: ['Kesehatan mental remaja Indonesia sangat baik dan tidak perlu dikhawatirkan', 'Masalah kesehatan mental remaja serius, disebabkan banyak faktor, dan memerlukan solusi yang komprehensif', 'Satu-satunya solusi adalah menghilangkan media sosial', 'Generasi muda lebih tertutup dibanding generasi sebelumnya', 'Pandemi COVID-19 tidak berpengaruh pada kesehatan mental'],
+  answer: 1,
+  explanation: 'Simpulan yang tepat mencakup: masalah yang serius (peningkatan prevalensi), berbagai faktor penyebab (paragraf 2), dan berbagai upaya yang masih perlu ditingkatkan (paragraf 3). Pilihan B merangkum ini dengan tepat.'
+},
+{
+  section:'lbe', passageTitle:'Teks 4 — Ekosistem Mangrove',
+  passage:`Ekosistem mangrove merupakan salah satu ekosistem paling produktif dan berharga di dunia. Hutan mangrove tumbuh di kawasan pesisir tropis dan subtropis, di batas antara daratan dan lautan. Indonesia memiliki hutan mangrove terluas di dunia, mencapai lebih dari 3,8 juta hektar atau sekitar 23% dari total mangrove global.
+
+Mangrove memberikan jasa ekosistem yang luar biasa. Akarnya yang kompleks menjadi nursery bagi berbagai spesies ikan, udang, dan kepiting yang bernilai ekonomi tinggi. Tajuknya yang rapat menyerap karbon dioksida lebih efisien dibanding hutan daratan—dikenal sebagai "blue carbon" atau karbon biru. Selain itu, mangrove melindungi garis pantai dari abrasi dan meredam dampak bencana seperti tsunami dan badai.
+
+Sayangnya, mangrove Indonesia menghadapi ancaman serius. Konversi lahan menjadi tambak udang dan lahan pertambangan, pencemaran air, dan eksploitasi berlebihan menyebabkan laju kerusakan yang mengkhawatirkan. Data menunjukkan bahwa Indonesia kehilangan sekitar 40.000 hektar mangrove per tahun. Pemerintah Indonesia kini menjalankan program rehabilitasi mangrove besar-besaran sebagai bagian dari komitmen iklim nasional.`,
+  question: 'Berapa persentase total mangrove global yang dimiliki Indonesia menurut teks?',
+  options: ['10%', '15%', '20%', '23%', '30%'],
+  answer: 3,
+  explanation: 'Teks secara eksplisit menyatakan Indonesia memiliki "sekitar 23% dari total mangrove global."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Apa yang dimaksud dengan "blue carbon" atau karbon biru dalam teks?',
+  options: ['Karbon yang berwarna biru secara kimiawi', 'Emisi karbon dari industri kelautan', 'Karbon yang diserap dan disimpan oleh ekosistem pesisir seperti mangrove', 'Jenis bahan bakar laut yang ramah lingkungan', 'Polutan kimia di lautan'],
+  answer: 2,
+  explanation: '"Blue carbon" atau karbon biru mengacu pada karbon yang diserap dan disimpan oleh ekosistem pesisir dan laut, termasuk mangrove, padang lamun, dan rawa pasang surut. Ini penting dalam mitigasi perubahan iklim.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Berapa luas mangrove Indonesia yang hilang setiap tahun menurut teks?',
+  options: ['10.000 hektar', '20.000 hektar', '30.000 hektar', '40.000 hektar', '50.000 hektar'],
+  answer: 3,
+  explanation: 'Teks menyebutkan "Indonesia kehilangan sekitar 40.000 hektar mangrove per tahun."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Berdasarkan teks, fungsi mangrove yang berkaitan langsung dengan kegiatan perikanan adalah…',
+  options: ['Menyerap karbon dioksida', 'Melindungi pantai dari abrasi', 'Menjadi nursery bagi ikan, udang, dan kepiting bernilai ekonomi', 'Meredam dampak tsunami', 'Menghasilkan oksigen lebih banyak dari hutan daratan'],
+  answer: 2,
+  explanation: 'Teks menyebutkan "Akarnya yang kompleks menjadi nursery bagi berbagai spesies ikan, udang, dan kepiting yang bernilai ekonomi tinggi" — ini adalah fungsi mangrove yang langsung berkaitan dengan kegiatan perikanan dan ekonomi masyarakat pesisir.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Ancaman mangrove yang disebutkan dalam teks adalah…',
+  options: ['Hanya pencemaran air', 'Hanya konversi lahan menjadi tambak', 'Konversi lahan, pencemaran air, dan eksploitasi berlebihan', 'Pertumbuhan populasi manusia yang pesat', 'Perubahan iklim dan naiknya permukaan laut'],
+  answer: 2,
+  explanation: 'Teks menyebutkan tiga ancaman: "Konversi lahan menjadi tambak udang dan lahan pertambangan, pencemaran air, dan eksploitasi berlebihan."'
+},
+{
+  section:'lbe', passageTitle:'Teks 5 — Bahasa Daerah',
+  passage:`Indonesia adalah rumah bagi keragaman linguistik yang menakjubkan. Dengan lebih dari 700 bahasa daerah yang tersebar dari Sabang sampai Merauke, Indonesia berada di peringkat kedua dunia dalam hal keragaman bahasa setelah Papua Nugini. Namun, keragaman ini tengah terancam. UNESCO memperkirakan bahwa ratusan bahasa di Indonesia berada dalam kondisi kritis atau terancam punah dalam beberapa dekade ke depan.
+
+Punahnya sebuah bahasa bukan sekadar hilangnya sistem komunikasi. Bahasa adalah wadah kebudayaan, kearifan lokal, pengetahuan tradisional, dan identitas kolektif suatu komunitas. Ketika bahasa punah, ikut hilang pula ribuan kosakata yang mendeskripsikan praktik pertanian tradisional, pengetahuan medis herbal, sistem kalender, mitologi, dan cara pandang unik yang tidak tergantikan.
+
+Upaya revitalisasi bahasa daerah sedang digiatkan di berbagai daerah. Beberapa sekolah memasukkan bahasa daerah ke dalam kurikulum lokal. Komunitas digital menciptakan konten dalam bahasa daerah untuk menjangkau generasi muda. Namun, tantangan terbesar tetaplah meyakinkan generasi muda bahwa bahasa leluhur mereka memiliki nilai dan relevansi di era modern.`,
+  question: 'Berapa jumlah bahasa daerah di Indonesia menurut teks?',
+  options: ['Lebih dari 300', 'Lebih dari 500', 'Lebih dari 600', 'Lebih dari 700', 'Lebih dari 1000'],
+  answer: 3,
+  explanation: 'Teks menyebutkan "Dengan lebih dari 700 bahasa daerah yang tersebar dari Sabang sampai Merauke."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Menurut teks, apa yang ikut hilang ketika sebuah bahasa daerah punah?',
+  options: ['Hanya sistem alfabet dan tulisan', 'Kearifan lokal, pengetahuan tradisional, identitas kolektif, dan cara pandang unik komunitas', 'Hanya lagu-lagu tradisional', 'Hanya nama-nama tempat yang unik', 'Semua agama dan kepercayaan setempat'],
+  answer: 1,
+  explanation: 'Teks menyatakan: "ikut hilang pula ribuan kosakata yang mendeskripsikan praktik pertanian tradisional, pengetahuan medis herbal, sistem kalender, mitologi, dan cara pandang unik yang tidak tergantikan" — semuanya mencerminkan kearifan lokal, pengetahuan tradisional, dan identitas kolektif.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Berdasarkan teks, Indonesia berada di peringkat berapa dalam keragaman bahasa di dunia?',
+  options: ['Pertama', 'Kedua', 'Ketiga', 'Keempat', 'Kelima'],
+  answer: 1,
+  explanation: 'Teks menyebutkan: "Indonesia berada di peringkat kedua dunia dalam hal keragaman bahasa setelah Papua Nugini."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Tantangan terbesar revitalisasi bahasa daerah menurut paragraf ketiga adalah…',
+  options: ['Kurangnya dana dari pemerintah', 'Tidak adanya sistem tulisan untuk bahasa daerah', 'Meyakinkan generasi muda bahwa bahasa leluhur mereka memiliki nilai di era modern', 'Terlalu banyaknya jumlah bahasa daerah', 'Tidak ada media yang mau mempromosikan bahasa daerah'],
+  answer: 2,
+  explanation: 'Teks secara eksplisit menyebutkan: "tantangan terbesar tetaplah meyakinkan generasi muda bahwa bahasa leluhur mereka memiliki nilai dan relevansi di era modern."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Kata "revitalisasi" dalam teks bermakna…',
+  options: ['Pemusnahan secara sistematis', 'Penggantian dengan yang baru', 'Pembaruan dan pemberian kembali vitalitas/semangat hidup', 'Penelitian ilmiah secara akademis', 'Dokumentasi untuk keperluan museum'],
+  answer: 2,
+  explanation: '"Revitalisasi" berasal dari kata "vital" yang berarti penting/hidup. Revitalisasi berarti proses pembaruan, pemberian kembali semangat dan vitalitas, atau menghidupkan kembali sesuatu yang mulai melemah atau terlupakan.'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Ide pokok paragraf kedua teks tentang bahasa daerah adalah…',
+  options: ['Indonesia memiliki banyak bahasa daerah', 'UNESCO memperkirakan banyak bahasa akan punah', 'Punahnya bahasa daerah berarti hilangnya kebudayaan dan kearifan lokal yang tak ternilai', 'Revitalisasi bahasa daerah perlu dilakukan segera', 'Generasi muda tidak peduli dengan bahasa leluhur'],
+  answer: 2,
+  explanation: 'Ide pokok paragraf kedua adalah dampak punahnya bahasa: "Punahnya sebuah bahasa bukan sekadar hilangnya sistem komunikasi" — kemudian diikuti perincian tentang apa yang ikut hilang (kebudayaan, kearifan lokal, pengetahuan tradisional, identitas).'
+},
+
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Manakah kalimat yang menggunakan tanda koma dengan benar?',
+  options: [
+    'Oleh karena itu, kami tidak dapat hadir.',
+    'Oleh karena itu kami, tidak dapat hadir.',
+    'Oleh karena, itu kami tidak dapat hadir.',
+    'Oleh, karena itu kami tidak dapat hadir.',
+    'Oleh karena itu kami tidak, dapat hadir.'
+  ],
+  answer: 0,
+  explanation: 'Tanda koma digunakan setelah kata atau frasa penghubung antarkalimat seperti "oleh karena itu", "namun", "akan tetapi", "dengan demikian" yang berada di awal kalimat. Pola yang benar: "Oleh karena itu, kami tidak dapat hadir."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Manakah kata yang TIDAK termasuk kelompok kata sifat (adjektiva)?',
+  options: ['Indah', 'Cepat', 'Berlari', 'Besar', 'Merah'],
+  answer: 2,
+  explanation: '"Berlari" adalah kata kerja (verba), bukan kata sifat. Kata sifat menerangkan keadaan atau sifat suatu benda/orang: indah (sifat estetika), cepat (sifat gerak), besar (sifat ukuran), merah (sifat warna).'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Penulisan angka yang benar dalam kalimat formal adalah…',
+  options: [
+    'Peserta lomba berjumlah 3 orang.',
+    'Peserta lomba berjumlah tiga orang.',
+    'Peserta lomba berjumlah Tiga Orang.',
+    'Peserta lomba berjumlah (3) tiga orang.',
+    'Peserta lomba berjumlah 3 (tiga) orang.'
+  ],
+  answer: 1,
+  explanation: 'Dalam penulisan formal bahasa Indonesia, angka satu sampai dua belas ditulis dengan huruf. "Tiga" (3) termasuk bilangan kecil yang ditulis dengan huruf dalam konteks kalimat: "Peserta lomba berjumlah tiga orang."'
+},
+{
+  section:'lbe', passageTitle:null, passage:null,
+  question: 'Manakah pernyataan yang merupakan opini (bukan fakta)?',
+  options: [
+    'Gunung Everest adalah puncak tertinggi di dunia.',
+    'Indonesia terdiri dari lebih dari 17.000 pulau.',
+    'Bahasa Indonesia dijadikan bahasa resmi negara sejak 1945.',
+    'Kebudayaan Bali lebih menarik dibandingkan kebudayaan daerah lain.',
+    'Proklamasi kemerdekaan Indonesia dibacakan pada 17 Agustus 1945.'
+  ],
+  answer: 3,
+  explanation: '"Kebudayaan Bali lebih menarik dibandingkan kebudayaan daerah lain" adalah opini karena mengandung penilaian subjektif ("lebih menarik") yang tidak dapat diverifikasi secara objektif — setiap orang dapat memiliki penilaian yang berbeda. Pilihan lain adalah fakta yang dapat diverifikasi.'
+},
+
+// ============================================================
+// PENALARAN MATEMATIKA (PM) — 20 Soal
+// ============================================================
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Sebuah tabung memiliki jari-jari 7 cm dan tinggi 10 cm. Volume tabung tersebut adalah… (π = 22/7)',
+  options: ['1.540 cm³', '1.440 cm³', '1.320 cm³', '1.210 cm³', '1.100 cm³'],
+  answer: 0,
+  explanation: 'Volume tabung = π × r² × t = (22/7) × 7² × 10 = (22/7) × 49 × 10 = 22 × 7 × 10 = 1.540 cm³.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Jika f(x) = 2x² - 3x + 1, maka f(3) = …',
+  options: ['8', '10', '12', '14', '16'],
+  answer: 1,
+  explanation: 'f(3) = 2(3)² - 3(3) + 1 = 2(9) - 9 + 1 = 18 - 9 + 1 = 10.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Himpunan penyelesaian dari 2x - 3 < 7 untuk x bilangan bulat positif adalah…',
+  options: ['{1, 2, 3, 4}', '{1, 2, 3, 4, 5}', '{1, 2, 3}', '{1, 2, 3, 4, 5, 6}', '{2, 3, 4}'],
+  answer: 1,
+  explanation: '2x - 3 < 7 → 2x < 10 → x < 5. Bilangan bulat positif yang memenuhi: 1, 2, 3, 4. Tapi x bisa juga sampai 4 karena x < 5. HP = {1, 2, 3, 4}. Jawaban A.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Grafik fungsi y = x² - 4 memotong sumbu-x di titik…',
+  options: ['x = ±1', 'x = ±2', 'x = ±4', 'x = 2 dan x = -4', 'x = 0 dan x = 4'],
+  answer: 1,
+  explanation: 'Titik potong sumbu-x saat y = 0: x² - 4 = 0 → x² = 4 → x = ±2. Jadi grafik memotong sumbu-x di x = 2 dan x = -2.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Nilai dari log₂ 64 adalah…',
+  options: ['4', '5', '6', '7', '8'],
+  answer: 2,
+  explanation: 'log₂ 64 = n berarti 2ⁿ = 64. Karena 2⁶ = 64, maka log₂ 64 = 6.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Suku banyak p(x) = x³ - 2x² + x - 2 dibagi (x - 2). Sisanya adalah…',
+  options: ['0', '1', '2', '-2', '4'],
+  answer: 0,
+  explanation: 'Teorema sisa: sisa pembagian p(x) oleh (x - a) adalah p(a). p(2) = 2³ - 2(2²) + 2 - 2 = 8 - 8 + 2 - 2 = 0. Sisa = 0 (artinya (x-2) adalah faktor dari p(x)).'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Sebuah data memiliki nilai: 3, 5, 7, 8, 10, 12. Varians dari data tersebut adalah…',
+  options: ['6', '7', '8', '9', '10'],
+  answer: 1,
+  explanation: 'Rata-rata = (3+5+7+8+10+12)/6 = 45/6 = 7,5. Varians = [(3-7,5)²+(5-7,5)²+(7-7,5)²+(8-7,5)²+(10-7,5)²+(12-7,5)²]/6 = [20,25+6,25+0,25+0,25+6,25+20,25]/6 = 53,5/6 ≈ 8,9 ≈ 9. Pilihan D.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Gradien garis yang melalui titik (2, 3) dan (6, 11) adalah…',
+  options: ['1', '1,5', '2', '2,5', '3'],
+  answer: 2,
+  explanation: 'Gradien (m) = (y₂ - y₁)/(x₂ - x₁) = (11 - 3)/(6 - 2) = 8/4 = 2.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Peluang mendapatkan angka genap saat melempar sebuah dadu adalah…',
+  options: ['1/6', '1/3', '1/2', '2/3', '5/6'],
+  answer: 2,
+  explanation: 'Dadu memiliki 6 sisi: {1, 2, 3, 4, 5, 6}. Angka genap: {2, 4, 6} = 3 kejadian. P(genap) = 3/6 = 1/2.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Hasil dari ∫(4x³ - 6x + 2) dx adalah…',
+  options: ['x⁴ - 3x² + 2x + C', '12x² - 6 + C', '4x⁴ - 6x² + 2x + C', 'x⁴ - 3x² + C', '4x² - 6 + C'],
+  answer: 0,
+  explanation: '∫(4x³ - 6x + 2) dx = 4x⁴/4 - 6x²/2 + 2x + C = x⁴ - 3x² + 2x + C.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Diketahui matriks A = [[2,3],[1,4]]. Determinan matriks A adalah…',
+  options: ['5', '6', '7', '8', '11'],
+  answer: 0,
+  explanation: 'Det(A) = (2×4) - (3×1) = 8 - 3 = 5.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Nilai sin 30° + cos 60° adalah…',
+  options: ['0', '1/2', '1', '√2/2', '√3/2'],
+  answer: 2,
+  explanation: 'sin 30° = 1/2 dan cos 60° = 1/2. Jadi sin 30° + cos 60° = 1/2 + 1/2 = 1.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Persamaan kuadrat x² - 5x + 6 = 0 memiliki akar-akar…',
+  options: ['x = 1 dan x = 6', 'x = 2 dan x = 3', 'x = -2 dan x = -3', 'x = -1 dan x = -6', 'x = 2 dan x = -3'],
+  answer: 1,
+  explanation: 'x² - 5x + 6 = 0 → (x - 2)(x - 3) = 0 → x = 2 atau x = 3. Verifikasi: 2+3=5 ✓ dan 2×3=6 ✓.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Nilai lim (x→2) [x² - 4]/(x - 2) adalah…',
+  options: ['0', '2', '4', '6', 'tidak ada'],
+  answer: 2,
+  explanation: 'lim(x→2) (x²-4)/(x-2) = lim(x→2) (x+2)(x-2)/(x-2) = lim(x→2) (x+2) = 2+2 = 4.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Sebuah barisan geometri memiliki suku pertama 3 dan rasio 2. Suku ke-6 adalah…',
+  options: ['48', '64', '96', '128', '192'],
+  answer: 2,
+  explanation: 'Suku ke-n barisan geometri = a × r^(n-1). Suku ke-6 = 3 × 2^(6-1) = 3 × 2⁵ = 3 × 32 = 96.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Luas segitiga dengan alas 14 cm dan tinggi 9 cm adalah…',
+  options: ['56 cm²', '63 cm²', '72 cm²', '126 cm²', '252 cm²'],
+  answer: 1,
+  explanation: 'Luas segitiga = ½ × alas × tinggi = ½ × 14 × 9 = 63 cm².'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Jika cos θ = 3/5 dan θ sudut lancip, maka tan θ = …',
+  options: ['3/4', '4/3', '4/5', '3/5', '5/4'],
+  answer: 1,
+  explanation: 'Jika cos θ = 3/5, maka sisi samping = 3, hipotenusa = 5. Sisi depan = √(5²-3²) = √(25-9) = √16 = 4. tan θ = sisi depan/sisi samping = 4/3.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Turunan dari f(x) = 3x⁴ - 8x² + 5 adalah…',
+  options: ['12x³ - 16x', '12x³ - 16x + 5', '3x³ - 8x', '12x⁴ - 16x² + 5', '12x³ + 16x'],
+  answer: 0,
+  explanation: 'f\'(x) = d/dx(3x⁴) - d/dx(8x²) + d/dx(5) = 12x³ - 16x + 0 = 12x³ - 16x.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Persamaan lingkaran dengan pusat (3, -2) dan jari-jari 5 adalah…',
+  options: ['(x-3)² + (y+2)² = 5', '(x+3)² + (y-2)² = 25', '(x-3)² + (y+2)² = 25', '(x-3)² + (y-2)² = 25', '(x+3)² + (y+2)² = 25'],
+  answer: 2,
+  explanation: 'Persamaan lingkaran dengan pusat (a,b) dan jari-jari r: (x-a)² + (y-b)² = r². Pusat (3,-2), r=5: (x-3)² + (y-(-2))² = 5² → (x-3)² + (y+2)² = 25.'
+},
+{
+  section:'pm', passageTitle:null, passage:null,
+  question: 'Jumlah tak hingga deret geometri dengan suku pertama 8 dan rasio 1/2 adalah…',
+  options: ['8', '12', '16', '20', '24'],
+  answer: 2,
+  explanation: 'Jumlah tak hingga deret geometri (|r| < 1): S∞ = a/(1-r) = 8/(1-1/2) = 8/(1/2) = 16.'
+},
+
+]; // akhir array questions
+
+// ============================================================
+// STATE
+// ============================================================
+let currentIndex = 0;
+let answers = new Array(questions.length).fill(null);
+let timerInterval = null;
+let timeLeft = 195 * 60;
+let examFinished = false;
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  renderSectionTabs();
+  renderNavGrid();
+  renderQuestion(currentIndex);
+  startTimer();
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      finishExam(true);
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  const el = document.getElementById('timer-display');
+  el.textContent = `${String(m).padStart(3,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = '';
+  if (timeLeft <= 600) el.classList.add('danger');
+  else if (timeLeft <= 1800) el.classList.add('warning');
+}
+
+// ============================================================
+// RENDER SECTION TABS
+// ============================================================
+function renderSectionTabs() {
+  const container = document.getElementById('section-tabs');
+  container.innerHTML = sections.map((sec, si) => {
+    const startIdx = sections.slice(0, si).reduce((a,s) => a+s.count, 0);
+    const answered = answers.slice(startIdx, startIdx + sec.count).filter(a => a !== null).length;
+    return `<button class="section-tab ${si===getCurrentSection()?'active':''}" onclick="jumpToSection(${si})">
+      <span>${sec.abbr}</span>
+      <span class="badge">${answered}/${sec.count}</span>
+    </button>`;
+  }).join('');
+}
+
+function getCurrentSection() {
+  let idx = 0;
+  for (let i = 0; i < sections.length; i++) {
+    idx += sections[i].count;
+    if (currentIndex < idx) return i;
+  }
+  return sections.length - 1;
+}
+
+function jumpToSection(si) {
+  const startIdx = sections.slice(0, si).reduce((a,s) => a+s.count, 0);
+  currentIndex = startIdx;
+  renderQuestion(currentIndex);
+  renderNavGrid();
+  renderSectionTabs();
+}
+
+// ============================================================
+// RENDER NAV GRID
+// ============================================================
+function renderNavGrid() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = questions.map((q, i) => {
+    let cls = 'nav-btn';
+    if (answers[i] !== null) cls += ' answered';
+    if (i === currentIndex) cls += ' current';
+    return `<button class="${cls}" onclick="goToQuestion(${i})">${i+1}</button>`;
+  }).join('');
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = answers.filter(a => a !== null).length;
+  const total = questions.length;
+  document.getElementById('progress-text').textContent = `${answered} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${(answered/total)*100}%`;
+}
+
+// ============================================================
+// RENDER QUESTION
+// ============================================================
+function renderQuestion(idx) {
+  const q = questions[idx];
+  const card = document.getElementById('question-card');
+  const secName = sections.find(s=>s.id===q.section)?.name || '';
+
+  let passageHTML = '';
+  if (q.passage) {
+    passageHTML = `<div class="passage-box">
+      ${q.passageTitle ? `<div class="passage-title">${q.passageTitle}</div>` : ''}
+      ${q.passage.replace(/\n/g,'<br>')}
+    </div>`;
+  } else if (q.passageTitle === null && questions[idx-1]?.passageTitle) {
+    passageHTML = `<div style="font-size:12px;color:var(--text-light);font-weight:600;margin-bottom:12px;letter-spacing:0.8px;">[Lanjutan dari bacaan yang sama]</div>`;
+  }
+
+  card.innerHTML = `
+    <div class="q-header">
+      <div class="q-meta">
+        <span class="q-badge ${q.section}">${secName}</span>
+      </div>
+      <div class="q-number-display">Soal ${idx+1} dari ${questions.length}</div>
+    </div>
+    ${passageHTML}
+    <div class="q-text">${q.question.replace(/\n/g,'<br>')}</div>
+    <div class="options" id="options-container">
+      ${q.options.map((opt, oi) => {
+        let cls = 'option';
+        if (answers[idx] === oi) cls += ' selected';
+        const keys = ['A','B','C','D','E'];
+        return `<button class="${cls}" onclick="selectAnswer(${idx}, ${oi})">
+          <span class="opt-key">${keys[oi]}</span>
+          <span>${opt}</span>
+        </button>`;
+      }).join('')}
+    </div>
+    <div class="q-actions">
+      <button class="btn btn-prev" onclick="navigate(-1)" ${idx===0?'disabled':''}>← Sebelumnya</button>
+      <button class="btn btn-next" onclick="navigate(1)" ${idx===questions.length-1?'disabled':''}>Selanjutnya →</button>
+    </div>
+  `;
+}
+
+function selectAnswer(qIdx, optIdx) {
+  if (examFinished) return;
+  answers[qIdx] = optIdx;
+  renderQuestion(qIdx);
+  renderNavGrid();
+  renderSectionTabs();
+}
+
+function navigate(dir) {
+  const newIdx = currentIndex + dir;
+  if (newIdx >= 0 && newIdx < questions.length) {
+    currentIndex = newIdx;
+    renderQuestion(currentIndex);
+    renderNavGrid();
+    renderSectionTabs();
+  }
+}
+
+function goToQuestion(idx) {
+  currentIndex = idx;
+  renderQuestion(currentIndex);
+  renderNavGrid();
+  renderSectionTabs();
+}
+
+// ============================================================
+// FINISH EXAM
+// ============================================================
+function finishExam(auto = false) {
+  if (examFinished) return;
+  examFinished = true;
+  clearInterval(timerInterval);
+
+  let correct = 0, wrong = 0, skip = 0;
+  questions.forEach((q, i) => {
+    if (answers[i] === null) skip++;
+    else if (answers[i] === q.answer) correct++;
+    else wrong++;
+  });
+
+  const rawScore = correct / questions.length;
+  const utbkScore = Math.round(200 + rawScore * 800);
+
+  document.getElementById('score-big').textContent = utbkScore;
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-wrong').textContent = wrong;
+  document.getElementById('stat-skip').textContent = skip;
+
+  const icon = utbkScore >= 700 ? '🏆' : utbkScore >= 550 ? '🎯' : utbkScore >= 400 ? '📚' : '💪';
+  document.getElementById('score-icon').textContent = icon;
+
+  let sHTML = '<div class="sidebar-title" style="margin-bottom:12px;">Skor Per Subtes</div>';
+  sections.forEach((sec, si) => {
+    const startIdx = sections.slice(0, si).reduce((a, s) => a + s.count, 0);
+    let c = 0;
+    for (let i = startIdx; i < startIdx + sec.count; i++) {
+      if (i < questions.length && answers[i] !== null && answers[i] === questions[i].answer) c++;
+    }
+    const pct = Math.round((c / sec.count) * 100);
+    sHTML += `<div class="section-score-row">
+      <span>${sec.abbr} — ${sec.name}</span>
+      <span class="section-score-val">${c}/${sec.count} (${pct}%)</span>
+    </div>`;
+  });
+  document.getElementById('section-scores-detail').innerHTML = sHTML;
+  document.getElementById('score-overlay').style.display = 'flex';
+}
+
+// ============================================================
+// ANALYSIS
+// ============================================================
+function showAnalysis() {
+  const body = document.getElementById('analysis-body');
+  const keys = ['A','B','C','D','E'];
+  body.innerHTML = questions.map((q, i) => {
+    const userAns = answers[i];
+    const isCorrect = userAns === q.answer;
+    const isSkip = userAns === null;
+    let statusClass = isSkip ? 'skip' : isCorrect ? 'correct' : 'wrong';
+    let statusLabel = isSkip ? 'Tidak Dijawab' : isCorrect ? 'Benar' : 'Salah';
+    const qShort = q.question.length > 80 ? q.question.substring(0,80)+'...' : q.question;
+    const yourAns = isSkip ? 'Tidak dijawab' : `${keys[userAns]}. ${q.options[userAns]}`;
+    const correctAns = `${keys[q.answer]}. ${q.options[q.answer]}`;
+    return `<div class="analysis-item ${statusClass}-item" id="ai-${i}">
+      <div class="analysis-toggle" onclick="toggleAnalysis(${i})">
+        <div class="a-toggle-left">
+          <span class="a-num">${i+1}</span>
+          <span class="a-qtext">${qShort.replace(/\n/g,' ')}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <span class="a-status ${statusClass}">${statusLabel}</span>
+          <span class="a-arrow">▼</span>
+        </div>
+      </div>
+      <div class="analysis-content">
+        <div class="a-your-answer">Jawaban kamu: <strong>${yourAns}</strong></div>
+        <div class="a-correct-answer">✅ Jawaban benar: <strong>${correctAns}</strong></div>
+        <div class="a-explanation"><strong>Pembahasan:</strong><br>${q.explanation}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('analysis-overlay').style.display = 'flex';
+}
+
+function toggleAnalysis(i) {
+  document.getElementById(`ai-${i}`).classList.toggle('open');
+}
+
+function closeAnalysis() {
+  document.getElementById('analysis-overlay').style.display = 'none';
+}
+
+// ============================================================
+// CONFIRM FINISH
+// ============================================================
+function confirmFinish() {
+  const answered = answers.filter(a => a !== null).length;
+  const total = questions.length;
+  document.getElementById('confirm-answered').textContent = answered;
+  document.getElementById('confirm-unanswered').textContent = total - answered;
+  document.getElementById('confirm-total').textContent = total;
+  document.getElementById('confirm-overlay').style.display = 'flex';
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').style.display = 'none';
+}
+
+function doFinish() {
+  closeConfirm();
+  finishExam(false);
+}
+
+// ============================================================
+// RETRY
+// ============================================================
+function retryExam() {
+  answers = new Array(questions.length).fill(null);
+  currentIndex = 0;
+  examFinished = false;
+  timeLeft = 195 * 60;
+  document.getElementById('score-overlay').style.display = 'none';
+  document.getElementById('analysis-overlay').style.display = 'none';
+  renderSectionTabs();
+  renderNavGrid();
+  renderQuestion(0);
+  startTimer();
+}
+
+// ============================================================
+// START
+// ============================================================
+init();
+</script>
+</body>
+</html>
