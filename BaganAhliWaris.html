@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Bagan Ahli Waris Lengkap | Faraid (Ilmu Waris Islam)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f1f5f9;
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, -apple-system, sans-serif;
+            line-height: 1.5;
+            color: #0f172a;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        /* header */
+        .hero {
+            background: linear-gradient(135deg, #0b3b2f 0%, #145c44 100%);
+            color: white;
+            padding: 2rem 2rem 1.8rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.3px;
+        }
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .badge {
+            background: #e9c46a;
+            color: #2c3e2f;
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+        /* content */
+        .content {
+            padding: 2rem 2rem 1rem;
+        }
+        .section {
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 1rem;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            border-left: 6px solid #0b5e42;
+            padding-left: 1rem;
+            margin-bottom: 1.2rem;
+            color: #1e3a2f;
+        }
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: 0.1s;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e2edf2;
+            vertical-align: top;
+        }
+        th {
+            background: #eef3f0;
+            font-weight: 700;
+            color: #1f4e3c;
+        }
+        .diagram {
+            background: #fefcf5;
+            font-family: 'Courier New', 'Fira Code', monospace;
+            padding: 1rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            white-space: pre;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            border: 1px solid #e9e5d0;
+        }
+        .highlight {
+            background: #fef9e3;
+            border-left: 4px solid #e6b422;
+            padding: 0.8rem 1rem;
+            border-radius: 0.8rem;
+        }
+        .badge-status {
+            background: #e0f2e9;
+            color: #145c44;
+            border-radius: 20px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        hr {
+            margin: 1.5rem 0;
+            border: none;
+            border-top: 2px dotted #cbd5e1;
+        }
+        footer {
+            background: #f8fafc;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.8rem;
+            color: #475569;
+            border-top: 1px solid #e2e8f0;
+        }
+        @media (max-width: 700px) {
+            .content {
+                padding: 1rem;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+            th, td {
+                font-size: 0.8rem;
+                padding: 8px 6px;
+            }
+        }
+        /* kalkulator */
+        .calc-wrapper {
+            background: #f9fafb;
+            border-radius: 1.5rem;
+            margin-top: 1rem;
+            padding: 0.2rem 0;
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .input-item {
+            flex: 1 1 180px;
+        }
+        .input-item label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .input-item input, .input-item select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            background: white;
+        }
+        button {
+            background: #0b5e42;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #094433;
+            transform: scale(0.98);
+        }
+        .result-box {
+            background: #eef3f0;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>📖 Bagan Ahli Waris Lengkap</h1>
+        <p>Ilmu Faraid — Siapa yang Menerima & Yang Terhalang (Hijab) berdasarkan Mazhab Syafi’i</p>
+        <div class="badge">⚖️ Ashhabul Furudh · ‘Ashabah · Dzawil Arham</div>
+    </div>
+
+    <div class="content">
+        <!-- 1. KLASIFIKASI UMUM -->
+        <div class="section">
+            <div class="section-title">🌿 1. Klasifikasi Ahli Waris</div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3 style="color:#0b5e42; margin-bottom: 0.5rem;">📌 Dzawil Furudh</h3>
+                    <p>Penerima bagian pasti (½, ¼, ⅛, ⅔, ⅓, ⅙). Jika tidak ada 'ashabah, sisa dikembalikan (<em>radd</em>) kecuali suami/istri.</p>
+                    <ul style="margin-top: 0.5rem; margin-left: 1rem;">
+                        <li>Suami, Istri</li>
+                        <li>Anak perempuan, Cucu perempuan (dari anak laki)</li>
+                        <li>Ibu, Ayah, Nenek</li>
+                        <li>Saudara kandung perempuan, Saudara seayah perempuan</li>
+                        <li>Saudara seibu (laki & perempuan)</li>
+                        <li>Kakek (dalam kondisi tertentu mendapat furudh ⅙)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 style="color:#0b5e42; margin-bottom: 0.5rem;">⚔️ ‘Ashabah</h3>
+                    <p>Penerima sisa harta setelah furudh dibagikan.</p>
+                    <ul>
+                        <li><strong>Bin nafsi</strong> (karena diri): anak laki, cucu laki, ayah, kakek, saudara kandung laki, saudara seayah laki, paman, dll.</li>
+                        <li><strong>Bi ghairih</strong> (karena orang lain): anak perempuan bersama anak laki, cucu perempuan bersama cucu laki, saudara perempuan bersama saudara laki.</li>
+                        <li><strong>Ma’al ghair</strong> (bersama orang lain): saudara kandung/seayah perempuan bersama anak/cucu perempuan.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Bagan struktur keluarga & alur -->
+        <div class="section">
+            <div class="section-title">📊 2. Bagan Hubungan & Alur Penerimaan Waris</div>
+            <div class="card">
+                <div class="diagram">
+                    ┌─────────────────────────────────────────────────────────────┐
+                    │                       PEWARIS                               │
+                    └─────────────────────────────────────────────────────────────┘
+                                           │
+          ┌────────────────┬───────────────┼───────────────┬─────────────────┐
+          ▼                ▼               ▼               ▼                 ▼
+        AYAH             IBU           SUAMI/ISTRI      ANAK LAKI        ANAK PEREMPUAN
+     (ashabah/       (furudh)         (furudh tetap)   (ashabah)        (furudh/ashabah)
+      furudh)
+          │                │               │               │                 │
+      Kakek             Nenek           pasangan        Cucu laki        Cucu perempuan
+    (terhalang       (terhalang         tetap          (ashabah)        (furudh/ashabah)
+     oleh ayah)       oleh ibu)
+                </div>
+                <div class="highlight" style="margin-top: 1rem;">
+                    <strong>🔁 Alur prioritas (flowchart faraid):</strong><br>
+                    1️⃣ Suami/Istri → 2️⃣ Ada anak/cucu laki? (ya → jadi ‘ashabah, anak/cucu perempuan dapat furudh) → 3️⃣ Ayah/kakek → 4️⃣ Ibu/nenek → 5️⃣ Saudara (kandung, seayah, seibu) → 6️⃣ Dzawil Arham jika semua di atas tidak ada.
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. RINCIAN DZAWIL FURUDH + HIJAB -->
+        <div class="section">
+            <div class="section-title">📜 3. Dzawil Furudh & Syarat Penghalang (Hijab)</div>
+            <div class="card" style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr><th>Ahli Waris</th><th>Bagian</th><th>Terhalang Oleh (Hijab) / Catatan</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Suami</td><td>½ (tanpa anak/cucu), ¼ (dengan anak/cucu)</td><td>Tidak terhalang, bagian berubah</td></tr>
+                        <tr><td>Istri</td><td>¼ (tanpa anak/cucu), ⅛ (dengan anak/cucu)</td><td>Tidak terhalang, bagian berubah</td></tr>
+                        <tr><td>Anak perempuan</td><td>½ sendiri; ⅔ jika ≥2</td><td>Jika bersama anak laki, berubah jadi ‘ashabah (bukan furudh)</td></tr>
+                        <tr><td>Cucu perempuan (dari anak laki)</td><td>½ sendiri; ⅔ jika ≥2 (tanpa anak pr & tanpa anak laki)</td><td>Terhalang oleh: anak laki, dua anak perempuan atau lebih, cucu laki setingkat</td></tr>
+                        <tr><td>Ibu</td><td>⅓ (tidak ada anak/cucu & tidak ada dua saudara), ⅙ (jika ada anak/cucu atau dua saudara)</td><td>Tidak terhalang total, bagian berubah</td></tr>
+                        <tr><td>Ayah</td><td>⅙ (jika ada anak/cucu), jika tidak ada menjadi ‘ashabah</td><td>Tidak pernah terhalang total</td></tr>
+                        <tr><td>Nenek (ibu/ayah)</td><td>⅙ (satu nenek)</td><td>Terhalang oleh ibu</td></tr>
+                        <tr><td>Saudara kandung perempuan</td><td>½ sendiri; ⅔ jika ≥2 & tanpa saudara laki</td><td>Terhalang oleh: anak laki, cucu laki, ayah, kakek</td></tr>
+                        <tr><td>Saudara seayah perempuan</td><td>½ sendiri; ⅔ jika ≥2 & tanpa saudara seayah laki</td><td>Terhalang oleh anak laki, cucu laki, ayah, kakek, saudara kandung laki, dua saudara kandung perempuan</td></tr>
+                        <tr><td>Saudara seibu (laki/pr)</td><td>⅙ sendiri; ⅓ jika dua atau lebih</td><td>Terhalang oleh anak, cucu, ayah, kakek</td></tr>
+                        <tr><td>Kakek (ayah dari ayah)</td><td>⅙ (jika ada anak/cucu) + ‘ashabah</td><td>Terhalang oleh ayah</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. ASHABAH & URUTAN -->
+        <div class="section">
+            <div class="section-title">🛡️ 4. Urutan ‘Ashabah (Penerima Sisa)</div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>👑 ‘Ashabah bin nafsi</h3>
+                    <ol style="margin-left: 1.2rem;">
+                        <li>Anak laki</li>
+                        <li>Cucu laki (dari anak laki) dan seterusnya</li>
+                        <li>Ayah</li>
+                        <li>Kakek (ayah dari ayah)</li>
+                        <li>Saudara kandung laki</li>
+                        <li>Saudara seayah laki</li>
+                        <li>Anak laki saudara kandung laki</li>
+                        <li>Anak laki saudara seayah laki</li>
+                        <li>Paman (saudara laki ayah) kandung</li>
+                        <li>Paman seayah, dst.</li>
+                    </ol>
+                </div>
+                <div class="card">
+                    <h3>🔗 ‘Ashabah bi ghairih & ma’al ghair</h3>
+                    <p><strong>Bi ghairih:</strong> Perempuan yang bersama laki-laki sederajat (anak pr + anak laki, cucu pr + cucu laki, saudari kandung + saudara kandung).</p>
+                    <p><strong>Ma’al ghair:</strong> Saudara kandung/seayah perempuan yang mewaris bersama anak/cucu perempuan (menjadi ‘ashabah dan mendapat sisa).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. TABEL HIJAB RINGKAS -->
+        <div class="section">
+            <div class="section-title">🚫 5. Ringkasan Hijab (Penghalang Total)</div>
+            <div class="card" style="overflow-x: auto;">
+                <table>
+                    <thead><tr><th>Ahli Waris yang Terhalang</th><th>Dihalang Oleh</th></tr></thead>
+                    <tbody>
+                        <tr><td>Cucu perempuan (dari anak laki)</td><td>Anak laki; dua anak perempuan (jika tidak ada anak laki); cucu laki setingkat</td></tr>
+                        <tr><td>Nenek</td><td>Ibu</td></tr>
+                        <tr><td>Saudara kandung (laki & perempuan)</td><td>Anak laki, cucu laki, ayah, kakek</td></tr>
+                        <tr><td>Saudara seayah</td><td>Anak laki, cucu laki, ayah, kakek, saudara kandung laki, dua saudara kandung perempuan (tanpa saudara kandung laki)</td></tr>
+                        <tr><td>Saudara seibu</td><td>Anak, cucu, ayah, kakek</td></tr>
+                        <tr><td>Kakek</td><td>Ayah</td></tr>
+                        <tr><td>Dzawil arham</td><td>Seluruh ahli waris furudh & ‘ashabah</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 6. CONTOH KASUS -->
+        <div class="section">
+            <div class="section-title">📌 6. Contoh Kasus Waris (Ilustrasi)</div>
+            <div class="card" style="overflow-x: auto;">
+                <table>
+                    <thead><tr><th>Kasus</th><th>Ahli Waris</th><th>Penerima & Bagian</th><th>Yang Terhalang</th></tr></thead>
+                    <tbody>
+                        <tr><td>1</td><td>Suami, Ibu, 2 Anak laki</td><td>Suami ¼, Ibu ⅙, 2 Anak laki (‘ashabah sisa)</td><td>-</td></tr>
+                        <tr><td>2</td><td>Istri, 2 Anak perempuan, Ayah</td><td>Istri ⅛, 2 Anak pr ⅔, Ayah ⅙ + ‘ashabah sisa</td><td>-</td></tr>
+                        <tr><td>3</td><td>Suami, Anak perempuan, Cucu perempuan (dari anak laki), Saudara kandung laki</td><td>Suami ¼, Anak pr ½, Cucu pr ⅙, Saudara kandung laki (‘ashabah)</td><td>-</td></tr>
+                        <tr><td>4</td><td>Ibu, 2 Saudara kandung laki, 1 Saudara kandung perempuan</td><td>Ibu ⅙, Saudara kandung (‘ashabah 2:1)</td><td>-</td></tr>
+                        <tr><td>5</td><td>Nenek, Ibu</td><td>Ibu (⅓), Nenek terhalang</td><td>Nenek</td></tr>
+                        <tr><td>6</td><td>Anak perempuan, Saudara kandung perempuan</td><td>Anak pr ½, Saudara kandung pr (‘ashabah ma’al ghair ½)</td><td>-</td></tr>
+                    </tbody>
+                </table>
+                <div class="highlight" style="margin-top: 1rem;">💡 Catatan: Jika total furudh melebihi 1, terjadi <strong>‘Aul</strong> (penyesuaian). Jika kurang dari 1 dan tidak ada ‘ashabah, berlaku <strong>Radd</strong> (dikembalikan ke furudh selain suami/istri).</div>
+            </div>
+        </div>
+
+        <!-- 7. KALKULATOR WARIS INTERAKTIF (LENGKAP) -->
+        <div class="section">
+            <div class="section-title">🧮 7. Kalkulator Waris Interaktif</div>
+            <div class="card calc-wrapper">
+                <p style="margin-bottom: 1rem;">Masukkan data ahli waris (angka 0 jika tidak ada). Sistem akan menentukan penerima, bagian, dan siapa yang terhalang berdasarkan kaidah faraid.</p>
+                <div id="calculator-app">
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <div class="input-item"><label>💍 Suami/Istri</label><select id="spouse"><option value="none">Tidak Ada</option><option value="suami">Suami</option><option value="istri">Istri</option></select></div>
+                            <div class="input-item"><label>👶 Anak Laki</label><input type="number" id="sons" min="0" value="0"></div>
+                            <div class="input-item"><label>👧 Anak Perempuan</label><input type="number" id="daughters" min="0" value="0"></div>
+                            <div class="input-item"><label>🧑 Cucu Laki (dari anak laki)</label><input type="number" id="grandsons" min="0" value="0"></div>
+                            <div class="input-item"><label>👩 Cucu Perempuan (dari anak laki)</label><input type="number" id="granddaughters" min="0" value="0"></div>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <div class="input-item"><label>👨 Ayah</label><select id="father"><option value="no">Tidak Ada</option><option value="yes">Ada</option></select></div>
+                            <div class="input-item"><label>🧓 Kakek</label><select id="grandfather"><option value="no">Tidak Ada</option><option value="yes">Ada</option></select></div>
+                            <div class="input-item"><label>👩 Ibu</label><select id="mother"><option value="no">Tidak Ada</option><option value="yes">Ada</option></select></div>
+                            <div class="input-item"><label>👵 Nenek</label><select id="grandmother"><option value="no">Tidak Ada</option><option value="yes">Ada</option></select></div>
+                            <div class="input-item"><label>👬 Saudara Kandung Laki</label><input type="number" id="fullBrothers" min="0" value="0"></div>
+                            <div class="input-item"><label>👭 Saudara Kandung Perempuan</label><input type="number" id="fullSisters" min="0" value="0"></div>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <div class="input-item"><label>👬 Saudara Seayah Laki</label><input type="number" id="patBrothers" min="0" value="0"></div>
+                            <div class="input-item"><label>👭 Saudara Seayah Perempuan</label><input type="number" id="patSisters" min="0" value="0"></div>
+                            <div class="input-item"><label>🤝 Saudara Seibu (Lk+Pr)</label><input type="number" id="maternalSiblings" min="0" value="0"></div>
+                            <div class="input-item"><label>📌 Ashabah Lain (paman/dll)</label><select id="otherAsabah"><option value="no">Tidak Ada</option><option value="yes">Ada (jika tidak ada ashabah prioritas)</option></select></div>
+                        </div>
+                    </div>
+                    <button id="calcWarisan">Hitung Warisan & Tampilkan Penerima</button>
+                    <div id="hasilWaris" class="result-box">✨ Klik tombol di atas untuk melihat siapa yang menerima, bagian furudh/ashabah, serta siapa yang terhalang.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        📚 Berdasarkan Mazhab Syafi’i dan kaidah faraid. Kalkulator menerapkan hijab (penghalang), ‘aul, radd, serta prioritas ‘ashabah. <br>
+        Referensi lengkap: Al-Qur’an, As-Sunnah, dan ijma’ ulama. Gunakan untuk pembelajaran, konsultasikan ke ahli faraid untuk kasus riil.
+    </footer>
+</div>
+
+<script>
+    // Fungsi kalkulator waris (interaktif) yang terintegrasi
+    function lcm(a,b) { return (a*b)/gcd(a,b); }
+    function gcd(a,b) { return b===0 ? a : gcd(b, a%b); }
+
+    function hitungFaraid() {
+        // ambil nilai
+        const spouse = document.getElementById('spouse').value;
+        let sons = parseInt(document.getElementById('sons').value) || 0;
+        let daughters = parseInt(document.getElementById('daughters').value) || 0;
+        let grandsons = parseInt(document.getElementById('grandsons').value) || 0;
+        let granddaughters = parseInt(document.getElementById('granddaughters').value) || 0;
+        const father = document.getElementById('father').value === 'yes';
+        const mother = document.getElementById('mother').value === 'yes';
+        const grandfather = document.getElementById('grandfather').value === 'yes';
+        const grandmother = document.getElementById('grandmother').value === 'yes';
+        let fullBrothers = parseInt(document.getElementById('fullBrothers').value) || 0;
+        let fullSisters = parseInt(document.getElementById('fullSisters').value) || 0;
+        let patBrothers = parseInt(document.getElementById('patBrothers').value) || 0;
+        let patSisters = parseInt(document.getElementById('patSisters').value) || 0;
+        let maternalSiblings = parseInt(document.getElementById('maternalSiblings').value) || 0;
+        const otherAsabah = document.getElementById('otherAsabah').value === 'yes';
+
+        // hijab anak & cucu
+        let effectiveGrandsons = grandsons;
+        let effectiveGranddaughters = granddaughters;
+        if (sons > 0) { effectiveGrandsons = 0; effectiveGranddaughters = 0; }
+        const effectiveGrandfather = father ? false : grandfather;
+        const effectiveGrandmother = mother ? false : grandmother;
+
+        // Hijab saudara
+        let blockedSiblings = (sons > 0 || effectiveGrandsons > 0 || father || effectiveGrandfather);
+        if (blockedSiblings) { fullBrothers = 0; fullSisters = 0; }
+        let blockedPat = (sons > 0 || effectiveGrandsons > 0 || father || effectiveGrandfather || fullBrothers > 0 || (fullSisters >= 2 && fullBrothers === 0));
+        if (blockedPat) { patBrothers = 0; patSisters = 0; }
+        let blockedMaternal = (sons > 0 || effectiveGrandsons > 0 || father || effectiveGrandfather);
+        if (blockedMaternal) maternalSiblings = 0;
+
+        let ahliWaris = []; // { nama, bagianTeks, isFurudh, rawVal, plusAshabah, ashabahPriority }
+        let totalFurudh = 0;
+
+        function addFurudh(nama, pecahan, numer, denom) {
+            ahliWaris.push({ nama, bagianTeks: pecahan, isFurudh: true, rawVal: numer/denom });
+            totalFurudh += numer/denom;
+        }
+        function addAshabah(nama, priority, desc = 'Ashabah') {
+            ahliWaris.push({ nama, bagianTeks: desc, isFurudh: false, ashabahPriority: priority });
+        }
+
+        // 1. Suami/istri
+        if (spouse === 'suami') {
+            let adaAnak = (sons+daughters+effectiveGrandsons+effectiveGranddaughters) > 0;
+            addFurudh('Suami', adaAnak ? '1/4' : '1/2', adaAnak ? 1/4 : 1/2, adaAnak ? 4 : 2);
+        } else if (spouse === 'istri') {
+            let adaAnak = (sons+daughters+effectiveGrandsons+effectiveGranddaughters) > 0;
+            addFurudh('Istri', adaAnak ? '1/8' : '1/4', adaAnak ? 1/8 : 1/4, adaAnak ? 8 : 4);
+        }
+
+        // 2. Anak & cucu
+        if (sons > 0 || daughters > 0) {
+            if (daughters > 0 && sons === 0) {
+                let bagian = (daughters === 1) ? '1/2' : '2/3';
+                let raw = (daughters === 1) ? 0.5 : 2/3;
+                addFurudh(`${daughters} Anak Perempuan`, bagian, raw, (daughters === 1) ? 2 : 3);
+            } else if (sons > 0) {
+                addAshabah(`${sons} Anak Laki${daughters>0 ? ` + ${daughters} Anak Perempuan` : ''}`, 1, 'Ashabah bin nafsi / bi ghairih (laki:perempuan 2:1)');
+            } else if (daughters > 0 && sons === 0) { /* sudah ditangani */ }
+        } 
+        else if (effectiveGrandsons > 0 || effectiveGranddaughters > 0) {
+            if (effectiveGranddaughters > 0 && effectiveGrandsons === 0) {
+                let bagian = (effectiveGranddaughters === 1) ? '1/2' : '2/3';
+                let raw = (effectiveGranddaughters === 1) ? 0.5 : 2/3;
+                addFurudh(`${effectiveGranddaughters} Cucu Perempuan`, bagian, raw, (effectiveGranddaughters === 1) ? 2 : 3);
+            } else {
+                addAshabah(`${effectiveGrandsons} Cucu Laki${effectiveGranddaughters>0 ? ` + ${effectiveGranddaughters} Cucu Perempuan` : ''}`, 2, 'Ashabah (cucu)');
+            }
+        }
+
+        // 3. Ayah & kakek
+        if (father) {
+            let adaAnakCucu = (sons+daughters+effectiveGrandsons+effectiveGranddaughters) > 0;
+            if (adaAnakCucu) {
+                addFurudh('Ayah', '1/6 + ashabah sisa', 1/6, 6);
+                ahliWaris[ahliWaris.length-1].plusAshabah = true;
+            } else addAshabah('Ayah', 3, 'Ashabah bin nafsi (tidak ada anak)');
+        } else if (effectiveGrandfather) {
+            let adaAnakCucu = (sons+daughters+effectiveGrandsons+effectiveGranddaughters) > 0;
+            if (adaAnakCucu) {
+                addFurudh('Kakek', '1/6 + ashabah sisa', 1/6, 6);
+                ahliWaris[ahliWaris.length-1].plusAshabah = true;
+            } else addAshabah('Kakek', 4, 'Ashabah');
+        }
+
+        // 4. Ibu & nenek
+        if (mother) {
+            let adaAnakCucu = (sons+daughters+effectiveGrandsons+effectiveGranddaughters) > 0;
+            let adaDuaSaudara = (fullBrothers+fullSisters+patBrothers+patSisters+maternalSiblings) >= 2;
+            let bagian = (adaAnakCucu || adaDuaSaudara) ? '1/6' : '1/3';
+            let raw = (adaAnakCucu || adaDuaSaudara) ? 1/6 : 1/3;
+            addFurudh('Ibu', bagian, raw, (adaAnakCucu || adaDuaSaudara) ? 6 : 3);
+        }
+        if (effectiveGrandmother && !mother) {
+            addFurudh('Nenek', '1/6', 1/6, 6);
+        }
+
+        // 5. Saudara (kandung, seayah, seibu)
+        let haveCloserAsabah = (sons > 0 || effectiveGrandsons > 0 || father || effectiveGrandfather);
+        if (!haveCloserAsabah && (fullBrothers > 0 || fullSisters > 0)) {
+            if (fullBrothers === 0 && fullSisters > 0) {
+                let bagian = (fullSisters === 1) ? '1/2' : '2/3';
+                let raw = (fullSisters === 1) ? 0.5 : 2/3;
+                addFurudh(`${fullSisters} Saudara Kandung Perempuan`, bagian, raw, (fullSisters === 1) ? 2 : 3);
+            } else addAshabah(`${fullBrothers} Lk + ${fullSisters} Pr (Sdr Kandung)`, 5, 'Ashabah');
+        } 
+        else if (!haveCloserAsabah && (fullBrothers+fullSisters === 0) && (patBrothers > 0 || patSisters > 0)) {
+            if (patBrothers === 0 && patSisters > 0) {
+                let bagian = (patSisters === 1) ? '1/2' : '2/3';
+                let raw = (patSisters === 1) ? 0.5 : 2/3;
+                addFurudh(`${patSisters} Saudara Seayah Perempuan`, bagian, raw, (patSisters === 1) ? 2 : 3);
+            } else addAshabah(`${patBrothers} Lk + ${patSisters} Pr (Seayah)`, 6, 'Ashabah');
+        }
+        if (maternalSiblings > 0 && !haveCloserAsabah && (sons+effectiveGrandsons === 0) && !father && !effectiveGrandfather) {
+            let bagian = (maternalSiblings === 1) ? '1/6' : '1/3';
+            let raw = (maternalSiblings === 1) ? 1/6 : 1/3;
+            addFurudh(`${maternalSiblings} Saudara Seibu`, bagian, raw, (maternalSiblings === 1) ? 6 : 3);
+        }
+
+        // Ashabah lain & dzawil arham
+        let hasAshabah = ahliWaris.some(h => !h.isFurudh && h.ashabahPriority);
+        if (otherAsabah && !hasAshabah && !haveCloserAsabah && (sons+effectiveGrandsons+ (father?1:0)+(effectiveGrandfather?1:0)+fullBrothers+patBrothers === 0)) {
+            addAshabah('Ashabah lain (paman, anak saudara laki)', 7, 'Menerima seluruh sisa');
+        }
+        if (ahliWaris.length === 0) {
+            ahliWaris.push({ nama: 'Dzawil Arham (kerabat jauh)', bagianTeks: 'Mewarisi seluruh harta', isFurudh: false, special: true });
+        }
+
+        // Build output HTML
+        let html = `<div style="font-weight:600;">✅ Ahli Waris Penerima:</div><ul>`;
+        for (let a of ahliWaris) {
+            let bagianShow = a.bagianTeks;
+            if (a.isFurudh && a.rawVal) bagianShow = a.bagianTeks;
+            html += `<li><strong>${a.nama}</strong> → ${bagianShow}</li>`;
+        }
+        html += `</ul>`;
+
+        // Terhalang list (beberapa kondisi)
+        let terhalangNote = [];
+        if (grandsons > 0 && sons > 0) terhalangNote.push('Cucu laki terhalang oleh anak laki.');
+        if (granddaughters > 0 && sons > 0) terhalangNote.push('Cucu perempuan terhalang oleh anak laki.');
+        if (grandfather && father) terhalangNote.push('Kakek terhalang oleh ayah.');
+        if (grandmother && mother) terhalangNote.push('Nenek terhalang oleh ibu.');
+        if ((fullBrothers+fullSisters > 0) && (sons+effectiveGrandsons+ (father?1:0)+(effectiveGrandfather?1:0) > 0)) terhalangNote.push('Saudara kandung terhalang oleh anak/cucu/ayah/kakek.');
+        if ((patBrothers+patSisters > 0) && (fullBrothers+fullSisters > 0 || sons>0 || effectiveGrandsons>0 || father || effectiveGrandfather)) terhalangNote.push('Saudara seayah terhalang oleh prioritas yang lebih dekat.');
+        if (maternalSiblings > 0 && blockedMaternal) terhalangNote.push('Saudara seibu terhalang oleh anak/cucu/ayah/kakek.');
+        if (terhalangNote.length) {
+            html += `<div style="background:#ffe6dd; border-radius:1rem; padding:0.6rem; margin-top:0.6rem;"><strong>🚫 Yang Terhalang (Hijab):</strong><ul>`;
+            terhalangNote.forEach(t => html += `<li>${t}</li>`);
+            html += `</ul></div>`;
+        } else html += `<div style="margin-top:0.6rem;">🔹 Tidak ada ahli waris yang terhalang total berdasarkan data.</div>`;
+
+        if (totalFurudh > 1) html += `<div class="highlight" style="margin-top:0.8rem;">⚠️ Terjadi 'Aul (total bagian melebihi 1), perlu penyesuaian pembagian.</div>`;
+        else if (totalFurudh < 1 && !ahliWaris.some(h => !h.isFurudh && (h.ashabahPriority || h.plusAshabah))) html += `<div class="highlight" style="margin-top:0.8rem;">📌 Terjadi Radd (sisa dikembalikan ke dzawil furudh selain suami/istri).</div>`;
+        document.getElementById('hasilWaris').innerHTML = html;
+    }
+
+    document.getElementById('calcWarisan').addEventListener('click', hitungFaraid);
+    // inisialisasi default tampilkan pesan
+    window.onload = () => {
+        document.getElementById('hasilWaris').innerHTML = '✨ Klik tombol "Hitung Warisan" untuk melihat hasil berdasarkan data ahli waris di atas.';
+    };
+</script>
+</body>
+</html>
