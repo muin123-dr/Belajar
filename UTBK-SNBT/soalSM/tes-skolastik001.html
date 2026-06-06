@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Quiz Interaktif TPS - Paket 1 Simulasi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f7ff;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #0a4b6e;
+        }
+        .subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c6979;
+            font-weight: 500;
+        }
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+            padding: 20px;
+            transition: all 0.2s;
+            border: 1px solid #e0e7f0;
+        }
+        .soal-nomor {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 40px;
+            margin-bottom: 16px;
+        }
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-weight: 500;
+            background: #f9fbfd;
+            padding: 12px;
+            border-radius: 16px;
+        }
+        .soal-gambar {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .soal-gambar img {
+            max-width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #eee;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0 15px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 10px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbd5e1;
+            transition: 0.1s;
+        }
+        .option:hover {
+            background: #eef2ff;
+        }
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+        label {
+            font-size: 1rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        button {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e293b;
+        }
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+        }
+        button.check-btn:hover {
+            background: #0f5e8a;
+        }
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+        }
+        button.pembahasan-btn:hover {
+            background: #e6edf5;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            background: #f1f5f9;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 5px solid #22c55e;
+        }
+        .feedback.wrong {
+            background: #ffe4e2;
+            color: #991b1b;
+            border-left: 5px solid #ef4444;
+        }
+        .pembahasan-text {
+            background: #eef2ff;
+            padding: 12px;
+            border-radius: 14px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid #3b82f6;
+            display: none;
+        }
+        .pembahasan-text.show {
+            display: block;
+        }
+        hr {
+            margin: 8px 0;
+            border-color: #e2e8f0;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.8rem;
+            color: #5b6e8c;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            .card {
+                padding: 16px;
+            }
+            .option {
+                padding: 8px 12px;
+            }
+            label {
+                font-size: 0.9rem;
+            }
+            .soal-teks {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📚 TES PENGETAHUAN SKOLASTIK</h1>
+    <div class="subtitle">Paket 1 Simulasi | 60 Soal Interaktif + Pembahasan</div>
+    <div id="soal-list"></div>
+    <footer>Klik "Cek Jawaban" untuk mengetahui benar/salah. Klik "Pembahasan" untuk melihat penjelasan setiap soal.</footer>
+</div>
+
+<script>
+    // Data soal dari nomor 1 sampai 60
+    const soalData = [];
+    
+    // Soal 1-50 (teks dan opsi)
+    soalData.push({ nomor:1, teks:"REPLIKASI", gambar:null, pilihan:["Tiruan","Salinan","Tindasan","Contekan","Reproduksi"], jawaban:"A", pembahasan:"REPLIKASI artinya duplikat, tiruan." });
+    soalData.push({ nomor:2, teks:"PURNA", gambar:null, pilihan:["Akhir","Habis","Putus","Tugas","Tuntas"], jawaban:"E", pembahasan:"PURNA artinya selesai, sempurna, tamat, tuntas." });
+    soalData.push({ nomor:3, teks:"TERPUKAU", gambar:null, pilihan:["Tersihir","Tertarik","Terkesan","Terhibur","Terbelalak"], jawaban:"B", pembahasan:"TERPUKAU artinya gandrung, heran, tertarik, terpesona, dsb." });
+    soalData.push({ nomor:4, teks:"SENYAP", gambar:null, pilihan:["Sepi","Diam","Hilang","Santun","Sunyi"], jawaban:"E", pembahasan:"SENYAP artinya tidak ada suara, sunyi, lengang." });
+    soalData.push({ nomor:5, teks:"KALUT", gambar:null, pilihan:["Rapi","Atur","Kusut","Keset","kotor"], jawaban:"C", pembahasan:"KALUT artinya kacau, kusut, galau, semrawut." });
+    soalData.push({ nomor:6, teks:"Pilihlah kata yang tidak cocok artinya: REDAM", gambar:null, pilihan:["Utuh","Kukuh","Lebur","Remuk","Hancur"], jawaban:"A", pembahasan:"REDAM bersinonim lebur, remuk, hancur. Antonimnya utuh." });
+    soalData.push({ nomor:7, teks:"Pilihlah kata yang tidak cocok artinya: SURUT", gambar:null, pilihan:["Turun","Susut","Lemah","Kurang","Mundur"], jawaban:"C", pembahasan:"SURUT sinonim turun, susut, kurang, mundur. 'Lemah' tidak cocok." });
+    soalData.push({ nomor:8, teks:"Pilihlah kata yang tidak cocok artinya: PANTAS", gambar:null, pilihan:["Tepat","Layak","Patut","Imbang","Cocok"], jawaban:"D", pembahasan:"PANTAS sinonim tepat, layak, patut, cocok. 'Imbang' tidak sama." });
+    soalData.push({ nomor:9, teks:"Pilihlah kata yang tidak cocok artinya: DRAMA", gambar:null, pilihan:["Kisah","Cerita","Prosa","Kejadian","Keadaan"], jawaban:"E", pembahasan:"DRAMA sinonim kisah, kejadian, cerita, prosa. 'Keadaan' tidak tepat." });
+    soalData.push({ nomor:10, teks:"TRANSISI", gambar:null, pilihan:["Perolehan","Pergantian","Perubahan","Pertukaran","Penyerahan"], jawaban:"A", pembahasan:"TRANSISI = peralihan, pergantian, perubahan. 'Perolehan' tidak sama." });
+    soalData.push({ nomor:11, teks:"Sayuran : Wortel =", gambar:null, pilihan:["Hewan : Reptil","Buah : Apel","Manisan : Permen","Gula : Garam","Kendaraan : Sepeda"], jawaban:"B", pembahasan:"Wortel jenis sayuran, apel jenis buah." });
+    soalData.push({ nomor:12, teks:"Denda : Uang =", gambar:null, pilihan:["Bayar : Utang","Sanksi : Kurungan","Mati : Eksekusi","Penjara : tahun","Tilang : Polisi"], jawaban:"B", pembahasan:"Denda sanksi dibayar uang, sanksi kurungan berupa hukuman." });
+    soalData.push({ nomor:13, teks:"Kertas : lembar =", gambar:null, pilihan:["Angin : sejuk","Buah : biji","Batu : truk","Kapas : gumpal","Rambut : ikal"], jawaban:"D", pembahasan:"Kertas satuan lembar, kapas satuan gumpal." });
+    soalData.push({ nomor:14, teks:"Rumah : jendela =", gambar:null, pilihan:["Pot : tanaman","Pipa : air","Mobil : knalpot","Gerobak : roda","Atap : jerami"], jawaban:"C", pembahasan:"Rumah punya jendela, mobil punya knalpot (bagian/fungsi keluar udara)." });
+    soalData.push({ nomor:15, teks:"Domba : mantel =", gambar:null, pilihan:["Debu : sapu","Pintu : kunci","Sapi : keju","Sekolah : lulusan","Pertanyaan : jawaban"], jawaban:"C", pembahasan:"Mantel dari wol domba, keju dari susu sapi (bahan baku produk)." });
+    soalData.push({ nomor:16, teks:"Gurau : serius =", gambar:null, pilihan:["Pertentangan : debat","Garam : cabai","Canda : tawa","Masalah : solusi","Pedas : hambar"], jawaban:"E", pembahasan:"Gurau lawan serius, pedas lawan hambar." });
+    soalData.push({ nomor:17, teks:"Lampu : Listrik =", gambar:null, pilihan:["Mobil : bensin","Mesin : diesel","Jet : api","Papan : tulis","Kipas : angin"], jawaban:"A", pembahasan:"Lampu butuh listrik, mobil butuh bensin (sumber energi)." });
+    soalData.push({ nomor:18, teks:"Kalimat : kata =", gambar:null, pilihan:["Negara : ibu kota","Pemukiman : rumah","Lidi : sapu","Penjara : kriminal","Sayuran : wortel"], jawaban:"B", pembahasan:"Kalimat terdiri kata, pemukiman terdiri rumah." });
+    soalData.push({ nomor:19, teks:"Kapal : Palka =", gambar:null, pilihan:["Kereta : masinis","Perahu : sekoci","Pesawat : hanggar","Mobil : bagasi","Tenom : terpal"], jawaban:"D", pembahasan:"Palka ruang simpan kapal, bagasi ruang simpan mobil." });
+    soalData.push({ nomor:20, teks:"Lari : Kaki = Menyanyi : ...", gambar:null, pilihan:["Mulut","Nada","Lagu","Vokal","Suara"], jawaban:"A", pembahasan:"Lari pakai kaki, menyanyi pakai mulut." });
+    soalData.push({ nomor:21, teks:"Semua pelamar beasiswa harus lulus tes bahasa Inggris. Beberapa mahasiswa melamar beasiswa. Simpulan yang benar adalah ...", gambar:null, pilihan:["Beberapa mahasiswa tidak melamar beasiswa.","Semua mahasiswa harus lulus tes bahasa Inggris.","Beberapa mahasiswa harus lulus tes bahasa Inggris.","Semua yang lulus tes bahasa Inggris adalah mahasiswa.","Beberapa pelamar beasiswa tidak ikut tes bahasa Inggris."], jawaban:"C", pembahasan:"Silogisme: Beberapa mahasiswa (yang melamar) harus lulus tes Inggris." });
+    soalData.push({ nomor:22, teks:"Semua pemain bola bisa berlari kencang. Sebagian anak kelas olahraga adalah pemain bola. Simpulan yang benar adalah ...", gambar:null, pilihan:["Sebagian pemain bola tidak bisa berlari kencang.","Semua anak kelas olahraga bisa berlari kencang.","Beberapa anak kelas olahraga bisa berlari kencang.","Sebagian anak kelas olahraga tidak bisa berlari kencang.","Anak kelas olahraga bisa berlari kencang dan pemain bola."], jawaban:"C", pembahasan:"Anak olahraga yang jadi pemain bola otomatis bisa lari kencang." });
+    soalData.push({ nomor:23, teks:"Beberapa tukang tidak wajib mematuhi prosedur keamanan. Semua pegawai konstruksi wajib mematuhi prosedur keamanan. Simpulan paling tepat ...", gambar:null, pilihan:["Semua yang wajib prosedur adalah pegawai konstruksi.","Semua tukang bukan pegawai konstruksi.","Beberapa tukang wajib prosedur.","Beberapa yang wajib prosedur bukan pegawai konstruksi.","Beberapa tukang bukan pegawai konstruksi."], jawaban:"E", pembahasan:"Tukang yang tidak wajib prosedur pasti bukan pegawai konstruksi." });
+    soalData.push({ nomor:24, teks:"Semua komputer dilengkapi keyboard. Sebagian keyboard berteknologi canggih. Simpulan tepat ...", gambar:null, pilihan:["Tidak ada dilengkapi keyboard kecuali komputer.","Tidak semua komputer canggih dilengkapi keyboard.","Keyboard canggih hanya ada di komputer.","Tidak ada komputer ber-keyboard canggih.","Ada komputer memiliki keyboard canggih."], jawaban:"E", pembahasan:"Irisan: sebagian keyboard canggih terpasang di komputer." });
+    soalData.push({ nomor:25, teks:"Semua mobil di perusahaan diikutkan asuransi kecelakaan. Sebagian mobil tidak diikutkan asuransi kebakaran. Simpulan paling tepat ...", gambar:null, pilihan:["Sebagian mobil tdk ikut asuransi kecelakaan ikut asuransi kebakaran.","Sebagian mobil tdk ikut kebakaran ikut asuransi kecelakaan.","Sebagian mobil ikut kebakaran tidak ikut kecelakaan.","Sebagian mobil tdk ikut kecelakaan tdk ikut kebakaran.","Semua mobil tdk ikut kebakaran ikut kecelakaan."], jawaban:"B", pembahasan:"Mobil yang tidak ikut kebakaran tetap ikut kecelakaan." });
+    soalData.push({ nomor:26, teks:"Jika guru idola maka santun, membantu, mudah dipahami. Guru berkata kasar, mementingkan diri, penjelasan rumit. Simpulan ...", gambar:null, pilihan:["Bukan guru teladan","Egois","Tidak memahami materi","Belum berpengalaman","Tidak menjadi idola murid"], jawaban:"E", pembahasan:"Modus Tollens, konsekuen tidak dipenuhi, maka anteseden salah." });
+    soalData.push({ nomor:27, teks:"Apabila dalang tidak datang, sebagian penari tidak tampil. Dalang tidak datang jika panitia tidak mengundang. Simpulan ...", gambar:null, pilihan:["Sebagian penari tidak tampil jika panitia tidak mengundang dalang.","Sebagian penari tidak tampil jika panitia mengundang dalang.","Panitia mengundang penari jika tidak undang dalang.","Panitia tidak undang penari jika tidak undang dalang.","Sebagian penari tampil jika panitia tidak undang dalang."], jawaban:"A", pembahasan:"Silogisme: Jika tidak undang dalang → dalang tidak datang → sebagian penari tidak tampil." });
+    soalData.push({ nomor:28, teks:"Sebagian paket tidak sampai jika kurir tidak pakai mobil ekspedisi. Kurir tidak pakai mobil jika tidak terampil. Simpulan benar ...", gambar:null, pilihan:["Sebagian paket sampai jika kurir tidak terampil.","Kurir terampil jika sebagian paket sampai.","Kurir tidak terampil jika pakai mobil dinas.","Sebagian paket tidak sampai jika kurir tidak terampil.","Sebagian paket tidak sampai jika kurir terampil."], jawaban:"D", pembahasan:"~R → ~P, ~P → ~Q => ~R → ~Q. Jika kurir tidak terampil, sebagian paket tidak sampai." });
+    soalData.push({ nomor:29, teks:"Jika karya dipajang → 5 bahan baku lokal, pernah lomba, jadi ikon. Sebuah karya hanya 3 bahan, belum lomba, belum dikenal. Simpulan BENAR ...", gambar:null, pilihan:["Karya kreatif","Perlu dilombakan","Tidak dipajang bulan depan","Hemat bahan baku","Perlu disosialisasikan"], jawaban:"C", pembahasan:"Modus Tollens, syarat tidak terpenuhi maka karya tidak dipajang." });
+    soalData.push({ nomor:30, teks:"Akhir pekan keluarga Sumadi selalu berwisata. Tidak semua wisata di luar kota. Simpulan tepat ...", gambar:null, pilihan:["Selalu wisata bukan luar kota","Selalu wisata di luar kota","Tidak selalu wisata kecuali bukan luar kota","Tidak selalu wisata kecuali luar kota","Selalu wisata, di luar atau bukan luar kota"], jawaban:"E", pembahasan:"Setiap akhir pekan pasti wisata, bisa di dalam/luar kota." });
+    soalData.push({ nomor:31, teks:"Ahli A: berhenti nikotin 2 bulan. Ahli B: permen karet nikotin mempermudah. Hasil penelitian: sebagian besar gagal mencoba berbagai cara. Hubungan?", gambar:null, pilihan:["Memperkuat A","Memperkuat B","Memperlemah A","Memperlemah B","Tidak relevan"], jawaban:"E", pembahasan:"Penelitian tidak menyinggung durasi 2 bulan atau permen karet." });
+    soalData.push({ nomor:32, teks:"Di TK X, anak ikut program Y rasa ingin tahu lebih besar, karena jelajah alam. Mana pernyataan memperkuat?", gambar:null, pilihan:["Program Y rutin sejak berdiri","Guru menyarankan ikut Y","Sebagian anak tidak ikut Y jarang bertanya","Karakteristik sama","Anak tidak ikut Y tak pernah dapat kesempatan jelajah alam"], jawaban:"E", pembahasan:"Memperkuat sebab-akibat, anak tanpa program Y tak dapat jelajah alam." });
+    soalData.push({ nomor:33, teks:"Gajah penting bagi ekosistem. Makin penting, makin perlu dilindungi. Akibat paling mungkin?", gambar:null, pilihan:["Populasi meningkat pesat","Penangkaran jadi objek wisata","Pemerintah larang perburuan & perdagangan","Penangkaran jauh dari kampung","Dibiarkan di alam bebas"], jawaban:"C", pembahasan:"Akibat logis perlu dilindungi => regulasi larangan perburuan." });
+    soalData.push({ nomor:34, teks:"Pakar: madu aman & baik untuk ibu hamil karena nutrisi tinggi. Mana memperlemah?", gambar:null, pilihan:["Sebagian madu hutan mengandung bakteri berbahaya bagi janin","Orang tua sarankan madu","Ibu hamil konsumsi asam folat lebih banyak","Ibu hamil lebih bertenaga setelah madu","Anjurkan konsultasi dokter"], jawaban:"A", pembahasan:"Membantah klaim 'aman' dengan adanya bakteri berbahaya." });
+    soalData.push({ nomor:35, teks:"Keberhasilan kampanye dipengaruhi partisipasi & efektivitas. Jika terjadi peningkatan pola hidup sehat, simpulan paling mungkin?", gambar:null, pilihan:["Partisipasi masyarakat tinggi","Kampanye berhasil","Masyarakat paham informasi","Masyarakat terapkan pola sehat","Penyuluhan efektif"], jawaban:"A", pembahasan:"Peningkatan pola hidup sehat adalah akibat, maka sebab (partisipasi tinggi) paling mungkin." });
+    soalData.push({ nomor:36, teks:"Tiga tim pendaki (3 org per tim). A dengan D, B tidak dengan G/C, C dengan I, E & H dengan B, F pisah dengan A. Tim yang dapat dibentuk?", gambar:null, pilihan:["A-D-G; B-I-H; C-E-F","A-F-G; B-E-H; C-D-I","A-D-G; B-E-H; C-I-F","A-D-I; B-E-H; C-G-F","A-D-H; B-E-I; C-E-F"], jawaban:"C", pembahasan:"Tim B-E-H, A-D-G, sisa C-I-F." });
+    soalData.push({ nomor:37, teks:"Urutan kota H,I,J,K,L. H sesudah J & K. L sesudah J dan sebelum K. Urutan yang benar?", gambar:null, pilihan:["K,J,L,I,H","I,H,K,J,L","L,J,K,H,1","L,I,H,K,I","J,L,K,H,I"], jawaban:"E", pembahasan:"J < L < K < H, kota I bebas. Opsi E: J, L, K, H, I" });
+    soalData.push({ nomor:38, teks:"Ikan kakap merah bergizi & indah. Udang gizi tinggi. Hidangan menarik & bergizi?", gambar:null, pilihan:["Kakap merah & udang","Bandeng & kakap merah","Tuna & bandeng","Lidang & bandeng","Kakap merah & bandeng"], jawaban:"A", pembahasan:"Kakap menarik, udang bergizi tinggi, kombinasi terbaik." });
+    soalData.push({ nomor:39, teks:"Diplomat P(Ing,Jerman), Q(Prancis,Jepang,Cina), R(Jerman), S(Inggris,Jepang,Cina), T(Prancis,Jerman). Pasangan harus pakai penerjemah?", gambar:null, pilihan:["P & R","R & T","Q & R","Q & S","P & S"], jawaban:"C", pembahasan:"Q dan R tidak punya bahasa yg sama." });
+    soalData.push({ nomor:40, teks:"B tiga kiri F dan tiga kanan H. C tiga kanan A (tidak sebelah F/D). E empat kanan A. D tiga kanan G. Siapa di depan B?", gambar:null, pilihan:["D","G","C","F","D atau G"], jawaban:"B", pembahasan:"Simulasi meja bundar, G tepat di depan B." });
+    soalData.push({ nomor:41, teks:"4, 16, 36, 64, 100 …", gambar:null, pilihan:["121","132","139","144","169"], jawaban:"D", pembahasan:"Bilangan genap kuadrat: 2²,4²,6²,8²,10²,12²=144." });
+    soalData.push({ nomor:42, teks:"81, 2, 49, 4, 25, 8, 9, 16 …", gambar:null, pilihan:["1","3","9","16","25"], jawaban:"A", pembahasan:"Pola ganjil: 81(9²),49(7²),25(5²),9(3²) berikutnya 1²=1. Genap: kali 2." });
+    soalData.push({ nomor:43, teks:"1, 3, 7, 15, 31, 63, …", gambar:null, pilihan:["78","94","101","127","133"], jawaban:"D", pembahasan:"(×2)+1, 63×2+1=127." });
+    soalData.push({ nomor:44, teks:"2, 4, 8, 32, 128, …", gambar:null, pilihan:["216","256","512","1024","2048"], jawaban:"B", pembahasan:"2×4=8, 4×8=32, 8×32=256." });
+    soalData.push({ nomor:45, teks:"12, 36, 39, 13, 39, 42, 14, …", gambar:null, pilihan:["9","17","37","41","42"], jawaban:"E", pembahasan:"Pola ×3, +3, ÷3 berulang. 14×3=42." });
+    soalData.push({ nomor:46, teks:"1/3 dari 240 siswa lulus. Yang lulus nilai 80 ada 50%, berapa lulus di bawah 80?", gambar:null, pilihan:["40","50","60","70","80"], jawaban:"A", pembahasan:"Lulus = 80 org, 50% lulus 80 = 40 org, sisa 40 di bawah 80." });
+    soalData.push({ nomor:47, teks:"Seperempat dari 0,25 × 1.600.000 adalah ...", gambar:null, pilihan:["100.000","125.000","200.000","400.000","1.000.000"], jawaban:"A", pembahasan:"1/4 × 1/4 × 1.600.000 = 1/16 × 1.600.000 = 100.000" });
+    soalData.push({ nomor:48, teks:"32 − 26 + 38 × 4 =", gambar:null, pilihan:["158","164","184","220","224"], jawaban:"A", pembahasan:"32-26=6, 38×4=152, 6+152=158" });
+    soalData.push({ nomor:49, teks:"Setiap 2 jam minum 500 ml air & 3 cokelat. Hari ini minum 2000 ml. Berapa cokelat?", gambar:null, pilihan:["4","5","8","12","14"], jawaban:"D", pembahasan:"2000/500=4 sesi, 4×3=12 cokelat." });
+    soalData.push({ nomor:50, teks:"Warna biru 1/6, merah 1/2, sisa hijau. Bagian hijau?", gambar:null, pilihan:["1/2","1/3","1/4","1/5","1/6"], jawaban:"B", pembahasan:"1 - 1/6 - 1/2 = 1/3." });
+    
+    // Soal gambar 51-60 (dengan link gambar)
+    const gambarLinks = {
+        51:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl008.png",
+        52:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl009.png",
+        53:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl0010.png",
+        54:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl001.png",
+        55:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl002.png",
+        56:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl003.png",
+        57:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl004.png",
+        58:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl005.png",
+        59:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl006.png",
+        60:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/skl007.png"
+    };
+    const jawabanGambar = {51:"D",52:"B",53:"D",54:"D",55:"B",56:"A",57:"E",58:"B",59:"A",60:"B"};
+    const pembahasanGambar = {
+        51:"Opsi D memiliki arsiran tegak, berbeda dari yang lain.",
+        52:"Opsi B hanya memiliki satu arsiran.",
+        53:"Opsi D tidak memiliki sudut.",
+        54:"Jika opsi D diputar, posisi putih terletak di bawah, berbeda.",
+        55:"Kotak berikutnya adalah opsi B.",
+        56:"Gambar berikutnya adalah opsi A.",
+        57:"Lanjutan gambar yang tepat adalah opsi E.",
+        58:"Lanjutan gambar yang tepat adalah opsi B.",
+        59:"Gambar tepat untuk mengisi bagian kosong adalah A.",
+        60:"Gambar tepat untuk mengisi bagian kosong adalah B."
+    };
+    
+    // Perubahan: untuk nomor 51-54, teks soal diganti menjadi "Pilihlah gambar yang paling berbeda!"
+    for (let i=51; i<=60; i++) {
+        let teksSoal;
+        if (i >= 51 && i <= 54) {
+            teksSoal = "Pilihlah gambar yang paling berbeda!";
+        } else {
+            teksSoal = `Pilih jawaban yang tepat berdasarkan gambar di bawah. (Soal nomor ${i})`;
+        }
+        soalData.push({
+            nomor:i,
+            teks:teksSoal,
+            gambar:gambarLinks[i],
+            pilihan:["A","B","C","D","E"],
+            jawaban:jawabanGambar[i],
+            pembahasan:pembahasanGambar[i]
+        });
+    }
+    
+    // Render semua soal ke dalam div
+    const container = document.getElementById("soal-list");
+    function renderSoal() {
+        container.innerHTML = "";
+        soalData.forEach(soal => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.id = `soal-${soal.nomor}`;
+            // nomor
+            const nomorSpan = document.createElement("div");
+            nomorSpan.className = "soal-nomor";
+            nomorSpan.innerText = `Soal ${soal.nomor}`;
+            card.appendChild(nomorSpan);
+            // teks soal
+            const teksDiv = document.createElement("div");
+            teksDiv.className = "soal-teks";
+            teksDiv.innerText = soal.teks;
+            card.appendChild(teksDiv);
+            // gambar jika ada
+            if (soal.gambar) {
+                const imgDiv = document.createElement("div");
+                imgDiv.className = "soal-gambar";
+                const img = document.createElement("img");
+                img.src = soal.gambar;
+                img.alt = `Gambar soal ${soal.nomor}`;
+                img.loading = "lazy";
+                imgDiv.appendChild(img);
+                card.appendChild(imgDiv);
+            }
+            // options
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            const nameAttr = `q${soal.nomor}`;
+            soal.pilihan.forEach((pil, idx) => {
+                const letter = String.fromCharCode(65+idx); // A,B,C,D,E
+                const optionDiv = document.createElement("div");
+                optionDiv.className = "option";
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = nameAttr;
+                radio.value = letter;
+                const label = document.createElement("label");
+                label.innerText = `${letter}. ${pil}`;
+                optionDiv.appendChild(radio);
+                optionDiv.appendChild(label);
+                optionsDiv.appendChild(optionDiv);
+            });
+            card.appendChild(optionsDiv);
+            // button group
+            const btnGroup = document.createElement("div");
+            btnGroup.className = "btn-group";
+            const checkBtn = document.createElement("button");
+            checkBtn.innerText = "✅ Cek Jawaban";
+            checkBtn.classList.add("check-btn");
+            const pembahasanBtn = document.createElement("button");
+            pembahasanBtn.innerText = "📖 Pembahasan";
+            pembahasanBtn.classList.add("pembahasan-btn");
+            btnGroup.appendChild(checkBtn);
+            btnGroup.appendChild(pembahasanBtn);
+            card.appendChild(btnGroup);
+            // feedback area
+            const feedbackDiv = document.createElement("div");
+            feedbackDiv.className = "feedback";
+            const pembahasanDiv = document.createElement("div");
+            pembahasanDiv.className = "pembahasan-text";
+            pembahasanDiv.innerHTML = `<strong>📘 Pembahasan:</strong> ${soal.pembahasan}`;
+            card.appendChild(feedbackDiv);
+            card.appendChild(pembahasanDiv);
+            // event listeners
+            checkBtn.addEventListener("click", () => {
+                const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                if (!selected) {
+                    feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                    feedbackDiv.classList.add("show");
+                    feedbackDiv.classList.remove("correct","wrong");
+                    return;
+                }
+                const jawabanUser = selected.value;
+                const benar = (jawabanUser === soal.jawaban);
+                if (benar) {
+                    feedbackDiv.innerHTML = "✅ Jawaban Anda BENAR!";
+                    feedbackDiv.classList.add("correct","show");
+                    feedbackDiv.classList.remove("wrong");
+                } else {
+                    feedbackDiv.innerHTML = `❌ Jawaban Anda SALAH. Jawaban benar: ${soal.jawaban}.`;
+                    feedbackDiv.classList.add("wrong","show");
+                    feedbackDiv.classList.remove("correct");
+                }
+            });
+            pembahasanBtn.addEventListener("click", () => {
+                pembahasanDiv.classList.toggle("show");
+                if (pembahasanDiv.classList.contains("show")) {
+                    pembahasanBtn.innerText = "🙈 Tutup Pembahasan";
+                } else {
+                    pembahasanBtn.innerText = "📖 Pembahasan";
+                }
+            });
+            container.appendChild(card);
+        });
+    }
+    renderSoal();
+</script>
+</body>
+</html>
