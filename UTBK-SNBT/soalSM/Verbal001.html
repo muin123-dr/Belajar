@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Tes Kemampuan Verbal - Paket 2</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        .timer {
+            color: #e74c3c;
+        }
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+        .option {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background-color: #f9f9f9;
+            border-color: #3498db;
+        }
+        .option.selected {
+            background-color: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background-color: #219150;
+        }
+        #result {
+            display: none;
+            text-align: center;
+        }
+        .score-box {
+            font-size: 2em;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f1c40f;
+            border-radius: 10px;
+            color: #2c3e50;
+        }
+        .pembahasan-container {
+            display: none;
+            margin-top: 30px;
+            text-align: left;
+        }
+        .pembahasan-item {
+            background: #fdfdfd;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .pembahasan-item strong {
+            color: #2980b9;
+        }
+        .reading-text {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-style: italic;
+            border: 1px solid #ddd;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="quiz-header">
+        <h1>Tes Kemampuan Verbal</h1>
+        <p style="text-align:center; color: #7f8c8d;">Paket 2 - 20 Soal</p>
+        <div class="info">
+            <span>Waktu: 20 Menit</span>
+            <span class="timer" id="timer">Sisa Waktu: 20:00</span>
+        </div>
+    </div>
+
+    <div id="quiz-content">
+        <!-- Questions will be injected here -->
+    </div>
+
+    <button id="submit-btn" class="btn" onclick="submitQuiz()">Selesai dan Kumpulkan</button>
+
+    <div id="result">
+        <h2>Hasil Ujian Anda</h2>
+        <div class="score-box" id="score-display">0 / 100</div>
+        <button class="btn" onclick="showPembahasan()">Lihat Pembahasan</button>
+    </div>
+
+    <div id="pembahasan" class="pembahasan-container">
+        <h2>Pembahasan Soal</h2>
+        <div id="pembahasan-list"></div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "ABSURD =",
+            options: ["Masuk Akal", "Mustahil", "Nyata", "Logis", "Jelas"],
+            answer: 1,
+            explanation: "Absurd berarti tidak masuk akal; mustahil; omong kosong."
+        },
+        {
+            q: "KONVENSI =",
+            options: ["Kesepakatan", "Pertentangan", "Perdebatan", "Perjanjian", "Perselisihan"],
+            answer: 0,
+            explanation: "Konvensi berarti permufakatan atau kesepakatan (terutama mengenai adat, tradisi, dan sebagainya)."
+        },
+        {
+            q: "EVOKASI =",
+            options: ["Panggilan", "Penggugah", "Penarikan", "Pemanggilan", "Pengusiran"],
+            answer: 1,
+            explanation: "Evokasi berarti penggugah rasa; pengungsian."
+        },
+        {
+            q: "DELUSI =",
+            options: ["Kenyataan", "Khayalan", "Fakta", "Kebenaran", "Ilusi"],
+            answer: 1,
+            explanation: "Delusi berarti pikiran atau pandangan yang tidak berdasar (tidak rasional), biasanya berupa keyakinan akan sesuatu yang tidak nyata; khayalan."
+        },
+        {
+            q: "PARADOKS =",
+            options: ["Keselarasan", "Pertentangan", "Kesamaan", "Keseimbangan", "Keharmonisan"],
+            answer: 1,
+            explanation: "Paradoks berarti pernyataan yang seolah-olah bertentangan (berlawanan) dengan pendapat umum atau kebenaran, tetapi kenyataannya mengandung kebenaran; situasi yang saling bertentangan."
+        },
+        {
+            q: "KONSTAN >> ...",
+            options: ["Berubah-ubah", "Tetap", "Stabil", "Konsisten", "Diam"],
+            answer: 0,
+            explanation: "Konstan berarti tetap tidak berubah; terus-menerus. Antonimnya adalah berubah-ubah."
+        },
+        {
+            q: "SPORADIS >> ...",
+            options: ["Jarang", "Sering", "Kadang-kadang", "Teratur", "Acak"],
+            answer: 3,
+            explanation: "Sporadis berarti tidak tentu; kadang-kadang; sesekali. Antonimnya adalah teratur."
+        },
+        {
+            q: "PREMAN >> ...",
+            options: ["Sipil", "Dinas", "Swasta", "Umum", "Rakyat"],
+            answer: 1,
+            explanation: "Preman berarti bukan tentara; bukan polisi; bukan pegawai negeri; partikelir. Antonimnya adalah dinas."
+        },
+        {
+            q: "MAYA >> ...",
+            options: ["Nyata", "Semu", "Khayalan", "Fana", "Ilusi"],
+            answer: 0,
+            explanation: "Maya berarti hanya ada dalam angan-angan; tidak berdasarkan kenyataan; semu. Antonimnya adalah nyata."
+        },
+        {
+            q: "PROMINEN >> ...",
+            options: ["Terkemuka", "Biasa", "Penting", "Menonjol", "Terkenal"],
+            answer: 1,
+            explanation: "Prominen berarti terkemuka; menonjol. Antonimnya adalah biasa."
+        },
+        {
+            q: "GURU : MURID = ______ : ______",
+            options: ["Dokter : Pasien", "Hakim : Jaksa", "Polisi : Penjahat", "Koki : Makanan", "Petani : Sawah"],
+            answer: 0,
+            explanation: "Hubungan antara Guru dan Murid adalah Guru memberikan ilmu/bimbingan kepada Murid. Hubungan yang sama adalah Dokter memberikan perawatan/pengobatan kepada Pasien."
+        },
+        {
+            q: "LAPAR : MAKAN = ______ : ______",
+            options: ["Haus : Minum", "Lelah : Tidur", "Dingin : Selimut", "Sakit : Obat", "Sedih : Menangis"],
+            answer: 0,
+            explanation: "Hubungan antara Lapar dan Makan adalah Makan dilakukan untuk mengatasi rasa Lapar. Hubungan yang sama adalah Minum dilakukan untuk mengatasi rasa Haus."
+        },
+        {
+            q: "PESAWAT : KOKPIT = ______ : ______",
+            options: ["Mobil : Setir", "Kapal : Nahkoda", "Rumah : Kamar", "Kereta : Masinis", "Motor : Helm"],
+            answer: 0,
+            explanation: "Kokpit adalah bagian dari pesawat tempat pilot mengendalikan pesawat. Setir adalah bagian dari mobil yang digunakan untuk mengendalikan mobil."
+        },
+        {
+            q: "BENANG : KAIN = ______ : ______",
+            options: ["Kayu : Meja", "Batu : Dinding", "Pasir : Kaca", "Kulit : Sepatu", "Padi : Nasi"],
+            answer: 2,
+            explanation: "Benang adalah bahan dasar untuk membuat Kain. Pasir adalah bahan dasar untuk membuat Kaca."
+        },
+        {
+            q: "BUKU : PERPUSTAKAAN = ______ : ______",
+            options: ["Ikan : Laut", "Pohon : Hutan", "Uang : Bank", "Siswa : Sekolah", "Pakaian : Lemari"],
+            answer: 2,
+            explanation: "Buku disimpan di Perpustakaan. Uang disimpan di Bank."
+        },
+        {
+            type: "reading",
+            text: "Indonesia adalah negara kepulauan terbesar di dunia, terdiri dari ribuan pulau yang membentang dari Sabang sampai Merauke. Keberagaman geografis ini menciptakan kekayaan hayati yang luar biasa, mulai dari hutan hujan tropis, pegunungan, hingga keindahan bawah laut. Selain itu, Indonesia juga kaya akan kebudayaan, dengan ratusan suku bangsa yang memiliki bahasa, adat istiadat, dan kesenian yang berbeda-beda. Potensi pariwisata Indonesia sangat besar, menarik wisatawan domestik maupun mancanegara untuk menikmati keindahan alam dan keunikan budayanya. Namun, tantangan dalam menjaga kelestarian alam dan budaya serta pemerataan pembangunan masih menjadi pekerjaan rumah yang besar bagi bangsa ini.",
+            q: "Ide pokok paragraf di atas adalah ...",
+            options: [
+                "Indonesia memiliki ribuan pulau yang membentang luas.",
+                "Keberagaman geografis Indonesia menciptakan kekayaan hayati.",
+                "Indonesia adalah negara kepulauan terbesar di dunia dengan kekayaan alam dan budaya yang melimpah.",
+                "Potensi pariwisata Indonesia sangat besar dan menarik wisatawan.",
+                "Tantangan dalam menjaga kelestarian alam dan budaya Indonesia."
+            ],
+            answer: 2,
+            explanation: "Ide pokok paragraf ini adalah tentang Indonesia sebagai negara kepulauan terbesar dengan kekayaan alam dan budaya yang melimpah. Kalimat pertama adalah kalimat utama yang menyatakan fakta ini."
+        },
+        {
+            type: "reading",
+            text: "Perubahan iklim global menjadi salah satu isu paling mendesak yang dihadapi umat manusia saat ini. Peningkatan suhu rata-rata bumi, pencairan gletser, kenaikan permukaan air laut, dan fenomena cuaca ekstrem adalah beberapa indikator nyata dari perubahan ini. Penyebab utamanya adalah emisi gas rumah kaca yang dihasilkan dari aktivitas manusia, seperti pembakaran bahan bakar fosil, deforestasi, dan industrialisasi. Dampak perubahan iklim sangat luas, mengancam ketahanan pangan, ketersediaan air bersih, kesehatan manusia, dan keanekaragaman hayati. Upaya mitigasi dan adaptasi yang serius dari seluruh negara di dunia sangat diperlukan untuk mengatasi krisis ini dan memastikan masa depan yang berkelanjutan bagi generasi mendatang.",
+            q: "Manakah pernyataan berikut yang bukan merupakan indikator nyata perubahan iklim global?",
+            options: [
+                "Peningkatan suhu rata-rata bumi.",
+                "Pencairan gletser.",
+                "Kenaikan permukaan air laut.",
+                "Penurunan emisi gas rumah kaca.",
+                "Fenomena cuaca ekstrem."
+            ],
+            answer: 3,
+            explanation: "Penurunan emisi gas rumah kaca adalah tujuan dari upaya mitigasi perubahan iklim, bukan indikator nyata dari perubahan iklim itu sendiri."
+        },
+        {
+            type: "reading",
+            text: "Literasi digital adalah kemampuan untuk menemukan, mengevaluasi, membuat, dan mengkomunikasikan informasi secara efektif menggunakan teknologi digital. Di era informasi ini, literasi digital bukan lagi sekadar keterampilan tambahan, melainkan kebutuhan esensial bagi setiap individu. Kemampuan ini mencakup pemahaman tentang cara kerja internet, keamanan siber, etika digital, serta kemampuan untuk membedakan informasi yang akurat dari hoaks. Dengan literasi digital yang baik, individu dapat berpartisipasi aktif dalam masyarakat digital, memanfaatkan peluang yang ditawarkan teknologi, dan melindungi diri dari risiko-risiko yang ada di dunia maya. Oleh karena itu, pendidikan literasi digital perlu diintegrasikan secara menyeluruh dalam kurikulum pendidikan dan program-program pelatihan masyarakat.",
+            q: "Pernyataan yang paling sesuai dengan isi paragraf di atas adalah ...",
+            options: [
+                "Literasi digital hanya berfokus pada kemampuan menggunakan internet.",
+                "Keamanan siber adalah satu-satunya aspek penting dalam literasi digital.",
+                "Literasi digital adalah kebutuhan esensial di era informasi untuk berpartisipasi aktif dan aman di dunia digital.",
+                "Pendidikan literasi digital hanya diperlukan untuk kalangan profesional.",
+                "Hoaks tidak dapat dibedakan dari informasi akurat jika seseorang memiliki literasi digital yang baik."
+            ],
+            answer: 2,
+            explanation: "Pernyataan ini paling sesuai karena mencakup definisi literasi digital sebagai kebutuhan esensial di era informasi, serta tujuannya untuk partisipasi aktif dan keamanan di dunia digital."
+        },
+        {
+            type: "reading",
+            text: "Ekonomi kreatif adalah konsep ekonomi baru yang mengintensifkan informasi dan kreativitas dengan mengandalkan ide dan pengetahuan sebagai faktor produksi utama. Sektor ini mencakup berbagai industri, seperti periklanan, arsitektur, seni pertunjukan, desain, fashion, film, musik, penerbitan, perangkat lunak, dan riset & pengembangan. Potensi ekonomi kreatif di Indonesia sangat besar, didukung oleh kekayaan budaya, keanekaragaman seni, dan jumlah penduduk usia produktif yang melimpah. Pengembangan ekonomi kreatif diharapkan dapat menjadi salah satu pilar pertumbuhan ekonomi nasional, menciptakan lapangan kerja, dan meningkatkan daya saing bangsa di kancah global. Namun, tantangan seperti perlindungan hak kekayaan intelektual, akses permodalan, dan pengembangan ekosistem yang kondusif masih perlu diatasi.",
+            q: "Manakah pernyataan berikut yang tidak benar mengenai ekonomi kreatif?",
+            options: [
+                "Ekonomi kreatif mengandalkan ide dan pengetahuan sebagai faktor produksi utama.",
+                "Sektor periklanan dan fashion termasuk dalam industri ekonomi kreatif.",
+                "Potensi ekonomi kreatif di Indonesia didukung oleh kekayaan budaya dan seni.",
+                "Perlindungan hak kekayaan intelektual adalah salah satu tantangan dalam pengembangan ekonomi kreatif.",
+                "Ekonomi kreatif hanya berfokus pada peningkatan daya saing bangsa di kancah global tanpa menciptakan lapangan kerja."
+            ],
+            answer: 4,
+            explanation: "Pernyataan E tidak benar karena pengembangan ekonomi kreatif diharapkan dapat menciptakan lapangan kerja, bukan hanya berfokus pada daya saing."
+        },
+        {
+            type: "reading",
+            text: "Sampah plastik telah menjadi masalah lingkungan global yang serius. Jutaan ton sampah plastik berakhir di lautan setiap tahun, mengancam kehidupan laut, merusak ekosistem, dan bahkan masuk ke rantai makanan manusia dalam bentuk mikroplastik. Salah satu penyebab utama masalah ini adalah penggunaan plastik sekali pakai yang berlebihan dan kurangnya sistem pengelolaan sampah yang efektif. Untuk mengatasi krisis ini, diperlukan upaya kolektif dari berbagai pihak, termasuk pemerintah, industri, dan masyarakat. Langkah-langkah yang dapat diambil meliputi pengurangan penggunaan plastik sekali pakai, daur ulang, pengembangan material alternatif yang ramah lingkungan, serta edukasi publik tentang pentingnya pengelolaan sampah yang bertanggung jawab.",
+            q: "Berikut ini adalah solusi yang dapat dilakukan untuk mengatasi masalah sampah plastik, kecuali ...",
+            options: [
+                "Mengurangi penggunaan plastik sekali pakai.",
+                "Meningkatkan daur ulang sampah plastik.",
+                "Mengembangkan material alternatif yang ramah lingkungan.",
+                "Membuang sampah plastik ke laut agar terurai secara alami.",
+                "Mengedukasi publik tentang pengelolaan sampah yang bertanggung jawab."
+            ],
+            answer: 3,
+            explanation: "Membuang sampah plastik ke laut adalah tindakan yang memperburuk masalah, bukan solusi. Plastik tidak terurai secara alami di laut dalam waktu singkat."
+        }
+    ];
+
+    let userAnswers = new Array(questions.length).fill(null);
+    let timeLeft = 20 * 60; // 20 minutes in seconds
+    let timerInterval;
+
+    function initQuiz() {
+        const quizContent = document.getElementById('quiz-content');
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            
+            let html = '';
+            if (q.type === 'reading') {
+                html += `<div class="reading-text">${q.text}</div>`;
+            }
+            
+            html += `<div class="question-text">${index + 1}. ${q.q}</div>`;
+            html += `<div class="options">`;
+            q.options.forEach((opt, optIndex) => {
+                const label = String.fromCharCode(65 + optIndex);
+                html += `<div class="option" onclick="selectOption(${index}, ${optIndex})" id="q${index}-o${optIndex}">${label}. ${opt}</div>`;
+            });
+            html += `</div>`;
+            
+            questionDiv.innerHTML = html;
+            quizContent.appendChild(questionDiv);
+        });
+
+        startTimer();
+    }
+
+    function selectOption(qIndex, optIndex) {
+        userAnswers[qIndex] = optIndex;
+        
+        // Remove selected class from all options of this question
+        for (let i = 0; i < 5; i++) {
+            document.getElementById(`q${qIndex}-o${i}`).classList.remove('selected');
+        }
+        
+        // Add selected class to the clicked option
+        document.getElementById(`q${qIndex}-o${optIndex}`).classList.add('selected');
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').innerText = `Sisa Waktu: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }, 1000);
+    }
+
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        
+        let score = 0;
+        userAnswers.forEach((ans, index) => {
+            if (ans === questions[index].answer) {
+                score++;
+            }
+        });
+
+        const finalScore = (score / questions.length) * 100;
+        document.getElementById('score-display').innerText = `${finalScore} / 100`;
+        
+        document.getElementById('quiz-header').classList.add('hidden');
+        document.getElementById('quiz-content').classList.add('hidden');
+        document.getElementById('submit-btn').classList.add('hidden');
+        document.getElementById('result').style.display = 'block';
+    }
+
+    function showPembahasan() {
+        const list = document.getElementById('pembahasan-list');
+        list.innerHTML = '';
+        
+        questions.forEach((q, index) => {
+            const item = document.createElement('div');
+            item.className = 'pembahasan-item';
+            
+            const isCorrect = userAnswers[index] === q.answer;
+            const statusText = isCorrect ? '<span style="color: green;">(Benar)</span>' : '<span style="color: red;">(Salah)</span>';
+            const userAnswerText = userAnswers[index] !== null ? String.fromCharCode(65 + userAnswers[index]) : 'Tidak Dijawab';
+            
+            item.innerHTML = `
+                <p><strong>Soal ${index + 1}:</strong> ${q.q}</p>
+                <p>Jawaban Anda: ${userAnswerText} ${statusText}</p>
+                <p><strong>Kunci Jawaban:</strong> ${String.fromCharCode(65 + q.answer)}. ${q.options[q.answer]}</p>
+                <p><strong>Pembahasan:</strong> ${q.explanation}</p>
+            `;
+            list.appendChild(item);
+        });
+        
+        document.getElementById('pembahasan').style.display = 'block';
+        window.scrollTo(0, document.getElementById('pembahasan').offsetTop);
+    }
+
+    window.onload = initQuiz;
+</script>
+
+</body>
+</html>

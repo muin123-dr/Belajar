@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Literasi Bahasa Indonesia - Quiz Interaktif per Teks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f5fb;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            color: #0a4b6e;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #2c6979;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #cbdde6;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+        /* Group Teks */
+        .teks-group {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+            border: 1px solid #e2edf2;
+        }
+        .teks-header {
+            background: #eef3fc;
+            padding: 18px 22px;
+            border-bottom: 2px solid #cbdde6;
+        }
+        .teks-judul {
+            font-size: 1.35rem;
+            font-weight: bold;
+            color: #0a4b6e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .teks-judul span {
+            background: #0a4b6e;
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+        .teks-bacaan {
+            background: #fefefe;
+            padding: 20px 22px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #1e2f3d;
+            border-bottom: 1px solid #e0eaf1;
+            white-space: pre-wrap;
+        }
+        .soal-container {
+            padding: 10px 22px 22px 22px;
+            background: white;
+        }
+        .card-soal {
+            background: #fafcff;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 16px 18px;
+            border: 1px solid #e2edf2;
+            transition: all 0.1s;
+        }
+        .soal-nomor {
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+            font-weight: 500;
+            background: #ffffff;
+            padding: 8px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 12px 0 16px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #ffffff;
+            padding: 8px 14px;
+            border-radius: 60px;
+            border: 1px solid #cbdbe0;
+        }
+        .option:hover {
+            background: #eef3fc;
+        }
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+        button {
+            background: #e9eef3;
+            border: none;
+            padding: 7px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+        }
+        button.check-btn:hover {
+            background: #0e5e89;
+        }
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #b9c8da;
+        }
+        .feedback {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e0f7e8;
+            color: #0a5e2e;
+            border-left: 5px solid #2b8c4a;
+        }
+        .feedback.wrong {
+            background: #ffe6e5;
+            color: #ac2c34;
+            border-left: 5px solid #e34d4d;
+        }
+        .pembahasan-text {
+            background: #eef2fa;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            border-left: 4px solid #3b82f6;
+            display: none;
+        }
+        .pembahasan-text.show {
+            display: block;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.75rem;
+            color: #5f7f9c;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            .teks-bacaan, .soal-container {
+                padding: 16px;
+            }
+            .option {
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📖 Literasi Bahasa Indonesia</h1>
+    <div style="text-align: center;"><span class="subtitle">Baca Teks → Jawab Soal → Lihat Pembahasan</span></div>
+
+    <div id="quiz-groups"></div>
+    <footer>✅ Klik "Cek Jawaban" untuk tahu benar/salah. 📘 "Pembahasan" membuka penjelasan setiap soal.</footer>
+</div>
+
+<script>
+    // ======================= DATA TEKS DAN SOAL BERDASARKAN KELOMPOK =======================
+    const groups = [];
+
+    // ----- GROUP 1: Teks AI (Soal 1-4) -----
+    groups.push({
+        judul: "Teks 1: Disrupsi AI di Pendidikan",
+        bacaan: `(1) Fenomena kecerdasan buatan generatif (Generative AI) seperti ChatGPT memicu disrupsi masif dalam dunia pendidikan di Indonesia. (2) Di satu sisi, teknologi ini menawarkan kemudahan akses informasi, pemicu ide kreatif, dan efisiensi waktu dalam penyusunan draf tugas. (3) Namun, di sisi lain, bayang-bayang degradasi integritas akademik semakin nyata. (4) Banyak dosen dan guru mengeluhkan fenomena "mahasiswa instan" yang mengumpulkan esai atau makalah hasil kopas (copy-paste) langsung dari AI tanpa proses penyuntingan dan nalar kritis. (5) Hal ini diperparah dengan fakta bahwa sistem pendeteksi AI (AI detector) yang ada saat ini belum sepenuhnya akurat, sering kali menghasilkan false positive pada tulisan murni manusia. (6) Merespons hal tersebut, sejumlah universitas terkemuka tidak serta merta melarang penggunaan AI. (7) Alih-alih melakukan pelarangan buta, mereka mulai merevisi pedoman akademik untuk mengatur penggunaan AI secara etis. (8) Mahasiswa diizinkan menggunakan AI sebagai teman diskusi atau mesin pencari tingkat lanjut, asalkan mereka mencantumkannya dalam sitasi dan mampu mempertanggungjawabkan argumennya saat ujian lisan. (9) Pendekatan ini dinilai lebih realistis karena melawan arus perkembangan teknologi adalah sebuah kesia-siaan.`,
+        soalList: [
+            { nomor:1, teks:"Gagasan utama paragraf kedua pada teks tersebut adalah...", pilihan:["Pelarangan total penggunaan kecerdasan buatan di universitas terkemuka.","Revisi pedoman akademik sebagai respons adaptif universitas terhadap AI.","Kewajiban mahasiswa mencantumkan sitasi saat menyalin tulisan dari AI.","Ketidakakuratan sistem pendeteksi AI dalam lingkungan akademik.","Perkembangan teknologi yang tidak mungkin dilawan oleh institusi pendidikan."], jawaban:"B", pembahasan:"Paragraf kedua berfokus pada respons universitas yang tidak melarang AI, melainkan merevisi pedoman akademik untuk mengatur penggunaannya secara etis dan realistis. Pilihan B paling mencakup inti gagasan paragraf ini." },
+            { nomor:2, teks:"Manakah pernyataan berikut yang jika benar, akan PALING MEMPERKUAT argumen pada kalimat (9) (Pendekatan ini dinilai lebih realistis karena melawan arus perkembangan teknologi adalah sebuah kesia-siaan)?", pilihan:["Banyak mahasiswa yang diam-diam tetap menggunakan AI meskipun dilarang keras oleh kampus.","Universitas yang melarang kalkulator di era 90-an akhirnya tertinggal, sedangkan yang mengintegrasikannya justru menghasilkan ilmuwan hebat.","Generative AI berbayar memiliki kemampuan yang jauh lebih baik daripada versi gratis yang diakses mayoritas mahasiswa.","Sistem pendeteksi AI terus diperbarui untuk mencapai tingkat akurasi hingga 99 persen.","Mahasiswa yang bergantung pada AI terbukti memiliki kemampuan analisis yang lebih rendah saat ujian tertutup."], jawaban:"B", pembahasan:"Kalimat (9) menyatakan bahwa melarang perkembangan teknologi adalah sebuah kesia-siaan (lebih baik beradaptasi). Pilihan B memberikan analogi logis tentang adaptasi terhadap teknologi (kalkulator di era 90-an) yang terbukti membawa dampak positif." },
+            { nomor:3, teks:"Kelemahan teks tersebut adalah...", pilihan:["Tidak menyertakan contoh universitas mana saja yang sudah merevisi pedoman akademiknya.","Kalimat (5) tidak memiliki korelasi logis dengan kalimat-kalimat sebelumnya.","Penggunaan istilah asing yang tidak dicetak miring pada kalimat (4) dan (5).","Penulis terlalu berpihak pada penggunaan AI dan mengabaikan dampak negatifnya.","Tidak ada kesimpulan yang merangkum keseluruhan isi teks."], jawaban:"A", pembahasan:"Teks menyebutkan 'sejumlah universitas terkemuka', namun tidak memberikan data empiris atau contoh spesifik institusi. Ketiadaan data pendukung spesifik ini menjadi kelemahan teks." },
+            { nomor:4, teks:"Sikap penulis dalam teks tersebut cenderung...", pilihan:["Pesimistis dan konservatif","Objektif dan adaptif","Sinis dan reaksioner","Provokatif dan ambisius","Apatis dan netral"], jawaban:"B", pembahasan:"Penulis memaparkan sisi positif dan negatif AI (objektif), lalu menampilkan solusi adaptif. Sikap penulis tidak menolak secara emosional, melainkan realistis dan adaptif." }
+        ]
+    });
+
+    // ----- GROUP 2: Teks El Nino (soal 5-7) -----
+    groups.push({
+        judul: "Teks 2: Dampak El Nino & Impor Beras",
+        bacaan: `(1) Fenomena El Nino yang melanda Indonesia pada akhir 2023 hingga pertengahan 2024 berdampak serius pada ketahanan pangan nasional. (2) Musim kemarau panjang menyebabkan ribuan hektare lahan sawah di sentra produksi seperti Jawa Barat dan Sulawesi Selatan mengalami puso (gagal panen). (3) Akibatnya, pasokan beras di pasar tradisional menurun drastis, yang memicu lonjakan harga hingga menembus angka Rp16.000,00 per kilogram untuk kualitas premium. (4) Untuk menstabilkan harga, pemerintah terpaksa membuka keran impor beras dari Thailand dan Vietnam. (5) Kebijakan ini, meski diklaim sebagai langkah darurat penyelamatan perut rakyat, menuai kritik keras dari Himpunan Kerukunan Tani Indonesia (HKTI). (6) Menurut HKTI, impor beras di saat sebagian kecil petani lokal baru mulai panen gadu justru akan menjatuhkan harga gabah di tingkat petani dan merugikan mereka.`,
+        soalList: [
+            { nomor:5, teks:"Inti permasalahan yang dibahas dalam teks tersebut adalah...", pilihan:["Kebijakan impor beras pemerintah menuai kritik keras dari HKTI.","Kegagalan panen di Jawa Barat dan Sulawesi Selatan akibat cuaca ekstrem.","Kenaikan harga beras premium yang mencapai Rp16.000,00 per kilogram.","Dampak El Nino terhadap ketahanan pangan dan dilema kebijakan impor beras.","Penolakan petani lokal terhadap masuknya beras dari Thailand dan Vietnam."], jawaban:"D", pembahasan:"Inti teks membicarakan rentetan peristiwa akibat El Nino: gagal panen, kurang pasokan, kenaikan harga, hingga dilema impor beras di tengah penolakan petani." },
+            { nomor:6, teks:"Makna istilah 'puso' dalam kalimat (2) memiliki kedekatan makna dengan kata...", pilihan:["Bera (tidak ditanami)","Fuso (kendaraan berat)","Paceklik","Mandul","Kemarau"], jawaban:"C", pembahasan:"Dalam konteks pertanian, puso = gagal panen. Paceklik adalah masa sulit karena kekurangan bahan pangan (akibat gagal panen)." },
+            { nomor:7, teks:"Pernyataan yang merupakan opini dalam teks tersebut ditunjukkan oleh kalimat...", pilihan:["(1) dan (3)","(2) dan (4)","(3) dan (5)","(4) dan (6)","(5) dan (6)"], jawaban:"E", pembahasan:"Kalimat (5) menuai kritik (fakta), tetapi (6) 'Menurut HKTI...' adalah opini/pandangan. Maka opini terdapat pada (5) dan (6)." }
+        ]
+    });
+
+    // GROUP 3: Wolbachia (soal 8-10)
+    groups.push({
+        judul: "Teks 3: Nyamuk Wolbachia",
+        bacaan: `Penyebaran nyamuk ber-Wolbachia di sejumlah kota di Indonesia belakangan ini memicu histeria massal di sebagian kalangan masyarakat. Hoaks berseliweran di media sosial yang menyebutkan bahwa nyamuk ini adalah hasil rekayasa genetika yang sengaja disebar untuk membawa virus baru atau menjadi alat depopulasi. Padahal, menurut para peneliti dari Universitas Gadjah Mada (UGM) yang tergabung dalam World Mosquito Program (WMP), Wolbachia adalah bakteri alami yang hidup di 60 persen serangga, termasuk lalat buah dan ngengat. Bakteri ini dimasukkan ke dalam telur nyamuk Aedes aegypti. Saat nyamuk tersebut menetas dan dewasa, Wolbachia akan memblokir replikasi virus dengue di dalam tubuh nyamuk. Artinya, jika nyamuk itu menggigit manusia, virus dengue tidak akan tertular. Metode ini sudah terbukti secara saintifik mampu menurunkan kasus Demam Berdarah Dengue (DBD) hingga 77 persen di Yogyakarta.`,
+        soalList: [
+            { nomor:8, teks:"Perbedaan pandangan pokok yang tergambar dalam teks tersebut adalah…", pilihan:["Pemerintah menganggap Wolbachia sebagai solusi, sedangkan UGM menganggapnya rekayasa genetika.","Sebagian masyarakat termakan hoaks depopulasi, sedangkan saintis membuktikan Wolbachia sebagai penekan kasus DBD.","Nyamuk Aedes aegypti dianggap berbahaya oleh masyarakat, tetapi dianggap bermanfaat oleh WMP.","Media sosial menolak penyebaran nyamuk, sedangkan masyarakat Yogyakarta sangat menerimanya.","Bakteri Wolbachia dianggap virus baru oleh peneliti, namun dianggap alami oleh serangga."], jawaban:"B", pembahasan:"Teks mengontraskan histeria masyarakat karena hoaks dengan bukti saintifik UGM (penurunan DBD)." },
+            { nomor:9, teks:"Berdasarkan teks, bagaimana mekanisme Wolbachia dalam menekan kasus DBD?", pilihan:["Wolbachia membunuh nyamuk Aedes aegypti secara perlahan sebelum nyamuk itu bisa terbang.","Wolbachia mematikan virus dengue di udara sebelum terhirup atau tergigit oleh manusia.","Wolbachia mencegah virus dengue memperbanyak diri di dalam tubuh nyamuk Aedes aegypti.","Wolbachia membuat manusia kebal terhadap gigitan nyamuk Aedes aegypti.","Wolbachia mengubah genetik nyamuk sehingga tidak lagi menghisap darah manusia."], jawaban:"C", pembahasan:"Teks: 'Wolbachia akan memblokir replikasi virus dengue di dalam tubuh nyamuk.' Replikasi = perbanyakan diri." },
+            { nomor:10, teks:"Kata 'histeria' dalam paragraf tersebut paling tepat digantikan dengan kata...", pilihan:["Kekacauan","Kepanikan","Kehebohan","Euforia","Kemarahan"], jawaban:"B", pembahasan:"Dalam konteks hoaks, histeria massal berarti ketakutan tidak rasional atau kepanikan massal." }
+        ]
+    });
+
+    // GROUP 4: Tech winter (soal 11-13)
+    groups.push({
+        judul: "Teks 4: Tech Winter & Seleksi Alam Startup",
+        bacaan: `(1) Era "tech winter" yang melanda ekosistem startup global turut memberikan pukulan telak bagi Indonesia. (2) Sejak akhir 2022 hingga 2024, fenomena PHK massal menjadi berita harian. (3) Berhentinya aliran dana murah dari investor memaksa para pendiri startup mengubah paradigma bisnis mereka dari "growth at all costs" (bakar uang) menjadi profitabilitas berkelanjutan. (4) Banyak startup merampingkan divisi yang tidak menghasilkan pendapatan langsung, mengurangi promo bakar uang, dan menaikkan biaya layanan. (5) Namun, para analis ekonomi memandang fenomena ini bukan sebagai kiamat, melainkan fase seleksi alam. (6) Hanya perusahaan rintisan dengan fundamental bisnis yang solid dan produk yang benar-benar memecahkan masalah masyarakat yang akan bertahan.`,
+        soalList: [
+            { nomor:11, teks:"Asumsi yang mendasari kalimat (3) adalah ...", pilihan:["Investor saat ini lebih menyukai startup yang memiliki banyak divisi.","Sebelumnya, startup mengandalkan kucuran dana investor untuk beroperasi dan berekspansi tanpa memikirkan keuntungan instan.","'Bakar uang' adalah strategi yang diciptakan oleh analis ekonomi untuk memusnahkan perusahaan rintisan.","Profitabilitas berkelanjutan tidak mungkin dicapai tanpa melakukan PHK massal.","Aliran dana murah masih tersedia di luar negeri, namun dilarang masuk ke Indonesia."], jawaban:"B", pembahasan:"Startup mengubah paradigma karena dana investor berhenti. Asumsi: sebelumnya startup hidup dari dana investor untuk bakar uang demi pertumbuhan, tanpa profit instan." },
+            { nomor:12, teks:"Mengapa analis ekonomi menganggap fenomena tersebut sebagai 'seleksi alam'?", pilihan:["Karena banyak startup di bidang agrikultur gagal panen.","Karena investor dengan sengaja menghancurkan perusahaan yang tidak tunduk.","Karena hanya startup yang mampu beradaptasi mencapai profit dan memiliki fundamental kuat yang akan tetap hidup.","Karena tech winter dipengaruhi perubahan iklim global.","Karena masyarakat kembali ke cara konvensional."], jawaban:"C", pembahasan:"Seleksi alam: yang mampu beradaptasi dan punya fundamental kuat akan bertahan." },
+            { nomor:13, teks:"Kalimat yang tidak padu (sumbang) secara logis jika ditambahkan pada teks tersebut adalah...", pilihan:["Oleh karena itu, startup kini berlomba-lomba mencari celah efisiensi di segala lini.","Kebijakan ini memaksa konsumen setia untuk mulai terbiasa membayar layanan yang dulunya gratis.","Akibatnya, lowongan pekerjaan di sektor teknologi informasi saat ini menjadi sangat melimpah ruah dan mudah didapat.","Fase ini menuntut inovasi sejati, bukan sekadar iming-iming diskon besar-besaran.","Beberapa startup raksasa bahkan memutuskan untuk merger demi memperkuat posisi keuangan."], jawaban:"C", pembahasan:"Teks membahas PHK massal, perampingan, efisiensi. 'Lowongan kerja melimpah' kontradiktif secara logis." }
+        ]
+    });
+
+    // GROUP 5: Timnas U23 (14-16)
+    groups.push({
+        judul: "Teks 5: Prestasi Timnas U-23",
+        bacaan: `Tinta emas kembali ditorehkan oleh Tim Nasional Sepak Bola Indonesia U-23 di kancah Asia. Lolos hingga babak semifinal Piala Asia U-23 2024 bukan sekadar faktor keberuntungan, melainkan buah manis dari regenerasi yang terstruktur dan kedisiplinan tingkat tinggi yang diterapkan pelatih. Formasi modern yang menitikberatkan pada high-pressing dan sirkulasi bola cepat berhasil membongkar taktik usang lawan-lawannya. Selain itu, kehadiran sejumlah pemain diaspora yang bermain di liga Eropa memberikan suntikan mental baja. Mereka tidak lagi demam panggung saat menghadapi raksasa Asia seperti Korea Selatan maupun Australia.`,
+        soalList: [
+            { nomor:14, teks:"Frasa 'demam panggung' pada teks bermakna...", pilihan:["Sakit fisik karena cuaca lapangan","Perasaan gugup dan panik saat tampil di ajang besar","Antusiasme berlebihan berujung cedera","Hasrat tampil mencolok","Kebiasaan meremehkan lawan"], jawaban:"B", pembahasan:"Demam panggung = grogi, cemas, panik ketika tampil di depan publik atau laga besar." },
+            { nomor:15, teks:"Manakah yang BUKAN merupakan faktor keberhasilan Timnas U-23?", pilihan:["Strategi sirkulasi bola cepat","Kedisiplinan tinggi pelatih","Mentalitas kuat pemain diaspora","Dukungan finansial tak terbatas dari sponsor utama","High-pressing"], jawaban:"D", pembahasan:"A, B, C, E disebut dalam teks. Dukungan finansial tak terbatas tidak disebut." },
+            { nomor:16, teks:"Pesan tersirat dari teks tersebut adalah...", pilihan:["Pelatih asing selalu lebih baik.","Pemain lokal tidak punya teknik.","Prestasi internasional butuh kombinasi sistem, disiplin, mentalitas.","Piala Asia U-23 mudah ditaklukkan.","Kemenangan karena kesalahan taktik lawan."], jawaban:"C", pembahasan:"Keberhasilan bukan kebetulan, melainkan hasil regenerasi (sistem), disiplin, formasi, mental diaspora." }
+        ]
+    });
+
+    // GROUP 6: Kebaya (17-19)
+    groups.push({
+        judul: "Teks 6: Nominasi Multinasional Kebaya",
+        bacaan: `(1) Pada awal 2024, Indonesia bersama Malaysia, Brunei, Singapura, Thailand mengajukan kebaya ke UNESCO melalui mekanisme multinational nomination. (2) Langkah ini memicu perdebatan warganet yang bersikeras kebaya milik eksklusif Indonesia. (3) Namun, para ahli sejarah meluruskan bahwa kebaya secara historis adalah busana wilayah Nusantara dan Semenanjung Malaya yang berevolusi melalui akulturasi panjang dengan budaya Arab, Tiongkok, dan Eropa. (4) Pengajuan multinasional ini justru strategi diplomasi budaya yang cerdas. (5) Alih-alih berebut hak milik, negara ASEAN memilih shared culture yang menonjolkan persaudaraan serumpun, sekaligus memperbesar peluang persetujuan UNESCO.`,
+        soalList: [
+            { nomor:17, teks:"Simpulan PALING TEPAT berdasarkan teks...", pilihan:["Pengajuan kebaya memicu ketegangan diplomatik merusak ASEAN.","Warganet Indonesia menggagalkan pengajuan bersama.","Kebaya lahir eksklusif dari budaya Arab & Eropa.","Jalur shared culture sebagai diplomasi budaya untuk memuluskan pengakuan UNESCO.","UNESCO memaksa Indonesia berbagi klaim."], jawaban:"D", pembahasan:"Paragraf (4) dan (5): shared culture adalah strategi diplomasi yang cerdas, bukan rebutan." },
+            { nomor:18, teks:"Mengapa budayawan mendukung multinational nomination?", pilihan:["Indonesia tidak punya dana sendiri.","Kebaya terbentuk dari akulturasi lintas batas Nusantara & Semenanjung Malaya.","Warganet tidak peduli budaya lokal.","UNESCO menolak pengajuan individu.","Kebaya berasal dari Eropa."], jawaban:"B", pembahasan:"Berdasarkan kalimat (3), secara historis kebaya adalah akulturasi wilayah lintas batas negara modern." },
+            { nomor:19, teks:"Kata 'akulturasi' bermakna...", pilihan:["Penolakan budaya asing","Percampuran budaya tanpa menghilangkan unsur asli","Penyatuan yang menghilangkan identitas asli","Penyebaran budaya lewat perdagangan","Pengakuan sepihak"], jawaban:"B", pembahasan:"Akulturasi = percampuran dua budaya atau lebih yang saling memengaruhi tanpa menghilangkan kepribadian budaya asli." }
+        ]
+    });
+
+    // GROUP 7: PISA & screen time (20-22)
+    groups.push({
+        judul: "Teks 7: Literasi Rendah vs Screen Time Tinggi",
+        bacaan: `Teks A: Skor PISA terbaru menempatkan Indonesia di urutan bawah secara global. Kemampuan membaca (literasi) siswa Indonesia masih jauh dari rata-rata OECD. Buku masih dianggap musuh membosankan.
+        \nTeks B: Laporan We Are Social: orang Indonesia rata-rata 7 jam 42 menit per hari di internet, lebih dari 3 jam untuk scrolling media sosial dan video pendek (<1 menit). Screen time tinggi mengubah pola kerja otak remaja menyukai dopamin instan, bukan bacaan yang butuh konsentrasi.`,
+        soalList: [
+            { nomor:20, teks:"Hubungan paling logis antara Teks A dan Teks B adalah...", pilihan:["Tingginya skor PISA karena internet >7 jam.","Durasi layar tinggi untuk konten singkat (Teks B) merupakan penyebab rendahnya literasi membaca mendalam (Teks A).","Remaja Indonesia paling adaptif teknologi.","Membaca buku diganti video pendek edukatif.","Tidak ada korelasi."], jawaban:"B", pembahasan:"Teks A: rendah literasi; Teks B: waktu habis untuk konten instan. Ada hubungan sebab-akibat." },
+            { nomor:21, teks:"Persamaan kedua teks tersebut adalah...", pilihan:["Keduanya soroti prestasi akademis global.","Keduanya mendeskripsikan potret perilaku dan kebiasaan kognitif/literasi masyarakat Indonesia saat ini.","Menyalahkan pemerintah.","Media sosial sumber masalah.","Data dari kuesioner guru."], jawaban:"B", pembahasan:"Keduanya memotret kondisi kognitif/perilaku generasi muda: literasi membaca dan kebiasaan digital." },
+            { nomor:22, teks:"Rekomendasi solusi yang menggabungkan permasalahan Teks A dan B adalah...", pilihan:["Blokir media sosial","Turunkan standar PISA","Perpanjang durasi video minimal 10 menit","Manfaatkan screen time untuk konten literasi kritis interaktif","Paksa siswa di perpustakaan 7 jam"], jawaban:"D", pembahasan:"Menggabungkan tingginya screen time dengan kebutuhan literasi: desain konten media sosial yang melatih literasi kritis." }
+        ]
+    });
+
+    // GROUP 8: Cerpen Kirana (23-25)
+    groups.push({
+        judul: "Teks 8: Kutipan Cerpen 'Burnout'",
+        bacaan: `Tepat pukul 22.15, Kirana baru mematikan laptopnya. Lampu gedung perkantoran di Sudirman sebagian besar padam, menyisakan lampu jalan yang menembus rintik hujan. Tumpukan dokumen di mejanya masih belum berkurang, tengkuknya terasa kaku seperti kayu. Di cermin toilet, ia menatap kantung matanya yang legam. Pesan WhatsApp dari ibunya belum dibalas. "Kamu sehat-sehat kan, Nduk? Jangan terlalu diforsir kerjanya." Kirana mendesah. Ia mendapat gaji dua digit, bekerja di perusahaan multinasional, namun kehilangan satu hal paling mahal: dirinya sendiri. Burnout perlahan melahap kewarasannya.`,
+        soalList: [
+            { nomor:23, teks:"Latar waktu dan suasana yang dominan adalah...", pilihan:["Malam santai penuh kehangatan","Sore sibuk mencekam","Dini hari misterius","Malam melelahkan penuh tekanan mental","Pagi sendu"], jawaban:"D", pembahasan:"Pukul 22.15, hujan, tengkuk kaku, kantung mata, burnout – menunjukkan malam melelahkan dan tekanan mental." },
+            { nomor:24, teks:"Watak/keadaan psikologis Kirana digambarkan secara...", pilihan:["Tersurat lewat dialog","Tersirat lewat fisik, lingkungan, pikiran batin","Tersurat dari pengarang","Tersirat lewat tanggapan ibu","Tersirat dari gaya berpakaian"], jawaban:"B", pembahasan:"Pengarang tidak bilang 'stres' eksplisit, tapi melalui fisik (tengkuk kaku, mata legam), lingkungan, dan pikiran batin." },
+            { nomor:25, teks:"Nilai moral yang dapat diekstraksi adalah...", pilihan:["Gaji besar tak selalu berbanding lurus kebahagiaan","Orang tua harus mengekang anak","Perusahaan multinasional menindas wanita","Tinggal di ibu kota wajib lupakan keluarga","Sukses karir butuh korbankan istirahat"], jawaban:"A", pembahasan:"Tersurat: 'gaji dua digit... namun kehilangan dirinya sendiri' → gaji besar tidak menjamin kesejahteraan jiwa." }
+        ]
+    });
+
+    // GROUP 9: Whoosh (26-28)
+    groups.push({
+        judul: "Teks 9: Kereta Cepat Whoosh",
+        bacaan: `(1) Kehadiran KCJB "Whoosh" meredefinisi lanskap transportasi publik Indonesia. (2) Kecepatan 350 km/jam, waktu tempuh Jakarta-Bandung dari 3 jam jadi 45 menit. (3) Whoosh menumbuhkan sentra ekonomi baru di sekitar stasiun Padalarang & Tegalluar. (4) UMKM lokal melaporkan lonjakan omzet akhir pekan karena pelancong day-trip. (5) Namun, tantangan integrasi antarmoda masih celah kelemahan. (6) Banyak penumpang mengeluhkan mahalnya taksi daring dari stasiun Tegalluar ke pusat Bandung, hampir menyamai harga tiket kereta.`,
+        soalList: [
+            { nomor:26, teks:"Fakta yang mendukung Whoosh menumbuhkan sentra ekonomi baru adalah...", pilihan:["Kecepatan 350 km/jam","Waktu tempuh 45 menit","Mahalnya taksi daring","Lonjakan omzet UMKM dari pelancong akhir pekan","Stasiun baru di Jabar"], jawaban:"D", pembahasan:"Kalimat (4): UMKM lokal melaporkan lonjakan omzet → bukti konkret pertumbuhan ekonomi." },
+            { nomor:27, teks:"Kalimat penilaian (evaluatif) terhadap kekurangan proyek adalah...", pilihan:["(1) dan (2)","(3) dan (4)","(2) dan (3)","(5) dan (6)","(4) dan (5)"], jawaban:"D", pembahasan:"(5) menyebut 'celah kelemahan' (evaluatif), (6) menjabarkan keluhan mahalnya taksi." },
+            { nomor:28, teks:"Sinonim 'meredefinisi' yang tepat dalam konteks kalimat (1) adalah...", pilihan:["Mengaburkan","Mempertahankan","Meninjau","Mendefinisikan ulang (mengubah tatanan)","Merusak tatanan"], jawaban:"D", pembahasan:"Meredefinisi = mendefinisikan ulang, mengubah konsep standar transportasi menjadi sesuatu yang baru." }
+        ]
+    });
+
+    // GROUP 10: UU ITE (29-30)
+    groups.push({
+        judul: "Teks 10: Revisi UU ITE & Celah Doxing",
+        bacaan: `Revisi UU ITE jilid II yang disahkan awal 2024 diklaim membawa angin segar bagi kebebasan berpendapat. Poin perubahan: pembatasan penafsiran pasal karet pencemaran nama baik, mensyaratkan aduan langsung korban individual, serta mengecualikan kritik demi kepentingan umum. Namun, pakar hukum siber menilai revisi ini belum menyentuh doxing (penyebaran data pribadi) dan cyberbullying massal (cancel culture). Aparat masih kebingungan menggunakan delik untuk doxing, sehingga perlindungan warga negara di dunia maya belum komprehensif.`,
+        soalList: [
+            { nomor:29, teks:"Simpulan yang paling mewakili isi teks tersebut adalah...", pilihan:["Revisi UU ITE berhasil hapus semua kejahatan siber termasuk doxing.","UU ITE terlalu liberal bagi pelaku cyberbullying.","Meski perbaikan pasal pencemaran nama baik, revisi masih menyisakan celah besar pada doxing & perundungan siber.","Pakar menolak seluruh isi revisi.","Aparat mudah menangkap pelaku doxing."], jawaban:"C", pembahasan:"Teks: ada perbaikan pasal pencemaran nama baik, namun doxing & cancel culture belum tersentuh." },
+            { nomor:30, teks:"Analogi revisi UU ITE jilid II menurut pakar hukum siber adalah...", pilihan:["Mengobati luka gores di tangan, membiarkan pendarahan di kaki.","Menyiram air ke api padam.","Tutup pintu depan, bangun tembok pintu belakang.","Mencari jarum di tumpukan jerami.","Memberi makan harimau tidur."], jawaban:"A", pembahasan:"Luka gores = perbaikan pasal pencemaran nama baik; pendarahan di kaki = doxing dan cyberbullying yang dibiarkan tanpa payung hukum." }
+        ]
+    });
+
+    // ======================= RENDER HTML =======================
+    const container = document.getElementById("quiz-groups");
+
+    function renderGroups() {
+        container.innerHTML = "";
+        groups.forEach((group, idx) => {
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "teks-group";
+
+            // Header group
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "teks-header";
+            const judulSpan = document.createElement("div");
+            judulSpan.className = "teks-judul";
+            judulSpan.innerHTML = `<span>📄 Teks ${idx+1}</span> ${group.judul}`;
+            headerDiv.appendChild(judulSpan);
+            groupDiv.appendChild(headerDiv);
+
+            // Bacaan
+            const bacaanDiv = document.createElement("div");
+            bacaanDiv.className = "teks-bacaan";
+            bacaanDiv.innerText = group.bacaan;
+            groupDiv.appendChild(bacaanDiv);
+
+            // Container soal
+            const soalContainer = document.createElement("div");
+            soalContainer.className = "soal-container";
+
+            group.soalList.forEach(soal => {
+                const cardSoal = document.createElement("div");
+                cardSoal.className = "card-soal";
+                const nomorSpan = document.createElement("div");
+                nomorSpan.className = "soal-nomor";
+                nomorSpan.innerText = `Soal ${soal.nomor}`;
+                cardSoal.appendChild(nomorSpan);
+
+                const teksSoalDiv = document.createElement("div");
+                teksSoalDiv.className = "soal-teks";
+                teksSoalDiv.innerText = soal.teks;
+                cardSoal.appendChild(teksSoalDiv);
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.className = "options";
+                const nameAttr = `q_group${idx}_${soal.nomor}`;
+                const letters = ["A","B","C","D","E"];
+                soal.pilihan.forEach((pil, idxPil) => {
+                    const letter = letters[idxPil];
+                    const optDiv = document.createElement("div");
+                    optDiv.className = "option";
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = nameAttr;
+                    radio.value = letter;
+                    const label = document.createElement("label");
+                    label.innerText = `${letter}. ${pil}`;
+                    optDiv.appendChild(radio);
+                    optDiv.appendChild(label);
+                    optionsDiv.appendChild(optDiv);
+                });
+                cardSoal.appendChild(optionsDiv);
+
+                const btnGroup = document.createElement("div");
+                btnGroup.className = "btn-group";
+                const checkBtn = document.createElement("button");
+                checkBtn.innerText = "✅ Cek Jawaban";
+                checkBtn.classList.add("check-btn");
+                const pembahasanBtn = document.createElement("button");
+                pembahasanBtn.innerText = "📖 Pembahasan";
+                pembahasanBtn.classList.add("pembahasan-btn");
+                btnGroup.appendChild(checkBtn);
+                btnGroup.appendChild(pembahasanBtn);
+                cardSoal.appendChild(btnGroup);
+
+                const feedbackDiv = document.createElement("div");
+                feedbackDiv.className = "feedback";
+                const pembahasanDiv = document.createElement("div");
+                pembahasanDiv.className = "pembahasan-text";
+                pembahasanDiv.innerHTML = `<strong>📘 Pembahasan:</strong> ${soal.pembahasan}`;
+                cardSoal.appendChild(feedbackDiv);
+                cardSoal.appendChild(pembahasanDiv);
+
+                // Event listeners
+                checkBtn.addEventListener("click", () => {
+                    const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                    if (!selected) {
+                        feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                        feedbackDiv.classList.add("show");
+                        feedbackDiv.classList.remove("correct","wrong");
+                        return;
+                    }
+                    const userVal = selected.value;
+                    const isCorrect = (userVal === soal.jawaban);
+                    if (isCorrect) {
+                        feedbackDiv.innerHTML = `✅ Jawaban BENAR! (Jawaban: ${soal.jawaban})`;
+                        feedbackDiv.classList.add("correct","show");
+                        feedbackDiv.classList.remove("wrong");
+                    } else {
+                        feedbackDiv.innerHTML = `❌ Jawaban SALAH. Jawaban benar: ${soal.jawaban}.`;
+                        feedbackDiv.classList.add("wrong","show");
+                        feedbackDiv.classList.remove("correct");
+                    }
+                });
+                pembahasanBtn.addEventListener("click", () => {
+                    pembahasanDiv.classList.toggle("show");
+                    pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
+                });
+
+                soalContainer.appendChild(cardSoal);
+            });
+
+            groupDiv.appendChild(soalContainer);
+            container.appendChild(groupDiv);
+        });
+    }
+
+    renderGroups();
+</script>
+</body>
+</html>

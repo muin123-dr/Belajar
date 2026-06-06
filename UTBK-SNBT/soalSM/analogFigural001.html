@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Quiz Analogi Figural - Tes Penalaran Gambar</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Poppins', 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9eef3 0%, #dbe1e8 100%);
+            margin: 0;
+            padding: 24px 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* container utama quiz */
+        .quiz-container {
+            max-width: 950px;
+            width: 100%;
+            background: rgba(255,255,255,0.96);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+            backdrop-filter: blur(0px);
+            transition: all 0.2s;
+        }
+
+        /* header */
+        .quiz-header {
+            background: #1e2a3e;
+            color: white;
+            padding: 1rem 1.75rem;
+        }
+        .quiz-header h1 {
+            margin: 0;
+            font-size: 1.55rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        .quiz-header p {
+            margin: 0.35rem 0 0;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* progress area */
+        .progress-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            background: #f8fafc;
+            padding: 0.75rem 1.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .question-counter {
+            font-weight: 600;
+            background: #eef2ff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+        .score-preview {
+            font-size: 0.9rem;
+            background: white;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        /* konten soal */
+        .question-card {
+            padding: 1.8rem 1.8rem 1.5rem;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+            border-left: 5px solid #3b82f6;
+            padding-left: 1rem;
+        }
+        .image-wrapper {
+            background: #f1f5f9;
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 1px 3px #0001, 0 6px 12px -8px #0002;
+        }
+        .question-image {
+            max-width: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            border-radius: 16px;
+            background: white;
+            padding: 8px;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.8rem 0 1rem;
+        }
+        .option-btn {
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 60px;
+            padding: 0.6rem 1.6rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.1s linear;
+            color: #1e293b;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .option-btn.selected {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: 0 6px 12px -8px #3b82f6;
+        }
+        .option-btn:hover:not(.disabled-opt) {
+            background: #e6f0ff;
+            border-color: #3b82f6;
+            transform: scale(0.97);
+        }
+        .disabled-opt, .option-btn.disabled-opt {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #eef2f5;
+        }
+
+        /* navigasi */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 1.8rem 1.8rem;
+            gap: 12px;
+        }
+        button {
+            background: #f1f5f9;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.9rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        button.primary {
+            background: #3b82f6;
+            color: white;
+        }
+        button.primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        button.secondary {
+            background: #e2e8f0;
+        }
+        button.secondary:hover {
+            background: #cbd5e1;
+        }
+        button.danger {
+            background: #ef4444;
+            color: white;
+        }
+        button.danger:hover {
+            background: #dc2626;
+        }
+        .finish-btn {
+            background: #10b981;
+            color: white;
+            font-weight: bold;
+        }
+        .finish-btn:hover {
+            background: #059669;
+        }
+
+        /* result panel */
+        .result-panel {
+            background: #fef9e3;
+            border-top: 2px solid #facc15;
+            padding: 1rem 1.8rem;
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .score-text {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #b45309;
+        }
+        .explanation-btn {
+            background: #8b5cf6;
+            color: white;
+        }
+        .explanation-btn:hover {
+            background: #7c3aed;
+        }
+
+        /* modal style */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 32px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            box-shadow: 0 25px 40px black;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.2rem;
+        }
+        .close-modal {
+            background: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0 8px;
+            box-shadow: none;
+        }
+        .explanation-item {
+            background: #f8fafc;
+            border-left: 5px solid #3b82f6;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .exp-thumb {
+            flex-shrink: 0;
+            width: 110px;
+            background: white;
+            border-radius: 16px;
+            padding: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .exp-thumb img {
+            max-width: 100%;
+            border-radius: 12px;
+            background: #f1f5f9;
+        }
+        .exp-details {
+            flex: 1;
+        }
+        .exp-header {
+            font-weight: bold;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .user-ans {
+            background: #eef2ff;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .correct-badge {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .wrong-badge {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .explanation-text {
+            font-size: 0.9rem;
+            line-height: 1.45;
+            color: #1e293b;
+            margin-top: 8px;
+            background: white;
+            padding: 10px 12px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        hr {
+            margin: 12px 0;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 1rem;
+            color: #475569;
+            border-top: 1px solid #e2e8f0;
+        }
+        @media (max-width: 650px) {
+            .explanation-item {
+                flex-direction: column;
+            }
+            .exp-thumb {
+                width: 100%;
+                text-align: center;
+            }
+            .exp-thumb img {
+                max-height: 120px;
+                width: auto;
+            }
+            .options {
+                gap: 0.6rem;
+            }
+            .option-btn {
+                padding: 0.5rem 1rem;
+                min-width: 60px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container" id="quizRoot">
+    <div class="quiz-header">
+        <h1>🔍 Analogi Figural</h1>
+        <p>Carilah pasangan gambar yang memiliki hubungan yang sama | Pilih A, B, C, D, atau E</p>
+    </div>
+    <div class="progress-area">
+        <span class="question-counter" id="counterLabel">Soal 1 / 20</span>
+        <span class="score-preview" id="previewScore">✅ Belum selesai</span>
+    </div>
+    <div id="questionBody">
+        <!-- dynamic content -->
+    </div>
+    <div class="nav-buttons" id="navButtons">
+        <!-- prev, next, reset, finish (conditional) -->
+    </div>
+    <div id="resultContainer" style="display: none;" class="result-panel">
+        <!-- score & penjelasan button -->
+    </div>
+    <footer>📐 Pilihlah satu jawaban yang paling tepat berdasarkan pola hubungan</footer>
+</div>
+
+<script>
+    // ======================= DATA SOAL (20) =========================
+    const questionsData = [
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/1-500x253.png", correct: "B", explanation: "Gambar kedua merupakan hasil dari gambar pertama yang diputar 180°. Warna gambar kedua merupakan lawan dari gambar pertama (hitam → putih) atau (putih → hitam). Kemudian dibagian kanan atas gambar kedua ditambahkan bentuk seperti bentuk dibawah (segitiga), namun bentuk tersebut diberi warna yang berlawanan dengan bentuk lainnya." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/2-500x281.png", correct: "C", explanation: "Pada analogi pertama, lihat bentuk besar: segitiga menjadi segiempat, warna putih tetap. Maka analogi kedua segiempat menjadi segilima, warna hitam tetap. Ada 2 bentuk kecil bertukar tempat (dalam ke luar & luar ke dalam). Bentuk luar naik sedikit ke tengah. Maka pada analogi kedua segiempat didalam dan segilima diluar lalu segilima naik ke tengah." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/3-500x254.png", correct: "E", explanation: "Bentuk love diputar searah jarum jam 2x (masing-masing 90°). Maka bentuk bulan juga diputar 2x. Bentuk bulat diputar 1x (90°). Maka bentuk panah juga diputar 1x (90°)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/4-500x256.png", correct: "C", explanation: "Gambar besar digandakan, kemudian hasilnya diarsir. Maka setengah lingkaran digandakan lalu diarsir. Ketiga persegi panjang berubah menjadi segitiga. Begitu juga analogi kedua." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/5-500x260.png", correct: "A", explanation: "Gambar diputar 45° searah jarum jam. Ditambahkan simbol ditengah badan. Warna kepala berubah (hitam→putih) sedangkan warna badan tetap. Pada gambar pertama tidak ada simbol, maka gambar kedua ada simbol." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/6-500x247.jpg", correct: "E", explanation: "Tidak terjadi perubahan pada kiri atas, kiri bawah, kanan bawah. Kanan atas berputar 90° berlawanan arah (U menjadi ⊃). Setiap sisi segitiga ditambah garis, maka setiap sisi persegi panjang ditambah garis (4 garis)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/7-500x250.png", correct: "D", explanation: "Gambar pojok kanan bawah dimasukkan ke pojok kiri bawah, warna sama. Gambar kiri atas di-copy ke kanan atas dengan warna berlawanan (putih jadi hitam/hitam jadi putih)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/8-500x262.png", correct: "A", explanation: "Gambar besar ditengah berubah warna berlawanan (hitam→putih, putih→hitam). Dua gambar kecil (kiri & kanan atas) bertukar posisi. Gambar kecil kanan berubah bentuk (segiempat→segilima / bertambah 1 sisi). Pada analogi kedua bintang 3 menjadi bintang 4." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/9-500x265.png", correct: "B", explanation: "Gabungkan gambar pertama dengan gambar kedua, lalu putar 90° searah jarum jam." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/10-500x255.png", correct: "A", explanation: "Perubahan 4 bangun datar kecil: lingkaran tetap; segitiga dan segiempat bertukar tempat; segilima → segiempat (-1). Pada analogi pertama segiempat tetap; lingkaran dan panah bertukar; segienam → segilima (-1)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/11-500x248.png", correct: "D", explanation: "Tukarkan posisi bangun datar yang dikiri dengan yang dikanan. Lalu tambahkan bulatan hitam pada bangun datar sebelah kiri yang ditengah." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/12-500x243.png", correct: "B", explanation: "Pada analogi pertama: gambar paling atas berubah warna, gambar tengah tetap, gambar bawah diisi dengan gambar yang sama. Analogi kedua: segitiga berwarna hitam, gambar tengah tetap, persegi panjang diisi persegi panjang." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/13-500x273.png", correct: "B", explanation: "Perhatikan letak gambar yang dihilangkan pada analogi pertama. Kemudian pada analogi kedua, hilangkan juga bagian gambar pada posisi yang sama." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/14-500x267.png", correct: "D", explanation: "Putar gambar 180°. Tambahkan bentuk yang dibawah pada bagian atas, namun dengan warna yang berbeda." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/15-500x409.png", correct: "C", explanation: "Sudut atas ditarik kedalam." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/16-500x272.png", correct: "A", explanation: "Gambar 2 merupakan hasil cermin secara horizontal dari gambar 1." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/17-500x241.jpg", correct: "B", explanation: "Cerminkan gambar secara vertikal. Bentuk sebelah kiri ubah warnanya menjadi warna berlawanan. Bentuk sebelah kanan, potong bagian atasnya, namun warnanya tetap sama." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/18-500x239.png", correct: "C", explanation: "Jumlah bulatan hitam pada gambar pertama sama dengan gambar kedua (6 buah). Maka jumlah persegi panjang hitam pada gambar pertama juga harus sama dengan gambar kedua (9 buah)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/19-500x243.png", correct: "C", explanation: "Tidak ada perubahan kotak pertama (segitiga hitam) dan kotak kelima (bulatan hitam). Kotak keenam bulatan hitam berubah jadi bulatan putih. Kotak ketujuh (setengah kotak hitam kiri) digabung dengan kotak kesembilan (setengah kotak hitam kanan) menjadi kotak ketiga hitam penuh." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/20-500x240.png", correct: "A", explanation: "Bangun besar diisi bangun kecil sisi-1 (segilima diisi segiempat), warna tetap sama. Maka segiempat (4 sisi) diisi segitiga (3 sisi). Gambar kecil pojok kiri atas dimasukkan ke pojok kiri bawah (setengah lingkaran hitam + setengah lingkaran hitam = setengah lingkaran hitam)." }
+    ];
+
+    // state
+    let currentIndex = 0;             // 0-based
+    let userAnswers = new Array(20).fill(null);   // null or 'A','B','C','D','E'
+    let quizFinished = false;
+    let finalScore = null;
+
+    // DOM elements
+    const quizRoot = document.getElementById('quizRoot');
+    const questionBody = document.getElementById('questionBody');
+    const navDiv = document.getElementById('navButtons');
+    const resultContainer = document.getElementById('resultContainer');
+    const counterLabel = document.getElementById('counterLabel');
+    const previewSpan = document.getElementById('previewScore');
+
+    // Helper: render current question
+    function renderQuestion() {
+        if (quizFinished) return;
+        const q = questionsData[currentIndex];
+        const userChoice = userAnswers[currentIndex];
+        const letters = ['A', 'B', 'C', 'D', 'E'];
+        
+        let optionsHtml = `<div class="options" id="optionsWrapper">`;
+        letters.forEach(letter => {
+            const isSelected = (userChoice === letter);
+            const selectedClass = isSelected ? 'selected' : '';
+            optionsHtml += `<div class="option-btn ${selectedClass}" data-opt="${letter}">${letter}</div>`;
+        });
+        optionsHtml += `</div>`;
+        
+        const html = `
+            <div class="question-card">
+                <div class="question-text">🔎 Soal ${currentIndex+1} : Carilah pasangan gambar yang memiliki hubungan yang sama dengan pasangan sebelumnya.</div>
+                <div class="image-wrapper">
+                    <img class="question-image" src="${q.img}" alt="Soal Figural ${currentIndex+1}" onerror="this.onerror=null;this.src='https://via.placeholder.com/400x200?text=Gambar+tidak+tersedia';">
+                </div>
+                ${optionsHtml}
+            </div>
+        `;
+        questionBody.innerHTML = html;
+        
+        // attach event listeners to option buttons
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (quizFinished) return;
+                const selected = btn.getAttribute('data-opt');
+                // update answers array
+                userAnswers[currentIndex] = selected;
+                // re-render to show highlight & keep state
+                renderQuestion();
+                updatePreviewCounter();
+            });
+        });
+        updatePreviewCounter();
+    }
+    
+    function updatePreviewCounter() {
+        counterLabel.innerText = `Soal ${currentIndex+1} / 20`;
+        const answeredCount = userAnswers.filter(a => a !== null).length;
+        previewSpan.innerHTML = `📌 Dijawab: ${answeredCount}/20`;
+        if (quizFinished) previewSpan.innerHTML = `🏆 Skor akhir: ${finalScore}/20`;
+    }
+    
+    // navigasi
+    function prevQuestion() {
+        if (quizFinished) return;
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderQuestion();
+            updateNavButtons();
+        }
+    }
+    
+    function nextQuestion() {
+        if (quizFinished) return;
+        if (currentIndex < 19) {
+            currentIndex++;
+            renderQuestion();
+            updateNavButtons();
+        } else {
+            // sudah di soal terakhir, next tetap di akhir, biar finish button aktif
+            updateNavButtons();
+        }
+    }
+    
+    function updateNavButtons() {
+        if (quizFinished) {
+            navDiv.innerHTML = `<button class="secondary" id="resetQuizBtn">⟳ Mulai Ulang Quiz</button>`;
+            const resetBtn = document.getElementById('resetQuizBtn');
+            if (resetBtn) resetBtn.addEventListener('click', resetQuiz);
+            return;
+        }
+        
+        let buttonsHtml = `
+            <button class="secondary" id="prevBtn">◀ Sebelumnya</button>
+            <button class="secondary" id="resetQuizNavBtn">↺ Reset Jawaban</button>
+        `;
+        if (currentIndex === 19) {
+            buttonsHtml += `<button class="finish-btn" id="finishQuizBtn">✅ SELESAI</button>`;
+        } else {
+            buttonsHtml += `<button class="primary" id="nextBtn">Selanjutnya ▶</button>`;
+        }
+        navDiv.innerHTML = buttonsHtml;
+        
+        document.getElementById('prevBtn')?.addEventListener('click', prevQuestion);
+        document.getElementById('nextBtn')?.addEventListener('click', nextQuestion);
+        document.getElementById('resetQuizNavBtn')?.addEventListener('click', resetQuiz);
+        const finishBtn = document.getElementById('finishQuizBtn');
+        if (finishBtn) finishBtn.addEventListener('click', finishQuiz);
+    }
+    
+    // fungsi finish
+    function finishQuiz() {
+        if (quizFinished) return;
+        // hitung skor
+        let correctCount = 0;
+        for (let i = 0; i < questionsData.length; i++) {
+            if (userAnswers[i] && userAnswers[i] === questionsData[i].correct) {
+                correctCount++;
+            }
+        }
+        finalScore = correctCount;
+        quizFinished = true;
+        
+        // tampilkan score dan panel penjelasan
+        resultContainer.style.display = 'flex';
+        resultContainer.innerHTML = `
+            <div class="score-text">🎯 Skor Anda: ${finalScore} / 20 (${Math.round(finalScore/20*100)} poin)</div>
+            <button class="explanation-btn" id="showExplanationBtn">📖 PENJELASAN LENGKAP</button>
+            <button class="secondary" id="resetAfterFinishBtn">⟳ Kerjakan Ulang</button>
+        `;
+        const explBtn = document.getElementById('showExplanationBtn');
+        const resetFinishBtn = document.getElementById('resetAfterFinishBtn');
+        if (explBtn) explBtn.addEventListener('click', showFullExplanation);
+        if (resetFinishBtn) resetFinishBtn.addEventListener('click', resetQuiz);
+        
+        // disable interaksi pada opsi soal
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.classList.add('disabled-opt');
+            btn.style.pointerEvents = 'none';
+        });
+        updateNavButtons();  // tombol navigasi berubah, hanya reset
+        updatePreviewCounter();
+    }
+    
+    // Reset total semua jawaban
+    function resetQuiz() {
+        quizFinished = false;
+        userAnswers = new Array(20).fill(null);
+        currentIndex = 0;
+        finalScore = null;
+        resultContainer.style.display = 'none';
+        resultContainer.innerHTML = '';
+        // re-render full
+        renderQuestion();
+        updateNavButtons();
+        updatePreviewCounter();
+        // hilangkan disabled effect
+        if (document.querySelectorAll('.option-btn')) {
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('disabled-opt');
+                btn.style.pointerEvents = 'auto';
+            });
+        }
+    }
+    
+    // Penjelasan lengkap modal dengan gambar thumbnail
+    function showFullExplanation() {
+        let modalDiv = document.createElement('div');
+        modalDiv.className = 'modal';
+        modalDiv.id = 'explanationModal';
+        let explanationsHtml = `<div class="modal-content">
+            <div class="modal-header">
+                <h3>📘 Penjelasan Lengkap (dengan gambar soal)</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div style="max-height: 70vh; overflow-y: auto; padding-right: 5px;">`;
+        
+        for (let i = 0; i < questionsData.length; i++) {
+            const q = questionsData[i];
+            const userAns = userAnswers[i] || 'Tidak dijawab';
+            const isCorrect = (userAnswers[i] === q.correct);
+            const statusClass = isCorrect ? 'correct-badge' : 'wrong-badge';
+            const statusText = isCorrect ? '✓ Benar' : '✗ Salah';
+            
+            explanationsHtml += `
+                <div class="explanation-item">
+                    <div class="exp-thumb">
+                        <img src="${q.img}" alt="Soal ${i+1}" onerror="this.src='https://via.placeholder.com/100?text=no+img'">
+                        <div style="font-size: 0.7rem; margin-top: 5px;">Soal ${i+1}</div>
+                    </div>
+                    <div class="exp-details">
+                        <div class="exp-header">
+                            <strong>Soal ${i+1}</strong>
+                            <span class="user-ans ${statusClass}">Jawaban Anda: ${userAns}</span>
+                            <span class="user-ans" style="background:#e2e3e8;">Kunci: ${q.correct}</span>
+                            <span class="user-ans ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="explanation-text">
+                            📖 <strong>Pembahasan:</strong> ${q.explanation}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        explanationsHtml += `</div><div style="margin-top: 20px; text-align:center;"><button class="primary" id="closeModalFooterBtn">Tutup Penjelasan</button></div></div>`;
+        modalDiv.innerHTML = explanationsHtml;
+        document.body.appendChild(modalDiv);
+        modalDiv.style.display = 'flex';
+        
+        const closeModal = () => {
+            modalDiv.remove();
+        };
+        document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
+        document.getElementById('closeModalFooterBtn')?.addEventListener('click', closeModal);
+        modalDiv.addEventListener('click', (e) => {
+            if (e.target === modalDiv) closeModal();
+        });
+    }
+    
+    // inisialisasi awal
+    function initQuiz() {
+        renderQuestion();
+        updateNavButtons();
+        updatePreviewCounter();
+        resultContainer.style.display = 'none';
+    }
+    
+    initQuiz();
+</script>
+</body>
+</html>

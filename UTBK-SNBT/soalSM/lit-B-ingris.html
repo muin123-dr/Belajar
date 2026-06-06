@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Literasi Bahasa Inggris - Quiz Interaktif</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f7fc;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            text-align: center;
+            color: #0a4b6e;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #2c6979;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #cbdfea;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+
+        /* Teks group */
+        .teks-group {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+            border: 1px solid #e2edf2;
+        }
+
+        .teks-header {
+            background: #eef3fc;
+            padding: 18px 24px;
+            border-bottom: 2px solid #cbdfea;
+        }
+
+        .teks-judul {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0a4b6e;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .teks-judul span {
+            background: #0a4b6e;
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 14px;
+            border-radius: 40px;
+        }
+
+        .teks-bacaan {
+            background: #fefefe;
+            padding: 22px 26px;
+            font-size: 0.96rem;
+            line-height: 1.65;
+            color: #1e2f3d;
+            border-bottom: 1px solid #e2edf2;
+            white-space: pre-wrap;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .soal-container {
+            padding: 12px 24px 24px 24px;
+            background: white;
+        }
+
+        .card-soal {
+            background: #fafcff;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            border: 1px solid #e2edf2;
+            transition: all 0.1s;
+        }
+
+        .soal-nomor {
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+        }
+
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+            font-weight: 500;
+            background: white;
+            padding: 4px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            margin: 14px 0 18px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbdbe0;
+            transition: 0.1s;
+        }
+
+        .option:hover {
+            background: #eef3fc;
+        }
+
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+
+        button {
+            background: #e9eef3;
+            border: none;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        button.check-btn:hover {
+            background: #0e5e89;
+        }
+
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #b9c8da;
+        }
+
+        button.pembahasan-btn:hover {
+            background: #e2eaf3;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #e0f7e8;
+            color: #0a5e2e;
+            border-left: 5px solid #2b8c4a;
+        }
+
+        .feedback.wrong {
+            background: #ffe6e5;
+            color: #ac2c34;
+            border-left: 5px solid #e34d4d;
+        }
+
+        .pembahasan-text {
+            background: #eef2fa;
+            padding: 12px 18px;
+            border-radius: 18px;
+            margin-top: 14px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            border-left: 4px solid #3b82f6;
+            display: none;
+        }
+
+        .pembahasan-text.show {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.75rem;
+            color: #5f7f9c;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .teks-bacaan,
+            .soal-container {
+                padding: 16px;
+            }
+
+            .option {
+                padding: 6px 12px;
+            }
+
+            label {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 LITERASI BAHASA INGGRIS</h1>
+    <div style="text-align: center;"><span class="subtitle">Read the texts → Answer questions → Check & Learn</span></div>
+    <div id="quiz-groups"></div>
+    <footer>✅ Klik "Cek Jawaban" untuk melihat benar/salah. 📖 "Pembahasan" membuka penjelasan lengkap setiap soal.</footer>
+</div>
+
+<script>
+    // ========= DATA KELOMPOK TEKS DAN SOAL (1 s.d 20) ==========
+    const groups = [];
+
+    // ----- GROUP 1: AI Art (Text 1 & Text 2) -> Soal 1-5 -----
+    groups.push({
+        judul: "Text 1 & Text 2 : AI Art Generators – Copyright vs Fair Use",
+        bacaan: `Text 1\nArtificial Intelligence (AI) art generators like Midjourney and DALL-E have revolutionized the creative industry. By simply typing a few text prompts, anyone can generate stunning, highly detailed artwork in seconds. However, this technological marvel has sparked a massive backlash from traditional artists. Many artists argue that these AI models are trained on billions of copyrighted images scraped from the internet without consent, credit, or compensation. Consequently, artists are finding their distinct styles replicated by machines, leading to a loss of potential commissions and undermining the value of human creativity. In response, several groups of artists have filed class-action lawsuits against AI companies, demanding stricter copyright laws and ethical data-sourcing practices. They propose an "opt-in" system, where AI developers must obtain explicit permission before feeding an artist's work into a machine learning algorithm.\n\nText 2\nProponents of AI art argue that the technology democratizes creativity, allowing individuals who lack technical drawing skills to express their imagination visually. Tech companies defend their data scraping practices by citing the "fair use" doctrine, arguing that AI models do not simply copy-paste existing images but analyze patterns to create entirely new, transformative works. They compare the AI learning process to a human art student who studies the works of masters like Van Gogh or Picasso to develop their own style. Furthermore, economists suggest that AI will not replace human artists but rather shift their roles. Artists who learn to integrate AI into their workflow will become "prompt engineers" or art directors, dramatically increasing their productivity. However, this transition requires a massive paradigm shift in how we define art and authorship in the 21st century.`,
+        soalList: [
+            { nomor: 1, teks: "What is the central disagreement between the artists in Text 1 and the tech companies in Text 2?", pilihan: ["Whether AI can produce art that is objectively better than human art.", "Whether AI developers should pay consumers for using their text prompts.", "Whether the process of AI learning from existing art constitutes copyright infringement or 'fair use'.", "Whether 'prompt engineers' should be legally classified as traditional artists.", "Whether traditional art schools should integrate AI courses into their curriculum."], jawaban: "C", pembahasan: "Text 1: seniman marah karena karya mereka di-scrape tanpa izin (pelanggaran hak cipta). Text 2: perusahaan membela dengan 'fair use'. Inti ketidaksepakatan adalah batas antara pelanggaran hak cipta dan fair use." },
+            { nomor: 2, teks: "The word 'backlash' in Text 1 Paragraph 1 is closest in meaning to...", pilihan: ["A strong and adverse reaction by a large number of people.", "An unexpected financial profit.", "A sudden technological breakthrough.", "A mutual agreement between two opposing parties.", "A legal permission to use copyrighted materials."], jawaban: "A", pembahasan: "'Backlash' berarti reaksi keras/negatif dari banyak orang (strong adverse reaction)." },
+            { nomor: 3, teks: "Based on Text 2, what analogy do tech companies use to justify their AI models?", pilihan: ["A photographer taking a picture of a famous painting in a museum.", "A human art student studying existing artworks to learn and create new pieces.", "A scientist conducting experiments on human behavior.", "A writer plagiarizing a famous novel by changing the characters' names.", "A machine assembling a car from pre-manufactured parts."], jawaban: "B", pembahasan: "Text 2: AI learning process dianalogikan seperti siswa seni manusia yang mempelajari karya master untuk mengembangkan gaya sendiri." },
+            { nomor: 4, teks: "Which of the following statements best describes the author's tone in both texts?", pilihan: ["Text 1 is highly critical of artists, while Text 2 is completely supportive of them.", "Text 1 is objective and explanatory, while Text 2 is sarcastic and condescending.", "Both texts maintain a neutral, informative tone, presenting contrasting perspectives on a single issue.", "Both texts exhibit a highly pessimistic tone regarding the future of the creative industry.", "Text 1 is persuasive, while Text 2 is purely narrative."], jawaban: "C", pembahasan: "Penulis menyajikan sudut pandang seniman (kontra AI) dan perusahaan teknologi (pro AI) secara objektif & informatif tanpa memihak." },
+            { nomor: 5, teks: "If the 'opt-in' system proposed in Text 1 were fully implemented, what would be the most likely consequence according to the logic of Text 2?", pilihan: ["Human artists would stop painting and solely rely on AI generators.", "AI companies would face severe limitations in the variety and quality of data available to train their models, potentially slowing down technological progress.", "The 'fair use' doctrine would completely replace all existing copyright laws.", "Every person typing a text prompt would have to pay a royalty fee to Pablo Picasso.", "AI companies would legally steal more data since the system is voluntary."], jawaban: "B", pembahasan: "Sistem opt-in membatasi data yang bisa digunakan AI. Konsekuensi logis: data latih berkurang drastis, memperlambat perkembangan teknologi AI." }
+        ]
+    });
+
+    // ----- GROUP 2: Quiet Quitting (6-10) -----
+    groups.push({
+        judul: "Text 3 : Hustle Culture vs Quiet Quitting",
+        bacaan: `The term "hustle culture" refers to the societal idealization of overworking, where working long hours and sacrificing personal time are seen as badges of honor necessary for success. Fueled by social media influencers and tech-billionaire mantras, this toxic mindset reached its peak during the late 2010s. However, a significant cultural shift emerged in the post-pandemic era: "quiet quitting."
+
+Despite its name, quiet quitting does not mean leaving a job. Instead, it refers to employees strictly adhering to their job descriptions and working hours, refusing to go "above and beyond" without adequate compensation. This phenomenon is largely driven by Gen Z and millennials who have experienced severe burnout. They witnessed their parents endure financial instability despite working tirelessly, leading them to question the promise of the hustle culture.
+
+Corporate management often views quiet quitting as a sign of laziness or disengagement. Human Resource (HR) departments report that it disrupts team dynamics and lowers overall productivity. On the contrary, labor psychologists argue that quiet quitting is a rational response to stagnant wages, soaring inflation, and the blurring of work-life boundaries caused by remote work. By pulling back, employees are merely establishing healthy boundaries to protect their mental well-being. To bridge this gap, experts suggest that companies must shift from measuring the hours employees spend at their desks to evaluating the actual outcomes they produce.`,
+        soalList: [
+            { nomor: 6, teks: "What does the term 'quiet quitting' actually mean in the context of the passage?", pilihan: ["Resigning from a company without giving a prior notice to the HR department.", "Working silently in an office without interacting with other colleagues.", "Doing only the tasks specified in the job description and refusing unpaid extra work.", "Secretly searching for a new job while still being employed by the current company.", "Organizing a silent strike to protest against the company's management."], jawaban: "C", pembahasan: "Teks menyebutkan: 'employees strictly adhering to their job descriptions and working hours, refusing to go above and beyond without adequate compensation.'" },
+            { nomor: 7, teks: "According to the text, why did Gen Z and millennials start to question the 'hustle culture'?", pilihan: ["They realized that working hard always guarantees a position as a tech-billionaire.", "They noticed that their parents' relentless hard work did not shield them from financial instability.", "They were heavily influenced by social media influencers to become lazy.", "They prefer to depend completely on government subsidies rather than working.", "They lack the physical strength required to work long hours in modern offices."], jawaban: "B", pembahasan: "Mereka menyaksikan orang tua tetap kesulitan finansial meski bekerja keras → mempertanyakan janji hustle culture." },
+            { nomor: 8, teks: "Which of the following best represents the perspective of labor psychologists regarding 'quiet quitting'?", pilihan: ["It is a catastrophic trend that will destroy the global economy.", "It is a deliberate sabotage initiated by competing corporations.", "It is an irrational behavior caused by excessive use of social media.", "It is a healthy and rational mechanism for employees to protect themselves from exploitation and burnout.", "It is an excuse for employees who lack the skills to complete their daily tasks."], jawaban: "D", pembahasan: "Psikolog tenaga kerja menyebut quiet quitting sebagai respons rasional untuk melindungi kesejahteraan mental dan menetapkan batasan sehat." },
+            { nomor: 9, teks: "The phrase 'above and beyond' in the second paragraph implies...", pilihan: ["Traveling for business purposes frequently.", "Receiving a promotion to a higher managerial level.", "Doing extra work that exceeds the basic requirements of the job without additional pay.", "Working on the top floor of a corporate building.", "Leaving the current job to pursue a completely different career path."], jawaban: "C", pembahasan: "'Go above and beyond' berarti melakukan pekerjaan ekstra melampaui tuntutan dasar tanpa kompensasi tambahan." },
+            { nomor: 10, teks: "Based on the passage, what is the recommended solution to address the tension caused by quiet quitting?", pilihan: ["Companies should fire all Gen Z and millennial employees immediately.", "Companies should focus on the quality of work produced rather than the number of hours worked.", "Companies should force employees to work from the office instead of remotely.", "Employees should accept lower wages to help the company fight inflation.", "HR departments should monitor employees' social media accounts."], jawaban: "B", pembahasan: "Rekomendasi: perusahaan beralih dari mengukur jam kerja menjadi mengevaluasi hasil nyata (outcomes)." }
+        ]
+    });
+
+    // ----- GROUP 3: Central Banks & LCT (11-14) -----
+    groups.push({
+        judul: "Text 4 : Interest Rates, Emerging Markets & Local Currency Transaction",
+        bacaan: `In recent months, central banks worldwide have been aggressively raising interest rates in a coordinated effort to combat skyrocketing inflation. This macroeconomic tightening has sent shockwaves through the global economy, particularly affecting emerging markets. When the US Federal Reserve hikes rates, investors tend to pull their capital out of developing countries and move it to the US seeking higher, safer returns. Consequently, emerging market currencies depreciate rapidly against the US dollar.
+
+This depreciation makes importing goods, especially energy and food, significantly more expensive for developing nations, exacerbating their domestic inflation. Furthermore, countries with high levels of dollar-denominated debt face a looming crisis. As their local currency weakens, the cost of servicing that debt essentially multiplies, pushing some fragile economies to the brink of default. To mitigate these risks, several Southeast Asian countries have initiated the Local Currency Transaction (LCT) framework, allowing them to trade and settle investments using their own currencies, thus reducing their reliance on the US dollar.`,
+        soalList: [
+            { nomor: 11, teks: "Why do investors withdraw their capital from developing countries when the US Federal Reserve raises interest rates?", pilihan: ["Because developing countries force investors to pay higher taxes.", "Because investors seek higher and safer financial returns available in the US.", "Because the US government prohibits its citizens from investing abroad.", "Because developing countries stop producing energy and food.", "Because emerging market currencies become too strong and overvalued."], jawaban: "B", pembahasan: "Investor menarik modal ke AS untuk mencari imbal hasil yang lebih tinggi dan aman (higher, safer returns)." },
+            { nomor: 12, teks: "According to the text, what is the 'looming crisis' faced by countries with high dollar-denominated debt?", pilihan: ["They will have an oversupply of US dollars that they cannot spend.", "They will be forced to adopt the US dollar as their official national currency.", "The weakening of their local currency makes repaying their dollar debt much more expensive and difficult.", "Their central banks will be taken over by the US Federal Reserve.", "They will no longer be allowed to import food and energy from the US."], jawaban: "C", pembahasan: "Ketika mata uang lokal melemah, biaya membayar utang dolar membengkak → krisis yang mengancam." },
+            { nomor: 13, teks: "What is the primary purpose of the Local Currency Transaction (LCT) framework mentioned in the text?", pilihan: ["To completely ban the US dollar from being used anywhere in the world.", "To create a single, unified currency for all Southeast Asian nations.", "To decrease reliance on the US dollar by enabling countries to use their local currencies for trade and investments.", "To artificially inflate the value of the US dollar to help American investors.", "To force developing nations to borrow more money from international banks."], jawaban: "C", pembahasan: "Tujuan LCT: mengurangi ketergantungan pada dolar AS dengan menggunakan mata uang lokal dalam perdagangan dan investasi." },
+            { nomor: 14, teks: "The word 'exacerbating' in paragraph 2 can be best replaced by...", pilihan: ["Alleviating", "Worsening", "Improving", "Calculating", "Eliminating"], jawaban: "B", pembahasan: "Exacerbating = memperburuk (worsening)." }
+        ]
+    });
+
+    // ----- GROUP 4: Microplastics (15-18) -----
+    groups.push({
+        judul: "Text 5 : Microplastics – Pervasive Pollutant & Biomagnification",
+        bacaan: `Microplastics—tiny plastic fragments measuring less than 5 millimeters—have become one of the most pervasive environmental pollutants of the 21st century. Originally derived from the breakdown of larger plastic debris, synthetic clothing fibers, and microbeads in cosmetics, these particles have infiltrated every corner of the globe. Recent scientific expeditions have discovered microplastics in the pristine snow of Mount Everest, the deepest trenches of the Mariana, and even in human blood and placenta.
+
+The ecological impact of microplastics is profoundly alarming. Marine organisms, from zooplankton to massive whales, frequently ingest these particles, mistaking them for food. Once inside the digestive tract, microplastics can cause physical blockages, starvation, and reproductive failure. Furthermore, microplastics act as toxic sponges. They absorb harmful chemicals from the surrounding seawater, such as pesticides and heavy metals. When ingested by marine life, these accumulated toxins enter the food chain, a process known as biomagnification, ultimately ending up on human dinner plates. Despite the undeniable evidence of their omnipresence, global regulatory responses remain fragmented, heavily relying on voluntary corporate pledges rather than legally binding international treaties to curb plastic production at its source.`,
+        soalList: [
+            { nomor: 15, teks: "What is the author's main concern regarding microplastics in the second paragraph?", pilihan: ["The high cost of removing microplastics from Mount Everest.", "The process of manufacturing synthetic clothing fibers.", "The ecological devastation and the transfer of toxins through the food chain to humans.", "The lack of public awareness regarding cosmetic microbeads.", "The aesthetic damage microplastics cause to pristine ocean beaches."], jawaban: "C", pembahasan: "Penulis fokus pada kerusakan ekologis (penyumbatan, kelaparan) dan transfer racun melalui biomagnifikasi hingga ke manusia." },
+            { nomor: 16, teks: "Which phenomenon describes the process where toxins absorbed by microplastics accumulate and move up the food chain?", pilihan: ["Biodegradation", "Photosynthesis", "Biomagnification", "Cellular respiration", "Desalination"], jawaban: "C", pembahasan: "Proses akumulasi racun yang meningkat di rantai makanan disebut biomagnifikasi." },
+            { nomor: 17, teks: "Based on the passage, the author views the current global regulatory response to microplastics as...", pilihan: ["Highly effective and globally unified.", "Inadequate and overly reliant on voluntary corporate actions.", "Too strict and damaging to the plastic manufacturing industry.", "Purely focused on cleaning the Mariana Trench.", "Scientifically unproven and legally binding."], jawaban: "B", pembahasan: "Respon regulasi global masih terpecah (fragmented) dan sangat bergantung pada janji sukarela korporasi, bukan perjanjian mengikat." },
+            { nomor: 18, teks: "The word 'pervasive' in paragraph 1 is closest in meaning to...", pilihan: ["Widespread and found everywhere", "Rare and highly valuable", "Easily biodegradable", "Safe for human consumption", "Visible only under a microscope"], jawaban: "A", pembahasan: "Pervasive = menyebar luas, ditemukan di mana-mana (widespread)." }
+        ]
+    });
+
+    // ----- GROUP 5: Urban Heat Islands (19-20) -----
+    groups.push({
+        judul: "Text 6 : Urban Heat Islands & Green Infrastructure",
+        bacaan: `Urban heat islands (UHIs) occur when cities replace natural land cover with dense concentrations of pavement, buildings, and other surfaces that absorb and retain heat. This effect increases energy costs (e.g., for air conditioning), air pollution levels, and heat-related illness and mortality. To combat UHIs, urban planners are increasingly integrating "green infrastructure." This includes planting urban forests, installing green roofs, and utilizing cool pavements that reflect rather than absorb solar radiation. While these solutions demand high initial investments, the long-term socioeconomic benefits—such as reduced healthcare costs and lower energy consumption—far outweigh the upfront expenditures.`,
+        soalList: [
+            { nomor: 19, teks: "According to the text, what is the primary cause of Urban Heat Islands (UHIs)?", pilihan: ["The excessive planting of urban forests.", "The use of cool pavements that reflect solar radiation.", "High energy costs caused by the overuse of air conditioners.", "The replacement of natural land with materials like pavement and buildings that trap heat.", "The reduction of healthcare budgets in major cities."], jawaban: "D", pembahasan: "Penyebab UHI: mengganti lahan alami dengan aspal, bangunan, dan permukaan yang menyerap panas." },
+            { nomor: 20, teks: "What is the author's argument regarding the cost of 'green infrastructure'?", pilihan: ["It is too expensive and should be abandoned immediately.", "It is entirely free to implement in modern cities.", "The high initial costs are justified by the long-term financial and health benefits.", "It only benefits wealthy neighborhoods that can afford high upfront expenditures.", "It increases the overall energy consumption of a city in the long run."], jawaban: "C", pembahasan: "Meskipun investasi awal tinggi, manfaat jangka panjang (kesehatan, hemat energi) jauh lebih besar." }
+        ]
+    });
+
+    // ======================= RENDER SEMUA GROUP =======================
+    const container = document.getElementById("quiz-groups");
+
+    function renderGroups() {
+        container.innerHTML = "";
+        groups.forEach((group, idx) => {
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "teks-group";
+
+            // Header
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "teks-header";
+            const judulSpan = document.createElement("div");
+            judulSpan.className = "teks-judul";
+            judulSpan.innerHTML = `<span>📄 Teks ${idx + 1}</span> ${group.judul}`;
+            headerDiv.appendChild(judulSpan);
+            groupDiv.appendChild(headerDiv);
+
+            // Bacaan
+            const bacaanDiv = document.createElement("div");
+            bacaanDiv.className = "teks-bacaan";
+            bacaanDiv.innerText = group.bacaan;
+            groupDiv.appendChild(bacaanDiv);
+
+            // Container soal
+            const soalContainer = document.createElement("div");
+            soalContainer.className = "soal-container";
+
+            group.soalList.forEach(soal => {
+                const cardSoal = document.createElement("div");
+                cardSoal.className = "card-soal";
+                const nomorSpan = document.createElement("div");
+                nomorSpan.className = "soal-nomor";
+                nomorSpan.innerText = `Soal ${soal.nomor}`;
+                cardSoal.appendChild(nomorSpan);
+
+                const teksSoalDiv = document.createElement("div");
+                teksSoalDiv.className = "soal-teks";
+                teksSoalDiv.innerText = soal.teks;
+                cardSoal.appendChild(teksSoalDiv);
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.className = "options";
+                const nameAttr = `group_${idx}_soal_${soal.nomor}`;
+                const letters = ["A", "B", "C", "D", "E"];
+                soal.pilihan.forEach((pil, idxPil) => {
+                    const letter = letters[idxPil];
+                    const optDiv = document.createElement("div");
+                    optDiv.className = "option";
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = nameAttr;
+                    radio.value = letter;
+                    const label = document.createElement("label");
+                    label.innerText = `${letter}. ${pil}`;
+                    optDiv.appendChild(radio);
+                    optDiv.appendChild(label);
+                    optionsDiv.appendChild(optDiv);
+                });
+                cardSoal.appendChild(optionsDiv);
+
+                const btnGroup = document.createElement("div");
+                btnGroup.className = "btn-group";
+                const checkBtn = document.createElement("button");
+                checkBtn.innerText = "✅ Cek Jawaban";
+                checkBtn.classList.add("check-btn");
+                const pembahasanBtn = document.createElement("button");
+                pembahasanBtn.innerText = "📖 Pembahasan";
+                pembahasanBtn.classList.add("pembahasan-btn");
+                btnGroup.appendChild(checkBtn);
+                btnGroup.appendChild(pembahasanBtn);
+                cardSoal.appendChild(btnGroup);
+
+                const feedbackDiv = document.createElement("div");
+                feedbackDiv.className = "feedback";
+                const pembahasanDiv = document.createElement("div");
+                pembahasanDiv.className = "pembahasan-text";
+                pembahasanDiv.innerHTML = `<strong>📘 Pembahasan:</strong> ${soal.pembahasan}`;
+                cardSoal.appendChild(feedbackDiv);
+                cardSoal.appendChild(pembahasanDiv);
+
+                // Event listeners
+                checkBtn.addEventListener("click", () => {
+                    const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                    if (!selected) {
+                        feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                        feedbackDiv.classList.add("show");
+                        feedbackDiv.classList.remove("correct", "wrong");
+                        return;
+                    }
+                    const userVal = selected.value;
+                    const isCorrect = (userVal === soal.jawaban);
+                    if (isCorrect) {
+                        feedbackDiv.innerHTML = `✅ Jawaban BENAR! (Jawaban: ${soal.jawaban})`;
+                        feedbackDiv.classList.add("correct", "show");
+                        feedbackDiv.classList.remove("wrong");
+                    } else {
+                        feedbackDiv.innerHTML = `❌ Jawaban SALAH. Jawaban benar: ${soal.jawaban}.`;
+                        feedbackDiv.classList.add("wrong", "show");
+                        feedbackDiv.classList.remove("correct");
+                    }
+                });
+
+                pembahasanBtn.addEventListener("click", () => {
+                    pembahasanDiv.classList.toggle("show");
+                    pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
+                });
+
+                soalContainer.appendChild(cardSoal);
+            });
+
+            groupDiv.appendChild(soalContainer);
+            container.appendChild(groupDiv);
+        });
+    }
+
+    renderGroups();
+</script>
+</body>
+</html>

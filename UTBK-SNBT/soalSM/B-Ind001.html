@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Kuis Literasi Bahasa Indonesia - Paket 2 (Dengan Gambar)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9f0f5 0%, #d9e2ec 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1rem;
+            color: #1e2a3e;
+        }
+
+        .quiz-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffffdd;
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+            padding: 1.8rem 2rem;
+            transition: all 0.2s;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0b3b3f, #1b6b6f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 6px solid #f4a261;
+            padding-left: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub {
+            color: #2c5f6e;
+            margin-bottom: 2rem;
+            border-bottom: 2px dashed #b9d8e6;
+            padding-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .soal-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+            margin-bottom: 1.8rem;
+            padding: 1.2rem 1.8rem;
+            transition: 0.1s;
+            border: 1px solid #e2edf2;
+        }
+
+        .soal-card:hover {
+            border-color: #cbdae2;
+            box-shadow: 0 10px 20px -8px rgba(0,0,0,0.1);
+        }
+
+        .soal-nomor {
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: #f4f9fc;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-bottom: 0.8rem;
+            color: #1d6f6f;
+            letter-spacing: -0.2px;
+        }
+
+        .soal-teks {
+            font-weight: 600;
+            font-size: 1.02rem;
+            margin: 0.8rem 0 1rem 0;
+            line-height: 1.45;
+            color: #0a2b2e;
+        }
+
+        .gambar-soal {
+            margin: 1rem 0;
+            text-align: center;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 1.2rem;
+            border: 1px solid #cbd5e1;
+        }
+
+        .gambar-soal img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-top: 0.8rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fefcf7;
+            padding: 0.5rem 0.9rem;
+            border-radius: 60px;
+            border: 1px solid #e0eef3;
+            transition: 0.1s;
+        }
+
+        .option:hover {
+            background: #eef4f9;
+            border-color: #bdd3df;
+        }
+
+        input[type="radio"] {
+            accent-color: #2a9d8f;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #1e4a5a;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2.2rem 0 1rem;
+        }
+
+        button {
+            background: #2c7a6e;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border: 1px solid #ffffff50;
+        }
+
+        button:hover {
+            background: #1e5f55;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -10px #1e5f55;
+        }
+
+        .btn-secondary {
+            background: #f4a261;
+            color: #2d3e40;
+        }
+
+        .btn-secondary:hover {
+            background: #e76f51;
+            color: white;
+        }
+
+        .score-area {
+            background: #0f3b3a;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 60px;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffedd5;
+            letter-spacing: 1px;
+        }
+
+        .pembahasan-area {
+            background: #fff7eb;
+            border-radius: 1.8rem;
+            padding: 1.6rem;
+            margin-top: 2rem;
+            border-left: 8px solid #f4a261;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+        }
+
+        .pembahasan-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #bc6c25;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pembahasan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .pembahasan-item {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid #ffe3bf;
+        }
+
+        .pembahasan-item strong {
+            color: #c4450c;
+            font-size: 1rem;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #cbd5e1, transparent);
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            margin-top: 2rem;
+            color: #547c86;
+        }
+
+        @media (max-width: 700px) {
+            .quiz-wrapper {
+                padding: 1.2rem;
+            }
+            .soal-card {
+                padding: 1rem;
+            }
+            .option {
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-wrapper">
+    <h1>📖 Literasi B. Indonesia Paket 2</h1>
+    <div class="sub">🎓 20 Soal Pilihan Ganda | Simak teks dengan saksama</div>
+
+    <div id="quizContainer"></div>
+
+    <div class="btn-group">
+        <button id="submitBtn">✅ Selesai dan Kumpulkan</button>
+        <button id="showDiscussionBtn" class="btn-secondary" disabled>📘 Tampilkan Pembahasan</button>
+    </div>
+
+    <div id="scoreDisplay" class="score-area" style="display: none;"></div>
+    <div id="discussionPanel" class="pembahasan-area" style="display: none;"></div>
+    <footer>Berdasarkan teks Pelabuhan Merak, Jeruk Nipis, Budaya Literasi, Plastik, & Tegur Sapa</footer>
+</div>
+
+<script>
+    // ---------- DATA SOAL (20 butir) ----------
+    const soalData = [
+        { // no 1
+            teks: "Pak Anton seorang supir truk. Pada tanggal 21—25 November ia akan membawa 1000 ton beras dari kota Lampung ke Jakarta melewati Pelabuhan Merak. Berdasarkan teks di atas, apa solusi yang dapat dilakukan oleh supir truk yang memuat sembako pada tanggal 21—25 November?",
+            pilihan: {
+                A: "Menunggu sekitar dua hingga empat hari untuk sampai di Pelabuhan Merak.",
+                B: "Menerapkan sistem buka tutup jalan pada antrean 100 m.",
+                C: "Larangan untuk melintas pada tanggal 21—25 November.",
+                D: "Melintas melalui Pelabuhan Penyeberangan Merak.",
+                E: "Truk gandengan, truk tempelan, dan truk kontainer dilarang melewati pelabuhan karena merupakan truk bersumbu dua."
+            },
+            jawaban: "D",
+            pembahasan: "Melintas melalui Pelabuhan Penyeberangan Merak. Berdasarkan paragraf 2, larangan melintas hanya untuk truk nonsembako, sedangkan truk sembako (beras) boleh melintas melalui Pelabuhan Merak."
+        },
+        { // no 2
+            teks: "Berdasarkan bacaan tersebut, fakta yang kesesuaiannya dapat kita temukan adalah...",
+            pilihan: {
+                A: "Setiap hari di Pelabuhan Merak dipadati truk.",
+                B: "Penumpukan truk bersumbu dua tersebut di Pelabuhan Merak menyebabkan antrean truk dari pintu masuk kapal.",
+                C: "Antrean truk terjadi di semua pelabuhan.",
+                D: "Antrean masih dalam batas normal.",
+                E: "Akibat penumpukan truk, beberapa sopir truk mengaku harus menunggu sekitar dua hingga empat hari untuk bisa masuk kapal."
+            },
+            jawaban: "B",
+            pembahasan: "Fakta dalam teks (paragraf 3) menyebutkan: 'Penumpukan truk bersumbu dua tersebut di Pelabuhan Merak menyebabkan antrean truk sekitar 100 meter dari pintu masuk kapal.'"
+        },
+        { // no 3
+            teks: "Berdasarkan teks jeruk nipis, pernyataan berikut yang sesuai dengan isi teks adalah...",
+            pilihan: {
+                A: "Jeruk nipis dapat mengobati batuk dan asma.",
+                B: "Kandungan minyak asiri bermanfaat untuk radang tenggorokan.",
+                C: "Jeruk nipis sebaiknya jangan dicampur dengan kecap manis.",
+                D: "Untuk mengurangi rasa asam, pada air perasan jeruk dapat dicampur dengan madu atau kecap manis.",
+                E: "Jeruk nipis hanya bisa dikonsumsi langsung tanpa campuran."
+            },
+            jawaban: "D",
+            pembahasan: "Paragraf terakhir: '...dapat juga dicampur dengan madu atau kecap manis untuk mengurangi rasa asamnya.' Jadi pernyataan D tepat."
+        },
+        { // no 4
+            teks: "Sudah 1 minggu Anda mengalami batuk berbahak. Anda sudah mencoba mengonsumsi obat tablet. Namun batuk belum mereda. Ibu menyarankan jeruk nipis. Berdasarkan bacaan, apa alasan mengonsumsi jeruk nipis saat batuk?",
+            pilihan: {
+                A: "Jeruk mengandung minyak asiri.",
+                B: "Cara menggunakannya yang cukup mudah.",
+                C: "Ketersediaan bahan yang mumpuni.",
+                D: "Pengetahuan tentang obat tradisional.",
+                E: "Meredakan batuk dengan alternatif tradisional."
+            },
+            jawaban: "A",
+            pembahasan: "Teks menyebut jeruk nipis mengandung minyak asiri dan zat bermanfaat yang membantu meredakan batuk. Kandungan inilah alasan utamanya."
+        },
+        { // no 5
+            teks: "Anda pelajar semester akhir kelas 12 IPA ingin masuk universitas favorit. Guru BK memberi artikel tentang kegiatan positif. Berdasarkan bacaan 'Belajar Meriah Kesuksesan', kegiatan positif yang dimaksud untuk meraih kesuksesan adalah...",
+            pilihan: {
+                A: "Rajin belajar tanpa mengenal lelah.",
+                B: "Mengatur jadwal belajar secara sistematis.",
+                C: "Menyempatkan waktu untuk belajar di waktu luang.",
+                D: "Membagi waktu untuk belajar dan bermain.",
+                E: "Menyeimbangkan kegiatan akademik dan nonakademik."
+            },
+            jawaban: "B",
+            pembahasan: "Teks menekankan 'harus pintar-pintar membagi waktu'. Membagi waktu secara sistematis (mengatur jadwal) adalah kegiatan positif untuk sukses."
+        },
+        { // no 6
+            teks: "Berdasarkan informasi di atas, manakah pertanyaan berikut yang terdapat jawabannya pada bacaan 'Belajar Meriah Kesuksesan'?",
+            pilihan: {
+                A: "Apa saja prestasi yang diraih seseorang?",
+                B: "Bagaimana kegiatan nonakademik dijalankan?",
+                C: "Mengapa kita harus membagi waktu?",
+                D: "Apa kegiatan yang akan menghasilkan kesuksesan?",
+                E: "Bagaimana cara membagi waktu?"
+            },
+            jawaban: "D",
+            pembahasan: "Bacaan menjelaskan bahwa kegiatan belajar dan membagi waktu akan menghasilkan kesuksesan. Jawaban pertanyaan 'Apa kegiatan yang menghasilkan kesuksesan?' dapat ditemukan."
+        },
+        { // no 7
+            teks: "Berdasarkan bacaan 'Belajar Meriah Kesuksesan', siklus yang mungkin dilakukan seseorang untuk meraih kesuksesan nonakademik adalah...",
+            pilihan: {
+                A: "Belajar-bermain-berolahraga-berbelanja",
+                B: "Praktik-bermain-belajar-belajar",
+                C: "Belajar-belajar-istirahat-praktik-belajar",
+                D: "Praktik-istirahat-belajar-praktik-belajar",
+                E: "Belajar-praktik-istirahat-belajar-praktik"
+            },
+            jawaban: "E",
+            pembahasan: "Siklus ideal: belajar teori dasar, praktik, istirahat, evaluasi (belajar lagi), praktik kembali. Pola ini membentuk peningkatan berkelanjutan."
+        },
+        { // no 8
+            teks: "Berikut pernyataan yang tidak sesuai dari bacaan 'Plastik Tak Lagi Gratis' adalah...",
+            pilihan: {
+                A: "Indonesia menghasilkan 64 ton sampah plastik setiap tahun.",
+                B: "KLHK mengimbau untuk mengurangi penggunaan produk plastik.",
+                C: "Indonesia menempati negara terbesar kedua penghasil sampah plastik.",
+                D: "Sampah plastik tidak dapat diuraikan dalam waktu singkat.",
+                E: "Satu sel hanya memiliki satu inti sel."
+            },
+            jawaban: "A",
+            pembahasan: "Teks menyebut '64 JUTA ton per tahun', bukan 64 ton. Pernyataan A salah total, bahkan E tidak relevan tapi yang paling jelas tidak sesuai adalah A."
+        },
+        { // no 9
+            teks: "Berdasarkan teks 'Plastik Tak Lagi Gratis', apa dampak kebijakan kantong plastik berbayar di supermarket dan ritel modern?",
+            pilihan: {
+                A: "Tidak konsumtifnya masyarakat menggunakan kantong plastik.",
+                B: "Penurunan sampah plastik di Indonesia.",
+                C: "Masyarakat tetap menggunakan kantong plastik berharga.",
+                D: "Secara tidak langsung masyarakat lebih beralih menggunakan kantong belanja yang dapat digunakan berkali-kali.",
+                E: "Masyarakat memulai ide kreatif untuk menghasilkan kantong plastik ramah lingkungan."
+            },
+            jawaban: "D",
+            pembahasan: "Kebijakan mendorong masyarakat membawa tas belanja sendiri (digunakan berulang) daripada plastik sekali pakai, sesuai isi teks."
+        },
+        { // no 10
+            teks: "Divia hobi minum boba. Saat istirahat membaca artikel 'Plastik Tak Lagi Gratis'. Kegiatan yang mungkin Divia lakukan untuk mengurangi produksi sampah plastik adalah...",
+            pilihan: {
+                A: "Menggunakan kantong kresek.",
+                B: "Membakar sampah plastik daripada membuangnya ke TPA.",
+                C: "Membawa air minum di dalam botol air minum ke kantor.",
+                D: "Membuang sampah plastik ke sungai.",
+                E: "Tidak perlu berbelanja di supermarket."
+            },
+            jawaban: "C",
+            pembahasan: "Menggunakan botol minum reusable adalah contoh nyata mengurangi sampah plastik sekali pakai, sesuai semangat teks."
+        },
+        { // no 11
+            teks: "Berdasarkan teks budaya literasi, kalimat simpulan yang tepat adalah...",
+            pilihan: {
+                A: "Alhasil, budaya literasi bisa ditumbuhkan melalui orang tua yang mendorong anaknya untuk membaca dan memberi contoh.",
+                B: "Jadi, hal yang harus digerakkan dan dilaksanakan di sekolah ialah dengan memulai pengenalan budaya literasi pada siswa.",
+                C: "Dengan demikian, budaya literasi dapat ditumbuhkan dan dikembangkan melalui lingkungan keluarga, masyarakat, dan sekolah.",
+                D: "Oleh karenanya, siswa yang mengikuti literasi dengan sungguh-sungguh akan memiliki kegemaran terhadap aktivitas baca dan tulis.",
+                E: "Dengan begitu, sekolah memiliki peran yang sangat penting dalam proses menumbuhkan budaya literasi pada para siswa."
+            },
+            jawaban: "C",
+            pembahasan: "Simpulan paragraf utuh mencakup peran keluarga, masyarakat, dan sekolah. Opsi C merangkum keseluruhan teks dengan kata 'dengan demikian'."
+        },
+        { // no 12
+            teks: "Bayu sosialisasi budaya literasi. Berdasarkan bacaan, pengaruh bagi siswa yang mengikuti budaya literasi dengan sungguh-sungguh adalah...",
+            pilihan: {
+                A: "Siswa akan memiliki kegemaran terhadap kegiatan membaca dan menulis fiksi.",
+                B: "Siswa menjadi lebih senang terhadap segala aktivitas yang berkaitan dengan menulis.",
+                C: "Siswa akan lebih rajin dalam membaca buku dan menulis karya ilmiah atau fiksi.",
+                D: "Siswa akan memiliki kesenangan atau kegemaran terhadap aktivitas baca-tulis.",
+                E: "Siswa akan menyukai atau gemari yang namanya kegiatan membaca."
+            },
+            jawaban: "D",
+            pembahasan: "Teks eksplisit: 'Siswa yang mengikuti budaya literasi dengan sungguh-sungguh, akan memiliki kesenangan atau kegemaran terhadap aktivitas baca-tulis'."
+        },
+        { // no 13
+            teks: "Kalimat yang menyajikan fakta pada teks budaya literasi adalah...",
+            pilihan: {
+                A: "Menurut penulis budaya literasi dapat ditumbuhkan sedini mungkin dimulai dari keluarga.",
+                B: "Mungkin anak mencontoh orang tua dalam membaca.",
+                C: "Kita harus berusaha menciptakan lingkungan yang mendukung minat baca.",
+                D: "Sekolah selayaknya memiliki peranan penting dalam menumbuhkan budaya literasi.",
+                E: "Oleh karena itu, sarana dan prasarana sekolah serta dorongan guru untuk memberi teladan dalam budaya literasi."
+            },
+            jawaban: "E",
+            pembahasan: "Opsi E merupakan pernyataan faktual tentang kondisi yang diperlukan (sarana & dorongan guru), tanpa opini subjektif atau kata 'mungkin', 'seharusnya'."
+        },
+        { // no 14
+            teks: "Berdasarkan teks tegur sapa, apa tujuan seseorang perlu menginformasikan tentang tegur sapa?",
+            pilihan: {
+                A: "Bertegur sapa ialah bagian dari budaya dan salah satu bentuk komunikasi.",
+                B: "Berupaya mengajak pembaca untuk selalu bertegur sapa kepada siapapun.",
+                C: "Memberikan pemahaman bahwa bertegur sapa ialah bagian dari budaya.",
+                D: "Bermaksud memberikan wawasan dan pengetahuan tentang bertegur sapa.",
+                E: "Bertujuan memberikan informasi mengenai pentingnya bertegur sapa."
+            },
+            jawaban: "B",
+            pembahasan: "Teks diakhiri ajakan 'Marilah kita selalu bertegur sapa kepada siapapun yang kita jumpai', menunjukkan tujuan mengajak pembaca."
+        },
+        { // no 15
+            teks: "Tulisan memberikan analogi yang sama dengan pernyataan 'Tegur sapa pada intinya adalah suatu pernyataan awal seseorang untuk dapat melakukan komunikasi' yaitu...",
+            pilihan: {
+                A: "Kontak senjata : pertempuran",
+                B: "Bencana alam : kecelakaan",
+                C: "Sepak bola : tendangan bebas",
+                D: "Sepeda gunung : permainan",
+                E: "Berbohong : pembicaraan"
+            },
+            jawaban: "A",
+            pembahasan: "Analoginya: tegur sapa adalah awal komunikasi, seperti kontak senjata adalah awal pertempuran. Keduanya sebagai pemicu awal."
+        },
+        { // no 16
+            teks: "Anda dan rekan kuliah Komunikasi Dasar, dosen memberi contoh kehidupan semut. Berdasarkan bacaan, cara mengimplikasikan tegur sapa apabila mengacu pada kehidupan semut adalah...",
+            pilihan: {
+                A: "Saling bertegur sapa.",
+                B: "Apabila bertemu teman ucapkan salam, seperti hai, halo, apa kabar?",
+                C: "Tersenyum kepada seseorang yang ditemui, apabila tak ada kata terucapkan.",
+                D: "Berhenti sejenak untuk sekadar saling menyapa.",
+                E: "Saling berkomunikasi tanpa jenuh."
+            },
+            jawaban: "C",
+            pembahasan: "Teks menyebut: 'Apabila kata-kata tersebut tidak terucapkan, maka alangkah baiknya kita keluarkan sebuah senyuman manis...' Senyum sebagai bentuk tegur sapa."
+        },
+        { // no 17
+            teks: "Berdasarkan paragraf 1 teks telur, jika konsumsi telur ayam pada tahun 2016 mencapai 1,55 juta ton, manakah simpulan yang paling tepat?",
+            pilihan: {
+                A: "Kebutuhan telur tercukupi untuk dalam negeri.",
+                B: "Kebutuhan telur belum tercukupi.",
+                C: "Terjadi kekurangan 6,4 ribu ton telur untuk memenuhi kebutuhan.",
+                D: "Masih dapat mengekspor telur dengan mengurangi konsumsi di dalam negeri.",
+                E: "Tidak berpengaruh pada kebutuhan telur sekarang."
+            },
+            jawaban: "B",
+            pembahasan: "Produksi tahun 2016 = 1,48 juta ton, jika konsumsi 1,55 juta ton maka defisit 0,07 juta ton (70 ribu ton) sehingga kebutuhan tidak tercukupi."
+        },
+        { // no 18
+            teks: "Berdasarkan paragraf 2, berapa prediksi selisih persentase kenaikan konsumsi dan produksi telur dalam jangka waktu lima tahun ke depan?",
+            pilihan: {
+                A: "0,69%",
+                B: "0,68%",
+                C: "0,67%",
+                D: "0,29%",
+                E: "0,28%"
+            },
+            jawaban: "A",
+            pembahasan: "Produksi naik 4,87% per tahun, konsumsi naik 4,18% → selisih = 4,87 - 4,18 = 0,69%."
+        },
+        { // no 19 (DENGAN GAMBAR)
+            teks: "Berdasarkan gambar grafik berikut, pada tahun berapa kemungkinan tidak dapat mengekspor telur?",
+            gambar: "https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/grafik.png",
+            pilihan: {
+                A: "2016",
+                B: "2017",
+                C: "2018",
+                D: "2019",
+                E: "2020"
+            },
+            jawaban: "B",
+            pembahasan: "Merujuk grafik: tahun 2017 produksi = konsumsi = 1,5 juta ton, sehingga tidak ada surplus → tidak bisa ekspor."
+        },
+        { // no 20
+            teks: "Berdasarkan informasi pada teks (soal mandiri): tarif parkir mobil 2 jam pertama Rp2.000, selanjutnya per jam. Jika uang Rp6.500 dapat parkir selama lima jam, maka tarif parkir setelah 2 jam pertama adalah...",
+            pilihan: {
+                A: "Rp500,00",
+                B: "Rp1.000,00",
+                C: "Rp1.500,00",
+                D: "Rp2.000,00",
+                E: "Rp2.500,00"
+            },
+            jawaban: "C",
+            pembahasan: "Biaya 2 jam pertama = Rp2.000. Sisa 3 jam = Rp6.500 - Rp2.000 = Rp4.500. Tarif per jam = Rp4.500 / 3 = Rp1.500."
+        }
+    ];
+
+    // Render seluruh soal ke DOM
+    const container = document.getElementById("quizContainer");
+    function renderQuiz() {
+        let html = '';
+        soalData.forEach((soal, idx) => {
+            const nomor = idx + 1;
+            html += `<div class="soal-card" data-soal-idx="${idx}">`;
+            html += `<div class="soal-nomor">Soal ${nomor}</div>`;
+            html += `<div class="soal-teks">${soal.teks}</div>`;
+            // Jika ada gambar, tampilkan
+            if (soal.gambar) {
+                html += `<div class="gambar-soal">
+                            <img src="${soal.gambar}" alt="Grafik telur ayam ras" onerror="this.onerror=null; this.src=''; this.alt='Gambar tidak dapat dimuat';">
+                         </div>`;
+            }
+            html += `<div class="options">`;
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            letters.forEach(letter => {
+                const optionText = soal.pilihan[letter];
+                if (optionText) {
+                    html += `<div class="option">
+                                <input type="radio" name="q${nomor}" value="${letter}" id="q${nomor}_${letter}">
+                                <label for="q${nomor}_${letter}"><strong>${letter}.</strong> ${optionText}</label>
+                             </div>`;
+                }
+            });
+            html += `</div></div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    renderQuiz();
+
+    // Ambil jawaban user & hitung skor
+    const submitBtn = document.getElementById("submitBtn");
+    const scoreDiv = document.getElementById("scoreDisplay");
+    const discussionBtn = document.getElementById("showDiscussionBtn");
+    const discussionPanel = document.getElementById("discussionPanel");
+
+    let currentScore = null;
+
+    function calculateScore() {
+        let correct = 0;
+        for (let i = 0; i < soalData.length; i++) {
+            const nomor = i + 1;
+            const selected = document.querySelector(`input[name="q${nomor}"]:checked`);
+            if (selected && selected.value === soalData[i].jawaban) {
+                correct++;
+            }
+        }
+        return correct;
+    }
+
+    submitBtn.addEventListener("click", () => {
+        const correctCount = calculateScore();
+        const total = soalData.length;
+        const scoreValue = (correctCount / total) * 100;
+        currentScore = scoreValue;
+        scoreDiv.style.display = "block";
+        scoreDiv.innerHTML = `🎯 SKOR ANDA: ${Math.round(scoreValue)} / 100  (${correctCount} dari ${total} soal benar) 🎯`;
+        // Aktifkan tombol pembahasan
+        discussionBtn.disabled = false;
+        // Sembunyikan pembahasan lama saat submit ulang
+        discussionPanel.style.display = "none";
+        // Scroll ke score
+        scoreDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    // Tampilkan pembahasan lengkap
+    function showFullDiscussion() {
+        if (currentScore === null && calculateScore() === 0) {
+            // jika belum kumpul, beri peringatan tapi tetap bisa tampilkan? lebih baik minta kumpul dulu
+            alert("Silakan klik 'Selesai dan Kumpulkan' terlebih dahulu untuk melihat skor, kemudian pembahasan bisa diakses.");
+            return;
+        }
+        let discussionHtml = `<div class="pembahasan-title">📚 Pembahasan Lengkap Soal</div>
+                              <div class="pembahasan-list">`;
+        for (let i = 0; i < soalData.length; i++) {
+            const soal = soalData[i];
+            const nomor = i + 1;
+            const userSelected = document.querySelector(`input[name="q${nomor}"]:checked`);
+            const userAnswer = userSelected ? userSelected.value : "(tidak dijawab)";
+            const correctAnswer = soal.jawaban;
+            const isCorrect = (userAnswer === correctAnswer);
+            const statusIcon = isCorrect ? "✅" : "❌";
+            discussionHtml += `<div class="pembahasan-item">
+                                <strong>${statusIcon} Soal ${nomor}</strong> <br>
+                                <span style="font-size:0.85rem">Jawaban Anda: ${userAnswer} | Kunci: ${correctAnswer}</span>
+                                <p style="margin-top: 8px; color: #2c3e2f;">📖 ${soal.pembahasan}</p>
+                               </div>`;
+        }
+        discussionHtml += `</div>`;
+        discussionPanel.innerHTML = discussionHtml;
+        discussionPanel.style.display = "block";
+        discussionPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    discussionBtn.addEventListener("click", showFullDiscussion);
+</script>
+</body>
+</html>

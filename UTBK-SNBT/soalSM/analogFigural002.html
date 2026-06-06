@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Quiz Pola Gambar - Lengkapilah Deret Figural</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Poppins', 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #eef2f7 0%, #d9e0e8 100%);
+            margin: 0;
+            padding: 24px 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-container {
+            max-width: 950px;
+            width: 100%;
+            background: rgba(255,255,255,0.97);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            background: #0f2b3d;
+            color: white;
+            padding: 1rem 1.75rem;
+        }
+        .quiz-header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        .quiz-header p {
+            margin: 0.3rem 0 0;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .progress-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            background: #f8fafc;
+            padding: 0.7rem 1.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .question-counter {
+            font-weight: 600;
+            background: #eef2ff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .score-preview {
+            font-size: 0.9rem;
+            background: white;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+        }
+
+        .question-card {
+            padding: 1.8rem;
+        }
+        .question-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #0c4a6e;
+            border-left: 5px solid #3b82f6;
+            padding-left: 1rem;
+        }
+        .image-wrapper {
+            background: #f1f5f9;
+            border-radius: 28px;
+            padding: 1.2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 1px 4px #0001, 0 8px 16px -8px #0002;
+        }
+        .question-image {
+            max-width: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            border-radius: 20px;
+            background: white;
+            padding: 6px;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.8rem 0 1rem;
+        }
+        .option-btn {
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 60px;
+            padding: 0.6rem 1.6rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #1e293b;
+            min-width: 80px;
+            text-align: center;
+        }
+        .option-btn.selected {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .option-btn:hover:not(.disabled-opt) {
+            background: #e6f0ff;
+            border-color: #3b82f6;
+            transform: scale(0.97);
+        }
+        .disabled-opt {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #eef2f5;
+            pointer-events: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 1.8rem 1.8rem;
+            gap: 12px;
+        }
+        button {
+            background: #f1f5f9;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.9rem;
+        }
+        button.primary {
+            background: #3b82f6;
+            color: white;
+        }
+        button.primary:hover {
+            background: #2563eb;
+        }
+        button.secondary {
+            background: #e2e8f0;
+        }
+        button.secondary:hover {
+            background: #cbd5e1;
+        }
+        .finish-btn {
+            background: #10b981;
+            color: white;
+        }
+        .finish-btn:hover {
+            background: #059669;
+        }
+
+        .result-panel {
+            background: #fef9e3;
+            border-top: 2px solid #facc15;
+            padding: 1rem 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .score-text {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #b45309;
+        }
+        .explanation-btn {
+            background: #8b5cf6;
+            color: white;
+        }
+        .explanation-btn:hover {
+            background: #7c3aed;
+        }
+
+        /* modal penjelasan dengan gambar */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 32px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.7rem;
+        }
+        .close-modal {
+            background: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+        .explanation-item {
+            background: #f8fafc;
+            border-left: 5px solid #3b82f6;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .exp-thumb {
+            flex-shrink: 0;
+            width: 110px;
+            background: white;
+            border-radius: 16px;
+            padding: 6px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .exp-thumb img {
+            max-width: 100%;
+            border-radius: 12px;
+        }
+        .exp-details {
+            flex: 1;
+        }
+        .exp-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+            font-weight: bold;
+        }
+        .user-ans {
+            background: #eef2ff;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .correct-badge {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .wrong-badge {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .explanation-text {
+            font-size: 0.9rem;
+            line-height: 1.45;
+            background: white;
+            padding: 10px 12px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.8rem;
+            color: #475569;
+            border-top: 1px solid #e2e8f0;
+        }
+        @media (max-width: 650px) {
+            .explanation-item { flex-direction: column; }
+            .exp-thumb { width: 100%; text-align: center; }
+            .option-btn { padding: 0.5rem 1rem; min-width: 65px; }
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container" id="quizRoot">
+    <div class="quiz-header">
+        <h1>🧩 Lengkapilah Pola Gambar</h1>
+        <p>Perhatikan deret gambar, pilihlah gambar yang tepat untuk melanjutkan pola (A, B, C, atau D)</p>
+    </div>
+    <div class="progress-area">
+        <span class="question-counter" id="counterLabel">Soal 1 / 15</span>
+        <span class="score-preview" id="previewScore">📝 Belum dijawab</span>
+    </div>
+    <div id="questionBody"></div>
+    <div class="nav-buttons" id="navButtons"></div>
+    <div id="resultContainer" style="display: none;" class="result-panel"></div>
+    <footer>📌 Klik salah satu opsi A, B, C, D. Setelah selesai, klik SELESAI untuk melihat skor & penjelasan.</footer>
+</div>
+
+<script>
+    // =============== DATA SOAL 21-35 (15 soal) ===============
+    const questions = [
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/21-500x279.jpg", correct: "B", explanation: "Semua bentuk yang berada pada ujung garis adalah bangun ruang (segiempat, segitiga, lingkaran). Sedangkan pada gambar B, bentuk yang diujungnya adalah garis (bukan bangun ruang)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/22-500x244.jpg", correct: "D", explanation: "Jumlah gambar pertama : 4, 3, 2, 1, 0. Jumlah gambar kedua : 0, 2, 4, 6, 8. Pola berkurang dan bertambah secara teratur." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/23-500x244.png", correct: "D", explanation: "Warna pusat : 1 & 3 putih, 2 & 4 hitam. Jumlah garis didalamnya bertambah 1, maka pada urutan ke-4, ada 4 garis." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/24-500x297.jpg", correct: "B", explanation: "Pola perputaran dan perubahan warna: Perhatikan bahwa setiap langkah, bentuk luar bergerak 90° searah jarum jam sementara bentuk dalam berganti warna. Pada gambar ke-3, pola mengarah ke bentuk yang sama dengan gambar B sebagai kelanjutan yang konsisten. Jawaban B tepat." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/25-500x285.jpg", correct: "B", explanation: "Perhatikan bahwa kotak dikiri bawah akan menjadi kotak ditengah atas gambar berikutnya. Pola pergeseran posisi kotak hitam dan putih membentuk rotasi." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/26-500x279.jpg", correct: "C", explanation: "Perhatikan angka romawi didalam kotak : II, III, IV, V. Maka urutan selanjutnya : VI. (Gambar C menunjukkan angka VI)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/27-500x254.png", correct: "B", explanation: "Urutan bangun datar : segitiga, segiempat, segilima. Maka urutan ke-4 adalah segienam. Pola warnanya selang-seling, warna hitam 1 & 3, dan warna putih 2 & 4. Jadi segienam putih (B)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/28-500x344.png", correct: "C", explanation: "Serial ke-1 diputar 180° searah jarum jam menjadi serial ke-3. Maka serial ke-2 diputar 180° searah jarum jam menjadi serial ke-4. Hasilnya adalah gambar C." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/29-500x341.png", correct: "D", explanation: "Urutan bangun datar segitiga, segiempat, segilima. Maka selanjutnya segienam. Segienam tersebut juga diisi dengan segienam yang dibelah 2. Pola pembelahan selang-seling: biasa pada 1 & 3, arsir pada 2 & 4. Maka segienam dengan belahan arsir (D)." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/30-500x307.jpg", correct: "C", explanation: "Semua gambar pada urutan ganjil (1, 3, 5, dst) bentuknya sama. Maka gambar ke-5 (urutan ganjil) sama dengan gambar ke-1 dan ke-3, yaitu pilihan C." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/31-500x245.jpg", correct: "B", explanation: "Fokus pada perpindahan warna sayap hitam, jangan tertipu dengan bentuk yang ditengah-tengah (karena tidak membentuk pola apapun). Pergerakan sayap hitam konsisten ke B." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/32-500x248.png", correct: "D", explanation: "Pola berikutnya : pusatnya berubah warna, lalu ditambah 1 garis didalam kotak. Maka gambar ke-4 memiliki pusat hitam dengan 3 garis, sesuai D." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/33-500x330.jpg", correct: "C", explanation: "Gambar pada urutan ganjil (1, 3, 5, dst) memiliki 4 kotak berwarna hitam. Gambar ke-5 (ganjil) harus memiliki 4 kotak hitam, yaitu pilihan C." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/34-500x273.jpg", correct: "B", explanation: "Jumlah bulatan hitam bertambah 2x lipat: serial1=1, serial2=2, serial3=4, serial4 seharusnya 8? Tapi gambar ke-4 memiliki 6 hitam + 1 putih (dimana 1 putih = 10 hitam). Maka total nilai hitam = 6+10=16 (2x dari 8? perlu logika deret). Pola: nilai total hitam: 1,2,4,16,32. Maka serial5=32 hitam → 3 putih(30) + 2 hitam = 32. Jawaban B sesuai." },
+        { img: "https://berlatihsoal.id/wp-content/uploads/2023/09/35-500x281.png", correct: "C", explanation: "Gambar diputar melawan jarum jam : 45°, 90°, 135° → setiap langkah +45°. Maka langkah ke-4 putaran 180°, sehingga hasilnya gambar C." }
+    ];
+
+    // state
+    let currentIndex = 0;
+    let userAnswers = new Array(15).fill(null);
+    let quizFinished = false;
+    let finalScore = null;
+
+    const questionBody = document.getElementById('questionBody');
+    const navDiv = document.getElementById('navButtons');
+    const resultContainer = document.getElementById('resultContainer');
+    const counterLabel = document.getElementById('counterLabel');
+    const previewSpan = document.getElementById('previewScore');
+
+    function renderCurrentQuestion() {
+        if (quizFinished) return;
+        const q = questions[currentIndex];
+        const userChoice = userAnswers[currentIndex];
+        const letters = ['A', 'B', 'C', 'D'];
+        let optionsHtml = `<div class="options" id="optionsWrapper">`;
+        letters.forEach(letter => {
+            const isSelected = (userChoice === letter);
+            const selectedClass = isSelected ? 'selected' : '';
+            optionsHtml += `<div class="option-btn ${selectedClass}" data-opt="${letter}">${letter}</div>`;
+        });
+        optionsHtml += `</div>`;
+        const html = `
+            <div class="question-card">
+                <div class="question-text">🔍 Soal ${currentIndex+1} : Lengkapilah pola gambar di bawah ini.</div>
+                <div class="image-wrapper">
+                    <img class="question-image" src="${q.img}" alt="Pola soal ${currentIndex+1}" onerror="this.src='https://via.placeholder.com/400x200?text=Gambar+tidak+tersedia';">
+                </div>
+                ${optionsHtml}
+            </div>
+        `;
+        questionBody.innerHTML = html;
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (quizFinished) return;
+                const selected = btn.getAttribute('data-opt');
+                userAnswers[currentIndex] = selected;
+                renderCurrentQuestion();
+                updateStats();
+            });
+        });
+        updateStats();
+    }
+
+    function updateStats() {
+        counterLabel.innerText = `Soal ${currentIndex+1} / 15`;
+        const answered = userAnswers.filter(a => a !== null).length;
+        previewSpan.innerHTML = `📌 Dijawab: ${answered}/15`;
+        if (quizFinished) previewSpan.innerHTML = `🏆 Skor akhir: ${finalScore}/15`;
+    }
+
+    function prevQuestion() {
+        if (quizFinished) return;
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderCurrentQuestion();
+            updateNavButtons();
+        }
+    }
+
+    function nextQuestion() {
+        if (quizFinished) return;
+        if (currentIndex < 14) {
+            currentIndex++;
+            renderCurrentQuestion();
+            updateNavButtons();
+        } else {
+            updateNavButtons();
+        }
+    }
+
+    function updateNavButtons() {
+        if (quizFinished) {
+            navDiv.innerHTML = `<button class="secondary" id="resetQuizBtn">⟳ Mulai Ulang Quiz</button>`;
+            document.getElementById('resetQuizBtn')?.addEventListener('click', resetQuiz);
+            return;
+        }
+        let html = `
+            <button class="secondary" id="prevBtn">◀ Sebelumnya</button>
+            <button class="secondary" id="resetNavBtn">↺ Reset Jawaban</button>
+        `;
+        if (currentIndex === 14) {
+            html += `<button class="finish-btn" id="finishQuizBtn">✅ SELESAI</button>`;
+        } else {
+            html += `<button class="primary" id="nextBtn">Selanjutnya ▶</button>`;
+        }
+        navDiv.innerHTML = html;
+        document.getElementById('prevBtn')?.addEventListener('click', prevQuestion);
+        document.getElementById('nextBtn')?.addEventListener('click', nextQuestion);
+        document.getElementById('resetNavBtn')?.addEventListener('click', resetQuiz);
+        document.getElementById('finishQuizBtn')?.addEventListener('click', finishQuiz);
+    }
+
+    function finishQuiz() {
+        if (quizFinished) return;
+        let correct = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] && userAnswers[i] === questions[i].correct) correct++;
+        }
+        finalScore = correct;
+        quizFinished = true;
+        resultContainer.style.display = 'flex';
+        resultContainer.innerHTML = `
+            <div class="score-text">🎯 Skor Anda: ${finalScore} / 15 (${Math.round(finalScore/15*100)} poin)</div>
+            <button class="explanation-btn" id="showExplanationBtn">📖 PENJELASAN LENGKAP (dengan gambar)</button>
+            <button class="secondary" id="resetFinishBtn">⟳ Kerjakan Ulang</button>
+        `;
+        document.getElementById('showExplanationBtn')?.addEventListener('click', showFullExplanation);
+        document.getElementById('resetFinishBtn')?.addEventListener('click', resetQuiz);
+        // disable option clicks
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.classList.add('disabled-opt');
+        });
+        updateNavButtons();
+        updateStats();
+    }
+
+    function resetQuiz() {
+        quizFinished = false;
+        userAnswers = new Array(15).fill(null);
+        currentIndex = 0;
+        finalScore = null;
+        resultContainer.style.display = 'none';
+        resultContainer.innerHTML = '';
+        renderCurrentQuestion();
+        updateNavButtons();
+        updateStats();
+        // re-enable options style
+        document.querySelectorAll('.option-btn')?.forEach(btn => btn.classList.remove('disabled-opt'));
+    }
+
+    function showFullExplanation() {
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'modal';
+        modalDiv.id = 'explanationModal';
+        let content = `<div class="modal-content">
+            <div class="modal-header">
+                <h3>📖 Penjelasan Lengkap Setiap Soal</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div style="max-height: 70vh; overflow-y: auto; padding-right: 6px;">`;
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            const userAns = userAnswers[i] || 'Tidak dijawab';
+            const isCorrect = (userAnswers[i] === q.correct);
+            const statusClass = isCorrect ? 'correct-badge' : 'wrong-badge';
+            const statusText = isCorrect ? '✓ Benar' : '✗ Salah';
+            content += `
+                <div class="explanation-item">
+                    <div class="exp-thumb">
+                        <img src="${q.img}" alt="Soal ${i+1}" onerror="this.src='https://via.placeholder.com/100?text=no+img'">
+                        <div style="font-size:0.7rem; margin-top:4px;">Soal ${i+1}</div>
+                    </div>
+                    <div class="exp-details">
+                        <div class="exp-header">
+                            <strong>Soal ${i+1}</strong>
+                            <span class="user-ans ${statusClass}">Jawaban Anda: ${userAns}</span>
+                            <span class="user-ans" style="background:#e2e3e8;">Kunci: ${q.correct}</span>
+                            <span class="user-ans ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="explanation-text">
+                            📌 <strong>Pembahasan:</strong> ${q.explanation}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        content += `</div><div style="margin-top:20px; text-align:center;"><button class="primary" id="closeModalFooterBtn">Tutup</button></div></div>`;
+        modalDiv.innerHTML = content;
+        document.body.appendChild(modalDiv);
+        modalDiv.style.display = 'flex';
+        const closeModal = () => modalDiv.remove();
+        document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
+        document.getElementById('closeModalFooterBtn')?.addEventListener('click', closeModal);
+        modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) closeModal(); });
+    }
+
+    // init
+    renderCurrentQuestion();
+    updateNavButtons();
+</script>
+</body>
+</html>

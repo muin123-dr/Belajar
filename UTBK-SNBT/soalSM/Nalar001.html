@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Tes Kemampuan Penalaran (Visual) - Paket 2</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #5f6368;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #e8f0fe;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            border: 1px solid #d2e3fc;
+        }
+        .timer {
+            color: #d93025;
+            font-size: 1.2em;
+        }
+        .section-title {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-left: 5px solid #1a73e8;
+            margin: 40px 0 20px 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .question {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        .question-text {
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .context-text {
+            background: #fdf6e3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-style: italic;
+            border: 1px solid #eee8d5;
+        }
+        .figural-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .fig-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .fig-label { font-size: 0.9em; color: #666; font-weight: bold; }
+        .fig-svg { background: white; border: 1px solid #ccc; border-radius: 4px; }
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fff;
+        }
+        .option:hover {
+            background-color: #f1f3f4;
+            border-color: #1a73e8;
+        }
+        .option.selected {
+            background-color: #e8f0fe;
+            color: #1967d2;
+            border-color: #1a73e8;
+            font-weight: bold;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .btn:hover {
+            background-color: #174ea6;
+            transform: translateY(-2px);
+        }
+        #result-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            line-height: 150px;
+            border-radius: 50%;
+            background: #fbbc04;
+            color: #fff;
+            font-size: 3em;
+            margin: 30px auto;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(251, 188, 4, 0.4);
+        }
+        .pembahasan-container {
+            display: none;
+            margin-top: 40px;
+            text-align: left;
+        }
+        .pembahasan-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .pembahasan-item.correct { border-left: 6px solid #34a853; }
+        .pembahasan-item.wrong { border-left: 6px solid #ea4335; }
+        .hidden { display: none; }
+        svg { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="quiz-header">
+        <h1>Tes Kemampuan Penalaran</h1>
+        <p class="subtitle">Paket 2 - 15 Butir Soal (Edisi Visual)</p>
+        <div class="info-bar">
+            <span>Waktu: 15 Menit</span>
+            <span class="timer" id="timer">Sisa Waktu: 15:00</span>
+        </div>
+    </div>
+
+    <div id="quiz-content">
+        <!-- Questions injected by JS -->
+    </div>
+
+    <button id="submit-btn" class="btn" onclick="submitQuiz()">Selesai dan Kumpulkan</button>
+
+    <div id="result-screen">
+        <h2>Hasil Evaluasi</h2>
+        <p>Skor Akhir Anda:</p>
+        <div class="score-circle" id="score-display">0</div>
+        <button class="btn" onclick="showPembahasan()">Lihat Pembahasan Lengkap</button>
+    </div>
+
+    <div id="pembahasan" class="pembahasan-container">
+        <h2 style="border-bottom: 2px solid #1a73e8; padding-bottom: 10px;">Pembahasan Soal</h2>
+        <div id="pembahasan-list"></div>
+    </div>
+</div>
+
+<script>
+    // SVG Templates
+    const svgs = {
+        q11_1: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><rect x="10" y="10" width="60" height="60" fill="none" stroke="black" stroke-width="2"/><circle cx="40" cy="40" r="20" fill="gray" stroke="black" stroke-width="1"/></svg>`,
+        q11_2: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><circle cx="40" cy="40" r="30" fill="none" stroke="black" stroke-width="2"/><rect x="25" y="25" width="30" height="30" fill="gray" stroke="black" stroke-width="1"/></svg>`,
+        q11_3: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><path d="M40 10 L70 70 L10 70 Z" fill="none" stroke="black" stroke-width="2"/><path d="M40 25 L45 38 L58 38 L48 46 L52 58 L40 50 L28 58 L32 46 L22 38 L35 38 Z" fill="gray" stroke="black" stroke-width="1"/></svg>`,
+        q11_a: `<svg width="50" height="50" viewBox="0 0 80 80"><path d="M40 10 L48 30 L70 30 L52 45 L60 70 L40 55 L20 70 L28 45 L10 30 L32 30 Z" fill="none" stroke="black" stroke-width="2"/><path d="M40 35 L55 60 L25 60 Z" fill="gray" stroke="black" stroke-width="1"/></svg>`,
+        
+        q12_1: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><path d="M20 40 H60 M50 30 L60 40 L50 50" fill="none" stroke="black" stroke-width="3"/></svg>`,
+        q12_2: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><path d="M40 20 V60 M30 50 L40 60 L50 50" fill="none" stroke="black" stroke-width="3"/></svg>`,
+        q12_3: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><path d="M40 60 V20 M30 30 L40 20 L50 30" fill="none" stroke="black" stroke-width="3"/></svg>`,
+        q12_b: `<svg width="50" height="50" viewBox="0 0 80 80"><path d="M60 40 H20 M30 30 L20 40 L30 50" fill="none" stroke="black" stroke-width="3"/></svg>`,
+        
+        q13_1: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><circle cx="40" cy="40" r="30" fill="none" stroke="black" stroke-width="2"/><path d="M40 40 L40 10 A30 30 0 0 1 70 40 Z" fill="gray" stroke="black" stroke-width="1"/><line x1="10" y1="40" x2="70" y2="40" stroke="black"/><line x1="40" y1="10" x2="40" y2="70" stroke="black"/></svg>`,
+        q13_2: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><circle cx="40" cy="40" r="30" fill="none" stroke="black" stroke-width="2"/><path d="M40 40 L40 10 A30 30 0 0 1 70 40 L70 40 A30 30 0 0 1 40 70 Z" fill="gray" stroke="black" stroke-width="1"/><line x1="10" y1="40" x2="70" y2="40" stroke="black"/><line x1="40" y1="10" x2="40" y2="70" stroke="black"/></svg>`,
+        q13_3: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><rect x="15" y="15" width="50" height="50" fill="none" stroke="black" stroke-width="2"/><rect x="40" y="15" width="25" height="25" fill="gray" stroke="black"/><line x1="15" y1="40" x2="65" y2="40" stroke="black"/><line x1="40" y1="15" x2="40" y2="65" stroke="black"/></svg>`,
+        q13_a: `<svg width="50" height="50" viewBox="0 0 80 80"><rect x="15" y="15" width="50" height="50" fill="none" stroke="black" stroke-width="2"/><rect x="40" y="15" width="25" height="50" fill="gray" stroke="black"/><line x1="15" y1="40" x2="65" y2="40" stroke="black"/><line x1="40" y1="15" x2="40" y2="65" stroke="black"/></svg>`,
+        
+        q14_1: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><rect x="15" y="15" width="50" height="50" fill="none" stroke="black" stroke-width="2"/><line x1="15" y1="15" x2="65" y2="65" stroke="black" stroke-width="2"/></svg>`,
+        q14_2: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><rect x="15" y="15" width="50" height="50" fill="none" stroke="black" stroke-width="2"/><line x1="65" y1="15" x2="15" y2="65" stroke="black" stroke-width="2"/></svg>`,
+        q14_3: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><rect x="15" y="15" width="50" height="50" fill="none" stroke="black" stroke-width="2"/><line x1="15" y1="40" x2="65" y2="40" stroke="black" stroke-width="2"/></svg>`,
+        q14_a: `<svg width="50" height="50" viewBox="0 0 80 80"><rect x="15" y="15" width="50" height="50" fill="none" stroke="black" stroke-width="2"/><line x1="40" y1="15" x2="40" y2="65" stroke="black" stroke-width="2"/></svg>`,
+        
+        q15_1: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><path d="M40 10 L48 30 L70 30 L52 45 L60 70 L40 55 L20 70 L28 45 L10 30 L32 30 Z" fill="gray" stroke="black" stroke-width="1"/></svg>`,
+        q15_2: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><path d="M40 10 L55 20 L55 40 L40 50 L25 40 L25 20 Z" transform="translate(0, 10)" fill="gray" stroke="black" stroke-width="1"/></svg>`, // simplified 6-star as hexagon for clarity
+        q15_3: `<svg width="80" height="80" viewBox="0 0 80 80" class="fig-svg"><rect x="20" y="20" width="40" height="40" fill="gray" stroke="black" stroke-width="1"/></svg>`,
+        q15_b: `<svg width="50" height="50" viewBox="0 0 80 80"><path d="M40 15 L65 35 L55 65 L25 65 L15 35 Z" fill="gray" stroke="black" stroke-width="1"/></svg>`
+    };
+
+    const questions = [
+        // ... (Logical and Analytical questions remain the same as previous version)
+        {
+            section: "PENALARAN LOGIS",
+            q: "Semua siswa rajin belajar akan lulus ujian. Beberapa siswa yang lulus ujian mendapatkan beasiswa.",
+            options: ["Semua siswa rajin belajar mendapatkan beasiswa.", "Beberapa siswa rajin belajar mendapatkan beasiswa.", "Beberapa siswa yang tidak rajin belajar mendapatkan beasiswa.", "Semua siswa yang mendapatkan beasiswa adalah siswa rajin belajar.", "Tidak dapat ditarik kesimpulan."],
+            answer: 4,
+            explanation: "Hubungan antara siswa rajin belajar dan penerima beasiswa tidak dijelaskan secara eksplisit, hanya keduanya sama-sama lulus ujian."
+        },
+        {
+            q: "Jika hari ini hujan, maka jalanan basah. Hari ini jalanan tidak basah.",
+            options: ["Hari ini hujan.", "Hari ini tidak hujan.", "Hari ini cerah.", "Hari ini mendung.", "Tidak dapat ditarik kesimpulan."],
+            answer: 1,
+            explanation: "Modus Tollens: P -> Q, ~Q maka ~P."
+        },
+        {
+            q: "Semua mamalia menyusui anaknya. Paus adalah mamalia.",
+            options: ["Paus menyusui anaknya.", "Paus tidak menyusui anaknya.", "Beberapa paus menyusui anaknya.", "Semua yang menyusui anaknya adalah paus.", "Tidak dapat ditarik kesimpulan."],
+            answer: 0,
+            explanation: "Silogisme valid: Semua A adalah B, C adalah A, maka C adalah B."
+        },
+        {
+            q: "Sebagian mahasiswa adalah aktivis. Semua aktivis adalah orator yang baik.",
+            options: ["Semua mahasiswa adalah orator yang baik.", "Sebagian mahasiswa adalah orator yang baik.", "Semua orator yang baik adalah mahasiswa.", "Sebagian orator yang baik bukan mahasiswa.", "Tidak dapat ditarik kesimpulan."],
+            answer: 1,
+            explanation: "Karena sebagian mahasiswa adalah aktivis, dan aktivis pasti orator, maka sebagian mahasiswa itu adalah orator."
+        },
+        {
+            q: "Tidak ada ikan yang bisa berbicara. Lumba-lumba bukan ikan.",
+            options: ["Lumba-lumba bisa berbicara.", "Lumba-lumba tidak bisa berbicara.", "Beberapa lumba-lumba bisa berbicara.", "Lumba-lumba mungkin bisa berbicara.", "Tidak dapat ditarik kesimpulan."],
+            answer: 3,
+            explanation: "Premis tidak melarang lumba-lumba (non-ikan) untuk berbicara, jadi ada kemungkinan lumba-lumba bisa berbicara."
+        },
+        {
+            section: "PENALARAN ANALITIS",
+            context: "Dalam sebuah perlombaan lari: Andi > Citra, Doni > Budi, Citra > Eka, Andi > Doni.",
+            q: "Siapakah yang tiba paling awal?",
+            options: ["Andi", "Budi", "Citra", "Doni", "Eka"],
+            answer: 0,
+            explanation: "Andi lebih dulu dari Citra dan Doni. Doni lebih dulu dari Budi. Citra lebih dulu dari Eka. Andi adalah yang pertama."
+        },
+        {
+            context: "Dalam sebuah perlombaan lari: Andi > Citra, Doni > Budi, Citra > Eka, Andi > Doni.",
+            q: "Siapakah yang tiba paling akhir?",
+            options: ["Andi", "Budi", "Citra", "Doni", "Eka"],
+            answer: 4,
+            explanation: "Citra > Eka. Andi > Citra. Budi setelah Doni. Eka berada di urutan paling belakang setelah Citra."
+        },
+        {
+            context: "Dalam sebuah perlombaan lari: Andi > Citra, Doni > Budi, Citra > Eka, Andi > Doni.",
+            q: "Jika Budi tiba sebelum Citra, urutan yang benar adalah...",
+            options: ["Andi, Doni, Budi, Citra, Eka", "Andi, Citra, Budi, Doni, Eka", "Doni, Andi, Budi, Citra, Eka", "Andi, Budi, Doni, Citra, Eka", "Andi, Doni, Citra, Budi, Eka"],
+            answer: 0,
+            explanation: "Andi > Doni > Budi > Citra > Eka memenuhi semua kriteria."
+        },
+        {
+            context: "Pertemuan Perpustakaan: Q > P, R > S, Q > R.",
+            q: "Siapakah yang bertemu paling awal?",
+            options: ["P", "Q", "R", "S", "Tidak dapat ditentukan"],
+            answer: 1,
+            explanation: "Q lebih dulu dari P dan R. R lebih dulu dari S. Maka Q adalah yang paling awal."
+        },
+        {
+            context: "Pertemuan Perpustakaan: Q > P, R > S, Q > R.",
+            q: "Siapakah yang bisa jadi bertemu paling akhir?",
+            options: ["P", "Q", "R", "S", "Tidak dapat ditentukan"],
+            answer: 0,
+            explanation: "Q-R-S adalah urutan tetap. P setelah Q, bisa di mana saja, termasuk setelah S."
+        },
+        // FIGURAL WITH VISUALS
+        {
+            section: "PENALARAN FIGURAL",
+            isFigural: true,
+            visuals: [svgs.q11_1, svgs.q11_2, svgs.q11_3],
+            q: "Carilah Gambar 4 yang melengkapi hubungan berikut:",
+            options: [
+                `<span>${svgs.q11_a}</span> A. Bintang di luar, segitiga di dalam`,
+                "B. Segitiga di luar, segitiga di dalam",
+                "C. Bintang di luar, bintang di dalam",
+                "D. Lingkaran di luar, segitiga di dalam",
+                "E. Persegi di luar, bintang di dalam"
+            ],
+            answer: 0,
+            explanation: "Hubungan: Tukar posisi bentuk luar dan dalam."
+        },
+        {
+            isFigural: true,
+            visuals: [svgs.q12_1, svgs.q12_2, svgs.q12_3],
+            q: "Carilah Gambar 4 yang melengkapi hubungan berikut:",
+            options: [
+                "A. Panah ke kanan",
+                `<span>${svgs.q12_b}</span> B. Panah ke kiri`,
+                "C. Panah ke bawah",
+                "D. Panah ke atas",
+                "E. Panah ke sudut"
+            ],
+            answer: 1,
+            explanation: "Hubungan: Rotasi 90 derajat searah jarum jam."
+        },
+        {
+            isFigural: true,
+            visuals: [svgs.q13_1, svgs.q13_2, svgs.q13_3],
+            q: "Carilah Gambar 4 yang melengkapi hubungan berikut:",
+            options: [
+                `<span>${svgs.q13_a}</span> A. Dua bagian diarsir (bersebelahan)`,
+                "B. Satu bagian diarsir",
+                "C. Tiga bagian diarsir",
+                "D. Lingkaran diarsir",
+                "E. Dua bagian diarsir (berseberangan)"
+            ],
+            answer: 0,
+            explanation: "Hubungan: Penambahan satu bagian arsir yang bersebelahan."
+        },
+        {
+            isFigural: true,
+            visuals: [svgs.q14_1, svgs.q14_2, svgs.q14_3],
+            q: "Carilah Gambar 4 yang melengkapi hubungan berikut:",
+            options: [
+                `<span>${svgs.q14_a}</span> A. Garis vertikal di tengah`,
+                "B. Garis diagonal",
+                "C. Dua garis diagonal",
+                "D. Kotak kosong",
+                "E. Garis horizontal di atas"
+            ],
+            answer: 0,
+            explanation: "Hubungan: Rotasi 90 derajat atau pencerminan sumbu diagonal."
+        },
+        {
+            isFigural: true,
+            visuals: [svgs.q15_1, svgs.q15_2, svgs.q15_3],
+            q: "Carilah Gambar 4 yang melengkapi hubungan berikut:",
+            options: [
+                "A. Segi tiga",
+                `<span>${svgs.q15_b}</span> B. Segi lima`,
+                "C. Segi enam",
+                "D. Lingkaran",
+                "E. Segi empat besar"
+            ],
+            answer: 1,
+            explanation: "Hubungan: Penambahan satu sisi/sudut pada bangun datar."
+        }
+    ];
+
+    let userAnswers = new Array(questions.length).fill(null);
+    let timeLeft = 15 * 60;
+    let timerInterval;
+
+    function initQuiz() {
+        const quizContent = document.getElementById('quiz-content');
+        let currentSection = "";
+
+        questions.forEach((q, index) => {
+            if (q.section && q.section !== currentSection) {
+                currentSection = q.section;
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section-title';
+                sectionDiv.innerText = currentSection;
+                quizContent.appendChild(sectionDiv);
+            }
+
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            
+            let html = '';
+            if (q.context) html += `<div class="context-text">${q.context}</div>`;
+            html += `<div class="question-text">${index + 1}. ${q.q}</div>`;
+            
+            if (q.isFigural) {
+                html += `<div class="figural-container">
+                    <div class="fig-box"><span class="fig-label">Gbr 1</span>${q.visuals[0]}</div>
+                    <div style="font-size: 2em;">:</div>
+                    <div class="fig-box"><span class="fig-label">Gbr 2</span>${q.visuals[1]}</div>
+                    <div style="font-size: 2em; margin: 0 10px;">=</div>
+                    <div class="fig-box"><span class="fig-label">Gbr 3</span>${q.visuals[2]}</div>
+                    <div style="font-size: 2em;">:</div>
+                    <div class="fig-box"><span class="fig-label">Gbr 4</span><div class="fig-svg" style="width:80px; height:80px; display:flex; align-items:center; justify-content:center; font-size:2em; font-weight:bold; color:#1a73e8;">?</div></div>
+                </div>`;
+            }
+
+            html += `<div class="options">`;
+            q.options.forEach((opt, optIndex) => {
+                const label = String.fromCharCode(65 + optIndex);
+                html += `<div class="option" onclick="selectOption(${index}, ${optIndex})" id="q${index}-o${optIndex}">
+                    <span style="min-width:25px; font-weight:bold;">${label}.</span>
+                    <div style="display:flex; align-items:center; gap:10px;">${opt}</div>
+                </div>`;
+            });
+            html += `</div>`;
+            
+            questionDiv.innerHTML = html;
+            quizContent.appendChild(questionDiv);
+        });
+        startTimer();
+    }
+
+    function selectOption(qIndex, optIndex) {
+        userAnswers[qIndex] = optIndex;
+        for (let i = 0; i < 5; i++) {
+            const el = document.getElementById(`q${qIndex}-o${i}`);
+            if (el) el.classList.remove('selected');
+        }
+        document.getElementById(`q${qIndex}-o${optIndex}`).classList.add('selected');
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            const min = Math.floor(timeLeft / 60);
+            const sec = timeLeft % 60;
+            document.getElementById('timer').innerText = `Sisa Waktu: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+            if (timeLeft <= 0) { clearInterval(timerInterval); submitQuiz(); }
+        }, 1000);
+    }
+
+    function submitQuiz() {
+        clearInterval(timerInterval);
+        let correct = 0;
+        userAnswers.forEach((ans, i) => { if (ans === questions[i].answer) correct++; });
+        document.getElementById('score-display').innerText = Math.round((correct / questions.length) * 100);
+        document.getElementById('quiz-header').classList.add('hidden');
+        document.getElementById('quiz-content').classList.add('hidden');
+        document.getElementById('submit-btn').classList.add('hidden');
+        document.getElementById('result-screen').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function showPembahasan() {
+        const list = document.getElementById('pembahasan-list');
+        list.innerHTML = '';
+        questions.forEach((q, i) => {
+            const isCorrect = userAnswers[i] === q.answer;
+            const item = document.createElement('div');
+            item.className = `pembahasan-item ${isCorrect ? 'correct' : 'wrong'}`;
+            const userAns = userAnswers[i] !== null ? String.fromCharCode(65 + userAnswers[i]) : '---';
+            item.innerHTML = `
+                <p><strong>Soal ${i + 1}:</strong> ${q.q}</p>
+                <p>Jawaban Anda: <strong>${userAns}</strong> ${isCorrect ? '[BENAR]' : '[SALAH]'}</p>
+                <p>Kunci: <strong>${String.fromCharCode(65 + q.answer)}</strong></p>
+                <p><strong>Penjelasan:</strong> ${q.explanation}</p>
+            `;
+            list.appendChild(item);
+        });
+        document.getElementById('pembahasan').style.display = 'block';
+        window.scrollTo(0, document.getElementById('pembahasan').offsetTop);
+    }
+    window.onload = initQuiz;
+</script>
+</body>
+</html>
