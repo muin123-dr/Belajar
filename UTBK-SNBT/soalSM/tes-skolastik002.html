@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>TPS - Tes Pengetahuan Skolastik (60 Soal + Pembahasan Lengkap)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f7fc;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.9rem;
+            text-align: center;
+            color: #0a4b6e;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #2c6979;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #cbdfea;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+        .section-group {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+            border: 1px solid #e2edf2;
+        }
+        .section-header {
+            background: #eef3fc;
+            padding: 18px 24px;
+            border-bottom: 2px solid #cbdfea;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0a4b6e;
+        }
+        .soal-container {
+            padding: 12px 24px 24px 24px;
+            background: white;
+        }
+        .card-soal {
+            background: #fafcff;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            border: 1px solid #e2edf2;
+            transition: all 0.1s;
+        }
+        .soal-nomor {
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+        }
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+            font-weight: 500;
+            background: white;
+            padding: 4px 0;
+        }
+        .soal-gambar {
+            text-align: center;
+            margin: 12px 0;
+        }
+        .soal-gambar img {
+            max-width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #f4f7fb;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            margin: 14px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbdbe0;
+            transition: 0.1s;
+        }
+        .option:hover {
+            background: #eef3fc;
+        }
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+        button {
+            background: #e9eef3;
+            border: none;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+        }
+        button.check-btn:hover {
+            background: #0e5e89;
+        }
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #b9c8da;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e0f7e8;
+            color: #0a5e2e;
+            border-left: 5px solid #2b8c4a;
+        }
+        .feedback.wrong {
+            background: #ffe6e5;
+            color: #ac2c34;
+            border-left: 5px solid #e34d4d;
+        }
+        .pembahasan-text {
+            background: #eef2fa;
+            padding: 16px 20px;
+            border-radius: 20px;
+            margin-top: 14px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            border-left: 4px solid #3b82f6;
+            display: none;
+            white-space: pre-wrap;
+        }
+        .pembahasan-text.show {
+            display: block;
+        }
+        .rumus {
+            background: #ffffffd9;
+            padding: 8px 12px;
+            border-radius: 16px;
+            margin: 8px 0;
+            font-weight: 500;
+            font-family: monospace;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.75rem;
+            color: #5f7f9c;
+        }
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .soal-container { padding: 16px; }
+            .option { padding: 6px 12px; }
+            label { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📚 TES PENGETAHUAN SKOLASTIK</h1>
+    <div style="text-align: center;"><span class="subtitle">60 Soal | Sinonim, Analogi, Logika, Deret, Gambar + Pembahasan Lengkap</span></div>
+    <div id="quiz-container"></div>
+    <footer>✅ Klik "Cek Jawaban" untuk menilai. 📖 "Pembahasan" menampilkan penjelasan detail (tanpa diringkas).</footer>
+</div>
+
+<script>
+    // =========================================================================
+    // DATA SOAL LENGKAP DENGAN PEMBAHASAN SESUAI TEKS ASLI (TIDAK DIRINGKAS)
+    // =========================================================================
+    const soalData = [
+        // 1 - 10 (Sinonim / Berbeda makna)
+        { nomor:1, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'TANDA'.", pilihan:["Isyarat","Saksama","Gejala","Kode","Simbol"], jawaban:"B", pembahasan:"Tanda memiliki arti isyarat, perunjuk, atau simbol.\n• Isyarat: petunjuk atau sinyal\n• Kode: simbol atau tanda\n• Gejala: fenomena yang menandai sesuatu\n• Simbol: tanda atau lambang\nSementara itu, saksama berarti cermat atau teliti yang tidak berhubungan dengan makna dasar tanda." },
+        { nomor:2, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'DARURAT'.", pilihan:["Bahaya","Utama","Krisis","Genting","Segera"], jawaban:"B", pembahasan:"'DARURAT' memiliki makna yang berkaitan dengan situasi yang mendesak, bahaya, atau krisis. Maka dari itu, kata-kata seperti bahaya, genting, krisis, dan segera masih berada dalam satu kelompok makna dengan 'darurat'. Sedangkan kata 'utama' memiliki arti yang berbeda karena mengacu pada hal yang paling penting tanpa adanya unsur desakan." },
+        { nomor:3, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'KONTEKSTUAL'.", pilihan:["Tekstual","Situasional","Relevan","Kasuistik","Kondisional"], jawaban:"A", pembahasan:"KONTEKSTUAL berkaitan dengan sesuatu yang sesuai dengan situasi atau kondisi tertentu. Kata kondisional, kasuistik, situasional, dan relevan memiliki makna yang masih berhubungan dengan kontekstual. Sedangkan kata tekstual memiliki makna yang berkaitan dengan teks atau tulisan tanpa menekankan pada situasi atau kondisi." },
+        { nomor:4, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'LEGITIMASI'.", pilihan:["Pembenaran","Validasi","Legalisasi","Pengesahan","Justifikasi"], jawaban:"A", pembahasan:"Legitimasi : pengakuan, penerimaan secara sah, pengesahan.\nPengesahan: pemberian status sah\nValidasi: proses memastikan sesuatu bahwa sah.\nJustifikasi: Pemberian alasan/pembenaran terhadap suatu keputusan\nLegalisasi: Pengesahan secara hukum\nNamun, pembenaran lebih mengarah pada memberikan alasan atau penjelasan untuk membenarkan sesuatu yang tidak selalu berhubungan dengan pemberian status sah." },
+        { nomor:5, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'EKUIVALEN'.", pilihan:["Semasa","Sepadan","Sebanding","Sejajar","Setara"], jawaban:"A", pembahasan:"EKUIVALEN : sama atau setara\nSemasa: berada dalam waktu yang sama\nSepadan: Seimbang atau setara\nSejajar: berasa pada jarak yang sama sering digunakan dalam posisi dan arah\nSetara: memiliki nilai, ukuran, atau status yang sama\nSebanding: memiliki ukuran, jumlah, atau nilai yang sama atau seimbang.\nKata yang memiliki makna paling berbeda adalah semasa. Kata ini mengacu pada waktu atau periode, sementara kata lainnya berkaitan dengan kesetaraan atau keseimbangan." },
+        { nomor:6, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'INTERVAL'.", pilihan:["Jarak","Sela","Jauh","Jeda","Celah"], jawaban:"C", pembahasan:"Interval : jarak atau selang waktu antara dua kejadian.\nJarak: ruang atau selang di antara dua titik\nSela: waktu atau ruang di antara dua peristiwa\nJeda: penghentian sementara atau selang waktu di antara dua aktivitas\nCelah: Bukaan atau ruang kecil di antara dua objek.\nJauh: mengacu pada sesuatu yang memiliki jarak yang besar.\nMaka dari itu kata yang memiliki makna berbeda adalah jauh." },
+        { nomor:7, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'PUNAH'.", pilihan:["Musnah","Habis","Tumpas","Binasa","Hilang"], jawaban:"C", pembahasan:"Punah berarti hilangnya suatu spesies, kelompok, atau zat. Sementara itu, tumpas berkaitan dengan menyingkirkan atau mengatasi sesuatu secara aktif, seperti mengatasi musuh atau masalah." },
+        { nomor:8, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'KELAS'.", pilihan:["Strata","Tahapan","Tingkat","Level","Klasifikasi"], jawaban:"E", pembahasan:"Kelas merujuk pada tingkatan, atau strata yang berurutan. Sementara itu, klasifikasi berkaitan dengan pengelompokan atau pengategorian sesuatu bukan tingkatan atau urutan." },
+        { nomor:9, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'MELEGO'.", pilihan:["Menawar","Menjajakan","Mempromosikan","Menjual","Memasarkan"], jawaban:"A", pembahasan:"MELEGO: menjual dengan harga tertentu, melepaskan barang untuk dijual\nMenawar: mengajukan harga untuk membeli barang atau jasa.\nMenjajakan: menjual barang dagangan secara berkeliling atau di tempat tertentu\nMemasarkan: menjual atau memperkenalkan barang ke pasar.\nMempromosikan: mengiklankan atau memperkenalkan produk atau layanan untuk meningkatkan penjualan.\nJadi, kata yang memiliki makna paling berbeda adalah menawar." },
+        { nomor:10, teks:"Tentukan kata yang memiliki makna berbeda dengan kata 'ALIBI'.", pilihan:["Alasan","Jawaban","Bantahan","Penyangkalan","Pembenaran"], jawaban:"E", pembahasan:"Alibi memiliki makna alasan, bukti, dalih, dalil, saksi, tanda. Jadi, makna yang berbeda adalah pembenaran." },
+        // 11-20 Analogi
+        { nomor:11, teks:"Buta : Warna = Tuli : ...", pilihan:["Mendengar","Tunarungu","Telinga","Bunyi","Pendengaran"], jawaban:"D", pembahasan:"Kata buta memiliki hubungan dengan warna di mana buta tidak dapat menangkap warna. Begitu pula dengan kata tuli yang berarti tidak bisa menangkap bunyi." },
+        { nomor:12, teks:"Nelayan : laut =", pilihan:["Guru : papan tulis","Petani : padi","Karyawan : pengawal","Pelukis : kuas","Penyanyi : panggung"], jawaban:"E", pembahasan:"Nelayan memiliki hubungan dengan laut karena laut adalah tempat nelayan menjalankan pekerjaan. Demikian pula penyanyi yang melaksanakan pekerjaan di panggung." },
+        { nomor:13, teks:"Samudera : Laut =", pilihan:["Benua : pulau","Kapal : nelayan","Internasional : batas negara","Negara : pantai","Luas : dalam"], jawaban:"A", pembahasan:"Samudra memiliki hubungan dengan laut di mana Samudra adalah kumpulan dari beberapa laut atau laut merupakan bagian yang lebih kecil dari Samudra. Hubungan ini sama dengan benua dan pulau karena benua merupakan kumpulan pulau atau pulau merupakan bagian lebih kecil dari benua." },
+        { nomor:14, teks:"Cacing : belut =", pilihan:["Kucing : harimau","Banteng : sapi","Biawak : Komodo","Jangkrik : belalang","Merpati : elang"], jawaban:"A", pembahasan:"Kata cacing memiliki hubungan dengan belut di mana keduanya adalah hewan yang memiliki kemiripan bentuk tubuh, yakni berbentuk panjang dan silindris meskipun mereka merupakan spesies yang berbeda. Hal ini sama dengan kucing dan harimau di mana keduanya adalah hewan yang mirip bentuk dan penampilannya meskipun berasal dari spesies yang berbeda. Sementara itu, biawak dan komodo berasal dari spesies yang lebih dekat secara taksonomi." },
+        { nomor:15, teks:"Badai : Angin", pilihan:["Banjir : hujan","Air : uap","Tsunami : ombak","Semilis : sepoi","Kebakaran : panas"], jawaban:"C", pembahasan:"Badai merupakan fenomena yang melibatkan angin yang kuat. Tsunami merupakan fenomena yang melibatkan ombak yang kuat." },
+        { nomor:16, teks:"Telekomunikasi : telegraf =", pilihan:["Transportasi : pesawat","Konsumsi : makanan","Surat : elektronik","Pekerjaan : tugas","Rumah : teras"], jawaban:"A", pembahasan:"Telegraf adalah salah satu jenis alat komunikasi. Pesawat merupakan salah satu jenis alat transportasi." },
+        { nomor:17, teks:"Petir : Kilat =", pilihan:["Hujan : mendung","Banjir : longsor","Gelap : terang","Gempa : tsunami","Sukses : Usaha"], jawaban:"E", pembahasan:"Petir merupakan hasil dari kilat. Sukses merupakan hasil dari usaha." },
+        { nomor:18, teks:"Kriminal : Penjara =", pilihan:["Koki : dapur","Siswa : kelas","Guru : pendidikan","Penyakit : dokter","Pasien : rumah sakit"], jawaban:"E", pembahasan:"Kriminal masuk penjara, pasien masuk rumah sakit." },
+        { nomor:19, teks:"Tempa : Besi =", pilihan:["Latih : keterampilan","Perintah : budak","Hukuman : aturan","Didik : sekolah","Semal : bibit"], jawaban:"A", pembahasan:"Menempa adalah proses pembentukan besi. Melatih adalah proses pembentukan keterampilan." },
+        { nomor:20, teks:"Gula : manis =", pilihan:["Laut : ikan","Pasar : penjual","Kanvas : lukisan","Kampus : pelajaran","Rumah sakit : dokter"], jawaban:"C", pembahasan:"Gula menghasilkan manis. Kanvas menghasilkan lukisan." },
+        // 21-30 Logika
+        { nomor:21, teks:"Faiz menyukai pelajaran berhitung. Ia sering mengikuti lomba matematika di sekolah. Lukman, teman sekolahnya, menyukai pelajaran berhitung, tetapi tidak suka mengikuti lomba matematika. Kesimpulan yang benar adalah ...", pilihan:["Faiz dan Lukman sering mengikuti lomba.","Faiz dan Lukman pernah mengikuti lomba matematika.","Lukman dan Faiz mengikuti lomba matematika di sekolah.","Faiz dan Lukman belajar berhitung di sekolah.","Faiz dan Lukman menyukai pelajaran berhitung."], jawaban:"E", pembahasan:"Diketahui bahwa Faiz menyukai pelajaran berhitung. Di sisi lain, Lukman (temannya) juga menyukai pelajaran berhitung, meskipun ia tidak suka mengikuti lomba. Kesamaan pasti dari kedua subjek ini adalah mereka berdua menyukai pelajaran berhitung. Maka kesimpulan yang benar adalah 'Faiz dan Lukman menyukai pelajaran berhitung'." },
+        { nomor:22, teks:"Anto menyukai bahasa Inggris. Ia ingin melanjutkan sekolah di Australia. Brian, teman sekelas Anto, menyukai pelajaran bahasa Inggris. Manakah kesimpulan yang benar?", pilihan:["Anto dan Brian belajar bahasa Inggris bersama.","Anto dan Brian ingin melanjutkan sekolah di Australia.","Anto dan Brian menyukai sekolah di Australia.","Anto dan Brian belajar bahasa Inggris di Australia.","Anto dan Brian menyukai pelajaran Bahasa Inggris."], jawaban:"E", pembahasan:"Diketahui bahwa Anto menyukai bahasa Inggris. Brian juga menyukai pelajaran bahasa Inggris. Cita-cita melanjutkan sekolah di Australia hanya disebutkan untuk Anto. Oleh karena itu, irisan kesamaan fakta dari keduanya yang paling tepat adalah 'Anto dan Brian menyukai pelajaran Bahasa Inggris'." },
+        { nomor:23, teks:"Syarat menjadi diplomat di negara berkembang adalah harus menguasai beberapa bahasa asing dan ilmu hubungan internasional. Beberapa mahasiswa jurusan Hubungan Internasional menguasai lebih dari satu bahasa asing. Simpulan berdasarkan informasi dalam kalimat tersebut adalah semua mahasiswa jurusan Hubungan Internasional adalah calon diplomat. Manakah pernyataan yang menggambarkan kualitas simpulan tersebut?", pilihan:["Simpulan tersebut pasti benar.","Simpulan tersebut mungkin benar.","Simpulan tersebut pasti salah.","Simpulan tidak dapat dinilai karena informasi tidak cukup.","Simpulan tidak relevan dengan informasi yang diberikan."], jawaban:"C", pembahasan:"Premis 2 menyatakan bahwa hanya 'Beberapa' mahasiswa jurusan Hubungan Internasional yang menguasai lebih dari satu bahasa asing. Sementara itu, simpulan pada soal berbunyi 'Semua mahasiswa jurusan Hubungan Internasional adalah calon diplomat'. Simpulan ini mengambil generalisasi yang salah (mengubah 'beberapa' menjadi 'semua') dan mengabaikan logika bahwa menguasai bahasa asing adalah syarat untuk melamar, bukan penentu bahwa seseorang otomatis menjadi diplomat. Maka simpulan tersebut pasti salah." },
+        { nomor:24, teks:"Andini sering mengikuti rapat. Ia mengikuti kegiatan organisasi di kampus setiap minggu. Reta mengikuti kegiatan organisasi setiap minggu, tetapi tidak sering menghadiri rapat. Simpulan yang paling tepat adalah ...", pilihan:["Andini dan Reta setiap minggu mengikuti kegiatan organisasi.","Andini dan Reta sering menghadiri rapat di kampus.","Andini dan Reta mengikuti kegiatan di kampus setiap minggu.","Andini dan Reta mengikuti kegiatan organisasi setiap minggu di kampus.","Andini dan Reta sering menghadiri rapat kampus setiap minggu."], jawaban:"A", pembahasan:"Fakta untuk Andini: Ia mengikuti kegiatan organisasi di kampus setiap minggu. Fakta untuk Reta: Ia mengikuti kegiatan organisasi setiap minggu (namun tidak sering rapat). Hal pasti yang dilakukan oleh keduanya secara bersamaan adalah mengikuti kegiatan organisasi secara rutin mingguan. Maka simpulan yang paling tepat adalah 'Andini dan Reta setiap minggu mengikuti kegiatan organisasi'." },
+        { nomor:25, teks:"Apabila tidak mengikuti latihan rutin setiap minggu, anggota UKM tidak diizinkan mengikuti pementasan teater. Aturan ini berlaku bagi anggota baru UKM seni. Manakah simpulan yang benar?", pilihan:["Anggota baru UKM Seni bisa mengikuti latihan rutin setiap minggu untuk mendukung pementasan teater.","Anggota baru UKM Seni tidak diizinkan ikut dalam pementasan teater jika tidak mengikuti latihan rutin setiap minggu.","Semua anggota UKM Seni diizinkan mengikuti pementasan teater jika mengikuti latihan rutin setiap minggu.","Sebagian anggota UKM Seni diizinkan ikut dalam pementasan teater meskipun tidak mengikuti latihan rutin setiap minggu.","Semua anggota UKM melakukan latihan rutin setiap minggu, kecuali anggota baru."], jawaban:"B", pembahasan:"Aturan dasarnya adalah: Jika tidak mengikuti latihan rutin setiap minggu, maka tidak diizinkan mengikuti pementasan teater. Aturan ini ditegaskan berlaku bagi anggota baru UKM seni. Jika diterapkan silogisme secara langsung pada subjeknya, maka 'Anggota baru UKM Seni tidak diizinkan ikut dalam pementasan teater jika tidak mengikuti latihan rutin setiap minggu'." },
+        { nomor:26, teks:"Eksploitasi minyak bumi di Pulau X menyebabkan terjadinya kerusakan lingkungan, kerusakan lingkungan ini mengakibatkan penurunan kualitas hidup masyarakat setempat. Meskipun belum pernah terjadi demonstrasi terhadap penolakan eksploitasi minyak bumi, banyak masyarakat yang tidak puas dengan kesejahteraan hidup mereka karena penurunan kualitas hidup masyarakat setempat. Berdasarkan informasi di atas, manakah pernyataan di bawah ini yang BENAR?", pilihan:["Masyarakat tidak puas dengan kesejahteraan hidup mereka walaupun terjadi eksploitasi minyak bumi di Pulau X.","Kerusakan lingkungan terjadi karena demonstrasi terhadap penolakan eksploitasi minyak bumi.","Penurunan kualitas hidup masyarakat menyebabkan demonstrasi terhadap penolakan eksploitasi minyak bumi.","Eksploitasi minyak bumi di Pulau X menyebabkan penurunan kualitas hidup masyarakat setempat.","Tidak adanya demonstrasi terhadap penolakan eksploitasi minyak bumi menyebabkan eksploitasi minyak bumi di Pulau X."], jawaban:"D", pembahasan:"Premis 1: Eksploitasi minyak bumi di Pulau X menyebabkan kerusakan lingkungan. (P ➔ Q)\nPremis 2: Kerusakan lingkungan ini mengakibatkan penurunan kualitas hidup masyarakat setempat. (Q ➔ R)\nBerdasarkan Silogisme berantai (P ➔ Q ➔ R), maka P menyebabkan R.\nKesimpulannya: Eksploitasi minyak bumi di Pulau X menyebabkan penurunan kualitas hidup masyarakat setempat." },
+        { nomor:27, teks:"Apabila jumlah pengunjung tidak meningkat, sebagian pameran usaha kecil tidak memenuhi target penjualan. Kondisi tersebut terjadi apabila media sosial tidak dimanfaatkan untuk pemasaran. Manakah simpulan berikut yang BENAR?", pilihan:["Sebagian kegiatan pameran usaha kecil tidak memenuhi target penjualan apabila media sosial dimanfaatkan untuk pemasaran.","Media sosial dimanfaatkan untuk pemasaran apabila kegiatan pameran usaha kecil memenuhi target penjualan.","Sebagian kegiatan pameran usaha kecil tidak memenuhi target penjualan apabila media sosial tidak dimanfaatkan untuk pemasaran.","Sebagian kegiatan pameran usaha kecil memenuhi target penjualan apabila media sosial tidak dimanfaatkan untuk pemasaran.","Media sosial tidak dimanfaatkan untuk pemasaran apabila kegiatan pameran usaha kecil memenuhi target penjualan."], jawaban:"C", pembahasan:"Premis 1: Apabila jumlah pengunjung tidak meningkat, sebagian pameran usaha kecil tidak memenuhi target penjualan. (A ➔ B)\nPremis 2: Jumlah pengunjung tidak meningkat terjadi apabila media sosial tidak dimanfaatkan untuk pemasaran. (C ➔ A)\nMelalui Silogisme (C ➔ A, A ➔ B, maka C ➔ B). Kesimpulannya: Apabila media sosial tidak dimanfaatkan untuk pemasaran, maka sebagian kegiatan pameran usaha kecil tidak memenuhi target penjualan." },
+        { nomor:28, teks:"Harga buah mangga sangat mahal karena petani mangga gagal panen. Biasanya, petani buah mangga panen raya saat musim kemarau. Berdasarkan pernyataan tersebut, manakah pernyataan yang benar?", pilihan:["Harga buah mangga murah saat panen raya.","Saat ini memasuki musim kemarau.","Saat ini masa panen raya buah mangga.","Harga buah mangga murah saat musim kemarau.","Saat ini bukan musim kemarau."], jawaban:"E", pembahasan:"Fakta saat ini: Petani mangga mengalami gagal panen (Artinya, saat ini BUKAN masa panen raya).\nPremis Umum: Biasanya, petani buah mangga panen raya saat musim kemarau. (Musim kemarau ➔ Panen raya).\nBerdasarkan Modus Tollens, karena saat ini tidak terjadi panen raya (gagal panen), maka dapat disimpulkan bahwa saat ini bukan musim kemarau." },
+        { nomor:29, teks:"Lampu LED adalah jenis lampu yang paling hemat pemakaian listriknya. Makin hemat pemakaian listrik sebuah lampu, makin banyak jenis lampu tersebut dipilih oleh masyarakat. Berdasarkan informasi tersebut, manakah pernyataan yang paling mungkin benar?", pilihan:["Hematnya pemakaian listrik pada lampu berkontribusi pada banyaknya jenis lampu yang dipilih masyarakat.","Tingkat penjualan jenis lampu lain lebih rendah karena pemakaian listriknya lebih hemat.","Keputusan untuk membeli suatu jenis lampu yang bergantung pada seberapa tebal kabel listrik pada lampu tersebut.","Jenis baru LED memiliki ketebalan kabel listrik yang besar di antara lampu-lampu lain.","Tingginya angka penjualan suatu jenis lampu pasti disebabkan pemakaian listrik yang hemat."], jawaban:"A", pembahasan:"Premis dalam teks menyatakan hubungan sebab-akibat yang lurus: Makin hemat pemakaian listrik sebuah lampu, makin banyak jenis lampu tersebut dipilih oleh masyarakat.\nPernyataan yang paling mungkin benar dan sejalan dengan informasi tersebut adalah bahwa tingkat kehematan listrik menjadi faktor (berkontribusi) yang membuat lampu tersebut banyak dipilih oleh masyarakat." },
+        { nomor:30, teks:"Kegiatan ekstrakurikuler dilakukan di luar ruangan jika diadakan pada hari Minggu. Jika kegiatan ekstrakurikuler dilakukan di luar ruangan, siswa mengenakan pakaian dinas lapangan. Simpulan yang paling tepat adalah …", pilihan:["Jika kegiatan tidak diadakan pada hari Minggu, siswa tidak mengenakan pakaian dinas lapangan.","Jika siswa tidak mengenakan pakaian dinas lapangan, kegiatan ekstrakurikuler tidak diadakan pada hari Minggu.","Jika kegiatan ekstrakurikuler tidak dilakukan di luar ruangan, siswa tidak menggunakan pakaian dinas lapangan.","Jika siswa mengenakan pakaian dinas lapangan, kegiatan ekstrakurikuler diadakan pada hari Minggu.","Jika kegiatan ekstrakurikuler dilakukan di luar ruangan, kegiatan tersebut tidak diadakan pada hari Minggu."], jawaban:"B", pembahasan:"Premis 1: Jika kegiatan diadakan pada hari Minggu, maka dilakukan di luar ruangan. (P ➔ Q)\nPremis 2: Jika kegiatan dilakukan di luar ruangan, maka siswa mengenakan pakaian dinas lapangan. (Q ➔ R)\nBerdasarkan hukum Silogisme, didapatkan kesimpulan: Jika kegiatan diadakan pada hari Minggu, maka siswa mengenakan pakaian dinas lapangan (P ➔ R)\nBentuk ekuivalen dari (P ➔ R) menurut hukum Kontraposisi adalah (~R ➔ ~P). Yaitu: Jika siswa tidak mengenakan pakaian dinas lapangan, maka kegiatan ekstrakurikuler tidak diadakan pada hari Minggu." },
+        // 31-35 Argumen memperkuat/melemahkan
+        { nomor:31, teks:"Sebuah studi menyimpulkan bahwa penggunaan aplikasi Kecerdasan Buatan (AI) sebagai tutor belajar pribadi mampu meningkatkan nilai ujian siswa sebesar 20%. Hal ini karena aplikasi AI mampu memberikan umpan balik secara instan, personal, dan tersedia selama 24 jam. Berdasarkan temuan tersebut, dewan pendidikan daerah mengusulkan agar sekolah-sekolah mulai mengganti sesi bimbingan belajar tambahan pascasekolah yang tadinya difasilitasi oleh guru, menjadi sesi mandiri menggunakan aplikasi tutor AI untuk efisiensi anggaran. Manakah pernyataan berikut yang, jika benar, paling MEMPERLEMAH usulan dewan pendidikan tersebut?", pilihan:["Biaya langganan aplikasi tutor AI secara massal terbukti lebih murah dibandingkan membayar honor tambahan (lembur) untuk guru bimbingan belajar.","Siswa yang menggunakan tutor AI sering kali menghabiskan lebih banyak waktu di depan layar gawai yang memicu kelelahan mata.","Keberhasilan bimbingan belajar konvensional sangat bergantung pada metode pengajaran dari masing-masing guru yang berbeda-beda.","Peningkatan nilai 20% pada studi tersebut hanya terjadi ketika penggunaan AI didampingi oleh motivasi emosional dan pengawasan langsung dari guru manusia.","Belum semua sekolah di daerah tersebut memiliki jaringan internet yang stabil untuk mengakses aplikasi AI secara serentak."], jawaban:"D", pembahasan:"Argumen: Dewan pendidikan ingin mengganti guru dengan tutor AI secara penuh untuk menghemat biaya, dengan dasar bahwa studi membuktikan AI mampu menaikkan nilai 20% berkat sistem 24 jam dan umpan baliknya.\nTugas: Memperlemah argumen (menunjukkan kelemahan/cacat fatal dari rencana tersebut).\nAnalisis Opsi: Opsi D menyatakan bahwa peningkatan 20% itu syarat mutlaknya adalah adanya pendampingan guru manusia. Jika guru manusia dihilangkan sepenuhnya (seperti rencana dewan pendidikan), maka peningkatan 20% tersebut tidak akan terjadi. Pernyataan ini membantah premis kausalitas bahwa 'AI sendirian dapat meningkatkan nilai', sehingga secara telak meruntuhkan (memperlemah) usulan dewan pendidikan. Opsi E melemahkan secara teknis (kurang internet), namun Opsi D menyerang esensi argumentasi efektivitasnya langsung." },
+        { nomor:32, teks:"Perusahaan manufaktur 'X' menerapkan kebijakan 4 hari kerja dalam seminggu tanpa memotong gaji karyawan. Setelah enam bulan berjalan, perusahaan mencatat bahwa tingkat produksi barang per karyawan justru meningkat sebesar 15%. Manajer operasional mengklaim bahwa bertambahnya waktu libur menjadi tiga hari di akhir pekan telah menurunkan tingkat stres karyawan secara drastis, yang secara langsung memicu lonjakan produktivitas tersebut. Manakah pernyataan berikut yang, jika benar, paling MEMPERKUAT klaim Manajer Operasional?", pilihan:["Perusahaan kompetitor 'Y' yang tetap menerapkan 5 hari kerja mengalami penurunan produktivitas sebesar 5% pada kuartal yang sama.","Bersamaan dengan diterapkannya kebijakan 4 hari kerja, Perusahaan 'X' juga mengganti mesin produksi lama dengan mesin otomatis bertenaga tinggi.","Tingkat ketidakhadiran karyawan karena sakit fisik maupun kelelahan mental (burnout) di Perusahaan 'X' turun hingga 80% sejak kebijakan diterapkan.","Karyawan Perusahaan 'X' diharuskan bekerja selama 12 jam per hari pada 4 hari kerja tersebut untuk menutupi kekurangan hari operasional.","Survei internal menunjukkan bahwa 95% karyawan lebih menyukai kebijakan 4 hari kerja karena mereka memiliki waktu lebih untuk keluarga."], jawaban:"C", pembahasan:"Klaim: Penambahan libur akhir pekan ➔ menurunkan stres ➔ memicu peningkatan produktivitas 15%.\nTugas: Memperkuat klaim (mencari bukti bahwa penurunan stres benar-benar terjadi dan menjadi penyebabnya).\nAnalisis Opsi: Opsi B justru melemahkan karena memunculkan 'faktor penyebab lain' (mesin baru). Opsi C memberikan bukti statistik kuat bahwa tingkat sakit dan kelelahan mental (burnout/stres ekstrem) turun hingga 80%. Turunnya absensi sakit ini adalah 'jembatan' yang memperkuat alur logika manajer bahwa tingkat stres memang benar-benar berkurang sejak kebijakan diterapkan, dan karyawan yang lebih sehat bekerja lebih produktif." },
+        { nomor:33, teks:"Pengamat ekonomi A menyatakan, 'Pemberlakuan sistem kerja dari rumah (Work From Home) secara permanen bagi sektor jasa akan menghemat biaya operasional perusahaan hingga 30% akibat pengurangan sewa ruang kantor dan tagihan listrik.' Pengamat tata kota B menyatakan, 'Penerapan kerja dari rumah secara masif akan sangat efektif mengurai tingkat kemacetan lalu lintas di jalan protokol ibu kota pada jam sibuk.' Sebuah riset psikologi industri terbaru mempublikasikan bahwa 'Sebagian besar pekerja rentan mengalami stres kronis karena kesulitan menarik batas yang jelas antara jam kerja profesional dan waktu istirahat di rumah.' Manakah pernyataan berikut yang PALING TEPAT menjelaskan posisi hasil riset psikologi tersebut terhadap pendapat pengamat A dan B?", pilihan:["Memperlemah secara langsung argumen pengamat ekonomi A.","Memperlemah secara langsung argumen pengamat tata kota B.","Memperkuat argumen pengamat A karena beban biaya stres ditanggung karyawan, bukan perusahaan.","Tidak relevan dengan dasar argumen yang disampaikan oleh pengamat A maupun pengamat B.","Menjadi antitesis yang menggugurkan seluruh gagasan pengamat tata kota B."], jawaban:"D", pembahasan:"Analisis Argumen A: Membahas variabel Finansial Korporat (Penghematan sewa gedung dan listrik).\nAnalisis Argumen B: Membahas variabel Lalu Lintas Tata Kota (Mengurai kemacetan).\nAnalisis Riset: Membahas variabel Kesehatan Mental/Psikologi (Karyawan kesulitan membagi waktu dan stres).\nKesimpulan: Fakta bahwa karyawan mengalami stres (psikologis) tidak membantah fakta bahwa perusahaan berhemat biaya sewa (finansial) dan tidak membantah fakta bahwa jalanan lebih lengang (lalu lintas). Karena ketiga pihak membahas tiga variabel dari dimensi yang sepenuhnya berbeda (tidak ada hubungan saling menjatuhkan), maka hasil riset psikologi tersebut tidak relevan dengan validitas argumen ekonomi A maupun argumen tata kota B." },
+        { nomor:34, teks:"Data kepolisian di Kota Z menunjukkan bahwa tingkat kepatuhan pengendara mobil dalam menggunakan sabuk pengaman telah mencapai 98%, meningkat tajam dibandingkan lima tahun lalu yang hanya berkisar 60%. Aturan lalu lintas juga ditegakkan dengan ketat. Namun, anehnya, persentase korban dengan cedera parah akibat kecelakaan lalu lintas roda empat di Kota Z justru mengalami peningkatan yang signifikan dalam periode lima tahun yang sama. Manakah pernyataan di bawah ini yang paling logis untuk MENJELASKAN fenomena yang paradoks tersebut?", pilihan:["Kampanye keselamatan berkendara di Kota Z selama lima tahun terakhir lebih banyak berfokus pada penggunaan helm standar bagi pengendara motor.","Karena merasa kendaraannya sudah sangat aman dengan sabuk pengaman, banyak pengendara di Kota Z cenderung mengemudi dengan kecepatan yang jauh melampaui batas wajar.","Populasi penduduk di Kota Z mengalami peningkatan sebesar 10% karena adanya gelombang urbanisasi besar-besaran.","Cuaca ekstrem yang sering melanda Kota Z belakangan ini menyebabkan kerusakan jalan raya di berbagai titik rawan kecelakaan.","Sebagian besar kecelakaan parah yang terjadi di Kota Z melibatkan kendaraan niaga (truk) yang masuk ke jalur perumahan warga."], jawaban:"B", pembahasan:"Paradoks: Pemakaian sabuk pengaman tinggi (98%) seharusnya menurunkan cedera parah, tapi faktanya cedera parah malah naik secara signifikan. Mengapa?\nAnalisis Opsi: Dalam teori keselamatan (Peltzman effect / risk compensation), orang sering kali mengubah perilakunya menjadi lebih ceroboh ketika merasa dirinya dilindungi oleh alat keselamatan. Opsi B dengan sangat masuk akal meresolusi (menjawab) anomali ini: Sabuk pengaman memang dipakai, tetapi rasa aman palsu tersebut membuat mereka mengebut secara ugal-ugalan. Kecepatan super tinggi inilah yang menyebabkan benturan menjadi sangat fatal sehingga, meskipun memakai sabuk pengaman, cedera parah tetap meningkat." },
+        { nomor:35, teks:"Apabila pemerintah menaikkan tarif pajak ekspor secara drastis, maka biaya produksi industri manufaktur dalam negeri akan membengkak. Apabila biaya produksi industri manufaktur dalam negeri membengkak, maka daya saing produk lokal di pasar global akan menurun drastis. Jika daya saing produk lokal di pasar global menurun drastis, terjadilah ancaman pemutusan hubungan kerja (PHK) massal di sektor padat karya. Diketahui saat ini TIDAK terjadi ancaman PHK massal di sektor padat karya, bahkan beberapa pabrik manufaktur baru saja membuka lowongan kerja berskala besar. Simpulan yang PALING TEPAT berdasarkan premis di atas adalah...", pilihan:["Pemerintah telah berhasil menurunkan tarif pajak ekspor dan meningkatkan daya saing global.","Daya saing produk lokal di pasar global menurun drastis meskipun tidak ada PHK massal.","Biaya produksi industri manufaktur dalam negeri stabil namun daya saing produk lokal tetap rendah.","Pemerintah tidak menaikkan tarif pajak ekspor secara drastis.","Pembukaan pabrik baru membatalkan efek dari kenaikan tarif pajak ekspor oleh pemerintah."], jawaban:"D", pembahasan:"Soal ini menggunakan logika Modus Tollens berantai (Syllogism).\nPremis 1: Jika Pajak Naik (P) ➔ Biaya Produksi Membengkak (Q)\nPremis 2: Jika Biaya Produksi Membengkak (Q) ➔ Daya Saing Turun (R)\nPremis 3: Jika Daya Saing Turun (R) ➔ PHK Massal (S)\nMaka dirangkum menjadi: P ➔ Q ➔ R ➔ S (Jika P maka S).\nFakta saat ini: BUKAN S (Tidak terjadi PHK massal / ~S).\nPenyelesaian: Jika (P ➔ S) digabungkan dengan fakta (~S), maka kesimpulan mutlak berdasarkan Modus Tollens adalah (~P).\nSimpulan: ~P = Pemerintah tidak menaikkan tarif pajak ekspor secara drastis. (Opsi A salah karena menyimpulkan pemerintah 'menurunkan pajak' yang mana belum tentu, bisa jadi pajaknya hanya 'tetap' atau 'tidak naik drastis')." },
+        // 36-40 puzzle logika
+        { nomor:36, teks:"Lima orang guru di MAN Syarif Hidayatullah (Pak Andi, Pak Budi, Pak Kasman, Bu Rina, dan Bu Suwarti) harus membagi jadwal piket menjaga Laboratorium Komputer dari hari Senin hingga Jumat. Setiap guru hanya piket satu kali dalam seminggu. Aturan pembagian jadwal adalah sebagai berikut:\n• Pak Budi mendapat giliran piket di hari Rabu.\n• Pak Kasman tidak bersedia piket di hari Senin maupun Jumat.\n• Jadwal piket Bu Suwarti dan Pak Andi harus terpisah tepat oleh dua hari piket guru lainnya (misalnya, jika satu di hari ke-1, yang lain di hari ke-4).\n• Bu Rina akan piket tepat satu hari sebelum giliran Pak Andi.\nBerdasarkan aturan tersebut, jika Bu Suwarti mendapat jadwal piket di hari Jumat, pada hari apakah Pak Kasman berjaga di laboratorium?", pilihan:["Senin","Selasa","Rabu","Kamis","Jumat"], jawaban:"D", pembahasan:"Aturan 1: Pak Budi pasti di hari Rabu (Hari ke-3).\nAturan 2: Bu Suwarti dan Pak Andi terpisah 2 hari. Posisi yang memungkinkan untuk terpisah 2 hari dalam 5 hari (dengan Rabu sudah diisi Budi) hanyalah Senin (1) dan Kamis (4) ATAU Selasa (2) dan Jumat (5).\nKondisi Soal: Bu Suwarti piket di hari Jumat (5). Maka, Pak Andi pasti di hari Selasa (2).\nSisa Hari: Senin (1) dan Kamis (4).\nSisa Guru: Pak Kasman dan Bu Rina.\nPak Kasman tidak mau hari Senin/Jumat. Berarti Pak Kasman harus mengambil hari Kamis (4)." },
+        { nomor:37, teks:"Menjelang akhir semester, lima siswa kelas 9 (Siswa A, B, C, D, E) secara bergiliran mempresentasikan proyek coding mereka. Topik yang dipresentasikan berbeda-beda: Scratch, Roblox, Python, Pembuatan Website, dan Animasi Logika.\n• Siswa yang mempresentasikan proyek Roblox tampil tepat setelah siswa C.\n• Siswa E mempresentasikan proyek Python, dan ia tampil sebelum siswa A tetapi sesudah siswa B.\n• Siswa D adalah penampil pertama, dan ia tidak menggunakan Scratch \n• Tepat ada satu siswa yang presentasi di antara penampil proyek Python dan penampil Scratch.\n• Proyek yang dipresentasikan pada urutan terakhir adalah Pembuatan Website.\nSiswa manakah yang mempresentasikan proyek Roblox dan pada urutan ke berapa ia tampil?", pilihan:["Siswa B pada urutan ke-2","Siswa C pada urutan ke-2","Siswa B pada urutan ke-3","Siswa E pada urutan ke-4","Siswa A pada urutan ke-5"], jawaban:"C", pembahasan:"Mari kita letakkan posisi 1 hingga 5.\nPenampil urutan ke-5 = Website.\nSiswa D = Urutan 1 (Bukan Scratch).\nSiswa E = Python. Urutannya E < A dan B < E (Artinya B tampil duluan, lalu E, lalu A). Karena D di posisi 1 dan Website di posisi 5, maka B, E, A memperebutkan sisa tempat. Susunannya pasti B di (2/3), E di (3/4), A di (4/5).\nJika E (Python) di posisi 3, harus ada 1 siswa antara Python dan Scratch. Berarti Scratch di posisi 1 atau 5. Tapi posisi 1 adalah D (tidak pakai Scratch), dan 5 adalah Website. Berarti E tidak mungkin di posisi 3.\nE pasti di urutan ke-4 (Python). Akibatnya, A berada di urutan ke-5 (Website).\nJarak 1 siswa antara Python (4) dan Scratch, maka Scratch pasti di urutan ke-2.\nSisa topik urutan ke-3 adalah Roblox.\nSyarat: Proyek Roblox (posisi 3) tampil setelah siswa C. Maka, siswa C berada di posisi ke-2 (dengan topik Scratch).\nSisa siswa untuk menempati posisi ke-3 adalah B.\nJadi: D (Animasi - 1), C (Scratch - 2), B (Roblox - 3), E (Python - 4), A (Website - 5)." },
+        { nomor:38, teks:"Panitia sekolah merencanakan proyek 'Dari Sampah Jadi Berkah' yang diakhiri dengan kegiatan penanaman pohon. Ada 7 jenis bibit pohon yang tersedia: Jati, Mahoni, Mangga, Rambutan, Sengon, Akasia, dan Beringin. Panitia hanya memiliki lahan untuk menanam 4 jenis pohon dengan tata aturan lingkungan sebagai berikut:\n• Jika Jati dipilih, maka Mahoni juga harus dipilih.\n• Mangga dan Rambutan tidak boleh ditanam pada proyek yang sama.\n• Jika Sengon dipilih, maka Jati tidak boleh dipilih karena akarnya akan berebut nutrisi.\n• Salah satu dari Akasia atau Beringin harus dipilih untuk peneduh, tetapi tidak boleh keduanya.\nJika panitia telah memutuskan secara final untuk menanam Sengon dan Mangga, manakah bibit pohon yang PASTI melengkapi pilihan panitia tersebut?", pilihan:["Jati dan Akasia","Mahoni dan Rambutan","Mahoni dan Beringin","Mahoni dan Beringin (sama)","Jati dan Beringin"], jawaban:"D", pembahasan:"Pilihan final panitia: Sengon dan Mangga. (Sisa kuota: 2 pohon lagi).\nKarena Sengon dipilih, maka Jati gugur (akar berebut nutrisi).\nKarena Mangga dipilih, maka Rambutan gugur.\nSisa bibit yang tersedia: Mahoni, Akasia, Beringin.\nAturan terakhir mewajibkan panitia memilih tepat salah satu antara Akasia atau Beringin.\nDengan terpilihnya 1 peneduh (Akasia/Beringin), maka kuota tersisa 1 pohon lagi.\nSatu-satunya bibit yang tersisa dan sah untuk mengisi kuota terakhir adalah Mahoni. (Meskipun Jati memicu Mahoni, Mahoni tetap bisa berdiri sendiri tanpa Jati karena aturannya adalah 'Jika Jati -> Mahoni', bukan sebaliknya)." },
+        { nomor:39, teks:"Enam unit komputer (K1, K2, K3, K4, K5, K6) di laboratorium madrasah disusun ke dalam dua barisan meja yang saling berhadapan (Baris Utara dan Baris Selatan). Masing-masing baris terdiri atas 3 komputer.\n• K1 berada di Baris Utara dan layarnya berhadapan langsung dengan K4.\n• K2 diletakkan tepat di sebelah K1.\n• K6 berada di barisan meja yang sama dengan K2.\n• Komputer yang layarnya berhadapan langsung dengan K2 diletakkan tepat di sebelah K5.\nKomputer manakah yang berhadapan langsung dengan K6?", pilihan:["K1","K2","K3","K4","K5"], jawaban:"E", pembahasan:"Terdapat dua baris: Baris Utara dan Baris Selatan. Asumsikan Baris Utara = [U1, U2, U3] dan Baris Selatan = [S1, S2, S3]. Komputer saling berhadapan (U1 berhadapan dengan S1, dst).\nK1 di Baris Utara, berhadapan dengan K4 (Baris Selatan). Misal K1 = U1, maka K4 = S1.\nK2 di sebelah K1, K6 sebaris dengan K2. Ini berarti K1, K2, K6 menyusun Baris Utara seluruhnya.\nMisal formasinya: K1(U1) - K2(U2) - K6(U3).\nMaka Baris Selatan diisi oleh: K4(S1) - X(S2) - Y(S3).\nK2 (U2) berhadapan dengan komputer X (S2).\nSyarat berbunyi: Komputer di seberang K2 (yaitu X) terletak tepat di sebelah K5.\nKarena X berada di tengah (S2), maka K5 bisa di S1 atau S3.\nNamun, S1 sudah diisi oleh K4. Oleh karena itu, K5 harus berada di S3.\nKarena S3 adalah K5, maka pasangannya di U3 (yang berhadapan langsung) adalah K6.\nMaka, K6 berhadapan langsung dengan K5. (Sisa komputer K3 menduduki posisi X)." },
+        { nomor:40, teks:"Empat guru sedang membagi tugas mengampu mata pelajaran (Informatika, Matematika, IPA, Seni Budaya) sekaligus menjadi pembina ekstrakurikuler (Pramuka, Teater, PMR, Jurnalistik). Setiap guru memegang tepat satu mapel dan satu ekskul.\n• Pak Hendra mengampu Matematika tetapi menolak membina Teater maupun Pramuka.\n• Guru yang mengampu Informatika ditugaskan membina PMR.\n• Bu Sinta tidak mengampu IPA dan bukan pembina Pramuka.\n• Bu Tika membina Teater.\n• Pembina Pramuka adalah guru yang sama dengan pengampu mapel IPA.\nSiapakah yang mengampu mata pelajaran Seni Budaya dan apa ekstrakurikuler yang dibinanya?", pilihan:["Bu Sinta, membina PMR","Pak Hendra, membina Jurnalistik","Bu Tika, membina Teater","Guru Ke-empat (belum disebut), membina Pramuka","Pak Hendra, membina Teater"], jawaban:"C", pembahasan:"Buat matriks logika untuk memudahkan deduksi:\nBu Tika = Teater.\nGuru Informatika = PMR. Berarti Bu Tika (Teater) bukan guru Informatika.\nPak Hendra = Matematika. Pak Hendra bukan Teater (sudah diisi Bu Tika) dan bukan Pramuka. Berarti Pak Hendra membina PMR atau Jurnalistik.\nJika Pak Hendra membina PMR, maka ia haruslah Guru Informatika. Tetapi Pak Hendra mengampu Matematika. Kontradiksi. Jadi, Pak Hendra membina Jurnalistik\nSisa ekskul untuk PMR dan Pramuka. Karena Informatika terikat dengan PMR, sisa mapel IPA terikat dengan Pramuka.\nSisa guru: Bu Sinta dan Guru Keempat.\nBu Sinta bukan IPA dan bukan Pramuka. Maka Bu Sinta pasti mengambil paket [Informatika - PMR].\nSisa guru terakhir (misal Pak Andi) pasti memegang paket [IPA - Pramuka].\nRekap saat ini:\nHendra [Matematika - Jurnalistik]\nSinta [Informatika - PMR]\nPak Andi [IPA - Pramuka]\nTika [??? - Teater]\nSisa mata pelajaran yang belum dialokasikan adalah Seni Budaya, yang secara otomatis menjadi beban mengampu Bu Tika." },
+        // 41-50 Deret dan Aritmetika (pembahasan lengkap)
+        { nomor:41, teks:"8, 10, 20, 18, 9, 11, 22, ... , ...", pilihan:["20, 10","24, 12","18, 9","20, 22","11, 13"], jawaban:"A", pembahasan:"Deret ini menggunakan kombinasi empat operasi matematika secara berurutan: ditambah 2 (+2), dikali 2 (x2), dikurang 2 (-2), dan dibagi 2 (÷2).\nPola berulang:\n8 + 2 = 10\n10 x 2 = 20\n20 - 2 = 18\n18 ÷ 2 = 9\n(Pola kembali berulang)\n9 + 2 = 11\n11 x 2 = 22\nLanjutan:\n22 - 2 = 20\n20 ÷ 2 = 10\nJadi dua angka berikutnya adalah 20 dan 10." },
+        { nomor:42, teks:"5, 7, 10, 15, 22, 33, 46, ...", pilihan:["59","61","63","65","67"], jawaban:"C", pembahasan:"Pola pada deret ini adalah penambahan dengan deret bilangan prima secara berurutan.\nPola:\n5 + 2 = 7 (Prima ke-1)\n7 + 3 = 10 (Prima ke-2)\n10 + 5 = 15 (Prima ke-3)\n15 + 7 = 22 (Prima ke-4)\n22 + 11 = 33 (Prima ke-5)\n33 + 13 = 46 (Prima ke-6)\nLanjutan: Bilangan prima setelah 13 adalah 17.\n46 + 17 = 63" },
+        { nomor:43, teks:"1, 4, 8, 16, 27, 36, 64, 64, ...", pilihan:["81","100","125","128","256"], jawaban:"C", pembahasan:"Terdapat dua deret yang digabungkan (selang-seling).\nDeret 1 (Suku Ganjil): 1, 8, 27, 64, ... (merupakan bilangan pangkat 3 atau kubik berurutan: 1³, 2³, 3³, 4³).\nDeret 2 (Suku Genap): 4, 16, 36, 64 ... (merupakan kuadrat dari bilangan genap: 2², 4², 6², 8²).\nLanjutan: Setelah angka 64 yang kedua (suku ke-8), maka giliran Deret 1 (suku ke-9), yaitu 5³.\n5³ = 5 x 5 x 5 = 125" },
+        { nomor:44, teks:"1, 2, 4, 7, 12, 20, 33, 54, ...", pilihan:["78","84","88","92","96"], jawaban:"C", pembahasan:"Deret ini merupakan variasi dari deret Fibonacci, di mana suku berikutnya adalah hasil penjumlahan dari dua suku sebelumnya ditambah 1.\nRumus logika: Un = U(n-1) + U(n-2) + 1\nPola:\n(1 + 2) + 1 = 4\n(2 + 4) + 1 = 7\n(4 + 7) + 1 = 12\n(7 + 12) + 1 = 20\n(12 + 20) + 1 = 33\n(20 + 33) + 1 = 54\nLanjutan:\n(33 + 54) + 1 = 88" },
+        { nomor:45, teks:"2, 5, 11, 23, 44, 77, ...", pilihan:["110","115","121","125","132"], jawaban:"D", pembahasan:"Ini merupakan deret angka bertingkat dua (selisih dari selisih membentuk pola).\nDeret utama: 2, 5, 11, 23, 44, 77, ...\nSelisih tingkat 1: +3, +6, +12, +21, +33\nSelisih tingkat 2: +3, +6, +9, +12 (kelipatan 3)\nLanjutan tingkat 2: Setelah +12 adalah +15.\nLanjutan tingkat 1: 33 + 15 = +48.\nMaka suku berikutnya: 77 + 48 = 125." },
+        { nomor:46, teks:"0,75 × 60% − 12% =", pilihan:["4,38","0,66","3,30","0,33","0,36"], jawaban:"D", pembahasan:"0,75 × 60% − 12% = 0,75 × (60/100) − (12/100) = 0,75 × 0,6 − 0,12 = 0,45 − 0,12 = 0,33" },
+        { nomor:47, teks:"Dika ingin membuat minuman dan membutuhkan air, gula, dan perasa buah dalam satu wadah dengan perbandingan 7 : 3 : 2. Dika ingin membuat 24 liter. Berapa kg gula yang dibutuhkan Dika?", pilihan:["5","6","7","8","9"], jawaban:"B", pembahasan:"Perbandingan air, gula, dan perasa buah adalah 7 : 3 : 2\nDika ingin membuat 24 liter sirup. Gula yang dibutuhkan adalah\ngula = (3 / (7+3+2)) × 24 = (3/12) × 24 = (1/4) × 24 = 6 kg." },
+        { nomor:48, teks:"Bilangan yang berada di antara (3/4 dari 240) dan (3/4 dari 248) adalah …", pilihan:["60","178","184","206","246"], jawaban:"D", pembahasan:"(3/4 dari 240) adalah (3/4) × 240 = 180\n(3/4 dari 248) adalah (3/4) × 248 = 186\nBilangan yang berada di antara 180 dan 186 adalah 184 (karena 184 di pilihan)." },
+        { nomor:49, teks:"Angka pertama dari √1800 adalah ....", pilihan:["4","5","6","7","8"], jawaban:"A", pembahasan:"√1800 = √(900 × 2) = 30√2. √2 ≈ 1,414, maka 30 × 1,414 = 42,42. Angka pertama (digit paling depan) adalah 4." },
+        { nomor:50, teks:"Jika A bilangan 22,5% dari 40 dan B bilangan 1/3 dari 30, maka …", pilihan:["A < B","A > B","2A > 2/3 B","A = B","A = 2/3 B"], jawaban:"A", pembahasan:"A = 22,5% × 40 = (22,5/100) × 40 = (9/40) × 40 = 9\nB = (1/3) × 30 = 10\nJadi, A = 9 dan B = 10, maka A < B." },
+        // 51-60 Gambar
+        { nomor:51, teks:"Pilih gambar yang paling berbeda.", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b001.png", pilihan:["A","B","C","D",""], jawaban:"C", pembahasan:"Jika diputar gambar B, C, dan D ke posisi tegak, terlihat gambar C paling berbeda." },
+        { nomor:52, teks:"Pilihlah gambar yang paling berbeda.", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b002.png", pilihan:["A","B","C","D","E"], jawaban:"D", pembahasan:"Jika gambar B, C, D, dan E diputar, diperoleh gambar yang paling beda, yaitu opsi D." },
+        { nomor:53, teks:"Pilihlah jawaban yang paling berbeda.", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b003.png", pilihan:["A","B","C","D","E"], jawaban:"D", pembahasan:"Jika gambar B, C, D, dan E diputar agar posisi bintang di atas, diperoleh gambar yang paling beda, yaitu opsi D." },
+        { nomor:54, teks:"Pilihlah lanjutan gambar berikut.", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b004.png", pilihan:["A","B","C","D","E"], jawaban:"D", pembahasan:"Berdasarkan pola rotasi dan warna, jawaban yang tepat adalah D." },
+        { nomor:55, teks:"Pilihlah lanjutan gambar berikut.", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b005.png", pilihan:["A","B","C","D","E"], jawaban:"B", pembahasan:"Lanjutan gambar yang sesuai adalah B." },
+        { nomor:56, teks:"Gambar berikutnya pada kotak kosong adalah …", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b006.png", pilihan:["A","B","C","D","E"], jawaban:"C", pembahasan:"Pola berulang, jawaban C." },
+        { nomor:57, teks:"Gambar untuk melengkapi bagian kosong adalah ..", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b007.png", pilihan:["A","B","C","D","E"], jawaban:"B", pembahasan:"Kesinambungan pola, jawaban B." },
+        { nomor:58, teks:"Gambar yang tepat untuk bagian selanjutnya adalah …", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b008.png", pilihan:["A","B","C","D","E"], jawaban:"B", pembahasan:"Pola gerak, jawaban B." },
+        { nomor:59, teks:"Pilih gambar yang paling berbeda.", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b009.png", pilihan:["A","B","C","D"], jawaban:"B", pembahasan:"Opsi B hanya memiliki satu arsiran." },
+        { nomor:60, teks:"Pilih gambar yang paling berbeda.", gambar:"https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/b010.png", pilihan:["A","B","C","D","E"], jawaban:"D", pembahasan:"Opsi D tidak memiliki sudut." }
+    ];
+
+    // ======================= RENDER QUIZ =======================
+    const container = document.getElementById("quiz-container");
+    function render() {
+        container.innerHTML = "";
+        let currentSection = null;
+        for (let i = 0; i < soalData.length; i++) {
+            const s = soalData[i];
+            if (i % 20 === 0) {
+                if (currentSection) container.appendChild(currentSection);
+                const sectionDiv = document.createElement("div");
+                sectionDiv.className = "section-group";
+                const header = document.createElement("div");
+                header.className = "section-header";
+                header.innerText = `📌 Kelompok ${Math.floor(i/20)+1} (Soal ${s.nomor} - ${Math.min(i+19, soalData.length)} )`;
+                sectionDiv.appendChild(header);
+                const soalContainerDiv = document.createElement("div");
+                soalContainerDiv.className = "soal-container";
+                sectionDiv.appendChild(soalContainerDiv);
+                currentSection = sectionDiv;
+                currentSection._soalContainer = soalContainerDiv;
+            }
+            const card = document.createElement("div");
+            card.className = "card-soal";
+            const nomorSpan = document.createElement("div");
+            nomorSpan.className = "soal-nomor";
+            nomorSpan.innerText = `Soal ${s.nomor}`;
+            card.appendChild(nomorSpan);
+            const teksDiv = document.createElement("div");
+            teksDiv.className = "soal-teks";
+            teksDiv.innerText = s.teks;
+            card.appendChild(teksDiv);
+            if (s.gambar) {
+                const imgDiv = document.createElement("div");
+                imgDiv.className = "soal-gambar";
+                const img = document.createElement("img");
+                img.src = s.gambar;
+                img.alt = `Gambar soal ${s.nomor}`;
+                imgDiv.appendChild(img);
+                card.appendChild(imgDiv);
+            }
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            const nameAttr = `q${s.nomor}`;
+            const letters = ["A","B","C","D","E"];
+            s.pilihan.forEach((pil, idx) => {
+                if (pil === undefined || pil === "") return;
+                const letter = letters[idx];
+                const optDiv = document.createElement("div");
+                optDiv.className = "option";
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = nameAttr;
+                radio.value = letter;
+                const label = document.createElement("label");
+                label.innerText = `${letter}. ${pil}`;
+                optDiv.appendChild(radio);
+                optDiv.appendChild(label);
+                optionsDiv.appendChild(optDiv);
+            });
+            card.appendChild(optionsDiv);
+            const btnGroup = document.createElement("div");
+            btnGroup.className = "btn-group";
+            const checkBtn = document.createElement("button");
+            checkBtn.innerText = "✅ Cek Jawaban";
+            checkBtn.classList.add("check-btn");
+            const pembahasanBtn = document.createElement("button");
+            pembahasanBtn.innerText = "📖 Pembahasan";
+            pembahasanBtn.classList.add("pembahasan-btn");
+            btnGroup.appendChild(checkBtn);
+            btnGroup.appendChild(pembahasanBtn);
+            card.appendChild(btnGroup);
+            const feedbackDiv = document.createElement("div");
+            feedbackDiv.className = "feedback";
+            const pembahasanDiv = document.createElement("div");
+            pembahasanDiv.className = "pembahasan-text";
+            // gunakan teks pembahasan yang sudah disertakan lengkap
+            pembahasanDiv.innerHTML = `<strong>📘 Pembahasan Lengkap:</strong><br>${s.pembahasan.replace(/\n/g, '<br>')}`;
+            card.appendChild(feedbackDiv);
+            card.appendChild(pembahasanDiv);
+            checkBtn.addEventListener("click", () => {
+                const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                if (!selected) {
+                    feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                    feedbackDiv.classList.add("show");
+                    return;
+                }
+                const userVal = selected.value;
+                if (userVal === s.jawaban) {
+                    feedbackDiv.innerHTML = `✅ BENAR! Jawaban: ${s.jawaban}`;
+                    feedbackDiv.classList.add("correct","show");
+                    feedbackDiv.classList.remove("wrong");
+                } else {
+                    feedbackDiv.innerHTML = `❌ SALAH. Jawaban yang benar: ${s.jawaban}`;
+                    feedbackDiv.classList.add("wrong","show");
+                    feedbackDiv.classList.remove("correct");
+                }
+            });
+            pembahasanBtn.addEventListener("click", () => {
+                pembahasanDiv.classList.toggle("show");
+                pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
+            });
+            currentSection._soalContainer.appendChild(card);
+        }
+        if (currentSection) container.appendChild(currentSection);
+    }
+    render();
+</script>
+</body>
+</html>
