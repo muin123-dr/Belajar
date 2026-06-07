@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Literasi Bahasa Indonesia | 30 Soal Interaktif</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f7fc;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.9rem;
+            text-align: center;
+            color: #0a4b6e;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #2c6979;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #cbdfea;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+        .teks-group {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+            border: 1px solid #e2edf2;
+        }
+        .teks-header {
+            background: #eef3fc;
+            padding: 18px 24px;
+            border-bottom: 2px solid #cbdfea;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0a4b6e;
+        }
+        .teks-bacaan {
+            background: #fefefe;
+            padding: 20px 24px;
+            font-size: 0.96rem;
+            line-height: 1.65;
+            color: #1e2f3d;
+            border-bottom: 1px solid #e2edf2;
+            white-space: pre-wrap;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        .soal-container {
+            padding: 12px 24px 24px 24px;
+            background: white;
+        }
+        .card-soal {
+            background: #fafcff;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            border: 1px solid #e2edf2;
+            transition: all 0.1s;
+        }
+        .soal-nomor {
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+        }
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+            font-weight: 500;
+            background: white;
+            padding: 4px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            margin: 14px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbdbe0;
+            transition: 0.1s;
+        }
+        .option:hover {
+            background: #eef3fc;
+        }
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+        button {
+            background: #e9eef3;
+            border: none;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+        }
+        button.check-btn:hover {
+            background: #0e5e89;
+        }
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #b9c8da;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e0f7e8;
+            color: #0a5e2e;
+            border-left: 5px solid #2b8c4a;
+        }
+        .feedback.wrong {
+            background: #ffe6e5;
+            color: #ac2c34;
+            border-left: 5px solid #e34d4d;
+        }
+        .pembahasan-text {
+            background: #eef2fa;
+            padding: 16px 20px;
+            border-radius: 20px;
+            margin-top: 14px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            border-left: 4px solid #3b82f6;
+            display: none;
+            white-space: pre-wrap;
+        }
+        .pembahasan-text.show {
+            display: block;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.75rem;
+            color: #5f7f9c;
+        }
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .teks-bacaan, .soal-container { padding: 16px; }
+            .option { padding: 6px 12px; }
+            label { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📖 Literasi Bahasa Indonesia</h1>
+    <div style="text-align: center;"><span class="subtitle">30 Soal Pemahaman Teks + Pembahasan Lengkap</span></div>
+    <div id="quiz-root"></div>
+    <footer>✅ Klik "Cek Jawaban" untuk melihat benar/salah. 📖 "Pembahasan" menampilkan penjelasan detail (tidak diringkas).</footer>
+</div>
+
+<script>
+    // Data teks dan soal berdasarkan teks asli (1-30)
+    const groups = [];
+
+    // TEKS 1 (Soal 1-3) Deepfake
+    groups.push({
+        judul: "Teks 1 : Deepfake & Regulasi",
+        bacaan: `(1) Perkembangan deepfake berbasis kecerdasan buatan (AI) belakangan ini telah membuka "Kotak Pandora" dalam dunia keamanan siber dan demokrasi. (2) Teknologi yang mampu memanipulasi video dan audio seseorang hingga tampak sangat nyata ini mulai sering disalahgunakan untuk menyebarkan hoaks politik, kampanye hitam, hingga penipuan finansial. (3) Sebuah riset dari lembaga keamanan siber independen mencatat peningkatan kasus kejahatan siber berbasis voice cloning (peniruan suara) sebesar 400% di Asia Tenggara sepanjang tahun lalu. (4) Sayangnya, regulasi di banyak negara berkembang, termasuk Indonesia, masih gagap merespons kecepatan eksponensial teknologi ini. (5) Para pakar hukum telematika mendesak adanya amandemen undang-undang yang secara spesifik mengatur watermarking wajib untuk konten hasil generate AI. (6) Tanpa regulasi yang proaktif, masyarakat di akar rumput akan menjadi korban utama dari realitas sintetik yang sulit dibedakan dari kebenaran.`,
+        soal: [
+            { nomor: 1, teks: "Makna kiasan 'Kotak Pandora' pada kalimat (1) dalam konteks teks tersebut adalah...", pilihan: ["Sesuatu yang menyimpan potensi keuntungan ekonomi yang sangat besar di masa depan.", "Sumber dari berbagai masalah, kekacauan, dan bahaya yang tidak terduga setelah diungkap.", "Sebuah inovasi teknologi yang selama ini disembunyikan oleh perusahaan-perusahaan besar.", "Kotak penyimpanan data rahasia yang tidak dapat diretas oleh kejahatan siber mana pun.", "Jalan keluar dari kebuntuan hukum dalam menangani kasus kejahatan dunia maya."], jawaban: "B", pembahasan: "\"Kotak Pandora\" adalah idiom dari mitologi Yunani. Membuka Kotak Pandora berarti melakukan tindakan yang tampaknya kecil/baru, namun memunculkan banyak dampak negatif, masalah kompleks, dan bahaya yang tak terduga. Hal ini sesuai dengan konteks deepfake yang memicu hoaks politik dan penipuan." },
+            { nomor: 2, teks: "Asumsi yang mendasari kekhawatiran para pakar hukum telematika pada kalimat (5) dan (6) adalah...", pilihan: ["Masyarakat di akar rumput sudah memiliki literasi digital yang mumpuni untuk membedakan hoaks.", "Watermarking adalah satu-satunya teknologi yang bisa memblokir AI agar tidak bisa diakses publik.", "Regulasi yang ada saat ini sudah cukup kuat namun implementasinya di lapangan sering kali diabaikan.", "Konten buatan AI yang tidak diberi tanda (rekam jejak) akan mengeksploitasi ketidakmampuan masyarakat dalam membedakan fakta dan fiksi.", "Amandemen undang-undang akan secara otomatis menghentikan semua bentuk kampanye hitam di media sosial."], jawaban: "D", pembahasan: "Mengapa pakar mewajibkan watermarking (penanda digital/label) pada konten AI? Asumsi dasarnya adalah karena konten tersebut sangat nyata sehingga masyarakat awam (akar rumput) tidak bisa membedakannya dengan realitas. Jika dibiarkan tanpa tanda, masyarakat akan menjadi korban manipulasi." },
+            { nomor: 3, teks: "Pernyataan manakah yang paling MELEMAHKAN argumen utama dalam teks tersebut?", pilihan: ["Banyak korban penipuan finansial mengaku tertipu oleh panggilan suara yang sangat mirip dengan suara anggota keluarga mereka.", "Beberapa platform media sosial telah mengembangkan algoritma internal yang mampu mendeteksi dan menghapus video deepfake dalam hitungan menit sebelum viral.", "Pemilu di beberapa negara terganggu karena beredarnya video palsu kandidat presiden yang melontarkan pidato provokatif.", "Hukum yang tertinggal dari teknologi adalah fenomena lazim yang terjadi sejak era revolusi industri pertama.", "Teknologi deepfake saat ini mulai digunakan secara luas di industri perfilman Hollywood untuk menekan biaya efek visual."], jawaban: "B", pembahasan: "Argumen utama teks: Teknologi deepfake berbahaya (hoaks, kejahatan) dan butuh regulasi (watermarking) secepatnya agar publik tidak tertipu. Pilihan B (platform medsos punya algoritma pendeteksi dan penghapus yang cepat dan ampuh) melemahkan argumen karena seolah-olah regulasi/UU tambahan tidak terlalu mendesak sebab sistem teknologinya sendiri sudah bisa menangkalnya secara mandiri." }
+        ]
+    });
+
+    // TEKS 2 (soal 4-6) EV paradox
+    groups.push({
+        judul: "Teks 2 : Paradoks Kendaraan Listrik",
+        bacaan: `(1) Transisi energi menuju kendaraan listrik (Electric Vehicle/EV) di Indonesia menyimpan sebuah paradoks yang ironis. (2) Di jalan raya perkotaan, EV memang tidak menghasilkan emisi gas buang, sehingga diklaim mampu menekan polusi udara secara signifikan. (3) Namun, di sisi hulu, lebih dari 60% bauran energi listrik nasional masih dipasok oleh Pembangkit Listrik Tenaga Uap (PLTU) berbasis batu bara. (4) Artinya, peningkatan populasi EV akan berbanding lurus dengan peningkatan beban daya PLTU, yang pada gilirannya memicu lebih banyak pembakaran batu bara dan emisi karbon di lokasi pembangkit. (5) Oleh karena itu, sejumlah aktivis lingkungan menyebut fenomena ini sebagai "solusi semu" atau sekadar memindahkan lokasi polusi dari knalpot kendaraan di kota ke cerobong asap PLTU di daerah pinggiran. (6) Ekosistem EV baru bisa disebut benar-benar hijau apabila transisi energi di sektor pembangkit menuju energi terbarukan (seperti surya, angin, dan panas bumi) dilakukan secara paralel dan agresif.`,
+        soal: [
+            { nomor: 4, teks: "Inti permasalahan yang disoroti oleh penulis dalam teks tersebut adalah...", pilihan: ["Masyarakat kota menolak menggunakan kendaraan listrik karena harga listrik dari PLTU semakin mahal.", "Kendaraan listrik tidak mampu menekan polusi udara karena mesinnya masih menghasilkan emisi karbon.", "Paradoks transisi kendaraan listrik yang sebenarnya masih sangat bergantung pada sumber energi kotor (batu bara).", "Penolakan aktivis lingkungan terhadap segala bentuk transisi energi yang dilakukan oleh pemerintah.", "Ekosistem kendaraan listrik yang gagal karena kurangnya stasiun pengisian daya yang menggunakan energi terbarukan."], jawaban: "C", pembahasan: "Teks berfokus pada paradoks di mana kendaraan bebas emisi (EV) tetap mencemari lingkungan jika listriknya berasal dari pembakaran batu bara. Pilihan C merangkum dengan tepat akar perdebatan logis dalam paragraf tersebut." },
+            { nomor: 5, teks: "Mengapa fenomena adopsi kendaraan listrik di Indonesia saat ini disebut sebagai 'solusi semu'?", pilihan: ["Karena baterai kendaraan listrik sulit didaur ulang dan memicu kerusakan lingkungan parah di area tambang nikel.", "Karena udara di perkotaan tetap kotor akibat emisi dari pabrik-pabrik manufaktur kendaraan listrik.", "Karena penggunaan EV hanya memindahkan sumber polusi dari kendaraan di jalanan ke PLTU batu bara yang menyuplai listriknya.", "Karena harga EV masih terlalu mahal sehingga hanya dapat dinikmati oleh segelintir masyarakat kelas atas.", "Karena energi terbarukan seperti surya dan angin belum mampu memproduksi listrik secara stabil untuk EV."], jawaban: "C", pembahasan: "Kalimat (5) dan (4) menjelaskan mengapa disebut 'solusi semu'. Kendaraannya memang tidak berpolusi di kota, namun agar bisa berjalan (dicas), listrik yang disedot memaksa PLTU batu bara di pinggiran membakar lebih banyak polutan. Artinya, polusi hanya bergeser tempat." },
+            { nomor: 6, teks: "Jika teks tersebut ditambahkan satu paragraf kesimpulan, kalimat manakah yang paling koheren untuk mengawali paragraf tersebut?", pilihan: ["Akibatnya, pemerintah harus segera menghentikan produksi dan penjualan kendaraan listrik di Indonesia.", "Dengan demikian, elektrifikasi transportasi harus berjalan seiring dengan dekarbonisasi pembangkit listrik agar manfaat ekologisnya nyata.", "Meskipun demikian, kendaraan berbahan bakar minyak tetap menjadi pilihan paling logis untuk saat ini.", "Sebaliknya, masyarakat daerah pinggiran harus diberikan kompensasi ekonomi akibat asap PLTU.", "Oleh sebab itu, investasi asing di sektor tambang nikel harus dievaluasi secara ketat."], jawaban: "B", pembahasan: "Karena permasalahan utamanya adalah elektrifikasi kendaraan listrik yang masih didukung oleh listrik kotor, maka kesimpulan logis dan solutifnya adalah transisi EV harus dibarengi dengan transisi PLTU ke energi terbarukan secara paralel (dekarbonisasi energi)." }
+        ]
+    });
+
+    // TEKS 3 (7-9) social commerce
+    groups.push({
+        judul: "Teks 3 : Social Commerce & Predatory Pricing",
+        bacaan: `Kebijakan penutupan fitur transaksi langsung (social commerce) pada salah satu platform media sosial raksasa akhir tahun lalu memicu polarisasi pandangan. Bagi pedagang pasar grosir tradisional seperti Tanah Abang, kebijakan ini adalah penyelamat. Mereka sebelumnya babak belur menghadapi gempuran produk impor super murah yang dibakar dengan subsidi silang dan strategi predatory pricing (jual rugi untuk mematikan pesaing). Namun, di kubu lain, jutaan kreator afiliator (affiliate) dan UMKM lokal yang telah bertransformasi digital merasa kehilangan mata pencarian secara instan. Mereka menilai regulasi tersebut ibarat membakar lumbung padi hanya untuk membunuh tikus. Alih-alih melarang total penyatuan media sosial dan e-commerce, pemerintah seharusnya fokus meregulasi arus barang impor lintas negara (cross-border) dan mengenakan pajak yang setara agar playing field (medan persaingan) menjadi adil.`,
+        soal: [
+            { nomor: 7, teks: "Analogi 'membakar lumbung padi hanya untuk membunuh tikus' dalam teks bermakna...", pilihan: ["Menyelamatkan pedagang pasar tradisional dengan cara merugikan kreator digital.", "Menyelesaikan masalah kecil dengan tindakan ekstrem yang justru menimbulkan kerugian/kerusakan yang jauh lebih besar.", "Mematikan fitur transaksi langsung untuk mencegah masuknya produk impor yang harganya sangat murah.", "Menggunakan strategi jual rugi agar kompetitor di pasar tradisional gulung tikar.", "Menertibkan produk impor ilegal dengan cara menutup akses internet di pusat-pusat perbelanjaan."], jawaban: "B", pembahasan: "Lumbung padi ibarat fitur social commerce yang banyak memberi makan/mata pencarian bagi afiliator dan UMKM. Tikus adalah barang impor ilegal dengan predatory pricing. Membakar lumbung (menutup aplikasinya) memang mematikan tikus, tetapi petani (kreator/UMKM) kehilangan lahannya. Pilihan B tepat memaknai peribahasa ini." },
+            { nomor: 8, teks: "Kata 'predatory pricing' dalam konteks persaingan dagang dapat disejajarkan dengan tindakan...", pilihan: ["Membajak karya orang lain untuk dijual kembali secara masal.", "Menaikkan harga barang ketika permintaan pasar sedang tinggi.", "Menghentikan pasokan barang agar terjadi kelangkaan di pasar.", "Menurunkan harga barang secara ekstrem di bawah modal untuk menyingkirkan kompetitor dari pasar.", "Memberikan diskon besar-besaran untuk produk-produk yang sudah mendekati masa kedaluwarsa."], jawaban: "D", pembahasan: "Predatory pricing (harga pemangsa) adalah taktik membakar uang dengan menjual produk sangat murah (bahkan rugi) secara ekstrem dalam waktu lama untuk menyingkirkan atau mematikan persaingan. Setelah pesaing mati, barulah mereka memonopoli dan menaikkan harga kembali." },
+            { nomor: 9, teks: "Berdasarkan teks, solusi alternatif apa yang dianggap lebih rasional dibanding pelarangan social commerce?", pilihan: ["Memberikan subsidi modal bagi pedagang di pasar tradisional agar bisa bersaing secara digital.", "Menutup seluruh akses platform e-commerce asing dan menggantinya dengan platform buatan pemerintah.", "Mewajibkan seluruh kreator afiliator untuk membuka toko fisik di pasar-pasar tradisional.", "Memperketat pengawasan, mengatur regulasi barang impor langsung, dan menyamaratakan pajak e-commerce.", "Mengizinkan strategi predatory pricing asalkan dilakukan oleh UMKM lokal, bukan produk asing."], jawaban: "D", pembahasan: "Di bagian akhir teks disebutkan alternatif yang disarankan: meregulasi arus barang impor lintas negara (cross-border) dan mengenakan tarif pajak yang setara agar playing field adil. Pilihan D mencerminkan poin ini." }
+        ]
+    });
+
+    // TEKS 4 (10-12) Quiet Quitting
+    groups.push({
+        judul: "Teks 4 : Quiet Quitting vs Hustle Culture",
+        bacaan: `(1) Fenomena "Quiet Quitting" (bekerja secukupnya sesuai deskripsi pekerjaan tanpa mau melakukan usaha ekstra) menjamur di kalangan Generasi Z belakangan ini. (2) Gerakan ini sebenarnya merupakan antitesis dan bentuk kelelahan kolektif terhadap eksploitasi "Hustle Culture"—sebuah budaya yang mengagungkan kerja keras tiada henti, lembur tanpa bayaran yang layak, dan mengorbankan kehidupan pribadi demi validasi karir. (3) Para penganut quiet quitting menolak narasi bahwa nilai seorang manusia ditentukan oleh produktivitasnya di tempat kerja. (4) Mereka lebih memilih menjaga batas tegas antara kehidupan profesional dan kehidupan personal (work-life boundaries). (5) Meskipun banyak pihak manajemen perusahaan memandang tren ini sebagai bentuk penurunan loyalitas dan etos kerja, para sosiolog melihatnya sebagai koreksi wajar atas sistem kerja kapitalistik yang abai terhadap kesehatan mental pekerjanya.`,
+        soal: [
+            { nomor: 10, teks: "Hubungan logis antara Hustle Culture dan Quiet Quitting berdasarkan teks adalah...", pilihan: ["Quiet Quitting adalah penyebab utama munculnya eksploitasi dalam Hustle Culture.", "Hustle Culture merupakan bentuk penyempurnaan dari kelemahan Quiet Quitting.", "Quiet Quitting adalah respons reaktif/perlawanan terhadap toksisitas budaya Hustle Culture.", "Kedua tren tersebut diciptakan oleh pihak manajemen untuk meningkatkan produktivitas pekerja.", "Hustle Culture dan Quiet Quitting adalah dua istilah yang merujuk pada fenomena kemalasan generasi muda."], jawaban: "C", pembahasan: "Kalimat (2) menyebutkan bahwa Quiet Quitting adalah antitesis dan bentuk kelelahan kolektif terhadap eksploitasi Hustle Culture. Jadi, ini adalah respons balik atau perlawanan terhadap budaya kerja keras ekstrem yang toxic." },
+            { nomor: 11, teks: "Apa yang menjadi titik perdebatan antara pihak manajemen perusahaan dan para sosiolog terkait fenomena tersebut?", pilihan: ["Manajemen menganggapnya sebagai penurunan etos kerja, sedangkan sosiolog menganggapnya sebagai bentuk perlindungan kesehatan mental.", "Manajemen menganggapnya wajar, sedangkan sosiolog menilainya sebagai ancaman bagi kapitalisme.", "Manajemen menyalahkan jam kerja yang terlalu panjang, sedangkan sosiolog menyalahkan gaji yang kecil.", "Manajemen menuntut lembur dibayar mahal, sedangkan sosiolog menginginkan batas jam kerja yang ketat.", "Manajemen melihatnya sebagai tren sementara, sedangkan sosiolog melihatnya sebagai kehancuran generasi muda."], jawaban: "A", pembahasan: "Kalimat (5) secara kontras menyajikan dua pandangan: manajemen menganggapnya sebagai penurunan loyalitas/etos kerja, sedangkan sosiolog melihatnya sebagai koreksi wajar atas kapitalisme (melindungi kesehatan mental pekerja)." },
+            { nomor: 12, teks: "Kalimat yang merupakan opini dari para quiet quitters (pelaku quiet quitting) terdapat pada...", pilihan: ["Kalimat (1)", "Kalimat (2)", "Kalimat (3)", "Kalimat (4)", "Kalimat (5)"], jawaban: "C", pembahasan: "Kalimat (3) menyatakan 'Para penganut quiet quitting menolak narasi bahwa nilai seorang manusia ditentukan oleh produktivitasnya di tempat kerja.' Ini adalah sebuah keyakinan, ideologi, opini, pandangan personal kelompok tersebut, bukan sebuah fakta empiris." }
+        ]
+    });
+
+    // TEKS 5 (13-15) IKN & WALHI
+    groups.push({
+        judul: "Teks 5 : IKN Nusantara vs WALHI",
+        bacaan: `Desain Pembangunan Ibu Kota Nusantara (IKN) dikonsepkan sebagai Smart Forest City (Kota Hutan Pintar), dengan komitmen mengalokasikan 75% dari total luas wilayahnya untuk ruang hijau. Pemerintah mengklaim proyek raksasa ini akan memulihkan ekosistem hutan hujan tropis Kalimantan yang sebelumnya rusak akibat konsesi tambang dan monokultur sawit. Namun, klaim ini ditanggapi skeptis oleh organisasi lingkungan seperti WALHI. Menurut mereka, membangun infrastruktur beton, jalan tol, dan bendungan besar di atas kawasan yang merupakan koridor satwa endemik seperti orangutan, bekantan, dan pesut Mahakam akan mempercepat fragmentasi habitat. Selain itu, mengubah hutan sekunder dan lahan gambut menjadi kawasan terbangun berisiko melepaskan jutaan ton cadangan karbon ke udara, yang bertolak belakang dengan retorika "kota hijau".`,
+        soal: [
+            { nomor: 13, teks: "Pernyataan manakah yang paling akurat merangkum konflik utama dalam teks di atas?", pilihan: ["Kegagalan pemerintah dalam mengalokasikan 75% lahan IKN untuk ruang terbuka hijau karena terhambat biaya.", "Benturan antara klaim pemulihan lingkungan (Smart Forest City) oleh pemerintah dengan potensi deforestasi dan ancaman satwa liar yang diutarakan WALHI.", "Sengketa lahan antara organisasi lingkungan dengan perusahaan tambang dan kelapa sawit di wilayah Nusantara.", "Penolakan organisasi lingkungan terhadap pemindahan ibu kota karena kekhawatiran meningkatnya emisi gas rumah kaca di Jakarta.", "Kegagalan konsep Smart Forest City akibat serangan satwa endemik ke area proyek pembangunan jalan tol."], jawaban: "B", pembahasan: "Konflik atau oposisi biner di dalam teks adalah klaim pemerintah bahwa pembangunan IKN berkonsep hijau dan pemulihan, ditentang oleh argumen aktivis (WALHI) bahwa realitas lapangan (infrastruktur beton di area satwa dan lahan gambut) memicu deforestasi, karbon, dan fragmentasi habitat satwa." },
+            { nomor: 14, teks: "Berdasarkan teks, mengapa WALHI bersikap skeptis terhadap konsep Smart Forest City IKN?", pilihan: ["Karena konsep kota pintar belum pernah berhasil diterapkan di negara-negara Asia Tenggara.", "Karena 75% lahan di IKN sudah dikuasai oleh perusahaan tambang batu bara dan perkebunan sawit.", "Karena pembangunan infrastruktur skala besar di wilayah tersebut akan memecah habitat satwa endemik dan melepaskan emisi karbon.", "Karena satwa endemik Kalimantan seperti bekantan dan orangutan sudah punah sebelum proyek IKN dimulai.", "Karena WALHI tidak dilibatkan secara langsung dalam pembuatan desain arsitektur Ibu Kota Nusantara."], jawaban: "C", pembahasan: "WALHI tidak menolak konsep Smart City secara teori, tetapi mereka skeptis karena membangun infrastruktur fisik (jalan tol, bendungan) secara masif di atas lahan hijau dan lahan gambut berisiko besar menghancurkan habitat satwa endemik dan memicu emisi karbon (bertolak belakang dengan janji hijau)." },
+            { nomor: 15, teks: "Istilah 'fragmentasi habitat' dalam teks merujuk pada kondisi...", pilihan: ["Bertambahnya luas kawasan hutan karena reboisasi massal oleh pemerintah.", "Perubahan fungsi hutan tropis menjadi kebun kelapa sawit secara ilegal.", "Berpindahnya satwa liar dari hutan ke kawasan pemukiman warga untuk mencari makan.", "Terpecahnya ekosistem alam yang luas menjadi area-area kecil yang terisolasi akibat pembangunan infrastruktur manusia.", "Pemusnahan habitat alami secara total dan seketika akibat bencana alam."], jawaban: "D", pembahasan: "Fragmentasi habitat adalah kondisi terpisahnya ruang/habitat satwa liar yang dulunya menyatu akibat dipotong oleh intervensi pembangunan manusia (seperti jalan raya besar, perkebunan), membuat kelompok satwa terisolasi, kesulitan mencari kawin, dan rentan konflik." }
+        ]
+    });
+
+    // TEKS 6 (16-18) Cukai MBDK
+    groups.push({
+        judul: "Teks 6 : Survei Kesehatan & Cukai Minuman Manis",
+        bacaan: `Teks A\nSurvei Kesehatan Indonesia 2023 membunyikan alarm keras: prevalensi penyakit tidak menular seperti diabetes melitus tipe 2 kini melonjak tajam di kalangan anak muda usia 20-30 tahun. Dokter spesialis penyakit dalam menyatakan bahwa pergeseran gaya hidup adalah biang kerok utama. Maraknya produk minuman manis kekinian, gaya hidup sedentary (kurang gerak), dan minimnya literasi gizi membuat organ pankreas generasi muda rusak lebih cepat. Jika tidak ada intervensi struktural, Indonesia berpotensi menghadapi bonus demografi yang diisi oleh generasi penyakitan dan membebani sistem jaminan kesehatan nasional (BPJS).\n\nTeks B\nKementerian Keuangan berencana menerapkan cukai Minuman Bergula dalam Kemasan (MBDK) pada tahun 2024. Kebijakan ini bertujuan mengendalikan konsumsi gula berlebih sekaligus menambah penerimaan negara. Berbagai studi di Meksiko dan Inggris membuktikan bahwa pengenaan pajak cukai sebesar 10-20% pada minuman manis efektif menurunkan volume konsumsi masyarakat secara signifikan dan memaksa industri mereformulasi produk mereka agar lebih rendah gula. Meski ditolak oleh asosiasi pengusaha minuman ringan dengan dalih akan mematikan industri dan menyebabkan PHK, banyak pakar kesehatan masyarakat mendesak kebijakan ini segera direalisasikan.`,
+        soal: [
+            { nomor: 16, teks: "Hubungan yang paling tepat antara Teks A dan Teks B adalah...", pilihan: ["Teks B adalah rincian data medis dari penyakit yang dijelaskan pada Teks A.", "Teks A menjelaskan dampak dari kebijakan yang akan diterapkan pada Teks B.", "Teks B memaparkan solusi/intervensi struktural dari pemerintah untuk mengatasi krisis kesehatan yang dijabarkan pada Teks A.", "Kedua teks saling bertentangan; Teks A mendukung industri minuman, sedangkan Teks B ingin mematikannya.", "Teks A dan Teks B tidak memiliki hubungan karena membahas isu dari sektor yang sama sekali berbeda (kesehatan vs ekonomi)."], jawaban: "C", pembahasan: "Teks A menjelaskan krisis (lonjakan diabetes pada usia muda akibat gaya hidup/minuman manis) dan mendesak perlunya 'intervensi struktural'. Teks B memaparkan wujud intervensi struktural pemerintah tersebut, yakni pengenaan cukai MBDK (Minuman Bergula dalam Kemasan)." },
+            { nomor: 17, teks: "Berdasarkan Teks B, apa multiplier effect (efek ganda) dari penerapan cukai MBDK selain menurunkan konsumsi gula masyarakat?", pilihan: ["Mendorong masyarakat beralih dari minuman kemasan ke minuman tradisional buatan rumah.", "Menyebabkan kebangkrutan BPJS Kesehatan karena kurangnya pasien yang berobat.", "Menambah penerimaan kas negara dan memaksa industri mengubah formula produk menjadi lebih sehat.", "Mengurangi tingkat pengangguran karena banyaknya pabrik minuman baru yang tidak menggunakan gula.", "Meningkatkan daya beli masyarakat terhadap produk makanan pokok."], jawaban: "C", pembahasan: "Pada Teks B terdapat kalimat 'pengenaan pajak... menurunkan volume konsumsi... dan memaksa industri mereformulasi produk mereka agar lebih rendah gula' serta 'menambah penerimaan negara'. Efek ganda yang dicapai pemerintah adalah fiskal (dapat uang pajak) dan kesehatan (industri merombak formula minuman)." },
+            { nomor: 18, teks: "Pihak yang pandangannya paling bertolak belakang dalam menanggapi rencana cukai MBDK adalah...", pilihan: ["Dokter spesialis penyakit dalam dan pakar kesehatan masyarakat.", "Kementerian Keuangan dan Badan Penyelenggara Jaminan Sosial (BPJS).", "Pelaku industri minuman ringan dan pakar kesehatan masyarakat.", "Anak muda usia 20-30 tahun dan penderita diabetes melitus.", "Asosiasi pengusaha dan kementerian tenaga kerja"], jawaban: "C", pembahasan: "Di akhir Teks B disebutkan bahwa regulasi ini ditolak oleh asosiasi pengusaha minuman ringan (karena takut mati dan PHK), namun justru sangat didesak penerapannya oleh pakar kesehatan masyarakat (demi keselamatan populasi)." }
+        ]
+    });
+
+    // TEKS 7 (19-21) Cerpen Bardi
+    groups.push({
+        judul: "Teks 7 : Kesan Bardi (Ojek Daring)",
+        bacaan: `Hujan sore itu turun seolah ingin mencuci bersih dosa-dosa Jakarta. Bardi, dengan mantel plastik hijaunya yang sudah robek di bagian ketiak, menepi di bawah flyover Casablanca. Layar gawainya redup, basah oleh rintik hujan dan keringat. Angka di aplikasi ojek daringnya menunjukkan bahwa hari ini ia baru menyelesaikan empat orderan, jauh di bawah target poin untuk mendapatkan bonus harian. Belakangan ini, algoritma aplikasi semakin "kejam". Jarak penjemputan diperjauh, sementara tarif per kilometer dipangkas tajam berkedok promo pelanggan. Bintang lima dari penumpang adalah nyawa, namun sistem yang mengatur nasibnya setiap hari adalah dewa yang tuli terhadap deru perutnya yang belum terisi sejak pagi. Bardi menyalakan sebatang kretek yang sudah lembap, menghembuskan asapnya perlahan ke udara, seolah meniupkan sisa-sisa harapannya untuk membeli susu anak bungsunya malam ini.`,
+        soal: [
+            { nomor: 19, teks: "Majas (gaya bahasa) yang sangat menonjol penggunaannya pada kalimat '...namun sistem yang mengatur nasibnya setiap hari adalah dewa yang tuli terhadap deru perutnya...' adalah...", pilihan: ["Personifikasi dan Metafora", "Litotes dan Hiperbola", "Sinekdoke dan Ironi", "Metonimia dan Sarkasme", "Asosiasi dan Eufemisme"], jawaban: "A", pembahasan: "'Sistem adalah dewa yang tuli' menggunakan kiasan perbandingan langsung tanpa kata perantara (Metafora), serta menghidupkan sistem algoritma seolah bisa memiliki pendengaran manusiawi namun bersikap tuli (Personifikasi)." },
+            { nomor: 20, teks: "Kritik sosial yang tersirat kuat dalam kutipan prosa tersebut adalah...", pilihan: ["Pelanggan ojek daring sering memberikan penilaian bintang secara sembarangan.", "Eksploitasi dan ketidakberdayaan pekerja gig economy (mitra ojek daring) terhadap sistem algoritma aplikator yang menekan pendapatan mereka.", "Pemerintah daerah Jakarta yang gagal menyediakan tempat berteduh yang layak bagi pengendara motor saat hujan.", "Pekerja jalanan yang memiliki manajemen keuangan yang buruk sehingga tidak mampu membeli susu untuk anaknya.", "Sistem pemberian bonus harian yang membuat para pengendara ojek daring menjadi malas bekerja."], jawaban: "B", pembahasan: "Melalui tokoh Bardi sang ojek daring, teks ini mengkritik bagaimana relasi kuasa dalam gig economy sangat tidak berimbang. Pekerja dikendalikan penuh oleh algoritma yang sewaktu-waktu bisa mencekik tarif dan menjauhkan jarak, sementara mereka tidak bisa melawan." },
+            { nomor: 21, teks: "Latar suasana yang tergambar secara dominan dalam paragraf tersebut adalah...", pilihan: ["Menegangkan dan berbahaya", "Romantis dan syahdu", "Nelangsa, dingin, dan penuh keputusasaan", "Penuh semangat dan optimisme pantang menyerah", "Tenang, damai, dan menyejukkan hati"], jawaban: "C", pembahasan: "Diksi 'hujan', 'redup', 'basah keringat', 'dewa yang tuli', 'kretek lembap', dan pikiran buntu untuk membeli susu anak, merajut latar serta suasana yang nelangsa, dingin, dan diliputi keputusasaan yang tragis." }
+        ]
+    });
+
+    // TEKS 8 (22-24) De-dolarisasi
+    groups.push({
+        judul: "Teks 8 : De-dolarisasi & LCT",
+        bacaan: `Wacana de-dolarisasi atau upaya melepaskan ketergantungan dari hegemoni dolar Amerika Serikat (AS) semakin gencar diimplementasikan oleh negara-negara Global South, termasuk Indonesia. Melalui kerangka Local Currency Transaction (LCT), Bank Indonesia telah menjalin kesepakatan bilateral dengan sejumlah negara seperti Tiongkok, Jepang, Malaysia, dan Thailand. Skema LCT memungkinkan pelaku usaha lintas negara melakukan penyelesaian transaksi perdagangan dan investasi menggunakan mata uang lokal masing-masing tanpa perlu menukarkannya terlebih dahulu ke dolar AS. Kebijakan ini tidak hanya menekan biaya konversi mata uang (biaya transaksi) yang membebani eksportir dan importir, tetapi juga menjadi tameng bagi stabilitas nilai tukar Rupiah dari guncangan kebijakan suku bunga bank sentral AS (The Fed) yang kerap tidak terduga.`,
+        soal: [
+            { nomor: 22, teks: "Kata 'hegemoni' dalam kalimat pertama memiliki padanan makna yang paling tepat dengan kata...", pilihan: ["Kekuatan bersenjata", "Ketidakstabilan", "Dominasi atau pengaruh kekuasaan", "Persaingan bisnis", "Monopoli perdagangan"], jawaban: "C", pembahasan: "Hegemoni adalah suatu pengaruh, kepemimpinan, kekuasaan, atau dominasi suatu entitas (dalam hal ini Dolar AS) terhadap entitas lainnya di berbagai aspek kehidupan ekonomi global." },
+            { nomor: 23, teks: "Berdasarkan teks, manakah yang BUKAN merupakan keuntungan dari implementasi Local Currency Transaction (LCT)?", pilihan: ["Menekan biaya konversi mata uang bagi pelaku ekspor-impor.", "Melindungi Rupiah dari efek kebijakan suku bunga The Fed.", "Mendorong penyelesaian transaksi bilateral menggunakan mata uang lokal.", "Melepaskan ketergantungan ekonomi Indonesia dari dolar AS secara bertahap.", "Mewajibkan negara-negara berkembang menggunakan mata uang Rupiah secara global."], jawaban: "E", pembahasan: "Manfaat LCT yang tercantum dalam teks adalah menekan biaya konversi (A), tameng dari kebijakan The Fed (B), memudahkan penggunaan mata uang lokal masing-masing negara (C), dan dedolarisasi (D). Pilihan E sepenuhnya keliru karena skema LCT tidak memaksa dunia menggunakan Rupiah, melainkan mata uang lokal masing-masing mitra." },
+            { nomor: 24, teks: "Hubungan sebab-akibat (kausalitas) yang terbangun pada bagian akhir teks tersebut adalah...", pilihan: ["Karena LCT diterapkan, maka The Fed tidak berani lagi menaikkan suku bunga.", "Jika eksportir menggunakan dolar AS, maka biaya transaksi akan menjadi lebih murah.", "Karena adanya guncangan ekonomi dari The Fed, maka mata uang lokal di seluruh dunia kehilangan nilainya secara permanen.", "Penggunaan LCT mengakibatkan berkurangnya ketergantungan pada dolar, sehingga stabilitas nilai tukar Rupiah lebih terlindungi dari fluktuasi kebijakan eksternal.", "De-dolarisasi menyebabkan runtuhnya dominasi ekonomi Amerika Serikat secara langsung di kawasan Asia Tenggara."], jawaban: "D", pembahasan: "Hubungan kausalitasnya adalah: [Sebab] LCT mengurangi proses tukar-menukar menggunakan dolar AS. [Akibat] Ketergantungan terhadap dolar turun. [Dampak Akhir] Gejolak kebijakan bank sentral AS (The Fed) tidak lagi merusak stabilitas Rupiah secara drastis. Pilihan D merangkum hubungan logis tersebut." }
+        ]
+    });
+
+    // TEKS 9 (25-27) Restorative Justice
+    groups.push({
+        judul: "Teks 9 : Restorative Justice Kejaksaan",
+        bacaan: `Dalam beberapa tahun terakhir, Kejaksaan Agung Republik Indonesia masif menerapkan pendekatan Restorative Justice (Keadilan Restoratif) dalam menangani perkara pidana ringan. Pendekatan ini menitikberatkan pada pemulihan keadaan kembali ke kondisi semula, penyelesaian di luar pengadilan, dan rekonsiliasi antara pelaku dan korban, alih-alih penghukuman pemenjaraan. Perkara yang memenuhi syarat antara lain: ancaman pidana di bawah 5 tahun, kerugian di bawah Rp2,5 juta, dan pelaku baru pertama kali melakukan tindak pidana. Kebijakan ini dinilai sebagai langkah progresif untuk mengikis stigma hukum yang "tajam ke bawah, tumpul ke atas", di mana nenek pencuri kayu ranting atau ibu miskin pencuri susu demi anaknya kerap kali dijatuhi hukuman penjara yang tidak rasional. Selain itu, keadilan restoratif secara pragmatis membantu mengurai masalah overcrowding (kelebihan kapasitas) yang ekstrem di lembaga pemasyarakatan (Lapas).`,
+        soal: [
+            { nomor: 25, teks: "Ide pokok paragraf di atas adalah...", pilihan: ["Masalah kelebihan kapasitas di lembaga pemasyarakatan Indonesia.", "Kritik terhadap hukum Indonesia yang selalu menindas rakyat kecil ('tajam ke bawah, tumpul ke atas').", "Penerapan dan urgensi pendekatan Restorative Justice oleh Kejaksaan Agung pada kasus pidana ringan.", "Syarat-syarat seseorang bisa dibebaskan dari hukuman penjara tanpa melalui persidangan.", "Kegagalan sistem peradilan konvensional dalam menekan angka kriminalitas di masyarakat."], jawaban: "C", pembahasan: "Paragraf ini adalah teks eksposisi informatif-argumentatif yang menjabarkan tentang kebijakan Kejaksaan Agung menggunakan Restorative Justice dalam pidana ringan, syarat-syaratnya, serta manfaat atau urgensi dari penerapannya." },
+            { nomor: 26, teks: "Makna dari frasa 'tajam ke bawah, tumpul ke atas' dalam konteks peradilan pidana bermakna...", pilihan: ["Hukum sangat tegas dan keras terhadap masyarakat kelas bawah, namun cenderung longgar dan toleran terhadap pejabat atau kalangan elite kelas atas.", "Aturan perundang-undangan selalu direvisi dari level masyarakat bawah hingga disahkan ke pejabat tingkat atas.", "Putusan hakim yang sering kali berpihak pada korban (masyarakat bawah) dibandingkan membela hak-hak tersangka.", "Sistem pengadilan yang hierarkis di mana Pengadilan Negeri lebih kejam daripada Mahkamah Agung.", "Hukum pidana tidak berlaku bagi warga negara asing, hanya tajam bagi warga negara asli."], jawaban: "A", pembahasan: "Perumpamaan peradilan ibarat 'pisau yang tumpul ke atas, namun tajam ke bawah' menyindir diskriminasi penegakan hukum: sangat garang dan menghukum berat rakyat miskin yang melakukan kesalahan sepele (tajam ke bawah), namun sering memberi diskon hukuman pada koruptor kelas kakap (tumpul ke atas)." },
+            { nomor: 27, teks: "Argumentasi paling pragmatis (berdasarkan nilai praktis dan kegunaan langsung) yang mendukung pendekatan Restorative Justice pada teks tersebut adalah...", pilihan: ["Membangun budaya saling memaafkan di tengah masyarakat.", "Menyelamatkan ibu miskin dan nenek tua dari jerat hukum.", "Menurunkan beban dan masalah kelebihan kapasitas (overcrowding) di dalam sel tahanan/Lapas.", "Memberikan ruang bagi aparat penegak hukum untuk memeras tersangka.", "Menunjukkan kepada dunia bahwa Indonesia menjunjung tinggi hak asasi manusia."], jawaban: "C", pembahasan: "'Secara pragmatis' merujuk pada asas guna dan keuntungan efisiensi operasional negara. Di kalimat terakhir disebutkan: '...secara pragmatis membantu mengurai masalah overcrowding (kelebihan kapasitas) yang ekstrem di lembaga pemasyarakatan.'" }
+        ]
+    });
+
+    // TEKS 10 (28-30) Golden Visa
+    groups.push({
+        judul: "Teks 10 : Golden Visa",
+        bacaan: `(1) Demi menggenjot arus investasi asing langsung (Foreign Direct Investment) dan menarik talenta global, pemerintah Indonesia meluncurkan kebijakan "Golden Visa". (2) Kebijakan keimigrasian ini memberikan izin tinggal eksklusif berdurasi 5 hingga 10 tahun bagi warga negara asing (WNA) yang menanamkan modalnya di Indonesia dengan batas nominal tertentu. (3) Investor perorangan, misalnya, diwajibkan menyetor dana investasi mulai dari 2,5 juta dolar AS untuk mendirikan perusahaan, sementara korporasi bisa menyetor hingga 50 juta dolar AS. (4) Kehadiran para pemegang Golden Visa ini diharapkan mampu menciptakan efek ganda (multiplier effect) berupa pembukaan lapangan kerja baru, transfer teknologi, dan percepatan pertumbuhan makroekonomi. (5) Kendati demikian, sejumlah pengamat kebijakan publik mengingatkan potensi ekses negatifnya. (6) Minimnya pengawasan berisiko menjadikan fasilitas ini sebagai karpet merah bagi pencucian uang lintas negara (money laundering) atau eksploitasi properti dan sumber daya alam oleh oligarki asing yang dapat meminggirkan masyarakat lokal.`,
+        soal: [
+            { nomor: 28, teks: "Berdasarkan teks, persyaratan krusial bagi seorang warga negara asing untuk mendapatkan Golden Visa adalah...", pilihan: ["Memiliki garis keturunan warga negara Indonesia.", "Bersedia bekerja sebagai tenaga ahli teknologi di perusahaan BUMN.", "Menanamkan modal atau dana investasi dalam jumlah besar di Indonesia.", "Menikah dengan warga negara Indonesia dan membangun bisnis berskala kecil.", "Lulus uji bahasa Indonesia dan wawasan kebangsaan."], jawaban: "C", pembahasan: "Teks menegaskan bahwa Golden Visa diberikan kepada individu asing yang 'menanamkan modalnya... batas nominal tertentu' atau 'wajib menyetor dana investasi'. Jadi, uang/modal adalah syarat mutlak, bukan silsilah keturunan, pernikahan, atau sekadar wawasan." },
+            { nomor: 29, teks: "Sikap kehati-hatian pengamat kebijakan publik (kalimat 5 dan 6) muncul karena adanya kemungkinan bahwa...", pilihan: ["Nilai tukar rupiah akan merosot tajam akibat banyaknya uang asing yang masuk.", "Lapangan kerja lokal akan sepenuhnya digantikan oleh mesin canggih dan robotik dari luar negeri.", "Pemegang Golden Visa akan menuntut hak politik seperti hak pilih dalam Pemilu di Indonesia.", "Dana investasi yang disetorkan berasal dari kejahatan kerah putih atau berujung pada penguasaan aset tanah oleh asing secara serampangan.", "Golden Visa akan membuat banyak pengusaha lokal mengurus pindah kewarganegaraan ke negara lain."], jawaban: "D", pembahasan: "Ekses negatif (risiko) yang disebut pada kalimat akhir teks adalah kekhawatiran fasilitas izin tinggal ini akan dipakai untuk money laundering (pencucian uang hasil kejahatan kerah putih dari luar) dan memberikan penguasaan properti/SDA lokal kepada oligarki asing secara berlebihan." },
+            { nomor: 30, teks: "Judul yang paling representatif untuk teks di atas adalah...", pilihan: ["Golden Visa: Solusi Mutlak Mengatasi Pengangguran Nasional.", "Syarat Rumit Investasi Asing di Era Digital Indonesia.", "Ancaman Pencucian Uang di Balik Kebijakan Bebas Visa.", "Dilema Kebijakan Golden Visa: Antara Karpet Merah Investasi dan Celah Oligarki.", "Sejarah Evolusi Kebijakan Keimigrasian di Asia Tenggara"], jawaban: "D", pembahasan: "Paragraf memaparkan dua sisi uang koin dari kebijakan Golden Visa: keuntungan dari masuknya investasi dan pertumbuhan ekonomi (karpet merah), dibenturkan dengan risiko penguasaan oleh elit asing serta pencucian uang (celah oligarki). Pilihan D adalah formulasi judul yang merangkum keseluruhan tesis dan antitesis dari teks tersebut." }
+        ]
+    });
+
+    // ========= RENDER =========
+    const root = document.getElementById("quiz-root");
+    function render() {
+        root.innerHTML = "";
+        for (let g of groups) {
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "teks-group";
+
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "teks-header";
+            headerDiv.innerText = g.judul;
+            groupDiv.appendChild(headerDiv);
+
+            const bacaanDiv = document.createElement("div");
+            bacaanDiv.className = "teks-bacaan";
+            bacaanDiv.innerText = g.bacaan;
+            groupDiv.appendChild(bacaanDiv);
+
+            const soalContainer = document.createElement("div");
+            soalContainer.className = "soal-container";
+
+            for (let q of g.soal) {
+                const card = document.createElement("div");
+                card.className = "card-soal";
+                const nomorSpan = document.createElement("div");
+                nomorSpan.className = "soal-nomor";
+                nomorSpan.innerText = `Soal ${q.nomor}`;
+                card.appendChild(nomorSpan);
+
+                const teksSoal = document.createElement("div");
+                teksSoal.className = "soal-teks";
+                teksSoal.innerText = q.teks;
+                card.appendChild(teksSoal);
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.className = "options";
+                const nameAttr = `soal_${q.nomor}`;
+                const letters = ["A","B","C","D","E"];
+                for (let i = 0; i < q.pilihan.length; i++) {
+                    const opt = document.createElement("div");
+                    opt.className = "option";
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = nameAttr;
+                    radio.value = letters[i];
+                    const label = document.createElement("label");
+                    label.innerText = `${letters[i]}. ${q.pilihan[i]}`;
+                    opt.appendChild(radio);
+                    opt.appendChild(label);
+                    optionsDiv.appendChild(opt);
+                }
+                card.appendChild(optionsDiv);
+
+                const btnGroup = document.createElement("div");
+                btnGroup.className = "btn-group";
+                const checkBtn = document.createElement("button");
+                checkBtn.innerText = "✅ Cek Jawaban";
+                checkBtn.classList.add("check-btn");
+                const pembahasanBtn = document.createElement("button");
+                pembahasanBtn.innerText = "📖 Pembahasan";
+                pembahasanBtn.classList.add("pembahasan-btn");
+                btnGroup.appendChild(checkBtn);
+                btnGroup.appendChild(pembahasanBtn);
+                card.appendChild(btnGroup);
+
+                const feedbackDiv = document.createElement("div");
+                feedbackDiv.className = "feedback";
+                const pembahasanDiv = document.createElement("div");
+                pembahasanDiv.className = "pembahasan-text";
+                pembahasanDiv.innerHTML = `<strong>📘 Pembahasan Lengkap:</strong><br>${q.pembahasan.replace(/\n/g, '<br>')}`;
+                card.appendChild(feedbackDiv);
+                card.appendChild(pembahasanDiv);
+
+                checkBtn.addEventListener("click", () => {
+                    const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                    if (!selected) {
+                        feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                        feedbackDiv.classList.add("show");
+                        return;
+                    }
+                    const userVal = selected.value;
+                    if (userVal === q.jawaban) {
+                        feedbackDiv.innerHTML = `✅ BENAR! Jawaban: ${q.jawaban}`;
+                        feedbackDiv.classList.add("correct", "show");
+                        feedbackDiv.classList.remove("wrong");
+                    } else {
+                        feedbackDiv.innerHTML = `❌ SALAH. Jawaban yang benar: ${q.jawaban}.`;
+                        feedbackDiv.classList.add("wrong", "show");
+                        feedbackDiv.classList.remove("correct");
+                    }
+                });
+                pembahasanBtn.addEventListener("click", () => {
+                    pembahasanDiv.classList.toggle("show");
+                    pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
+                });
+
+                soalContainer.appendChild(card);
+            }
+            groupDiv.appendChild(soalContainer);
+            root.appendChild(groupDiv);
+        }
+    }
+    render();
+</script>
+</body>
+</html>
