@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Literasi Bahasa Inggris | 20 Soal Interaktif</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f7fc;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.9rem;
+            text-align: center;
+            color: #0a4b6e;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #2c6979;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #cbdfea;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+        .teks-group {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+            border: 1px solid #e2edf2;
+        }
+        .teks-header {
+            background: #eef3fc;
+            padding: 18px 24px;
+            border-bottom: 2px solid #cbdfea;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0a4b6e;
+        }
+        .teks-bacaan {
+            background: #fefefe;
+            padding: 20px 24px;
+            font-size: 0.96rem;
+            line-height: 1.65;
+            color: #1e2f3d;
+            border-bottom: 1px solid #e2edf2;
+            white-space: pre-wrap;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        .soal-container {
+            padding: 12px 24px 24px 24px;
+            background: white;
+        }
+        .card-soal {
+            background: #fafcff;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            border: 1px solid #e2edf2;
+            transition: all 0.1s;
+        }
+        .soal-nomor {
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+        }
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+            font-weight: 500;
+            background: white;
+            padding: 4px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            margin: 14px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbdbe0;
+            transition: 0.1s;
+        }
+        .option:hover {
+            background: #eef3fc;
+        }
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+        button {
+            background: #e9eef3;
+            border: none;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+        }
+        button.check-btn:hover {
+            background: #0e5e89;
+        }
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #b9c8da;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e0f7e8;
+            color: #0a5e2e;
+            border-left: 5px solid #2b8c4a;
+        }
+        .feedback.wrong {
+            background: #ffe6e5;
+            color: #ac2c34;
+            border-left: 5px solid #e34d4d;
+        }
+        .pembahasan-text {
+            background: #eef2fa;
+            padding: 16px 20px;
+            border-radius: 20px;
+            margin-top: 14px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            border-left: 4px solid #3b82f6;
+            display: none;
+            white-space: pre-wrap;
+        }
+        .pembahasan-text.show {
+            display: block;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.75rem;
+            color: #5f7f9c;
+        }
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .teks-bacaan, .soal-container { padding: 16px; }
+            .option { padding: 6px 12px; }
+            label { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📘 Literasi Bahasa Inggris</h1>
+    <div style="text-align: center;"><span class="subtitle">20 Soal Pemahaman Teks + Pembahasan Lengkap</span></div>
+    <div id="quiz-root"></div>
+    <footer>✅ Klik "Cek Jawaban" untuk menilai. 📖 "Pembahasan" menampilkan penjelasan detail.</footer>
+</div>
+
+<script>
+    // Data teks dan soal (5 teks, masing-masing 4-5 soal)
+    const groups = [];
+
+    // ----- TEKS 1 (Sleep) Soal 1-5 -----
+    groups.push({
+        judul: "Text 1: The Importance of Sleep",
+        bacaan: `Sleep is a complex biological process that is essential for healthy brain function and overall physical health. While you sleep, your brain is busy forming new pathways to help you learn and remember information. Studies show that a good night's sleep improves learning and problem-solving skills. It also helps you pay attention, make decisions, and be creative. Physically, sleep is involved in the healing and repair of your heart and blood vessels. Ongoing sleep deficiency is linked to an increased risk of heart disease, kidney disease, high blood pressure, diabetes, and stroke. Furthermore, sleep helps maintain a healthy balance of the hormones that make you feel hungry (ghrelin) or full (leptin). When you don't get enough sleep, your level of ghrelin goes up and your level of leptin goes down. This makes you feel hungrier than when you are well-rested.`,
+        soal: [
+            { nomor: 1, teks: "What is the primary focus of the first paragraph?", pilihan: ["The chemical composition of the brain during rest.", "The cognitive benefits of adequate sleep.", "The physical repair of internal organs.", "The history of sleep research in education.", "The relationship between sleep and physical exercise."], jawaban: "B", pembahasan: "Paragraf pertama berfokus pada manfaat tidur bagi fungsi kognitif otak seperti belajar dan memori." },
+            { nomor: 2, teks: "According to the text, how does sleep deprivation affect appetite?", pilihan: ["It balances ghrelin and leptin levels.", "It makes a person feel full longer due to high leptin.", "It increases hunger by raising ghrelin levels.", "It has no significant impact on hormonal balance.", "It decreases the desire to eat sugary foods."], jawaban: "C", pembahasan: "Teks menjelaskan bahwa kurang tidur meningkatkan hormon lapar (ghrelin)." },
+            { nomor: 3, teks: "The word 'deficiency' in paragraph 2 is closest in meaning to...", pilihan: ["Excess", "Sufficiency", "Lack", "Efficiency", "Abundance"], jawaban: "C", pembahasan: "Deficiency berarti kekurangan atau lack." },
+            { nomor: 4, teks: "What can be inferred about someone who consistently sleeps only 4 hours a night?", pilihan: ["They will have better problem-solving skills than those who sleep 8 hours.", "They are at a higher risk of developing chronic physical health issues.", "Their leptin levels will likely be higher than their ghrelin levels.", "They will be more creative in their professional life.", "Their heart and blood vessels will repair themselves faster."], jawaban: "B", pembahasan: "Disebutkan bahwa kurang tidur terus-menerus meningkatkan risiko masalah kesehatan fisik kronis (jantung, stroke, dll)." },
+            { nomor: 5, teks: "The author’s purpose in writing this text is to...", pilihan: ["Persuade the readers to buy sleep-tracking devices.", "Critique the current medical treatment for insomnia.", "Describe the biological and cognitive importance of sleep.", "Narrate a story about a person with a sleep disorder."], jawaban: "C", pembahasan: "Tujuan teks adalah memberikan penjelasan/deskripsi tentang pentingnya tidur bagi tubuh dan otak." }
+        ]
+    });
+
+    // ----- TEKS 2 (Digital Rupiah) Soal 6-10 -----
+    groups.push({
+        judul: "Text 2: Digital Rupiah Pilot Phase",
+        bacaan: `Jakarta, May 2026 – The Central Bank has officially announced the pilot phase of the Digital Rupiah, aimed at modernizing the nation's financial infrastructure. This move comes as digital transactions have surged by 45% over the past year. The Governor stated that the digital currency would enhance payment efficiency and support financial inclusion for those in remote areas without access to traditional banking.
+However, some cybersecurity experts have raised concerns regarding data privacy and the potential for large-scale system breaches. "While the efficiency is undeniable, the infrastructure must be foolproof against sophisticated cyber-attacks," said Dr. Aris, a lead researcher at the Cyber Security Institute. The government plans to run the trial for six months before a full-scale rollout.`,
+        soal: [
+            { nomor: 6, teks: "What triggered the Central Bank to launch the Digital Rupiah pilot phase?", pilihan: ["A decrease in international trade.", "The total collapse of traditional banks.", "A significant increase in digital transactions.", "Pressure from cybersecurity experts.", "The need to replace all physical money immediately."], jawaban: "C", pembahasan: "Pemicunya adalah lonjakan transaksi digital sebesar 45%." },
+            { nomor: 7, teks: "What is one benefit of the Digital Rupiah mentioned by the Governor?", pilihan: ["Eliminating the need for internet access in remote areas.", "Helping people without bank accounts participate in the economy.", "Preventing all forms of cyber-attacks.", "Reducing the government’s debt.", "Increasing the value of the Rupiah against the Dollar."], jawaban: "B", pembahasan: "Disebutkan bahwa mata uang digital mendukung inklusi finansial bagi mereka yang tidak memiliki akses ke bank tradisional." },
+            { nomor: 8, teks: "What is Dr. Aris's stance on the Digital Rupiah?", pilihan: ["Completely against the initiative.", "Enthusiastic without any reservations.", "Cautious about the security of the infrastructure.", "Indifferent to the change in currency.", "Concerned that it will be too expensive for the public."], jawaban: "C", pembahasan: "Dr. Aris mengakui efisiensinya namun waspada terhadap celah keamanan siber." },
+            { nomor: 9, teks: "The word 'breaches' in the second paragraph refers to...", pilihan: ["Improvements", "Connections", "Violations or gaps in security", "Transactions", "Investments"], jawaban: "C", pembahasan: "Breaches adalah pelanggaran atau pembobolan keamanan." },
+            { nomor: 10, teks: "How long will the trial period for the Digital Rupiah last?", pilihan: ["One year", "Six months", "One month", "Forty-five days", "It is not mentioned."], jawaban: "B", pembahasan: "Masa uji coba direncanakan berlangsung selama enam bulan." }
+        ]
+    });
+
+    // ----- TEKS 3 (Remote Work vs Office) Soal 11-15 -----
+    groups.push({
+        judul: "Text 3: Remote Work vs Traditional Office",
+        bacaan: `The debate between remote work and traditional office settings has intensified. Proponents of remote work argue that it offers unparalleled flexibility and eliminates stressful commutes, leading to higher job satisfaction. Furthermore, companies can reduce overhead costs by maintaining smaller physical offices.
+On the other hand, critics argue that the "office culture" is essential for innovation and spontaneous collaboration. They believe that face-to-face interactions build trust and a sense of belonging that digital screens cannot replicate. A study by the Productivity Lab suggests that while individual tasks might be completed faster at home, complex team projects often suffer due to communication delays. Therefore, a "hybrid model" seems to be the most viable solution, balancing individual freedom with the social benefits of the office.`,
+        soal: [
+            { nomor: 11, teks: "Which of the following is an argument in favor of remote work?", pilihan: ["It fosters spontaneous collaboration.", "It builds a stronger sense of belonging.", "It reduces the costs of running an office.", "It speeds up complex team projects.", "It requires more digital screens."], jawaban: "C", pembahasan: "Salah satu keuntungan yang disebutkan adalah penghematan biaya operasional kantor." },
+            { nomor: 12, teks: "What is the main drawback of remote work mentioned in the text?", pilihan: ["It increases overhead costs for companies.", "It can lead to communication delays in team-based work.", "It makes individual tasks take longer to complete.", "It eliminates the need for flexible schedules.", "It prevents workers from using digital technology."], jawaban: "B", pembahasan: "Teks menyebutkan bahwa proyek tim yang kompleks sering mengalami hambatan komunikasi dalam kerja jarak jauh." },
+            { nomor: 13, teks: "The author suggests a 'hybrid model' as a solution. This means...", pilihan: ["Working only from home forever.", "Working only in the office forever.", "Combining both remote and office-based work.", "Replacing human workers with AI.", "Reducing the number of team projects."], jawaban: "C", pembahasan: "Model hibrida menggabungkan kerja jarak jauh dan kerja di kantor." },
+            { nomor: 14, teks: "The word 'unparalleled' in paragraph 1 is closest in meaning to...", pilihan: ["Common", "Exceptional/Matchless", "Limited", "Disappointing", "Average"], jawaban: "B", pembahasan: "Unparalleled berarti tidak tertandingi atau luar biasa (exceptional)." },
+            { nomor: 15, teks: "What is the author's tone in the text?", pilihan: ["Highly biased toward remote work.", "Sarcastic and dismissive of office workers.", "Objective and balanced.", "Fearful of future technology.", "Aggressive and demanding."], jawaban: "C", pembahasan: "Penulis menyajikan kedua sudut pandang (pro dan kontra) secara berimbang sebelum memberikan solusi." }
+        ]
+    });
+
+    // ----- TEKS 4 (Elias the Clockmaker) Soal 16-20 -----
+    groups.push({
+        judul: "Text 4: Elias the Clockmaker",
+        bacaan: `Elias had lived in the small town of Oakhaven for eighty years, and for sixty of those, he had been the town’s only clockmaker. His shop was a sanctuary of ticking sounds, a rhythmic heartbeat that calmed his aging soul. Every clock in the shop told a different story—some were gifts for weddings, others were heirlooms passed down through generations.
+One day, a young girl named Clara entered the shop holding a broken pocket watch. "My grandfather said you’re the only one who can make time move again," she whispered. Elias looked at the watch; it was rusted and silent. He knew it would take weeks of meticulous work. He didn't do it for the money anymore; he did it because he understood that a clock wasn't just a machine. It was a bridge to the past. As he began to work, he felt a familiar spark of purpose.`,
+        soal: [
+            { nomor: 16, teks: "How long has Elias worked as a clockmaker?", pilihan: ["Eighty years", "Twenty years", "Sixty years", "Sixteen years", "All his life"], jawaban: "C", pembahasan: "Elias tinggal selama 80 tahun, tetapi bekerja sebagai tukang jam selama 60 tahun." },
+            { nomor: 17, teks: "What does the 'rhythmic heartbeat' in the first paragraph refer to?", pilihan: ["Elias’s own health condition.", "The sound of the town’s people walking.", "The collective ticking of the clocks in the shop.", "The sound of a drum in the distance.", "The noise from the factory next door."], jawaban: "C", pembahasan: "Suara detak jam kolektif di toko tersebut digambarkan sebagai detak jantung." },
+            { nomor: 18, teks: "Why did Elias agree to fix Clara’s watch?", pilihan: ["He was in desperate need of money.", "He wanted to prove he was better than other clockmakers.", "He felt a sense of purpose and valued the watch's connection to the past.", "The girl promised to help him in the shop.", "He was bored and had nothing else to do."], jawaban: "C", pembahasan: "Elias melakukannya karena merasa jam tersebut adalah jembatan ke masa lalu (makna emosional)." },
+            { nomor: 19, teks: "What is the theme of the story?", pilihan: ["The dangers of old technology.", "The value of craftsmanship and memory.", "The importance of being wealthy.", "The rivalry between old and young generations.", "The fast-paced nature of modern life."], jawaban: "B", pembahasan: "Tema utama adalah nilai dari keterampilan tangan (craftsmanship) dan kenangan." },
+            { nomor: 20, teks: "The word 'meticulous' in the second paragraph implies that the work is...", pilihan: ["Very fast and easy.", "Extremely careful and precise.", "Dirty and unpleasant.", "Careless and random.", "Cheap and affordable."], jawaban: "B", pembahasan: "Meticulous berarti sangat teliti, hati-hati, dan presisi." }
+        ]
+    });
+
+    // ========= RENDER =========
+    const root = document.getElementById("quiz-root");
+    function render() {
+        root.innerHTML = "";
+        for (let g of groups) {
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "teks-group";
+
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "teks-header";
+            headerDiv.innerText = g.judul;
+            groupDiv.appendChild(headerDiv);
+
+            const bacaanDiv = document.createElement("div");
+            bacaanDiv.className = "teks-bacaan";
+            bacaanDiv.innerText = g.bacaan;
+            groupDiv.appendChild(bacaanDiv);
+
+            const soalContainer = document.createElement("div");
+            soalContainer.className = "soal-container";
+
+            for (let q of g.soal) {
+                const card = document.createElement("div");
+                card.className = "card-soal";
+                const nomorSpan = document.createElement("div");
+                nomorSpan.className = "soal-nomor";
+                nomorSpan.innerText = `Soal ${q.nomor}`;
+                card.appendChild(nomorSpan);
+
+                const teksSoal = document.createElement("div");
+                teksSoal.className = "soal-teks";
+                teksSoal.innerText = q.teks;
+                card.appendChild(teksSoal);
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.className = "options";
+                const nameAttr = `soal_${q.nomor}`;
+                const letters = ["A","B","C","D","E"];
+                for (let i = 0; i < q.pilihan.length; i++) {
+                    const opt = document.createElement("div");
+                    opt.className = "option";
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = nameAttr;
+                    radio.value = letters[i];
+                    const label = document.createElement("label");
+                    label.innerText = `${letters[i]}. ${q.pilihan[i]}`;
+                    opt.appendChild(radio);
+                    opt.appendChild(label);
+                    optionsDiv.appendChild(opt);
+                }
+                card.appendChild(optionsDiv);
+
+                const btnGroup = document.createElement("div");
+                btnGroup.className = "btn-group";
+                const checkBtn = document.createElement("button");
+                checkBtn.innerText = "✅ Cek Jawaban";
+                checkBtn.classList.add("check-btn");
+                const pembahasanBtn = document.createElement("button");
+                pembahasanBtn.innerText = "📖 Pembahasan";
+                pembahasanBtn.classList.add("pembahasan-btn");
+                btnGroup.appendChild(checkBtn);
+                btnGroup.appendChild(pembahasanBtn);
+                card.appendChild(btnGroup);
+
+                const feedbackDiv = document.createElement("div");
+                feedbackDiv.className = "feedback";
+                const pembahasanDiv = document.createElement("div");
+                pembahasanDiv.className = "pembahasan-text";
+                pembahasanDiv.innerHTML = `<strong>📘 Pembahasan Lengkap:</strong><br>${q.pembahasan.replace(/\n/g, '<br>')}`;
+                card.appendChild(feedbackDiv);
+                card.appendChild(pembahasanDiv);
+
+                checkBtn.addEventListener("click", () => {
+                    const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                    if (!selected) {
+                        feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                        feedbackDiv.classList.add("show");
+                        return;
+                    }
+                    const userVal = selected.value;
+                    if (userVal === q.jawaban) {
+                        feedbackDiv.innerHTML = `✅ BENAR! Jawaban: ${q.jawaban}`;
+                        feedbackDiv.classList.add("correct", "show");
+                        feedbackDiv.classList.remove("wrong");
+                    } else {
+                        feedbackDiv.innerHTML = `❌ SALAH. Jawaban yang benar: ${q.jawaban}.`;
+                        feedbackDiv.classList.add("wrong", "show");
+                        feedbackDiv.classList.remove("correct");
+                    }
+                });
+                pembahasanBtn.addEventListener("click", () => {
+                    pembahasanDiv.classList.toggle("show");
+                    pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
+                });
+
+                soalContainer.appendChild(card);
+            }
+            groupDiv.appendChild(soalContainer);
+            root.appendChild(groupDiv);
+        }
+    }
+    render();
+</script>
+</body>
+</html>
