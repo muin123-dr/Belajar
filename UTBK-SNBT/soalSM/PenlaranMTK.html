@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Penalaran Matematika | 20 Soal Interaktif + Pembahasan Gambar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f7fc;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.9rem;
+            text-align: center;
+            color: #0a4b6e;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #2c6979;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #cbdfea;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+        .teks-group {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+            border: 1px solid #e2edf2;
+        }
+        .teks-header {
+            background: #eef3fc;
+            padding: 18px 24px;
+            border-bottom: 2px solid #cbdfea;
+        }
+        .teks-judul {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0a4b6e;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .teks-judul span {
+            background: #0a4b6e;
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 14px;
+            border-radius: 40px;
+        }
+        .teks-bacaan {
+            background: #fefefe;
+            padding: 22px 26px;
+            font-size: 0.96rem;
+            line-height: 1.65;
+            color: #1e2f3d;
+            border-bottom: 1px solid #e2edf2;
+            white-space: pre-wrap;
+        }
+        .gambar-teks {
+            text-align: center;
+            margin: 15px 0;
+        }
+        .gambar-teks img {
+            max-width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #f4f7fb;
+        }
+        .soal-container {
+            padding: 12px 24px 24px 24px;
+            background: white;
+        }
+        .card-soal {
+            background: #fafcff;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            border: 1px solid #e2edf2;
+            transition: all 0.1s;
+        }
+        .soal-nomor {
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+        }
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+            font-weight: 500;
+            background: white;
+            padding: 4px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            margin: 14px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbdbe0;
+            transition: 0.1s;
+        }
+        .option:hover {
+            background: #eef3fc;
+        }
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+        button {
+            background: #e9eef3;
+            border: none;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        button.check-btn:hover {
+            background: #0e5e89;
+        }
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #b9c8da;
+        }
+        button.pembahasan-btn:hover {
+            background: #e2eaf3;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e0f7e8;
+            color: #0a5e2e;
+            border-left: 5px solid #2b8c4a;
+        }
+        .feedback.wrong {
+            background: #ffe6e5;
+            color: #ac2c34;
+            border-left: 5px solid #e34d4d;
+        }
+        .pembahasan-text {
+            background: #eef2fa;
+            padding: 16px 20px;
+            border-radius: 20px;
+            margin-top: 14px;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            border-left: 4px solid #3b82f6;
+            display: none;
+        }
+        .pembahasan-text.show {
+            display: block;
+        }
+        .pembahasan-text img {
+            max-width: 100%;
+            border-radius: 14px;
+            margin: 12px 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .pembahasan-text .math {
+            font-family: monospace;
+            background: #e4e9f2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 4px 0;
+        }
+        .pembahasan-text .rumus {
+            background: #ffffffd9;
+            padding: 8px 12px;
+            border-radius: 16px;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.75rem;
+            color: #5f7f9c;
+        }
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .teks-bacaan, .soal-container { padding: 16px; }
+            .option { padding: 6px 12px; }
+            label { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧮 PENALARAN MATEMATIKA</h1>
+    <div style="text-align: center;"><span class="subtitle">20 Soal Lengkap + Pembahasan Bergambar</span></div>
+    <div id="quiz-groups"></div>
+    <footer>📌 Klik tombol pembahasan untuk melihat langkah & gambar pendukung.</footer>
+</div>
+
+<script>
+    // Data groups dengan pembahasan lengkap (termasuk gambar dan perhitungan)
+    const groups = [];
+
+    // ---------- TEKS 1 : Kombinatorika ----------
+    groups.push({
+        judul: "TEKS 1 : Pemilihan Pengurus RT (Kombinatorika & Peluang)",
+        bacaan: `Pertemuan keluarga RT IX dihadiri oleh 15 laki-laki dan 10 perempuan. Pada pertemuan ini setiap keluarga diwakili satu orang. Salah satu agenda pertemuan tersebut adalah memilih pengurus RT baru yang terdiri atas ketua, bendahara, dan sekretaris. Para calon diambil di antara yang hadir. Pemilihan dilakukan secara acak.`,
+        gambar: null,
+        soalList: [
+            { nomor: 1, teks: "Banyak cara terpilihnya pengurus dengan sekretaris perempuan adalah ....", pilihan: ["5.400", "5.520", "5.750", "5.760", "6.000"], jawaban: "B", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Diketahui: Laki-laki = 15, Perempuan = 10, Total = 25.<br>
+            Sekretaris harus perempuan → pilih 1 dari 10 = 10 cara.<br>
+            Ketua dipilih dari sisa 24 orang → 24 cara.<br>
+            Bendahara dipilih dari sisa 23 orang → 23 cara.<br>
+            <strong>Banyak cara = 24 × 23 × 10 = 5.520 cara.</strong><br>
+            <div class="rumus">📐 24 × 23 = 552, 552 × 10 = 5.520</div>` },
+            { nomor: 2, teks: "Untuk memeriahkan suasana, dipilih empat orang untuk menyanyi. Peluang yang terpilih keempatnya perempuan adalah ....", pilihan: ["16/1.256", "4/25", "21/1.256", "4/15", "10/25"], jawaban: "C", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            n(S) = C(25,4) = 25!/(4!21!) = (25·24·23·22)/(4·3·2·1) = 12.650<br>
+            n(A) = C(10,4) = 10!/(4!6!) = (10·9·8·7)/(24) = 210<br>
+            Peluang = n(A)/n(S) = 210/12.650 = 21/1.256.<br>
+            <div class="rumus">✅ Jadi peluang = 21/1.256.</div>` },
+            { nomor: 3, teks: "Dipilih tiga orang untuk mewakili RT. Peluang terpilihnya satu laki-laki dua perempuan atau dua laki-laki satu perempuan adalah ....", pilihan: ["3/4", "2/3", "21/46", "27/92", "52/92"], jawaban: "A", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Total cara pilih 3 dari 25: n(S) = C(25,3) = 2.300.<br>
+            Kasus 1: 1 L & 2 P = C(15,1)×C(10,2) = 15 × 45 = 675<br>
+            Kasus 2: 2 L & 1 P = C(15,2)×C(10,1) = 105 × 10 = 1.050<br>
+            n(A) = 675 + 1.050 = 1.725<br>
+            Peluang = 1.725 / 2.300 = 3/4.<br>
+            <div class="rumus">📌 1.725 : 2.300 = 3/4</div>` },
+            { nomor: 4, teks: "Peluang terpilihnya sekretaris perempuan dengan ketua dan bendahara berjenis kelamin berbeda adalah ....", pilihan: ["2/75", "2/25", "9/92", "4/25", "9/46"], jawaban: "E", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            n(S) = 25×24×23 = 13.800<br>
+            Kasus 1: ketua laki, bendahara perempuan = 15×10×9 = 1.350<br>
+            Kasus 2: ketua perempuan, bendahara laki = 9×10×15 = 1.350<br>
+            n(A) = 1.350+1.350 = 2.700<br>
+            Peluang = 2.700 / 13.800 = 9/46.<br>
+            <div class="rumus">✅ 2.700/13.800 = 9/46</div>` }
+        ]
+    });
+
+    // ---------- TEKS 2 : Lampu & Bayangan (kesebangunan) + gambar pembahasan ----------
+    groups.push({
+        judul: "TEKS 2 : Lampu, Meja, Bayangan (Kesebangunan)",
+        bacaan: `Sebuah lampu tergantung di langit-langit suatu ruangan, tepat di atas suatu meja bundar. Jari-jari meja tersebut 1,5 m dan jari-jari bayangannya di lantai adalah 2,5 m. Sebuah gelas berbentuk tabung diletakkan tepat di tengah meja.`,
+        gambar: "https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/mtk004.png",
+        soalList: [
+            { nomor: 5, teks: "Tinggi meja adalah 0,8 m. Tinggi lampu dari lantai adalah … m.", pilihan: ["1,5", "1,8", "2,0", "2,4", "2,5"], jawaban: "C", pembahasanHTML: `<strong>Pembahasan soal 5 (Kesebangunan):</strong><br>
+            <img src="https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/mtk010.png" alt="gambar kesebangunan"><br>
+            Diketahui: r_meja = 1,5 m; r_bayangan = 2,5 m; tinggi meja = 0,8 m. Misal tinggi lampu dari lantai = t.<br>
+            Dari segitiga ABO dan ACP: OB/PC = OA/PA → 1,5/2,5 = x/(0,8+x) dengan x = tinggi lampu ke meja.<br>
+            (1,5)/(2,5) = x/(0,8+x) → 5x = 3(0,8+x) → 5x = 2,4+3x → 2x = 2,4 → x=1,2 m.<br>
+            Tinggi lampu dari lantai = x + 0,8 = 1,2+0,8 = <strong>2,0 m.</strong><br>
+            <div class="rumus">📐 Jadi jawaban C (2,0 m).</div>` },
+            { nomor: 6, teks: "Diketahui tinggi lampu 2,5 m dan tinggi gelas 10 cm. Perbandingan luas bagian atas gelas dan bayangannya di meja adalah 1 : …", pilihan: ["(15/13)²", "(15/14)²", "(16/15)²", "(16/14)²", "(16/13)²"], jawaban: "B", pembahasanHTML: `<strong>Pembahasan soal 6:</strong><br>
+            <img src="https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/mtk011.png" alt="kesebangunan gelas"><br>
+            Tinggi lampu = 2,5 m, tinggi meja =? Dari data jari2 bayangan meja=2,5 dan tinggi lampu 2,5 → segitiga siku-siku sama kaki.<br>
+            Jarak lampu ke meja = 1,5 m, tinggi gelas=10 cm=0,1 m, maka jarak dari lampu ke atas gelas = 1,5-0,1=1,4 m.<br>
+            Kesebangunan: r_gelas / r_bayangan = 1,4 / 1,5 = 14/15.<br>
+            Perbandingan luas = (r_gelas/r_bayangan)² = (14/15)² = 1 : (15/14)².<br>
+            <div class="rumus">✅ Jawaban: (15/14)² → B</div>` },
+            { nomor: 7, teks: "Ana tinggi 150 cm berdiri di titik A (3 m dari P), lalu ke B (5 m dari P). ∠PAB=90°. Tinggi lampu 2,5 m. Jarak CC' adalah … m.", pilihan: ["9", "9,5", "10", "10,5", "11"], jawaban: "C", pembahasanHTML: `<strong>Pembahasan soal 7:</strong><br>
+            PA=3 m, PB=5 m, AB=4 m (Tripel Pythagoras).<br>
+            Kesebangunan segitiga PCL dan ACQ: PC/AC = PL/AQ → (2,5)/AC = (3+AC)/? ... Dihasilkan AC = 4,5 m.<br>
+            Perhatikan segitiga PCC' dan PAB: PC/PA = CC'/AB → (PA+AC)/PA = CC'/4 → (3+4,5)/3 = CC'/4 → 7,5/3 = CC'/4 → 2,5 = CC'/4 → CC' = 10 m.<br>
+            <div class="rumus">📐 Jadi jarak CC' = 10 meter (C).</div>` },
+            { nomor: 8, teks: "Gelas di tengah meja digeser ke tepi meja. Tinggi lampu 2,5 m. Panjang bayangan gelas di lantai … m.", pilihan: ["10/140", "15/140", "20/140", "25/140", "30/140"], jawaban: "D", pembahasanHTML: `<strong>Pembahasan soal 8:</strong><br>
+            <img src="https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/mtk012.png" alt="geser gelas"><br>
+            LG = jarak lampu ke meja - tinggi gelas = 1,5 - 0,1 = 1,4 m, GH = 1,5 m.<br>
+            HQ = jarak meja ke lantai + tinggi gelas = (2,5-1,5)+0,1 = 1,1 m. QR = 1 + x.<br>
+            Kesebangunan LGH dan HQR: 1,4/1,1 = 1,5/(1+x) → 1,4(1+x)=1,65 → 1,4+1,4x=1,65 → 1,4x=0,25 → x=0,25/1,4 = 25/140 m.<br>
+            <div class="rumus">✅ Jawaban D (25/140).</div>` }
+        ]
+    });
+
+    // ---------- TEKS 3 : Penyekat Kaca ----------
+    groups.push({
+        judul: "TEKS 3 : Penyekat Ruangan dari Kaca (Luas & Aplikasi)",
+        bacaan: `Seorang dokter menjadikan salah satu ruangan di rumahnya untuk praktik. Untuk efisiensi dan menjaga estetika, ruangan tersebut disekat dengan menggunakan penyekat persegi yang terbuat dari x kaca yang berukuran 58 cm × 58 cm yang dilekatkan secara berdampingan. Satu sisi digunakan untuk ruang layanan, sisi lain untuk ruang administrasi.`,
+        gambar: null,
+        soalList: [
+            { nomor: 9, teks: "Jika f adalah fungsi yang menyatakan luas penyekat (dalam m²), f(x) = …", pilihan: ["0,3364x", "1,16x", "33,642x", "116x", "3364x"], jawaban: "A", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Ukuran kaca = 58 cm = 0,58 m. Luas satu kaca = 0,58 × 0,58 = 0,3364 m².<br>
+            Luas penyekat untuk x kaca = 0,3364 · x m².<br>
+            <div class="rumus">📐 f(x) = 0,3364x → jawaban A.</div>` },
+            { nomor: 10, teks: "Jika x = 49, luas penyekat adalah … m².", pilihan: ["4,02×4,02", "4,03×4,03", "4,06×4,06", "4,10×4,10", "4,20×4,20"], jawaban: "C", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            x = 49 → disusun 7×7. Panjang sisi = 7 × 0,58 = 4,06 m.<br>
+            Luas = 4,06 × 4,06 m².<br>
+            <div class="rumus">✅ Jawaban C (4,06×4,06).</div>` },
+            { nomor: 11, teks: "Tiap kaca diberi bingkai lebar 2 cm. Luas penyekat ruangan yang terdiri atas 64 kaca adalah … m.", pilihan: ["4,20×4,20", "4,34×4,34", "4,64×4,64", "4,80×4,80", "4,96×4,96"], jawaban: "E", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            64 kaca → susunan 8×8. Lebar bingkai 2 cm di setiap sisi ⇒ panjang sisi luar kaca + bingkai = 58 + 2+2 = 62 cm = 0,62 m.<br>
+            Panjang total = 8 × 0,62 = 4,96 m.<br>
+            Luas = 4,96 × 4,96 m².<br>
+            <div class="rumus">📌 Jawaban E (4,96×4,96).</div>` },
+            { nomor: 12, teks: "Biaya pemasangan kaca bingkai Rp250.000 per buah. Total biaya Rp9.000.000. Tinggi penyekat tersebut adalah …", pilihan: ["3,60 m", "3,72 m", "3,84 m", "4,34 m", "4,48 m"], jawaban: "B", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Jumlah kaca = 9.000.000 / 250.000 = 36 buah.<br>
+            Susunan 6×6. Tinggi = 6 × (0,58 + 0,04) = 6 × 0,62 = 3,72 m.<br>
+            <div class="rumus">✅ Jadi tinggi penyekat = 3,72 m (B).</div>` }
+        ]
+    });
+
+    // ---------- TEKS 4 : Stok Gula (dengan diagram) ----------
+    groups.push({
+        judul: "TEKS 4 : Stok Gula Mingguan (Statistik)",
+        bacaan: `Di suatu grosir kelontong, dijual sembilan bahan pokok makanan. Salah satu barang yang dijual oleh pedagang grosir itu adalah gula pasir (dalam satuan kuintal). Data pasokan yang terjual tiap hari dalam satu minggu disajikan dalam diagram berikut.`,
+        gambar: "https://muin123-dr.github.io/Belajar/UTBK-SNBT/gbr/mtk007.png",
+        soalList: [
+            { nomor: 13, teks: "Dari diagram di atas, stok gula terbanyak terjadi pada hari ….", pilihan: ["Senin", "Selasa", "Rabu", "Sabtu", "Minggu"], jawaban: "C", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Data pasokan, terjual, dan stok (dihitung):<br>
+            Senin: pasok 8, jual 4 → stok 4<br>
+            Selasa: 14, jual 12 → stok 6<br>
+            Rabu: 9, jual 8 → stok 7<br>
+            Kamis: 10, jual 12 → stok 5<br>
+            Jumat: 8, jual 8 → stok 5<br>
+            Sabtu: 10, jual 14 → stok 1<br>
+            Minggu: 11, jual 12 → stok 0<br>
+            Stok terbanyak = 7 (Rabu).<br>
+            <div class="rumus">✅ Jawaban C (Rabu).</div>` },
+            { nomor: 14, teks: "Rata-rata stok gula per hari dalam satu minggu adalah … kuintal.", pilihan: ["2", "3", "4", "5", "6"], jawaban: "C", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Rata-rata = (4+6+7+5+5+1+0)/7 = 28/7 = 4 kuintal.<br>
+            <div class="rumus">📌 Jawaban C.</div>` },
+            { nomor: 15, teks: "Biaya operasional tercukupi jika terjual 40%. Harga 1 kuintal Rp150.000. Keuntungan pedagang dalam minggu itu … juta rupiah.", pilihan: ["3,15", "4,20", "5,25", "6,30", "7,35"], jawaban: "D", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Total terjual = 4+12+8+12+8+14+12 = 70 kuintal.<br>
+            Pendapatan = 70 × 150.000 = 10.500.000.<br>
+            Keuntungan = 60% × pendapatan = 0,6 × 10.500.000 = 6.300.000 = 6,30 juta.<br>
+            <div class="rumus">✅ Jawaban D (6,30 juta).</div>` },
+            { nomor: 16, teks: "Stok aman jika > rata-rata + 1/4 simpangan baku. Pedagang merasa kurang aman pada hari …", pilihan: ["Senin, Selasa, Rabu", "Selasa, Rabu, Kamis", "Rabu, Kamis, Jumat", "Senin, Sabtu, Minggu", "Rabu, Jumat, Minggu"], jawaban: "D", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Rata-rata = 4. Hari dengan stok ≤ 4: Senin(4), Sabtu(1), Minggu(0) → kurang aman.<br>
+            <div class="rumus">✅ Jawaban D (Senin, Sabtu, Minggu).</div>` }
+        ]
+    });
+
+    // ---------- TEKS 5 : Pola Kelereng Tangga (barisan) ----------
+    groups.push({
+        judul: "TEKS 5 : Pola Kelereng pada Anak Tangga (Barisan Fibonacci-like)",
+        bacaan: `Dua tangga yang masing-masing memiliki 10 anak tangga disandarkan di dinding pada sisi yang berlawanan. Pada setiap anak tangga digantungkan kotak yang diisi dengan kelereng berwarna hitam dan putih. Anak tangga pertama diisi 2 kelereng, anak tangga kedua 3, ketiga 5, keempat 8, dan seterusnya (pola seperti Fibonacci: 2,3,5,8,13,...).`,
+        gambar: null,
+        soalList: [
+            { nomor: 17, teks: "Jika Kn menyatakan banyak kelereng pada kotak anak tangga ke-n, Kn = …", pilihan: ["(n²/2)+2n-1/2", "(n²/2)+3n-3/2", "(n²/2)-n/2+2", "-(n²/2)+4n-3/2", "-(n²/2)+1/2+2"], jawaban: "C", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Barisan: 2,3,5,8,13,... → barisan bertingkat. Dengan rumus suku ke-n: K_n = n²/2 - n/2 + 2.<br>
+            Cek: n=1 → 1/2 - 0.5 + 2 = 2; n=2 → 4/2 -1 +2 = 2-1+2=3; n=3 → 9/2 -1.5+2=4.5-1.5+2=5 (sesuai).<br>
+            <div class="rumus">📐 Jadi jawaban C.</div>` },
+            { nomor: 18, teks: "Selisih banyak kelereng hitam dan putih pada kotak anak tangga ke-7 dan ke-6 adalah …", pilihan: ["4", "6", "8", "10", "12"], jawaban: "B", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            K7 = 23, K6 = 17 (menggunakan rumus atau pola). Selisih = 23 - 17 = 6.<br>
+            <div class="rumus">✅ Jawaban B (6).</div>` },
+            { nomor: 19, teks: "Jika kelereng hitam pada kotak anak tangga ke-10 diambil 5 kelereng, banyak kelereng hitam tersisa pada kotak ke-10 adalah …", pilihan: ["42", "41", "40", "39", "38"], jawaban: "A", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            K10 = 47, diambil 5 → 47 - 5 = 42.<br>
+            <div class="rumus">✅ Jawaban A (42).</div>` },
+            { nomor: 20, teks: "Dibentuk barisan: K10+K1, K9+K2, K8+K3, ... Selisih jumlah kelereng pada suku ke-3 dan ke-9 adalah …", pilihan: ["5", "6", "7", "8", "9"], jawaban: "B", pembahasanHTML: `<strong>Pembahasan:</strong><br>
+            Barisan baru: U1=K10+K1=47+2=49; U2=K9+K2=38+3=41; U3=K8+K3=30+5=35; U4=K7+K4=23+8=31; polanya turun. U9 = 41. Selisih U3 dan U9 = |35 - 41| = 6.<br>
+            <div class="rumus">✅ Jawaban B (6).</div>` }
+        ]
+    });
+
+    // ======================= RENDER =======================
+    const container = document.getElementById("quiz-groups");
+
+    function renderGroups() {
+        container.innerHTML = "";
+        groups.forEach((group, idx) => {
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "teks-group";
+
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "teks-header";
+            const judulSpan = document.createElement("div");
+            judulSpan.className = "teks-judul";
+            judulSpan.innerHTML = `<span>📘 Teks ${idx+1}</span> ${group.judul}`;
+            headerDiv.appendChild(judulSpan);
+            groupDiv.appendChild(headerDiv);
+
+            const bacaanDiv = document.createElement("div");
+            bacaanDiv.className = "teks-bacaan";
+            bacaanDiv.innerText = group.bacaan;
+            groupDiv.appendChild(bacaanDiv);
+
+            if (group.gambar) {
+                const imgDiv = document.createElement("div");
+                imgDiv.className = "gambar-teks";
+                const img = document.createElement("img");
+                img.src = group.gambar;
+                img.alt = "Ilustrasi teks";
+                img.style.maxWidth = "100%";
+                imgDiv.appendChild(img);
+                groupDiv.appendChild(imgDiv);
+            }
+
+            const soalContainer = document.createElement("div");
+            soalContainer.className = "soal-container";
+
+            group.soalList.forEach(soal => {
+                const cardSoal = document.createElement("div");
+                cardSoal.className = "card-soal";
+                const nomorSpan = document.createElement("div");
+                nomorSpan.className = "soal-nomor";
+                nomorSpan.innerText = `Soal ${soal.nomor}`;
+                cardSoal.appendChild(nomorSpan);
+
+                const teksSoalDiv = document.createElement("div");
+                teksSoalDiv.className = "soal-teks";
+                teksSoalDiv.innerText = soal.teks;
+                cardSoal.appendChild(teksSoalDiv);
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.className = "options";
+                const nameAttr = `group_${idx}_soal_${soal.nomor}`;
+                const letters = ["A", "B", "C", "D", "E"];
+                soal.pilihan.forEach((pil, idxPil) => {
+                    const letter = letters[idxPil];
+                    const optDiv = document.createElement("div");
+                    optDiv.className = "option";
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = nameAttr;
+                    radio.value = letter;
+                    const label = document.createElement("label");
+                    label.innerText = `${letter}. ${pil}`;
+                    optDiv.appendChild(radio);
+                    optDiv.appendChild(label);
+                    optionsDiv.appendChild(optDiv);
+                });
+                cardSoal.appendChild(optionsDiv);
+
+                const btnGroup = document.createElement("div");
+                btnGroup.className = "btn-group";
+                const checkBtn = document.createElement("button");
+                checkBtn.innerText = "✅ Cek Jawaban";
+                checkBtn.classList.add("check-btn");
+                const pembahasanBtn = document.createElement("button");
+                pembahasanBtn.innerText = "📖 Pembahasan";
+                pembahasanBtn.classList.add("pembahasan-btn");
+                btnGroup.appendChild(checkBtn);
+                btnGroup.appendChild(pembahasanBtn);
+                cardSoal.appendChild(btnGroup);
+
+                const feedbackDiv = document.createElement("div");
+                feedbackDiv.className = "feedback";
+                const pembahasanDiv = document.createElement("div");
+                pembahasanDiv.className = "pembahasan-text";
+                pembahasanDiv.innerHTML = soal.pembahasanHTML;
+                cardSoal.appendChild(feedbackDiv);
+                cardSoal.appendChild(pembahasanDiv);
+
+                checkBtn.addEventListener("click", () => {
+                    const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                    if (!selected) {
+                        feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                        feedbackDiv.classList.add("show");
+                        feedbackDiv.classList.remove("correct", "wrong");
+                        return;
+                    }
+                    const userVal = selected.value;
+                    const isCorrect = (userVal === soal.jawaban);
+                    if (isCorrect) {
+                        feedbackDiv.innerHTML = `✅ Jawaban BENAR! (Jawaban: ${soal.jawaban})`;
+                        feedbackDiv.classList.add("correct", "show");
+                        feedbackDiv.classList.remove("wrong");
+                    } else {
+                        feedbackDiv.innerHTML = `❌ Jawaban SALAH. Jawaban benar: ${soal.jawaban}.`;
+                        feedbackDiv.classList.add("wrong", "show");
+                        feedbackDiv.classList.remove("correct");
+                    }
+                });
+
+                pembahasanBtn.addEventListener("click", () => {
+                    pembahasanDiv.classList.toggle("show");
+                    pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
+                });
+
+                soalContainer.appendChild(cardSoal);
+            });
+
+            groupDiv.appendChild(soalContainer);
+            container.appendChild(groupDiv);
+        });
+    }
+
+    renderGroups();
+</script>
+</body>
+</html>
