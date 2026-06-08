@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Penalaran Matematika | 20 Soal Interaktif</title>
+    <!-- MathJax untuk tampilan rumus pecahan rapi -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f7fc;
+            padding: 20px;
+            color: #1a2c3e;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.9rem;
+            text-align: center;
+            color: #0a4b6e;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #2c6979;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid #cbdfea;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+        .teks-group {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            overflow: hidden;
+            border: 1px solid #e2edf2;
+        }
+        .teks-header {
+            background: #eef3fc;
+            padding: 18px 24px;
+            border-bottom: 2px solid #cbdfea;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0a4b6e;
+        }
+        .teks-bacaan {
+            background: #fefefe;
+            padding: 20px 24px;
+            font-size: 0.96rem;
+            line-height: 1.65;
+            color: #1e2f3d;
+            border-bottom: 1px solid #e2edf2;
+            white-space: pre-wrap;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        .soal-container {
+            padding: 12px 24px 24px 24px;
+            background: white;
+        }
+        .card-soal {
+            background: #fafcff;
+            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            border: 1px solid #e2edf2;
+            transition: all 0.1s;
+        }
+        .soal-nomor {
+            background: #0a4b6e;
+            color: white;
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+        }
+        .soal-teks {
+            font-size: 1rem;
+            line-height: 1.45;
+            margin-bottom: 18px;
+            font-weight: 500;
+            background: white;
+            padding: 4px 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            margin: 14px 0 18px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 60px;
+            border: 1px solid #cbdbe0;
+            transition: 0.1s;
+        }
+        .option:hover {
+            background: #eef3fc;
+        }
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #0a4b6e;
+            cursor: pointer;
+        }
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            cursor: pointer;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 10px 0 8px;
+        }
+        button {
+            background: #e9eef3;
+            border: none;
+            padding: 7px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.check-btn {
+            background: #0a4b6e;
+            color: white;
+        }
+        button.check-btn:hover {
+            background: #0e5e89;
+        }
+        button.pembahasan-btn {
+            background: #f1f5f9;
+            border: 1px solid #b9c8da;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 10px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e0f7e8;
+            color: #0a5e2e;
+            border-left: 5px solid #2b8c4a;
+        }
+        .feedback.wrong {
+            background: #ffe6e5;
+            color: #ac2c34;
+            border-left: 5px solid #e34d4d;
+        }
+        .pembahasan-text {
+            background: #eef2fa;
+            padding: 16px 20px;
+            border-radius: 20px;
+            margin-top: 14px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 4px solid #3b82f6;
+            display: none;
+            white-space: normal;
+        }
+        .pembahasan-text.show {
+            display: block;
+        }
+        /* Gaya untuk rumus matematika */
+        .pembahasan-text .math {
+            font-size: 1.05em;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.75rem;
+            color: #5f7f9c;
+        }
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .teks-bacaan, .soal-container { padding: 16px; }
+            .option { padding: 6px 12px; }
+            label { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧮 Penalaran Matematika</h1>
+    <div style="text-align: center;"><span class="subtitle">20 Soal | Kombinatorika, Geometri, Barisan, Statistika</span></div>
+    <div id="quiz-root"></div>
+    <footer>✅ Klik "Cek Jawaban" untuk menilai. 📖 "Pembahasan" menampilkan penjelasan lengkap dengan rumus pecahan rapi.</footer>
+</div>
+
+<script>
+    // Data soal lengkap dengan pembahasan tanpa asterisk dan spasi rapi
+    const groups = [
+        {
+            judul: "TEKS 1 : Pemilihan Kepengurusan Desa",
+            bacaan: "Pada sebuah rapat pengurus desa, hadir 18 orang perwakilan warga yang terdiri atas 10 laki-laki dan 8 perempuan. Dari 18 orang tersebut, akan dipilih kepengurusan inti yang terdiri atas seorang ketua, seorang wakil ketua, dan seorang sekretaris. Setiap warga yang hadir memiliki hak yang sama untuk dipilih, dan pemilihan dilakukan secara acak.",
+            soal: [
+                { nomor: 1, teks: "Banyak susunan kepengurusan inti yang dapat dibentuk jika sekretaris harus seorang perempuan adalah ....", pilihan: ["2.160", "2.176", "2.448", "2.500", "2.880"], jawaban: "B", pembahasan: "Jawaban: B (2.176)\n\nPembahasan:\nTotal warga yang hadir = 18 orang (10 L, 8 P).\nSekretaris harus perempuan.\nBanyak cara memilih sekretaris = 8 cara (karena ada 8 perempuan).\nSetelah sekretaris terpilih, tersisa 17 orang untuk posisi ketua.\nBanyak cara memilih ketua = 17 cara.\nSetelah sekretaris dan ketua terpilih, tersisa 16 orang untuk posisi wakil ketua.\nBanyak cara memilih wakil ketua = 16 cara.\n\nTotal susunan = \\(8 \\times 17 \\times 16 = 2.176\\) cara." },
+                { nomor: 2, teks: "Untuk acara ramah tamah, akan dipilih tiga orang secara acak untuk memberikan sambutan. Peluang ketiga orang yang terpilih semuanya adalah laki-laki adalah ....", pilihan: ["10/68", "15/68", "5/34", "3/17", "5/17"], jawaban: "C", pembahasan: "Jawaban: C (5/34)\n\nPembahasan:\nMemilih 3 orang secara acak dari 18 orang.\nBanyak titik sampel:\n\\[ n(S) = C(18,3) = \\frac{18!}{3!(18-3)!} = \\frac{18 \\cdot 17 \\cdot 16}{3 \\cdot 2 \\cdot 1} = 816 \\]\n\nKejadian \\(A\\) = terpilih ketiganya laki-laki (dari 10 L).\n\\[ n(A) = C(10,3) = \\frac{10!}{3!(10-3)!} = \\frac{10 \\cdot 9 \\cdot 8}{3 \\cdot 2 \\cdot 1} = 120 \\]\n\n\\[ P(A) = \\frac{n(A)}{n(S)} = \\frac{120}{816} = \\frac{15}{102} = \\frac{5}{34} \\]" },
+                { nomor: 3, teks: "Selain kepengurusan inti, akan dipilih juga dua orang delegasi untuk mengikuti lokakarya di tingkat kecamatan. Peluang terpilihnya satu delegasi laki-laki dan satu delegasi perempuan adalah ....", pilihan: ["20/153", "40/153", "80/153", "20/17", "40/17"], jawaban: "C", pembahasan: "Jawaban: C (80/153)\n\nPembahasan:\nMemilih 2 delegasi dari 18 orang.\n\\[ n(S) = C(18,2) = \\frac{18 \\cdot 17}{2} = 153 \\]\n\nKejadian \\(B\\) = terpilih 1 laki-laki dan 1 perempuan.\nMemilih 1 laki-laki dari 10 L = 10 cara.\nMemilih 1 perempuan dari 8 P = 8 cara.\n\\[ n(B) = 10 \\times 8 = 80 \\]\n\n\\[ P(B) = \\frac{80}{153} \\]" },
+                { nomor: 4, teks: "Banyak cara memilih kepengurusan inti (ketua, wakil ketua, sekretaris) dengan syarat ketua dan wakil ketua berjenis kelamin berbeda, sementara sekretaris boleh siapa saja, adalah ....", pilihan: ["1.280", "1.440", "2.560", "2.880", "4.896"], jawaban: "C", pembahasan: "Jawaban: C (2.560)\n\nPembahasan:\nKasus 1: Ketua laki-laki, Wakil perempuan.\n- Ketua: 10 pilihan (dari 10 L)\n- Wakil: 8 pilihan (dari 8 P)\n- Sekretaris: sisa 16 orang = 16 cara\n  Banyak cara = \\(10 \\times 8 \\times 16 = 1.280\\)\n\nKasus 2: Ketua perempuan, Wakil laki-laki.\n- Ketua: 8 pilihan\n- Wakil: 10 pilihan\n- Sekretaris: 16 cara\n  Banyak cara = \\(8 \\times 10 \\times 16 = 1.280\\)\n\nTotal cara = \\(1.280 + 1.280 = 2.560\\)." }
+            ]
+        },
+        {
+            judul: "TEKS 2 : Tiang Bendera & Bayangan",
+            bacaan: "Sebuah tiang bendera setinggi 4 meter berdiri tegak di tengah sebuah halaman sekolah. Pada suatu waktu, sinar matahari membentuk bayangan tiang bendera tersebut sepanjang 6 meter di permukaan tanah. Di dekat tiang bendera, terdapat sebuah patung dengan tinggi 1,5 meter.",
+            soal: [
+                { nomor: 5, teks: "Jika sinar matahari diasumsikan membentuk sudut yang sama terhadap semua benda di halaman pada waktu tersebut, panjang bayangan patung adalah .... meter.", pilihan: ["1,00", "1,50", "2,00", "2,25", "2,50"], jawaban: "D", pembahasan: "Jawaban: D (2,25)\n\nPembahasan:\nKarena sinar matahari sejajar, segitiga yang dibentuk oleh benda dan bayangannya sebangun.\n\\[ \\frac{\\text{Tinggi Tiang}}{\\text{Bayangan Tiang}} = \\frac{\\text{Tinggi Patung}}{\\text{Bayangan Patung}} \\]\n\\[ \\frac{4}{6} = \\frac{1,5}{x} \\]\n\\[ 4x = 9 \\]\n\\[ x = \\frac{9}{4} = 2,25 \\text{ meter} \\]" },
+                { nomor: 6, teks: "Misalkan pada waktu yang berbeda, panjang bayangan tiang bendera menjadi 5 meter. Pada saat itu, perbandingan luas penampang vertikal tiang bendera dengan luas penampang vertikal bayangannya (diasumsikan sebagai persegi panjang dengan lebar yang sama) adalah ....", pilihan: ["16 : 25", "4 : 5", "1 : 1", "5 : 4", "25 : 16"], jawaban: "B", pembahasan: "Jawaban: B (4 : 5)\n\nPembahasan:\nTinggi tiang = 4 m. Bayangan tiang = 5 m.\nLuas penampang sebanding dengan panjang jika lebarnya sama.\n\\[ \\text{Perbandingan luas} = \\frac{\\text{Tinggi}}{\\text{Bayangan}} = \\frac{4}{5} = 4 : 5 \\]" },
+                { nomor: 7, teks: "Seorang siswa berjalan menjauhi tiang bendera searah dengan garis bayangan. Jika siswa tersebut berhenti tepat ketika ujung bayangan kepalanya berimpit dengan ujung bayangan tiang bendera, dan diketahui tinggi siswa adalah 1,6 meter, maka jarak siswa tersebut dari tiang bendera adalah .... meter.", pilihan: ["2,4", "3,6", "4,0", "4,2", "4,8"], jawaban: "B", pembahasan: "Jawaban: B (3,6)\n\nPembahasan:\nMisal \\(x\\) adalah jarak anak ke ujung bayangan.\nUjung bayangan kepala berimpit dengan ujung bayangan tiang, sehingga:\n\\[ \\frac{\\text{Tinggi Anak}}{x} = \\frac{\\text{Tinggi Tiang}}{\\text{Total Bayangan}} \\]\n\\[ \\frac{1,6}{x} = \\frac{4}{6} \\]\n\\[ 4x = 9,6 \\]\n\\[ x = 2,4 \\text{ m} \\]\nJarak anak ke tiang = Total bayangan - \\(x\\) = \\(6 - 2,4 = 3,6\\) m." },
+                { nomor: 8, teks: "Sebuah bola lampu diletakkan tepat di puncak tiang bendera. Seekor semut bergerak lurus dari pangkal tiang bendera sejauh 3 meter. Jarak semut tersebut terhadap bola lampu adalah .... meter.", pilihan: ["4", "5", "6", "√7", "2√5"], jawaban: "B", pembahasan: "Jawaban: B (5)\n\nPembahasan:\nTinggi tiang = 4 m (vertikal).\nJarak semut dari pangkal = 3 m (horizontal).\nMembentuk segitiga siku-siku.\n\\[ \\text{Jarak semut ke lampu} = \\sqrt{4^2 + 3^2} = \\sqrt{16 + 9} = \\sqrt{25} = 5 \\text{ m} \\]" }
+            ]
+        },
+        {
+            judul: "TEKS 3 : Meja Ubin Keramik",
+            bacaan: "Seorang tukang kayu akan membuat sebuah meja makan yang permukaannya berbentuk persegi panjang. Meja tersebut dirancang menggunakan sejumlah ubin keramik persegi identik berukuran \\(x\\) cm × \\(x\\) cm. Tukang kayu tersebut menyusun ubin-ubin tersebut dalam susunan \\(m\\) baris dan \\(n\\) kolom (\\(m\\) dan \\(n\\) bilangan bulat).",
+            soal: [
+                { nomor: 9, teks: "Jika \\(f(x)\\) adalah fungsi yang menyatakan luas permukaan meja (dalam cm²) untuk suatu susunan \\(m \\times n\\), maka \\(f(x) = ....\\)", pilihan: ["x²", "mnx", "(m+n)x²", "mnx²", "(mn)²x"], jawaban: "D", pembahasan: "Jawaban: D (mnx²)\n\nPembahasan:\nSusunan \\(m \\times n\\) ubin berarti ada \\(m \\cdot n\\) buah ubin.\nLuas satu ubin = \\(x \\cdot x = x^2\\).\nTotal luas permukaan \\(f(x) = (\\text{jumlah ubin}) \\times (\\text{luas 1 ubin}) = mn \\cdot x^2\\)." },
+                { nomor: 10, teks: "Misalkan tukang kayu menggunakan ubin berukuran 20 cm × 20 cm dan menyusunnya dalam 4 baris dan 6 kolom. Luas permukaan meja tersebut adalah .... cm².", pilihan: ["480", "4.800", "9.600", "12.000", "14.400"], jawaban: "C", pembahasan: "Jawaban: C (9.600)\n\nPembahasan:\nUkuran ubin \\(x = 20\\) cm. Baris \\(m = 4\\), kolom \\(n = 6\\).\nBanyak ubin = \\(4 \\times 6 = 24\\) ubin.\nLuas 1 ubin = \\(20 \\times 20 = 400\\) cm².\nTotal luas = \\(24 \\times 400 = 9.600\\) cm²." },
+                { nomor: 11, teks: "Meja tersebut kemudian akan dipasangi lis kayu pada seluruh keliling tepinya. Jika lebar lis kayu diabaikan (dianggap berukuran garis), panjang lis kayu yang dibutuhkan untuk meja dengan susunan 4 × 6 ubin (ubin 20 cm × 20 cm) adalah .... cm.", pilihan: ["200", "400", "480", "800", "960"], jawaban: "B", pembahasan: "Jawaban: B (400)\n\nPembahasan:\nPanjang meja = \\(n \\cdot x = 6 \\times 20 = 120\\) cm.\nLebar meja = \\(m \\cdot x = 4 \\times 20 = 80\\) cm.\nKeliling (panjang lis) = \\(2 \\times (\\text{panjang} + \\text{lebar}) = 2 \\times (120 + 80) = 2 \\times 200 = 400\\) cm." },
+                { nomor: 12, teks: "Biaya bahan untuk ubin adalah Rp15.000,00 per buah dan biaya pengerjaan pembuatan meja adalah Rp200.000,00. Jika total anggaran yang tersedia untuk satu meja (dengan ubin 4 × 6) adalah Rp650.000,00, maka sisa anggaran yang dapat digunakan untuk membeli lis kayu dan bahan lainnya adalah ....", pilihan: ["Rp50.000,00", "Rp90.000,00", "Rp110.000,00", "Rp150.000,00", "Rp290.000,00"], jawaban: "B", pembahasan: "Jawaban: B (Rp90.000,00)\n\nPembahasan:\nJumlah ubin = \\(4 \\times 6 = 24\\) buah.\nBiaya ubin = \\(24 \\times 15.000 = 360.000\\).\nBiaya pengerjaan = 200.000.\nTotal biaya awal = \\(360.000 + 200.000 = 560.000\\).\nAnggaran tersedia = 650.000.\nSisa anggaran = \\(650.000 - 560.000 = 90.000\\) rupiah." }
+            ]
+        },
+        {
+            judul: "TEKS 4 : Data Penjualan Ponsel",
+            bacaan: "Sebuah toko elektronik mendata penjualan telepon seluler (ponsel) dalam satu minggu. Data jumlah ponsel yang dipasok ke toko dan yang terjual setiap harinya disajikan dalam tabel berikut.\n\n| Hari    | Pasokan (unit) | Terjual (unit) |\n|---------|----------------|----------------|\n| Senin   | 15             | 10             |\n| Selasa  | 20             | 18             |\n| Rabu    | 12             | 12             |\n| Kamis   | 18             | 15             |\n| Jumat   | 25             | 20             |\n| Sabtu   | 30             | 28             |\n| Minggu  | 15             | 14             |\n\nAsumsi: Stok hari sebelumnya yang tidak terjual diakumulasikan ke stok hari berikutnya (Stok Harian = Sisa Stok Kemarin + Pasokan Hari Ini - Terjual Hari Ini).\nKondisi awal: Sebelum Senin, tidak ada sisa stok.",
+            soal: [
+                { nomor: 13, teks: "Sisa stok ponsel terbanyak di akhir hari (setelah penjualan) terjadi pada hari ....", pilihan: ["Selasa", "Kamis", "Jumat", "Sabtu", "Minggu"], jawaban: "E", pembahasan: "Jawaban: E (Minggu)\n\nPembahasan:\nStok = (Sisa kemarin) + Pasokan - Terjual\n- Senin: \\(0 + 15 - 10 = 5\\)\n- Selasa: \\(5 + 20 - 18 = 7\\)\n- Rabu: \\(7 + 12 - 12 = 7\\)\n- Kamis: \\(7 + 18 - 15 = 10\\)\n- Jumat: \\(10 + 25 - 20 = 15\\)\n- Sabtu: \\(15 + 30 - 28 = 17\\)\n- Minggu: \\(17 + 15 - 14 = 18\\) (terbanyak)" },
+                { nomor: 14, teks: "Rata-rata pasokan ponsel per hari dalam satu minggu tersebut adalah .... unit.", pilihan: ["15", "17", "19", "21", "23"], jawaban: "C", pembahasan: "Jawaban: C (19)\n\nPembahasan:\nTotal pasokan = \\(15 + 20 + 12 + 18 + 25 + 30 + 15 = 135\\) unit.\nRata-rata = \\(\\frac{135}{7} \\approx 19,28 \\approx 19\\)." },
+                { nomor: 15, teks: "Jika setiap ponsel yang terjual memberikan keuntungan bersih sebesar Rp250.000,00, maka total keuntungan toko selama akhir pekan (Sabtu dan Minggu) adalah .... rupiah.", pilihan: ["10.000.000", "10.500.000", "11.000.000", "11.500.000", "12.000.000"], jawaban: "B", pembahasan: "Jawaban: B (10.500.000)\n\nPembahasan:\nPenjualan akhir pekan (Sabtu + Minggu) = \\(28 + 14 = 42\\) unit.\nKeuntungan = \\(42 \\times 250.000 = 10.500.000\\) rupiah." },
+                { nomor: 16, teks: "Berdasarkan data, persentase ponsel yang terjual dibandingkan dengan total pasokan dalam minggu tersebut adalah sekitar ....", pilihan: ["78%", "82%", "87%", "92%", "95%"], jawaban: "C", pembahasan: "Jawaban: C (87%)\n\nPembahasan:\nTotal terjual = \\(10 + 18 + 12 + 15 + 20 + 28 + 14 = 117\\) unit.\nTotal pasokan = 135 unit.\nPersentase = \\(\\frac{117}{135} \\times 100\\% = 86,67\\% \\approx 87\\%\\)." }
+            ]
+        },
+        {
+            judul: "TEKS 5 : Formasi Baris-Berbaris",
+            bacaan: "Dalam sebuah pertunjukan formasi baris-berbaris, peserta diatur dalam beberapa barisan. Barisan pertama terdiri dari 3 orang, barisan kedua terdiri dari 6 orang, barisan ketiga terdiri dari 10 orang, barisan keempat terdiri dari 15 orang, dan seterusnya mengikuti pola yang teratur hingga barisan ke-12.",
+            soal: [
+                { nomor: 17, teks: "Jika \\(U_n\\) menyatakan banyak orang pada barisan ke-\\(n\\), maka rumus yang tepat untuk \\(U_n\\) adalah ....", pilihan: ["U_n = n² + 2", "U_n = n(n+1)/2 + 2", "U_n = (n² + 3n + 2)/2", "U_n = (n² + n)/2 + 1", "U_n = 2n + 1"], jawaban: "C", pembahasan: "Jawaban: C (U_n = (n² + 3n + 2)/2)\n\nPembahasan:\nBarisan: 3, 6, 10, 15, ...\nPola selisih pertama: 3, 4, 5, ... (naik 1)\nPola selisih kedua: 1, 1, ... (konstan) → Barisan Aritmetika Bertingkat Dua.\nRumus umum: \\(U_n = \\frac{(n+1)(n+2)}{2} = \\frac{n^2 + 3n + 2}{2}\\).\nCek: n=1 → \\(\\frac{1+3+2}{2}=3\\); n=2 → \\(\\frac{4+6+2}{2}=6\\); n=3 → \\(\\frac{9+9+2}{2}=10\\)." },
+                { nomor: 18, teks: "Selisih banyak orang antara barisan ke-9 dan barisan ke-7 adalah ....", pilihan: ["13", "15", "17", "19", "21"], jawaban: "D", pembahasan: "Jawaban: D (19)\n\nPembahasan:\n\\[ U_9 = \\frac{9^2 + 3\\cdot9 + 2}{2} = \\frac{81 + 27 + 2}{2} = \\frac{110}{2} = 55 \\]\n\\[ U_7 = \\frac{7^2 + 3\\cdot7 + 2}{2} = \\frac{49 + 21 + 2}{2} = \\frac{72}{2} = 36 \\]\nSelisih = \\(55 - 36 = 19\\)." },
+                { nomor: 19, teks: "Pada formasi akhir, instruktur meminta setengah dari jumlah peserta pada barisan ke-10 untuk mundur. Jika total peserta pada barisan ke-10 mula-mula adalah A, maka jumlah peserta yang mundur adalah ....", pilihan: ["28", "33", "36", "45", "55"], jawaban: "B", pembahasan: "Jawaban: B (33)\n\nPembahasan:\n\\[ U_{10} = \\frac{10^2 + 3\\cdot10 + 2}{2} = \\frac{100 + 30 + 2}{2} = \\frac{132}{2} = 66 \\]\nSetengahnya = \\(\\frac{66}{2} = 33\\) orang." },
+                { nomor: 20, teks: "Jika dibentuk barisan baru di mana suku ke-\\(k\\) (\\(B_k\\)) didefinisikan sebagai jumlah orang pada barisan ke-\\(k\\) dan barisan ke-\\((13 - k)\\) pada formasi awal (misal \\(B_1 = U_1 + U_{12}\\)), maka nilai dari \\(B_3\\) adalah ....", pilihan: ["70", "76", "80", "85", "91"], jawaban: "B", pembahasan: "Jawaban: B (76)\n\nPembahasan:\n\\(B_k = U_k + U_{13-k}\\).\n\\(B_3 = U_3 + U_{10}\\).\n\\(U_3 = 10\\), \\(U_{10} = 66\\).\n\\(B_3 = 10 + 66 = 76\\)." }
+            ]
+        }
+    ];
+
+    // Render ke DOM
+    const root = document.getElementById("quiz-root");
+    function render() {
+        root.innerHTML = "";
+        for (let group of groups) {
+            const groupDiv = document.createElement("div");
+            groupDiv.className = "teks-group";
+
+            const header = document.createElement("div");
+            header.className = "teks-header";
+            header.innerText = group.judul;
+            groupDiv.appendChild(header);
+
+            const bacaan = document.createElement("div");
+            bacaan.className = "teks-bacaan";
+            bacaan.innerText = group.bacaan;
+            groupDiv.appendChild(bacaan);
+
+            const soalContainer = document.createElement("div");
+            soalContainer.className = "soal-container";
+
+            for (let q of group.soal) {
+                const card = document.createElement("div");
+                card.className = "card-soal";
+
+                const nomorSpan = document.createElement("div");
+                nomorSpan.className = "soal-nomor";
+                nomorSpan.innerText = `Soal ${q.nomor}`;
+                card.appendChild(nomorSpan);
+
+                const teksSoal = document.createElement("div");
+                teksSoal.className = "soal-teks";
+                teksSoal.innerText = q.teks;
+                card.appendChild(teksSoal);
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.className = "options";
+                const nameAttr = `soal_${q.nomor}`;
+                const letters = ["A", "B", "C", "D", "E"];
+                for (let i = 0; i < q.pilihan.length; i++) {
+                    const optDiv = document.createElement("div");
+                    optDiv.className = "option";
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = nameAttr;
+                    radio.value = letters[i];
+                    const label = document.createElement("label");
+                    label.innerText = `${letters[i]}. ${q.pilihan[i]}`;
+                    optDiv.appendChild(radio);
+                    optDiv.appendChild(label);
+                    optionsDiv.appendChild(optDiv);
+                }
+                card.appendChild(optionsDiv);
+
+                const btnGroup = document.createElement("div");
+                btnGroup.className = "btn-group";
+                const checkBtn = document.createElement("button");
+                checkBtn.innerText = "✅ Cek Jawaban";
+                checkBtn.classList.add("check-btn");
+                const pembahasanBtn = document.createElement("button");
+                pembahasanBtn.innerText = "📖 Pembahasan";
+                pembahasanBtn.classList.add("pembahasan-btn");
+                btnGroup.appendChild(checkBtn);
+                btnGroup.appendChild(pembahasanBtn);
+                card.appendChild(btnGroup);
+
+                const feedbackDiv = document.createElement("div");
+                feedbackDiv.className = "feedback";
+                const pembahasanDiv = document.createElement("div");
+                pembahasanDiv.className = "pembahasan-text";
+                // Mengonversi teks pembahasan: ganti newline menjadi <br>
+                pembahasanDiv.innerHTML = q.pembahasan.replace(/\n/g, '<br>');
+                card.appendChild(feedbackDiv);
+                card.appendChild(pembahasanDiv);
+
+                checkBtn.addEventListener("click", () => {
+                    const selected = document.querySelector(`input[name="${nameAttr}"]:checked`);
+                    if (!selected) {
+                        feedbackDiv.innerHTML = "⚠️ Pilih jawaban terlebih dahulu!";
+                        feedbackDiv.classList.add("show");
+                        feedbackDiv.classList.remove("correct", "wrong");
+                        return;
+                    }
+                    const userVal = selected.value;
+                    const isCorrect = (userVal === q.jawaban);
+                    if (isCorrect) {
+                        feedbackDiv.innerHTML = `✅ BENAR! Jawaban: ${q.jawaban}`;
+                        feedbackDiv.classList.add("correct", "show");
+                        feedbackDiv.classList.remove("wrong");
+                    } else {
+                        feedbackDiv.innerHTML = `❌ SALAH. Jawaban yang benar: ${q.jawaban}.`;
+                        feedbackDiv.classList.add("wrong", "show");
+                        feedbackDiv.classList.remove("correct");
+                    }
+                });
+                pembahasanBtn.addEventListener("click", () => {
+                    pembahasanDiv.classList.toggle("show");
+                    pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
+                    // Memicu MathJax untuk merender ulang jika diperlukan
+                    if (typeof MathJax !== 'undefined') {
+                        MathJax.typesetPromise();
+                    }
+                });
+
+                soalContainer.appendChild(card);
+            }
+            groupDiv.appendChild(soalContainer);
+            root.appendChild(groupDiv);
+        }
+    }
+    render();
+</script>
+</body>
+</html>
