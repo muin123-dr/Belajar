@@ -63,8 +63,42 @@
             line-height: 1.65;
             color: #1e2f3d;
             border-bottom: 1px solid #e2edf2;
-            white-space: pre-wrap;
+            white-space: normal;
             font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        /* Gaya tabel untuk Teks 4 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .data-table thead tr {
+            background-color: #0a4b6e;
+            color: white;
+            font-weight: 600;
+        }
+        .data-table th, 
+        .data-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e0e7ef;
+        }
+        .data-table tbody tr:nth-child(even) {
+            background-color: #f8fafd;
+        }
+        .data-table tbody tr:hover {
+            background-color: #eef3fc;
+        }
+        /* Responsif tabel untuk layar kecil */
+        @media (max-width: 600px) {
+            .data-table th, .data-table td {
+                padding: 8px 4px;
+                font-size: 0.8rem;
+            }
         }
         .soal-container {
             padding: 12px 24px 24px 24px;
@@ -189,21 +223,11 @@
         .pembahasan-text.show {
             display: block;
         }
-        /* Gaya untuk rumus matematika */
-        .pembahasan-text .math {
-            font-size: 1.05em;
-        }
         footer {
             text-align: center;
             margin: 30px 0 20px;
             font-size: 0.75rem;
             color: #5f7f9c;
-        }
-        @media (max-width: 600px) {
-            body { padding: 12px; }
-            .teks-bacaan, .soal-container { padding: 16px; }
-            .option { padding: 6px 12px; }
-            label { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -217,6 +241,7 @@
 
 <script>
     // Data soal lengkap dengan pembahasan tanpa asterisk dan spasi rapi
+    // Untuk Teks 4 kita gunakan tabel HTML yang rapi
     const groups = [
         {
             judul: "TEKS 1 : Pemilihan Kepengurusan Desa",
@@ -250,7 +275,25 @@
         },
         {
             judul: "TEKS 4 : Data Penjualan Ponsel",
-            bacaan: "Sebuah toko elektronik mendata penjualan telepon seluler (ponsel) dalam satu minggu. Data jumlah ponsel yang dipasok ke toko dan yang terjual setiap harinya disajikan dalam tabel berikut.\n\n| Hari    | Pasokan (unit) | Terjual (unit) |\n|---------|----------------|----------------|\n| Senin   | 15             | 10             |\n| Selasa  | 20             | 18             |\n| Rabu    | 12             | 12             |\n| Kamis   | 18             | 15             |\n| Jumat   | 25             | 20             |\n| Sabtu   | 30             | 28             |\n| Minggu  | 15             | 14             |\n\nAsumsi: Stok hari sebelumnya yang tidak terjual diakumulasikan ke stok hari berikutnya (Stok Harian = Sisa Stok Kemarin + Pasokan Hari Ini - Terjual Hari Ini).\nKondisi awal: Sebelum Senin, tidak ada sisa stok.",
+            bacaan: `Sebuah toko elektronik mendata penjualan telepon seluler (ponsel) dalam satu minggu. Data jumlah ponsel yang dipasok ke toko dan yang terjual setiap harinya disajikan dalam tabel berikut.
+            
+            <table class="data-table">
+                <thead>
+                    <tr><th>Hari</th><th>Pasokan (unit)</th><th>Terjual (unit)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Senin</td><td>15</td><td>10</td></tr>
+                    <tr><td>Selasa</td><td>20</td><td>18</td></tr>
+                    <tr><td>Rabu</td><td>12</td><td>12</td></tr>
+                    <tr><td>Kamis</td><td>18</td><td>15</td></tr>
+                    <tr><td>Jumat</td><td>25</td><td>20</td></tr>
+                    <tr><td>Sabtu</td><td>30</td><td>28</td></tr>
+                    <tr><td>Minggu</td><td>15</td><td>14</td></tr>
+                </tbody>
+            </table>
+            
+            Asumsi: Stok hari sebelumnya yang tidak terjual diakumulasikan ke stok hari berikutnya (Stok Harian = Sisa Stok Kemarin + Pasokan Hari Ini - Terjual Hari Ini).
+            Kondisi awal: Sebelum Senin, tidak ada sisa stok.`,
             soal: [
                 { nomor: 13, teks: "Sisa stok ponsel terbanyak di akhir hari (setelah penjualan) terjadi pada hari ....", pilihan: ["Selasa", "Kamis", "Jumat", "Sabtu", "Minggu"], jawaban: "E", pembahasan: "Jawaban: E (Minggu)\n\nPembahasan:\nStok = (Sisa kemarin) + Pasokan - Terjual\n- Senin: \\(0 + 15 - 10 = 5\\)\n- Selasa: \\(5 + 20 - 18 = 7\\)\n- Rabu: \\(7 + 12 - 12 = 7\\)\n- Kamis: \\(7 + 18 - 15 = 10\\)\n- Jumat: \\(10 + 25 - 20 = 15\\)\n- Sabtu: \\(15 + 30 - 28 = 17\\)\n- Minggu: \\(17 + 15 - 14 = 18\\) (terbanyak)" },
                 { nomor: 14, teks: "Rata-rata pasokan ponsel per hari dalam satu minggu tersebut adalah .... unit.", pilihan: ["15", "17", "19", "21", "23"], jawaban: "C", pembahasan: "Jawaban: C (19)\n\nPembahasan:\nTotal pasokan = \\(15 + 20 + 12 + 18 + 25 + 30 + 15 = 135\\) unit.\nRata-rata = \\(\\frac{135}{7} \\approx 19,28 \\approx 19\\)." },
@@ -285,7 +328,13 @@
 
             const bacaan = document.createElement("div");
             bacaan.className = "teks-bacaan";
-            bacaan.innerText = group.bacaan;
+            // Untuk teks 4 yang sudah mengandung HTML tabel, kita gunakan innerHTML
+            // Pastikan string bacaan berisi HTML safe.
+            if (group.judul.includes("TEKS 4")) {
+                bacaan.innerHTML = group.bacaan;
+            } else {
+                bacaan.innerText = group.bacaan;
+            }
             groupDiv.appendChild(bacaan);
 
             const soalContainer = document.createElement("div");
@@ -340,7 +389,6 @@
                 feedbackDiv.className = "feedback";
                 const pembahasanDiv = document.createElement("div");
                 pembahasanDiv.className = "pembahasan-text";
-                // Mengonversi teks pembahasan: ganti newline menjadi <br>
                 pembahasanDiv.innerHTML = q.pembahasan.replace(/\n/g, '<br>');
                 card.appendChild(feedbackDiv);
                 card.appendChild(pembahasanDiv);
@@ -368,7 +416,6 @@
                 pembahasanBtn.addEventListener("click", () => {
                     pembahasanDiv.classList.toggle("show");
                     pembahasanBtn.innerText = pembahasanDiv.classList.contains("show") ? "🙈 Tutup Pembahasan" : "📖 Pembahasan";
-                    // Memicu MathJax untuk merender ulang jika diperlukan
                     if (typeof MathJax !== 'undefined') {
                         MathJax.typesetPromise();
                     }
