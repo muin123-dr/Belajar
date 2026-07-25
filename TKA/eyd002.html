@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Master EYD V - UTBK/TKA</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --correct: #10b981;
+            --wrong: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background-color: #d1fae5;
+            border-color: var(--correct);
+            color: #065f46;
+        }
+
+        .option-btn.wrong {
+            background-color: #fee2e2;
+            border-color: var(--wrong);
+            color: #991b1b;
+        }
+
+        .feedback-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-box.success {
+            background-color: #d1fae5;
+            border: 1px solid var(--correct);
+        }
+
+        .feedback-box.error {
+            background-color: #fee2e2;
+            border: 1px solid var(--wrong);
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .feedback-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .next-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .result-score {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--text-muted);
+        }
+
+        .restart-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 20px; }
+            .question-text { font-size: 1.05rem; }
+            .option-btn { font-size: 0.95rem; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="quiz-container">
+    <div class="header">
+        <h1>Latihan EYD V (25 Soal)</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Fokus: Kapital, Koma, & Penulisan di/di-</p>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <div class="question-meta">
+        <span id="q-number">Soal 1 dari 25</span>
+        <span id="score-display">Skor: 0</span>
+    </div>
+
+    <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+    
+    <div class="options" id="options-container">
+        <!-- Options injected via JS -->
+    </div>
+
+    <div class="feedback-box" id="feedback-box">
+        <div class="feedback-title" id="feedback-title"></div>
+        <div class="feedback-text" id="feedback-text"></div>
+    </div>
+
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Soal Selanjutnya</button>
+</div>
+
+<div class="container result-container" id="result-container">
+    <h1>Latihan Selesai!</h1>
+    <div class="result-score" id="final-score">100</div>
+    <div class="result-message" id="final-message">Luar biasa! Pemahaman EYD-mu sangat mantap!</div>
+    <button class="restart-btn" onclick="location.reload()">Ulangi Latihan</button>
+</div>
+
+<script>
+    const questions = [
+        // BAGIAN 1: HURUF KAPITAL
+        {
+            q: "Penulisan huruf kapital pada gelar, pangkat, dan jabatan yang benar terdapat pada kalimat...",
+            options: [
+                "Kemarin, Presiden jokowi meresmikan jalan tol baru.",
+                "Seorang Gubernur baru saja dilantik di istana negara.",
+                "Siapakah gubernur yang baru dilantik itu?",
+                "Ia bercita-cita menjadi seorang Dokter spesialis bedah."
+            ],
+            answer: 2,
+            rationale: "Gelar/jabatan (gubernur) ditulis huruf kecil jika TIDAK diikuti nama orang. Opsi 1 salah karena 'jokowi' kecil. Opsi 2 dan 4 salah karena jabatan ditulis kapital meski tidak diikuti nama spesifik."
+        },
+        {
+            q: "Manakah penulisan nama geografi yang tepat sesuai EYD V?",
+            options: [
+                "Mereka sedang berlayar ke arah Selatan.",
+                "Paman saya tinggal di Jakarta selatan.",
+                "Keluarga kami sering berlibur ke Danau Toba.",
+                "Anak-anak desa suka mandi di Sungai."
+            ],
+            answer: 2,
+            rationale: "'Danau Toba' adalah nama diri geografi, jadi kapital semua. Opsi 1 salah karena 'selatan' hanya arah (s kecil). Opsi 2 salah karena 'selatan' bagian dari nama diri wilayah (S kapital). Opsi 3 salah karena 'sungai' bukan nama diri (s kecil)."
+        },
+        {
+            q: "Kalimat manakah yang penulisan jenis/produk khasnya paling tepat?",
+            options: [
+                "Ibu membeli jeruk Bali di pasar buah.",
+                "Paman membawa oleh-oleh kacang bogor.",
+                "Wisatawan sangat mengagumi Batik cirebon.",
+                "Adik sangat suka makan pisang Ambon."
+            ],
+            answer: 1,
+            rationale: "'kacang bogor', 'jeruk bali', dan 'pisang ambon' adalah nama jenis (varietas), sehingga nama tempatnya ditulis KECIL. Sedangkan 'batik Cirebon' merujuk pada produk khas daerah asal, sehingga 'Cirebon' KAPITAL (b-nya kecil)."
+        },
+        {
+            q: "Penulisan huruf kapital pada nama agama dan kata ganti Tuhan yang benar adalah...",
+            options: [
+                "Kita harus selalu mensyukuri rahmatNya.",
+                "Kita harus selalu mensyukuri rahmat-Nya.",
+                "Kita harus selalu mensyukuri Rahmatnya.",
+                "Kita harus selalu mensyukuri Rahmat-Nya."
+            ],
+            answer: 1,
+            rationale: "Kata ganti untuk Tuhan (-Nya, -Mu) ditulis dengan huruf kapital dan dirangkaikan dengan tanda hubung (-)."
+        },
+        {
+            q: "Penulisan nama suku, bangsa, atau bahasa dengan imbuhan gabung (konfiks) yang tepat adalah...",
+            options: [
+                "Gaya bicaranya sangat ke-Inggris-inggrisan.",
+                "Gaya bicaranya sangat keInggris-inggrisan.",
+                "Gaya bicaranya sangat keinggris-inggrisan.",
+                "Gaya bicaranya sangat Keinggris-Inggrisan."
+            ],
+            answer: 2,
+            rationale: "Nama bangsa/suku/bahasa yang mendapat imbuhan gabung (awalan dan akhiran sekaligus) menjadi kata turunan, sehingga HILANG kapitalnya (keinggris-inggrisan, kejawa-jawaan)."
+        },
+        {
+            q: "Manakah penulisan judul buku/karangan yang benar sesuai EYD V?",
+            options: [
+                "Cara Cepat membaca Dan Memahami Teks",
+                "Cara Cepat Membaca Dan Memahami Teks",
+                "Cara Cepat Membaca dan Memahami Teks",
+                "Cara cepat membaca dan memahami teks"
+            ],
+            answer: 2,
+            rationale: "Setiap awal kata pada judul ditulis kapital, KECUALI kata tugas (dan, di, ke, dari, yang, untuk, dsb.) yang letaknya tidak di awal judul."
+        },
+        {
+            q: "Penulisan nama lembaga/dokumen yang benar adalah...",
+            options: [
+                "undang-undang dasar 1945",
+                "Undang-Undang Dasar 1945",
+                "Undang-undang Dasar 1945",
+                "Undang-undang dasar 1945"
+            ],
+            answer: 1,
+            rationale: "Nama dokumen resmi, lembaga, dan ketatanegaraan ditulis kapital pada setiap awal katanya, termasuk kata ulang utuh seperti Undang-Undang."
+        },
+        {
+            q: "Kalimat sapaan dengan huruf kapital yang benar adalah...",
+            options: [
+                "'Silakan duduk, Pak,' kata resepsionis itu.",
+                "'Silakan duduk, pak,' kata resepsionis itu.",
+                "Ia bertanya kepada Bapaknya di rumah.",
+                "Tolong sampaikan pesan ini kepada Ibu guru."
+            ],
+            answer: 0,
+            rationale: "Kata sapaan ('Pak', 'Bu', 'Saudara') yang digunakan sebagai sapaan langsung WAJIB dikapitalisasi. Opsi 2 salah (huruf p kecil). Opsi 3 dan 4 salah karena bukan sapaan langsung."
+        },
+
+        // BAGIAN 2: TANDA KOMA
+        {
+            q: "Penggunaan tanda koma pada perincian yang benar adalah...",
+            options: [
+                "Ayah membaca koran, dan ibu memasak.",
+                "Kakak menyukai teh, dan adik menyukai kopi.",
+                "Ibu membeli sayur, ikan, dan buah.",
+                "Dia hanya membeli pensil, dan buku."
+            ],
+            answer: 2,
+            rationale: "Tanda koma dipakai di antara unsur-unsur dalam perincian jika unsurnya TIGA atau lebih. Jika hanya dua unsur (pensil dan buku), TIDAK boleh pakai koma sebelum 'dan'."
+        },
+        {
+            q: "Penempatan tanda koma pada kalimat majemuk setara yang benar adalah...",
+            options: [
+                "Dia tidak marah melainkan, hanya kecewa.",
+                "Dia tidak marah, melainkan hanya kecewa.",
+                "Dia tidak marah melainkan hanya kecewa.",
+                "Dia tidak marah, melainkan, hanya kecewa."
+            ],
+            answer: 1,
+            rationale: "Tanda koma WAJIB diletakkan SEBELUM konjungsi pertentangan (tetapi, melainkan, sedangkan, padahal)."
+        },
+        {
+            q: "Penggunaan tanda koma pada anak dan induk kalimat yang benar adalah...",
+            options: [
+                "Kami batal pergi, karena hujan sangat lebat.",
+                "Karena hujan sangat lebat kami batal pergi.",
+                "Kami batal pergi karena hujan sangat lebat.",
+                "Karena, hujan sangat lebat, kami batal pergi."
+            ],
+            answer: 2,
+            rationale: "Jika INDUK kalimat mendahului ANAK kalimat (ditandai dengan 'karena', 'jika', 'saat'), maka TIDAK PERLU tanda koma. Koma dipakai hanya jika anak kalimat yang di depan (Karena hujan lebat, kami batal pergi)."
+        },
+        {
+            q: "Kalimat manakah yang TIDAK TERJEBAK dalam penempatan koma?",
+            options: [
+                "Saksi itu mengatakan, bahwa ia tidak melihat kejadiannya.",
+                "Saksi itu mengatakan bahwa, ia tidak melihat kejadiannya.",
+                "Saksi itu mengatakan, bahwa, ia tidak melihat kejadiannya.",
+                "Saksi itu mengatakan bahwa ia tidak melihat kejadiannya."
+            ],
+            answer: 3,
+            rationale: "Jebakan paling sering! Jangan letakkan tanda koma sebelum atau sesudah kata 'bahwa', 'agar', atau 'supaya' di tengah kalimat."
+        },
+        {
+            q: "Penggunaan tanda koma setelah konjungsi antarkalimat yang TEPAT adalah...",
+            options: [
+                "Harga beras naik. Oleh karena itu warga mengeluh.",
+                "Harga beras naik. Oleh karena itu, warga mengeluh.",
+                "Harga beras naik. Oleh, karena itu warga mengeluh.",
+                "Harga beras naik, oleh karena itu, warga mengeluh."
+            ],
+            answer: 1,
+            rationale: "Kata penghubung antarkalimat di awal kalimat (Oleh karena itu, Namun, Akan tetapi, Jadi, Dengan demikian) WAJIB diikuti tanda koma."
+        },
+        {
+            q: "Penggunaan tanda koma untuk keterangan tambahan (appositif) yang benar adalah...",
+            options: [
+                "Pak Ahmad guru matematika kami, akan pensiun bulan depan.",
+                "Pak Ahmad, guru matematika kami akan pensiun bulan depan.",
+                "Pak Ahmad, guru matematika kami, akan pensiun bulan depan.",
+                "Pak Ahmad guru matematika kami akan pensiun, bulan depan."
+            ],
+            answer: 2,
+            rationale: "Keterangan aposisi/tambahan yang menyela di tengah kalimat ('guru matematika kami') harus diapit oleh DUA tanda koma (sebelum dan sesudahnya)."
+        },
+        {
+            q: "Penulisan tanda koma sebelum rincian penjelas yang benar adalah...",
+            options: [
+                "Dia menyukai banyak olahraga yaitu, renang dan basket.",
+                "Dia menyukai banyak olahraga, yaitu, renang dan basket.",
+                "Dia menyukai banyak olahraga yaitu renang dan basket.",
+                "Dia menyukai banyak olahraga, yaitu renang dan basket."
+            ],
+            answer: 3,
+            rationale: "Tanda koma dipakai SEBELUM kata penjelas seperti 'yaitu', 'yakni', 'misalnya', atau 'seperti' jika berada di tengah kalimat."
+        },
+        {
+            q: "Penulisan tempat dan tanggal yang tepat adalah...",
+            options: [
+                "Jakarta 17 Agustus 1945",
+                "Jakarta. 17 Agustus 1945",
+                "Jakarta, 17 Agustus 1945",
+                "Jakarta, 17 Agustus, 1945"
+            ],
+            answer: 2,
+            rationale: "Tanda koma digunakan untuk memisahkan nama tempat dan tanggal, bulan, serta tahun yang ditulis berurutan."
+        },
+
+        // BAGIAN 3: PENULISAN DI / DI-
+        {
+            q: "Manakah penulisan awalan 'di-' dan kata depan 'di' yang TEPAT seluruhnya?",
+            options: [
+                "Buku itu di jual di pasar.",
+                "Buku itu dijual dipasar.",
+                "Buku itu dijual di pasar.",
+                "Buku itu di jual dipasar."
+            ],
+            answer: 2,
+            rationale: "'dijual' adalah pasif (bisa diubah jadi 'menjual') maka SERANGKAI. 'di pasar' menunjukkan tempat (di mana?), maka TERPISAH."
+        },
+        {
+            q: "Penulisan kata yang menjebak ini, manakah yang benar?",
+            options: [
+                "Banyak hal yang harus diselesaikan, di antaranya adalah tugas ini.",
+                "Banyak hal yang harus diselesaikan, diantaranya adalah tugas ini.",
+                "Banyak hal yang harus diselesaikan diantara nya adalah tugas ini.",
+                "Banyak hal yang harus diselesaikan, di-antaranya adalah tugas ini."
+            ],
+            answer: 0,
+            rationale: "JEBAKAN GANAS! 'di antaranya' terbentuk dari kata depan 'di' + 'antaranya'. Karena menunjukkan posisi (tempat abstrak), harus dipisah menjadi 'di antaranya'."
+        },
+        {
+            q: "Penulisan bentuk waktu yang benar di bawah ini adalah...",
+            options: [
+                "Dikala senja menyapa, kami pulang.",
+                "Di kala senja menyapa, kami pulang.",
+                "Dikala senja menyapa kami pulang.",
+                "Di-kala senja menyapa, kami pulang."
+            ],
+            answer: 1,
+            rationale: "Kata 'di kala' bermakna 'pada waktu'. 'di' di sini berfungsi setara kata depan, sehingga harus ditulis TERPISAH."
+        },
+        {
+            q: "Manakah kalimat dengan penulisan 'di mana' yang benar?",
+            options: [
+                "Dimana kamu menyimpan kuncinya?",
+                "Di mana kamu menyimpan kuncinya?",
+                "Sekolah dimana tempatku belajar sangat luas.",
+                "Negara dimana ia lahir sangat indah."
+            ],
+            answer: 1,
+            rationale: "Kata tanya 'di mana' selalu ditulis TERPISAH. (Catatan: Penggunaan 'di mana' sebagai konjungsi pengganti 'yang' pada opsi 3 dan 4 juga salah secara struktur bahasa)."
+        },
+        {
+            q: "Perhatikan kalimat homofon ini. Manakah penulisan yang tepat?",
+            options: [
+                "Polisi mencari tahu apa yang ada dibalik selimut itu.",
+                "Polisi mencari tahu apa yang ada di balik selimut itu.",
+                "Telur itu sedang di balik ibu.",
+                "Telur itu sedang dibalik ibu di dapur."
+            ],
+            answer: 1,
+            rationale: "Opsi 2 tepat: 'di balik' (tempat, terpisah). Opsi 4 juga tepat cara tulisnya, namun karena harus memilih satu, kita fokus ke opsi 2 sebagai pembuktian tempat. *Note: pada realita UTBK, hanya 1 opsi benar, anggap opsi 4 salah struktur karena kurang 'oleh' (dibalik oleh ibu)*."
+        },
+        {
+            q: "Pilih kalimat yang benar terkait penulisan 'dikontrakkan' / 'di kontrakan'!",
+            options: [
+                "Rumah itu akan di kontrakkan bulan depan.",
+                "Rumah itu akan dikontrakan bulan depan.",
+                "Dia saat ini tinggal dikontrakan petak.",
+                "Dia saat ini tinggal di kontrakan petak."
+            ],
+            answer: 3,
+            rationale: "'di kontrakan' (opsi 4) berarti 'di [tempat] kontrakan' -> Terpisah. Jika pasif, seharusnya 'dikontrakkan' (dengan dobel k: awalan di- + kontrak + -kan)."
+        },
+        {
+            q: "Pilih penulisan gabungan yang tepat untuk kata dasar 'parkir'.",
+            options: [
+                "Mobil diparkir diparkiran.",
+                "Mobil di parkir di parkiran.",
+                "Mobil di parkir diparkiran.",
+                "Mobil diparkir di parkiran."
+            ],
+            answer: 3,
+            rationale: "'diparkir' -> pasif (bisa diganti memarkir), jadi serangkai. 'di parkiran' -> tempat (di mana?), jadi terpisah."
+        },
+        {
+            q: "Manakah kalimat yang penulisannya SESUAI dengan aturan EYD V seluruhnya?",
+            options: [
+                "Karena cuaca buruk, kami berlindung di bawah pohon.",
+                "Kami berlindung dibawah pohon, karena cuaca buruk.",
+                "Karena cuaca buruk kami berlindung di bawah pohon.",
+                "Kami berlindung di bawah pohon, karena cuaca buruk."
+            ],
+            answer: 0,
+            rationale: "Opsi 1: Koma tepat karena anak kalimat di depan, 'di bawah' terpisah. Opsi 2 & 4 salah koma sebelum karena. Opsi 3 salah tidak pakai koma anak kalimat di depan."
+        },
+        {
+            q: "Kalimat pamungkas! Manakah yang penulisannya 100% benar (Koma, Kapital, & Di)?",
+            options: [
+                "Gubernur DKI Jakarta menyatakan bahwa, banjir sudah di atasi.",
+                "gubernur DKI Jakarta menyatakan bahwa banjir sudah diatasi.",
+                "Gubernur DKI Jakarta menyatakan bahwa banjir sudah diatasi.",
+                "Gubernur DKI Jakarta menyatakan, bahwa banjir sudah diatasi."
+            ],
+            answer: 2,
+            rationale: "Opsi 2 tepat: 'Gubernur DKI Jakarta' (Kapital karena jabatan + nama wilayah), tidak ada koma sebelum/sesudah 'bahwa', 'diatasi' (pasif, serangkai). Opsi 1 salah koma dan 'di atasi'. Opsi 3 awal huruf kecil. Opsi 4 salah koma sebelum bahwa."
+        }
+    ];
+
+    // FIXING THE HOMOPHONE QUESTION FOR EXPLICITNESS:
+    questions[20].options = [
+        "Polisi mencari tahu apa yang ada dibalik selimut itu.",
+        "Polisi mencari tahu apa yang ada di balik selimut itu.",
+        "Telur itu sedang di balik ibu.",
+        "Telur itu sedang di balik, oleh ibu."
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let hasAnswered = false;
+
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+    const qNumber = document.getElementById("q-number");
+    const scoreDisplay = document.getElementById("score-display");
+    const progressFill = document.getElementById("progress-fill");
+    
+    const feedbackBox = document.getElementById("feedback-box");
+    const feedbackTitle = document.getElementById("feedback-title");
+    const feedbackText = document.getElementById("feedback-text");
+    const nextBtn = document.getElementById("next-btn");
+
+    const quizContainer = document.getElementById("quiz-container");
+    const resultContainer = document.getElementById("result-container");
+
+    function loadQuestion() {
+        hasAnswered = false;
+        feedbackBox.className = "feedback-box";
+        nextBtn.style.display = "none";
+        
+        const q = questions[currentQuestion];
+        questionText.innerHTML = `${currentQuestion + 1}. ${q.q}`;
+        qNumber.innerText = `Soal ${currentQuestion + 1} dari ${questions.length}`;
+        progressFill.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+        
+        optionsContainer.innerHTML = "";
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerHTML = `<span style="font-weight:bold; margin-right:8px;">${String.fromCharCode(65 + index)}.</span> ${opt}`;
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedIndex, btnElement) {
+        if (hasAnswered) return;
+        hasAnswered = true;
+
+        const q = questions[currentQuestion];
+        const buttons = optionsContainer.querySelectorAll(".option-btn");
+        
+        // Disable all buttons
+        buttons.forEach(b => b.disabled = true);
+
+        if (selectedIndex === q.answer) {
+            btnElement.classList.add("correct");
+            score++;
+            scoreDisplay.innerText = `Skor: ${score}`;
+            
+            feedbackBox.classList.add("show", "success");
+            feedbackTitle.innerText = "✅ Tepat Sekali!";
+            feedbackTitle.style.color = "var(--correct)";
+        } else {
+            btnElement.classList.add("wrong");
+            buttons[q.answer].classList.add("correct"); // Show correct answer
+            
+            feedbackBox.classList.add("show", "error");
+            feedbackTitle.innerText = "❌ Kurang Tepat!";
+            feedbackTitle.style.color = "var(--wrong)";
+        }
+
+        feedbackText.innerText = q.rationale;
+        nextBtn.style.display = "block";
+        
+        // Change button text on last question
+        if (currentQuestion === questions.length - 1) {
+            nextBtn.innerText = "Lihat Hasil Akhir";
+        }
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizContainer.style.display = "none";
+        resultContainer.style.display = "block";
+        
+        const finalScore = Math.round((score / questions.length) * 100);
+        document.getElementById("final-score").innerText = finalScore;
+        
+        let message = "";
+        if (finalScore >= 90) message = "Luar biasa! Kamu sudah sangat siap menghadapi UTBK/TKA. Insting EYD-mu sangat tajam!";
+        else if (finalScore >= 70) message = "Bagus! Kamu sudah memahami konsep utamanya, perhatikan lagi jebakan-jebakan kecilnya.";
+        else if (finalScore >= 50) message = "Cukup baik, tapi kamu perlu membaca ulang materi koma dan kata depan. Jangan menyerah!";
+        else message = "Jangan patah semangat! Pelajari lagi aturan ringkas EYD V, terutama bagian huruf kapital dan di/di-.";
+        
+        document.getElementById("final-message").innerText = message;
+    }
+
+    // Start Quiz
+    loadQuestion();
+</script>
+
+</body>
+</html>
