@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0">
+  <title>🎯 Kuis EYD V (Final) | Latihan TKA SMA</title>
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #2d2a4a);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #f0f0f0;
+    }
+    .quiz-container {
+      width: 100%;
+      max-width: 750px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      border-radius: 32px;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.15);
+      padding: 2rem 1.8rem 2rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.3s ease;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .progress-area {
+      flex: 1 1 100%;
+      margin-bottom: 15px;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #d1c4e9;
+    }
+    .progress-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f7971e, #ffd200);
+      border-radius: 20px;
+      box-shadow: 0 0 12px #ffb347;
+      transition: width 0.4s ease;
+    }
+    .score-badge {
+      background: #ffd200;
+      color: #1e1e2f;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(255,210,0,0.5);
+    }
+    .question-card {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 1.8rem 1.5rem;
+      margin: 20px 0 25px;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: 0.2s;
+    }
+    .question-number {
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      color: #ffd200;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .question-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 25px 0 15px;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 18px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      color: #f0f0f0;
+    }
+    .option-item:hover:not(.disabled) {
+      background: rgba(255,255,255,0.18);
+      border-color: #ffd200;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+    }
+    .option-letter {
+      background: rgba(255,210,0,0.2);
+      color: #ffd200;
+      font-weight: 700;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      margin-right: 14px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255,210,0,0.5);
+    }
+    .option-text {
+      flex: 1;
+    }
+    .option-item.correct {
+      background: rgba(56, 176, 0, 0.3);
+      border-color: #38b000;
+      color: #fff;
+    }
+    .option-item.wrong {
+      background: rgba(220, 38, 38, 0.3);
+      border-color: #dc2626;
+      color: #fff;
+    }
+    .option-item.disabled {
+      pointer-events: none;
+      opacity: 0.9;
+    }
+    .explanation-box {
+      background: rgba(0,0,0,0.35);
+      border-left: 5px solid #ffd200;
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-top: 18px;
+      font-size: 0.9rem;
+      color: #f1f5f9;
+      backdrop-filter: blur(8px);
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.25s;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+    }
+    .btn-primary {
+      background: #ffd200;
+      color: #1e1e2f;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(255,210,0,0.5);
+    }
+    .btn-primary:hover {
+      background: #ffe64d;
+      box-shadow: 0 8px 22px rgba(255,210,0,0.8);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .result-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    .result-emoji {
+      font-size: 4rem;
+    }
+    .result-score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #ffd200;
+    }
+    .btn-restart {
+      margin-top: 25px;
+    }
+    .footer-note {
+      text-align: center;
+      margin-top: 20px;
+      color: #aaa;
+      font-size: 0.8rem;
+    }
+    @media (max-width: 500px) {
+      .quiz-container {
+        padding: 1.5rem 1rem;
+      }
+      .question-text {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container" id="quizContainer">
+    <!-- Konten dinamis -->
+  </div>
+
+  <script>
+    (function() {
+      // Data soal final - sudah divalidasi ketat, hanya satu jawaban benar per soal
+      const quizData = [
+        // === SOAL 1 ===
+        {
+          soal: "1. Kalimat dengan penggunaan huruf kapital yang benar adalah …",
+          opsi: [
+            "A. Setiap hari Senin, presiden Jokowi mengadakan rapat terbatas.",
+            "B. Setiap hari Senin, Presiden Jokowi mengadakan rapat terbatas.",
+            "C. Setiap hari senin, Presiden Jokowi mengadakan rapat terbatas.",
+            "D. Setiap hari Senin, Presiden jokowi mengadakan rapat terbatas.",
+            "E. Setiap Hari Senin, Presiden Jokowi mengadakan rapat terbatas."
+          ],
+          jawaban: 1, // B
+          penjelasan: "“Senin” (hari) kapital, “Presiden” kapital karena diikuti nama “Jokowi”. Pilihan A salah karena “presiden” kecil (diikuti nama). C salah karena “senin” kecil. D salah karena “jokowi” kecil. E salah karena “Hari” tidak perlu kapital (bukan nama hari)."
+        },
+        // === SOAL 2 ===
+        {
+          soal: "2. Penggunaan huruf kapital yang tepat terdapat pada kalimat …",
+          opsi: [
+            "A. Suku jawa memiliki tradisi yang kaya.",
+            "B. Bahasa inggris adalah bahasa internasional.",
+            "C. Kain batik Cirebon sangat terkenal.",
+            "D. Dia bercita-cita menjadi seorang Dokter.",
+            "E. Gunung semeru terletak di Jawa Timur."
+          ],
+          jawaban: 2, // C
+          penjelasan: "C benar karena “Cirebon” bagian dari nama produk khas daerah (kapital). A salah: “Jawa” harus kapital. B salah: “Inggris” kapital. D salah: “dokter” profesi umum tidak diikuti nama → kecil. E salah: “Semeru” nama gunung → kapital."
+        },
+        // === SOAL 3 (DIREVISI: opsi B diubah, kacang Bogor kapital) ===
+        {
+          soal: "3. Penulisan huruf kapital yang salah terdapat pada …",
+          opsi: [
+            "A. Nabi Muhammad adalah utusan Allah.",
+            "B. Ayah membeli kacang Bogor di pasar.",
+            "C. Indonesia terletak di antara dua benua.",
+            "D. Paman tinggal di daerah Jakarta Selatan.",
+            "E. Banyak turis mengunjungi Pulau Dewata."
+          ],
+          jawaban: 1, // B
+          penjelasan: "Opsi B salah: “kacang Bogor” seharusnya ditulis “kacang bogor” (huruf kecil semua) karena merupakan nama jenis/varietas, bukan merujuk pada geografi. Pilihan lain sudah benar."
+        },
+        // === SOAL 4 (DIREVISI: opsi E profesor kecil) ===
+        {
+          soal: "4. Penulisan gelar yang benar menurut EYD V adalah …",
+          opsi: [
+            "A. Presiden Jokowi bertemu dengan gubernur Jawa Tengah.",
+            "B. Dokter Santi praktek di rumah sakit itu.",
+            "C. Tahun ini, Prof. Budi diangkat menjadi rektor.",
+            "D. Saya menghadiri seminar bersama Bapak Menteri.",
+            "E. profesor Arif seorang dosen teladan."
+          ],
+          jawaban: 2, // C
+          penjelasan: "C benar: “Prof.” kapital karena gelar diikuti nama, “rektor” kecil karena tidak diikuti nama. A salah: “gubernur” harus kapital (Gubernur Jawa Tengah). B salah: “praktek” tidak baku (praktik). D salah: “Bapak Menteri” sebaiknya kecil kecuali sapaan langsung. E salah: “profesor” harus kapital karena diikuti nama (Profesor Arif)."
+        },
+        // === SOAL 5 (DIREVISI: hanya E benar) ===
+        {
+          soal: "5. Kalimat dengan pemakaian huruf kapital yang benar adalah …",
+          opsi: [
+            "A. Saya tinggal di Jalan Mawar nomor 5, Jakarta barat.",
+            "B. Dia orang islam yang taat beribadah di Masjid.",
+            "C. Setiap kamis, dokter Andi praktik di klinik.",
+            "D. Manado adalah ibu kota Provinsi sulawesi Utara.",
+            "E. Banjir melanda Jakarta Selatan dan sekitarnya."
+          ],
+          jawaban: 4, // E
+          penjelasan: "E benar: semua kapital tepat. A salah: “barat” harus kapital (bagian nama “Jakarta Barat”). B salah: “kristen” harus kapital (Kristen), “Gereja” kecil jika bukan nama khusus. C salah: “kamis” dan “dokter” harus kapital (Kamis, Dokter). D salah: “sulawesi” harus kapital (Sulawesi)."
+        },
+        // === SOAL 6 ===
+        {
+          soal: "6. Kesalahan penggunaan huruf kapital terdapat pada …",
+          opsi: [
+            "A. Mereka berwisata ke Danau Toba.",
+            "B. Ayah membeli sate Madura.",
+            "C. Kakek lahir di bulan Desember.",
+            "D. Angin muson bertiup dari Utara.",
+            "E. Siapa presiden pertama Indonesia?"
+          ],
+          jawaban: 3, // D
+          penjelasan: "“Utara” di sini menunjukkan arah, bukan bagian nama geografi, jadi harus ditulis kecil “utara”. Pilihan lain benar."
+        },
+        // === SOAL 7 (DIREVISI: opsi A ditambahkan "Di Indonesia,") ===
+        {
+          soal: "7. Huruf kapital digunakan secara tepat pada …",
+          opsi: [
+            "A. Di Indonesia, Suku Sunda dan suku Batak hidup berdampingan.",
+            "B. Ia sedang belajar bahasa jepang.",
+            "C. Seluruh umat Islam merayakan Idulfitri.",
+            "D. Surat itu ditujukan kepada kepala Sekolah.",
+            "E. Jenderal sudirman adalah pahlawan nasional."
+          ],
+          jawaban: 2, // C
+          penjelasan: "C benar: “Islam” kapital, “Idulfitri” kapital. A salah: “Suku” di tengah kalimat harus kecil (suku Sunda). B salah: “jepang” kecil. D salah: “kepala Sekolah” harus “kepala sekolah”. E salah: “sudirman” kecil."
+        },
+        // === SOAL 8 (DIREVISI: opsi E bupati kecil) ===
+        {
+          soal: "8. Manakah penulisan yang benar?",
+          opsi: [
+            "A. Di Indonesia ada lima Agama resmi.",
+            "B. Ia membaca buku “Laskar pelangi”.",
+            "C. Saya akan pergi ke Gunung Bromo.",
+            "D. Paman bertugas sebagai Gubernur.",
+            "E. Kemarin, kami bertemu bupati Bandung."
+          ],
+          jawaban: 2, // C
+          penjelasan: "C benar: “Gunung Bromo” nama geografi. A salah: “Agama” kecil. B salah: judul buku “Laskar Pelangi”. D salah: “Gubernur” tanpa nama → kecil. E salah: “bupati” jabatan diikuti nama daerah harus kapital (Bupati Bandung)."
+        },
+        // === SOAL 9 ===
+        {
+          soal: "9. Penggunaan huruf kapital yang benar untuk nama geografi adalah …",
+          opsi: [
+            "A. Pendaki itu menuju puncak gunung Rinjani.",
+            "B. Nelayan melaut di Selat malaka.",
+            "C. Jakarta Pusat padat penduduk.",
+            "D. Arus sungai brantas cukup deras.",
+            "E. Mereka menyeberangi selat Sunda."
+          ],
+          jawaban: 2, // C
+          penjelasan: "“Jakarta Pusat” nama wilayah administrasi, semua kapital. A: “gunung Rinjani” salah, “Gunung Rinjani”. B: “malaka” kecil seharusnya “Malaka”. D: “brantas” kecil. E: “selat Sunda” → seharusnya “Selat Sunda”, karena “Selat” bagian nama."
+        },
+        // === SOAL 10 ===
+        {
+          soal: "10. Kata “utara” harus ditulis kapital pada …",
+          opsi: [
+            "A. Mereka berlayar ke arah utara.",
+            "B. Korea Utara adalah negara komunis.",
+            "C. Angin bertiup dari utara.",
+            "D. Ia tinggal di bagian utara kota.",
+            "E. Medan terletak di utara."
+          ],
+          jawaban: 1, // B
+          penjelasan: "“Korea Utara” adalah nama negara, “Utara” bagian dari nama diri → kapital. Pilihan lain menunjukkan arah semata."
+        },
+        // === SOAL 11 (KOMA) ===
+        {
+          soal: "11. Kalimat dengan tanda koma yang tepat adalah …",
+          opsi: [
+            "A. Dia membawa buku, pulpen dan penggaris.",
+            "B. Dia membawa buku, pulpen, dan penggaris.",
+            "C. Dia membawa buku pulpen, dan penggaris.",
+            "D. Dia membawa, buku, pulpen, dan penggaris.",
+            "E. Dia membawa, buku pulpen dan penggaris."
+          ],
+          jawaban: 1, // B
+          penjelasan: "Pemerincian tiga unsur, koma sebelum “dan” boleh dipakai. B paling lengkap dan lazim."
+        },
+        // === SOAL 12 (KOMA) ===
+        {
+          soal: "12. Pemakaian koma yang salah terdapat pada …",
+          opsi: [
+            "A. Oleh karena itu, ia memutuskan mundur.",
+            "B. Dia tidak datang, karena hujan deras.",
+            "C. Kakak suka kopi, sedangkan aku suka teh.",
+            "D. Ibunya, seorang guru, sangat sabar.",
+            "E. Jakarta, 10 November 2023."
+          ],
+          jawaban: 1, // B
+          penjelasan: "Anak kalimat “karena hujan deras” di belakang, tidak perlu koma. Seharusnya: “Dia tidak datang karena hujan deras.”"
+        },
+        // === SOAL 13 (KOMA) ===
+        {
+          soal: "13. Tanda koma wajib digunakan sebelum kata …",
+          opsi: [
+            "A. dan",
+            "B. atau",
+            "C. tetapi",
+            "D. yang",
+            "E. dengan"
+          ],
+          jawaban: 2, // C
+          penjelasan: "Koma selalu dipakai sebelum konjungsi pertentangan: tetapi, melainkan, sedangkan. Untuk “dan”/“atau” hanya pada perincian lebih dari dua."
+        },
+        // === SOAL 14 (KOMA) ===
+        {
+          soal: "14. Manakah penulisan yang benar?",
+          opsi: [
+            "A. Ia berkata, bahwa pertemuan ditunda.",
+            "B. Jika cuaca cerah kami akan pergi.",
+            "C. Meskipun lelah, ia tetap bekerja.",
+            "D. Saya membeli buku, dan pensil.",
+            "E. Dia gagal namun, tidak menyerah."
+          ],
+          jawaban: 2, // C
+          penjelasan: "C benar: anak kalimat “Meskipun lelah” di depan → pakai koma. A: tidak boleh koma sebelum “bahwa”. B: “Jika cuaca cerah” di depan harus ada koma: “Jika cuaca cerah, kami …”. D: hanya dua unsur, tidak perlu koma. E: koma seharusnya sebelum “namun”, bukan sesudahnya."
+        },
+        // === SOAL 15 (KOMA) ===
+        {
+          soal: "15. Perbaikan yang tepat untuk kalimat “Kami tidak jadi berenang sebab cuaca buruk” adalah …",
+          opsi: [
+            "A. Kami tidak jadi berenang, sebab cuaca buruk.",
+            "B. Kami, tidak jadi berenang sebab cuaca buruk.",
+            "C. Sebab cuaca buruk kami tidak jadi berenang.",
+            "D. Sebab cuaca buruk, kami tidak jadi berenang.",
+            "E. Tidak ada perbaikan, kalimat sudah benar."
+          ],
+          jawaban: 3, // D
+          penjelasan: "Jika anak kalimat “Sebab cuaca buruk” diletakkan di depan, harus ada koma. Kalimat asli (induk di depan) tanpa koma, tapi D memperbaiki posisi menjadi depan dan menambah koma. Jadi jawaban D."
+        },
+        // === SOAL 16 (KOMA) ===
+        {
+          soal: "16. Kalimat yang menggunakan koma secara tepat adalah …",
+          opsi: [
+            "A. Saya akan datang jika diundang.",
+            "B. Walaupun mahal, ia tetap membelinya.",
+            "C. Adik menangis, dan ibu menghiburnya.",
+            "D. Dia bertanya, “apakah kamu siap?”",
+            "E. Dengan demikian dia diterima di PTN."
+          ],
+          jawaban: 1, // B
+          penjelasan: "B benar, anak kalimat di depan + koma. A benar tanpa koma karena anak kalimat di belakang. C: “dan” tidak perlu koma. D: setelah petikan langsung, seharusnya tanda petik dan koma di dalam: “Dia bertanya, ‘Apakah kamu siap?’”. Huruf A kapital. E: perlu koma setelah “Dengan demikian”."
+        },
+        // === SOAL 17 (KOMA) ===
+        {
+          soal: "17. Manakah kalimat yang memerlukan koma setelah kata “Namun”?",
+          opsi: [
+            "A. Namun dia tetap pergi.",
+            "B. Namun, dia tetap pergi.",
+            "C. Dia namun tetap pergi.",
+            "D. Dia tetap pergi namun.",
+            "E. Namun dia, tetap pergi."
+          ],
+          jawaban: 1, // B
+          penjelasan: "“Namun” sebagai konjungsi antarkalimat di awal kalimat, wajib diikuti koma."
+        },
+        // === SOAL 18 (KOMA) ===
+        {
+          soal: "18. Tanda koma yang salah terdapat pada …",
+          opsi: [
+            "A. Ibu pergi ke pasar, lalu ke apotek.",
+            "B. Dia tidak kaya, melainkan miskin.",
+            "C. Saya bingung, apa yang harus dilakukan.",
+            "D. Bunga itu, yang berwarna merah, sangat cantik.",
+            "E. Akan tetapi, dia tidak marah."
+          ],
+          jawaban: 2, // C
+          penjelasan: "Koma tidak diperlukan untuk memisahkan induk kalimat dengan anak kalimat “apa yang harus dilakukan” yang merupakan keterangan objek. Seharusnya: “Saya bingung apa yang harus dilakukan.”"
+        },
+        // === SOAL 19 (DI-) ===
+        {
+          soal: "19. Penulisan “di” yang benar adalah …",
+          opsi: [
+            "A. Buku itu ada dimeja.",
+            "B. Mobil itu di parkir di garasi.",
+            "C. Surat itu ditulis oleh ayah.",
+            "D. Mereka duduk dikursi.",
+            "E. Dia berjalan diantaranya."
+          ],
+          jawaban: 2, // C
+          penjelasan: "“ditulis” (awalan pasif, serangkai). Lainnya salah: A “dimeja” harusnya “di meja”, B “di parkir” harusnya “diparkir”, D “dikursi” harusnya “di kursi”, E “diantaranya” harusnya “di antaranya”."
+        },
+        // === SOAL 20 (DI-) ===
+        {
+          soal: "20. Kalimat dengan penulisan kata depan “di” yang tepat adalah …",
+          opsi: [
+            "A. Dimanakah rumahmu?",
+            "B. Kami berteduh dipinggir jalan.",
+            "C. Dia bersembunyi dibalik pintu.",
+            "D. Bapak bekerja di kantor.",
+            "E. Peserta berkumpul disini."
+          ],
+          jawaban: 3, // D
+          penjelasan: "“di kantor” (terpisah). A: “Di manakah”, B: “di pinggir”, C: “di balik”, E: “di sini”."
+        },
+        // === SOAL 21 (DI-) ===
+        {
+          soal: "21. Penulisan yang salah adalah …",
+          opsi: [
+            "A. Pencuri itu ditangkap polisi.",
+            "B. Kain itu di jahit oleh ibu.",
+            "C. Adik bermain di lapangan.",
+            "D. Kami tinggal di kontrakan.",
+            "E. Jawabanmu ditunggu."
+          ],
+          jawaban: 1, // B
+          penjelasan: "“di jahit” seharusnya serangkai “dijahit” (bisa diaktifkan menjahit). Lainnya benar."
+        },
+        // === SOAL 22 (DI-) ===
+        {
+          soal: "22. Pasangan penulisan yang benar adalah …",
+          opsi: [
+            "A. dibalik selimut – di balikkan badan",
+            "B. di parkir – diparkirkan",
+            "C. di kala itu – di antaranya",
+            "D. dikontrakkan – di kontrak",
+            "E. disini – di mana"
+          ],
+          jawaban: 2, // C
+          penjelasan: "“di kala itu” (kata depan waktu → terpisah), “di antaranya” (kata depan + pronomina → terpisah). A: “di balik selimut” benar jika tempat, tapi “di balikkan badan” salah karena harus “dibalikkan” (pasif). B: “di parkir” salah. D: “di kontrak” harus “dikontrak” (pasif). E: “disini” salah."
+        },
+        // === SOAL 23 (DI-) ===
+        {
+          soal: "23. Mana kalimat yang semua penulisan “di”-nya benar?",
+          opsi: [
+            "A. Dikala senja, kami duduk di taman.",
+            "B. Surat itu sudah di kirim.",
+            "C. Buku ini di tulis oleh sastrawan.",
+            "D. Di antara kalian pasti ada yang tahu.",
+            "E. Mobil itu di parkir di parkiran."
+          ],
+          jawaban: 3, // D
+          penjelasan: "“Di antara” terpisah, benar. A: “Dikala” salah, harus “Di kala”. B: “di kirim” → “dikirim”. C: “di tulis” → “ditulis”. E: “di parkir” → “diparkir”, tetapi “di parkiran” benar."
+        },
+        // === SOAL 24 (DI-) ===
+        {
+          soal: "24. Cermati kalimat berikut: Polisi menyelidiki motif yang tersembunyi di balik kasus itu. Penulisan “di balik” yang benar adalah …",
+          opsi: [
+            "A. dibalik, karena bisa diubah menjadi “membalik”",
+            "B. di balik, karena menyatakan tempat (di balik)",
+            "C. dibalik, karena bukan kata depan",
+            "D. di balik, karena digabung",
+            "E. dibalik, karena menunjukkan pasif"
+          ],
+          jawaban: 1, // B
+          penjelasan: "Konteks “tersembunyi di balik” adalah tempat, bukan tindakan membalik. Maka terpisah."
+        },
+        // === SOAL 25 (DI-) ===
+        {
+          soal: "25. Mana yang seharusnya ditulis serangkai?",
+          opsi: [
+            "A. di samping rumah",
+            "B. di kontrakan",
+            "C. di jemur pakaian",
+            "D. di antara kita",
+            "E. di sini"
+          ],
+          jawaban: 2, // C
+          penjelasan: "“di jemur” harus “dijemur” (pasif dari menjemur). Lainnya adalah kata depan tempat → terpisah."
+        }
+      ];
+
+      const quizContainer = document.getElementById('quizContainer');
+      let currentQuestion = 0;
+      let score = 0;
+      let answered = false;
+      let userAnswers = new Array(quizData.length).fill(null);
+
+      function renderStart() {
+        quizContainer.innerHTML = `
+          <div style="text-align:center; padding:1rem 0.5rem;">
+            <div style="font-size:4rem;">📝</div>
+            <h2 style="margin:15px 0 5px; font-weight:700;">Kuis EYD V (Final)</h2>
+            <p style="color:#ccc; margin-bottom:20px;">Latihan Soal TKA SMA • 25 Pertanyaan • Sudah Dikoreksi</p>
+            <button class="btn btn-primary" id="startBtn" style="font-size:1.2rem; padding:14px 40px;">🚀 Mulai Kuis</button>
+            <p style="margin-top:30px; color:#aaa; font-size:0.8rem;">Uji pemahaman Huruf Kapital, Tanda Koma, dan Penulisan di-</p>
+          </div>
+        `;
+        document.getElementById('startBtn').addEventListener('click', () => {
+          currentQuestion = 0;
+          score = 0;
+          answered = false;
+          userAnswers = new Array(quizData.length).fill(null);
+          renderQuestion();
+        });
+      }
+
+      function renderQuestion() {
+        const q = quizData[currentQuestion];
+        const progressPercent = ((currentQuestion) / quizData.length) * 100;
+        const optionLabels = ["A", "B", "C", "D", "E"];
+        
+        let optionsHTML = '';
+        q.opsi.forEach((opt, idx) => {
+          let extraClass = '';
+          if (answered) {
+            if (idx === q.jawaban) extraClass = 'correct';
+            else if (userAnswers[currentQuestion] === idx && idx !== q.jawaban) extraClass = 'wrong';
+          }
+          const disabledClass = answered ? 'disabled' : '';
+          optionsHTML += `
+            <div class="option-item ${extraClass} ${disabledClass}" data-index="${idx}">
+              <span class="option-letter">${optionLabels[idx]}</span>
+              <span class="option-text">${opt.replace(/^[A-E]\.\s/, '')}</span>
+            </div>
+          `;
+        });
+
+        const explanationDisplay = answered ? 'block' : 'none';
+        const explanationText = answered ? q.penjelasan : '';
+
+        const html = `
+          <div class="header">
+            <div class="progress-area">
+              <div class="progress-text">
+                <span>Soal ${currentQuestion+1} dari ${quizData.length}</span>
+                <span>${Math.round(progressPercent)}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:${progressPercent}%;"></div>
+              </div>
+            </div>
+            <div class="score-badge">
+              ⭐ <span id="liveScore">${score}</span>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-number">PERTANYAAN ${currentQuestion+1}</div>
+            <div class="question-text">${q.soal}</div>
+            <div class="options" id="optionsContainer">
+              ${optionsHTML}
+            </div>
+            <div class="explanation-box" id="explanationBox" style="display:${explanationDisplay};">
+              <strong>💡 Penjelasan:</strong> ${explanationText}
+            </div>
+          </div>
+          <div class="nav-buttons">
+            <button class="btn" id="prevBtn" ${currentQuestion === 0 ? 'disabled' : ''}>◀ Sebelumnya</button>
+            ${!answered ? '<button class="btn btn-primary" id="nextBtn" disabled>Lanjut ▶</button>' : 
+              (currentQuestion < quizData.length-1 ? '<button class="btn btn-primary" id="nextBtn">Selanjutnya ▶</button>' : 
+              '<button class="btn btn-primary" id="finishBtn">Lihat Hasil 🎉</button>')
+            }
+          </div>
+        `;
+
+        quizContainer.innerHTML = html;
+
+        if (!answered) {
+          const optionElements = document.querySelectorAll('.option-item');
+          optionElements.forEach(el => {
+            el.addEventListener('click', function(e) {
+              if (answered) return;
+              const selectedIdx = parseInt(this.dataset.index);
+              handleAnswer(selectedIdx);
+            });
+          });
+        }
+
+        document.getElementById('prevBtn')?.addEventListener('click', () => {
+          if (currentQuestion > 0) {
+            currentQuestion--;
+            answered = userAnswers[currentQuestion] !== null;
+            renderQuestion();
+          }
+        });
+
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (currentQuestion < quizData.length - 1) {
+              currentQuestion++;
+              answered = userAnswers[currentQuestion] !== null;
+              renderQuestion();
+            }
+          });
+        }
+
+        const finishBtn = document.getElementById('finishBtn');
+        if (finishBtn) {
+          finishBtn.addEventListener('click', showResult);
+        }
+      }
+
+      function handleAnswer(selectedIdx) {
+        if (answered) return;
+        answered = true;
+        userAnswers[currentQuestion] = selectedIdx;
+        const q = quizData[currentQuestion];
+        if (selectedIdx === q.jawaban) {
+          score++;
+        }
+        renderQuestion();
+        document.getElementById('liveScore').innerText = score;
+      }
+
+      function showResult() {
+        const max = quizData.length;
+        const percentage = Math.round((score / max) * 100);
+        let emoji, message;
+        if (percentage >= 90) { emoji = '🏆'; message = 'Luar biasa! Kamu hampir sempurna!'; }
+        else if (percentage >= 75) { emoji = '🌟'; message = 'Bagus! Pemahamanmu kuat.'; }
+        else if (percentage >= 60) { emoji = '📘'; message = 'Cukup baik, perlu asah lagi.'; }
+        else if (percentage >= 40) { emoji = '📚'; message = 'Terus belajar, ya!'; }
+        else { emoji = '🌱'; message = 'Semangat! Banyak latihan lagi.'; }
+
+        quizContainer.innerHTML = `
+          <div class="result-card">
+            <div class="result-emoji">${emoji}</div>
+            <div class="result-score">${score} / ${max}</div>
+            <p style="font-size:1.2rem; margin:10px 0 20px; color:#f1f5f9;">${message}</p>
+            <p style="color:#bbb;">Ketepatan: <strong>${percentage}%</strong></p>
+            <button class="btn btn-primary btn-restart" id="restartBtn" style="margin-top:25px;">🔄 Ulangi Kuis</button>
+          </div>
+        `;
+        document.getElementById('restartBtn').addEventListener('click', () => {
+          currentQuestion = 0;
+          score = 0;
+          answered = false;
+          userAnswers = new Array(quizData.length).fill(null);
+          renderQuestion();
+        });
+      }
+
+      renderStart();
+    })();
+  </script>
+</body>
+</html>
