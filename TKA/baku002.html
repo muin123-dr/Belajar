@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+  <title>📖 Kuis Kata Baku & Tidak Baku | TKA SMA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', 'Poppins', Roboto, system-ui, sans-serif;
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: #e2e8f0;
+    }
+    .quiz-wrapper {
+      width: 100%;
+      max-width: 720px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(20px);
+      border-radius: 36px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+      padding: 1.8rem 1.5rem 2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .progress-wrap {
+      flex: 2;
+      min-width: 180px;
+    }
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #cbd5e1;
+    }
+    .progress-track {
+      height: 10px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #fbbf24, #f59e0b);
+      border-radius: 20px;
+      box-shadow: 0 0 16px #fbbf24aa;
+      transition: width 0.35s ease;
+    }
+    .score-chip {
+      background: #fbbf24;
+      color: #0f172a;
+      font-weight: 700;
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 6px 18px rgba(251,191,36,0.5);
+    }
+    .question-panel {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 1.8rem 1.4rem;
+      margin: 18px 0 22px;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .question-label {
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      color: #fbbf24;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #fff;
+      margin-bottom: 18px;
+    }
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0 10px;
+    }
+    .option-btn {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.07);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 18px;
+      padding: 13px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      color: #e2e8f0;
+      text-align: left;
+      word-break: break-word;
+    }
+    .option-btn:hover:not(.static) {
+      background: rgba(255,255,255,0.16);
+      border-color: #fbbf24;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+    .option-letter {
+      background: rgba(251,191,36,0.25);
+      color: #fbbf24;
+      font-weight: 700;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      margin-right: 14px;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      border: 1px solid rgba(251,191,36,0.5);
+    }
+    .option-text {
+      flex: 1;
+    }
+    .option-btn.correct {
+      background: rgba(34, 197, 94, 0.25);
+      border-color: #22c55e;
+    }
+    .option-btn.wrong {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+    }
+    .option-btn.static {
+      pointer-events: none;
+      opacity: 0.9;
+    }
+    .explanation {
+      background: rgba(0,0,0,0.4);
+      border-left: 4px solid #fbbf24;
+      border-radius: 14px;
+      padding: 13px 16px;
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: #f1f5f9;
+      backdrop-filter: blur(8px);
+      display: none;
+      animation: fadeSlide 0.3s ease;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 11px 26px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.25s;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      flex: 1 1 auto;
+    }
+    .btn-primary {
+      background: #fbbf24;
+      color: #0f172a;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(251,191,36,0.5);
+    }
+    .btn-primary:hover {
+      background: #fcd34d;
+      box-shadow: 0 10px 25px rgba(251,191,36,0.7);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .result-screen {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .result-emoji {
+      font-size: 4rem;
+      margin-bottom: 10px;
+    }
+    .result-value {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+    @media (max-width: 480px) {
+      .quiz-wrapper {
+        padding: 1.4rem 1rem 1.8rem;
+      }
+      .question-text {
+        font-size: 1.1rem;
+      }
+      .btn {
+        padding: 10px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-wrapper" id="quizContainer"></div>
+  <script>
+    (function() {
+      // Data soal final – sudah valid, satu jawaban benar per soal
+      const questions = [
+        {
+          text: "1. Kata tidak baku pada kalimat 'Para atlit sedang bertanding di lapangan' adalah …",
+          options: ["A. para", "B. atlit", "C. sedang", "D. bertanding", "E. lapangan"],
+          answer: 1,
+          explanation: "Bentuk baku dari 'atlit' adalah 'atlet'."
+        },
+        {
+          text: "2. Kalimat yang seluruh katanya baku adalah …",
+          options: [
+            "A. Saya sudah ijin kepada guru.",
+            "B. Silahkan ambil makanan itu.",
+            "C. Kami akan menelpon ayah.",
+            "D. Dia membeli apotik di sudut jalan.",
+            "E. Surat itu ditulis dengan tinta."
+          ],
+          answer: 4,
+          explanation: "E semua baku. A: ijin→izin, B: Silahkan→silakan, C: menelpon→menelepon, D: apotik→apotek."
+        },
+        {
+          text: "3. Kata baku yang tepat untuk melengkapi kalimat 'Ibu pergi ke ________ untuk membeli obat' adalah …",
+          options: ["A. apotik", "B. apotek", "C. apothic", "D. apoteek", "E. apotick"],
+          answer: 1,
+          explanation: "Kata baku yang benar adalah 'apotek'."
+        },
+        {
+          text: "4. Kata tidak baku pada kalimat 'Hipotesa itu harus dibuktikan' adalah …",
+          options: ["A. Hipotesa", "B. itu", "C. harus", "D. dibuktikan", "E. semua baku"],
+          answer: 0,
+          explanation: "'Hipotesa' tidak baku, bentuk baku: 'hipotesis'."
+        },
+        {
+          text: "5. Kalimat di bawah ini yang menggunakan kata baku adalah …",
+          options: [
+            "A. Budi sedang mengkonsumsi buah.",
+            "B. Mereka sedang menelpon kakek.",
+            "C. Adik makan coklat di dapur.",
+            "D. Kami perlu mengurus surat ijin.",
+            "E. Saya akan membeli kuitansi."
+          ],
+          answer: 4,
+          explanation: "E: 'kuitansi' baku. A: mengkonsumsi→mengonsumsi, B: menelpon→menelepon, C: coklat→cokelat, D: ijin→izin."
+        },
+        {
+          text: "6. Kata 'standard' adalah bentuk tidak baku. Bentuk bakunya adalah …",
+          options: ["A. standardisasi", "B. standart", "C. standar", "D. setandar", "E. standarisasi"],
+          answer: 2,
+          explanation: "Kata baku: 'standar'."
+        },
+        {
+          text: "7. Perbaikan yang tepat untuk kata bercetak miring dalam kalimat 'Dia seorang atlit yang disiplin' adalah …",
+          options: ["A. atlet", "B. athlet", "C. atlit (sudah benar)", "D. atleat", "E. atleth"],
+          answer: 0,
+          explanation: "Bentuk baku: 'atlet'."
+        },
+        {
+          text: "8. Kata tidak baku pada kalimat 'Kwalitas produk itu sangat baik' adalah …",
+          options: ["A. Kwalitas", "B. produk", "C. itu", "D. sangat", "E. baik"],
+          answer: 0,
+          explanation: "'Kwalitas' tidak baku, bentuk baku: 'kualitas'."
+        },
+        {
+          text: "9. Kalimat yang seluruhnya menggunakan kata baku adalah …",
+          options: [
+            "A. Itu adalah azas organisasi kami.",
+            "B. Kami akan merubah jadwal besok.",
+            "C. Dia bekerja sebagai jendral.",
+            "D. Ibu menasehati kami dengan sabar.",
+            "E. Hari ini cuaca sangat cerah."
+          ],
+          answer: 4,
+          explanation: "E semua baku. A: azas→asas, B: merubah→mengubah, C: jendral→jenderal, D: menasehati→menasihati."
+        },
+        {
+          text: "10. Bentuk baku dari kata 'realisir' adalah …",
+          options: ["A. realisasi", "B. realisir", "C. realis", "D. realita", "E. riil"],
+          answer: 0,
+          explanation: "'realisir' tidak baku, kata baku yang tepat adalah 'realisasi'."
+        },
+        {
+          text: "11. Kata 'ijin' yang benar menurut KBBI adalah …",
+          options: ["A. ijin", "B. izin", "C. ijin (sudah baku)", "D. iziin", "E. ijin dan izin sama"],
+          answer: 1,
+          explanation: "Bentuk baku: 'izin'."
+        },
+        {
+          text: "12. Kata tidak baku pada kalimat 'Adik suka makan coklat' adalah …",
+          options: ["A. Adik", "B. suka", "C. makan", "D. coklat", "E. semua baku"],
+          answer: 3,
+          explanation: "'coklat' tidak baku, seharusnya 'cokelat'."
+        },
+        {
+          text: "13. Manakah yang seluruhnya kata baku?",
+          options: [
+            "A. analisa, detail, resiko",
+            "B. analisis, detil, risiko",
+            "C. analisis, detail, risiko",
+            "D. analisa, detil, resiko",
+            "E. analisa, detail, risiko"
+          ],
+          answer: 2,
+          explanation: "C benar: analisis, detail, risiko. A: analisa tidak baku, resiko tidak baku. B: detil→detail. D, E: analisa salah."
+        },
+        {
+          text: "14. Kata 'himbauan' yang baku adalah …",
+          options: ["A. himbauan", "B. imbauan", "C. himbawan", "D. himbau", "E. himbauwan"],
+          answer: 1,
+          explanation: "Bentuk baku: 'imbauan' (tanpa h)."
+        },
+        {
+          text: "15. Penulisan kata serapan yang benar adalah …",
+          options: [
+            "A. managemen",
+            "B. management",
+            "C. manajemen",
+            "D. manejemen",
+            "E. manageman"
+          ],
+          answer: 2,
+          explanation: "Bentuk baku: 'manajemen'."
+        },
+        {
+          text: "16. Kata 'praktek' diperbaiki menjadi …",
+          options: ["A. praktik", "B. praktek", "C. peraktek", "D. praktis", "E. praktic"],
+          answer: 0,
+          explanation: "Bentuk baku: 'praktik'."
+        },
+        {
+          text: "17. Kalimat yang menggunakan kata baku adalah …",
+          options: [
+            "A. Kami akan menghadiri acara itu.",
+            "B. Dia adalah seorang jendral.",
+            "C. Kami membutuhkan kwitansi.",
+            "D. Dia bertugas sebagai sekertaris.",
+            "E. Semua salah."
+          ],
+          answer: 0,
+          explanation: "A: menghadiri (baku). B: jendral→jenderal, C: kwitansi→kuitansi, D: sekertaris→sekretaris."
+        },
+        {
+          text: "18. Kata 'tehnik' yang benar adalah …",
+          options: ["A. tehnik", "B. teknik", "C. tekhnik", "D. teknic", "E. tehnical"],
+          answer: 1,
+          explanation: "Bentuk baku: 'teknik'."
+        },
+        {
+          text: "19. Kata tidak baku dalam kalimat 'Saya akan merubah jadwal' adalah …",
+          options: ["A. Saya", "B. akan", "C. merubah", "D. jadwal", "E. semua baku"],
+          answer: 2,
+          explanation: "'merubah' tidak baku, seharusnya 'mengubah' (dari kata dasar 'ubah')."
+        },
+        {
+          text: "20. Bentuk baku 'survey' adalah …",
+          options: ["A. survey", "B. survei", "C. surve", "D. surfei", "E. surpai"],
+          answer: 1,
+          explanation: "Bentuk baku: 'survei'."
+        },
+        {
+          text: "21. Kata baku dari 'propinsi' adalah …",
+          options: ["A. propinsi", "B. provinsi", "C. profinsi", "D. propency", "E. province"],
+          answer: 1,
+          explanation: "Bentuk baku: 'provinsi'."
+        },
+        {
+          text: "22. Kata 'komplek' seharusnya ditulis …",
+          options: ["A. komplek", "B. kompleks", "C. komplec", "D. kompleks (baku)", "E. komplik"],
+          answer: 1,
+          explanation: "Bentuk baku: 'kompleks'."
+        },
+        {
+          text: "23. Kata tidak baku pada 'Kita harus menghindari praktek korupsi' adalah …",
+          options: ["A. harus", "B. menghindari", "C. praktek", "D. korupsi", "E. tidak ada"],
+          answer: 2,
+          explanation: "'praktek' tidak baku, seharusnya 'praktik'."
+        },
+        {
+          text: "24. Kata baku dari 'kaedah' adalah …",
+          options: ["A. kaedah", "B. kaidah", "C. qaidah", "D. kaidah", "E. kaedah (baku)"],
+          answer: 1,
+          explanation: "Bentuk baku: 'kaidah'."
+        },
+        {
+          text: "25. Kalimat yang seluruhnya baku adalah …",
+          options: [
+            "A. Saya akan mengambil resiko itu.",
+            "B. Nasehat ibu sangat berharga.",
+            "C. Kami harus menghemat energi.",
+            "D. Dia adalah seorang atlit.",
+            "E. Mereka sedang berolah raga."
+          ],
+          answer: 2,
+          explanation: "C baku semua. A: resiko→risiko, B: Nasehat→nasihat, D: atlit→atlet, E: berolah raga→berolahraga."
+        }
+      ];
+
+      const container = document.getElementById('quizContainer');
+      let current = 0, score = 0, answered = false;
+      let userAns = new Array(questions.length).fill(null);
+
+      function startScreen() {
+        container.innerHTML = `
+          <div style="text-align:center; padding:1.5rem 0.5rem;">
+            <div style="font-size:3.8rem;">📚</div>
+            <h2 style="margin:12px 0 6px; font-weight:700;">Kuis Kata Baku & Tidak Baku</h2>
+            <p style="color:#cbd5e1; margin-bottom:18px;">Persiapan TKA Bahasa Indonesia • 25 Soal</p>
+            <button class="btn btn-primary" id="startBtn" style="font-size:1.1rem; padding:14px 38px;">🚀 Mulai Kuis</button>
+            <p style="margin-top:28px; color:#94a3b8; font-size:0.8rem;">Klik pilih jawaban, lihat pembahasan, dan dapatkan skor</p>
+          </div>
+        `;
+        document.getElementById('startBtn').addEventListener('click', ()=>{
+          current=0; score=0; answered=false; userAns.fill(null);
+          renderQuestion();
+        });
+      }
+
+      function renderQuestion() {
+        const q = questions[current];
+        const percent = (current / questions.length) * 100;
+        const labels = ["A","B","C","D","E"];
+        let optsHTML = '';
+        q.options.forEach((opt, idx)=>{
+          let cls = '';
+          if(answered) {
+            if(idx===q.answer) cls='correct';
+            else if(userAns[current]===idx && idx!==q.answer) cls='wrong';
+          }
+          const disabled = answered ? 'static' : '';
+          optsHTML += `
+            <div class="option-btn ${cls} ${disabled}" data-index="${idx}">
+              <span class="option-letter">${labels[idx]}</span>
+              <span class="option-text">${opt.replace(/^[A-E]\.\s/,'')}</span>
+            </div>`;
+        });
+        const explDisplay = answered ? 'block' : 'none';
+        const explText = answered ? q.explanation : '';
+
+        container.innerHTML = `
+          <div class="top-bar">
+            <div class="progress-wrap">
+              <div class="progress-info"><span>Soal ${current+1}/${questions.length}</span><span>${Math.round(percent)}%</span></div>
+              <div class="progress-track"><div class="progress-fill" style="width:${percent}%;"></div></div>
+            </div>
+            <div class="score-chip">⭐ <span id="liveScore">${score}</span></div>
+          </div>
+          <div class="question-panel">
+            <div class="question-label">PERTANYAAN ${current+1}</div>
+            <div class="question-text">${q.text}</div>
+            <div class="options-grid" id="optionsGrid">${optsHTML}</div>
+            <div class="explanation" id="explBox" style="display:${explDisplay};"><strong>💡 Pembahasan:</strong> ${explText}</div>
+          </div>
+          <div class="nav-row">
+            <button class="btn" id="prevBtn" ${current===0?'disabled':''}>◀ Sebelumnya</button>
+            ${!answered ? '<button class="btn btn-primary" id="nextBtn" disabled>Lanjut ▶</button>' : 
+              (current < questions.length-1 ? '<button class="btn btn-primary" id="nextBtn">Selanjutnya ▶</button>' : 
+              '<button class="btn btn-primary" id="finishBtn">Lihat Hasil 🎉</button>')
+            }
+          </div>
+        `;
+
+        if(!answered) {
+          document.querySelectorAll('.option-btn').forEach(el=>{
+            el.addEventListener('click', function(e){
+              if(answered) return;
+              const idx = parseInt(this.dataset.index);
+              handleAnswer(idx);
+            });
+          });
+        }
+        document.getElementById('prevBtn')?.addEventListener('click', ()=>{
+          if(current>0){ current--; answered = userAns[current]!==null; renderQuestion(); }
+        });
+        document.getElementById('nextBtn')?.addEventListener('click', ()=>{
+          if(current < questions.length-1){ current++; answered = userAns[current]!==null; renderQuestion(); }
+        });
+        document.getElementById('finishBtn')?.addEventListener('click', showResult);
+      }
+
+      function handleAnswer(idx) {
+        if(answered) return;
+        answered = true;
+        userAns[current] = idx;
+        if(idx === questions[current].answer) score++;
+        renderQuestion();
+        document.getElementById('liveScore').innerText = score;
+      }
+
+      function showResult() {
+        const max = questions.length;
+        const pct = Math.round((score/max)*100);
+        let emoji, msg;
+        if(pct>=90){ emoji='🏆'; msg='Luar biasa! Nyaris sempurna.'; }
+        else if(pct>=75){ emoji='🌟'; msg='Bagus! Terus pertahankan.'; }
+        else if(pct>=60){ emoji='📘'; msg='Cukup baik, perlu latihan lagi.'; }
+        else if(pct>=40){ emoji='📚'; msg='Jangan menyerah, perbanyak membaca.'; }
+        else { emoji='🌱'; msg='Semangat! Saatnya giat berlatih.'; }
+
+        container.innerHTML = `
+          <div class="result-screen">
+            <div class="result-emoji">${emoji}</div>
+            <div class="result-value">${score} / ${max}</div>
+            <p style="font-size:1.2rem; margin:10px 0 20px; color:#f1f5f9;">${msg}</p>
+            <p style="color:#a0aec0;">Ketepatan: <strong>${pct}%</strong></p>
+            <button class="btn btn-primary" id="restartBtn" style="margin-top:28px;">🔄 Ulangi Kuis</button>
+          </div>
+        `;
+        document.getElementById('restartBtn').addEventListener('click', ()=>{
+          current=0; score=0; answered=false; userAns.fill(null);
+          renderQuestion();
+        });
+      }
+
+      startScreen();
+    })();
+  </script>
+</body>
+</html>

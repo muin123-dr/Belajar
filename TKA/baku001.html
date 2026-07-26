@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif: Kata Baku & Tidak Baku</title>
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --primary-hover: #0f766e;
+            --bg-color: #f0fdfa;
+            --text-main: #134e4a;
+            --text-muted: #475569;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #ef4444;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            max-width: 650px;
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(13, 148, 136, 0.1);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .question-box {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            color: #0f172a;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #1e293b;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: #991b1b;
+        }
+
+        .feedback-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-container.show {
+            display: block;
+        }
+
+        .feedback-container.success {
+            background-color: var(--correct-bg);
+            border: 1px solid var(--correct-border);
+        }
+
+        .feedback-container.error {
+            background-color: var(--wrong-bg);
+            border: 1px solid var(--wrong-border);
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .feedback-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #334155;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            transition: background-color 0.2s;
+        }
+
+        .next-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .result-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .result-screen h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0 auto 20px auto;
+        }
+
+        .result-msg {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .restart-btn {
+            background-color: var(--text-main);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .quiz-container { padding: 20px; }
+            .question-box { font-size: 1.1rem; }
+            .option-btn { font-size: 0.95rem; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="quiz-box">
+    <div class="header">
+        <h1>Kuis TKA: Kata Baku</h1>
+        <p>Uji kemampuanmu membedakan kata baku dan tidak baku (25 Soal)</p>
+    </div>
+
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="status-bar">
+        <span id="question-count">Soal 1 / 25</span>
+        <span id="score-counter">Skor: 0</span>
+    </div>
+
+    <div class="question-box" id="question-text">Memuat pertanyaan...</div>
+
+    <div class="options-container" id="options">
+        <!-- Opsi jawaban dimuat lewat JS -->
+    </div>
+
+    <div class="feedback-container" id="feedback">
+        <div class="feedback-title" id="feedback-title"></div>
+        <div class="feedback-desc" id="feedback-desc"></div>
+    </div>
+
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Lanjut ke Soal Berikutnya</button>
+</div>
+
+<div class="quiz-container result-screen" id="result-box">
+    <h2>Latihan Selesai!</h2>
+    <div class="score-circle" id="final-score">100</div>
+    <div class="result-msg" id="result-message">Luar biasa! Insting ejaanmu sangat tajam.</div>
+    <button class="restart-btn" onclick="location.reload()">Ulangi Kuis</button>
+</div>
+
+<script>
+    const quizData = [
+        {
+            q: "Penulisan kata baku yang tepat untuk tempat meramu dan menjual obat adalah...",
+            options: ["Apotik", "Apotek", "Apothik", "Aphotek"],
+            correct: 1,
+            rationale: "Bentuk baku yang tepat adalah 'apotek'. Ingat saja profesinya disebut 'apoteker', bukan 'apotiker'."
+        },
+        {
+            q: "Manakah penulisan kata yang benar sesuai pedoman KBBI?",
+            options: ["Atlit", "Atlet", "Athlet", "Athletik"],
+            correct: 1,
+            rationale: "Kata baku yang tepat adalah 'atlet'. Bentuk 'atlit' adalah bentuk tidak baku."
+        },
+        {
+            q: "Bentuk baku dari kata 'jadual' adalah...",
+            options: ["Jadwal", "Jadual", "Jadual", "Zadwal"],
+            correct: 0,
+            rationale: "Penulisan yang benar adalah 'jadwal'. Huruf 'u' diganti menjadi 'w' dalam penyerapan ke bahasa Indonesia."
+        },
+        {
+            q: "Manakah bentuk baku dari kata yang bermakna 'pernyataan mengabulkan'?",
+            options: ["Ijin", "Idzin", "Izin", "Idin"],
+            correct: 2,
+            rationale: "Kata bakunya menggunakan huruf 'z', yaitu 'izin'."
+        },
+        {
+            q: "Kata baku yang tepat untuk menggantikan kata 'nasehat' adalah...",
+            options: ["Nasehat", "Nasihat", "Nashehat", "Nazeehat"],
+            correct: 1,
+            rationale: "Bentuk baku dari kata tersebut adalah 'nasihat', bukan 'nasehat'."
+        },
+        {
+            q: "Penulisan yang benar dari kata yang sering diucapkan untuk mempersilakan orang adalah...",
+            options: ["Silahkan", "Persilahkan", "Silakan", "Silan"],
+            correct: 2,
+            rationale: "Kata dasarnya adalah 'sila'. Jadi, jika mendapat akhiran -kan, bentuknya menjadi 'silakan' (tanpa 'h')."
+        },
+        {
+            q: "Manakah penulisan kata yang tepat sesuai KBBI?",
+            options: ["Antri", "Antre", "Antrian", "Mengantri"],
+            correct: 1,
+            rationale: "Bentuk bakunya adalah 'antre'. Oleh karena itu, kata turunannya menjadi 'antrean' dan 'mengantre'."
+        },
+        {
+            q: "Bentuk baku dari kata 'aktifitas' adalah...",
+            options: ["Aktifitas", "Aktifity", "Aktivitas", "Aktiviti"],
+            correct: 2,
+            rationale: "Kata bakunya adalah 'aktivitas'. Meskipun kata dasarnya 'aktif' (pakai 'f'), saat mendapat imbuhan serapan -itas, bentuknya menjadi 'v' (aktivitas)."
+        },
+        {
+            q: "Manakah bentuk baku yang berarti 'penyelidikan terhadap suatu peristiwa'?",
+            options: ["Analisa", "Analisis", "Analist", "Analisasi"],
+            correct: 1,
+            rationale: "Dalam bahasa Indonesia, bentuk serapan dari 'analysis' menjadi 'analisis', bukan 'analisa'."
+        },
+        {
+            q: "Penulisan kata baku dari 'karir' adalah...",
+            options: ["Karier", "Karir", "Karriere", "Karirer"],
+            correct: 0,
+            rationale: "Kata bakunya adalah 'karier', diserap dari bahasa Belanda 'carrière'."
+        },
+        {
+            q: "Manakah penulisan imbuhan me- yang benar pada kata dasar 'ubah'?",
+            options: ["Merubah", "Mengubah", "Mengrubah", "Ubah"],
+            correct: 1,
+            rationale: "Kata dasarnya adalah 'ubah'. Awalan me- + ubah = mengubah. Kata 'merubah' berarti menjadi seperti rubah (hewan)."
+        },
+        {
+            q: "Pilih penulisan berimbuhan yang baku di bawah ini!",
+            options: ["Mempengaruhi", "Mempengaruh", "Memengaruhi", "Di pengaruhi"],
+            correct: 2,
+            rationale: "Kata dasar 'pengaruh' diawali huruf 'p'. Sesuai aturan K-P-T-S, huruf 'p' luluh jika mendapat awalan me-, sehingga menjadi 'memengaruhi'."
+        },
+        {
+            q: "Kata baku dari 'mempesona' adalah...",
+            options: ["Mempesona", "Memesona", "Mempesonakan", "Mepesona"],
+            correct: 1,
+            rationale: "Kata dasarnya 'pesona'. Huruf 'p' luluh bertemu awalan me-, sehingga menjadi 'memesona'."
+        },
+        {
+            q: "Bentuk baku dari 'diagnosa' adalah...",
+            options: ["Diagnosis", "Diagnosa", "Diagnostik", "Diagnos"],
+            correct: 0,
+            rationale: "Bentuk baku yang tepat adalah 'diagnosis' (berakhiran -sis, bukan -sa)."
+        },
+        {
+            q: "Penulisan kata baku yang tepat untuk bermakna 'hanya untuk' adalah...",
+            options: ["Sekedar", "Sekadar", "Skadar", "Se-kadar"],
+            correct: 1,
+            rationale: "Kata bakunya adalah 'sekadar'. Berasal dari kata dasar 'kadar', bukan 'kedar'."
+        },
+        {
+            q: "Manakah penulisan kata baku yang benar?",
+            options: ["Kwitansi", "Kuitansi", "Kwetansi", "Kuitancy"],
+            correct: 1,
+            rationale: "Bentuk baku yang tepat adalah 'kuitansi', bukan 'kwitansi'."
+        },
+        {
+            q: "Kata baku untuk 'detil' adalah...",
+            options: ["Detil", "Deteil", "Detail", "Deatail"],
+            correct: 2,
+            rationale: "Bentuk baku dari kata tersebut adalah 'detail'."
+        },
+        {
+            q: "Manakah penulisan yang tepat sesuai KBBI?",
+            options: ["Hierarki", "Hirarki", "Hirarkhi", "Hierarkhi"],
+            correct: 0,
+            rationale: "Bentuk baku yang tepat adalah 'hierarki' (menggunakan 'ie' dan tanpa 'h' di akhir)."
+        },
+        {
+            q: "Bentuk baku dari kata 'ekstrim' adalah...",
+            options: ["Ekstrem", "Ekstrim", "Ekstrime", "Ekstreme"],
+            correct: 0,
+            rationale: "Sesuai KBBI, penulisan yang benar adalah 'ekstrem'."
+        },
+        {
+            q: "Manakah penulisan kata yang berarti 'nyata/benar-benar ada' secara baku?",
+            options: ["Konkrit", "Kongkrit", "Konkret", "Kongkret"],
+            correct: 2,
+            rationale: "Bentuk baku yang tepat adalah 'konkret'."
+        },
+        {
+            q: "Bentuk baku dari kata 'hakekat' adalah...",
+            options: ["Hakiki", "Hakekat", "Hakikat", "Hakekatnya"],
+            correct: 2,
+            rationale: "Penulisan yang benar menurut KBBI adalah 'hakikat'."
+        },
+        {
+            q: "Manakah kata yang baku?",
+            options: ["Milyar", "Miliar", "Milyard", "Miliard"],
+            correct: 1,
+            rationale: "Bentuk serapan yang baku adalah 'miliar'."
+        },
+        {
+            q: "Bentuk baku dari 'jaman' adalah...",
+            options: ["Jaman", "Zamman", "Zhaman", "Zaman"],
+            correct: 3,
+            rationale: "Kata tersebut diserap dari bahasa Arab dan bentuk bakunya adalah 'zaman'."
+        },
+        {
+            q: "Pilih penulisan kata baku yang benar!",
+            options: ["Sistim", "Sistem", "System", "Sistym"],
+            correct: 1,
+            rationale: "Bentuk baku yang tepat dalam bahasa Indonesia adalah 'sistem'."
+        },
+        {
+            q: "Bentuk baku dari 'resiko' adalah...",
+            options: ["Resiko", "Riziko", "Risiko", "Riseko"],
+            correct: 2,
+            rationale: "Bentuk baku dari kata tersebut adalah 'risiko' (memakai 'i')."
+        }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let isAnswered = false;
+
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options");
+    const questionCount = document.getElementById("question-count");
+    const scoreCounter = document.getElementById("score-counter");
+    const progressBar = document.getElementById("progress");
+    const feedbackBox = document.getElementById("feedback");
+    const feedbackTitle = document.getElementById("feedback-title");
+    const feedbackDesc = document.getElementById("feedback-desc");
+    const nextBtn = document.getElementById("next-btn");
+    
+    const quizBox = document.getElementById("quiz-box");
+    const resultBox = document.getElementById("result-box");
+    const finalScoreDisplay = document.getElementById("final-score");
+    const resultMsg = document.getElementById("result-message");
+
+    function initQuiz() {
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        isAnswered = false;
+        const q = quizData[currentQuestion];
+        
+        // Update header info
+        questionCount.innerText = `Soal ${currentQuestion + 1} / ${quizData.length}`;
+        progressBar.style.width = `${(currentQuestion / quizData.length) * 100}%`;
+        
+        // Reset UI
+        feedbackBox.className = "feedback-container";
+        nextBtn.style.display = "none";
+        
+        // Load Question & Options
+        questionText.innerHTML = `${currentQuestion + 1}. ${q.q}`;
+        optionsContainer.innerHTML = "";
+        
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerHTML = `<strong>${String.fromCharCode(65 + index)}.</strong> ${opt}`;
+            btn.onclick = () => selectOption(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(selectedIndex, btnElement) {
+        if (isAnswered) return;
+        isAnswered = true;
+
+        const q = quizData[currentQuestion];
+        const allBtns = optionsContainer.querySelectorAll(".option-btn");
+
+        // Disable all buttons
+        allBtns.forEach(b => b.disabled = true);
+
+        if (selectedIndex === q.correct) {
+            btnElement.classList.add("correct");
+            score++;
+            scoreCounter.innerText = `Skor: ${score}`;
+            
+            feedbackBox.classList.add("show", "success");
+            feedbackTitle.innerText = "✅ Benar Sekali!";
+            feedbackTitle.style.color = "var(--correct-border)";
+        } else {
+            btnElement.classList.add("wrong");
+            allBtns[q.correct].classList.add("correct"); // Highlight correct answer
+            
+            feedbackBox.classList.add("show", "error");
+            feedbackTitle.innerText = "❌ Kurang Tepat!";
+            feedbackTitle.style.color = "var(--wrong-border)";
+        }
+
+        feedbackDesc.innerText = q.rationale;
+        nextBtn.style.display = "block";
+
+        if (currentQuestion === quizData.length - 1) {
+            nextBtn.innerText = "Lihat Hasil Akhir";
+        }
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizBox.style.display = "none";
+        resultBox.style.display = "block";
+        
+        const finalScore = Math.round((score / quizData.length) * 100);
+        finalScoreDisplay.innerText = finalScore;
+        
+        if (finalScore >= 90) {
+            resultMsg.innerText = "Luar biasa! Pemahaman kata baku kamu sudah setingkat ahli. Kamu sangat siap untuk TKA Bahasa Indonesia!";
+        } else if (finalScore >= 70) {
+            resultMsg.innerText = "Kerja bagus! Kamu sudah menguasai sebagian besar kata baku. Cukup pelajari beberapa pengecualian yang masih salah.";
+        } else if (finalScore >= 50) {
+            resultMsg.innerText = "Not bad! Tapi kamu masih sering tertipu kata-kata yang umum diucapkan sehari-hari. Yuk perbanyak baca kamus KBBI.";
+        } else {
+            resultMsg.innerText = "Jangan menyerah! Ingatlah bahwa bahasa yang sering kita dengar sehari-hari belum tentu baku. Terus berlatih ya!";
+        }
+    }
+
+    // Start
+    initQuiz();
+</script>
+
+</body>
+</html>
