@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif TKA: Imbuhan & Kalimat Efektif</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --background: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 700px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .progress-container {
+            padding: 15px 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .difficulty-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .diff-mudah { background-color: var(--secondary); }
+        .diff-sedang { background-color: #f59e0b; }
+        .diff-sulit { background-color: var(--danger); }
+
+        .question-body {
+            padding: 20px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        .option-btn:hover {
+            background-color: #e0e7ff;
+            border-color: #a5b4fc;
+        }
+
+        .option-btn.selected {
+            background-color: #e0e7ff;
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .footer {
+            padding: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            background-color: #f9fafb;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-prev {
+            background-color: #e5e7eb;
+            color: var(--text-main);
+        }
+        
+        .btn-prev:hover:not(:disabled) {
+            background-color: #d1d5db;
+        }
+
+        .btn-next {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-next:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Results Screen */
+        .results-container {
+            display: none;
+            padding: 30px 20px;
+        }
+
+        .score-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .review-section {
+            max-height: 400px;
+            overflow-y: auto;
+            border-top: 2px solid #e5e7eb;
+            padding-top: 20px;
+        }
+
+        .review-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            border-left: 5px solid #e5e7eb;
+        }
+
+        .review-item.correct { border-left-color: var(--secondary); }
+        .review-item.incorrect { border-left-color: var(--danger); }
+
+        .review-q {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .review-ans { font-size: 0.9rem; margin-bottom: 5px; }
+        .review-exp { 
+            font-size: 0.85rem; 
+            color: #047857; 
+            background-color: #d1fae5; 
+            padding: 8px; 
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        
+        .btn-restart {
+            width: 100%;
+            margin-top: 20px;
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px;
+        }
+        
+        .btn-restart:hover {
+            background-color: #059669;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-app">
+        <!-- Quiz Header -->
+        <div class="header">
+            <h1>Kuis TKA SMA</h1>
+            <p>Materi: Imbuhan & Kalimat Efektif</p>
+        </div>
+
+        <!-- Question Screen -->
+        <div id="question-screen">
+            <div class="progress-container">
+                <span id="question-counter">Soal 1 / 25</span>
+                <span id="difficulty-badge" class="difficulty-badge diff-mudah">Mudah</span>
+            </div>
+
+            <div class="question-body">
+                <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+                <div class="options-container" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+            </div>
+
+            <div class="footer">
+                <button class="btn btn-prev" id="btn-prev" onclick="prevQuestion()" disabled>Kembali</button>
+                <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">Selanjutnya</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="results-container">
+            <div class="score-section">
+                <h2>Kuis Selesai!</h2>
+                <p>Berikut adalah skor dan evaluasi kamu:</p>
+                <div class="score-circle" id="final-score">100</div>
+                <p id="score-message">Luar Biasa!</p>
+            </div>
+            
+            <h3 style="margin-bottom: 10px;">Pembahasan:</h3>
+            <div class="review-section" id="review-container">
+                <!-- Review injected via JS -->
+            </div>
+            
+            <button class="btn btn-restart" onclick="restartQuiz()">Ulangi Kuis</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            // MUDAH (1-5)
+            {
+                q: "Penulisan kata berimbuhan me- + sapu yang benar menurut aturan peluluhan adalah...",
+                options: ["mensapu", "menyapu", "memsapu", "mengsapu"],
+                ans: 1,
+                diff: "mudah",
+                exp: "Berdasarkan aturan PTKS luluh, huruf awal 's' luluh menjadi 'meny-'. Jadi, me- + sapu = menyapu."
+            },
+            {
+                q: "Jika imbuhan pe- ditambahkan pada kata 'pilih', bentuk kata yang tepat adalah...",
+                options: ["pempilih", "mempilih", "pemilih", "pepilih"],
+                ans: 2,
+                diff: "mudah",
+                exp: "Imbuhan pe- mengikuti aturan luluh PTKS. Huruf 'p' luluh menjadi 'pem-'. Jadi, pe- + pilih = pemilih."
+            },
+            {
+                q: "Bentuk kata berimbuhan ber- dari kata 'renang' yang paling tepat adalah...",
+                options: ["berrenang", "berenang", "berenng", "bererenang"],
+                ans: 1,
+                diff: "mudah",
+                exp: "Jika kata dasar berawalan huruf 'r' mendapat imbuhan ber-, maka hanya satu huruf 'r' yang ditulis. Jadi, ber- + renang = berenang."
+            },
+            {
+                q: "Kalimat di bawah ini yang mengandung pleonasme (pemborosan kata) adalah...",
+                options: ["Anak-anak bermain di lapangan.", "Ia naik ke atas atap.", "Buku itu dibaca adik.", "Ibu pergi ke pasar."],
+                ans: 1,
+                diff: "mudah",
+                exp: "Frasa 'naik ke atas' adalah bentuk pleonasme karena makna 'naik' sudah pasti ke atas."
+            },
+            {
+                q: "Kata penghubung yang menunjukkan bentuk pleonasme dan harus dihindari penggunaannya secara bersamaan adalah...",
+                options: ["walaupun dan tetapi", "karena dan sebab", "agar dan supaya", "jika dan maka"],
+                ans: 2,
+                diff: "mudah",
+                exp: "'Agar supaya' adalah bentuk pemborosan kata karena keduanya memiliki makna yang sama. Pilih salah satu saja: 'agar' atau 'supaya'."
+            },
+            
+            // SEDANG (6-15)
+            {
+                q: "Kata berimbuhan me- yang baku untuk kata dasar 'pengaruh' adalah...",
+                options: ["mempengaruhi", "memengaruhi", "mengpengaruh", "menpengaruh"],
+                ans: 1,
+                diff: "sedang",
+                exp: "Meskipun 'mempengaruhi' sering dipakai, bentuk baku menurut KBBI adalah 'memengaruhi' (huruf p luluh)."
+            },
+            {
+                q: "Penulisan imbuhan me- pada kata serapan 'proses' yang benar adalah...",
+                options: ["memproses", "memeroses", "mengproses", "menproses"],
+                ans: 0,
+                diff: "sedang",
+                exp: "Kata serapan asing sering mempertahankan huruf awalnya dan tidak luluh. Jadi, me- + proses = memproses."
+            },
+            {
+                q: "Perbaikan kalimat tidak logis 'Waktu dan tempat kami persilakan' yang tepat adalah...",
+                options: ["Waktu dan tempat disediakan.", "Bapak/Ibu kami persilakan.", "Kepada waktu dan tempat dipersilakan.", "Tempat dan waktu kami berikan."],
+                ans: 1,
+                diff: "sedang",
+                exp: "Secara logika, yang dipersilakan adalah orangnya (Bapak/Ibu), bukan 'waktu' atau 'tempat'."
+            },
+            {
+                q: "Kalimat berikut ini mengandung kesalahan kontaminasi kata, kecuali...",
+                options: ["Guru itu mempersalahkan siswanya.", "Hal tersebut sangat membahaya.", "Ia menyalahkan temannya atas kejadian itu.", "Mereka mengenyampingkan masalah tersebut."],
+                ans: 2,
+                diff: "sedang",
+                exp: "'menyalahkan' adalah bentuk baku (dari kata salah). 'mempersalahkan' adalah bentuk kontaminasi yang salah."
+            },
+            {
+                q: "Bentuk pengecualian imbuhan ber- yang benar terdapat pada kata...",
+                options: ["berkerja", "berajar", "bekerja", "bekerja dan belajar"],
+                ans: 3,
+                diff: "sedang",
+                exp: "'belajar' (dari ajar) dan 'bekerja' (dari kerja) merupakan pengecualian bentuk ber- yang tidak mengikuti aturan umum."
+            },
+            {
+                q: "Kalimat 'Guru baru datang' merupakan kalimat ambigu. Perbaikan yang tepat agar tidak ambigu adalah...",
+                options: ["Guru sedang baru datang.", "Baru datang guru itu.", "Guru itu baru saja datang.", "Guru-guru baru datang."],
+                ans: 2,
+                diff: "sedang",
+                exp: "'Guru baru datang' bisa bermakna guru yang baru, atau guru baru saja tiba. Perbaikan 'Guru itu baru saja datang' menghilangkan ambiguitas waktu."
+            },
+            {
+                q: "Perbaikan yang tepat untuk kalimat 'Para hadirin dimohon berdiri' adalah...",
+                options: ["Semua para hadirin dimohon berdiri.", "Hadirin dimohon berdiri.", "Para hadirin sekalian dimohon berdiri.", "Hadirin-hadirin dimohon berdiri."],
+                ans: 1,
+                diff: "sedang",
+                exp: "Kata 'hadirin' sudah bermakna jamak (banyak). Menambahkan kata 'para' menjadi bentuk pleonasme (pemborosan kata)."
+            },
+            {
+                q: "Bentuk me- dari kata 'kritik' yang sesuai dengan pedoman ejaan adalah...",
+                options: ["mengritik", "mengkritik", "memkritik", "menkritik"],
+                ans: 1,
+                diff: "sedang",
+                exp: "Kata 'kritik' merupakan kata serapan, sehingga huruf awalnya (k) tidak luluh. Tetap ditulis 'mengkritik'."
+            },
+            {
+                q: "Kalimat 'Karena hujan, maka pertandingan ditunda' tidak efektif karena...",
+                options: ["Menggunakan kata berlebihan di awal kalimat.", "Menggunakan dua konjungsi sekaligus.", "Kekurangan subjek di awal kalimat.", "Tidak ada predikat pada klausa kedua."],
+                ans: 1,
+                diff: "sedang",
+                exp: "Penggunaan 'karena ... maka ...' adalah salah karena keduanya adalah konjungsi (kata hubung). Pilih salah satu saja."
+            },
+            {
+                q: "Kalimat 'Anak itu memukul ular dengan sapu' bisa menjadi ambigu. Bagaimana perbaikannya agar memperjelas bahwa sapu adalah alat?",
+                options: ["Ular dengan sapu dipukul anak itu.", "Dengan sapu, anak itu memukul ular.", "Anak itu dengan sapu memukul ular.", "Sapu memukul ular dengan anak itu."],
+                ans: 1,
+                diff: "sedang",
+                exp: "Memindahkan keterangan alat ('Dengan sapu') ke awal kalimat menghilangkan tafsir bahwa ular tersebut membawa/memakai sapu."
+            },
+
+            // SULIT (16-25)
+            {
+                q: "Manakah di antara kalimat berikut yang merupakan kalimat paling efektif?",
+                options: ["Banyak para siswa mengikuti upacara hari Senin.", "Semua para siswa mengikuti upacara hari Senin.", "Para siswa mengikuti upacara hari Senin.", "Banyak siswa semuanya mengikuti upacara hari Senin."],
+                ans: 2,
+                diff: "sulit",
+                exp: "'Para siswa' sudah menunjukkan jamak. 'Banyak para' atau 'semua para' adalah pleonasme."
+            },
+            {
+                q: "Pilihlah kalimat yang paling efektif di bawah ini!",
+                options: ["Karena hujan deras, maka kami tidak jadi pergi.", "Sebab hujan deras, kami tidak jadi pergi.", "Karena hujan deras, kami tidak jadi pergi.", "Kami tidak jadi pergi dikarenakan sebab hujan deras."],
+                ans: 2,
+                diff: "sulit",
+                exp: "Kalimat 'Karena hujan deras, kami tidak jadi pergi' hanya menggunakan satu konjungsi ('Karena') dan merupakan struktur kalimat majemuk yang baku."
+            },
+            {
+                q: "Penulisan imbuhan me- pada kata 'klasifikasi' yang tepat adalah...",
+                options: ["mengklasifikasi", "menglasifikasi", "mengklasifikasikan", "menklasifikasi"],
+                ans: 0,
+                diff: "sulit",
+                exp: "'Klasifikasi' adalah kata serapan asing dengan gugus konsonan 'kl'. Huruf awal tidak luluh, sehingga menjadi 'mengklasifikasi'."
+            },
+            {
+                q: "Penggunaan bentuk kontaminasi yang SALAH terdapat pada kalimat...",
+                options: ["Ia sangat terpengaruh oleh ucapan temannya.", "Sikapnya sangat dipengaruhi oleh lingkungan.", "Keputusan itu terpengaruhi oleh emosi sesaat.", "Tolong jangan mengesampingkan fakta tersebut."],
+                ans: 2,
+                diff: "sulit",
+                exp: "'terpengaruhi' adalah bentuk kontaminasi yang salah. Bentuk baku yang benar adalah 'terpengaruh' atau 'dipengaruhi'."
+            },
+            {
+                q: "Apa perbaikan yang tepat untuk kalimat: 'Buku itu diterbitkan oleh penerbit Gramedia.'?",
+                options: ["Buku itu diterbitkan dari penerbit Gramedia.", "Buku itu menerbitkan oleh Gramedia.", "Buku itu diterbitkan oleh Gramedia.", "Penerbit Gramedia menerbitkan oleh buku itu."],
+                ans: 2,
+                diff: "sulit",
+                exp: "Penggunaan kata 'diterbitkan' dan 'penerbit' secara bersamaan dalam konteks ini adalah pemborosan. Cukup tulis 'diterbitkan oleh Gramedia'."
+            },
+            {
+                q: "Kalimat di bawah ini salah secara struktur kehematan kata (pleonasme), KECUALI...",
+                options: ["Kami berkumpul sejak dari pagi.", "Mereka saling tolong-menolong satu sama lain.", "Prajurit itu gugur demi bangsa dan negara.", "Ayah meminta agar supaya saya belajar giat."],
+                ans: 2,
+                diff: "sulit",
+                exp: "Kalimat C efektif. Kalimat A salah ('sejak dari'), B salah ('saling ... satu sama lain'), D salah ('agar supaya')."
+            },
+            {
+                q: "Kata 'silakan' jika diberi imbuhan me- yang tepat dan baku adalah...",
+                options: ["menyikalan", "mempersilakan", "mempersilahkan", "mensilakan"],
+                ans: 1,
+                diff: "sulit",
+                exp: "Kata dasarnya adalah 'silakan' (tanpa h). Bentuk berimbuhan yang baku adalah 'mempersilakan' (ini bukan kontaminasi)."
+            },
+            {
+                q: "Perbaikan kalimat 'Mereka saling berpelukan satu sama lain' yang paling efektif adalah...",
+                options: ["Mereka saling peluk-berpelukan.", "Mereka berpelukan.", "Mereka berpelukan satu sama lain.", "Mereka saling berpelukan."],
+                ans: 1,
+                diff: "sulit",
+                exp: "Kata 'berpelukan' sudah bermakna saling/resiprokal. Menambahkan 'saling' atau 'satu sama lain' membuat kalimat menjadi boros."
+            },
+            {
+                q: "Kalimat berikut ini efektif, kecuali...",
+                options: ["Ayah membacakan cerita dongeng untuk adik.", "Ibu mengembalikan buku itu ke perpustakaan.", "Hadirin dipersilakan duduk kembali.", "Kami akan mengembalikan buku itu kembali ke perpustakaan."],
+                ans: 3,
+                diff: "sulit",
+                exp: "Frasa 'mengembalikan ... kembali' merupakan bentuk pleonasme (pemborosan kata) yang membuat kalimat tidak efektif."
+            },
+            {
+                q: "Berdasarkan materi TKA, manakah pernyataan aturan peluluhan kata serapan yang paling tepat?",
+                options: ["Semua huruf P,T,K,S pada kata serapan pasti luluh.", "Kata serapan asing sering mempertahankan huruf awal (tidak luluh) meskipun diawali P,T,K,S.", "Kata serapan harus selalu luluh jika menggunakan imbuhan pe-.", "Kata serapan asing hanya luluh jika diawali huruf vokal."],
+                ans: 1,
+                diff: "sulit",
+                exp: "Aturan khusus kata serapan (seperti proses, transfer, kritik, konstruksi) umumnya mempertahankan huruf aslinya dan tidak luluh untuk menjaga identitas kata asalnya."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        // DOM Elements
+        const questionText = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const questionCounter = document.getElementById("question-counter");
+        const difficultyBadge = document.getElementById("difficulty-badge");
+        const btnPrev = document.getElementById("btn-prev");
+        const btnNext = document.getElementById("btn-next");
+        
+        const quizScreen = document.getElementById("question-screen");
+        const resultsScreen = document.getElementById("results-screen");
+
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            quizScreen.style.display = "block";
+            resultsScreen.style.display = "none";
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const currentQ = quizData[currentQuestionIndex];
+            
+            // Update Header
+            questionCounter.innerText = `Soal ${currentQuestionIndex + 1} / ${quizData.length}`;
+            
+            // Update Badge
+            difficultyBadge.innerText = currentQ.diff;
+            difficultyBadge.className = `difficulty-badge diff-${currentQ.diff}`;
+            
+            // Update Question
+            questionText.innerText = currentQ.q;
+            
+            // Render Options
+            optionsContainer.innerHTML = "";
+            currentQ.options.forEach((opt, index) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = `${String.fromCharCode(65 + index)}. ${opt}`;
+                
+                // Restore selection if previously answered
+                if(userAnswers[currentQuestionIndex] === index) {
+                    btn.classList.add("selected");
+                }
+                
+                btn.onclick = () => selectOption(index);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Update Nav Buttons
+            btnPrev.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.length - 1) {
+                btnNext.innerText = "Selesai & Cek Skor";
+                btnNext.style.backgroundColor = "var(--secondary)";
+            } else {
+                btnNext.innerText = "Selanjutnya";
+                btnNext.style.backgroundColor = "var(--primary)";
+            }
+        }
+
+        function selectOption(index) {
+            userAnswers[currentQuestionIndex] = index;
+            // Update UI
+            const buttons = optionsContainer.getElementsByClassName("option-btn");
+            for(let i=0; i<buttons.length; i++){
+                buttons[i].classList.remove("selected");
+            }
+            buttons[index].classList.add("selected");
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            // Check if option selected
+            if (userAnswers[currentQuestionIndex] === null) {
+                alert("Pilih jawaban terlebih dahulu sebelum melanjutkan!");
+                return;
+            }
+
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                calculateScore();
+            }
+        }
+
+        function calculateScore() {
+            score = 0;
+            quizData.forEach((item, index) => {
+                if(userAnswers[index] === item.ans) {
+                    score++;
+                }
+            });
+            showResults();
+        }
+
+        function showResults() {
+            quizScreen.style.display = "none";
+            resultsScreen.style.display = "block";
+            
+            // Set Score
+            const finalScoreVal = Math.round((score / quizData.length) * 100);
+            const scoreCircle = document.getElementById("final-score");
+            const scoreMessage = document.getElementById("score-message");
+            
+            scoreCircle.innerText = finalScoreVal;
+            if(finalScoreVal >= 80) scoreMessage.innerText = "Luar Biasa! Kamu siap hadapi TKA!";
+            else if(finalScoreVal >= 60) scoreMessage.innerText = "Kerja Bagus! Tingkatkan sedikit lagi.";
+            else scoreMessage.innerText = "Jangan menyerah! Coba baca lagi materinya dan ulangi.";
+
+            // Render Reviews
+            const reviewContainer = document.getElementById("review-container");
+            reviewContainer.innerHTML = "";
+            
+            quizData.forEach((item, index) => {
+                const userAns = userAnswers[index];
+                const isCorrect = userAns === item.ans;
+                
+                const reviewItem = document.createElement("div");
+                reviewItem.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                let html = `<div class="review-q">${index + 1}. ${item.q}</div>`;
+                
+                if(isCorrect) {
+                    html += `<div class="review-ans"><strong>Jawaban Kamu:</strong> Benar ( ${item.options[userAns]} ) ✅</div>`;
+                } else {
+                    const ansText = userAns !== null ? item.options[userAns] : "Tidak dijawab";
+                    html += `<div class="review-ans" style="color:var(--danger)"><strong>Jawaban Kamu:</strong> ${ansText} ❌</div>`;
+                    html += `<div class="review-ans"><strong>Kunci Jawaban:</strong> ${item.options[item.ans]}</div>`;
+                }
+                
+                html += `<div class="review-exp"><strong>Pembahasan:</strong> ${item.exp}</div>`;
+                
+                reviewItem.innerHTML = html;
+                reviewContainer.appendChild(reviewItem);
+            });
+        }
+
+        function restartQuiz() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            initQuiz();
+        }
+
+        // Run on load
+        window.onload = initQuiz;
+
+    </script>
+</body>
+</html>

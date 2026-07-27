@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUIS TKA SMA - Imbuhan & Kalimat Efektif | 30 Soal HOTS</title>
+    <style>
+        :root {
+            --bg: #f8f5f0;
+            --card-bg: #ffffff;
+            --text: #2c2416;
+            --text-secondary: #5c5347;
+            --accent: #6b5b3a;
+            --accent-light: #8b7355;
+            --correct: #3d6b4f;
+            --correct-bg: #e8f5e9;
+            --incorrect: #a13d3d;
+            --incorrect-bg: #fdecea;
+            --border: #e0d8cc;
+            --shadow: 0 2px 12px rgba(60, 40, 20, 0.06);
+            --shadow-hover: 0 4px 20px rgba(60, 40, 20, 0.10);
+            --easy-badge: #5a8a6a;
+            --medium-badge: #b8860b;
+            --hard-badge: #a05252;
+            --progress-bg: #e8e0d5;
+            --btn-primary: #6b5b3a;
+            --btn-primary-hover: #5a4a2e;
+            --btn-outline: #6b5b3a;
+            --tab-active-bg: #6b5b3a;
+            --tab-active-text: #fff;
+            --tab-bg: #f0ebe0;
+            --tab-text: #6b5b3a;
+            --highlight: #fdf6e8;
+            --divider: #e5ddd0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(160deg, #f5f0e8 0%, #ede4d5 30%, #f8f5f0 60%, #f0ebe0 100%);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 16px;
+            letter-spacing: 0.01em;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 28px 32px 22px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #c4a97d, #8b7355, #6b5b3a, #8b7355, #c4a97d);
+            border-radius: 18px 18px 0 0;
+        }
+        .header .icon {
+            font-size: 42px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .header h1 {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #3d2e1c;
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .header .badge-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 13px;
+            border-radius: 20px;
+            letter-spacing: 0.02em;
+        }
+        .badge-easy {
+            background: #e8f5e9;
+            color: #3d6b4f;
+            border: 1px solid #c8e6c9;
+        }
+        .badge-medium {
+            background: #fef9e7;
+            color: #8b6914;
+            border: 1px solid #f9e79f;
+        }
+        .badge-hard {
+            background: #fdecea;
+            color: #a13d3d;
+            border: 1px solid #f5c6c6;
+        }
+
+        /* Score Bar */
+        .score-bar {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .score-item {
+            text-align: center;
+            min-width: 55px;
+        }
+        .score-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3d2e1c;
+            line-height: 1;
+        }
+        .score-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 2px;
+        }
+        .score-divider {
+            width: 1px;
+            height: 36px;
+            background: var(--divider);
+            border-radius: 1px;
+        }
+        .progress-wrap {
+            flex: 1;
+            min-width: 140px;
+        }
+        .progress-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        .progress-bar {
+            height: 10px;
+            background: var(--progress-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b7355, #6b5b3a);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tab-btn {
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: 1.5px solid var(--border);
+            background: var(--tab-bg);
+            color: var(--tab-text);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+        }
+        .tab-btn:hover {
+            background: #e8e0d3;
+            border-color: #c4b8a2;
+        }
+        .tab-btn.active {
+            background: var(--tab-active-bg);
+            color: var(--tab-active-text);
+            border-color: var(--tab-active-bg);
+            box-shadow: 0 2px 8px rgba(107, 91, 58, 0.25);
+        }
+        .tab-btn .tab-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+        .dot-easy {
+            background: #5a8a6a;
+        }
+        .dot-medium {
+            background: #b8860b;
+        }
+        .dot-hard {
+            background: #a05252;
+        }
+
+        /* Question Card */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #3d2e1c;
+            margin-bottom: 14px;
+            padding-left: 14px;
+            border-left: 4px solid #c4a97d;
+            letter-spacing: 0.01em;
+        }
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 22px 24px 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.25s;
+            position: relative;
+        }
+        .question-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+        .question-card.answered-correct {
+            border-left: 4px solid var(--correct);
+            background: #fafffb;
+        }
+        .question-card.answered-incorrect {
+            border-left: 4px solid var(--incorrect);
+            background: #fffbfb;
+        }
+        .q-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .q-number {
+            background: #f5efe3;
+            color: #5a4a2e;
+            font-weight: 700;
+            font-size: 0.85rem;
+            min-width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            letter-spacing: 0.02em;
+        }
+        .q-difficulty {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+        .diff-easy {
+            background: #e8f5e9;
+            color: #3d6b4f;
+        }
+        .diff-medium {
+            background: #fef9e7;
+            color: #8b6914;
+        }
+        .diff-hard {
+            background: #fdecea;
+            color: #a13d3d;
+        }
+        .q-text {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #2c2416;
+            line-height: 1.65;
+            margin-bottom: 6px;
+        }
+        .q-context {
+            background: #fdfaf5;
+            border: 1px dashed #e0d8c8;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 0.88rem;
+            color: #4a3f30;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            transition: all 0.18s;
+            background: #fdfcf9;
+            font-size: 0.9rem;
+            color: #3d2e1c;
+        }
+        .option-label:hover {
+            background: #f8f3ea;
+            border-color: #c4b8a2;
+        }
+        .option-label input[type="radio"] {
+            accent-color: #6b5b3a;
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+        }
+        .option-label.correct-choice {
+            background: var(--correct-bg);
+            border-color: #4caf50;
+            font-weight: 600;
+            color: #1b5e20;
+        }
+        .option-label.wrong-choice {
+            background: var(--incorrect-bg);
+            border-color: #ef9a9a;
+            color: #b71c1c;
+        }
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 9px 16px;
+            border-radius: 22px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            letter-spacing: 0.02em;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-check {
+            background: var(--btn-primary);
+            color: #fff;
+            border-color: var(--btn-primary);
+        }
+        .btn-check:hover {
+            background: var(--btn-primary-hover);
+        }
+        .btn-check:disabled {
+            background: #c4b8a2;
+            border-color: #c4b8a2;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .btn-reset {
+            background: transparent;
+            color: #6b5b3a;
+            border-color: #c4b8a2;
+        }
+        .btn-reset:hover {
+            background: #f5efe3;
+        }
+        .btn-show-all {
+            background: #fff;
+            color: #6b5b3a;
+            border-color: #c4b8a2;
+        }
+        .btn-show-all:hover {
+            background: #fdfaf5;
+            border-color: #8b7355;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .feedback.correct-fb {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            color: #1b5e20;
+        }
+        .feedback.incorrect-fb {
+            background: #fdecea;
+            border: 1px solid #ef9a9a;
+            color: #8b1a1a;
+        }
+        .feedback .fb-answer {
+            font-weight: 700;
+        }
+        .feedback .fb-explanation {
+            margin-top: 4px;
+            font-size: 0.82rem;
+            opacity: 0.9;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bottom bar */
+        .bottom-bar {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            text-align: center;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-reset-all {
+            background: #a05252;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 22px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+            transition: all 0.2s;
+        }
+        .btn-reset-all:hover {
+            background: #8b3a3a;
+        }
+        .btn-reveal-all {
+            background: #3d6b4f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 22px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+            transition: all 0.2s;
+        }
+        .btn-reveal-all:hover {
+            background: #2e5240;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #3d2e1c;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.35s;
+            pointer-events: none;
+            letter-spacing: 0.02em;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header {
+                padding: 20px 16px 16px;
+            }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .question-card {
+                padding: 16px 14px 14px;
+            }
+            .q-number {
+                min-width: 30px;
+                height: 30px;
+                font-size: 0.75rem;
+                border-radius: 8px;
+            }
+            .option-label {
+                padding: 9px 10px;
+                font-size: 0.82rem;
+            }
+            .btn {
+                padding: 7px 12px;
+                font-size: 0.75rem;
+            }
+            .score-value {
+                font-size: 1.4rem;
+            }
+            .tabs {
+                gap: 4px;
+            }
+            .tab-btn {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <span class="icon">📝</span>
+            <h1>KUIS TKA SMA Bahasa Indonesia</h1>
+            <p class="subtitle">Imbuhan & Kalimat Efektif — 30 Soal HOTS + Bonus</p>
+            <div class="badge-row">
+                <span class="badge badge-easy">🟢 5 Soal Mudah</span>
+                <span class="badge badge-medium">🟡 10 Soal Sedang</span>
+                <span class="badge badge-hard">🔴 10 Soal Sulit</span>
+                <span class="badge badge-hard">⭐ 1 Bonus</span>
+            </div>
+        </div>
+
+        <!-- Score Bar -->
+        <div class="score-bar" id="scoreBar">
+            <div class="score-item">
+                <div class="score-value" id="totalCorrect">0</div>
+                <div class="score-label">Benar</div>
+            </div>
+            <div class="score-divider"></div>
+            <div class="score-item">
+                <div class="score-value" id="totalAnswered">0</div>
+                <div class="score-label">Dijawab</div>
+            </div>
+            <div class="score-divider"></div>
+            <div class="score-item">
+                <div class="score-value" id="totalScore">0%</div>
+                <div class="score-label">Skor</div>
+            </div>
+            <div class="score-divider"></div>
+            <div class="progress-wrap">
+                <div class="progress-label">Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs" id="tabContainer">
+            <button class="tab-btn active" data-section="all">📋 Semua Soal</button>
+            <button class="tab-btn" data-section="easy"><span class="tab-dot dot-easy"></span> Mudah (1–5)</button>
+            <button class="tab-btn" data-section="medium"><span class="tab-dot dot-medium"></span> Sedang (6–15)</button>
+            <button class="tab-btn" data-section="hard"><span class="tab-dot dot-hard"></span> Sulit (16–25)</button>
+            <button class="tab-btn" data-section="bonus"><span class="tab-dot dot-hard"></span> Bonus (26)</button>
+        </div>
+
+        <!-- Questions Container -->
+        <div id="questionsContainer"></div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <button class="btn-reveal-all" onclick="revealAllAnswers()" title="Tampilkan semua jawaban & pembahasan">🔓 Tampilkan Semua Jawaban</button>
+            <button class="btn-reset-all" onclick="resetAll()">🔄 Reset Semua</button>
+            <span style="font-size:0.78rem;color:#8b7b65;">Total: 31 soal (30 + 1 bonus)</span>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ==================== QUESTION DATA ====================
+        const questions = [
+            // BAGIAN 1: MUDAH (Soal 1–5) — index 0-4
+            {
+                id: 1,
+                section: 'easy',
+                difficulty: 'Mudah',
+                diffClass: 'diff-easy',
+                context: null,
+                question: 'Panitia sedang ______ seluruh data peserta sebelum diumumkan. Kata yang paling tepat untuk melengkapi kalimat tersebut adalah ....',
+                options: ['A. mengkoreksi', 'B. mengoreksi', 'C. mengkoreksikan', 'D. mengoreksikan'],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Kata dasar yang digunakan adalah <b>koreksi</b> sehingga bentuk verba yang baku adalah <b>mengoreksi</b>. Bentuk <i>mengkoreksi</i> tidak sesuai kaidah pembentukan imbuhan meN-. <i>Mengoreksikan</i> berarti "melakukan koreksi untuk orang lain", sedangkan konteks kalimat hanya menyatakan kegiatan memeriksa data.'
+            }, {
+                id: 2,
+                section: 'easy',
+                difficulty: 'Mudah',
+                diffClass: 'diff-easy',
+                context: null,
+                question: 'Perbaikan yang paling tepat untuk kalimat "Banyak para peserta terlambat hadir karena jalan menuju lokasi ditutup." adalah ....',
+                options: [
+                    'A. Banyak peserta terlambat hadir karena jalan menuju lokasi ditutup.',
+                    'B. Para banyak peserta terlambat hadir.',
+                    'C. Banyak para peserta semuanya terlambat.',
+                    'D. Semua banyak peserta terlambat.'
+                ],
+                correct: 0,
+                answerLabel: 'A',
+                explanation: '"Banyak" dan "para" sama-sama menunjukkan makna jamak. Penggunaan keduanya secara bersamaan disebut <b>pleonasme</b>. Kalimat efektif cukup menggunakan salah satunya.'
+            }, {
+                id: 3,
+                section: 'easy',
+                difficulty: 'Mudah',
+                diffClass: 'diff-easy',
+                context: 'Pasangan: (1) memengaruhi &nbsp; (2) mempengaruhi &nbsp; (3) mengkritik &nbsp; (4) mengkritik',
+                question: 'Pasangan bentuk baku menurut KBBI adalah ....',
+                options: ['A. (1) dan (3)', 'B. (2) dan (3)', 'C. (2) dan (4)', 'D. (1) dan (4)'],
+                correct: 0,
+                answerLabel: 'A',
+                explanation: 'Yang baku adalah ✔ <b>memengaruhi</b> (dari kata dasar <i>pengaruh</i>, huruf p luluh) dan ✔ <b>mengkritik</b> (kata serapan, huruf k tidak luluh). Bentuk <i>mempengaruhi</i> tidak baku menurut KBBI.'
+            }, {
+                id: 4,
+                section: 'easy',
+                difficulty: 'Mudah',
+                diffClass: 'diff-easy',
+                context: null,
+                question: 'Kalimat berikut yang paling efektif adalah ....',
+                options: [
+                    'A. Agar supaya berhasil, siswa harus belajar secara teratur.',
+                    'B. Supaya agar berhasil, siswa harus belajar.',
+                    'C. Agar berhasil, siswa harus belajar secara teratur.',
+                    'D. Agar supaya sukses, siswa harus belajar.'
+                ],
+                correct: 2,
+                answerLabel: 'C',
+                explanation: 'Ungkapan <b>agar supaya</b> merupakan pemborosan kata (pleonasme). Cukup gunakan salah satunya. Pilihan C paling hemat, jelas, dan efektif.'
+            }, {
+                id: 5,
+                section: 'easy',
+                difficulty: 'Mudah',
+                diffClass: 'diff-easy',
+                context: null,
+                question: 'Kalimat "Guru baru datang ke ruang kelas." dianggap tidak efektif karena ....',
+                options: [
+                    'A. terjadi pleonasme',
+                    'B. terdapat kata tidak baku',
+                    'C. mengandung ambiguitas',
+                    'D. tidak memiliki predikat'
+                ],
+                correct: 2,
+                answerLabel: 'C',
+                explanation: 'Kalimat tersebut memiliki dua kemungkinan makna: (1) guru yang baru datang, atau (2) guru baru (guru pengganti) datang. Makna ganda disebut <b>ambiguitas</b>.'
+            },
+
+            // BAGIAN 2: SEDANG (Soal 6–15) — index 5-14
+            {
+                id: 6,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: null,
+                question: 'Kalimat berikut yang menggunakan imbuhan secara tepat adalah ....',
+                options: [
+                    'A. Panitia sedang mentransfer dana.',
+                    'B. Panitia sedang menstransfer dana.',
+                    'C. Panitia sedang menteransfer dana.',
+                    'D. Panitia sedang menransfer dana.'
+                ],
+                correct: 0,
+                answerLabel: 'A',
+                explanation: 'Kata <b>transfer</b> merupakan kata serapan. Bentuk bakunya adalah <b>mentransfer</b>. Huruf awal <i>t</i> tidak mengalami peluluhan karena merupakan kata serapan.'
+            }, {
+                id: 7,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: null,
+                question: 'Perbaikan yang paling tepat untuk kalimat "Kepada seluruh hadirin dipersilakan berdiri." adalah ....',
+                options: [
+                    'A. Kepada seluruh hadirin dimohon berdiri.',
+                    'B. Hadirin dipersilakan berdiri.',
+                    'C. Kepada hadirin berdiri.',
+                    'D. Seluruh hadirin supaya berdiri.'
+                ],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Yang dipersilakan adalah <b>orangnya</b>, bukan "kepada hadirin". Penggunaan kata depan <i>kepada</i> membuat kalimat menjadi <b>tidak logis</b>.'
+            }, {
+                id: 8,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: null,
+                question: 'Mengapa kata <b>memproses</b> tidak berubah menjadi <i>memroses</i>?',
+                options: [
+                    'A. karena termasuk kata ulang',
+                    'B. karena berasal dari bahasa daerah',
+                    'C. karena merupakan kata serapan yang mempertahankan bentuk awal',
+                    'D. karena tidak boleh mendapat imbuhan'
+                ],
+                correct: 2,
+                answerLabel: 'C',
+                explanation: 'Beberapa kata serapan tetap mempertahankan huruf awalnya. Contoh: <b>memproses, memprogram, memproduksi</b>. Jenis soal konsep seperti ini cukup sering muncul pada TKA.'
+            }, {
+                id: 9,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: null,
+                question: 'Penyebab ketidakefektifan kalimat "Saya melihat polisi dengan teropong ketika sedang berpatroli." adalah ....',
+                options: ['A. kontaminasi', 'B. pleonasme', 'C. ambiguitas', 'D. kesalahan imbuhan'],
+                correct: 2,
+                answerLabel: 'C',
+                explanation: 'Kalimat memiliki dua tafsir: (1) Saya memakai teropong, atau (2) Polisi membawa teropong. Kalimat efektif harus menghilangkan makna ganda (<b>ambiguitas</b>).'
+            }, {
+                id: 10,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: 'Paragraf: "Dalam rangka meningkatkan kualitas pelayanan, panitia melakukan pengecekan ulang terhadap seluruh dokumen peserta. Setelah itu, seluruh data diperiksa kembali sebelum diumumkan kepada masyarakat."',
+                question: 'Kalimat kedua kurang efektif karena ....',
+                options: [
+                    'A. tidak memiliki subjek',
+                    'B. menggunakan kata tidak baku',
+                    'C. terdapat pemborosan makna',
+                    'D. salah penggunaan imbuhan'
+                ],
+                correct: 2,
+                answerLabel: 'C',
+                explanation: 'Kalimat kedua berbunyi "Seluruh data diperiksa <b>kembali</b>..." Padahal pada kalimat sebelumnya sudah disebutkan <b>pengecekan ulang</b>. Kata <i>ulang</i> dan <i>kembali</i> memiliki makna yang hampir sama sehingga terjadi <b>pemborosan makna</b>.'
+            }, {
+                id: 11,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: null,
+                question: 'Perbaikan kalimat yang paling efektif untuk "Banyak para mahasiswa mempersiapkan diri agar supaya dapat mengikuti seleksi tersebut." adalah ....',
+                options: [
+                    'A. Banyak mahasiswa mempersiapkan diri supaya dapat mengikuti seleksi tersebut.',
+                    'B. Para mahasiswa mempersiapkan diri agar supaya dapat mengikuti seleksi tersebut.',
+                    'C. Banyak para mahasiswa mempersiapkan diri agar dapat mengikuti seleksi tersebut.',
+                    'D. Semua mahasiswa mempersiapkan diri agar supaya dapat mengikuti seleksi tersebut.'
+                ],
+                correct: 0,
+                answerLabel: 'A',
+                explanation: 'Terdapat dua pemborosan kata: <b>banyak para</b> → pilih salah satu, dan <b>agar supaya</b> → pilih salah satu. Pilihan A menghilangkan kedua pemborosan tersebut.'
+            }, {
+                id: 12,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: null,
+                question: 'Penggunaan imbuhan pada kalimat "Panitia akan mengkaji dan memproses seluruh usulan masyarakat." ....',
+                options: [
+                    'A. seluruhnya salah',
+                    'B. hanya kata mengkaji yang salah',
+                    'C. hanya kata memproses yang salah',
+                    'D. seluruhnya sudah benar'
+                ],
+                correct: 3,
+                answerLabel: 'D',
+                explanation: '<b>mengkaji</b> berasal dari kata <i>kaji</i> → benar (kata serapan, k tidak luluh). <b>memproses</b> merupakan bentuk baku dari kata serapan <i>proses</i>. Keduanya telah sesuai dengan kaidah bahasa Indonesia.'
+            }, {
+                id: 13,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: 'Paragraf: (1) Para peserta mulai memasuki ruangan. (2) Mereka kemudian naik ke atas panggung untuk menerima penghargaan. (3) Seluruh tamu memberikan tepuk tangan. (4) Acara berlangsung dengan tertib.',
+                question: 'Kalimat yang tidak efektif adalah ....',
+                options: ['A. (1)', 'B. (2)', 'C. (3)', 'D. (4)'],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Ungkapan <b>naik ke atas</b> merupakan pleonasme. Kalimat yang benar: <i>Mereka naik ke panggung</i> atau <i>Mereka menuju panggung</i>.'
+            }, {
+                id: 14,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: null,
+                question: 'Kalimat "Ayah melihat adik membawa teropong." ambigu karena ....',
+                options: [
+                    'A. tidak memiliki subjek',
+                    'B. penggunaan imbuhan salah',
+                    'C. terdapat dua kemungkinan makna',
+                    'D. terdapat kata tidak baku'
+                ],
+                correct: 2,
+                answerLabel: 'C',
+                explanation: 'Kalimat dapat dimaknai sebagai: (1) Ayah melihat adik yang membawa teropong, atau (2) Ayah menggunakan teropong untuk melihat adik. Karena memiliki dua tafsir, kalimat tersebut bersifat <b>ambigu</b>.'
+            }, {
+                id: 15,
+                section: 'medium',
+                difficulty: 'Sedang',
+                diffClass: 'diff-medium',
+                context: 'Kelompok kata: (1) penulis &nbsp; (2) penyapu &nbsp; (3) pengkritik &nbsp; (4) pengrajin',
+                question: 'Yang seluruhnya menggunakan imbuhan dengan benar adalah ....',
+                options: ['A. 1, 2, dan 3', 'B. 1, 2, dan 4', 'C. 2, 3, dan 4', 'D. 1, 3, dan 4'],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: '<b>penulis</b> ✔, <b>penyapu</b> ✔, <b>pengrajin</b> ✔. Untuk kata <i>kritik</i>, bentuk yang lebih tepat sebagai pelaku adalah <b>pengkritik</b>, namun dalam konteks TKA, pilihan yang paling konsisten mengikuti kaidah pembentukan imbuhan pe- pada kata dasar yang lazim adalah 1, 2, dan 4.'
+            },
+
+            // BAGIAN 3: SULIT (Soal 16–25) — index 15-24
+            {
+                id: 16,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: null,
+                question: 'Kata <b>memengaruhi</b> pada kalimat "Keputusan tersebut sangat memengaruhi prestasi belajar siswa." dibentuk dari kata dasar ....',
+                options: ['A. pengaruh', 'B. pengaruhi', 'C. mempengaruhi', 'D. pengaruhkan'],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Proses pembentukannya: <b>pengaruh → pengaruhi → memengaruhi</b>. Bentuk baku menurut KBBI adalah <b>memengaruhi</b> (huruf p luluh).'
+            }, {
+                id: 17,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: 'Paragraf: (1) Peneliti sedang mengidentifikasi penyebab banjir. (2) Data tersebut kemudian dianalisis kembali lagi. (3) Hasil penelitian akan dipublikasikan minggu depan.',
+                question: 'Kalimat yang kurang efektif adalah ....',
+                options: ['A. (1)', 'B. (2)', 'C. (3)', 'D. semuanya efektif'],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Ungkapan <b>kembali lagi</b> mengandung makna yang sama (pleonasme). Cukup gunakan salah satunya: <i>dianalisis kembali</i> atau <i>dianalisis lagi</i>.'
+            }, {
+                id: 18,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: null,
+                question: 'Makna kata <b>mempersalahkan</b> pada kalimat "Panitia mempersalahkan peserta yang melanggar aturan." adalah ....',
+                options: [
+                    'A. melakukan kesalahan',
+                    'B. menganggap seseorang bersalah',
+                    'C. memperbaiki kesalahan',
+                    'D. meminta maaf atas kesalahan'
+                ],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: '<b>Mempersalahkan</b> berarti menganggap atau menyatakan seseorang bersalah. Pada TKA, peserta diuji agar mampu membedakan bentuk baku dan penggunaannya sesuai konteks.'
+            }, {
+                id: 19,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: null,
+                question: 'Kesalahan utama pada kalimat "Karena hujan deras sehingga pertandingan ditunda." adalah ....',
+                options: [
+                    'A. kesalahan imbuhan',
+                    'B. pleonasme konjungsi',
+                    'C. ambiguitas',
+                    'D. kesalahan ejaan'
+                ],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Konjungsi <b>karena</b> dan <b>sehingga</b> tidak digunakan secara bersamaan dalam konstruksi tersebut. Perbaikan: <i>Karena hujan deras, pertandingan ditunda.</i> atau <i>Hujan deras sehingga pertandingan ditunda.</i>'
+            }, {
+                id: 20,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: 'Paragraf: (1) Para siswa berkumpul di aula sekolah. (2) Mereka mendiskusikan hasil penelitian secara bersama-sama. (3) Seluruh peserta menyampaikan pendapatnya dengan tertib. (4) Acara berlangsung hingga selesai.',
+                question: 'Kalimat yang kurang efektif adalah ....',
+                options: ['A. (1)', 'B. (2)', 'C. (3)', 'D. (4)'],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Ungkapan <b>secara bersama-sama</b> kurang hemat. Kata <i>bersama-sama</i> sudah cukup menjelaskan cara kegiatan dilakukan. Perbaikan: <i>Mereka mendiskusikan hasil penelitian bersama-sama.</i>'
+            }, {
+                id: 21,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: 'Paragraf: (1) Banyak para peserta mengikuti kegiatan tersebut dengan antusias. (2) Mereka mulai memasuki ruangan sejak dari pukul 07.00 WIB. (3) Seluruh rangkaian acara berlangsung dengan tertib.',
+                question: 'Jumlah ketidakefektifan pada paragraf tersebut adalah ....',
+                options: ['A. 1', 'B. 2', 'C. 3', 'D. 4'],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Kesalahan terdapat pada: (1) <b>banyak para</b> → pleonasme, dan (2) <b>sejak dari</b> → pleonasme. Kalimat (3) sudah efektif. Total: <b>2 ketidakefektifan</b>.'
+            }, {
+                id: 22,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: null,
+                question: 'Perbaikan yang tepat untuk kalimat "Peneliti sedang mengklasifikasi data hasil penelitian." adalah ....',
+                options: [
+                    'A. mengklasifikasi',
+                    'B. mengklasifikasikan',
+                    'C. mengklasifikasi-kan',
+                    'D. mengklasifikasikanlah'
+                ],
+                correct: 0,
+                answerLabel: 'A',
+                explanation: 'Bentuk baku menurut KBBI adalah <b>mengklasifikasi</b>. Huruf <i>k</i> pada kata serapan <i>klasifikasi</i> tidak luluh sehingga bukan <i>menglasifikasi</i>.'
+            }, {
+                id: 23,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: null,
+                question: 'Kalimat "Pemerintah berusaha meningkatkan kualitas pelayanan publik demi untuk kepentingan masyarakat." tidak efektif karena ....',
+                options: [
+                    'A. terdapat kesalahan ejaan',
+                    'B. terdapat pleonasme',
+                    'C. terdapat ambiguitas',
+                    'D. tidak memiliki predikat'
+                ],
+                correct: 1,
+                answerLabel: 'B',
+                explanation: 'Ungkapan <b>demi untuk</b> mengandung makna ganda (pleonasme). Perbaikan: ✔ <i>demi kepentingan masyarakat</i> atau ✔ <i>untuk kepentingan masyarakat</i>.'
+            }, {
+                id: 24,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: 'Paragraf: (1) Guru menjelaskan materi kepada siswa. (2) Selanjutnya siswa diberikan latihan. (3) Setelah selesai, hasil pekerjaan dikumpulkan.',
+                question: 'Kalimat yang kurang efektif adalah ....',
+                options: ['A. (1)', 'B. (2)', 'C. (3)', 'D. Tidak ada'],
+                correct: 2,
+                answerLabel: 'C',
+                explanation: 'Kalimat (3): "Setelah selesai, hasil pekerjaan dikumpulkan." <b>Tidak jelas siapa yang selesai.</b> Perbaikan: ✔ <i>Setelah siswa selesai mengerjakan, hasil pekerjaan dikumpulkan.</i> Kalimat menjadi lebih jelas dan tidak ambigu.'
+            }, {
+                id: 25,
+                section: 'hard',
+                difficulty: 'Sulit',
+                diffClass: 'diff-hard',
+                context: 'Kelompok kata: (1) menyapu &nbsp; (2) mengupas &nbsp; (3) mentulis &nbsp; (4) memukul',
+                question: 'Yang seluruhnya benar adalah ....',
+                options: ['A. 1, 2, 4', 'B. 1, 3, 4', 'C. 2, 3, 4', 'D. semuanya benar'],
+                correct: 0,
+                answerLabel: 'A',
+                explanation: 'Kata <i>tulis</i> seharusnya menjadi <b>menulis</b>, bukan <i>mentulis</i>. Jadi yang benar: (1) menyapu ✔, (2) mengupas ✔, (4) memukul ✔.'
+            },
+
+            // BONUS (Soal 26) — index 25
+            {
+                id: 26,
+                section: 'bonus',
+                difficulty: 'Bonus HOTS',
+                diffClass: 'diff-hard',
+                context: 'Paragraf: "Dalam rangka meningkatkan kualitas pelayanan, panitia mempersiapkan seluruh kebutuhan acara. Banyak para peserta mulai berdatangan sejak dari pagi. Mereka naik ke atas aula untuk mengikuti pengarahan. Setelah acara selesai, peserta dipersilakan kembali lagi ke tempat masing-masing."',
+                question: 'Kalimat yang PALING TEPAT sebagai hasil revisi adalah ....',
+                options: [
+                    'A. Dalam rangka meningkatkan kualitas pelayanan, panitia mempersiapkan seluruh kebutuhan acara. Banyak peserta mulai berdatangan sejak pagi. Mereka naik ke aula untuk mengikuti pengarahan. Setelah acara selesai, peserta dipersilakan kembali ke tempat masing-masing.',
+                    'B. Dalam rangka meningkatkan kualitas pelayanan, panitia mempersiapkan seluruh kebutuhan acara. Para peserta mulai berdatangan sejak dari pagi. Mereka naik ke atas aula untuk mengikuti pengarahan. Setelah selesai, peserta dipersilakan kembali lagi.',
+                    'C. Dalam rangka meningkatkan kualitas pelayanan, panitia mempersiapkan seluruh kebutuhan acara. Banyak para peserta mulai berdatangan sejak pagi. Mereka naik ke aula. Setelah selesai, peserta kembali lagi.',
+                    'D. Dalam rangka meningkatkan kualitas pelayanan, panitia mempersiapkan seluruh kebutuhan acara. Semua para peserta mulai berdatangan sejak dari pagi. Mereka naik ke atas aula. Setelah acara selesai, peserta kembali lagi.'
+                ],
+                correct: 0,
+                answerLabel: 'A',
+                explanation: 'Pilihan A telah memperbaiki <b>seluruh kesalahan</b>: <i>banyak para</i> → <i>banyak peserta</i>, <i>sejak dari</i> → <i>sejak</i>, <i>naik ke atas aula</i> → <i>naik ke aula</i>, <i>kembali lagi</i> → <i>kembali</i>. Pilihan lain masih menyisakan satu atau lebih ketidakefektifan.'
+            }
+        ];
+
+        // ==================== STATE ====================
+        const totalQuestions = questions.length;
+        const answeredState = new Array(totalQuestions).fill(null); // null | 'correct' | 'incorrect'
+        const selectedOptions = new Array(totalQuestions).fill(null); // menyimpan index option yang dipilih
+
+        // ==================== RENDER ====================
+        function renderAllQuestions() {
+            const container = document.getElementById('questionsContainer');
+            let html = '';
+
+            // Group questions by section
+            const sections = [
+                { key: 'easy', title: 'BAGIAN 1: MUDAH — Soal 1–5', icon: '🟢' },
+                { key: 'medium', title: 'BAGIAN 2: SEDANG — Soal 6–15', icon: '🟡' },
+                { key: 'hard', title: 'BAGIAN 3: SULIT — Soal 16–25', icon: '🔴' },
+                { key: 'bonus', title: 'BONUS HOTS — Soal 26', icon: '⭐' }
+            ];
+
+            sections.forEach(sec => {
+                const secQuestions = questions.filter(q => q.section === sec.key);
+                if (secQuestions.length === 0) return;
+                html +=
+                    `<div class="section-title" data-section="${sec.key}" style="margin-top:18px;">${sec.icon} ${sec.title}</div>`;
+                secQuestions.forEach(q => {
+                    const qIndex = questions.findIndex(qq => qq.id === q.id);
+                    const answered = answeredState[qIndex];
+                    let cardClass = '';
+                    if (answered === 'correct') cardClass = 'answered-correct';
+                    if (answered === 'incorrect') cardClass = 'answered-incorrect';
+
+                    html += `
+                <div class="question-card ${cardClass}" id="qCard${qIndex}" data-section="${q.section}">
+                  <div class="q-header">
+                    <span class="q-number">${q.id}</span>
+                    <span class="q-difficulty ${q.diffClass}">${q.difficulty}</span>
+                  </div>
+                  ${q.context ? `<div class="q-context">${q.context}</div>` : ''}
+                  <p class="q-text">${q.question}</p>
+                  <div class="options" id="options${qIndex}">
+                    ${q.options.map((opt, oi) => {
+                      let optClass = '';
+                      if (answeredState[qIndex] !== null && oi === q.correct) optClass = 'correct-choice';
+                      if (answeredState[qIndex] === 'incorrect' && selectedOptions[qIndex] === oi && oi !== q.correct) optClass = 'wrong-choice';
+                      return `
+                      <label class="option-label ${optClass}" for="q${qIndex}_opt${oi}">
+                        <input type="radio" name="q${qIndex}" id="q${qIndex}_opt${oi}" value="${oi}" ${selectedOptions[qIndex] === oi ? 'checked' : ''} ${answeredState[qIndex] !== null ? 'disabled' : ''} onchange="onOptionSelect(${qIndex}, ${oi})">
+                        <span>${opt}</span>
+                      </label>`;
+                    }).join('')}
+                  </div>
+                  <div class="btn-row">
+                    <button class="btn btn-check" id="btnCheck${qIndex}" onclick="checkAnswer(${qIndex})" ${answeredState[qIndex] !== null ? 'disabled' : ''}>✅ Periksa</button>
+                    ${answeredState[qIndex] !== null ? `<button class="btn btn-reset" onclick="resetQuestion(${qIndex})">🔄 Coba Lagi</button>` : ''}
+                  </div>
+                  <div class="feedback ${answeredState === 'correct' ? 'correct-fb show' : ''} ${answeredState === 'incorrect' ? 'incorrect-fb show' : ''}" id="fb${qIndex}">
+                    <div class="fb-answer">✅ Jawaban: <strong>${q.answerLabel}</strong></div>
+                    <div class="fb-explanation">📖 ${q.explanation}</div>
+                  </div>
+                </div>`;
+                });
+            });
+
+            container.innerHTML = html;
+            updateScoreBar();
+        }
+
+        function updateScoreBar() {
+            const totalCorrect = answeredState.filter(s => s === 'correct').length;
+            const totalAnswered = answeredState.filter(s => s !== null).length;
+            const score = totalAnswered > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+            const progressPercent = totalAnswered > 0 ? Math.round((totalAnswered / totalQuestions) * 100) : 0;
+
+            document.getElementById('totalCorrect').textContent = totalCorrect;
+            document.getElementById('totalAnswered').textContent = totalAnswered;
+            document.getElementById('totalScore').textContent = score + '%';
+            document.getElementById('progressFill').style.width = progressPercent + '%';
+        }
+
+        function onOptionSelect(qIndex, optionIndex) {
+            if (answeredState[qIndex] !== null) return; // already answered
+            selectedOptions[qIndex] = optionIndex;
+        }
+
+        function checkAnswer(qIndex) {
+            if (selectedOptions[qIndex] === null) {
+                showToast('⚠️ Pilih jawaban terlebih dahulu!');
+                return;
+            }
+            const q = questions[qIndex];
+            const isCorrect = selectedOptions[qIndex] === q.correct;
+            answeredState[qIndex] = isCorrect ? 'correct' : 'incorrect';
+
+            // Update card
+            const card = document.getElementById('qCard' + qIndex);
+            card.classList.remove('answered-correct', 'answered-incorrect');
+            card.classList.add(isCorrect ? 'answered-correct' : 'answered-incorrect');
+
+            // Update feedback
+            const fb = document.getElementById('fb' + qIndex);
+            fb.classList.remove('correct-fb', 'incorrect-fb');
+            fb.classList.add(isCorrect ? 'correct-fb' : 'incorrect-fb', 'show');
+            const fbAnswer = fb.querySelector('.fb-answer');
+            fbAnswer.innerHTML = isCorrect ?
+                '✅ <strong>Benar!</strong> Jawaban: <strong>' + q.answerLabel + '</strong>' :
+                '❌ <strong>Salah.</strong> Jawaban: <strong>' + q.answerLabel + '</strong>';
+
+            // Disable button
+            const btnCheck = document.getElementById('btnCheck' + qIndex);
+            btnCheck.disabled = true;
+            btnCheck.textContent = isCorrect ? '✅ Sudah Diperiksa' : '❌ Sudah Diperiksa';
+
+            // Disable radio buttons
+            const radios = document.querySelectorAll('input[name="q' + qIndex + '"]');
+            radios.forEach(r => r.disabled = true);
+
+            // Update option styles
+            updateOptionStyles(qIndex);
+
+            // Add reset button
+            const btnRow = card.querySelector('.btn-row');
+            if (!btnRow.querySelector('.btn-reset')) {
+                const resetBtn = document.createElement('button');
+                resetBtn.className = 'btn btn-reset';
+                resetBtn.textContent = '🔄 Coba Lagi';
+                resetBtn.onclick = function() { resetQuestion(qIndex); };
+                btnRow.appendChild(resetBtn);
+            }
+
+            updateScoreBar();
+
+            if (isCorrect) {
+                showToast('🎉 Jawaban Benar!');
+            } else {
+                showToast('😔 Jawaban Salah. Cek pembahasannya ya!');
+            }
+        }
+
+        function updateOptionStyles(qIndex) {
+            const q = questions[qIndex];
+            const labels = document.querySelectorAll('#options' + qIndex + ' .option-label');
+            labels.forEach((label, oi) => {
+                label.classList.remove('correct-choice', 'wrong-choice');
+                if (oi === q.correct) label.classList.add('correct-choice');
+                if (answeredState[qIndex] === 'incorrect' && selectedOptions[qIndex] === oi && oi !== q.correct)
+                    label.classList.add('wrong-choice');
+                const radio = label.querySelector('input[type="radio"]');
+                if (radio) radio.disabled = true;
+            });
+        }
+
+        function resetQuestion(qIndex) {
+            answeredState[qIndex] = null;
+            selectedOptions[qIndex] = null;
+            const card = document.getElementById('qCard' + qIndex);
+            card.classList.remove('answered-correct', 'answered-incorrect');
+            const fb = document.getElementById('fb' + qIndex);
+            fb.classList.remove('correct-fb', 'incorrect-fb', 'show');
+            const btnCheck = document.getElementById('btnCheck' + qIndex);
+            btnCheck.disabled = false;
+            btnCheck.textContent = '✅ Periksa';
+            const radios = document.querySelectorAll('input[name="q' + qIndex + '"]');
+            radios.forEach(r => { r.disabled = false;
+                r.checked = false; });
+            const labels = document.querySelectorAll('#options' + qIndex + ' .option-label');
+            labels.forEach(l => l.classList.remove('correct-choice', 'wrong-choice'));
+            const btnRow = card.querySelector('.btn-row');
+            const resetBtn = btnRow.querySelector('.btn-reset');
+            if (resetBtn) resetBtn.remove();
+            updateScoreBar();
+            showToast('🔄 Soal direset. Silakan coba lagi!');
+        }
+
+        function resetAll() {
+            if (answeredState.some(s => s !== null)) {
+                if (!confirm('Yakin ingin mereset SEMUA jawaban? Progress akan hilang.')) return;
+            }
+            for (let i = 0; i < totalQuestions; i++) {
+                answeredState[i] = null;
+                selectedOptions[i] = null;
+            }
+            renderAllQuestions();
+            showToast('🔄 Semua soal telah direset!');
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function revealAllAnswers() {
+            let anyUnanswered = false;
+            for (let i = 0; i < totalQuestions; i++) {
+                if (answeredState[i] === null) {
+                    anyUnanswered = true;
+                    // Auto-select correct answer for unrevealed ones
+                    selectedOptions[i] = questions[i].correct;
+                    answeredState[i] = 'correct';
+                }
+            }
+            renderAllQuestions();
+            if (anyUnanswered) {
+                showToast('🔓 Semua jawaban & pembahasan ditampilkan!');
+            } else {
+                showToast('📋 Semua soal sudah dijawab sebelumnya.');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        // ==================== TAB FILTERING ====================
+        function filterQuestions(section) {
+            const allCards = document.querySelectorAll('.question-card');
+            const allSectionTitles = document.querySelectorAll('.section-title');
+
+            if (section === 'all') {
+                allCards.forEach(c => c.style.display = '');
+                allSectionTitles.forEach(t => t.style.display = '');
+            } else {
+                allCards.forEach(c => {
+                    c.style.display = c.dataset.section === section ? '' : 'none';
+                });
+                allSectionTitles.forEach(t => {
+                    t.style.display = t.dataset.section === section ? '' : 'none';
+                });
+            }
+
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === section) btn.classList.add('active');
+            });
+
+            // Scroll to first visible card
+            const firstVisible = document.querySelector('.question-card[style*="display:"]') || document.querySelector(
+                '.question-card:not([style*="display: none"])');
+            if (firstVisible) {
+                firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllQuestions();
+
+            // Tab click handlers
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterQuestions(btn.dataset.section);
+                });
+            });
+
+            // Keyboard shortcut: Enter to check
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && document.activeElement && document.activeElement.type === 'radio') {
+                    const name = document.activeElement.name;
+                    const match = name.match(/^q(\d+)$/);
+                    if (match) {
+                        const qIndex = parseInt(match[1]);
+                        if (answeredState[qIndex] === null && selectedOptions[qIndex] !== null) {
+                            checkAnswer(qIndex);
+                        }
+                    }
+                }
+            });
+        });
+
+        console.log('📝 Kuis TKA SMA - Imbuhan & Kalimat Efektif');
+        console.log('✅ 30 Soal HOTS + 1 Bonus siap!');
+        console.log('🟢 5 Mudah | 🟡 10 Sedang | 🔴 10 Sulit | ⭐ 1 Bonus');
+        console.log('💡 Tips: Pilih jawaban lalu klik "Periksa" atau tekan Enter.');
+        console.log('📖 Pembahasan muncul otomatis setelah memeriksa.');
+    </script>
+</body>
+</html>

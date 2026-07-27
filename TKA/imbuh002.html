@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Imbuhan & Kalimat Efektif | TKA SMA</title>
+    <style>
+        :root {
+            --bg: #f5f0eb;
+            --card: #ffffff;
+            --primary: #2c3e50;
+            --accent: #c0392b;
+            --accent-light: #e74c3c;
+            --correct: #27ae60;
+            --wrong: #e74c3c;
+            --easy: #f1c40f;
+            --medium: #e67e22;
+            --hard: #c0392b;
+            --text: #2c3e50;
+            --text-light: #5d6d7e;
+            --border: #e0d5c7;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fdf6ed 0%, #f7efe2 30%, #ede0cd 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            text-align: center;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #c0392b, #e67e22, #f1c40f, #27ae60);
+        }
+
+        .header .icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+        .header .subtitle {
+            color: var(--text-light);
+            font-size: 1em;
+            margin-top: 4px;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px 28px;
+            border: 1px solid var(--border);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .progress-info .stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        .stat-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .stat-dot.easy {
+            background: #f1c40f;
+        }
+        .stat-dot.medium {
+            background: #e67e22;
+        }
+        .stat-dot.hard {
+            background: #c0392b;
+        }
+        .stat-dot.correct-dot {
+            background: #27ae60;
+        }
+        .stat-dot.wrong-dot {
+            background: #e74c3c;
+        }
+        .stat-dot.remaining-dot {
+            background: #bdc3c7;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: #e8e0d5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #c0392b, #e67e22, #f1c40f, #27ae60);
+            border-radius: 20px;
+            transition: width 0.6s ease;
+            width: 0%;
+        }
+
+        /* Card Soal */
+        .quiz-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .quiz-card.answered-correct {
+            border-left: 5px solid var(--correct);
+            background: #f0faf5;
+        }
+        .quiz-card.answered-wrong {
+            border-left: 5px solid var(--wrong);
+            background: #fef5f5;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .badge.easy {
+            background: #fef9e7;
+            color: #7d6608;
+        }
+        .badge.medium {
+            background: #fef5e7;
+            color: #7e5109;
+        }
+        .badge.hard {
+            background: #fdedec;
+            color: #922b21;
+        }
+        .badge.correct-badge {
+            background: #eafaf1;
+            color: #1e7e34;
+        }
+        .badge.wrong-badge {
+            background: #fdedec;
+            color: #c0392b;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 10px 0 20px;
+            color: var(--primary);
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px 18px;
+            background: #faf8f5;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            color: var(--text);
+            transition: all var(--transition);
+            text-align: left;
+            font-family: inherit;
+        }
+        .option-btn:hover:not(.disabled) {
+            background: #f0ebe0;
+            border-color: #c0a98b;
+            transform: translateX(4px);
+        }
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #e8e4db;
+            font-weight: 700;
+        }
+        .option-btn.correct-answer {
+            border-color: var(--correct) !important;
+            background: #eafaf1 !important;
+            color: #1e7e34 !important;
+            font-weight: 700;
+        }
+        .option-btn.wrong-answer {
+            border-color: var(--wrong) !important;
+            background: #fdedec !important;
+            color: #c0392b !important;
+            font-weight: 700;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e0d5c7;
+            font-weight: 700;
+            font-size: 0.9em;
+            flex-shrink: 0;
+            transition: all var(--transition);
+        }
+        .option-btn.correct-answer .option-letter {
+            background: #27ae60;
+            color: white;
+        }
+        .option-btn.wrong-answer .option-letter {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Feedback */
+        .feedback {
+            margin-top: 16px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #eafaf1;
+            border: 1px solid #a3d9b1;
+            color: #1e7e34;
+        }
+        .feedback.wrong {
+            background: #fdedec;
+            border: 1px solid #f5b7b1;
+            color: #922b21;
+        }
+        .feedback .pembahasan-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .feedback .pembahasan-text {
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+        .feedback code {
+            background: rgba(0, 0, 0, 0.06);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Result Section */
+        .result-section {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .result-icon {
+            font-size: 64px;
+            margin-bottom: 12px;
+        }
+        .result-score {
+            font-size: 3em;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .result-detail {
+            color: var(--text-light);
+            font-size: 1.1em;
+            margin: 8px 0 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition);
+            font-family: inherit;
+            letter-spacing: 0.3px;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(192, 57, 43, 0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            margin-left: 12px;
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-reset {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            border-radius: 25px;
+        }
+        .btn-reset:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Filter */
+        .filter-section {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            background: white;
+            color: var(--text);
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .filter-btn.filter-easy.active,
+        .filter-btn.filter-easy:hover {
+            background: #f1c40f;
+            border-color: #f1c40f;
+            color: #3e3a00;
+        }
+        .filter-btn.filter-medium.active,
+        .filter-btn.filter-medium:hover {
+            background: #e67e22;
+            border-color: #e67e22;
+            color: white;
+        }
+        .filter-btn.filter-hard.active,
+        .filter-btn.filter-hard:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+            color: white;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .quiz-card {
+                padding: 18px 16px;
+            }
+            .question-text {
+                font-size: 1.05em;
+            }
+            .option-btn {
+                padding: 12px 14px;
+                font-size: 0.9em;
+            }
+            .progress-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="icon">📝</div>
+            <h1>Kuis Imbuhan & Kalimat Efektif</h1>
+            <div class="subtitle">Persiapan Ujian TKA SMA — 25 Soal Interaktif</div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section" id="progressSection">
+            <div class="progress-info">
+                <div class="stats">
+                    <span class="stat-item"><span class="stat-dot easy"></span> Mudah: 5</span>
+                    <span class="stat-item"><span class="stat-dot medium"></span> Sedang: 10</span>
+                    <span class="stat-item"><span class="stat-dot hard"></span> Sulit: 10</span>
+                    <span class="stat-item"><span class="stat-dot correct-dot"></span> Benar: <span id="correctCount">0</span></span>
+                    <span class="stat-item"><span class="stat-dot wrong-dot"></span> Salah: <span id="wrongCount">0</span></span>
+                    <span class="stat-item"><span class="stat-dot remaining-dot"></span> Sisa: <span id="remainingCount">25</span></span>
+                </div>
+                <div class="filter-section">
+                    <button class="filter-btn active" onclick="filterQuestions('all')">Semua</button>
+                    <button class="filter-btn filter-easy" onclick="filterQuestions('easy')">Mudah</button>
+                    <button class="filter-btn filter-medium" onclick="filterQuestions('medium')">Sedang</button>
+                    <button class="filter-btn filter-hard" onclick="filterQuestions('hard')">Sulit</button>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Cards Container -->
+        <div id="quizContainer"></div>
+
+        <!-- Result Section -->
+        <div class="result-section hidden" id="resultSection">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-score" id="resultScore">0/25</div>
+            <div class="result-detail" id="resultDetail"></div>
+            <button class="btn btn-primary" onclick="resetQuiz()">🔄 Ulangi Kuis</button>
+            <button class="btn btn-outline" onclick="scrollToTop()">📋 Lihat Soal</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== SOAL DATA ====================
+        const questions = [
+            // MUDAH (5 soal) - Indeks 0-4
+            {
+                id: 1,
+                difficulty: 'easy',
+                question: 'Kata berimbuhan yang benar dari kata dasar "tulis" adalah ...',
+                options: ['mentulis', 'menulis', 'memtulis', 'mengtulis'],
+                correct: 1,
+                explanation: 'Kata dasar "tulis" diawali huruf <strong>T</strong>. Berdasarkan aturan <strong>PTKS → LULUH</strong>, huruf T luluh dan imbuhan me- berubah menjadi <strong>men-</strong>. Jadi bentuk bakunya adalah <strong>menulis</strong>. Pilihan A (mentulis) tidak baku karena mempertahankan T, C dan D salah bentuk.'
+            },
+            {
+                id: 2,
+                difficulty: 'easy',
+                question: '"Banyak para siswa hadir." Kalimat tersebut tidak efektif karena mengandung ...',
+                options: ['Ambiguitas', 'Kontaminasi', 'Pleonasme', 'Ketidaklogisan'],
+                correct: 2,
+                explanation: 'Kalimat <strong>"Banyak para siswa hadir"</strong> mengandung <strong>pleonasme</strong> (pemborosan kata). Kata "banyak" sudah menunjukkan jumlah jamak, begitu pula "para". Gunakan salah satu saja: <strong>"Banyak siswa hadir"</strong> atau <strong>"Para siswa hadir"</strong>.'
+            },
+            {
+                id: 3,
+                difficulty: 'easy',
+                question: 'Bentuk berimbuhan yang benar dari kata dasar "pukul" adalah ...',
+                options: ['mempukul', 'memukul', 'mengpukul', 'menyukul'],
+                correct: 1,
+                explanation: 'Kata dasar "pukul" berawalan <strong>P</strong>. Aturan PTKS → luluh: P hilang, imbuhan me- menjadi <strong>mem-</strong>. Jadi <strong>memukul</strong>. Pilihan A (mempukul) mempertahankan P sehingga tidak baku.'
+            },
+            {
+                id: 4,
+                difficulty: 'easy',
+                question: 'Kalimat berikut yang paling efektif adalah ...',
+                options: [
+                    'Naiklah ke atas panggung.',
+                    'Naiklah ke panggung.',
+                    'Naik ke atas panggunglah.',
+                    'Naiklah ke atas panggung sekarang.'
+                ],
+                correct: 1,
+                explanation: 'Frasa <strong>"naik ke atas"</strong> bersifat pleonastis karena "naik" sudah pasti menuju ke atas. Kalimat efektifnya cukup <strong>"Naiklah ke panggung."</strong> Pilihan A, C, dan D masih mengandung unsur boros kata.'
+            },
+            {
+                id: 5,
+                difficulty: 'easy',
+                question: 'Imbuhan yang benar untuk kata dasar "kirim" adalah ...',
+                options: ['mengkirim', 'mengirim', 'menyirim', 'mekirim'],
+                correct: 1,
+                explanation: 'Kata dasar "kirim" berawalan <strong>K</strong>. Berdasarkan aturan PTKS → luluh, K hilang dan imbuhan me- menjadi <strong>meng-</strong>. Jadi <strong>mengirim</strong>. Pilihan A (mengkirim) salah karena mempertahankan K, pilihan C dan D tidak sesuai pola.'
+            },
+
+            // SEDANG (10 soal) - Indeks 5-14
+            {
+                id: 6,
+                difficulty: 'medium',
+                question: '"Kepada hadirin dipersilakan berdiri." Perbaikan yang tepat untuk kalimat tersebut adalah ...',
+                options: [
+                    'Kepada hadirin dipersilakan untuk berdiri.',
+                    'Hadirin dipersilakan berdiri.',
+                    'Kepada hadirin kami persilakan berdiri.',
+                    'Hadirin dipersilakan untuk berdiri.'
+                ],
+                correct: 1,
+                explanation: 'Kalimat asli <strong>tidak logis</strong> karena yang dipersilakan adalah "hadirin", bukan "kepada hadirin". Penggunaan "kepada" membuat kalimat kehilangan subjek. Perbaikan paling tepat: <strong>"Hadirin dipersilakan berdiri."</strong>'
+            },
+            {
+                id: 7,
+                difficulty: 'medium',
+                question: 'Kata "memengaruhi" berasal dari kata dasar ...',
+                options: ['pengaruh', 'mempengaruhi', 'pengaruh → memengaruhi', 'pengaruh (dengan peluluhan P)'],
+                correct: 0,
+                explanation: 'Kata <strong>"memengaruhi"</strong> berasal dari kata dasar <strong>"pengaruh"</strong>. Berdasarkan aturan PTKS, huruf P pada "pengaruh" luluh ketika mendapat imbuhan me-. Bentuk bakunya adalah <strong>memengaruhi</strong>, bukan "mempengaruhi" (meskipun bentuk tersebut sering digunakan dalam percakapan sehari-hari).'
+            },
+            {
+                id: 8,
+                difficulty: 'medium',
+                question: 'Kalimat yang AMBIGU adalah ...',
+                options: [
+                    'Ayah membaca koran setiap pagi.',
+                    'Saya melihat polisi dengan teropong.',
+                    'Para siswa belajar di kelas.',
+                    'Mereka bekerja keras menyelesaikan tugas.'
+                ],
+                correct: 1,
+                explanation: 'Kalimat <strong>"Saya melihat polisi dengan teropong"</strong> bersifat <strong>ambigu</strong> karena memiliki dua kemungkinan makna: (1) Saya menggunakan teropong untuk melihat polisi, atau (2) Saya melihat polisi yang sedang membawa teropong. Agar tidak ambigu, bisa diperbaiki menjadi: "Dengan teropong, saya melihat polisi."'
+            },
+            {
+                id: 9,
+                difficulty: 'medium',
+                question: '"Guru baru datang." Kalimat tersebut ambigu karena ...',
+                options: [
+                    'Kata "baru" bisa berarti "yang baru" atau "baru saja"',
+                    'Kata "guru" tidak jelas subjeknya',
+                    'Kalimat terlalu pendek',
+                    'Tidak ada objek dalam kalimat'
+                ],
+                correct: 0,
+                explanation: 'Kata <strong>"baru"</strong> dalam kalimat tersebut memiliki dua makna: (1) guru yang baru (menggantikan guru lama), atau (2) guru itu baru saja datang. Ini adalah contoh <strong>ambiguitas leksikal</strong>. Perbaikan: <strong>"Guru yang baru itu datang"</strong> atau <strong>"Guru itu baru saja datang"</strong>.'
+            },
+            {
+                id: 10,
+                difficulty: 'medium',
+                question: 'Bentuk yang BENAR dari kata serapan "proses" dengan imbuhan me- adalah ...',
+                options: ['memroses', 'memproses', 'memprosess', 'memrosess'],
+                correct: 1,
+                explanation: 'Kata "proses" adalah <strong>kata serapan</strong> yang huruf awalnya <strong>tidak luluh</strong>. Kata serapan asing umumnya mempertahankan huruf awal meskipun diawali P, T, K, atau S. Jadi bentuk bakunya adalah <strong>memproses</strong> (P tetap dipertahankan).'
+            },
+            {
+                id: 11,
+                difficulty: 'medium',
+                question: 'Kalimat berikut yang mengandung KONTAMINASI adalah ...',
+                options: [
+                    'Guru itu menyalahkan siswanya.',
+                    'Guru itu mempersalahkan siswanya.',
+                    'Guru itu disalahkan siswanya.',
+                    'Guru itu dipersalahkan siswanya.'
+                ],
+                correct: 1,
+                explanation: '<strong>"Mempersalahkan"</strong> adalah bentuk <strong>kontaminasi</strong> dari dua bentuk yang benar: "menyalahkan" dan "mempersalahkan?" (bentuk kedua ini sebenarnya tidak baku untuk konteks "menyalahkan"). Bentuk yang baku adalah <strong>"menyalahkan"</strong>, dari kata dasar "salah" dengan imbuhan me-...-kan → menyalahkan.'
+            },
+            {
+                id: 12,
+                difficulty: 'medium',
+                question: 'Perbaikan kalimat "Sejak dari pagi hujan turun" agar efektif adalah ...',
+                options: [
+                    'Sejak dari pagi tadi hujan turun.',
+                    'Sejak pagi hujan turun.',
+                    'Dari pagi hujan turun.',
+                    'Hujan turun sejak dari pagi.'
+                ],
+                correct: 1,
+                explanation: 'Frasa <strong>"sejak dari"</strong> bersifat pleonastis karena "sejak" sudah berarti "dari". Pilih salah satu saja. Perbaikan paling efektif: <strong>"Sejak pagi hujan turun."</strong> atau "Dari pagi hujan turun." Pilihan B adalah yang paling ringkas dan tepat.'
+            },
+            {
+                id: 13,
+                difficulty: 'medium',
+                question: '"Mereka saling berpelukan satu sama lain." Kalimat tersebut tidak efektif karena ...',
+                options: [
+                    'Mengandung kontaminasi',
+                    'Mengandung pleonasme pada "saling" dan "satu sama lain"',
+                    'Bersifat ambigu',
+                    'Tidak logis'
+                ],
+                correct: 1,
+                explanation: 'Kata <strong>"berpelukan"</strong> sudah mengandung makna saling. Penambahan "saling" dan "satu sama lain" membuat kalimat menjadi <strong>pleonasme</strong>. Cukup gunakan <strong>"Mereka berpelukan"</strong> saja, sudah efektif dan jelas.'
+            },
+            {
+                id: 14,
+                difficulty: 'medium',
+                question: 'Bentuk berimbuhan yang benar untuk kata "transfer" adalah ...',
+                options: ['mentransfer', 'mentransfer', 'menransfer', 'mentransper'],
+                correct: 0,
+                explanation: 'Kata "transfer" adalah <strong>kata serapan</strong> yang diawali huruf T. Karena termasuk kata serapan, huruf T <strong>tidak luluh</strong>. Bentuk bakunya adalah <strong>mentransfer</strong>. Pilihan C (menransfer) akan benar jika "transfer" adalah kata asli Indonesia, tetapi ini adalah kata serapan.'
+            },
+            {
+                id: 15,
+                difficulty: 'medium',
+                question: '"Agar supaya berhasil, kamu harus belajar." Perbaikan yang paling efektif adalah ...',
+                options: [
+                    'Agar supaya berhasil, kamu harus belajar.',
+                    'Supaya agar berhasil, kamu harus belajar.',
+                    'Agar berhasil, kamu harus belajar.',
+                    'Agar supaya bisa berhasil, kamu harus belajar.'
+                ],
+                correct: 2,
+                explanation: 'Frasa <strong>"agar supaya"</strong> merupakan pleonasme karena kedua kata memiliki makna yang sama. Gunakan salah satu saja. Pilihan paling efektif: <strong>"Agar berhasil, kamu harus belajar"</strong> atau "Supaya berhasil, kamu harus belajar."'
+            },
+
+            // SULIT (10 soal) - Indeks 15-24
+            {
+                id: 16,
+                difficulty: 'hard',
+                question: '"Waktu dan tempat kami persilakan." Ketidakefektifan kalimat tersebut disebabkan oleh ...',
+                options: [
+                    'Pleonasme',
+                    'Ambiguitas',
+                    'Ketidaklogisan',
+                    'Kontaminasi'
+                ],
+                correct: 2,
+                explanation: 'Kalimat ini <strong>tidak logis</strong> karena yang dipersilakan adalah orangnya, bukan "waktu dan tempat". "Waktu dan tempat" adalah benda mati yang tidak bisa "dipersilakan". Perbaikannya: <strong>"Bapak/Ibu kami persilakan menempati tempat yang telah disediakan."</strong>'
+            },
+            {
+                id: 17,
+                difficulty: 'hard',
+                question: 'Bentuk baku dari kata dasar "kritik" dengan imbuhan me- adalah ...',
+                options: ['mengritik', 'mengkritik', 'mengritikk', 'mengkritikk'],
+                correct: 1,
+                explanation: 'Meskipun "kritik" berawalan K, kata ini termasuk <strong>kata serapan</strong> yang huruf awalnya <strong>tidak luluh</strong>. Jadi bentuk bakunya adalah <strong>mengkritik</strong>. Pilihan A (mengritik) akan benar jika "kritik" mengikuti aturan PTKS, tetapi pengecualian berlaku untuk kata serapan ini.'
+            },
+            {
+                id: 18,
+                difficulty: 'hard',
+                question: 'Manakah pasangan berikut yang SEMUANYA merupakan bentuk pleonasme?',
+                options: [
+                    'naik ke atas, turun ke bawah, mundur ke belakang',
+                    'para guru, banyak siswa, buku baru',
+                    'menulis surat, membaca buku, berlari cepat',
+                    'guru baru, siswa lama, mobil merah'
+                ],
+                correct: 0,
+                explanation: '<strong>"Naik ke atas", "turun ke bawah", dan "mundur ke belakang"</strong> semuanya mengandung pleonasme. "Naik" sudah pasti ke atas, "turun" sudah pasti ke bawah, "mundur" sudah pasti ke belakang. Pilihan B: "para guru" dan "banyak siswa" masing-masing bisa efektif jika berdiri sendiri. Pilihan C dan D adalah kalimat normal tanpa pleonasme.'
+            },
+            {
+                id: 19,
+                difficulty: 'hard',
+                question: 'Kata "terpengaruhi" merupakan bentuk ...',
+                options: [
+                    'Baku sesuai KBBI',
+                    'Pleonasme',
+                    'Kontaminasi dari "dipengaruhi" dan "terpengaruh"',
+                    'Kata serapan yang tidak luluh'
+                ],
+                correct: 2,
+                explanation: '<strong>"Terpengaruhi"</strong> adalah bentuk <strong>kontaminasi</strong>. Dua bentuk yang benar adalah <strong>"dipengaruhi"</strong> (pasif, awalan di-) dan <strong>"terpengaruh"</strong> (bentuk ter-). Mencampurkan keduanya menghasilkan "terpengaruhi" yang tidak baku. Gunakan salah satu bentuk yang benar sesuai konteks.'
+            },
+            {
+                id: 20,
+                difficulty: 'hard',
+                question: '"Buku itu diterbitkan oleh penerbit Gramedia." Kalimat tersebut tidak efektif karena ...',
+                options: [
+                    'Pleonasme pada "diterbitkan" dan "penerbit"',
+                    'Ambiguitas pada kata "penerbit"',
+                    'Kontaminasi imbuhan',
+                    'Struktur kalimat pasif yang salah'
+                ],
+                correct: 0,
+                explanation: 'Kalimat ini mengandung <strong>pleonasme</strong>. Kata <strong>"diterbitkan"</strong> sudah mengandung makna adanya penerbit. Menambahkan "oleh penerbit" membuat kalimat boros kata. Perbaikan: <strong>"Buku itu diterbitkan Gramedia."</strong> atau langsung menyebut penerbitnya tanpa kata "penerbit".'
+            },
+            {
+                id: 21,
+                difficulty: 'hard',
+                question: 'Pernyataan yang BENAR mengenai aturan imbuhan ber- adalah ...',
+                options: [
+                    'ber- selalu luluh di depan kata berawalan R',
+                    'ber- tidak pernah luluh, tetapi pada kata berawalan R, salah satu R-nya hilang',
+                    'ber- berubah menjadi be- di semua kata',
+                    'ber- selalu ditulis lengkap tanpa perubahan'
+                ],
+                correct: 1,
+                explanation: 'Imbuhan <strong>ber- tidak pernah luluh</strong>, tetapi pada kata dasar berawalan <strong>R</strong>, terjadi penghilangan salah satu R sehingga hanya tersisa satu R. Contoh: ber- + renang → <strong>berenang</strong> (bukan berrenang). Pengecualian khusus: ajar → <strong>belajar</strong>, kerja → <strong>bekerja</strong>.'
+            },
+            {
+                id: 22,
+                difficulty: 'hard',
+                question: 'Kalimat "Saya melihat anak itu dengan teropong" menjadi efektif jika diperbaiki menjadi ...',
+                options: [
+                    'Dengan teropong, saya melihat anak itu.',
+                    'Saya melihat dengan teropong anak itu.',
+                    'Saya dan teropong melihat anak itu.',
+                    'Anak itu saya lihat dengan teropong oleh saya.'
+                ],
+                correct: 0,
+                explanation: 'Untuk menghilangkan <strong>ambiguitas</strong>, keterangan "dengan teropong" sebaiknya diletakkan di awal kalimat agar jelas bahwa yang menggunakan teropong adalah "saya". Jadi: <strong>"Dengan teropong, saya melihat anak itu."</strong> Alternatif lain: "Saya melihat anak itu menggunakan teropong" (jika konteksnya jelas).'
+            },
+            {
+                id: 23,
+                difficulty: 'hard',
+                question: '"Para hadirin dimohon untuk segera memasuki ruangan." Jumlah pleonasme dalam kalimat tersebut adalah ...',
+                options: ['1 (pada kata "para")', '2 (pada "para" dan "untuk")', '3 (pada "para", "untuk", dan "segera")', '0, kalimat sudah efektif'],
+                correct: 0,
+                explanation: 'Kalimat ini mengandung <strong>1 pleonasme</strong>, yaitu pada kata <strong>"para"</strong>. Kata "hadirin" sudah bermakna jamak (banyak orang yang hadir), sehingga penggunaan "para" menjadi mubazir. Perbaikan: <strong>"Hadirin dimohon segera memasuki ruangan."</strong> Kata "untuk" dan "segera" dalam konteks ini bukan pleonasme.'
+            },
+            {
+                id: 24,
+                difficulty: 'hard',
+                question: 'Bentuk yang BENAR untuk kata dasar "konstruksi" dengan imbuhan me- adalah ...',
+                options: ['mengonstruksi', 'mengkonstruksi', 'mengkonstruksikan', 'mengonstruksikan'],
+                correct: 1,
+                explanation: '"Konstruksi" adalah <strong>kata serapan</strong> yang berawalan K. Karena termasuk kata serapan, huruf K <strong>tidak luluh</strong>. Bentuk bakunya adalah <strong>mengkonstruksi</strong>. Pilihan A (mengonstruksi) akan benar jika mengikuti aturan PTKS, tetapi ini adalah pengecualian untuk kata serapan.'
+            },
+            {
+                id: 25,
+                difficulty: 'hard',
+                question: '"Disebabkan karena hujan deras, pertandingan ditunda." Kalimat tersebut tidak efektif karena ...',
+                options: [
+                    'Mengandung kontaminasi pada "disebabkan karena"',
+                    'Mengandung pleonasme pada "disebabkan karena"',
+                    'Bersifat ambigu',
+                    'Struktur kalimat pasif yang salah'
+                ],
+                correct: 1,
+                explanation: 'Frasa <strong>"disebabkan karena"</strong> mengandung <strong>pleonasme</strong>. Kata "disebabkan" sudah mengandung makna "karena", sehingga penggunaan "karena" setelahnya menjadi mubazir. Perbaikan: <strong>"Disebabkan hujan deras, pertandingan ditunda"</strong> atau <strong>"Karena hujan deras, pertandingan ditunda."</strong>'
+            }
+        ];
+
+        // ==================== STATE ====================
+        let answered = {}; // { id: 'correct' | 'wrong' | null }
+        let selectedOptions = {}; // { id: index }
+        let currentFilter = 'all';
+
+        // Initialize
+        questions.forEach(q => {
+            answered[q.id] = null;
+            selectedOptions[q.id] = null;
+        });
+
+        // ==================== RENDER ====================
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            let filteredQuestions = questions;
+            if (currentFilter === 'easy') filteredQuestions = questions.filter(q => q.difficulty === 'easy');
+            if (currentFilter === 'medium') filteredQuestions = questions.filter(q => q.difficulty === 'medium');
+            if (currentFilter === 'hard') filteredQuestions = questions.filter(q => q.difficulty === 'hard');
+
+            filteredQuestions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                if (answered[q.id] === 'correct') card.classList.add('answered-correct');
+                if (answered[q.id] === 'wrong') card.classList.add('answered-wrong');
+                card.id = `question-${q.id}`;
+
+                const difficultyLabel = q.difficulty === 'easy' ? 'Mudah' : q.difficulty === 'medium' ? 'Sedang' : 'Sulit';
+                const difficultyBadgeClass = q.difficulty === 'easy' ? 'easy' : q.difficulty === 'medium' ? 'medium' : 'hard';
+
+                let badgeHTML = `<span class="badge ${difficultyBadgeClass}">● ${difficultyLabel}</span>`;
+                if (answered[q.id] === 'correct') badgeHTML += `<span class="badge correct-badge">✅ Benar</span>`;
+                if (answered[q.id] === 'wrong') badgeHTML += `<span class="badge wrong-badge">❌ Salah</span>`;
+
+                card.innerHTML = `
+                    <div class="badge-row">${badgeHTML}</div>
+                    <div class="question-number">Soal ${q.id} dari 25</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options" id="options-${q.id}">
+                        ${q.options.map((opt, optIndex) => {
+                            const letter = String.fromCharCode(65 + optIndex); // A, B, C, D
+                            let btnClass = 'option-btn';
+                            if (selectedOptions[q.id] === optIndex) btnClass += ' selected';
+                            if (answered[q.id] !== null) {
+                                btnClass += ' disabled';
+                                if (optIndex === q.correct) btnClass += ' correct-answer';
+                                if (selectedOptions[q.id] === optIndex && optIndex !== q.correct) btnClass += ' wrong-answer';
+                            }
+                            return `
+                                <button class="${btnClass}" onclick="selectOption(${q.id}, ${optIndex})" ${answered[q.id] !== null ? 'disabled' : ''}>
+                                    <span class="option-letter">${letter}</span>
+                                    <span>${opt}</span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="feedback ${answered[q.id] !== null ? 'show ' + answered[q.id] : ''}" id="feedback-${q.id}">
+                        <div class="pembahasan-title">📖 Pembahasan:</div>
+                        <div class="pembahasan-text">${q.explanation}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            updateProgress();
+            updateResultSection();
+
+            // Scroll to result if all answered
+            const allAnswered = Object.values(answered).every(a => a !== null);
+            if (allAnswered) {
+                document.getElementById('resultSection').classList.remove('hidden');
+                document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function selectOption(questionId, optionIndex) {
+            if (answered[questionId] !== null) return; // Already answered
+
+            const question = questions.find(q => q.id === questionId);
+            selectedOptions[questionId] = optionIndex;
+
+            if (optionIndex === question.correct) {
+                answered[questionId] = 'correct';
+            } else {
+                answered[questionId] = 'wrong';
+            }
+
+            renderQuiz();
+
+            // Scroll to the answered question
+            const card = document.getElementById(`question-${questionId}`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function updateProgress() {
+            const total = questions.length;
+            const answeredCount = Object.values(answered).filter(a => a !== null).length;
+            const correctCount = Object.values(answered).filter(a => a === 'correct').length;
+            const wrongCount = Object.values(answered).filter(a => a === 'wrong').length;
+            const remaining = total - answeredCount;
+
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+            document.getElementById('remainingCount').textContent = remaining;
+            document.getElementById('progressBarFill').style.width = `${(answeredCount / total) * 100}%`;
+
+            // Update filter counts (optional visual)
+            updateResultSection();
+        }
+
+        function updateResultSection() {
+            const total = questions.length;
+            const answeredCount = Object.values(answered).filter(a => a !== null).length;
+            const correctCount = Object.values(answered).filter(a => a === 'correct').length;
+            const resultSection = document.getElementById('resultSection');
+
+            if (answeredCount === total) {
+                resultSection.classList.remove('hidden');
+                const score = correctCount;
+                document.getElementById('resultScore').textContent = `${score} / ${total}`;
+                let icon, detail;
+                if (score === total) {
+                    icon = '🏆';
+                    detail = 'Sempurna! Kamu menguasai materi Imbuhan & Kalimat Efektif dengan sangat baik.';
+                } else if (score >= 20) {
+                    icon = '🌟';
+                    detail = 'Sangat baik! Tingkatkan lagi ke skor sempurna.';
+                } else if (score >= 15) {
+                    icon = '👍';
+                    detail = 'Cukup baik. Pelajari kembali pembahasan soal yang salah.';
+                } else if (score >= 10) {
+                    icon = '📚';
+                    detail = 'Perlu belajar lebih giat. Fokus pada materi pleonasme, kontaminasi, dan peluluhan.';
+                } else {
+                    icon = '💪';
+                    detail = 'Jangan menyerah! Ulangi kuis dan pahami pembahasannya dengan teliti.';
+                }
+                document.getElementById('resultIcon').textContent = icon;
+                document.getElementById('resultDetail').textContent = detail;
+            } else {
+                resultSection.classList.add('hidden');
+            }
+        }
+
+        function filterQuestions(filter) {
+            currentFilter = filter;
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.filter-btn.${filter === 'easy' ? 'filter-easy' : filter === 'medium' ? 'filter-medium' : filter === 'hard' ? 'filter-hard' : ''}`);
+            if (filter === 'all') {
+                document.querySelector('.filter-btn:first-child').classList.add('active');
+            } else if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            renderQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            questions.forEach(q => {
+                answered[q.id] = null;
+                selectedOptions[q.id] = null;
+            });
+            currentFilter = 'all';
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.filter-btn:first-child').classList.add('active');
+            document.getElementById('resultSection').classList.add('hidden');
+            renderQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initial render
+        renderQuiz();
+    </script>
+</body>
+</html>
