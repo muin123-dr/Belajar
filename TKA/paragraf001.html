@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Master Paragraf TKA: 20 Soal (Sedang & Sulit)</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 750px;
+            width: 100%;
+            position: relative;
+        }
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-top: 0;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+        .difficulty-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.85em;
+        }
+        .diff-sedang { background-color: #f59e0b; }
+        .diff-sulit { background-color: #dc2626; }
+        
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1em;
+        }
+        .option:hover:not(.disabled) {
+            background-color: #eff6ff;
+            border-color: #93c5fd;
+        }
+        .option.correct {
+            background-color: #dcfce7;
+            border-color: var(--success);
+            color: #14532d;
+            font-weight: 600;
+        }
+        .option.incorrect {
+            background-color: #fee2e2;
+            border-color: var(--danger);
+            color: #7f1d1d;
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .explanation-box {
+            display: none;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            animation: fadeIn 0.5s;
+        }
+        .btn-next {
+            display: none;
+            margin-top: 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .btn-next:hover {
+            background-color: var(--primary-hover);
+        }
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+        .result-container h3 {
+            color: var(--primary);
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--success);
+            margin: 20px 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="quiz-screen">
+        <h2>Latihan Intensif TKA: Paragraf</h2>
+        
+        <div class="meta-info">
+            <span id="difficulty-badge" class="difficulty-badge diff-sedang">Tingkat: Sedang</span>
+            <span style="color: #6b7280;" id="progress-text">Soal 1 / 20</span>
+        </div>
+
+        <div class="question-text" id="question-text">Memuat pertanyaan...</div>
+        
+        <div class="options-container" id="options-container"></div>
+        
+        <div class="explanation-box" id="explanation-box"></div>
+        
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()">Soal Selanjutnya</button>
+    </div>
+
+    <div class="result-container" id="result-screen">
+        <h3>Evaluasi Selesai!</h3>
+        <p>Total Skor Anda:</p>
+        <div class="score-display" id="score-text">0 / 20</div>
+        <p id="feedback-text" style="font-size: 1.1em; margin-bottom: 30px;"></p>
+        <button class="btn-next" style="display: inline-block; width: auto;" onclick="location.reload()">Mulai Ulang Kuis</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        // ================= LEVEL: SEDANG (10 SOAL) =================
+        {
+            level: "Sedang",
+            type: "Menyusun Kalimat",
+            question: "Susunlah kalimat acak berikut menjadi paragraf deduktif yang padu!<br><br>(1) Hal ini dikarenakan energi surya sangat ramah lingkungan dan tidak terbatas.<br>(2) Penggunaan energi terbarukan di dunia kini semakin diminati.<br>(3) Panel surya banyak dipasang di atap rumah penduduk maupun gedung perkantoran.<br>(4) Salah satu jenis energi terbarukan yang paling populer adalah energi surya.",
+            options: [
+                "A. (2)-(4)-(1)-(3)",
+                "B. (2)-(1)-(4)-(3)",
+                "C. (4)-(1)-(2)-(3)",
+                "D. (4)-(3)-(2)-(1)",
+                "E. (2)-(3)-(4)-(1)"
+            ],
+            correct: 0,
+            explanation: "<b>Jawaban: A</b><br>Kalimat (2) adalah kalimat paling umum (ide pokok). Kalimat (4) menyempitkan topik energi terbarukan menjadi <i>energi surya</i>. Kalimat (1) menjelaskan alasan (<i>Hal ini dikarenakan...</i> merujuk ke popularitas energi surya). Kalimat (3) memberi bukti aplikasinya."
+        },
+        {
+            level: "Sedang",
+            type: "Kalimat Tidak Padu",
+            question: "Manakah kalimat yang merusak kepaduan paragraf di bawah ini?<br><br>(1) Sayuran hijau kaya akan serat dan vitamin yang sangat dibutuhkan tubuh. (2) Konsumsi sayur setiap hari dapat melancarkan sistem pencernaan. (3) Harga pupuk kimia di pasaran saat ini melonjak tajam. (4) Selain itu, nutrisi dalam sayuran juga membantu menjaga berat badan tetap ideal. (5) Oleh karena itu, para ahli gizi menyarankan agar sayuran hijau selalu ada dalam menu harian.",
+            options: [
+                "A. Kalimat (1)",
+                "B. Kalimat (2)",
+                "C. Kalimat (3)",
+                "D. Kalimat (4)",
+                "E. Kalimat (5)"
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Ide pokok paragraf ini adalah <b>manfaat konsumsi sayuran hijau bagi kesehatan</b>. Kalimat (3) yang membahas <i>harga pupuk kimia</i> tiba-tiba melompat dari topik gizi dan kesehatan menjadi masalah pertanian/ekonomi."
+        },
+        {
+            level: "Sedang",
+            type: "Melengkapi Konjungsi",
+            question: "Budi memiliki kebiasaan mengulang materi pelajaran setiap malam. ..., ia selalu mendapat nilai sempurna saat ujian akhir. ..., Budi tidak pernah sombong dan selalu mau mengajari teman-temannya yang kesulitan.<br><br>Konjungsi antarkalimat yang paling tepat secara berurutan adalah...",
+            options: [
+                "A. Namun, Akibatnya",
+                "B. Akibatnya, Meskipun demikian",
+                "C. Oleh karena itu, Bahkan",
+                "D. Selain itu, Jadi",
+                "E. Sebab, Akan tetapi"
+            ],
+            correct: 1,
+            explanation: "<b>Jawaban: B</b><br>Kalimat kedua (nilai sempurna) adalah <b>akibat</b> dari rajin belajar (kalimat pertama), jadi butuh <i>Akibatnya</i> atau <i>Oleh karena itu</i>. Kalimat ketiga menunjukkan <b>pertentangan</b> (meski pintar, dia tidak sombong), sehingga butuh <i>Meskipun demikian</i>."
+        },
+        {
+            level: "Sedang",
+            type: "Melengkapi Kalimat",
+            question: "(1) Belanja daring memudahkan konsumen untuk mendapatkan barang impian. (2) Konsumen hanya perlu memilih barang melalui layar ponsel pintar mereka. (3) ... (4) Oleh karena itu, perusahaan jasa ekspedisi kini semakin kewalahan melayani lonjakan volume pengiriman.<br><br>Kalimat yang paling tepat untuk menjembatani kalimat (2) dan (4) adalah...",
+            options: [
+                "A. Diskon ongkos kirim sering diberikan pada tanggal kembar.",
+                "B. Banyak penjual yang mempromosikan barangnya secara langsung.",
+                "C. Setelah dibayar, barang akan langsung dikirim ke alamat tujuan.",
+                "D. Namun, masih banyak penipuan terjadi di aplikasi belanja daring.",
+                "E. Kualitas barang di toko daring tidak selalu sesuai ekspektasi."
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Kalimat (2) membahas proses <i>memilih barang</i>. Kalimat (4) membahas akibat logisnya: <i>ekspedisi kewalahan</i>. Kalimat jembatannya harus membahas proses <b>pengiriman barang</b>. Opsi C paling logis menghubungkan proses belanja dengan ekspedisi pengiriman."
+        },
+        {
+            level: "Sedang",
+            type: "Menyusun Kalimat",
+            question: "Susun urutan prosedur berikut agar menjadi paragraf yang koheren!<br><br>(1) Setelah didiamkan beberapa minggu, pupuk kompos siap digunakan.<br>(2) Pertama, kumpulkan sampah organik seperti daun kering dan sisa sayuran.<br>(3) Pembuatan pupuk kompos skala rumah tangga sangatlah mudah.<br>(4) Kemudian, campurkan sampah tersebut dengan tanah di dalam wadah tertutup.",
+            options: [
+                "A. (2)-(4)-(1)-(3)",
+                "B. (3)-(2)-(1)-(4)",
+                "C. (3)-(2)-(4)-(1)",
+                "D. (2)-(3)-(4)-(1)",
+                "E. (3)-(4)-(2)-(1)"
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Gunakan pola umum-khusus (kronologis). (3) adalah pembuka (Topik). Prosesnya dimulai dari (2) kata penanda <i>Pertama</i>. Dilanjutkan dengan (4) kata penanda <i>Kemudian</i>. Diakhiri hasil (1) kata penanda <i>Setelah didiamkan...</i>."
+        },
+        {
+            level: "Sedang",
+            type: "Kalimat Tidak Padu",
+            question: "(1) Sistem bekerja dari rumah atau WFH memberikan fleksibilitas waktu bagi para karyawan. (2) Karyawan tidak perlu lagi menghabiskan waktu bermacet-macetan di jalan setiap pagi. (3) Tarif tol antarprovinsi baru saja mengalami penyesuaian harga menjelang liburan. (4) Waktu yang biasanya terbuang di jalan dapat dimanfaatkan untuk berolahraga ringan atau bersama keluarga. (5) Hal ini berdampak positif pada keseimbangan kehidupan kerja (work-life balance) mereka.<br><br>Kalimat tidak padu ditunjukkan oleh nomor...",
+            options: [
+                "A. (1)",
+                "B. (2)",
+                "C. (3)",
+                "D. (4)",
+                "E. (5)"
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Topik utama adalah <b>manfaat WFH bagi karyawan</b> (fleksibilitas waktu, hemat waktu, work-life balance). Kalimat (3) tentang kenaikan tarif tol tidak relevan dengan esensi WFH."
+        },
+        {
+            level: "Sedang",
+            type: "Melengkapi Konjungsi",
+            question: "Musim kemarau tahun ini berlangsung lebih panjang dari prediksi Badan Meteorologi. ..., banyak area persawahan yang mengalami kekeringan ekstrem. ..., pemerintah daerah segera mendistribusikan ratusan unit pompa air untuk menyelamatkan panen petani.<br><br>Konjungsi yang tepat adalah...",
+            options: [
+                "A. Namun, Bahkan",
+                "B. Sebaliknya, Jadi",
+                "C. Akibatnya, Oleh karena itu",
+                "D. Sementara itu, Kemudian",
+                "E. Sebab, Dengan demikian"
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Sawah kekeringan adalah <b>akibat</b> dari kemarau panjang (<i>Akibatnya</i>). Tindakan pemerintah membagikan pompa adalah <b>solusi/akibat logis</b> dari kekeringan tersebut (<i>Oleh karena itu</i>)."
+        },
+        {
+            level: "Sedang",
+            type: "Melengkapi Kalimat",
+            question: "(1) Desa wisata Penglipuran di Bali menawarkan pesona budaya leluhur yang kental. (2) Udara yang sejuk serta tata ruang desa yang sangat bersih menjadi daya tarik utamanya. (3) ... (4) Bahkan, desa ini sering memenangkan penghargaan kebersihan tingkat internasional.<br><br>Kalimat pelengkap yang padu adalah...",
+            options: [
+                "A. Warga Bali sangat taat dalam menjalankan ibadah agamanya.",
+                "B. Tak heran jika kawasan ini tidak pernah sepi dari kunjungan wisatawan.",
+                "C. Banyak investor asing yang ingin membangun hotel di sekitarnya.",
+                "D. Makanan khas desa tersebut adalah ayam betutu pedas.",
+                "E. Wisatawan diwajibkan menggunakan pakaian adat saat berkunjung."
+            ],
+            correct: 1,
+            explanation: "<b>Jawaban: B</b><br>Kalimat (2) menyebutkan daya tarik desa (bersih, sejuk). Kalimat (4) memberikan penegasan prestasi (<i>Bahkan... memenangkan penghargaan</i>). Kalimat B (Tak heran jika... tidak pernah sepi wisatawan) adalah respon paling natural dari kondisi daya tarik di kalimat (2)."
+        },
+        {
+            level: "Sedang",
+            type: "Kalimat Tidak Padu",
+            question: "(1) Minum segelas air putih hangat sebelum tidur terbukti dapat membantu merelaksasi ketegangan otot. (2) Kebiasaan ini juga berperan menjaga tubuh tetap terhidrasi sepanjang malam. (3) Kasur busa biasanya memiliki harga jual yang jauh lebih murah dibandingkan kasur pegas. (4) Dengan otot yang rileks dan hidrasi cukup, kualitas tidur seseorang akan meningkat secara signifikan. (5) Bangun di pagi hari pun akan terasa lebih segar dan berenergi.<br><br>Kalimat sumbang pada paragraf di atas adalah nomor...",
+            options: [
+                "A. (1)",
+                "B. (2)",
+                "C. (3)",
+                "D. (4)",
+                "E. (5)"
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Paragraf membahas <b>manfaat minum air putih hangat sebelum tidur</b>. Kalimat (3) tiba-tiba membandingkan jenis dan harga kasur, yang sama sekali tidak berhubungan dengan manfaat air putih."
+        },
+        {
+            level: "Sedang",
+            type: "Struktur Paragraf",
+            question: "Paragraf yang kalimat utamanya berada di akhir sebagai sebuah kesimpulan/penegasan dari kalimat-kalimat penjelas sebelumnya disebut paragraf...",
+            options: [
+                "A. Deduktif",
+                "B. Naratif",
+                "C. Ekspositoris",
+                "D. Induktif",
+                "E. Campuran"
+            ],
+            correct: 3,
+            explanation: "<b>Jawaban: D. Induktif</b><br>Sesuai materi struktur paragraf: Paragraf dengan pola Khusus → Umum di mana kalimat utamanya berada di akhir disebut paragraf Induktif."
+        },
+
+        // ================= LEVEL: SULIT (10 SOAL) =================
+        {
+            level: "Sulit",
+            type: "Menyusun Kalimat",
+            question: "Susunlah kalimat-kalimat berikut menjadi paragraf padu!<br><br>(1) Dampaknya, daya beli masyarakat berpenghasilan rendah akan merosot tajam.<br>(2) Inflasi adalah fenomena ekonomi berupa kenaikan harga barang dan jasa secara umum dan terus-menerus.<br>(3) Untuk menahan laju inflasi tersebut, bank sentral biasanya akan menaikkan suku bunga acuan.<br>(4) Ketika hal ini terjadi, nilai uang sebenarnya sedang mengalami penurunan.<br>(5) Penurunan inilah yang membuat harga kebutuhan pokok terasa semakin mencekik.",
+            options: [
+                "A. (2)-(4)-(5)-(1)-(3)",
+                "B. (2)-(1)-(4)-(5)-(3)",
+                "C. (2)-(4)-(1)-(5)-(3)",
+                "D. (4)-(2)-(5)-(1)-(3)",
+                "E. (2)-(5)-(4)-(1)-(3)"
+            ],
+            correct: 0,
+            explanation: "<b>Jawaban: A</b><br>Kalimat (2) mendefinisikan Inflasi (Topik Umum).<br>Kalimat (4) menjelaskan fenomena di kalimat (2) (<i>hal ini terjadi</i>).<br>Kalimat (5) menangkap kata kunci dari (4) melalui repetisi: <i>Penurunan inilah...</i><br>Kalimat (1) adalah efek lanjutan dari mahalnya harga pokok (<i>Dampaknya...</i>).<br>Kalimat (3) adalah solusi (<i>Untuk mengatasi...</i>)."
+        },
+        {
+            level: "Sulit",
+            type: "Melengkapi Kalimat",
+            question: "(1) Teknologi kecerdasan buatan (AI) kini mampu menghasilkan esai yang sangat menyerupai tulisan manusia. (2) Kemudahan ini dimanfaatkan oleh banyak mahasiswa untuk membantu mencari kerangka ide. (3) ... (4) Pasalnya, sistem AI masih sering 'berhalusinasi' dengan memberikan informasi fiktif yang terlihat meyakinkan. (5) Oleh sebab itu, verifikasi manual dan riset literatur yang mendalam tetap mutlak diperlukan.<br><br>Kalimat jembatan yang paling tepat adalah...",
+            options: [
+                "A. Selain itu, banyak dosen yang belum mampu mendeteksi tulisan buatan AI.",
+                "B. Akan tetapi, pengguna dilarang menelan mentah-mentah hasil generasi teks tersebut.",
+                "C. Fitur berbayar pada AI memberikan jawaban yang jauh lebih akurat.",
+                "D. Hal ini membuat minat baca di kalangan mahasiswa menurun drastis.",
+                "E. Namun, AI tidak bisa menggantikan empati dan emosi manusia sepenuhnya."
+            ],
+            correct: 1,
+            explanation: "<b>Jawaban: B</b><br>Kalimat (4) menyatakan alasan negatif (<i>Pasalnya, AI sering berhalusinasi/fiktif</i>). Maka, kalimat (3) harus berupa peringatan atau pertentangan terhadap kemudahan di kalimat (2). Opsi B paling logis terhubung dengan kata <i>Pasalnya...</i> (Alasan kenapa tidak boleh ditelan mentah-mentah)."
+        },
+        {
+            level: "Sulit",
+            type: "Melengkapi Konjungsi",
+            question: "Perusahaan rintisan (startup) logistik itu baru saja meraih pendanaan Seri A bernilai fantastis. ..., mereka langsung agresif merekrut puluhan talenta digital senior. ..., rencana ekspansi cabang fisik ke negara tetangga terpaksa ditunda ... regulasi perizinan yang dinilai masih belum jelas.<br><br>Konjungsi yang tepat untuk mengisi ketiga rumpang tersebut adalah...",
+            options: [
+                "A. Akibatnya, Bahkan, agar",
+                "B. Namun, Oleh karena itu, karena",
+                "C. Dengan demikian, Namun, akibat",
+                "D. Selain itu, Sebaliknya, sebab",
+                "E. Oleh karena itu, Jadi, hingga"
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Rumpang 1: Hasil dari dapat dana adalah rekrutmen masif → <i>Dengan demikian / Oleh karena itu</i>.<br>Rumpang 2: Ekspansi ditunda merupakan pertentangan dari kesuksesan rekrutmen → <i>Namun</i>.<br>Rumpang 3: Alasan penundaan → <i>akibat / karena</i>."
+        },
+        {
+            level: "Sulit",
+            type: "Kalimat Tidak Padu",
+            question: "Manakah kalimat yang mengganggu koherensi pada paragraf historis ini?<br><br>(1) Sejarah mencatat bahwa pada abad ke-16, rempah-rempah pernah jauh lebih berharga daripada emas murni. (2) Bangsa-bangsa Eropa rela mengarungi samudra berbahaya demi menemukan kepulauan penghasil rempah. (3) Cengkih dan pala dari Kepulauan Maluku adalah komoditas utama yang paling diperebutkan kala itu. (4) Saat ini, pala lebih banyak dimanfaatkan sebagai penguat rasa pada masakan tradisional Nusantara. (5) Monopoli perdagangan rempah yang rakus inilah yang kemudian memicu era kelam kolonialisme di Indonesia.",
+            options: [
+                "A. (1)",
+                "B. (2)",
+                "C. (3)",
+                "D. (4)",
+                "E. (5)"
+            ],
+            correct: 3,
+            explanation: "<b>Jawaban: D. (4)</b><br>Paragraf ini beralur historis/sejarah tentang perebutan rempah yang memicu kolonialisme. Kalimat (5) merujuk langsung ke peristiwa sejarah di (3) dengan frasa <i>'Monopoli rempah inilah'</i>. Kalimat (4) tiba-tiba melompat ke konteks <b>kuliner modern saat ini</b>, merusak kepaduan waktu dan makna."
+        },
+        {
+            level: "Sulit",
+            type: "Menyusun Kalimat",
+            question: "Urutkan proses medis berikut agar menjadi paragraf yang koheren!<br><br>(1) Setelah lolos uji klinis ketat, barulah vaksin diizinkan untuk diproduksi secara massal.<br>(2) Secara garis besar, vaksin bekerja dengan melatih sistem kekebalan tubuh mengenali patogen jahat.<br>(3) Apabila di masa depan virus asli menyerang, sel memori antibodi sudah siap membasminya.<br>(4) Patogen yang telah dilemahkan dalam vaksin akan memicu pembentukan antibodi tanpa menyebabkan sakit.<br>(5) Namun, proses pembuatan dan pengembangannya membutuhkan waktu bertahun-tahun.",
+            options: [
+                "A. (2)-(4)-(3)-(5)-(1)",
+                "B. (2)-(5)-(4)-(3)-(1)",
+                "C. (4)-(3)-(2)-(5)-(1)",
+                "D. (2)-(3)-(4)-(1)-(5)",
+                "E. (5)-(2)-(4)-(3)-(1)"
+            ],
+            correct: 0,
+            explanation: "<b>Jawaban: A</b><br>Kalimat (2) memperkenalkan topik: cara kerja vaksin.<br>Kalimat (4) merinci proses di dalam tubuh.<br>Kalimat (3) adalah hasil proteksi di masa depan.<br>Kalimat (5) memberi transisi (pertentangan waktu pembuatan yang lama).<br>Kalimat (1) adalah kesimpulan/tahap akhir pembuatannya."
+        },
+        {
+            level: "Sulit",
+            type: "Melengkapi Konjungsi",
+            question: "Berbagai kampanye pengurangan sampah plastik terus digaungkan secara masif di media sosial. ..., data lapangan menunjukkan penggunaan kantong kresek di pasar tradisional tidak mengalami penurunan. ..., pemerintah dituntut tidak hanya mengedukasi, tetapi juga mulai menerapkan cukai plastik yang ketat.<br><br>Konjungsi antarkalimat yang paling tepat adalah...",
+            options: [
+                "A. Meskipun demikian, Selanjutnya",
+                "B. Akan tetapi, Oleh sebab itu",
+                "C. Sebaliknya, Bahkan",
+                "D. Padahal, Dengan demikian",
+                "E. Namun, Sementara itu"
+            ],
+            correct: 1,
+            explanation: "<b>Jawaban: B</b><br>Kalimat kedua bertentangan dengan kalimat pertama (kampanye masif VS tidak ada penurunan di lapangan) → <i>Akan tetapi / Namun</i>.<br>Kalimat ketiga adalah solusi tegas atas kebuntuan di kalimat kedua → <i>Oleh sebab itu / Karena itu</i>."
+        },
+        {
+            level: "Sulit",
+            type: "Melengkapi Kalimat",
+            question: "(1) Pemanasan global menyebabkan suhu rata-rata permukaan laut terus mengalami peningkatan tajam. (2) Kenaikan suhu ekstrem ini memicu pencairan lapisan es abadi di kawasan kutub secara masif. (3) ... (4) Jika kondisi ini dibiarkan, banyak pulau kecil dan daratan rendah terancam tenggelam. (5) Jutaan penduduk pesisir di seluruh dunia pun harus bersiap menghadapi krisis tempat tinggal.<br><br>Pilihlah kalimat yang paling tepat untuk mengisi bagian rumpang (3)!",
+            options: [
+                "A. Beruang kutub mulai kehilangan habitat alami mereka untuk berburu.",
+                "B. Emisi gas rumah kaca adalah penyumbang terbesar pemanasan global.",
+                "C. Volume air laut yang melimpah akhirnya menaikkan tinggi permukaan laut global.",
+                "D. Akibatnya, cuaca di berbagai belahan dunia menjadi tidak dapat diprediksi.",
+                "E. Banyak aktivis lingkungan yang menuntut pengurangan bahan bakar fosil."
+            ],
+            correct: 2,
+            explanation: "<b>Jawaban: C</b><br>Soal ini membutuhkan jembatan logis (sebab-akibat). Es kutub mencair (2) mengakibatkan ancaman pulau tenggelam (4). Apa proses penghubungnya? Tentu saja <b>volume air laut naik</b> (Opsi C)."
+        },
+        {
+            level: "Sulit",
+            type: "Kalimat Tidak Padu",
+            question: "(1) Keberhasilan sebuah *startup* tidak melulu ditentukan oleh ide bisnis yang cemerlang di awal pendirian. (2) Eksekusi yang konsisten dan karakter tim yang solid justru memainkan peran jauh lebih krusial. (3) Investor berpengalaman biasanya akan menelisik rekam jejak para pendiri sebelum menyuntikkan dana. (4) Banyak karyawan generasi Z sering melakukan *job-hopping* (kutu loncat) demi mengejar kenaikan gaji yang instan. (5) Tanpa fondasi tim inti yang saling percaya, ide sebrilian apa pun umumnya akan berujung pada kegagalan.<br><br>Kalimat sumbang ditunjukkan oleh...",
+            options: [
+                "A. (1)",
+                "B. (2)",
+                "C. (3)",
+                "D. (4)",
+                "E. (5)"
+            ],
+            correct: 3,
+            explanation: "<b>Jawaban: D. (4)</b><br>Ide pokok paragraf ini adalah <b>faktor penentu kesuksesan startup (eksekusi dan tim/founder inti)</b>. Kalimat (5) merujuk kembali ke gagasan tim. Kalimat (4) yang menyinggung fenomena karyawan Gen Z pindah-pindah kerja demi gaji merusak koherensi makna paragraf."
+        },
+        {
+            level: "Sulit",
+            type: "Menyusun Kalimat",
+            question: "Susun kalimat berikut menjadi paragraf padu yang membahas fungsi psikologis sebuah aktivitas!<br><br>(1) Hal ini membuktikan bahwa seni memiliki fungsi terapeutik yang mendalam.<br>(2) Melukis sering dijadikan medium oleh seseorang untuk mengekspresikan emosi yang terpendam.<br>(3) Tanpa disadari, beban pikiran yang berat perlahan luruh seiring tangan menorehkan warna di kanvas.<br>(4) Warna-warna yang dipilih tersebut biasanya merepresentasikan suasana batin pelukisnya secara jujur.<br>(5) Oleh karena itu, pendekatan terapi seni mulai banyak diadopsi di berbagai klinik psikologi modern.",
+            options: [
+                "A. (2)-(4)-(3)-(1)-(5)",
+                "B. (2)-(3)-(4)-(1)-(5)",
+                "C. (1)-(2)-(4)-(3)-(5)",
+                "D. (2)-(4)-(1)-(3)-(5)",
+                "E. (2)-(1)-(4)-(3)-(5)"
+            ],
+            correct: 0,
+            explanation: "<b>Jawaban: A</b><br>(2) Ide pembuka: melukis sbg ekspresi emosi.<br>(4) Menjelaskan lebih lanjut elemen melukis (warna = suasana batin).<br>(3) Proses melepaskan emosi (beban pikiran luruh).<br>(1) Simpulan dari fenomena (1-3) bahwa seni punya fungsi terapeutik (<i>Hal ini membuktikan...</i>).<br>(5) Simpulan/tindakan akhir (<i>Oleh karena itu...</i> terapi seni diadopsi)."
+        },
+        {
+            level: "Sulit",
+            type: "Melengkapi Konjungsi",
+            question: "Kurikulum pendidikan nasional mutlak perlu dievaluasi secara berkala ... tetap relevan dengan cepatnya perubahan zaman. ..., pembaruan kurikulum ini harus diiringi secara paralel dengan peningkatan kualitas pedagogik guru. ..., sehebat apa pun rancangan silabus di atas kertas, target belajar tak akan tercapai jika sang pengajar belum siap beradaptasi.<br><br>Kata hubung intrakalimat dan antarkalimat yang paling tepat berturut-turut adalah...",
+            options: [
+                "A. karena, Akan tetapi, Bahkan",
+                "B. agar, Selain itu, Sebab",
+                "C. sehingga, Sebaliknya, Namun",
+                "D. untuk, Kemudian, Oleh karena itu",
+                "E. supaya, Meskipun demikian, Akibatnya"
+            ],
+            correct: 1,
+            explanation: "<b>Jawaban: B</b><br>Rumpang 1 intrakalimat: Menyatakan tujuan (<i>agar/supaya</i> tetap relevan).<br>Rumpang 2 antarkalimat: Menambahkan syarat sejajar yang tak kalah penting (<i>Selain itu</i>).<br>Rumpang 3 antarkalimat: Menyatakan alasan/kausalitas logis mengapa kualitas guru itu penting (<i>Sebab / Karena</i>)."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let isAnswered = false;
+
+    // DOM Elements
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const explanationBox = document.getElementById('explanation-box');
+    const btnNext = document.getElementById('btn-next');
+    const progressText = document.getElementById('progress-text');
+    const difficultyBadge = document.getElementById('difficulty-badge');
+    const scoreText = document.getElementById('score-text');
+    const feedbackText = document.getElementById('feedback-text');
+
+    function loadQuestion() {
+        const q = quizData[currentQuestionIndex];
+        
+        // Reset state
+        isAnswered = false;
+        explanationBox.style.display = 'none';
+        btnNext.style.display = 'none';
+        optionsContainer.innerHTML = '';
+        
+        // Update header info
+        progressText.innerText = `Soal ${currentQuestionIndex + 1} dari ${quizData.length}`;
+        
+        // Setup difficulty badge
+        difficultyBadge.innerText = `Tingkat: ${q.level}`;
+        if(q.level === 'Sedang') {
+            difficultyBadge.className = 'difficulty-badge diff-sedang';
+        } else {
+            difficultyBadge.className = 'difficulty-badge diff-sulit';
+        }
+
+        // Setup Question Text
+        questionText.innerHTML = `<b>[${q.type}]</b><br><br>${q.question}`;
+
+        // Create Options
+        q.options.forEach((optText, i) => {
+            const optDiv = document.createElement('div');
+            optDiv.className = 'option';
+            optDiv.innerHTML = optText;
+            optDiv.onclick = () => selectOption(i, optDiv);
+            optionsContainer.appendChild(optDiv);
+        });
+    }
+
+    function selectOption(selectedIndex, selectedDiv) {
+        if (isAnswered) return; // Prevent multiple clicks
+        isAnswered = true;
+
+        const q = quizData[currentQuestionIndex];
+        const allOptions = optionsContainer.children;
+
+        // Disable all options
+        for(let i = 0; i < allOptions.length; i++) {
+            allOptions[i].classList.add('disabled');
+        }
+
+        // Check Correct/Incorrect
+        if (selectedIndex === q.correct) {
+            selectedDiv.classList.add('correct');
+            score++;
+        } else {
+            selectedDiv.classList.add('incorrect');
+            allOptions[q.correct].classList.add('correct'); // Reveal true answer
+        }
+
+        // Show Explanation
+        explanationBox.innerHTML = q.explanation;
+        explanationBox.style.display = 'block';
+
+        // Show Next Button
+        btnNext.style.display = 'block';
+        if (currentQuestionIndex === quizData.length - 1) {
+            btnNext.innerText = 'Lihat Hasil Akhir';
+        } else {
+            btnNext.innerText = 'Soal Selanjutnya';
+        }
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizScreen.style.display = 'none';
+        resultScreen.style.display = 'block';
+        scoreText.innerText = `${score} / ${quizData.length}`;
+        
+        let percentage = (score / quizData.length) * 100;
+        if (percentage >= 85) {
+            feedbackText.innerHTML = "🎯 <b>Luar Biasa!</b> Logika dan pemahaman struktur kalimatmu sudah di level dewa. Kamu sangat siap menghadapi TKA!";
+            feedbackText.style.color = "var(--success)";
+        } else if (percentage >= 60) {
+            feedbackText.innerHTML = "👍 <b>Kerja Bagus!</b> Pemahamanmu sudah kuat. Tinggal pertajam lagi analisis soal tipe Sulit (Pronomina & Konjungsi).";
+            feedbackText.style.color = "#d97706";
+        } else {
+            feedbackText.innerHTML = "💪 <b>Terus Semangat!</b> Jangan menyerah. Baca kembali materi konjungsi dan repetisi kalimat sebelum mencoba kuis ini lagi.";
+            feedbackText.style.color = "var(--danger)";
+        }
+    }
+
+    // Initialize Quiz
+    loadQuestion();
+</script>
+
+</body>
+</html>

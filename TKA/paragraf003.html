@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Kuis TKA SMA: Paragraf (Struktur & Koherensi) - 20 Soal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', Roboto, system-ui, sans-serif;
+            background: linear-gradient(145deg, #1b2b3f 0%, #0d1922 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            margin: 0;
+        }
+
+        .quiz-wrapper {
+            width: 100%;
+            max-width: 850px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 2.5rem;
+            padding: 2rem 1.8rem;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f0f3fa;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(to right, #c6ddff, #a5c9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subhead {
+            text-align: center;
+            color: #9aa9bc;
+            margin-bottom: 1.8rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+            padding-bottom: 1rem;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .progress-bar-bg {
+            flex: 3;
+            min-width: 160px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #4ea8ff, #6dc5ff);
+            border-radius: 20px;
+            transition: width 0.3s ease;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 0.4rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #e0e8f2;
+            white-space: nowrap;
+        }
+
+        .card {
+            background: rgba(18, 28, 42, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            padding: 2rem 1.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 1.8rem;
+            color: #f0f6ff;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #dde5f2;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: #6ea8ff;
+        }
+
+        .option-item input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.3rem;
+            height: 1.3rem;
+            border: 2px solid #8ba4c7;
+            border-radius: 50%;
+            margin-right: 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option-item input[type="radio"]:checked {
+            border-color: #4ea8ff;
+            background: #4ea8ff;
+            box-shadow: 0 0 12px #4ea8ff;
+        }
+
+        .option-item input[type="radio"]:checked::after {
+            content: '';
+            width: 0.55rem;
+            height: 0.55rem;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .option-letter {
+            font-weight: 700;
+            margin-right: 0.7rem;
+            color: #b0cbff;
+            min-width: 1.4rem;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            background: #2e425a;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: white;
+            letter-spacing: 0.3px;
+            background: linear-gradient(135deg, #2a4159, #1b2a3a);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:hover {
+            filter: brightness(1.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0070e0, #004fa3);
+            border: 1px solid #3399ff;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #1f8b4c, #0e5e32);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .explanation-box {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            background: rgba(0, 20, 40, 0.7);
+            border-left: 5px solid #4ea8ff;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            color: #cfdef5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-screen {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: conic-gradient(#4ea8ff calc(var(--score-percent) * 1%), #2a3a4e 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 1rem;
+            color: #8899aa;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-wrapper {
+                padding: 1.5rem 1rem;
+            }
+            .card {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-wrapper">
+        <h1>📘 PARAGRAF: STRUKTUR & KOHERENSI</h1>
+        <div class="subhead">Kuis Interaktif 20 Soal • Persiapan TKA SMA</div>
+
+        <div class="progress-container">
+            <div class="progress-bar-bg">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <span class="badge" id="questionCounter">Soal 1/20</span>
+            <span class="badge" id="scoreDisplay">Skor: 0</span>
+        </div>
+
+        <div class="card" id="questionCard">
+            <div class="question-text" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="submitBtn" disabled>✔ Jawab</button>
+                <button class="btn" id="nextBtn" style="display:none;">Lanjut ➡️</button>
+            </div>
+            <div id="explanationArea"></div>
+        </div>
+
+        <div class="footer-note">Pilih jawaban, lalu klik <strong>Jawab</strong> untuk melihat pembahasan.</div>
+    </div>
+
+    <script>
+        (function() {
+            // 20 soal TKA SMA Bahasa Indonesia – Paragraf Struktur & Koherensi
+            const questions = [{
+                text: "Susunlah kalimat berikut agar menjadi paragraf yang padu!\n(1) Akibatnya, berbagai spesies kehilangan habitat alaminya.\n(2) Deforestasi masih menjadi masalah lingkungan di berbagai wilayah Indonesia.\n(3) Penebangan hutan dilakukan untuk membuka lahan perkebunan dan permukiman.\n(4) Oleh karena itu, upaya reboisasi harus terus dilakukan secara berkelanjutan.\n(5) Kondisi tersebut juga meningkatkan risiko banjir dan longsor.\n\nUrutan yang tepat adalah ....",
+                options: [
+                    "a. (2)–(3)–(1)–(5)–(4)",
+                    "b. (2)–(1)–(3)–(5)–(4)",
+                    "c. (3)–(2)–(1)–(5)–(4)",
+                    "d. (2)–(3)–(5)–(1)–(4)",
+                    "e. (3)–(1)–(2)–(5)–(4)"
+                ],
+                answer: "a",
+                explanation: "Kalimat (2) merupakan kalimat umum yang memperkenalkan topik. Kalimat (3) menjelaskan penyebab. Kalimat (1) diawali 'Akibatnya', sehingga harus mengikuti penyebab. Kalimat (5) menambahkan akibat lain. Kalimat (4) menjadi penutup berupa solusi."
+            }, {
+                text: "Perubahan iklim menyebabkan suhu bumi terus meningkat. ________, berbagai negara mulai mengembangkan energi terbarukan. ________, penggunaan bahan bakar fosil masih cukup tinggi.\n\nKonjungsi yang tepat adalah ....",
+                options: [
+                    "a. Oleh karena itu, Namun",
+                    "b. Selain itu, Akibatnya",
+                    "c. Karena, Oleh sebab itu",
+                    "d. Bahkan, Jadi",
+                    "e. Sebaliknya, Oleh karena itu"
+                ],
+                answer: "a",
+                explanation: "Kalimat kedua merupakan akibat sehingga memakai Oleh karena itu. Kalimat ketiga menunjukkan pertentangan sehingga memakai Namun."
+            }, {
+                text: "(1) Perpustakaan digital semakin banyak dimanfaatkan pelajar.\n(2) Ribuan buku dapat diakses melalui telepon pintar.\n(3) ...\n(4) Akibatnya, minat membaca masyarakat perlahan meningkat.\n\nKalimat yang paling tepat adalah ....",
+                options: [
+                    "a. Buku cetak masih dijual di berbagai toko.",
+                    "b. Kemudahan tersebut membuat masyarakat lebih mudah memperoleh bahan bacaan.",
+                    "c. Banyak perpustakaan dibangun sejak zaman Belanda.",
+                    "d. Harga telepon pintar terus mengalami penurunan.",
+                    "e. Sebagian pelajar lebih menyukai olahraga."
+                ],
+                answer: "b",
+                explanation: "Kalimat (3) harus menjembatani antara kemudahan akses buku digital dan meningkatnya minat membaca."
+            }, {
+                text: "(1) Energi matahari merupakan sumber energi terbarukan.\n(2) Panel surya mampu mengubah cahaya matahari menjadi listrik.\n(3) Penggunaan panel surya dapat mengurangi emisi karbon.\n(4) Harga beberapa jenis sepeda listrik mulai turun.\n(5) Banyak negara mulai memanfaatkan energi surya.\n\nKalimat yang tidak padu adalah ....",
+                options: ["a. (1)", "b. (2)", "c. (3)", "d. (4)", "e. (5)"],
+                answer: "d",
+                explanation: "Paragraf membahas energi surya. Kalimat (4) mengenai harga sepeda listrik tidak mendukung ide pokok."
+            }, {
+                text: "Susunlah kalimat berikut agar menjadi paragraf yang padu!\n(1) Mereka juga belajar bekerja sama dalam tim.\n(2) Kegiatan pramuka memberikan banyak manfaat bagi peserta didik.\n(3) Selain itu, rasa tanggung jawab semakin berkembang.\n(4) Berbagai kegiatan dilakukan secara berkelompok.\n(5) Pengalaman tersebut berguna dalam kehidupan sehari-hari.\n\nUrutan yang tepat adalah ....",
+                options: [
+                    "a. (2)-(4)-(1)-(3)-(5)",
+                    "b. (2)-(1)-(4)-(3)-(5)",
+                    "c. (4)-(2)-(1)-(3)-(5)",
+                    "d. (2)-(3)-(1)-(4)-(5)",
+                    "e. (2)-(4)-(3)-(1)-(5)"
+                ],
+                answer: "a",
+                explanation: "Kalimat (2) sebagai ide pokok. Kalimat (4) menjelaskan bentuk kegiatan. Kalimat (1) menjelaskan manfaat kegiatan kelompok. Kalimat (3) menambahkan manfaat lain. Kalimat (5) menjadi simpulan."
+            }, {
+                text: "Banyak siswa mengikuti bimbingan belajar menjelang TKA. ________, mereka tetap harus belajar secara mandiri di rumah.\n\nKonjungsi yang tepat adalah ....",
+                options: [
+                    "a. Oleh karena itu",
+                    "b. Namun",
+                    "c. Bahkan",
+                    "d. Akibatnya",
+                    "e. Jadi"
+                ],
+                answer: "b",
+                explanation: "Hubungan kedua kalimat berupa pertentangan sehingga menggunakan Namun."
+            }, {
+                text: "(1) Sampah plastik menjadi masalah di berbagai kota.\n(2) Banyak sungai dipenuhi limbah plastik.\n(3) ...\n(4) Oleh karena itu, masyarakat perlu mengurangi penggunaan plastik sekali pakai.\n\nKalimat yang tepat adalah ....",
+                options: [
+                    "a. Sampah organik lebih mudah terurai.",
+                    "b. Kondisi tersebut mengancam ekosistem perairan.",
+                    "c. Banyak orang gemar memancing.",
+                    "d. Harga plastik semakin murah.",
+                    "e. Sungai memiliki arus yang deras."
+                ],
+                answer: "b",
+                explanation: "Kalimat (3) harus menjelaskan dampak limbah plastik sebelum muncul solusi pada kalimat (4)."
+            }, {
+                text: "(1) Bersepeda secara rutin dapat meningkatkan kebugaran tubuh.\n(2) Aktivitas tersebut membantu menjaga kesehatan jantung.\n(3) Selain itu, bersepeda melatih kekuatan otot kaki.\n(4) Banyak toko sepeda menawarkan potongan harga akhir tahun.\n(5) Bersepeda juga dapat mengurangi tingkat stres.\n\nKalimat yang tidak padu adalah ....",
+                options: ["a. (1)", "b. (2)", "c. (3)", "d. (4)", "e. (5)"],
+                answer: "d",
+                explanation: "Topik paragraf adalah manfaat bersepeda bagi kesehatan. Kalimat (4) membahas promosi penjualan sepeda sehingga tidak padu."
+            }, {
+                text: "Susunlah kalimat berikut agar menjadi paragraf yang padu!\n(1) Setelah panen, gabah dijemur hingga kadar airnya berkurang.\n(2) Petani mulai menanam padi pada awal musim hujan.\n(3) Selanjutnya, bibit dipindahkan ke lahan sawah.\n(4) Bibit terlebih dahulu disemai selama beberapa minggu.\n(5) Hasil panen kemudian digiling menjadi beras.\n\nUrutan yang tepat adalah ....",
+                options: [
+                    "a. (2)-(4)-(3)-(1)-(5)",
+                    "b. (4)-(2)-(3)-(1)-(5)",
+                    "c. (2)-(3)-(4)-(1)-(5)",
+                    "d. (2)-(4)-(1)-(3)-(5)",
+                    "e. (4)-(3)-(2)-(1)-(5)"
+                ],
+                answer: "a",
+                explanation: "Urutan mengikuti proses budidaya padi secara kronologis: menanam → menyemai → memindahkan bibit → panen dan penjemuran → penggilingan."
+            }, {
+                text: "Literasi digital perlu ditingkatkan di kalangan masyarakat. ________, kemampuan memilah informasi menjadi semakin penting. ________, penyebaran berita palsu dapat diminimalkan.\n\nKonjungsi yang tepat adalah ....",
+                options: [
+                    "a. Sebaliknya, Namun",
+                    "b. Oleh karena itu, Dengan demikian",
+                    "c. Bahkan, Tetapi",
+                    "d. Akibatnya, Sebab",
+                    "e. Selain itu, Namun"
+                ],
+                answer: "b",
+                explanation: "Kalimat kedua merupakan akibat dari pentingnya literasi digital sehingga menggunakan Oleh karena itu. Kalimat ketiga merupakan simpulan atau hasil yang diharapkan sehingga menggunakan Dengan demikian."
+            }, {
+                text: "Susunlah kalimat berikut agar menjadi paragraf yang padu!\n(1) Setelah dipilah, sampah tersebut diolah menjadi berbagai produk baru.\n(2) Daur ulang merupakan salah satu cara mengurangi jumlah sampah.\n(3) Proses tersebut membantu mengurangi pencemaran lingkungan.\n(4) Langkah pertama adalah memisahkan sampah berdasarkan jenisnya.\n(5) Oleh karena itu, kebiasaan memilah sampah perlu diterapkan sejak dini.\n\nUrutan yang tepat adalah ....",
+                options: [
+                    "a. (2)–(4)–(1)–(3)–(5)",
+                    "b. (2)–(1)–(4)–(3)–(5)",
+                    "c. (4)–(2)–(1)–(3)–(5)",
+                    "d. (2)–(3)–(4)–(1)–(5)",
+                    "e. (4)–(1)–(2)–(3)–(5)"
+                ],
+                answer: "a",
+                explanation: "Kalimat (2) merupakan gagasan umum. Kalimat (4) menjelaskan tahap pertama proses daur ulang. Kalimat (1) melanjutkan proses setelah pemilahan. Kalimat (3) menjelaskan manfaatnya. Kalimat (5) menjadi simpulan sekaligus ajakan."
+            }, {
+                text: "Kemampuan berpikir kritis perlu dikembangkan sejak dini. ________, siswa akan lebih mampu menganalisis informasi secara objektif. ________, mereka tidak mudah percaya pada berita yang belum terbukti kebenarannya.\n\nKonjungsi yang tepat adalah ....",
+                options: [
+                    "a. Sebaliknya, Namun",
+                    "b. Oleh karena itu, Akibatnya",
+                    "c. Bahkan, Tetapi",
+                    "d. Karena, Jadi",
+                    "e. Selain itu, Sebab"
+                ],
+                answer: "b",
+                explanation: "Kalimat kedua merupakan akibat dari pentingnya berpikir kritis sehingga menggunakan Oleh karena itu. Kalimat ketiga merupakan akibat lanjutan sehingga menggunakan Akibatnya."
+            }, {
+                text: "(1) Pemerintah terus mendorong penggunaan kendaraan listrik.\n(2) Kendaraan listrik menghasilkan emisi yang lebih rendah.\n(3) ...\n(4) Dengan demikian, kualitas udara di perkotaan diharapkan semakin baik.\n\nKalimat yang tepat adalah ....",
+                options: [
+                    "a. Harga kendaraan listrik lebih mahal dibandingkan kendaraan biasa.",
+                    "b. Pengurangan emisi membantu menekan pencemaran udara.",
+                    "c. Jalan tol terus diperluas di berbagai daerah.",
+                    "d. Banyak orang memilih bepergian saat libur panjang.",
+                    "e. Kendaraan bermotor memerlukan bahan bakar."
+                ],
+                answer: "b",
+                explanation: "Kalimat (3) harus menjelaskan hubungan antara emisi yang rendah dan meningkatnya kualitas udara."
+            }, {
+                text: "(1) Membaca buku setiap hari dapat memperluas wawasan.\n(2) Kebiasaan membaca juga meningkatkan kemampuan berpikir kritis.\n(3) Banyak tokoh sukses memiliki kebiasaan membaca.\n(4) Harga kertas dunia mengalami kenaikan dalam beberapa tahun terakhir.\n(5) Oleh sebab itu, budaya membaca perlu terus ditingkatkan.\n\nKalimat yang tidak padu adalah ....",
+                options: ["a. (1)", "b. (2)", "c. (3)", "d. (4)", "e. (5)"],
+                answer: "d",
+                explanation: "Topik paragraf membahas manfaat membaca. Kalimat (4) mengenai harga kertas tidak mendukung ide pokok."
+            }, {
+                text: "Susunlah kalimat berikut agar menjadi paragraf yang padu!\n(1) Setelah itu, peserta melakukan presentasi hasil diskusi.\n(2) Kegiatan diskusi kelompok melatih kemampuan berkomunikasi.\n(3) Guru membagi siswa ke dalam beberapa kelompok.\n(4) Setiap kelompok diminta membahas suatu permasalahan.\n(5) Melalui kegiatan tersebut, siswa belajar menyampaikan pendapat secara santun.\n\nUrutan yang tepat adalah ....",
+                options: [
+                    "a. (2)-(3)-(4)-(1)-(5)",
+                    "b. (3)-(2)-(4)-(1)-(5)",
+                    "c. (2)-(4)-(3)-(1)-(5)",
+                    "d. (2)-(3)-(1)-(4)-(5)",
+                    "e. (3)-(4)-(2)-(1)-(5)"
+                ],
+                answer: "a",
+                explanation: "Kalimat (2) merupakan gagasan umum. Kalimat (3), (4), dan (1) menjelaskan urutan kegiatan. Kalimat (5) menjadi simpulan manfaat."
+            }, {
+                text: "Harga kebutuhan pokok mengalami kenaikan menjelang hari raya. ________, masyarakat tetap berupaya memenuhi kebutuhan keluarganya.\n\nKonjungsi yang tepat adalah ....",
+                options: [
+                    "a. Oleh karena itu",
+                    "b. Namun",
+                    "c. Akibatnya",
+                    "d. Bahkan",
+                    "e. Jadi"
+                ],
+                answer: "b",
+                explanation: "Hubungan kedua kalimat adalah pertentangan: harga naik, tetapi masyarakat tetap berbelanja."
+            }, {
+                text: "(1) Menanam pohon memberikan banyak manfaat bagi lingkungan.\n(2) Pohon mampu menyerap karbon dioksida dari udara.\n(3) ...\n(4) Oleh karena itu, gerakan menanam pohon perlu terus digalakkan.\n\nKalimat yang tepat adalah ....",
+                options: [
+                    "a. Daun pohon memiliki bentuk yang beragam.",
+                    "b. Udara menjadi lebih bersih dan sejuk.",
+                    "c. Banyak pohon dijadikan bahan bangunan.",
+                    "d. Pohon dapat tumbuh hingga puluhan meter.",
+                    "e. Sebagian pohon berbunga pada musim tertentu."
+                ],
+                answer: "b",
+                explanation: "Kalimat (3) harus menjelaskan dampak positif dari penyerapan karbon dioksida sehingga mendukung ajakan pada kalimat (4)."
+            }, {
+                text: "(1) Museum menyimpan berbagai benda bersejarah.\n(2) Pengunjung dapat mempelajari perjalanan sejarah bangsa.\n(3) Museum juga menjadi sarana pendidikan bagi generasi muda.\n(4) Banyak restoran baru bermunculan di sekitar pusat kota.\n(5) Kunjungan ke museum dapat menumbuhkan rasa cinta tanah air.\n\nKalimat yang tidak padu adalah ....",
+                options: ["a. (1)", "b. (2)", "c. (3)", "d. (4)", "e. (5)"],
+                answer: "d",
+                explanation: "Kalimat (4) membahas restoran, sedangkan kalimat lainnya membahas fungsi museum."
+            }, {
+                text: "Susunlah kalimat berikut agar menjadi paragraf yang padu!\n(1) Selanjutnya, bibit sayuran dipindahkan ke lahan tanam.\n(2) Berkebun di pekarangan menjadi kegiatan yang semakin diminati masyarakat.\n(3) Setelah beberapa minggu, tanaman mulai menghasilkan panen.\n(4) Bibit disemai terlebih dahulu pada wadah khusus.\n(5) Hasil panen dapat dimanfaatkan untuk kebutuhan sehari-hari.\n\nUrutan yang tepat adalah ....",
+                options: [
+                    "a. (2)-(4)-(1)-(3)-(5)",
+                    "b. (4)-(2)-(1)-(3)-(5)",
+                    "c. (2)-(1)-(4)-(3)-(5)",
+                    "d. (2)-(4)-(3)-(1)-(5)",
+                    "e. (4)-(1)-(2)-(3)-(5)"
+                ],
+                answer: "a",
+                explanation: "Kalimat (2) merupakan pengantar. Kalimat (4), (1), dan (3) menunjukkan urutan proses berkebun. Kalimat (5) menjadi penutup."
+            }, {
+                text: "Penggunaan internet memberikan banyak manfaat bagi dunia pendidikan. ________, peserta didik dapat mengakses berbagai sumber belajar dari seluruh dunia. ________, mereka tetap harus menggunakan internet secara bijaksana.\n\nKonjungsi yang tepat adalah ....",
+                options: [
+                    "a. Sebaliknya, Bahkan",
+                    "b. Oleh karena itu, Namun",
+                    "c. Akibatnya, Jadi",
+                    "d. Karena, Oleh sebab itu",
+                    "e. Selain itu, Dengan demikian"
+                ],
+                answer: "b",
+                explanation: "Kalimat kedua merupakan akibat dari manfaat internet sehingga menggunakan Oleh karena itu. Kalimat ketiga menunjukkan pertentangan atau peringatan bahwa internet tetap harus digunakan secara bijaksana, sehingga konjungsi Namun paling tepat."
+            }];
+
+            let currentIndex = 0;
+            let score = 0;
+            let answered = false;
+            let userAnswers = new Array(questions.length).fill(null);
+
+            const questionText = document.getElementById('questionText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const submitBtn = document.getElementById('submitBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const explanationArea = document.getElementById('explanationArea');
+            const progressFill = document.getElementById('progressFill');
+            const questionCounter = document.getElementById('questionCounter');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+
+            function renderQuestion(index) {
+                const q = questions[index];
+                questionText.innerText = q.text;
+                optionsContainer.innerHTML = '';
+                q.options.forEach((opt, i) => {
+                    const letter = String.fromCharCode(97 + i); // a, b, c...
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option-item';
+                    optionDiv.innerHTML = `
+                        <input type="radio" name="quizOption" id="opt${i}" value="${letter}">
+                        <span class="option-letter">${letter}.</span> ${opt.substring(3)}
+                    `;
+                    const radio = optionDiv.querySelector('input');
+                    radio.addEventListener('change', () => {
+                        if (!answered) {
+                            submitBtn.disabled = false;
+                        }
+                    });
+                    if (userAnswers[index] === letter) {
+                        radio.checked = true;
+                        if (!answered) submitBtn.disabled = false;
+                    }
+                    optionsContainer.appendChild(optionDiv);
+                });
+
+                explanationArea.innerHTML = '';
+                submitBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'none';
+                submitBtn.disabled = true;
+                answered = false;
+
+                if (userAnswers[index] !== null) {
+                    answered = true;
+                    submitBtn.style.display = 'none';
+                    nextBtn.style.display = 'inline-block';
+                    const correct = q.answer;
+                    const selected = userAnswers[index];
+                    document.querySelectorAll('.option-item').forEach((optDiv, idx) => {
+                        const letter = String.fromCharCode(97 + idx);
+                        const radioEl = optDiv.querySelector('input');
+                        radioEl.disabled = true;
+                        if (letter === correct) {
+                            optDiv.style.borderColor = '#2ecc71';
+                            optDiv.style.backgroundColor = 'rgba(46,204,113,0.15)';
+                        } else if (letter === selected && selected !== correct) {
+                            optDiv.style.borderColor = '#e74c3c';
+                            optDiv.style.backgroundColor = 'rgba(231,76,60,0.2)';
+                        }
+                        optDiv.style.cursor = 'default';
+                    });
+                    explanationArea.innerHTML = `<div class="explanation-box"><strong>✅ Jawaban: ${correct.toUpperCase()}</strong><br>📌 ${q.explanation}</div>`;
+                }
+
+                if (index === questions.length - 1) {
+                    nextBtn.innerText = '🏁 Lihat Hasil';
+                } else {
+                    nextBtn.innerText = 'Lanjut ➡️';
+                }
+
+                updateProgressAndScore();
+                questionCounter.innerText = `Soal ${index+1}/${questions.length}`;
+                progressFill.style.width = ((index+1) / questions.length) * 100 + '%';
+            }
+
+            function updateProgressAndScore() {
+                let correctCount = 0;
+                for (let i = 0; i < questions.length; i++) {
+                    if (userAnswers[i] === questions[i].answer) correctCount++;
+                }
+                score = correctCount;
+                scoreDisplay.innerText = `Skor: ${score}/${questions.length}`;
+            }
+
+            function handleSubmit() {
+                if (answered) return;
+                const selectedRadio = document.querySelector('input[name="quizOption"]:checked');
+                if (!selectedRadio) return;
+                const userAns = selectedRadio.value;
+                userAnswers[currentIndex] = userAns;
+                answered = true;
+
+                const q = questions[currentIndex];
+                const correct = q.answer;
+                explanationArea.innerHTML = `<div class="explanation-box"><strong>${userAns === correct ? '✅ Benar!' : '❌ Kurang Tepat'}</strong> Jawaban: ${correct.toUpperCase()}<br>📌 ${q.explanation}</div>`;
+
+                document.querySelectorAll('.option-item').forEach((optDiv, idx) => {
+                    const letter = String.fromCharCode(97 + idx);
+                    const radioEl = optDiv.querySelector('input');
+                    radioEl.disabled = true;
+                    if (letter === correct) {
+                        optDiv.style.borderColor = '#2ecc71';
+                        optDiv.style.backgroundColor = 'rgba(46,204,113,0.15)';
+                    } else if (letter === userAns && userAns !== correct) {
+                        optDiv.style.borderColor = '#e74c3c';
+                        optDiv.style.backgroundColor = 'rgba(231,76,60,0.2)';
+                    }
+                    optDiv.style.cursor = 'default';
+                });
+
+                submitBtn.style.display = 'none';
+                nextBtn.style.display = 'inline-block';
+                if (currentIndex === questions.length - 1) {
+                    nextBtn.innerText = '🏁 Lihat Hasil';
+                }
+                updateProgressAndScore();
+            }
+
+            function handleNext() {
+                if (currentIndex < questions.length - 1) {
+                    currentIndex++;
+                    renderQuestion(currentIndex);
+                } else {
+                    showResultScreen();
+                }
+            }
+
+            function showResultScreen() {
+                let correctCount = 0;
+                userAnswers.forEach((ans, i) => {
+                    if (ans === questions[i].answer) correctCount++;
+                });
+                const total = questions.length;
+                const percent = Math.round((correctCount / total) * 100);
+                document.getElementById('questionCard').innerHTML = `
+                    <div class="result-screen">
+                        <h2 style="color:white; margin-bottom:0.8rem;">📊 Hasil Kuis Paragraf</h2>
+                        <div class="score-circle" style="--score-percent:${percent};">${correctCount}/${total}</div>
+                        <p style="font-size:1.3rem; margin:1rem 0;">Kamu menjawab <strong>${correctCount}</strong> dari <strong>${total}</strong> soal dengan benar.</p>
+                        <p style="color:#b0cbff;">Persentase: ${percent}%</p>
+                        <button class="btn btn-success" id="restartBtn" style="margin-top:1.5rem;">🔁 Ulangi Kuis</button>
+                    </div>
+                `;
+                submitBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                explanationArea.innerHTML = '';
+                progressFill.style.width = '100%';
+                questionCounter.innerText = `Selesai`;
+                scoreDisplay.innerText = `Skor: ${correctCount}/${total}`;
+                document.getElementById('restartBtn').addEventListener('click', restartQuiz);
+            }
+
+            function restartQuiz() {
+                currentIndex = 0;
+                score = 0;
+                answered = false;
+                userAnswers = new Array(questions.length).fill(null);
+                submitBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'none';
+                renderQuestion(0);
+                updateProgressAndScore();
+            }
+
+            submitBtn.addEventListener('click', handleSubmit);
+            nextBtn.addEventListener('click', handleNext);
+
+            renderQuestion(0);
+        })();
+    </script>
+</body>
+</html>
