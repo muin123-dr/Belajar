@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Soal TKA - Kata, Makna, dan Diksi</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --error: #dc2626;
+            --error-light: #fee2e2;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            padding: 0.2rem 0.8rem;
+            border-radius: 99px;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .options-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .option-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover:not(.disabled) {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-label.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .option-label.correct {
+            border-color: var(--success);
+            background: var(--success-light);
+            color: #166534;
+        }
+
+        .option-label.wrong {
+            border-color: var(--error);
+            background: var(--error-light);
+            color: #991b1b;
+        }
+
+        .option-label.disabled {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .option-input {
+            display: none;
+        }
+
+        .option-letter {
+            font-weight: bold;
+            margin-right: 1rem;
+            min-width: 1.5rem;
+        }
+
+        .btn-check {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background 0.2s;
+        }
+
+        .btn-check:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-check:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            border-radius: 4px 8px 8px 4px;
+            display: none;
+            font-size: 0.95rem;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-panel {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 1rem;
+            z-index: 100;
+        }
+        .score-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Ujian TKA SMA: Bahasa Indonesia</h1>
+        <p>Materi: Kata, Makna, dan Diksi (25 Soal)</p>
+    </div>
+
+    <div class="container" id="quiz-container">
+        <!-- Questions injected via JS -->
+    </div>
+
+    <script>
+        const questions = [{"q": "Bacalah paragraf berikut!<br><i>(1) Ekosistem hutan tropis menyimpan keanekaragaman hayati yang luar biasa. (2) Namun, setiap tahun areal hutan terus tergerus oleh pembalakan liar dan alih fungsi lahan. (3) Perilaku <b>serakah</b> segelintir pihak membuat bumi kehilangan paru-parunya.</i><br><br>Sinonim kata <i>serakah</i> dalam kalimat (3) yang paling tepat sesuai konteks bacaan adalah \u2026", "options": ["pelit", "tamak", "egois", "hemat", "rakus"], "answer": 1, "explanation": "<i>Serakah</i> dalam konteks pembalakan liar berarti sifat ingin mengambil sebanyak-banyaknya tanpa peduli akibat atau merugikan lingkungan. Sinonim yang paling pas dan elegan dalam konteks ini adalah <b>tamak</b>. Rakus lebih dekat ke konteks konsumsi (makan/minum)."}, {"q": "Dalam kalimat <i>\"Perilaku serakah segelintir pihak membuat bumi kehilangan <b>paru-parunya</b>\"</i>, kata <i>paru-paru</i> bermakna \u2026", "options": ["organ pernapasan manusia", "alat bantu pernapasan", "kawasan hijau penyeimbang ekosistem (konotatif)", "bagian tubuh yang vital", "tempat pertukaran oksigen secara denotatif"], "answer": 2, "explanation": "Kata <i>paru-paru</i> di sini bukan menunjuk pada organ pernapasan makhluk hidup yang sebenarnya, melainkan digunakan sebagai majas (makna konotatif) untuk menyebut <b>kawasan hutan/hijau</b> yang berfungsi menghasilkan oksigen bagi bumi."}, {"q": "<i>\"Untuk itu, upaya reboisasi harus <b>digencarkan</b> sebagai wujud nyata kepedulian terhadap lingkungan.\"</i><br><br>Antonim dari kata <i>digencarkan</i> yang sesuai konteks adalah \u2026", "options": ["dihentikan", "dikurangi", "dilambatkan", "dipercepat", "dilalaikan"], "answer": 0, "explanation": "<i>Digencarkan</i> artinya digiatkan, dipercepat, atau didorong pelaksanaannya. Lawan kata yang paling ekstrim dan logis sesuai konteks upaya yang sedang dicanangkan adalah <b>dihentikan</b>."}, {"q": "<i>\"Sayangnya, banyak pemuda yang ingin meraih keberhasilan dengan cara <b>instan</b>.\"</i><br><br>Makna kata <i>instan</i> dalam kalimat tersebut adalah \u2026", "options": ["langsung jadi tanpa proses panjang (denotatif)", "serba cepat dan tidak mau bersusah payah (konotatif negatif)", "praktis dan efisien (konotatif positif)", "dalam waktu singkat secara harfiah", "siap pakai"], "answer": 1, "explanation": "Dalam konteks meraih keberhasilan, kata <i>instan</i> berkonotasi negatif, yaitu merujuk pada sikap ingin berhasil dengan <b>serba cepat dan enggan bersusah payah</b> (enggan berlelah-lelah)."}, {"q": "<i>\"Mereka enggan berlelah-lelah dan mudah <b>putus asa</b> saat menemui kegagalan.\"</i><br><br>Kata <i>putus asa</i> pada kalimat di atas memiliki hubungan antonim dengan \u2026", "options": ["semangat", "pasrah", "optimistis", "gigih", "menyerah"], "answer": 3, "explanation": "<i>Putus asa</i> berarti menyerah, hilang harapan, atau berhenti berusaha. Antonim kontekstual yang paling tepat bagi orang yang menemui kegagalan adalah <b>gigih</b> (terus berusaha tak kenal lelah)."}, {"q": "<i>\"Perkembangan teknologi telah <b>mendorong</b> lahirnya berbagai inovasi yang mempermudah kehidupan masyarakat.\"</i><br><br>Makna kata <i>mendorong</i> pada kalimat tersebut adalah \u2026", "options": ["menekan", "menyebabkan", "mengangkat", "menghalangi", "menghentikan"], "answer": 1, "explanation": "Dalam konteks kalimat tersebut, <i>mendorong lahirnya inovasi</i> bukan berarti mendorong secara fisik, melainkan <b>menyebabkan, memicu, atau memfasilitasi</b> terjadinya sesuatu."}, {"q": "<i>\"Setelah bertahun-tahun bekerja keras, akhirnya ia menjadi <b>buah bibir</b> di kampungnya.\"</i><br><br>Makna kata <i>buah bibir</i> adalah \u2026", "options": ["makanan khas", "bahan pembicaraan banyak orang", "hasil panen", "buah yang dijual", "hadiah"], "answer": 1, "explanation": "<i>Buah bibir</i> adalah sebuah ungkapan atau kiasan (makna konotatif) yang berarti <b>bahan pembicaraan banyak orang</b> (bisa dalam arti positif maupun negatif, tergantung konteks)."}, {"q": "<i>\"Pemerintah mengajak masyarakat untuk lebih <b>hemat</b> menggunakan energi listrik agar cadangan energi tetap terjaga.\"</i><br><br>Antonim kata <i>hemat</i> adalah \u2026", "options": ["efisien", "bijaksana", "boros", "cermat", "sederhana"], "answer": 2, "explanation": "Lawan kata <i>hemat</i> (menggunakan sesuatu secukupnya dan berhati-hati) adalah <b>boros</b> (menggunakan sesuatu secara berlebihan dan tidak terencana)."}, {"q": "<i>\"Tim peneliti berhasil menemukan metode baru yang lebih <b>efektif</b> dalam mengolah limbah plastik.\"</i><br><br>Padanan kata <i>efektif</i> adalah \u2026", "options": ["berhasil guna", "rumit", "lambat", "sederhana", "biasa"], "answer": 0, "explanation": "Kata <i>efektif</i> merujuk pada sesuatu yang dapat membawa hasil atau tepat sasaran. Padanan kata yang baku dalam bahasa Indonesia adalah <b>berhasil guna</b>."}, {"q": "<i>\"Para peserta diminta <b>mengumpulkan</b> laporan sebelum pukul 12.00.\"</i><br><br>Makna gramatikal pada kata <i>mengumpulkan</i> muncul karena \u2026", "options": ["perubahan bunyi", "penggunaan kata asing", "penambahan imbuhan", "perubahan ejaan", "penggunaan majas"], "answer": 2, "explanation": "Kata <i>mengumpulkan</i> terbentuk dari kata dasar <i>kumpul</i> yang mendapat konfiks (imbuhan) <i>me-</i> dan <i>-kan</i>. Makna gramatikal (membuat jadi berkumpul) muncul murni karena <b>penambahan imbuhan</b> tersebut."}, {"q": "<i>\"Pemerintah berupaya keras untuk <b>menggenjot</b> pertumbuhan ekonomi di kuartal ketiga.\"</i><br><br>Padanan kata <i>menggenjot</i> pada kalimat tersebut adalah \u2026", "options": ["Menekan", "Memacu", "Menambah", "Memperluas", "Menaikkan"], "answer": 1, "explanation": "Dalam konteks ekonomi, <i>menggenjot</i> bermakna mendorong dengan kuat atau <b>memacu</b> agar pertumbuhan terjadi lebih cepat dan lebih besar."}, {"q": "<i>\"Berbagai stimulus diberikan kepada pelaku UMKM agar mereka bisa bertahan di tengah <b>badai</b> inflasi yang melanda global.\"</i><br><br>Kata <i>badai</i> pada kalimat di atas bermakna \u2026", "options": ["Angin kencang yang merusak", "Perubahan cuaca yang ekstrem", "Bencana alam yang datang tiba-tiba", "Keadaan atau situasi yang sangat menyulitkan", "Kerugian finansial negara"], "answer": 3, "explanation": "Kata <i>badai</i> di sini digunakan secara konotatif (kiasan). Ini tidak merujuk pada fenomena alam, melainkan pada <b>situasi atau keadaan krisis yang sangat menyulitkan</b> para pelaku UMKM."}, {"q": "<i>\"Namun, <b>pengawasan</b> yang ketat tetap diperlukan agar distribusi bantuan tidak salah sasaran.\"</i><br><br>Makna gramatikal imbuhan <i>pe-an</i> pada kata <i>pengawasan</i> menyatakan makna \u2026", "options": ["Tempat", "Alat", "Hasil", "Kumpulan", "Proses"], "answer": 4, "explanation": "Kata <i>pengawasan</i> (dari kata dasar <i>awas</i>) dengan imbuhan gabung <i>pe-an</i> menyatakan makna <b>proses atau cara</b> (proses mengawasi)."}, {"q": "Pilihlah kalimat di bawah ini yang menggunakan diksi paling tepat dan sesuai konteks situasi berupa ajakan halus dari institusi negara kepada warganya!", "options": ["Pemerintah memerintah masyarakat agar menghemat air.", "Pemerintah memaksa masyarakat agar menghemat air.", "Pemerintah menuntut masyarakat agar menghemat air.", "Pemerintah mengimbau masyarakat agar menghemat air.", "Pemerintah memohon masyarakat agar menghemat air."], "answer": 3, "explanation": "Diksi <b>mengimbau</b> adalah yang paling tepat karena bermakna ajakan yang bersifat resmi, halus, dan persuasif, tidak bersifat diktator (memaksa) atau merendah (memohon)."}, {"q": "<i>\"Presiden Republik Indonesia hari ini memberikan pidato <b>besar</b> di sidang tahunan MPR.\"</i><br><br>Sinonim kontekstual yang paling tepat untuk menggantikan kata <i>besar</i> adalah \u2026", "options": ["luas", "penting", "panjang", "megah", "raksasa"], "answer": 1, "explanation": "Dalam kalimat ini, kata <i>besar</i> tidak merujuk pada ukuran fisik (luas/raksasa), melainkan pada esensi atau signifikansi pidato tersebut. Sinonim yang tepat adalah <b>penting</b>."}, {"q": "<i>\"Polisi sedang <b>melihat</b> rekaman CCTV di lokasi kejadian untuk mencari bukti tambahan.\"</i><br><br>Padanan kata <i>melihat</i> yang lebih akurat sesuai dengan profesi dan tujuan dalam kalimat tersebut adalah \u2026", "options": ["memandang", "menatap", "menyaksikan", "mengamati", "melirik"], "answer": 3, "explanation": "Polisi tidak sekadar <i>melihat</i> (dengan pasif), melainkan memperhatikan dengan saksama untuk mencari bukti. Kata <b>mengamati</b> atau menyelidiki sangat tepat. (Di teks contoh, \"menyaksikan\" juga bisa, tapi <b>mengamati</b> lebih spesifik untuk pencarian bukti. Dalam opsi ini, \"mengamati\" lebih analitis)."}, {"q": "<i>\"Setelah cuaca buruk berhari-hari, pagi ini langit tampak <b>ringan</b>.\"</i><br><br>Berdasarkan konteks kalimat di atas, antonim kata <i>ringan</i> adalah \u2026", "options": ["berat", "mendung", "kelam", "keras", "terang"], "answer": 1, "explanation": "Kata <i>ringan</i> pada kalimat tersebut berkonotasi cerah, bersih, tidak tertutup awan tebal. Maka lawan kata yang tepat adalah <b>mendung</b> atau gelap/pekat."}, {"q": "Kalimat manakah di bawah ini yang menggunakan kata <b>kambing hitam</b> dengan makna <i>denotatif</i> (sebenarnya)?", "options": ["Dalam konflik antar departemen, karyawan baru sering dijadikan kambing hitam.", "Paman baru saja membeli seekor kambing hitam untuk dipelihara di peternakannya.", "Jangan selalu mencari kambing hitam atas kesalahanmu sendiri.", "Ia menjadi kambing hitam dalam skandal korupsi tersebut.", "Kambing hitam selalu muncul di saat suasana sedang kacau."], "answer": 1, "explanation": "Makna denotatif adalah makna lugas, sesuai arti kamus. Kalimat <b>\"Paman baru saja membeli seekor kambing hitam...\"</b> benar-benar membicarakan hewan (kambing) yang berwarna hitam, bukan kiasan."}, {"q": "<i>\"Semenjak ayahnya sakit, Budi terpaksa berhenti sekolah dan bekerja karena ia kini menjadi <b>tulang punggung</b> keluarga.\"</i><br><br>Makna konotatif dari <i>tulang punggung</i> adalah \u2026", "options": ["organ tubuh yang sangat penting", "orang yang bekerja dengan otot", "pencari nafkah utama", "anak laki-laki tertua", "orang yang paling menderita"], "answer": 2, "explanation": "Ungkapan <i>tulang punggung keluarga</i> secara konotatif berarti seseorang yang menjadi penopang hidup atau <b>pencari nafkah utama</b> bagi keluarganya."}, {"q": "<i>\"Tebing curam itu dipenuhi oleh <b>bebatuan</b> terjal yang menyulitkan para pendaki.\"</i><br><br>Makna gramatikal imbuhan pada kata <i>bebatuan</i> adalah \u2026", "options": ["menjadi seperti batu", "tempat yang penuh batu", "kumpulan atau bermacam-macam batu", "batu yang sangat besar", "hasil lemparan batu"], "answer": 2, "explanation": "Kata <i>bebatuan</i> merupakan bentuk reduplikasi/imbuhan yang menyatakan arti jamak atau <b>kumpulan/bermacam-macam batu</b>."}, {"q": "<i>\"Anak-anak berlarian <b>kejar-kejaran</b> di halaman sekolah saat jam istirahat.\"</i><br><br>Makna gramatikal pengulangan (reduplikasi) pada kata <i>kejar-kejaran</i> adalah menyatakan \u2026", "options": ["kegiatan yang berulang-ulang", "dilakukan oleh banyak orang", "saling melakukan sesuatu", "melakukan sesuatu dengan santai", "menyerupai suatu tindakan"], "answer": 2, "explanation": "Kata ulang <i>kejar-kejaran</i> bermakna <b>saling mengejar</b> antara satu sama lain."}, {"q": "Kata majemuk (komposisi) di bawah ini yang maknanya sudah menyatu menjadi istilah baru dan tidak bisa diartikan per kata adalah \u2026", "options": ["kursi kayu", "baju merah", "rumah sakit", "air sungai", "kaca jendela"], "answer": 2, "explanation": "<b>Rumah sakit</b> adalah komposisi/pemajemukan yang maknanya sudah padu menjadi 'tempat merawat orang sakit', bukan diartikan sebagai 'rumah yang sedang sakit'. Opsi lain maknanya masih harfiah (denotatif per kata)."}, {"q": "<i>\"Dalam upacara kenegaraan kemarin, Presiden resmi <b>mengangkat</b> lima menteri baru dalam kabinetnya.\"</i><br><br>Sinonim kontekstual dari kata <i>mengangkat</i> pada kalimat di atas adalah \u2026", "options": ["memindahkan ke atas", "menjunjung tinggi", "memuji", "meresmikan atau menunjuk", "memunculkan"], "answer": 3, "explanation": "Dalam konteks pemerintahan/jabatan, kata <i>mengangkat</i> bermakna menetapkan, <b>meresmikan, atau menunjuk</b> seseorang pada posisi tertentu."}, {"q": "Di bawah ini, manakah kalimat yang menggunakan seluruh katanya dalam makna denotatif?", "options": ["Hatinya seputih salju melihat anak-anak terlantar itu.", "Banyak politisi yang bermuka dua menjelang pemilihan umum.", "Meja belajar kayu jati itu dibeli ayah di toko furnitur.", "Ia sangat terpukul dengan kepergian sahabatnya.", "Kabar burung itu cepat menyebar ke seluruh penjuru desa."], "answer": 2, "explanation": "Kalimat <b>\"Meja belajar kayu jati itu dibeli ayah di toko furnitur\"</b> menggunakan bahasa yang lugas, tidak ada majas atau kata kiasan (makna murni denotatif)."}, {"q": "<i>\"Banyak siswa mulai <b>menyadari</b> pentingnya menjaga kesehatan fisik dan mental menjelang ujian UTBK.\"</i><br><br>Padanan kata yang paling tepat untuk menggantikan kata <i>menyadari</i> adalah \u2026", "options": ["memahami", "merasakan", "melupakan", "mencari", "menerima"], "answer": 0, "explanation": "<i>Menyadari</i> dalam kalimat ini bermakna mengerti dengan sungguh-sungguh akan suatu hal. Padanan kata yang paling pas dan logis adalah <b>memahami</b>."}];
+        const container = document.getElementById('quiz-container');
+        
+        let html = '';
+        const letters = ['A', 'B', 'C', 'D', 'E'];
+
+        questions.forEach((q, index) => {
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <li class="option-item">
+                        <label class="option-label" id="label-${index}-${optIndex}">
+                            <input type="radio" class="option-input" name="q${index}" value="${optIndex}" onchange="selectOption(${index}, ${optIndex})">
+                            <span class="option-letter">${letters[optIndex]}.</span>
+                            <span class="option-text">${opt}</span>
+                        </label>
+                    </li>
+                `;
+            });
+
+            html += `
+                <div class="question-card" id="card-${index}">
+                    <div class="question-header">
+                        <span class="question-number">Soal ${index + 1}</span>
+                    </div>
+                    <div class="question-text">${q.q}</div>
+                    <ul class="options-list">
+                        ${optionsHtml}
+                    </ul>
+                    <button class="btn-check" id="btn-${index}" onclick="checkAnswer(${index})">Cek Jawaban</button>
+                    <div class="explanation" id="exp-${index}">
+                        <strong>Pembahasan:</strong><br>
+                        ${q.explanation}
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+
+        function selectOption(qIndex, optIndex) {
+            // Remove selected class from all labels in this question
+            for(let i=0; i<5; i++) {
+                let lbl = document.getElementById(`label-${qIndex}-${i}`);
+                if(lbl) lbl.classList.remove('selected');
+            }
+            // Add selected class to chosen label
+            document.getElementById(`label-${qIndex}-${optIndex}`).classList.add('selected');
+        }
+
+        function checkAnswer(qIndex) {
+            const selectedInput = document.querySelector(`input[name="q${qIndex}"]:checked`);
+            if(!selectedInput) {
+                alert('Silakan pilih jawaban terlebih dahulu!');
+                return;
+            }
+
+            const selectedValue = parseInt(selectedInput.value);
+            const correctValue = questions[qIndex].answer;
+
+            // Disable all inputs for this question
+            const inputs = document.querySelectorAll(`input[name="q${qIndex}"]`);
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.parentElement.classList.add('disabled');
+            });
+
+            // Highlight answers
+            if(selectedValue === correctValue) {
+                document.getElementById(`label-${qIndex}-${selectedValue}`).classList.add('correct');
+            } else {
+                document.getElementById(`label-${qIndex}-${selectedValue}`).classList.add('wrong');
+                document.getElementById(`label-${qIndex}-${correctValue}`).classList.add('correct');
+            }
+
+            // Show explanation
+            document.getElementById(`exp-${qIndex}`).classList.add('show');
+
+            // Disable the button
+            const btn = document.getElementById(`btn-${qIndex}`);
+            btn.disabled = true;
+            btn.innerText = "Jawaban Tersimpan";
+        }
+    </script>
+</body>
+</html>

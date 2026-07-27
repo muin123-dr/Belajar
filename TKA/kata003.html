@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Soal TKA (Menengah & Sulit) - Kata, Makna, dan Diksi</title>
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-hover: #3730a3;
+            --success: #15803d;
+            --success-light: #dcfce7;
+            --error: #b91c1c;
+            --error-light: #fee2e2;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: #cbd5e1;
+            --medium-tag: #f59e0b;
+            --hard-tag: #e11d48;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            background: linear-gradient(135deg, var(--primary), #312e81);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 0.25rem 1rem;
+            border-radius: 99px;
+            font-size: 0.95rem;
+        }
+        
+        .difficulty-tag.menengah {
+            color: var(--medium-tag);
+            border: 1px solid var(--medium-tag);
+            background: #fffbeb;
+            font-weight: 600;
+            padding: 0.25rem 0.8rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+        }
+        
+        .difficulty-tag.sulit {
+            color: var(--hard-tag);
+            border: 1px solid var(--hard-tag);
+            background: #fff1f2;
+            font-weight: 600;
+            padding: 0.25rem 0.8rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .question-text b {
+            color: var(--primary);
+        }
+
+        .options-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .option-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.05rem;
+        }
+
+        .option-label:hover:not(.disabled) {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .option-label.selected {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .option-label.correct {
+            border-color: var(--success);
+            background: var(--success-light);
+            color: #14532d;
+        }
+
+        .option-label.wrong {
+            border-color: var(--error);
+            background: var(--error-light);
+            color: #7f1d1d;
+        }
+
+        .option-label.disabled {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .option-input {
+            display: none;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            margin-right: 1.2rem;
+            min-width: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .btn-check {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.8rem;
+            transition: background 0.2s;
+        }
+
+        .btn-check:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-check:disabled {
+            background: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
+        }
+
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            border-radius: 0 8px 8px 0;
+            display: none;
+            font-size: 1rem;
+            color: #334155;
+            line-height: 1.7;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Ujian TKA SMA: Bahasa Indonesia (Part 2)</h1>
+        <p>Materi: Kata, Makna, dan Diksi (Tingkat Menengah & Sulit)</p>
+    </div>
+
+    <div class="container" id="quiz-container">
+        <!-- Questions injected via JS -->
+    </div>
+
+    <script>
+        const questions = [{"q": "<b>[Tingkat Menengah]</b><br><i>\"Setelah mendengar berita duka itu, Budi hanya diam <b>membatu</b> di sudut ruangan.\"</i><br><br>Makna gramatikal imbuhan pada kata <i>membatu</i> dalam kalimat tersebut adalah \u2026", "options": ["menjadi batu", "mengumpulkan batu", "berbuat seperti batu (diam kaku)", "membuat batu", "melempari dengan batu"], "answer": 2, "explanation": "Imbuhan <i>me-</i> pada kata dasar kata benda (batu) bisa bermakna 'menjadi atau menyerupai'. Dalam konteks \"diam membatu\", maknanya adalah <b>berbuat menyerupai batu</b> (diam, kaku, tidak bergerak). Bukan berubah wujud secara fisik (menjadi batu)."}, {"q": "<b>[Tingkat Menengah]</b><br><i>\"Kedua belah pihak telah sepakat untuk membuat perjanjian tertulis yang saling <b>mengikat</b>.\"</i><br><br>Sinonim kata <i>mengikat</i> dalam konteks kalimat tersebut adalah \u2026", "options": ["menyambung", "mengharuskan (mematuhi)", "menjerat", "membelenggu", "menyatukan"], "answer": 1, "explanation": "Dalam konteks hukum atau perjanjian, kata <i>mengikat</i> berarti mewajibkan atau <b>mengharuskan</b> pihak-pihak yang terlibat untuk mematuhi kesepakatan tersebut. 'Menjerat' dan 'membelenggu' berkonotasi negatif/kriminal."}, {"q": "<b>[Tingkat Menengah]</b><br><i>\"Tulisan kolomnis itu berisi kritikan yang sangat <b>tajam</b> terhadap kebijakan pemerintah kota.\"</i><br><br>Antonim kata <i>tajam</i> yang paling tepat sesuai konteks kalimat di atas adalah \u2026", "options": ["tumpul", "tengah", "halus", "lembut", "dangkal"], "answer": 2, "explanation": "Kritikan yang 'tajam' berarti kritikan yang keras, pedas, atau menohok. Lawan kata kontekstual yang paling tepat untuk sifat sebuah kritikan/perkataan adalah <b>halus</b> (kritikan yang disampaikan secara halus/sopan)."}, {"q": "<b>[Tingkat Menengah]</b><br>Manakah kalimat di bawah ini yang menggunakan frasa <b>tangan kanan</b> dengan makna konotatif?", "options": ["Tangan kanan Budi terkilir saat bermain basket kemarin sore.", "Direktur itu selalu mengandalkan tangan kanannya dalam setiap negosiasi bisnis.", "Adik lebih terbiasa menulis menggunakan tangan kanan daripada tangan kiri.", "Cincin emas itu melingkar indah di jari manis tangan kanannya.", "Dokter sedang memeriksa saraf pada pergelangan tangan kanannya."], "answer": 1, "explanation": "Makna konotatif dari 'tangan kanan' adalah orang kepercayaan atau asisten andalan. Kalimat B menggunakan makna kiasan ini, sedangkan opsi lainnya menggunakan makna denotatif (bagian tubuh)."}, {"q": "<b>[Tingkat Menengah]</b><br><i>\"Pemberian vaksin booster terbukti memberikan dampak yang <b>signifikan</b> dalam menurunkan angka fatalitas virus.\"</i><br><br>Padanan kata <i>signifikan</i> dalam kalimat tersebut adalah \u2026", "options": ["cepat", "berarti (penting)", "luas", "langsung", "menyeluruh"], "answer": 1, "explanation": "Kata <i>signifikan</i> diserap dari bahasa Inggris (significant) yang dalam bahasa Indonesia memiliki padanan makna <b>penting atau berarti (berpengaruh besar)</b>."}, {"q": "<b>[Tingkat Menengah]</b><br><i>\"Kulit anak itu terlihat <b>kemerahan</b> setelah seharian bermain di bawah terik matahari pantai.\"</i><br><br>Makna gramatikal imbuhan <i>ke-an</i> pada kata <i>kemerahan</i> menyatakan makna \u2026", "options": ["menjadi merah", "paling merah", "agak merah (menyerupai sifat)", "kumpulan warna merah", "tempat yang merah"], "answer": 2, "explanation": "Imbuhan <i>ke-an</i> yang melekat pada kata sifat warna (seperti kemerahan, kebiruan, kehitaman) menyatakan makna <b>agak (menyerupai) sifat warna tersebut</b>."}, {"q": "<b>[Tingkat Menengah]</b><br><i>\"Pembangunan jalan tol bawah laut itu diperkirakan akan <b>menelan</b> biaya hingga triliunan rupiah.\"</i><br><br>Sinonim kontekstual yang paling tepat untuk kata <i>menelan</i> adalah \u2026", "options": ["menghabiskan", "memakan", "menyembunyikan", "merugikan", "membayar"], "answer": 0, "explanation": "Dalam frasa 'menelan biaya', kata 'menelan' bermakna konotatif yaitu memerlukan atau <b>menghabiskan</b> dana/biaya."}, {"q": "<b>[Tingkat Menengah]</b><br><i>\"Menurut pakar hukum, surat wasiat tersebut dianggap <b>cacat</b> hukum karena ditandatangani di bawah paksaan.\"</i><br><br>Antonim kata <i>cacat</i> dalam konteks hukum tersebut adalah \u2026", "options": ["sempurna", "utuh", "sah", "baik", "berlaku"], "answer": 2, "explanation": "Dalam konteks perjanjian atau administrasi hukum, 'cacat hukum' berarti tidak memenuhi syarat hukum (batal demi hukum/tidak sah). Maka antonimnya adalah <b>sah</b> (legal)."}, {"q": "<b>[Tingkat Menengah]</b><br>Pemilihan diksi yang paling tepat dan baku terdapat pada kalimat \u2026", "options": ["Pimpinan menugaskan para stafnya untuk segera menyusun laporan keuangan.", "Pimpinan menyuruh para stafnya untuk segera membikin laporan keuangan.", "Pimpinan menugasi para stafnya untuk segera menyusun laporan keuangan.", "Pimpinan memerintah para stafnya bikin laporan keuangan dengan segera.", "Pimpinan menugasi para stafnya agar supaya menyusun laporan keuangan."], "answer": 2, "explanation": "Diksi yang paling tepat adalah <b>menugasi</b>. 'Menugaskan' diikuti oleh hal/pekerjaannya (menugaskan penyusunan laporan), sedangkan 'menugasi' diikuti oleh orangnya (menugasi para staf). Opsi E tidak efektif ('agar supaya')."}, {"q": "<b>[Tingkat Menengah]</b><br><i>\"Terjadinya hujan es di daerah tropis dataran rendah merupakan sebuah <b>anomali</b> cuaca yang sedang diteliti BMKG.\"</i><br><br>Makna kata <i>anomali</i> dalam kalimat di atas adalah \u2026", "options": ["kejadian luar biasa", "perubahan drastis", "penyimpangan dari yang biasa (normal)", "bencana alam", "fenomena musiman"], "answer": 2, "explanation": "Kata <i>anomali</i> secara leksikal berarti ketidaknormalan atau <b>penyimpangan dari keadaan yang biasa atau normal</b>."}, {"q": "<b>[Tingkat Sulit]</b><br>Bacalah paragraf berikut!<br><i>Berbagai inovasi pendidikan terus digulirkan. Namun, semua upaya perbaikan fasilitas dan kurikulum ini harus bermuara pada satu titik, yaitu peningkatan kualitas karakter dan literasi siswa.</i><br><br>Makna kata <b>bermuara</b> pada paragraf tersebut adalah \u2026", "options": ["berakhir atau berpusat", "mengalir menuju laut", "berkumpul di satu tempat", "menjadi awal dari sesuatu", "menyelesaikan masalah"], "answer": 0, "explanation": "Kata 'muara' secara denotatif adalah tempat berakhirnya aliran sungai (bertemu dengan laut). Dalam konteks kalimat ini (kiasan), 'bermuara' berarti <b>berakhir, berpusat, atau memiliki tujuan akhir</b> pada satu titik."}, {"q": "<b>[Tingkat Sulit]</b><br><i>\"Pengesahan undang-undang baru tersebut dikritik oleh kaum buruh karena dinilai berpotensi <b>mengebiri</b> hak-hak fundamental pekerja.\"</i><br><br>Makna kata <i>mengebiri</i> dalam kalimat tersebut adalah \u2026", "options": ["menghilangkan kemampuan reproduksi", "membatasi atau merampas hak (memangkas)", "menyakiti secara fisik dan mental", "memperbarui sistem kerja", "mengalihkan tanggung jawab"], "answer": 1, "explanation": "Dalam konteks politik/hukum, kata 'mengebiri' digunakan secara kiasan yang bermakna <b>membatasi, mengurangi, memangkas, atau merampas</b> hak dan kekuasaan pihak tertentu."}, {"q": "<b>[Tingkat Sulit]</b><br><i>\"Pertandingan malam ini sangat <b>krusial</b> bagi timnas, sebab hasil imbang saja akan membuat mereka tersingkir dari turnamen.\"</i><br><br>Sinonim kata <i>krusial</i> yang paling tepat dan spesifik sesuai konteks adalah \u2026", "options": ["penting", "menentukan (sangat menentukan)", "berbahaya", "menegangkan", "mendesak"], "answer": 1, "explanation": "Meski 'krusial' sering diartikan 'penting', dalam konteks keadaan/pertandingan yang menjadi titik balik atau penentu nasib, makna yang lebih akurat dan spesifik adalah <b>menentukan</b>."}, {"q": "<b>[Tingkat Sulit]</b><br><i>\"Kedua kelompok remaja itu akhirnya <b>berbalas-balasan</b> pantun dalam acara adat semalam.\"</i><br><br>Makna gramatikal dari kata ulang <i>berbalas-balasan</i> memiliki kesamaan makna dengan kata bercetak tebal pada kalimat \u2026", "options": ["Dedaunan hijau <b>berguguran</b> ditiup angin kencang.", "Anak-anak itu <b>berlari-lari</b> di taman kota.", "Mereka sering <b>surat-menyurat</b> sejak duduk di bangku SMP.", "Ayah sedang <b>beres-beres</b> gudang belakang.", "Para tamu <b>bersalam-salaman</b> sebelum pulang."], "answer": 2, "explanation": "Kata 'berbalas-balasan' mengandung makna gramatikal perbuatan saling (resiprokal). Opsi yang juga mengandung makna 'saling' adalah <b>surat-menyurat</b> (saling berkirim surat) atau bersalam-salaman (saling bersalaman). *Catatan: 'Surat-menyurat' lebih kuat kadar resiprokal kerjanya dibanding bersalam-salaman yang sekadar aktivitas ritual jamak, tapi keduanya bisa dibilang resiprokal. Namun, 'surat-menyurat' (kata ulang berimbuhan me-) murni resiprokal.*"}, {"q": "<b>[Tingkat Sulit]</b><br><i>\"Auditor menemukan adanya beberapa laporan keuangan yang terindikasi <b>fiktif</b> pada proyek pembangunan jembatan tersebut.\"</i><br><br>Antonim kata <i>fiktif</i> yang paling tepat dalam konteks audit dan laporan adalah \u2026", "options": ["nyata", "faktual (berdasarkan fakta)", "logis", "akurat", "orisinil"], "answer": 1, "explanation": "Fiktif berarti rekaan, khayalan, atau tidak sungguh-sungguh ada (dibuat-buat). Dalam konteks laporan formal/audit, antonim yang paling tepat dan profesional adalah <b>faktual</b> (berdasarkan kenyataan atau fakta)."}, {"q": "<b>[Tingkat Sulit]</b><br><i>\"Pengalaman bekerja sebagai staf administrasi desa dijadikannya sebagai <b>batu loncatan</b> untuk mencalonkan diri menjadi bupati di masa depan.\"</i><br><br>Makna ungkapan <i>batu loncatan</i> adalah \u2026", "options": ["tempat yang aman untuk bersembunyi", "sarana (jalan) untuk memajukan diri / mencapai tujuan yang lebih tinggi", "rintangan awal yang harus dihadapi dengan berani", "kegiatan coba-coba untuk mencari pengalaman", "tempat pelarian dari masalah utama"], "answer": 1, "explanation": "Ungkapan 'batu loncatan' secara konotatif bermakna sesuatu yang dijadikan sebagai sarana, pijakan, atau <b>jalan untuk melangkah maju ke tingkat atau tujuan yang lebih tinggi</b>."}, {"q": "<b>[Tingkat Sulit]</b><br><i>\"Prof. Dr. Ir. Sudiarso adalah tokoh penting yang <b>membidani</b> lahirnya fakultas pertanian di universitas bergengsi tersebut.\"</i><br><br>Padanan kata <i>membidani</i> yang paling tepat adalah \u2026", "options": ["membantu persalinan", "menyaksikan", "meresmikan", "memelopori (mendirikan)", "membiayai"], "answer": 3, "explanation": "Kata 'membidani' secara denotatif berarti menolong persalinan. Secara konotatif (seperti dalam kalimat), artinya adalah menjadi pendorong utama, <b>memelopori, atau memprakarsai/mendirikan</b> berdirinya sesuatu."}, {"q": "<b>[Tingkat Sulit]</b><br>Imbuhan <b>ter-</b> pada kata bercetak tebal dalam kalimat <i>\"Dompetnya <b>terbawa</b> oleh adiknya saat berangkat ke sekolah\"</i> bermakna sama dengan kata berimbuhan <i>ter-</i> pada kalimat \u2026", "options": ["Gunung Everest adalah gunung <b>tertinggi</b> di dunia.", "Pintu gerbang istana itu <b>tertutup</b> rapat sejak pagi.", "Kakak <b>tertidur</b> di sofa saat menonton televisi.", "Tersangka akhirnya <b>terpojok</b> saat polisi mengepung rumahnya.", "Berita itu telah <b>tercetak</b> di berbagai media nasional."], "answer": 2, "explanation": "Imbuhan 'ter-' pada kata 'terbawa' menyatakan makna <b>tidak sengaja di- / tidak sengaja melakukan</b>. Opsi C (tertidur = tidak sengaja tidur) memiliki makna gramatikal ketidaksengajaan yang sama. (Tertinggi = paling; tertutup/tercetak = sudah di-; terpojok = dalam keadaan)."}, {"q": "<b>[Tingkat Sulit]</b><br><i>\"Dalam mengambil keputusan strategis, seorang pemimpin tidak boleh memiliki pandangan yang <b>miopia</b>.\"</i><br><br>Kata <i>miopia</i> dalam konteks kepemimpinan tersebut bermakna \u2026", "options": ["rabun jauh (penyakit mata)", "terlalu memikirkan hal-hal kecil", "pandangan sempit / hanya melihat kepentingan jangka pendek", "sikap mudah dipengaruhi oleh bawahan", "tidak berani mengambil risiko besar"], "answer": 2, "explanation": "Secara medis, miopia adalah rabun jauh (tidak bisa melihat jauh). Jika dipinjam ke dalam konteks manajerial/kepemimpinan, miopia bermakna kiasan: <b>pandangan sempit yang hanya melihat kepentingan jangka pendek</b> dan mengabaikan visi jangka panjang."}, {"q": "<b>[Tingkat Sulit]</b><br>Perhatikan kalimat-kalimat berikut!<br>(1) Pejabat baru itu pandai <b>menjilat</b> atasan demi mengamankan posisinya.<br>(2) Adik kecilku suka <b>menjilat</b> es krim yang mulai mencair di tangannya.<br>(3) Api kebakaran hebat <b>menjilat</b> atap rumah warga di permukiman padat.<br><br>Kalimat yang menggunakan kata <i>menjilat</i> dengan makna denotatif ditunjukkan oleh nomor \u2026", "options": ["(1) saja", "(2) saja", "(1) dan (2)", "(2) dan (3)", "(3) saja"], "answer": 1, "explanation": "Makna denotatif adalah makna sebenarnya (fisik). Pada kalimat (2), 'menjilat es krim' dilakukan secara fisik dengan lidah. Kalimat (1) bermakna konotatif (mencari muka), dan kalimat (3) bermakna konotatif/majas personifikasi (api menyambar)."}];
+        const container = document.getElementById('quiz-container');
+        
+        let html = '';
+        const letters = ['A', 'B', 'C', 'D', 'E'];
+
+        questions.forEach((q, index) => {
+            
+            // Extract difficulty tag from the question text to render it nicely
+            let qText = q.q;
+            let diffClass = '';
+            let diffLabel = '';
+            
+            if(qText.includes('[Tingkat Menengah]')) {
+                diffClass = 'menengah';
+                diffLabel = 'Tingkat Menengah';
+                qText = qText.replace('<b>[Tingkat Menengah]</b><br>', '');
+            } else if (qText.includes('[Tingkat Sulit]')) {
+                diffClass = 'sulit';
+                diffLabel = 'Tingkat Sulit (HOTS)';
+                qText = qText.replace('<b>[Tingkat Sulit]</b><br>', '');
+            }
+
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <li class="option-item">
+                        <label class="option-label" id="label-${index}-${optIndex}">
+                            <input type="radio" class="option-input" name="q${index}" value="${optIndex}" onchange="selectOption(${index}, ${optIndex})">
+                            <span class="option-letter">${letters[optIndex]}.</span>
+                            <span class="option-text">${opt}</span>
+                        </label>
+                    </li>
+                `;
+            });
+
+            html += `
+                <div class="question-card" id="card-${index}">
+                    <div class="question-header">
+                        <span class="question-number">Soal ${index + 1}</span>
+                        <span class="difficulty-tag ${diffClass}">${diffLabel}</span>
+                    </div>
+                    <div class="question-text">${qText}</div>
+                    <ul class="options-list">
+                        ${optionsHtml}
+                    </ul>
+                    <button class="btn-check" id="btn-${index}" onclick="checkAnswer(${index})">Cek Jawaban</button>
+                    <div class="explanation" id="exp-${index}">
+                        <strong>Pembahasan:</strong><br>
+                        ${q.explanation}
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+
+        function selectOption(qIndex, optIndex) {
+            for(let i=0; i<5; i++) {
+                let lbl = document.getElementById(`label-${qIndex}-${i}`);
+                if(lbl) lbl.classList.remove('selected');
+            }
+            document.getElementById(`label-${qIndex}-${optIndex}`).classList.add('selected');
+        }
+
+        function checkAnswer(qIndex) {
+            const selectedInput = document.querySelector(`input[name="q${qIndex}"]:checked`);
+            if(!selectedInput) {
+                alert('Silakan pilih jawaban Anda terlebih dahulu!');
+                return;
+            }
+
+            const selectedValue = parseInt(selectedInput.value);
+            const correctValue = questions[qIndex].answer;
+
+            const inputs = document.querySelectorAll(`input[name="q${qIndex}"]`);
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.parentElement.classList.add('disabled');
+            });
+
+            if(selectedValue === correctValue) {
+                document.getElementById(`label-${qIndex}-${selectedValue}`).classList.add('correct');
+            } else {
+                document.getElementById(`label-${qIndex}-${selectedValue}`).classList.add('wrong');
+                document.getElementById(`label-${qIndex}-${correctValue}`).classList.add('correct');
+            }
+
+            document.getElementById(`exp-${qIndex}`).classList.add('show');
+
+            const btn = document.getElementById(`btn-${qIndex}`);
+            btn.disabled = true;
+            btn.innerText = "Selesai Dijawab";
+        }
+    </script>
+</body>
+</html>
