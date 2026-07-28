@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>TKA Bahasa Indonesia 2025 - Simulasi 28 Soal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, sans-serif;
+      background: #eef2f6;
+      color: #1e293b;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      padding: 1.2rem;
+      min-height: 100vh;
+    }
+    .app {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Header TKA */
+    .header {
+      background: #0b2d5c;
+      color: white;
+      border-radius: 0.8rem;
+      padding: 0.9rem 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo {
+      background: #f59e0b;
+      color: #0b2d5c;
+      font-weight: 900;
+      font-size: 1.4rem;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.6rem;
+    }
+    .header-title h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .header-title span {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+    .timer {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      padding: 0.5rem 1.4rem;
+      border-radius: 2.5rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      font-variant-numeric: tabular-nums;
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 0.5px;
+    }
+    .timer.warning {
+      background: #fecaca;
+      color: #7f1d1d;
+      border-color: #f87171;
+      animation: pulse 0.85s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Number navigation */
+    .number-nav {
+      background: white;
+      border-radius: 0.7rem;
+      padding: 0.7rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      justify-content: center;
+      border: 1px solid #dce1e8;
+    }
+    .num-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      background: white;
+      font-weight: 600;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: #475569;
+    }
+    .num-btn:hover { background: #eef2ff; border-color: #3b82f6; }
+    .num-btn.active { background: #1d4ed8; color: white; border-color: #1d4ed8; transform: scale(1.08); }
+    .num-btn.answered { background: #dcfce7; border-color: #22c55e; color: #166534; }
+    .num-btn.active.answered { background: #1d4ed8; color: white; border-color: #1d4ed8; }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: white;
+      border-radius: 0.7rem;
+      padding: 0.6rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      border: 1px solid #dce1e8;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #334155;
+    }
+    .progress-bar {
+      flex: 1;
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #2563eb;
+      border-radius: 10px;
+      transition: width 0.3s;
+    }
+
+    /* Card soal */
+    .card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+      min-height: 340px;
+    }
+    .reading-box {
+      background: #f8fafc;
+      border-left: 5px solid #1e40af;
+      padding: 1.2rem 1.5rem;
+      border-radius: 0.7rem;
+      margin-bottom: 1.6rem;
+      font-size: 0.9rem;
+      white-space: pre-line;
+      max-height: 340px;
+      overflow-y: auto;
+      color: #1e293b;
+      line-height: 1.75;
+    }
+    .reading-box h4 {
+      color: #1e3a8a;
+      margin-bottom: 0.5rem;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+    .question-text {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+      color: #0f172a;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.75rem 1.1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.6rem;
+      cursor: pointer;
+      transition: 0.15s;
+      background: #fafbfc;
+      font-weight: 500;
+    }
+    .option:hover { border-color: #93c5fd; background: #eff6ff; }
+    .option.selected { border-color: #2563eb; background: #eef2ff; }
+    .option.correct { border-color: #16a34a; background: #f0fdf4; }
+    .option.incorrect { border-color: #dc2626; background: #fef2f2; }
+    .option-letter {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      background: white;
+      flex-shrink: 0;
+    }
+    .option.selected .option-letter { background: #2563eb; color: white; border-color: #2563eb; }
+    .option.correct .option-letter { background: #16a34a; color: white; border-color: #16a34a; }
+    .option.incorrect .option-letter { background: #dc2626; color: white; border-color: #dc2626; }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.7rem 2rem;
+      border-radius: 2.5rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 0.3px;
+    }
+    .btn-primary { background: #1d4ed8; color: white; }
+    .btn-primary:hover { background: #1e3a8a; }
+    .btn-outline { background: white; border: 2px solid #1d4ed8; color: #1d4ed8; }
+    .btn-outline:hover { background: #eef2ff; }
+    .btn-submit { background: #b91c1c; color: white; }
+    .btn-submit:hover { background: #991b1b; }
+    .btn:disabled { opacity: 0.4; pointer-events: none; }
+
+    /* Result */
+    .result-box {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .score {
+      font-size: 4.2rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      line-height: 1;
+    }
+    .review-item {
+      background: #f8fafc;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      text-align: left;
+      border-left: 5px solid #94a3b8;
+    }
+    .review-item.correct { border-left-color: #16a34a; }
+    .review-item.wrong { border-left-color: #dc2626; }
+
+    @media (max-width: 650px) {
+      .header { flex-direction: column; align-items: flex-start; }
+      .card { padding: 1rem; }
+      .num-btn { width: 30px; height: 30px; font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="app" id="appContainer">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">TKA</div>
+      <div class="header-title">
+        <h1>Bahasa Indonesia</h1>
+        <span>Simulasi Soal Setara 2025 • 28 Butir</span>
+      </div>
+    </div>
+    <div class="timer" id="timerBox">⏱️ <span id="timerDisplay">45:00</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    📊 Progress <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span id="progressText">0/28</span>
+  </div>
+
+  <!-- Nomor soal -->
+  <div class="number-nav" id="numberNav"></div>
+
+  <!-- Card Soal -->
+  <div class="card" id="cardSoal"></div>
+
+  <!-- Tombol navigasi -->
+  <div class="btn-row" id="btnRow">
+    <button class="btn btn-outline" id="btnPrev" disabled>◀ Sebelumnya</button>
+    <button class="btn btn-primary" id="btnNext">Selanjutnya ▶</button>
+    <button class="btn btn-submit" id="btnSubmit" style="display:none;">✅ Kumpulkan Jawaban</button>
+  </div>
+
+  <!-- Hasil -->
+  <div id="resultContainer" style="display:none;"></div>
+</div>
+
+<script>
+(function() {
+  // ----------------- DATA BACAAN -----------------
+  const bacaanDB = {
+    digital: {
+      judul: "Transformasi Digital dan Kesenjangan Sosial di Era Society 5.0",
+      teks: `Era Society 5.0 menawarkan visi masyarakat yang berpusat pada manusia dengan mengintegrasikan ruang siber dan fisik. Transformasi digital di Indonesia, yang ditandai oleh penetrasi internet dan penggunaan AI, seharusnya mendorong inklusivitas. Namun, fakta di lapangan menunjukkan adanya kesenjangan digital yang semakin lebar antara daerah perkotaan dan pedesaan. Infrastruktur yang tidak merata serta literasi digital yang rendah menjadi batu sandungan utama. Akibatnya, alih-alih menciptakan kesejahteraan merata, revolusi digital justru berpotensi memperdalam jurang sosial ekonomi.\n\nPemerintah telah meluncurkan berbagai program seperti Palapa Ring dan pelatihan keterampilan digital. Meskipun demikian, kecepatan adopsi teknologi di kalangan masyarakat menengah ke bawah masih jauh dari harapan. Data BPS menunjukkan bahwa hanya 35% penduduk di wilayah 3T (terdepan, terpencil, tertinggal) yang memiliki akses internet stabil. Kondisi ini diperparah oleh minimnya konten lokal yang relevan serta mahalnya biaya perangkat. Tanpa intervensi kebijakan yang tepat sasaran, kesenjangan digital akan menjadi bom waktu yang mengancam kohesi sosial.\n\nOleh karena itu, diperlukan sinergi antara pemerintah, swasta, dan masyarakat untuk membangun ekosistem digital yang inklusif. Pembangunan infrastruktur harus dibarengi dengan peningkatan kapasitas SDM dan penciptaan konten edukatif berbahasa daerah. Hanya dengan cara itu, visi Society 5.0 dapat terwujud tanpa meninggalkan satu pun lapisan masyarakat.`
+    },
+    ladang: {
+      judul: "Cerpen: Langit Senja di Ujung Ladang",
+      teks: `Mentari hampir tenggelam di ufuk barat ketika Sari masih mencangkul ladang yang mulai retak karena kemarau panjang. Peluh membasahi tubuhnya, tapi ia tak peduli. “Ayah dulu bilang, jangan menyerah pada tanah, karena tanahlah yang memberi kita kehidupan,” gumamnya.\n\nTiga tahun lalu, ayahnya meninggal setelah gagal panen dan terlilit utang tengkulak. Ladang satu-satunya hampir disita bank. Sari, yang saat itu baru lulus SMA, terpaksa menggantikan ayahnya mengurus ladang. Ibunya hanya bisa meratap di rumah, lumpuh karena stroke.\n\nSuatu sore, seorang pria kota datang menawarkan kerja sama. Ia ingin menyewa ladang untuk proyek vila. Sari menolak mentah-mentah. “Ladang ini warisan ayah. Saya tidak akan menjualnya,” tegasnya. Pria itu pergi dengan kesal, meninggalkan ancaman bahwa suatu saat Sari akan menyesal.\n\nKeesokan harinya, saluran irigasi yang biasa mengaliri ladangnya tiba-tiba kering. Sari curiga ada yang sengaja memblokir. Ia menyusuri parit dan menemukan tumpukan batu yang menutup aliran air. Dengan susah payah, ia membersihkannya. Tiba-tiba, dari kejauhan, ia melihat pria kota itu bersama dua orang suruhannya tertawa melihatnya.\n\nSari tidak gentar. Ia terus bekerja, bahkan mulai menanam varietas padi tahan kering yang ia pelajari dari internet di balai desa. Perlahan, padinya tumbuh. Saat panen tiba, hasilnya melimpah. Pria kota itu kembali datang, kali ini dengan nada kagum. “Kau memang pantang menyerah, Nak. Aku salah menilaimu.” Sari hanya tersenyum. “Langit senja di ujung ladang ini terlalu indah untuk ditukar dengan vila.”`
+    },
+    plastik: {
+      judul: "Plastik dan Masa Depan Laut Kita",
+      teks: `Sampah plastik di lautan telah menjadi krisis lingkungan global yang mengancam ekosistem maritim. Data Kementerian Kelautan dan Perikanan menunjukkan bahwa Indonesia menghasilkan sekitar 3,2 juta ton sampah plastik per tahun, dengan 1,29 juta ton berakhir di lautan. Mikroplastik—partikel plastik berukuran kurang dari 5 mm—kini terdeteksi pada ikan, garam, bahkan air minum kemasan. Kondisi ini tidak hanya merusak biota laut, tetapi juga membahayakan kesehatan manusia melalui rantai makanan.\n\nParahnya, pandemi Covid-19 memperburuk situasi. Penggunaan masker sekali pakai, sarung tangan, dan bungkus makanan meningkat drastis. Banyak di antaranya tidak terkelola dengan baik dan hanyut ke sungai lalu ke laut. Studi dari LIPI mengungkapkan bahwa sampah medis berbahan plastik menyumbang 20% dari total sampah di perairan Indonesia selama pandemi.\n\nMengatasi persoalan ini membutuhkan kolaborasi lintas sektor. Selain pengelolaan sampah yang lebih baik, produsen wajib menerapkan prinsip extended producer responsibility (EPR) untuk mengurangi kemasan plastik sekali pakai. Masyarakat juga perlu mengubah perilaku dengan mengurangi konsumsi plastik dan memilah sampah dari rumah. Tanpa tindakan kolektif yang segera, pada tahun 2040 diperkirakan akan ada lebih banyak plastik daripada ikan di laut.`
+    },
+    wisata: {
+      judul: "Pariwisata Berkelanjutan: Antara Ekonomi dan Ekologi",
+      teks: `Pariwisata merupakan salah satu sektor andalan ekonomi Indonesia. Namun, pertumbuhan pariwisata massal yang tidak terkendali menimbulkan fenomena overtourism di destinasi unggulan. Bali, sebagai contoh, mengalami tekanan ekologis berat seperti krisis air bersih dan penumpukan sampah. Overtourism terjadi ketika jumlah wisatawan melampaui kapasitas tampung lingkungan, sehingga merusak daya dukung alam dan sosial budaya setempat.\n\nDi sisi lain, pendapatan dari sektor ini sangat vital bagi masyarakat lokal. Ribuan tenaga kerja bergantung pada hotel, restoran, dan biro perjalanan. Pemerintah daerah pun mengandalkan pajak wisata untuk pembangunan. Dilema ini menuntut solusi berupa pariwisata berkelanjutan yang menyeimbangkan aspek ekonomi, sosial, dan lingkungan. Konsep ekowisata dan community-based tourism (CBT) menjadi alternatif yang mengedepankan partisipasi masyarakat dalam pengelolaan wisata.\n\nPenerapan CBT di beberapa desa wisata di Yogyakarta dan Nusa Tenggara Barat menunjukkan hasil positif. Wisatawan tinggal bersama penduduk, belajar budaya lokal, dan biaya menginap langsung masuk ke kas desa. Selain itu, pembatasan jumlah pengunjung harian dan penerapan tarif tinggi untuk wisatawan asing dapat mengurangi dampak negatif. Langkah tegas pemerintah dalam membatasi pembangunan hotel di zona hijau juga mutlak diperlukan.`
+    },
+    bahasa: {
+      judul: "Revitalisasi Bahasa Daerah di Tengah Arus Globalisasi",
+      teks: `Bahasa daerah di Indonesia menghadapi ancaman kepunahan. Dari 718 bahasa daerah yang ada, 25 bahasa dinyatakan punah dan puluhan lainnya terancam punah karena jumlah penuturnya yang terus menurun. Generasi muda lebih memilih menggunakan bahasa Indonesia atau bahasa asing dalam komunikasi sehari-hari, menganggap bahasa daerah kuno dan tidak relevan.\n\nKepunahan bahasa daerah bukan hanya kehilangan kosakata, melainkan juga lenyapnya pengetahuan lokal dan identitas budaya. Sastra lisan, sistem pengetahuan tradisional tentang obat-obatan, dan kearifan ekologi terekam dalam bahasa daerah. Oleh karena itu, revitalisasi bahasa daerah menjadi mendesak. Pemerintah melalui program Merdeka Belajar telah memasukkan muatan lokal bahasa daerah di sekolah.\n\nNamun, upaya itu belum cukup. Diperlukan inovasi seperti aplikasi kamus digital bahasa daerah, konten media sosial berbahasa daerah, dan festival sastra lokal. Pelibatan tokoh adat dan komunitas sangat penting agar bahasa daerah tidak hanya diajarkan, tetapi juga digunakan dalam kehidupan sehari-hari. Tanpa upaya serius, dalam beberapa dekade mendatang, kita mungkin akan kehilangan kekayaan budaya tak ternilai.`
+    },
+    pantai2: {
+      judul: "Cerpen: Jejak di Pasir Putih",
+      teks: `Hamparan pasir putih membentang di sepanjang Teluk Kiluan. Dulu, tempat ini sepi, hanya nelayan yang sesekali melintas. Kini, kawasan itu ramai dengan hotel dan restoran mewah. Wisatawan asing berjemur, jet ski meraung-raung.\n\nPak Usman, seorang nelayan tua, duduk termenung di perahunya yang reyot. Ia baru saja pulang melaut dengan hasil tangkapan yang makin sedikit. “Ikan-ikan pergi menjauh, Nak. Mereka takut suara mesin,” ujarnya pada Arman, pemuda yang membantunya.\n\nArman, yang baru lulus SMA, sebenarnya ingin bekerja di hotel. “Gajinya lebih besar, Pak. Daripada melaut tapi hasilnya tidak pasti.” Pak Usman hanya menghela napas. Konflik batin antara mempertahankan tradisi dan tuntutan ekonomi modern menggelayuti pikirannya.\n\nSuatu hari, seekor penyu tersangkut jaring di dekat pantai. Wisatawan ramai mengambil foto, tapi tak ada yang menolong. Pak Usman dan Arman bergegas melepaskan penyu itu. Seorang wisatawan menegur, “Kenapa dilepas? Itu bisa jadi atraksi.” Pak Usman menjawab, “Penyu ini dilindungi. Kalau mati, anak cucu kita tidak akan melihatnya lagi.”\n\nMalamnya, Arman berkata, “Pak, saya ingin tetap di sini, membantu Bapak melaut dan menjaga pantai. Biar tidak banyak uang, tapi saya tidak mau lihat laut kita rusak.” Pak Usman tersenyum, menepuk bahu Arman. “Itu keputusan mulia, Nak. Jejak yang kau tinggalkan di pasir ini akan berarti.”`
+    },
+    pangan: {
+      judul: "Kedaulatan Pangan di Indonesia: Mimpi atau Kenyataan?",
+      teks: `Indonesia pernah mengalami masa kejayaan swasembada beras pada tahun 1984. Kini, ironisnya, kita justru mengimpor beras dari Vietnam dan Thailand. Padahal, lahan pertanian kita cukup luas. Masalahnya, alih fungsi lahan pertanian menjadi pemukiman dan industri terus terjadi. Data BPS menunjukkan, dalam 5 tahun terakhir, lahan sawah menyusut 1,2 juta hektar.\n\nSelain itu, krisis regenerasi petani semakin serius. Rata-rata usia petani Indonesia adalah 47 tahun. Generasi muda enggan menjadi petani karena pendapatan yang rendah dan stigma sosial. Teknologi pertanian modern belum banyak diterapkan, sehingga produktivitas rendah. Akibatnya, biaya produksi tinggi dan harga gabah lokal kalah bersaing dengan beras impor.\n\nPemerintah mencanangkan program food estate di Kalimantan Tengah, tetapi proyek ini menuai kritik karena dianggap tidak memperhatikan aspek lingkungan dan sosial. Kedaulatan pangan bukan hanya soal produksi, melainkan juga distribusi, akses, dan keberpihakan pada petani kecil. Reforma agraria, subsidi bibit unggul, dan jaminan harga merupakan langkah mendesak. Jika tidak, mimpi swasembada akan tetap menjadi angan.`
+    }
+  };
+
+  // ----------------- 28 SOAL -----------------
+  const soalList = [
+    // 1-4: bacaan digital
+    { id:1, bacaan:"digital", tanya:"Makna frasa 'batu sandungan' dalam teks tersebut adalah...", opsi:["Pijakan awal","Hambatan utama","Alat bantu","Tumpuan harapan","Jalan pintas"], jawab:1 },
+    { id:2, bacaan:"digital", tanya:"Gagasan utama paragraf kedua teks tersebut adalah...", opsi:["Program Palapa Ring telah berhasil mengatasi kesenjangan digital.","Hanya 35% penduduk 3T yang menikmati akses internet stabil.","Kesenjangan digital diperparah oleh konten lokal yang minim.","Upaya pemerintah belum cukup untuk menjembatani kesenjangan digital.","Masyarakat menengah ke bawah enggan menggunakan teknologi digital."], jawab:3 },
+    { id:3, bacaan:"digital", tanya:"Hubungan makna antara paragraf 1 dan paragraf 3 adalah...", opsi:["Paragraf 1 menjelaskan masalah, paragraf 3 solusi.","Paragraf 1 menyajikan fakta, paragraf 3 opini.","Paragraf 1 akibat, paragraf 3 sebab.","Paragraf 1 dan 3 sama-sama menjelaskan solusi.","Paragraf 1 dan 3 saling bertentangan."], jawab:0 },
+    { id:4, bacaan:"digital", tanya:"Berdasarkan teks, manakah data yang mendukung bahwa kesenjangan digital masih tinggi?\n(1) Hanya 35% penduduk 3T memiliki akses internet stabil.\n(2) Konten edukatif berbahasa daerah sudah banyak tersedia.\n(3) Program Palapa Ring telah menjangkau seluruh pelosok.\n(4) Biaya perangkat yang mahal menjadi kendala.", opsi:["(1) dan (2)","(1) dan (4)","(2) dan (3)","(3) dan (4)","(1), (2), (3), (4)"], jawab:1 },
+    // 5-8: ladang
+    { id:5, bacaan:"ladang", tanya:"Sifat Sari yang paling menonjol dalam cerita tersebut adalah...", opsi:["Pemurung dan pasrah","Pemberani dan pekerja keras","Ceroboh dan gegabah","Manja dan mudah menyerah","Pendendam dan licik"], jawab:1 },
+    { id:6, bacaan:"ladang", tanya:"Apa penyebab utama konflik dalam cerita tersebut?", opsi:["Sari tidak mau menjual ladangnya kepada pria kota.","Saluran irigasi tersumbat batu.","Pria kota ingin membangun vila di ladang Sari.","Ayah Sari meninggal karena gagal panen.","Sari belajar menanam padi tahan kering dari internet."], jawab:0 },
+    { id:7, bacaan:"ladang", tanya:"Urutan peristiwa yang tepat sesuai cerita adalah...", opsi:["Sari menolak tawaran pria kota → saluran irigasi kering → Sari membersihkan batu → panen melimpah.","Sari panen melimpah → pria kota datang → saluran irigasi kering → Sari menolak tawaran.","Saluran irigasi kering → Sari menolak tawaran → pria kota marah → panen gagal.","Pria kota kagum → Sari membersihkan batu → panen gagal → ayah Sari meninggal.","Ayah Sari meninggal → Sari menjual ladang → pria kota membangun vila → Sari menyesal."], jawab:0 },
+    { id:8, bacaan:"ladang", tanya:"Bagaimana reaksi Sari setelah saluran irigasi kering?", opsi:["Menangis dan menyerah","Melaporkan ke polisi","Menyusuri parit dan membersihkan sumbatan","Meminta bantuan pria kota","Membiarkan ladangnya mati"], jawab:2 },
+    // 9-12: plastik
+    { id:9, bacaan:"plastik", tanya:"Makna istilah 'mikroplastik' dalam teks adalah...", opsi:["Plastik yang diproduksi secara massal oleh pabrik besar","Sampah plastik berukuran besar yang mengapung di laut","Partikel plastik kecil hasil degradasi sampah plastik","Mikroorganisme yang hidup di dalam sampah plastik","Teknologi daur ulang plastik terbaru"], jawab:2 },
+    { id:10, bacaan:"plastik", tanya:"Berdasarkan teks, manakah pernyataan yang tepat?", opsi:["Indonesia menghasilkan 1,29 juta ton sampah plastik per tahun.","Masker sekali pakai tidak termasuk sampah plastik.","Mikroplastik hanya membahayakan biota laut, bukan manusia.","Sampah medis plastik menyumbang 20% sampah di perairan Indonesia selama pandemi.","Pada 2040, jumlah plastik akan setara dengan jumlah ikan di laut."], jawab:3 },
+    { id:11, bacaan:"plastik", tanya:"Hubungan paragraf 1 dan 2 adalah...", opsi:["Paragraf 1 menjelaskan penyebab, paragraf 2 menjelaskan akibat.","Paragraf 1 menjelaskan masalah, paragraf 2 memperburuk masalah.","Paragraf 1 dan 2 sama-sama memberikan solusi.","Paragraf 1 berisi data, paragraf 2 berisi opini tanpa data.","Paragraf 1 dan 2 saling bertentangan."], jawab:1 },
+    { id:12, bacaan:"plastik", tanya:"Manakah data yang mendukung bahwa pandemi memperparah sampah plastik?\n(1) 1,29 juta ton sampah plastik berakhir di lautan.\n(2) Sampah medis plastik menyumbang 20% di perairan.\n(3) Penggunaan masker sekali pakai meningkat drastis.\n(4) Produsen wajib menerapkan EPR.", opsi:["(1) dan (3)","(2) dan (3)","(2) dan (4)","(3) dan (4)","(1), (2), (3)"], jawab:1 },
+    // 13-16: wisata
+    { id:13, bacaan:"wisata", tanya:"Istilah 'overtourism' dalam teks mengacu pada...", opsi:["Wisatawan yang datang melebihi target pemerintah","Jumlah wisatawan yang melampaui kapasitas lingkungan","Pariwisata yang hanya menguntungkan investor asing","Wisata yang hanya fokus pada keindahan alam","Program promosi pariwisata berlebihan"], jawab:1 },
+    { id:14, bacaan:"wisata", tanya:"Gagasan pendukung paragraf kedua yang tepat adalah...", opsi:["Bali mengalami krisis air bersih.","Ribuan tenaga kerja bergantung pada sektor pariwisata.","Pembatasan pengunjung harian perlu diterapkan.","CBT menunjukkan hasil positif.","Pemerintah harus membatasi pembangunan hotel."], jawab:1 },
+    { id:15, bacaan:"wisata", tanya:"Bagaimana hubungan makna paragraf 2 dan 3?", opsi:["Paragraf 2 menjelaskan masalah, paragraf 3 solusi.","Paragraf 2 sebab, paragraf 3 akibat.","Paragraf 2 dan 3 berisi contoh yang sama.","Paragraf 2 kelebihan pariwisata, paragraf 3 kekurangan.","Paragraf 2 opini, paragraf 3 fakta."], jawab:0 },
+    { id:16, bacaan:"wisata", tanya:"Kalimat yang dapat menjadi kelanjutan teks tersebut adalah...", opsi:["Oleh karena itu, pemerintah harus menutup semua destinasi wisata.","Dengan demikian, pengembangan pariwisata perlu fokus pada kuantitas.","Ke depan, kolaborasi semua pemangku kepentingan menjadi kunci keberhasilan pariwisata berkelanjutan.","Masyarakat sebaiknya menolak semua proyek wisata di daerahnya.","Pada akhirnya, pariwisata hanya akan merusak lingkungan."], jawab:2 },
+    // 17-20: bahasa
+    { id:17, bacaan:"bahasa", tanya:"Makna kata 'punah' dalam konteks teks adalah...", opsi:["Berkurang jumlahnya","Tidak digunakan lagi sama sekali","Bergabung dengan bahasa lain","Hanya digunakan oleh orang tua","Dipelajari di sekolah"], jawab:1 },
+    { id:18, bacaan:"bahasa", tanya:"Ide pokok paragraf ketiga adalah...", opsi:["Bahasa daerah sudah banyak yang punah.","Pemerintah memasukkan muatan lokal bahasa daerah.","Inovasi dan pelibatan komunitas diperlukan untuk revitalisasi bahasa daerah.","Generasi muda menganggap bahasa daerah kuno.","Sastra lisan terekam dalam bahasa daerah."], jawab:2 },
+    { id:19, bacaan:"bahasa", tanya:"Hubungan antara paragraf 2 dan 3 adalah...", opsi:["Paragraf 2 menjelaskan pentingnya bahasa daerah, paragraf 3 cara pelestariannya.","Paragraf 2 penyebab, paragraf 3 akibat.","Paragraf 2 dan 3 saling bertentangan.","Paragraf 2 tentang data, paragraf 3 tentang opini.","Paragraf 2 dan 3 membahas contoh bahasa daerah."], jawab:0 },
+    { id:20, bacaan:"bahasa", tanya:"Kesimpulan yang tepat untuk teks tersebut adalah...", opsi:["Bahasa daerah harus diganti dengan bahasa Indonesia.","Hanya pemerintah yang bertanggung jawab melestarikan bahasa daerah.","Pelestarian bahasa daerah memerlukan sinergi berbagai pihak dan inovasi.","Bahasa daerah akan punah dalam beberapa tahun.","Generasi muda tidak perlu mempelajari bahasa daerah."], jawab:2 },
+    // 21-24: pantai2
+    { id:21, bacaan:"pantai2", tanya:"Latar tempat cerita tersebut adalah...", opsi:["Pegunungan yang asri","Pantai yang ramai wisatawan","Hutan lindung","Perkebunan teh","Sungai besar"], jawab:1 },
+    { id:22, bacaan:"pantai2", tanya:"Penyebab konflik batin yang dialami Pak Usman adalah...", opsi:["Keinginan Arman bekerja di hotel.","Suara mesin jet ski mengusir ikan.","Tradisi melaut mulai tergerus pariwisata modern.","Penyu tersangkut jaring.","Wisatawan mengambil foto tanpa menolong."], jawab:2 },
+    { id:23, bacaan:"pantai2", tanya:"Perubahan sikap Arman ditunjukkan ketika...", opsi:["Ia memutuskan bekerja di hotel.","Ia menegur wisatawan.","Ia ikut melepaskan penyu.","Ia memutuskan tetap membantu Pak Usman melaut.","Ia memotret penyu."], jawab:3 },
+    { id:24, bacaan:"pantai2", tanya:"Apa yang akan terjadi selanjutnya sesuai dengan perubahan sikap Arman?", opsi:["Arman tetap melamar di hotel.","Arman pergi merantau ke kota.","Arman bersama Pak Usman menjaga kelestarian laut.","Arman membeli jet ski.","Arman membuka restoran mewah."], jawab:2 },
+    // 25-28: pangan
+    { id:25, bacaan:"pangan", tanya:"Makna kata 'swasembada' dalam teks adalah...", opsi:["Ketergantungan pada impor","Kemampuan mencukupi kebutuhan sendiri","Produksi pangan berlebih untuk ekspor","Sistem irigasi modern","Diversifikasi pangan"], jawab:1 },
+    { id:26, bacaan:"pangan", tanya:"Manakah yang termasuk gagasan penjelas pada paragraf kedua?\n(1) Krisis regenerasi petani.\n(2) Rata-rata usia petani 47 tahun.\n(3) Produktivitas rendah karena teknologi.\n(4) Food estate di Kalimantan Tengah.", opsi:["(1), (2), (3)","(1) dan (3)","(2) dan (4)","(1), (2), (3), (4)","(1) dan (4)"], jawab:0 },
+    { id:27, bacaan:"pangan", tanya:"Hubungan makna paragraf 1 dan 2 adalah...", opsi:["Paragraf 1 menjelaskan solusi, paragraf 2 menjelaskan penyebab.","Paragraf 1 menjelaskan masalah, paragraf 2 menjelaskan penyebab.","Paragraf 1 fakta, paragraf 2 opini tanpa dasar.","Paragraf 1 dan 2 saling tidak berhubungan.","Paragraf 1 dan 2 sama-sama menjelaskan food estate."], jawab:1 },
+    { id:28, bacaan:"pangan", tanya:"Kesimpulan yang paling tepat untuk teks tersebut adalah...", opsi:["Indonesia sudah berhasil mencapai swasembada pangan.","Kedaulatan pangan tidak penting bagi Indonesia.","Pemerintah tidak perlu ikut campur dalam masalah pangan.","Upaya sistematis dan berpihak pada petani kecil diperlukan untuk mewujudkan kedaulatan pangan.","Food estate adalah solusi terbaik tanpa kekurangan."], jawab:3 }
+  ];
+
+  const TOTAL = 28;
+  const TOTAL_TIME = 45 * 60; // 45 menit
+  let currentIdx = 0;
+  let userAns = Array(TOTAL).fill(null);
+  let waktu = TOTAL_TIME;
+  let timerInterval = null;
+  let selesai = false;
+
+  // DOM
+  const $timerBox = document.getElementById('timerBox');
+  const $timerDisp = document.getElementById('timerDisplay');
+  const $progressFill = document.getElementById('progressFill');
+  const $progressText = document.getElementById('progressText');
+  const $numberNav = document.getElementById('numberNav');
+  const $card = document.getElementById('cardSoal');
+  const $btnPrev = document.getElementById('btnPrev');
+  const $btnNext = document.getElementById('btnNext');
+  const $btnSubmit = document.getElementById('btnSubmit');
+  const $btnRow = document.getElementById('btnRow');
+  const $resultCont = document.getElementById('resultContainer');
+
+  function formatTime(detik) {
+    const m = Math.floor(detik/60), s = detik%60;
+    return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }
+  function updateTimer() {
+    $timerDisp.textContent = formatTime(waktu);
+    $timerBox.classList.toggle('warning', waktu <= 300);
+  }
+  function updateProgress() {
+    const done = userAns.filter(a=>a!==null).length;
+    $progressFill.style.width = (done/TOTAL*100)+'%';
+    $progressText.textContent = done+'/'+TOTAL;
+  }
+  function renderNav() {
+    let html = '';
+    for(let i=0;i<TOTAL;i++){
+      let cls = 'num-btn';
+      if(i===currentIdx) cls += ' active';
+      if(userAns[i]!==null) cls += ' answered';
+      html += `<button class="${cls}" onclick="app.goTo(${i})">${i+1}</button>`;
+    }
+    $numberNav.innerHTML = html;
+  }
+  function renderSoal() {
+    if(selesai) return;
+    const s = soalList[currentIdx];
+    let html = '';
+    if(s.bacaan && bacaanDB[s.bacaan]){
+      html += `<div class="reading-box"><h4>📖 ${bacaanDB[s.bacaan].judul}</h4>${bacaanDB[s.bacaan].teks}</div>`;
+    }
+    html += `<div class="question-text">Soal ${s.id}. ${s.tanya.replace(/\n/g,'<br>')}</div><div class="options">`;
+    const labels = ['A','B','C','D','E'];
+    for(let i=0;i<s.opsi.length;i++){
+      let cls = 'option';
+      if(userAns[currentIdx]===i) cls += ' selected';
+      html += `<div class="${cls}" id="opt${i}" onclick="app.pilih(${i})">
+        <div class="option-letter">${labels[i]}</div>
+        <span>${s.opsi[i]}</span>
+      </div>`;
+    }
+    html += '</div>';
+    $card.innerHTML = html;
+    $btnPrev.disabled = (currentIdx===0);
+    if(currentIdx===TOTAL-1){
+      $btnNext.style.display='none';
+      $btnSubmit.style.display='inline-flex';
+    } else {
+      $btnNext.style.display='inline-flex';
+      $btnSubmit.style.display='none';
+    }
+    renderNav();
+    updateProgress();
+  }
+  function pilihJawaban(opsiIdx) {
+    if(selesai) return;
+    userAns[currentIdx] = opsiIdx;
+    document.querySelectorAll('.option').forEach((el,i)=>{
+      el.classList.toggle('selected', i===opsiIdx);
+    });
+    renderNav();
+    updateProgress();
+  }
+  function goTo(idx) {
+    if(selesai) return;
+    currentIdx = idx;
+    renderSoal();
+  }
+  function next() { if(currentIdx<TOTAL-1){ currentIdx++; renderSoal(); } }
+  function prev() { if(currentIdx>0){ currentIdx--; renderSoal(); } }
+  function submit() {
+    if(selesai) return;
+    if(!confirm('Yakin ingin mengumpulkan jawaban? Soal yang belum dijawab akan dianggap salah.')) return;
+    selesai = true;
+    clearInterval(timerInterval);
+    let benar = 0;
+    const review = [];
+    for(let i=0;i<TOTAL;i++){
+      const s = soalList[i];
+      const ua = userAns[i];
+      const isTrue = (ua===s.jawab);
+      if(isTrue) benar++;
+      review.push({ soal:s, user:ua, benar:isTrue });
+    }
+    const skor = Math.round((benar/TOTAL)*100);
+    let html = `<div class="result-box"><h2>Hasil TKA Bahasa Indonesia</h2>
+      <div class="score">${skor}</div><p>Benar ${benar} dari ${TOTAL} soal</p>`;
+    html += `<div style="text-align:left; margin-top:1.5rem;">`;
+    const labels = ['A','B','C','D','E'];
+    review.forEach((r,i)=>{
+      const s = r.soal;
+      const icon = r.benar?'✅':'❌';
+      const warna = r.benar?'correct':'wrong';
+      html += `<div class="review-item ${warna}"><strong>${icon} Soal ${s.id}</strong><br>
+        Jawaban Anda: ${r.user!==null?labels[r.user]:'—'} | Kunci: ${labels[s.jawab]}<br>
+        <small>${s.tanya.substring(0,70)}...</small></div>`;
+    });
+    html += `</div><button class="btn btn-primary" onclick="location.reload()">🔄 Ulangi Kuis</button></div>`;
+    $card.style.display='none';
+    $btnRow.style.display='none';
+    $numberNav.style.display='none';
+    document.querySelector('.progress-wrap').style.display='none';
+    $resultCont.style.display='block';
+    $resultCont.innerHTML = html;
+  }
+
+  function startTimer() {
+    updateTimer();
+    timerInterval = setInterval(()=>{
+      waktu--;
+      updateTimer();
+      if(waktu<=0){
+        clearInterval(timerInterval);
+        alert('Waktu habis! Jawaban akan dikumpulkan otomatis.');
+        submit();
+      }
+    },1000);
+  }
+
+  window.app = { pilih: pilihJawaban, goTo, next, prev, submit };
+  document.getElementById('btnNext').addEventListener('click', next);
+  document.getElementById('btnPrev').addEventListener('click', prev);
+  document.getElementById('btnSubmit').addEventListener('click', submit);
+
+  renderSoal();
+  startTimer();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT Simulasi TKA SMA - Bahasa Indonesia</title>
+    <style>
+        :root {
+            --primary-bg: #e0e7ed;
+            --header-bg: #1c4e80;
+            --text-color: #333;
+            --border-color: #ccc;
+            --btn-bg: #2980b9;
+            --btn-hover: #1f618d;
+            --answered-bg: #27ae60;
+            --current-bg: #f39c12;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--primary-bg); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        header { background-color: var(--header-bg); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 1.1em; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; }
+        .timer { font-weight: bold; background: #c0392b; padding: 5px 15px; border-radius: 5px; }
+        .main-container { display: flex; flex: 1; overflow: hidden; }
+        
+        .content-area { flex: 3; display: flex; flex-direction: row; background: white; margin: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow: hidden; }
+        .passage-section { flex: 1; padding: 20px; overflow-y: auto; border-right: 2px solid var(--border-color); background: #fdfdfd; line-height: 1.6; font-size: 15px;}
+        .passage-section p { margin-bottom: 12px; text-align: justify; }
+        .question-section { flex: 1; padding: 20px; overflow-y: auto; position: relative; display: flex; flex-direction: column; font-size: 15px;}
+        
+        .q-text { font-weight: bold; margin-bottom: 20px; font-size: 16px; }
+        .options-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .option-label { display: flex; align-items: flex-start; padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 5px; cursor: pointer; transition: background 0.2s; }
+        .option-label:hover { background: #f0f4f8; }
+        .option-label input { margin-top: 4px; margin-right: 15px; cursor: pointer; }
+        
+        .sidebar { flex: 1; max-width: 300px; background: white; margin: 15px 15px 15px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; display: flex; flex-direction: column; }
+        .sidebar-title { text-align: center; font-weight: bold; margin-bottom: 15px; color: var(--header-bg); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        .grid-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; overflow-y: auto; flex: 1; align-content: start; }
+        .grid-item { padding: 10px 0; text-align: center; background: white; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .grid-item.answered { background: var(--answered-bg); color: white; border-color: var(--answered-bg); }
+        .grid-item.current { background: var(--current-bg); color: white; border-color: var(--current-bg); }
+        
+        .navigation-btns { margin-top: auto; display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border-color); }
+        .nav-btn { padding: 10px 20px; background: var(--btn-bg); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .nav-btn:disabled { background: #95a5a6; cursor: not-allowed; }
+        .submit-btn { margin-top: 20px; padding: 12px; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; }
+        
+        #result-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 100; justify-content: center; align-items: center; flex-direction: column; }
+        .result-box { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; max-width: 500px; }
+        .result-box h2 { color: var(--header-bg); margin-bottom: 20px; }
+        .score-display { font-size: 48px; font-weight: bold; color: #27ae60; margin-bottom: 20px; }
+        .review-btn { padding: 10px 20px; background: var(--btn-bg); color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>SIMULASI CBT UTBK/SNBT - LITERASI BAHASA INDONESIA</div>
+    <div class="timer" id="timer">01:00:00</div>
+</header>
+
+<div class="main-container">
+    <div class="content-area">
+        <div class="passage-section" id="passage-container"></div>
+        <div class="question-section">
+            <div class="q-text" id="question-text"></div>
+            <div class="options-container" id="options-container"></div>
+            <div class="navigation-btns">
+                <button class="nav-btn" id="btn-prev" onclick="changeQuestion(-1)">SEBELUMNYA</button>
+                <button class="nav-btn" id="btn-next" onclick="changeQuestion(1)">SELANJUTNYA</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sidebar">
+        <div class="sidebar-title">Daftar Soal</div>
+        <div class="grid-container" id="question-grid"></div>
+        <button class="submit-btn" onclick="submitTest()">SELESAI UJIAN</button>
+    </div>
+</div>
+
+<div id="result-screen">
+    <div class="result-box">
+        <h2>Hasil Ujian Simulasi</h2>
+        <p>Skor Anda:</p>
+        <div class="score-display" id="final-score">0</div>
+        <button class="review-btn" onclick="location.reload()">Ulangi Ujian</button>
+    </div>
+</div>
+
+<script>
+    const database = [
+        {
+            passage: `<h3>Tradisi Sinoman: Solidaritas Sosial atau Beban Tersembunyi?</h3>
+            <p>Tradisi sinoman merupakan bagian dari kearifan lokal masyarakat perdesaan di Jawa. Tradisi ini umumnya terlihat ketika sebuah keluarga mengadakan hajatan besar, seperti pernikahan atau khitanan. Sinoman adalah kegiatan sukarela yang dilakukan oleh para pemuda dan warga desa untuk membantu melayani tamu, menata tempat, hingga menyiapkan hidangan. Aktivitas ini mencerminkan tingginya nilai gotong royong dan ikatan komunal, di mana tenaga yang dikeluarkan tidak dibayar dengan uang, melainkan dibalas dengan asas timbal balik saat pihak lain memiliki hajat serupa.</p>
+            <p>Namun, di balik harmonisnya tradisi ini, terdapat pergeseran makna yang mulai dirasakan di era modern. Asas timbal balik yang dulu murni didasari keikhlasan, perlahan dipandang sebagai "tabungan tenaga" yang wajib dilunasi. Apabila seseorang tidak pernah ikut sinoman, ia akan mendapat sanksi sosial berupa pengucilan atau tidak dibantu saat ia sendiri mengadakan hajatan. Hal ini menimbulkan tekanan tersendiri bagi warga yang sibuk bekerja di sektor formal atau merantau, yang tidak memiliki waktu fleksibel untuk mengikuti tradisi tersebut.</p>
+            <p>Pada akhirnya, bagi sebagian masyarakat, sinoman tidak lagi dipandang sekadar gotong royong, melainkan sebuah bentuk kewajiban sosial yang mengikat. Ada yang memandangnya sebagai modal sosial yang merekatkan desa, namun ada pula yang menganggapnya sebagai sistem utang budi yang membebani. Oleh karena itu, pemahaman dan adaptasi terhadap pelaksanaan sinoman perlu disesuaikan dengan dinamika masyarakat masa kini, agar nilai luhur kerukunan tetap terjaga tanpa harus mengorbankan kebebasan dan produktivitas individu.</p>`,
+            questions: [
+                { q: `1. Apa makna kata <em>hajatan</em> pada teks tersebut?`, options: [`A. Kegiatan musyawarah desa untuk menentukan panitia acara.`, `B. Pesta atau acara perayaan yang diadakan oleh seseorang atau keluarga.`, `C. Tradisi saling memberi sumbangan berupa uang atau bahan pokok.`, `D. Pekerjaan fisik yang dilakukan secara massal tanpa dibayar.`, `E. Aturan adat yang mewajibkan seluruh warga untuk berkumpul.`], ans: `B` },
+                { q: `2. Manakah gagasan yang mendukung ide pokok bahwa sinoman kini dipandang sebagai kewajiban sosial yang mengikat?`, options: [`A. Warga desa dengan senang hati menata tempat dan melayani tamu hajatan.`, `B. Sinoman membantu meringankan beban finansial keluarga yang mengadakan acara.`, `C. Warga yang tidak pernah ikut sinoman akan mendapat sanksi sosial berupa pengucilan.`, `D. Pemuda desa menggunakan waktu luang mereka untuk mempererat persaudaraan.`, `E. Tradisi ini mencerminkan tingginya nilai gotong royong dan ikatan komunal warga.`], ans: `C` },
+                { q: `3. Hubungan makna paragraf pertama dan kedua adalah ....`, options: [`A. perbandingan sejarah lahirnya sinoman dengan perkembangannya di masa kini`, `B. penjelasan rincian teknis pelaksanaan sinoman berdasarkan pandangan masyarakat`, `C. penegasan dari paragraf pertama mengenai manfaat sinoman bagi kesejahteraan ekonomi`, `D. paragraf kedua memaparkan sisi negatif atau tekanan sosial dari tradisi yang dipaparkan pada paragraf pertama`, `E. penjelasan sebab dan akibat dari berkurangnya jumlah pemuda di desa akibat merantau`], ans: `D` },
+                { q: `4. Perhatikan kalimat berikut:<br><br>“Oleh karena itu, pemahaman dan adaptasi terhadap pelaksanaan sinoman perlu disesuaikan dengan dinamika masyarakat masa kini, agar nilai luhur kerukunan tetap terjaga tanpa harus mengorbankan kebebasan dan produktivitas individu.”<br><br>Kalimat tersebut dapat menjadi kesimpulan teks argumentasi di atas karena ....`, options: [`A. menyimpulkan bahwa warga yang sibuk bekerja tidak perlu lagi mengikuti sinoman`, `B. merangkum seluruh konflik batin masyarakat perdesaan akibat sanksi sosial`, `C. memberikan solusi atas pergeseran makna sinoman agar nilai positifnya tetap relevan`, `D. menyangkal pendapat yang mengatakan bahwa sinoman adalah tradisi yang kuno dan membebani`, `E. menyimpulkan bahwa sinoman merupakan tradisi yang hanya cocok dilakukan di perdesaan`], ans: `C` }
+            ]
+        },
+        {
+            passage: `<h3>Bilah Terakhir</h3>
+            <p>“Kau harus berhenti, Yah. Usiamu tak lagi pantas berdiri di depan tungku peleburan,” ucap Seta pelan, namun cukup tegas untuk menghentikan ayunan palu ayahnya.</p>
+            <p>Ki Darma tidak menoleh. Ia hanya menyeka keringat yang membasahi keriput di dahinya, lalu kembali memanaskan potongan baja ke dalam bara. Bagi Ki Darma, menjadi pandai besi bukan sekadar pekerjaan; itu adalah kehormatan. Ia adalah pewaris terakhir pembuat keris pusaka di desa ini. Tiga keturunan sebelumnya telah mengisi ruang pamer di keraton dengan karya agung mereka.</p>
+            <p>“Seta, jika aku berhenti, siapa yang akan meneruskan? Kau? Kau bahkan lebih memilih kertas dan angka-angka di ibu kota daripada memegang palu,” balas Ki Darma dengan suara serak, nyaris tenggelam oleh desis baja yang dicelupkan ke dalam air.</p>
+            <p>Seta terdiam. Benar, ia telah memilih jalannya sendiri. Ia ingat betapa marahnya ayahnya ketika ia menolak belajar <em>masuh</em> dan menimpa logam sepuluh tahun lalu. Penolakan itu sempat membuat hubungan mereka merenggang. Seta pergi membawa rasa bersalah, sementara Ki Darma menelan kekecewaannya di balik percikan api tungku.</p>
+            <p>Tiba-tiba, Ki Darma terbatuk keras. Tubuhnya terhuyung. Seta dengan sigap menangkap tubuh ringkih itu sebelum menghantam lantai tanah. Palu baja terlepas dari genggaman sang ayah, berdentang nyaring di keheningan bengkel.</p>
+            <p>“Biarkan aku menyelesaikannya, Yah,” bisik Seta sambil menuntun ayahnya duduk. Seta membuka jas kotanya, menggulung lengan kemejanya, dan mengambil palu yang terjatuh. Ki Darma menatap putranya dengan mata berkaca-kaca. Ia melihat pantulan api di mata Seta, mata yang sama dengan kakek buyut mereka.</p>`,
+            questions: [
+                { q: `5. Berdasarkan teks tersebut, bagaimana sifat yang dimiliki oleh Ki Darma?`, options: [`A. Mudah menyerah dan penyayang`, `B. Keras kepala dan sangat menjaga tradisi`, `C. Pemarah dan materialistis`, `D. Suka mengatur dan egois`, `E. Penyabar dan modern`], ans: `B` },
+                { q: `6. Apa yang menyebabkan Ki Darma merasa kecewa terhadap Seta pada masa lalu?`, options: [`A. Seta tidak pernah kembali ke desa selama sepuluh tahun.`, `B. Seta merusak keris pusaka buatan kakek buyutnya.`, `C. Seta menolak untuk meneruskan tradisi keluarga sebagai pandai besi.`, `D. Seta memaksa Ki Darma untuk menutup bengkel peleburannya.`, `E. Seta pergi ke ibu kota tanpa pamit kepada ayahnya.`], ans: `C` },
+                { q: `7. Bagaimana kisah yang sesuai untuk menutup cerita <em>Bilah Terakhir</em> jika Seta merasa lega pada akhir cerita?`, options: [`A. Ki Darma mengusir Seta karena tidak percaya putranya bisa membuat keris.`, `B. Seta menyelesaikan tempaan keris itu dan Ki Darma tersenyum puas melihat putranya kembali pada tradisi.`, `C. Seta meninggalkan bengkel dan memutuskan untuk kembali ke ibu kota keesokan harinya.`, `D. Ki Darma berdiri, merebut palu dari Seta, dan menyelesaikan bilah tersebut sendiri dengan susah payah.`, `E. Seta menjual bengkel tersebut dan membawa Ki Darma pindah ke ibu kota untuk berobat.`], ans: `B` },
+                { q: `8. Bagaimana reaksi yang ditunjukkan oleh Seta ketika ayahnya terhuyung dan hampir jatuh?`, options: [`A. Marah dan menyalahkan ayahnya yang terlalu memaksakan diri bekerja`, `B. Panik dan segera berlari ke luar bengkel untuk mencari bantuan`, `C. Menangis histeris dan memohon agar ayahnya berhenti bekerja`, `D. Cepat tanggap menangkap ayahnya dan mengambil alih pekerjaannya`, `E. Membiarkan ayahnya terjatuh lalu menasihatinya agar segera beristirahat`], ans: `D` }
+            ]
+        },
+        {
+            passage: `<h3>Estetika Alam dan Realita Pendaki Instan</h3>
+            <p>Jalur pendakian Gunung Pangrango pagi itu dipenuhi embun. Di pos 3, tampak beberapa pendaki sedang menikmati seduhan kopi sambil mengabadikan momen. Mereka adalah rombongan pendaki dari kota yang membawa peralatan mahal dengan merek ternama. Pakaian mereka sangat modis, sangat siap untuk difoto dan diunggah ke media sosial dengan tagar pelestarian alam.</p>
+            <p>Seorang petugas relawan kebersihan gunung, Kang Asep, sedang memunguti botol oksigen kaleng dan bungkus mi instan yang berserakan tidak jauh dari tenda rombongan tersebut.</p>
+            <p>"Kang, permisi, bisa tolong geser sedikit? Kami mau ambil video <em>timelapse</em> pemandangan kabut," ucap salah satu pendaki dengan ramah namun terkesan abai.</p>
+            <p>Kang Asep hanya mengangguk dan menyingkir, membawa karung sampah yang sudah penuh. Dalam hati ia bergumam, mereka bisa mendaki gunung tinggi, membeli peralatan jutaan rupiah, namun tidak mampu membawa turun sampah mereka sendiri yang beratnya tak sampai setengah kilogram. Ironisnya, satu jam kemudian, Kang Asep melihat postingan pendaki tersebut di media sosial: <em>"Cintai alam seperti kau mencintai dirimu sendiri. Jangan tinggalkan apa pun kecuali jejak!"</em></p>`,
+            questions: [
+                { q: `9. Manakah urutan peristiwa berikut yang paling sesuai dengan isi teks?`, options: [`A. Kang Asep memungut sampah → pendaki mengambil video → pendaki mengunggah foto ke media sosial`, `B. Pendaki mengunggah foto → Kang Asep memungut sampah → pendaki meminta Kang Asep menyingkir`, `C. Pendaki tiba di pos 3 → pendaki membuang sampah → pendaki membantu Kang Asep`, `D. Kang Asep menegur pendaki → pendaki meminta maaf → pendaki membuat konten alam`, `E. Pendaki membuat konten → Kang Asep memungut sampah → Kang Asep menegur rombongan`], ans: `A` },
+                { q: `10. Manakah relevansi paling kuat antara sindiran dalam teks dengan realitas kehidupan sehari-hari?`, options: [`A. Banyak relawan kebersihan yang bekerja tanpa dibayar oleh pemerintah daerah.`, `B. Harga perlengkapan mendaki yang mahal membuat pendaki enggan membawa turun sampah.`, `C. Adanya fenomena orang yang melakukan kampanye peduli lingkungan hanya demi pencitraan di media sosial.`, `D. Petugas kebersihan sering kali mengganggu aktivitas wisata masyarakat modern.`, `E. Kampanye "jangan tinggalkan apa pun kecuali jejak" adalah slogan yang salah dan harus diganti.`], ans: `C` }
+            ]
+        },
+        {
+            passage: `<h3>Darurat Polusi Udara dan Transisi Energi</h3>
+            <p>Data terbaru dari <em>Air Quality Index</em> (AQI) menunjukkan bahwa beberapa kota besar di Indonesia secara konsisten menduduki peringkat atas dengan tingkat polusi udara terburuk di dunia. Polutan Particulate Matter (PM) 2.5 yang sangat berbahaya bagi paru-paru tercatat jauh melampaui ambang batas aman yang ditetapkan WHO. Kementerian Kesehatan melaporkan adanya lonjakan kasus infeksi saluran pernapasan akut (ISPA) sebesar 40% dalam kurun waktu enam bulan terakhir di wilayah padat kendaraan.</p>
+            <p>Akar dari tingginya polusi ini tidak lepas dari besarnya ketergantungan pada kendaraan bermotor berbasis fosil dan emisi cerobong asap dari Pembangkit Listrik Tenaga Uap (PLTU) batu bara di sekitar kawasan aglomerasi. Peningkatan mobilitas warga pascapandemi memicu kemacetan yang memperparah pembakaran gas buang. Transisi menuju energi terbarukan dan elektrifikasi kendaraan massal belum berjalan masif. Upaya pemerintah daerah seperti uji emisi dan rekayasa lalu lintas belum cukup efektif meredam laju polusi, menuntut intervensi kebijakan berskala makro untuk mengurangi emisi dari hulu.</p>`,
+            questions: [
+                { q: `11. Bagaimana hubungan makna antara paragraf 1 dan paragraf 2 dalam teks tersebut?`, options: [`A. Paragraf 2 membantah data indeks kualitas udara yang dipaparkan pada paragraf 1.`, `B. Paragraf 2 menjelaskan penyebab dari masalah lonjakan polusi udara yang diuraikan di paragraf 1.`, `C. Paragraf 2 menyajikan contoh spesifik mengenai penyakit ISPA yang disebutkan di paragraf 1.`, `D. Paragraf 2 memberikan rincian prosedur pengobatan ISPA akibat polusi udara dari paragraf 1.`, `E. Paragraf 2 menyimpulkan perbandingan tingkat polusi Indonesia dengan negara lain di paragraf 1.`], ans: `B` },
+                { q: `12. Pernyataan manakah yang BENAR terkait data yang mendukung keparahan dampak polusi udara dalam teks? (Pilih pernyataan yang tepat)`, options: [`A. WHO menetapkan bahwa PM 2.5 tidak berbahaya jika masyarakat menggunakan kendaraan listrik.`, `B. Terjadi penurunan mobilitas masyarakat pascapandemi yang menekan angka penyebaran ISPA.`, `C. Terdapat lonjakan kasus infeksi saluran pernapasan akut (ISPA) sebesar 40% dalam enam bulan terakhir.`, `D. Pembangkit Listrik Tenaga Uap (PLTU) batu bara dihentikan operasionalnya akibat lonjakan polutan.`, `E. Uji emisi kendaraan telah terbukti secara efektif menekan polusi udara secara makro.`], ans: `C` },
+                { q: `13. Mengapa penulis menggunakan frasa <em>"intervensi kebijakan berskala makro"</em> pada kalimat terakhir?`, options: [`A. Untuk menyiratkan bahwa masalah polusi udara harus diselesaikan oleh masyarakat tingkat bawah.`, `B. Untuk menegaskan perlunya tindakan dan regulasi besar di tingkat nasional, bukan sekadar penanganan lalu lintas lokal.`, `C. Menunjukkan bahwa uji emisi adalah satu-satunya cara terbaik untuk mengendalikan polutan industri.`, `D. Memberikan kesan bahwa pemerintah daerah tidak berwenang mengurus masalah kesehatan masyarakat.`, `E. Menggambarkan sistem perpajakan kendaraan bermotor yang harus dinaikkan secara signifikan.`], ans: `B` }
+            ]
+        },
+        {
+            passage: `<h3>Digitalisasi UMKM di Tengah Gejolak Ekonomi</h3>
+            <p>Perekonomian nasional saat ini dihadapkan pada tantangan ketidakpastian daya beli masyarakat dan ancaman inflasi imbas fluktuasi harga komoditas global. Laporan terbaru dari Bank Indonesia menunjukkan adanya tekanan biaya produksi yang dialami oleh Usaha Mikro, Kecil, dan Menengah (UMKM). UMKM yang sangat bergantung pada bahan baku impor menjadi kelompok yang paling terdampak akibat pelemahan nilai tukar rupiah terhadap dolar AS.</p>
+            <p>Meski demikian, digitalisasi memberikan secercah harapan. Pelaku UMKM yang telah beralih menggunakan platform <em>e-commerce</em> dan sistem pembayaran digital <em>(e-wallet)</em> terbukti lebih tangguh bertahan. Mereka mampu memangkas biaya pemasaran fisik, menjangkau pangsa pasar lintas provinsi, hingga mendapatkan kemudahan akses kredit mikro berkat rekam jejak transaksi digital yang tercatat rapi. Namun, ada paradoks yang terjadi: dari sekitar 64 juta unit UMKM di Indonesia, baru sekitar 30% yang benar-benar melek digital. Literasi digital dan infrastruktur internet yang belum merata di daerah pelosok menjadi hambatan besar.</p>`,
+            questions: [
+                { q: `14. Fenomena yang menggambarkan tantangan perekonomian UMKM berdasarkan teks di atas adalah ....`, options: [`A. Harga komoditas lokal yang turun drastis sehingga merugikan petani`, `B. Tingginya pajak <em>e-commerce</em> yang membebani penjual kecil`, `C. Tekanan biaya produksi akibat bahan baku impor dan nilai tukar rupiah`, `D. Beralihnya konsumen dari belanja online ke pasar tradisional`, `E. Hilangnya sistem pembayaran tunai di daerah pelosok`], ans: `C` },
+                { q: `15. Peristiwa yang menggambarkan dampak positif digitalisasi bagi UMKM adalah ....`, options: [`A. UMKM tidak lagi membutuhkan bahan baku impor dari luar negeri`, `B. UMKM mampu menjangkau pasar lintas provinsi dan mudah mengakses kredit`, `C. Terjadi pemerataan infrastruktur internet hingga ke daerah pedalaman`, `D. Bank sentral memberikan subsidi tunai langsung melalui platform e-wallet`, `E. Seluruh 64 juta unit UMKM kini telah beralih ke transaksi <em>e-commerce</em>`], ans: `B` },
+                { q: `16. Manakah pernyataan yang dapat menjadi kelanjutan teks tersebut?`, options: [`A. Penjabaran langkah-langkah pemerintah untuk menutup platform <em>e-commerce</em> asing`, `B. Diskusi mengenai cara bank sentral menurunkan inflasi pangan global`, `C. Paparan solusi memperluas literasi digital dan infrastruktur internet bagi UMKM pelosok`, `D. Analisis perbandingan kualitas produk UMKM Indonesia dengan produk dari negara Eropa`, `E. Penegasan bahwa nilai tukar rupiah terhadap dolar AS tidak berdampak pada ekonomi`], ans: `C` }
+            ]
+        },
+        {
+            passage: `<h3>Subak: Jaringan Irigasi Berbalut Filosofi Tri Hita Karana</h3>
+            <p>Subak bukan sekadar sistem pengairan sawah biasa di Bali. Sistem ini merupakan manifestasi nyata dari filosofi kuno Bali, yaitu <em>Tri Hita Karana</em>, yang mengajarkan tiga penyebab terciptanya kebahagiaan dan kesejahteraan: hubungan harmonis antara manusia dengan Tuhan, manusia dengan sesama manusia, dan manusia dengan alam lingkungannya. Diakui sebagai Warisan Budaya Dunia oleh UNESCO, eksistensi Subak kini menghadapi tantangan serius akibat masifnya alih fungsi lahan agraris menjadi kawasan pariwisata.</p>
+            <p>Pertama, aspek spiritual Subak terlihat dari keberadaan Pura Ulun Suci di setiap sistemnya. Para petani (<em>krama subak</em>) berkumpul untuk melakukan ritual persembahan sebelum menanam padi. Ritual ini bukan hal mistis belaka, melainkan simbol rasa syukur dan permohonan agar siklus ekologi berjalan seimbang. Kedua, aspek sosial tergambar dari tata kelola air yang sangat demokratis. Air didistribusikan secara adil dari sumbernya ke seluruh petak sawah tanpa memandang status kekayaan sang petani, melainkan berdasarkan kesepakatan bersama.</p>
+            <p>Ketiga, aspek ekologis Subak berfungsi mencegah kerusakan lingkungan. Pola tanam bergilir dan sistem terasering membantu mencegah erosi serta mengendalikan hama secara alami tanpa perlu pupuk kimia berlebih. Jika Subak hilang tergerus pembangunan beton, Bali tidak hanya kehilangan sistem irigasi, tetapi juga kehilangan jiwa kebudayaannya. Melestarikan Subak berarti merawat keberlanjutan hidup masyarakat agraris dan menjaga kelestarian ekosistem pulau dewata.</p>`,
+            questions: [
+                { q: `17. Makna dari istilah <em>Tri Hita Karana</em> dalam teks tersebut adalah ....`, options: [`A. Organisasi para petani Bali pengelola sistem irigasi secara mandiri`, `B. Ritual persembahan di Pura Ulun Suci sebelum masa tanam`, `C. Filosofi harmoni antara manusia dengan Tuhan, sesama, dan alam`, `D. Sistem pembagian air irigasi yang demokratis dan proporsional`, `E. Pola tanam bergilir yang bertujuan menekan pertumbuhan hama`], ans: `C` },
+                { q: `18. Sistem Subak mengajarkan nilai keadilan sosial yang demokratis.`, options: [`A. Ritual syukur dan permohonan di Pura Ulun Suci`, `B. Subak telah ditetapkan sebagai Warisan Budaya Dunia UNESCO`, `C. Pembagian air irigasi berdasarkan kesepakatan dan bukan kekayaan`, `D. Pola tanam bergilir menggunakan terasering mencegah erosi`, `E. Berkurangnya lahan pertanian akibat pembangunan kawasan pariwisata`], ans: `C` },
+                { q: `19. Bagaimana keterkaitan antara paragraf pertama dengan paragraf kedua dan ketiga?`, options: [`A. Paragraf pertama memaparkan masalah, lalu kedua dan ketiga memberikan solusi berupa bantuan UNESCO`, `B. Paragraf pertama menyebutkan konsep filosofis, lalu kedua dan ketiga menjabarkan penerapan filosofi tersebut pada aspek spiritual, sosial, dan ekologis`, `C. Paragraf pertama, kedua, dan ketiga berisi opini subjektif penulis yang saling bertentangan`, `D. Paragraf pertama menceritakan sejarah awal, sedangkan kedua dan ketiga menceritakan keruntuhan Subak`, `E. Paragraf kedua dan ketiga berisi perbandingan Subak dengan sistem irigasi di daerah lain`], ans: `B` },
+                { q: `20. Mengapa kalimat terakhir pada teks tersebut dinilai tepat sebagai penutup?`, options: [`A. Karena memberikan rincian dana yang dibutuhkan untuk menjaga Pura Ulun Suci.`, `B. Karena menjelaskan secara detail cara pembagian air bagi petani kaya dan miskin.`, `C. Karena menegaskan bahaya pariwisata yang sepenuhnya merugikan perekonomian Bali.`, `D. Karena merangkum inti argumen bahwa hilangnya Subak setara dengan hilangnya jiwa budaya dan ekologi Bali.`, `E. Karena merekomendasikan pupuk kimia tertentu sebagai pengganti metode tanam bergilir.`], ans: `D` }
+            ]
+        },
+        {
+            passage: `<h3>Suara dari Rimba</h3>
+            <p>Suara mesin gergaji menderu memecah keheningan fajar di Hutan adat Molo. Leo mengusap keringat di lehernya. Mandor perusahaan itu terus mendesaknya untuk segera menyelesaikan tebangan di sektor timur. Target kayu gelondongan bulan ini harus tercapai, atau gajinya akan dipotong.</p>
+            <p>Saat Leo mengarahkan ujung gergaji mesinnya ke sebuah pohon merbau raksasa, seorang pria tua dengan pakaian anyaman kulit kayu muncul dari balik semak. Wajahnya dipenuhi guratan usia, namun matanya menatap tajam bagai elang.</p>
+            <p>“Berhenti, Anak Muda. Akar pohon itu mengikat sumber air yang menghidupi kampung kami di hilir,” kata pria tua itu, suaranya tenang namun bergema melampaui bisingnya mesin.</p>
+            <p>Leo mematikan mesinnya. “Maaf, Kek. Saya hanya pekerja. Perusahaan sudah mendapat izin konsesi lahan ini. Jika pohon ini tak tumbang, perut keluarga saya yang tumbang.”</p>
+            <p>Pria tua itu mendekat, meletakkan tangannya di batang merbau. “Pohon ini telah berdiri sebelum kakek buyutmu lahir. Jika ia tumbang, mata air mengering, tanah akan longsor. Perut keluargamu mungkin kenyang bulan ini, tapi ribuan orang akan kelaparan selamanya. Kami, masyarakat adat, tidak memiliki kertas izin, tapi kami memiliki darah yang menyatu dengan tanah ini.”</p>
+            <p>Leo terdiam. Ia memandangi batang merbau, lalu menatap pria tua itu. Bayangan anak istrinya di rumah melintas di benaknya, namun di saat bersamaan, ia melihat jernihnya mata air kecil yang mengalir dari celah akar pohon besar itu. Dengan napas berat, Leo menurunkan gergaji mesinnya, memutar badan, dan berjalan menjauhi pohon merbau itu, meninggalkan mandornya yang berteriak marah dari kejauhan.</p>`,
+            questions: [
+                { q: `21. Latar tempat yang tergambar dalam cerita tersebut adalah ....`, options: [`A. Pabrik pengolahan kayu`, `B. Perkampungan masyarakat adat`, `C. Hutan adat Molo`, `D. Mata air pegunungan`, `E. Kantor perusahaan konsesi`], ans: `C` },
+                { q: `22. Apa yang menjadi akar konflik antara Leo dan Pria Tua dalam kutipan cerpen tersebut?`, options: [`A. Leo ingin mencuri kayu, sedangkan Pria Tua adalah polisi hutan.`, `B. Leo dituntut menebang pohon oleh perusahaan, sementara Pria Tua melindungi pohon penahan mata air.`, `C. Perusahaan Leo tidak membayar gaji, sehingga Leo merusak hutan adat.`, `D. Pria Tua meminta ganti rugi uang kepada Leo karena memasuki hutan.`, `E. Pohon merbau tersebut merupakan sarang hewan buas yang dilindungi.`], ans: `B` },
+                { q: `23. Apa yang dilakukan Leo setelah berdialog dengan Pria Tua?`, options: [`A. Mengabaikan pria tua tersebut dan melanjutkan pekerjaannya`, `B. Melaporkan pria tua itu kepada mandor agar diusir`, `C. Menebang pohon lain yang ukurannya lebih kecil`, `D. Mengurungkan niat menebang pohon dan pergi menjauh`, `E. Meminta uang suap kepada pria tua sebagai ganti rugi`], ans: `D` },
+                { q: `24. Keputusan Leo di akhir cerita menunjukkan sebuah pengorbanan. Nilai karakter apa yang mencerminkan tindakan Leo tersebut?`, options: [`A. Mengedepankan ego dan ambisi pribadi demi karier`, `B. Menghargai keberlanjutan ekologi dibanding keuntungan finansial sesaat`, `C. Ketakutan terhadap ancaman fisik dari masyarakat adat setempat`, `D. Kekecewaan terhadap mandor yang sering memotong gajinya`, `E. Keinginan untuk diakui sebagai pahlawan oleh masyarakat adat`], ans: `B` }
+            ]
+        },
+        {
+            passage: `<h3>Uang Panai: Antara Harga Diri dan Hambatan Pernikahan</h3>
+            <p>Dalam tradisi pernikahan masyarakat suku Bugis-Makassar, terdapat adat penyerahan <em>uang panai</em> dari pihak calon mempelai pria kepada pihak keluarga calon mempelai wanita. Uang panai berbeda dengan mahar (mas kawin) dalam konteks agama. Mahar merupakan syarat sah pernikahan yang menjadi hak mutlak sang istri, sedangkan uang panai adalah dana adat yang akan digunakan untuk membiayai pesta pernikahan yang diselenggarakan oleh pihak keluarga perempuan. Besaran uang panai biasanya ditentukan berdasarkan status sosial, garis keturunan (<em>karaeng/andi</em>), tingkat pendidikan, hingga profesi dari pihak perempuan.</p>
+            <p>Di satu sisi, tradisi ini memuat nilai filosofis sebagai bentuk penghargaan terhadap perempuan. Tingginya uang panai dipandang sebagai lambang keseriusan dan kerja keras seorang pria yang ingin meminang putri dari sebuah keluarga. Hal ini menjadi gengsi atau prestise tersendiri bagi keluarga perempuan, sekaligus filter sosial untuk memastikan anak mereka dipersunting oleh laki-laki yang bertanggung jawab dan mapan.</p>
+            <p>Namun, di era kiwari, uang panai kerap memunculkan persoalan pelik. Patokan nilai yang mencapai ratusan juta rupiah membuat banyak pemuda merasa terbebani. Tidak sedikit pasangan yang gagal menikah, menunda pernikahan hingga usia lanjut, atau bahkan nekat melakukan pinjaman utang dengan bunga tinggi demi menutupi tuntutan uang panai. Hal ini berdampak buruk, di mana pernikahan yang seharusnya menjadi awal kebahagiaan justru dimulai dengan lilitan utang yang merusak keharmonisan rumah tangga. Oleh karena itu, belakangan ini mulai muncul kesadaran dari tokoh agama dan tetua adat untuk menyederhanakan uang panai, mengembalikan pada kemampuan pihak pria tanpa menghilangkan esensi penghargaan terhadap perempuan.</p>`,
+            questions: [
+                { q: `25. Apa perbedaan antara <em>uang panai</em> dan mahar berdasarkan teks tersebut?`, options: [`A. Mahar ditentukan oleh pendidikan perempuan, uang panai tidak.`, `B. Mahar adalah hak mutlak istri, sedangkan uang panai adalah dana adat untuk biaya pesta.`, `C. Mahar diberikan oleh keluarga perempuan, uang panai diberikan oleh pria.`, `D. Mahar bisa diutang, sedangkan uang panai harus dibayar tunai.`, `E. Mahar merupakan gengsi keluarga, uang panai adalah syarat sah pernikahan.`], ans: `B` },
+                { q: `26. Gagasan penjelas yang mendukung ide pokok bahwa uang panai menjadi persoalan pelik saat ini adalah ....`, options: [`A. Uang panai menunjukkan kerja keras laki-laki yang bertanggung jawab.`, `B. Besaran uang panai dilihat dari garis keturunan bangsawan.`, `C. Adanya pasangan yang membatalkan pernikahan atau berutang demi menutupi panai.`, `D. Tokoh agama menyarankan agar uang panai dikembalikan fungsinya sebagai mas kawin.`, `E. Panai adalah wujud penghormatan tinggi masyarakat Bugis terhadap kaum wanita.`], ans: `C` },
+                { q: `27. Bagaimana hubungan makna antara paragraf kedua dan ketiga pada teks tersebut?`, options: [`A. Paragraf ketiga menjelaskan dampak positif dari filosofi yang ada di paragraf kedua.`, `B. Paragraf ketiga merupakan perbandingan sejarah mengenai panai dengan masa lalu di paragraf kedua.`, `C. Paragraf kedua dan ketiga menceritakan langkah-langkah negosiasi uang panai.`, `D. Paragraf ketiga memaparkan dampak negatif/beban finansial yang bertolak belakang dengan nilai ideal pada paragraf kedua.`, `E. Paragraf ketiga menegaskan bahwa makna filosofis di paragraf kedua sudah tidak berlaku sama sekali.`], ans: `D` },
+                { q: `28. Perhatikan kalimat berikut:<br><br>“Oleh karena itu, belakangan ini mulai muncul kesadaran dari tokoh agama dan tetua adat untuk menyederhanakan uang panai, mengembalikan pada kemampuan pihak pria tanpa menghilangkan esensi penghargaan terhadap perempuan.”<br><br>Kalimat tersebut berfungsi sebagai ....`, options: [`A. argumen penolak terhadap keberadaan tradisi uang panai`, `B. kesimpulan yang menawarkan jalan tengah atas permasalahan tingginya uang panai`, `C. deskripsi mengenai peran tokoh agama dalam membatalkan pernikahan`, `D. pendahuluan untuk memaparkan rincian biaya pernikahan adat`, `E. sindiran kepada keluarga perempuan yang menetapkan panai ratusan juta`], ans: `B` }
+            ]
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    const flatQuestions = [];
+    const answers = new Array(28).fill(null);
+
+    database.forEach(section => {
+        section.questions.forEach(q => {
+            flatQuestions.push({
+                passage: section.passage,
+                question: q.q,
+                options: q.options,
+                ans: q.ans
+            });
+        });
+    });
+
+    function init() {
+        renderGrid();
+        if (flatQuestions.length > 0) {
+            loadQuestion(0);
+            startTimer();
+        } else {
+            console.error("Database soal kosong atau gagal dimuat.");
+        }
+    }
+
+    function renderGrid() {
+        const grid = document.getElementById('question-grid');
+        grid.innerHTML = '';
+        for (let i = 0; i < flatQuestions.length; i++) {
+            const box = document.createElement('div');
+            box.className = 'grid-item';
+            box.innerText = (i + 1);
+            if (answers[i]) box.classList.add('answered');
+            if (i === currentQuestionIndex) box.classList.add('current');
+            
+            box.onclick = () => loadQuestion(i);
+            grid.appendChild(box);
+        }
+    }
+
+    function loadQuestion(index) {
+        currentQuestionIndex = index;
+        const qData = flatQuestions[index];
+        
+        document.getElementById('passage-container').innerHTML = qData.passage;
+        document.getElementById('question-text').innerHTML = qData.question;
+        
+        const optContainer = document.getElementById('options-container');
+        optContainer.innerHTML = '';
+        
+        const labels = ['A', 'B', 'C', 'D', 'E'];
+        
+        qData.options.forEach((optText, idx) => {
+            const letter = labels[idx];
+            const label = document.createElement('label');
+            label.className = 'option-label';
+            
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'q_option';
+            radio.value = letter;
+            if (answers[index] === letter) {
+                radio.checked = true;
+            }
+            
+            radio.onchange = () => {
+                answers[index] = letter;
+                renderGrid();
+            };
+            
+            label.appendChild(radio);
+            const textNode = document.createElement('span');
+            textNode.innerHTML = optText;
+            label.appendChild(textNode);
+            
+            optContainer.appendChild(label);
+        });
+
+        document.getElementById('btn-prev').disabled = index === 0;
+        document.getElementById('btn-next').disabled = index === flatQuestions.length - 1;
+        
+        renderGrid();
+    }
+
+    function changeQuestion(step) {
+        let newIndex = currentQuestionIndex + step;
+        if (newIndex >= 0 && newIndex < flatQuestions.length) {
+            loadQuestion(newIndex);
+        }
+    }
+
+    function submitTest() {
+        if(confirm("Apakah Anda yakin ingin menyelesaikan ujian?")) {
+            let score = 0;
+            flatQuestions.forEach((q, i) => {
+                if (answers[i] === q.ans) score++;
+            });
+            const finalValue = Math.round((score / flatQuestions.length) * 1000);
+            
+            document.getElementById('result-screen').style.display = 'flex';
+            document.getElementById('final-score').innerText = finalValue;
+        }
+    }
+
+    let timeInSeconds = 3600;
+    function startTimer() {
+        setInterval(() => {
+            if(timeInSeconds > 0) {
+                timeInSeconds--;
+                let h = Math.floor(timeInSeconds / 3600).toString().padStart(2, '0');
+                let m = Math.floor((timeInSeconds % 3600) / 60).toString().padStart(2, '0');
+                let s = (timeInSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer').innerText = h + ":" + m + ":" + s;
+            } else {
+                submitTest();
+            }
+        }, 1000);
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>

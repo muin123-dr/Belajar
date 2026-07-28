@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis TKA SMA - Bahasa Indonesia 2024/2025</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #818cf8;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 30%, #f0f4ff 60%, #ede9fe 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text);
+            line-height: 1.7;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 820px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            border: 1px solid var(--border);
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .header-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+        .header-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .timer-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fef3c7;
+            border: 2px solid #fcd34d;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #92400e;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            min-width: 100px;
+            justify-content: center;
+            font-variant-numeric: tabular-nums;
+            font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+        }
+        .timer-box.warning {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #991b1b;
+            animation: pulse 0.8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.06);
+            }
+        }
+        .timer-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Progress */
+        .progress-wrap {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .progress-bar-outer {
+            flex: 1;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+
+        /* Navigasi Nomor Soal */
+        .nav-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            justify-content: center;
+        }
+        .nav-num {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #6b7280;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            position: relative;
+        }
+        .nav-num:hover {
+            border-color: var(--primary-light);
+            background: #eef2ff;
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);
+        }
+        .nav-num.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+            transform: scale(1.08);
+        }
+        .nav-num.answered {
+            border-color: var(--success);
+            background: #ecfdf5;
+            color: #059669;
+        }
+        .nav-num.answered::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        .nav-num.active.answered {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .nav-num.active.answered::after {
+            background: #fff;
+            border-color: var(--primary);
+        }
+
+        /* Card Soal */
+        .card-soal {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px 30px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            min-height: 320px;
+        }
+        .card-soal.fade-in {
+            animation: fadeSlideIn 0.35s ease-out;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .bacaan-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius-sm);
+            padding: 18px 22px;
+            margin-bottom: 22px;
+            font-size: 0.93rem;
+            line-height: 1.8;
+            color: #334155;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-line;
+            letter-spacing: 0.1px;
+        }
+        .bacaan-box h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .soal-label {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 5px 14px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        .soal-pertanyaan {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .opsi-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .opsi-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            background: #fafbfc;
+            font-weight: 500;
+            user-select: none;
+            position: relative;
+        }
+        .opsi-item:hover {
+            border-color: #a5b4fc;
+            background: #f5f7ff;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+            transform: translateX(3px);
+        }
+        .opsi-item.selected {
+            border-color: var(--primary);
+            background: #eef2ff;
+            font-weight: 600;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .opsi-item.correct {
+            border-color: var(--success) !important;
+            background: #ecfdf5 !important;
+            color: #065f46 !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12) !important;
+        }
+        .opsi-item.incorrect {
+            border-color: var(--danger) !important;
+            background: #fef2f2 !important;
+            color: #991b1b !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+        .opsi-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+            background: #fff;
+            color: #64748b;
+        }
+        .opsi-item.selected .opsi-indicator {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+        .opsi-item.correct .opsi-indicator {
+            border-color: var(--success);
+            background: var(--success);
+            color: #fff;
+        }
+        .opsi-item.incorrect .opsi-indicator {
+            border-color: var(--danger);
+            background: var(--danger);
+            color: #fff;
+        }
+        .opsi-text {
+            flex: 1;
+        }
+
+        /* Tombol */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+        .btn-outline {
+            background: #fff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-outline:hover {
+            background: #eef2ff;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #fff;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+        }
+        .btn-danger:hover {
+            background: #fef2f2;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        /* Hasil */
+        .result-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 36px 30px;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--border);
+            text-align: center;
+            animation: fadeSlideIn 0.5s ease-out;
+        }
+        .result-score {
+            font-size: 4.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        .result-grade {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .result-detail {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .result-stat {
+            background: #f8fafc;
+            border-radius: var(--radius-sm);
+            padding: 16px 22px;
+            text-align: center;
+            min-width: 90px;
+        }
+        .result-stat-val {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .result-stat-lbl {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .pembahasan-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            margin-top: 10px;
+            font-size: 0.88rem;
+            color: #92400e;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .modal {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 28px 30px;
+            max-width: 440px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        .modal h3 {
+            margin-bottom: 10px;
+        }
+        .modal p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Tooltip kecil */
+        .info-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 50px;
+            letter-spacing: 0.4px;
+        }
+
+        /* Responsif */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .timer-box {
+                font-size: 1rem;
+                padding: 8px 16px;
+            }
+            .card-soal {
+                padding: 18px 16px;
+            }
+            .bacaan-box {
+                max-height: 200px;
+                font-size: 0.82rem;
+                padding: 12px 14px;
+            }
+            .opsi-item {
+                padding: 10px 14px;
+                gap: 10px;
+                font-size: 0.9rem;
+            }
+            .opsi-indicator {
+                width: 26px;
+                height: 26px;
+                font-size: 0.75rem;
+            }
+            .nav-num {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+            .result-score {
+                font-size: 3rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container" id="appContainer">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-brand">
+                <div class="header-icon">📝</div>
+                <div>
+                    <div class="header-title">TKA Bahasa Indonesia</div>
+                    <div class="header-subtitle">Simulasi Soal 2024/2025 • 15 Soal</div>
+                </div>
+            </div>
+            <div class="timer-box" id="timerBox">
+                <span class="timer-icon">⏱️</span>
+                <span id="timerDisplay">25:00</span>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-wrap">
+            <span style="font-size:0.85rem;font-weight:600;">📊 Progress</span>
+            <div class="progress-bar-outer">
+                <div class="progress-bar-inner" id="progressBar" style="width: 0%;"></div>
+            </div>
+            <span class="progress-text" id="progressText">0/15</span>
+        </div>
+
+        <!-- Navigasi Nomor -->
+        <div class="nav-numbers" id="navNumbers"></div>
+
+        <!-- Card Soal -->
+        <div class="card-soal fade-in" id="cardSoal">
+            <!-- Dinamis -->
+        </div>
+
+        <!-- Tombol Navigasi -->
+        <div class="btn-row" id="btnRow">
+            <button class="btn btn-outline" id="btnPrev" disabled>⬅ Sebelumnya</button>
+            <button class="btn btn-primary" id="btnNext">Selanjutnya ➡</button>
+            <button class="btn btn-danger" id="btnSubmit" style="display:none;">✅ Kumpulkan</button>
+        </div>
+
+        <!-- Hasil (hidden default) -->
+        <div id="resultContainer" style="display:none;"></div>
+    </div>
+
+    <!-- Modal Konfirmasi Submit -->
+    <div class="modal-overlay" id="modalConfirm" style="display:none;">
+        <div class="modal">
+            <h3>⚠️ Yakin ingin mengumpulkan?</h3>
+            <p id="modalUnanswered">Anda belum menjawab <strong>0</strong> soal. Soal yang tidak dijawab akan dianggap salah.</p>
+            <p style="font-size:0.8rem;color:#94a3b8;">Waktu tersisa: <span id="modalTimeLeft">-</span></p>
+            <div class="btn-row" style="margin-top:8px;">
+                <button class="btn btn-outline" onclick="closeModal()">🔙 Kembali</button>
+                <button class="btn btn-danger" onclick="submitQuiz()">✅ Ya, Kumpulkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ==================== DATA BACAAN & SOAL ====================
+            const bacaanData = {
+                bacaan1: {
+                    judul: 'Bacaan 1 — Transformasi Digital dan Daya Saing Bangsa',
+                    teks: `Revolusi industri 4.0 telah mendorong percepatan transformasi digital di berbagai sektor kehidupan. Di Indonesia, gelombang digitalisasi ini terlihat dari masifnya penetrasi internet, pertumbuhan e-commerce, serta adopsi teknologi finansial yang kian meluas. Pemerintah pun mencanangkan berbagai inisiatif strategis, seperti pembangunan infrastruktur digital hingga ke daerah terpencil, guna menjembatani kesenjangan akses teknologi. Namun, transformasi ini tidak sekadar perkara adopsi teknologi; ia menuntut perubahan fundamental dalam pola pikir, budaya kerja, dan sistem pendidikan nasional.
+
+                    Salah satu tantangan utama yang dihadapi Indonesia adalah kesenjangan literasi digital. Data menunjukkan bahwa meskipun tingkat penetrasi internet telah melampaui 78% dari total populasi, indeks literasi digital masyarakat masih berada pada kategori sedang. Hal ini mengindikasikan bahwa kemampuan menggunakan perangkat digital belum sepenuhnya diimbangi dengan kapasitas untuk mengevaluasi informasi secara kritis, menjaga keamanan data pribadi, dan memanfaatkan teknologi secara produktif.
+
+                    Di sisi lain, disrupsi yang ditimbulkan oleh otomatisasi dan kecerdasan buatan (AI) berpotensi menggeser banyak jenis pekerjaan konvensional. Studi dari berbagai lembaga riset memperkirakan bahwa dalam satu dekade mendatang, jutaan pekerjaan di sektor manufaktur, administrasi, dan jasa rutin akan tergantikan oleh sistem otomatis. Namun, peluang baru juga muncul di bidang-bidang yang membutuhkan kreativitas, pemikiran kritis, dan kecerdasan emosional—area yang hingga kini belum sepenuhnya mampu direplikasi oleh mesin.
+
+                    Oleh karena itu, sistem pendidikan nasional perlu segera beradaptasi. Kurikulum harus dirancang ulang agar tidak hanya berfokus pada hafalan dan ujian standar, melainkan juga mengembangkan kompetensi abad ke-21 seperti pemecahan masalah kompleks, kolaborasi lintas disiplin, dan literasi data. Hanya dengan pendekatan yang holistik dan antisipatif, Indonesia dapat memanfaatkan bonus demografi sebagai keunggulan kompetitif, bukan sekadar menjadi pasar bagi produk digital asing.`
+                },
+                bacaan2: {
+                    judul: 'Bacaan 2 — Ketahanan Pangan dan Kedaulatan Pangan Nasional',
+                    teks: `Isu ketahanan pangan kembali menjadi sorotan tajam di tengah dinamika geopolitik global dan perubahan iklim yang kian tak menentu. Indonesia, sebagai negara agraris dengan populasi lebih dari 270 juta jiwa, menghadapi tantangan berat dalam memastikan ketersediaan pangan yang cukup, merata, dan terjangkau bagi seluruh rakyatnya. Paradoks yang sering terjadi adalah negeri yang kaya akan sumber daya alam ini justru masih bergantung pada impor untuk sejumlah komoditas pangan pokok seperti beras, kedelai, dan gula.
+
+                    Konsep kedaulatan pangan menekankan hak setiap bangsa untuk menentukan kebijakan pangannya sendiri secara mandiri, termasuk dalam hal produksi, distribusi, dan konsumsi. Ini berbeda dengan sekadar ketahanan pangan yang lebih bersifat teknokratis dan berfokus pada ketersediaan stok. Kedaulatan pangan menempatkan petani, nelayan, dan masyarakat adat sebagai subjek utama, bukan sekadar objek kebijakan. Dalam kerangka ini, reforma agraria, perlindungan lahan pertanian produktif, dan penguatan kelembagaan petani menjadi prasyarat mutlak.
+
+                    Sayangnya, alih fungsi lahan pertanian ke penggunaan non-pertanian terus berlangsung secara masif, terutama di Pulau Jawa. Data Kementerian Pertanian menunjukkan bahwa rata-rata penyusutan lahan sawah mencapai puluhan ribu hektar per tahun. Fenomena ini diperparah oleh krisis regenerasi petani; generasi muda semakin enggan berkecimpung di sektor pertanian karena dianggap kurang menjanjikan secara ekonomi dan kurang bergengsi secara sosial.
+
+                    Untuk mengatasi kompleksitas persoalan ini, diperlukan kebijakan yang terintegrasi dari hulu ke hilir. Subsidi dan insentif harus diarahkan tidak hanya pada input produksi, tetapi juga pada riset dan pengembangan varietas unggul tahan iklim, perbaikan sistem irigasi, dan akses pasar yang adil bagi petani kecil. Di tingkat konsumsi, edukasi mengenai pola konsumsi pangan yang beragam dan tidak bergantung pada satu komoditas (seperti beras) perlu digalakkan. Tanpa langkah-langkah strategis yang konsisten, cita-cita kedaulatan pangan hanya akan menjadi retorika belaka.`
+                }
+            };
+
+            // Struktur soal
+            const soalData = [
+                // === Soal 1-5 terkait Bacaan 1 ===
+                {
+                    id: 1,
+                    bacaanRef: 'bacaan1',
+                    pertanyaan: 'Apa ide pokok paragraf pertama bacaan di atas?',
+                    opsi: [
+                        'A. Pemerintah Indonesia gencar membangun infrastruktur digital di daerah terpencil.',
+                        'B. Transformasi digital di Indonesia menuntut perubahan pola pikir dan sistem pendidikan.',
+                        'C. Revolusi industri 4.0 hanya berdampak pada sektor e-commerce dan teknologi finansial.',
+                        'D. Penetrasi internet di Indonesia telah mencapai lebih dari 78% dari total populasi.',
+                        'E. Kesenjangan akses teknologi merupakan satu-satunya masalah transformasi digital.'
+                    ],
+                    jawaban: 1,
+                    pembahasan: 'Paragraf pertama menyatakan bahwa transformasi digital "menuntut perubahan fundamental dalam pola pikir, budaya kerja, dan sistem pendidikan nasional." Ini merupakan gagasan utama yang merangkum keseluruhan isi paragraf.'
+                }, {
+                    id: 2,
+                    bacaanRef: 'bacaan1',
+                    pertanyaan: 'Kata "disrupsi" dalam paragraf ketiga bacaan tersebut paling dekat maknanya dengan...',
+                    opsi: [
+                        'A. Kehancuran',
+                        'B. Gangguan besar',
+                        'C. Inovasi',
+                        'D. Kecepatan',
+                        'E. Perbaikan'
+                    ],
+                    jawaban: 1,
+                    pembahasan: 'Dalam konteks bacaan, "disrupsi" merujuk pada gangguan atau perubahan besar yang mengacaukan tatanan yang sudah ada, terutama akibat otomatisasi dan AI. Makna paling tepat adalah "gangguan besar".'
+                }, {
+                    id: 3,
+                    bacaanRef: 'bacaan1',
+                    pertanyaan: 'Pernyataan berikut yang SESUAI dengan isi bacaan adalah...',
+                    opsi: [
+                        'A. Indeks literasi digital masyarakat Indonesia sudah berada pada kategori tinggi.',
+                        'B. Kecerdasan buatan telah sepenuhnya mampu mereplikasi kreativitas manusia.',
+                        'C. Kurikulum pendidikan saat ini sudah sepenuhnya berfokus pada kompetensi abad ke-21.',
+                        'D. Otomatisasi berpotensi menggantikan pekerjaan di sektor manufaktur dan administrasi.',
+                        'E. Bonus demografi Indonesia tidak relevan dengan transformasi digital.'
+                    ],
+                    jawaban: 3,
+                    pembahasan: 'Paragraf ketiga secara eksplisit menyebutkan bahwa "jutaan pekerjaan di sektor manufaktur, administrasi, dan jasa rutin akan tergantikan oleh sistem otomatis." Pilihan D sesuai dengan pernyataan tersebut.'
+                }, {
+                    id: 4,
+                    bacaanRef: 'bacaan1',
+                    pertanyaan: 'Sinonim yang tepat untuk kata "holistik" dalam paragraf terakhir bacaan adalah...',
+                    opsi: [
+                        'A. Parsial',
+                        'B. Sektoral',
+                        'C. Menyeluruh',
+                        'D. Terbatas',
+                        'E. Spesifik'
+                    ],
+                    jawaban: 2,
+                    pembahasan: 'Kata "holistik" berarti bersifat menyeluruh atau komprehensif, memperhatikan semua aspek secara utuh. Lawannya adalah parsial atau sektoral.'
+                }, {
+                    id: 5,
+                    bacaanRef: 'bacaan1',
+                    pertanyaan: 'Antonim dari kata "antisipatif" dalam paragraf terakhir bacaan adalah...',
+                    opsi: [
+                        'A. Proaktif',
+                        'B. Responsif',
+                        'C. Reaktif',
+                        'D. Adaptif',
+                        'E. Inovatif'
+                    ],
+                    jawaban: 2,
+                    pembahasan: '"Antisipatif" berarti bersifat tanggap terhadap sesuatu yang akan terjadi (mempersiapkan diri). Antonimnya adalah "reaktif", yaitu baru bertindak setelah sesuatu terjadi.'
+                },
+
+                // === Soal 6-10: Soal Independen ===
+                {
+                    id: 6,
+                    bacaanRef: null,
+                    pertanyaan: 'Pilihlah pasangan kata yang memiliki hubungan analogi paling tepat! DOKTER : STETOSKOP = ... : ...',
+                    opsi: [
+                        'A. Pilot : Pesawat',
+                        'B. Koki : Wajan',
+                        'C. Petani : Cangkul',
+                        'D. Guru : Papan Tulis',
+                        'E. Pelukis : Kanvas'
+                    ],
+                    jawaban: 2,
+                    pembahasan: 'DOKTER menggunakan STETOSKOP sebagai alat utama untuk mendiagnosis. Hubungan yang paling setara adalah PETANI menggunakan CANGKUL sebagai alat utama untuk mengolah tanah. Pilihan lain kurang tepat: Pilot mengendarai pesawat (bukan alat diagnostik), Koki menggunakan wajan (tapi wajan bukan identitas utama), Guru dan papan tulis (papan tulis bukan alat utama yang melekat), Pelukis dan kanvas (kanvas adalah media, bukan alat).'
+                }, {
+                    id: 7,
+                    bacaanRef: null,
+                    pertanyaan: 'Manakah kalimat yang menggunakan ejaan Bahasa Indonesia sesuai dengan EYD V?',
+                    opsi: [
+                        'A. "Saya akan pergi ke Jakarta besok pagi," kata Andi.',
+                        'B. Para siswa-siswi dihimbau untuk mengumpulkan tugas tepat pada waktunya.',
+                        'C. Walikota Bandung meresmikan gedung serba guna di Kelurahan Cimahi.',
+                        'D. Mereka berdiskusi tentang sistem pengelolaan sampah di Indonesia.',
+                        'E. Bapak Budi, S.H. akan memberikan sambutan pada acara tersebut.'
+                    ],
+                    jawaban: 3,
+                    pembahasan: 'Pilihan D benar karena tidak mengandung kesalahan ejaan. Pilihan A: tanda koma sebelum kutipan seharusnya tidak ada jika kutipan diawali huruf kecil (atau gunakan titik dua). Pilihan B: "siswa-siswi" seharusnya "para siswa" (pengulangan makna jamak), "dihimbau" seharusnya "diimbau" (tanpa h). Pilihan C: "Walikota" seharusnya "Wali Kota" (dipisah). Pilihan E: tanda koma setelah "S.H." tidak diperlukan sebelum predikat.'
+                }, {
+                    id: 8,
+                    bacaanRef: null,
+                    pertanyaan: 'Kalimat manakah yang PALING EFEKTIF?',
+                    opsi: [
+                        'A. Bagi para mahasiswa yang belum melunasi pembayaran, dimohon untuk segera menyelesaikannya.',
+                        'B. Mahasiswa yang belum melunasi pembayaran dimohon segera menyelesaikannya.',
+                        'C. Untuk para mahasiswa yang belum melunasi pembayaran, diharap segera melunasi.',
+                        'D. Kepada mahasiswa-mahasiswa yang belum melunasi, diminta agar segera menyelesaikan pembayaran.',
+                        'E. Semua mahasiswa diharapkan untuk segera melakukan pelunasan pembayaran yang belum diselesaikan.'
+                    ],
+                    jawaban: 1,
+                    pembahasan: 'Pilihan B adalah kalimat paling efektif karena ringkas, tidak bertele-tele, dan tidak mengandung kata mubazir. Pilihan A menggunakan "bagi" yang tidak tepat di awal kalimat dan "para" yang berlebihan. Pilihan C menggunakan "untuk" yang kurang tepat. Pilihan D menggunakan "kepada" dan pengulangan "mahasiswa-mahasiswa". Pilihan E terlalu panjang dan berbelit.'
+                }, {
+                    id: 9,
+                    bacaanRef: null,
+                    pertanyaan: 'Konjungsi yang tepat untuk melengkapi kalimat berikut adalah...\n\n"Pemerintah terus menggalakkan program vaksinasi, _____ kesadaran masyarakat akan pentingnya imunisasi masih perlu ditingkatkan."',
+                    opsi: [
+                        'A. karena',
+                        'B. sehingga',
+                        'C. meskipun',
+                        'D. sedangkan',
+                        'E. dan'
+                    ],
+                    jawaban: 3,
+                    pembahasan: 'Kalimat tersebut membandingkan dua hal yang kontras: upaya pemerintah yang gencar vs. kesadaran masyarakat yang masih perlu ditingkatkan. Konjungsi yang tepat untuk menunjukkan pertentangan atau perbandingan adalah "sedangkan". "Meskipun" juga menunjukkan kontras tetapi lebih tepat untuk konsesi (pengakuan), sementara di sini lebih ke perbandingan dua keadaan.'
+                }, {
+                    id: 10,
+                    bacaanRef: null,
+                    pertanyaan: 'Urutan kalimat berikut yang membentuk paragraf padu adalah...\n\n(1) Oleh karena itu, menjaga keseimbangan ekosistem sangatlah penting.\n(2) Ekosistem yang seimbang menjamin keberlangsungan hidup semua makhluk.\n(3) Kerusakan pada satu komponen ekosistem dapat memicu efek domino yang merugikan.\n(4) Sebaliknya, ekosistem yang rusak akan mengancam kehidupan banyak spesies.',
+                    opsi: [
+                        'A. (1)-(2)-(3)-(4)',
+                        'B. (2)-(4)-(3)-(1)',
+                        'C. (3)-(4)-(2)-(1)',
+                        'D. (2)-(3)-(4)-(1)',
+                        'E. (4)-(3)-(2)-(1)'
+                    ],
+                    jawaban: 1,
+                    pembahasan: 'Urutan logis: (2) menjelaskan ekosistem seimbang → (4) kontras dengan ekosistem rusak → (3) menjelaskan dampak kerusakan → (1) simpulan berupa ajakan. Jadi urutannya (2)-(4)-(3)-(1).'
+                },
+
+                // === Soal 11-13 terkait Bacaan 2 ===
+                {
+                    id: 11,
+                    bacaanRef: 'bacaan2',
+                    pertanyaan: 'Simpulan yang paling tepat dari bacaan kedua adalah...',
+                    opsi: [
+                        'A. Indonesia tidak perlu mengimpor bahan pangan karena memiliki sumber daya alam melimpah.',
+                        'B. Kedaulatan pangan hanya dapat dicapai melalui reforma agraria dan subsidi input produksi.',
+                        'C. Diperlukan kebijakan terintegrasi dan langkah strategis yang konsisten untuk mewujudkan kedaulatan pangan.',
+                        'D. Generasi muda tidak tertarik pada sektor pertanian karena minimnya insentif dari pemerintah.',
+                        'E. Alih fungsi lahan merupakan satu-satunya penyebab krisis ketahanan pangan di Indonesia.'
+                    ],
+                    jawaban: 2,
+                    pembahasan: 'Paragraf terakhir secara eksplisit menyimpulkan bahwa "diperlukan kebijakan yang terintegrasi dari hulu ke hilir" dan "tanpa langkah-langkah strategis yang konsisten, cita-cita kedaulatan pangan hanya akan menjadi retorika belaka." Ini sesuai dengan pilihan C.'
+                }, {
+                    id: 12,
+                    bacaanRef: 'bacaan2',
+                    pertanyaan: 'Apa yang dimaksud dengan "kedaulatan pangan" menurut bacaan tersebut?',
+                    opsi: [
+                        'A. Kemampuan negara menyediakan stok pangan yang cukup bagi seluruh rakyatnya.',
+                        'B. Hak setiap bangsa menentukan kebijakan pangannya sendiri secara mandiri dengan petani sebagai subjek utama.',
+                        'C. Ketergantungan pada impor untuk memenuhi kebutuhan pangan pokok masyarakat.',
+                        'D. Program pemerintah dalam mendistribusikan bantuan pangan kepada masyarakat miskin.',
+                        'E. Sistem pertanian modern yang mengandalkan teknologi canggih dan otomatisasi.'
+                    ],
+                    jawaban: 1,
+                    pembahasan: 'Paragraf kedua mendefinisikan kedaulatan pangan sebagai "hak setiap bangsa untuk menentukan kebijakan pangannya sendiri secara mandiri" dan menempatkan "petani, nelayan, dan masyarakat adat sebagai subjek utama." Pilihan B paling tepat.'
+                }, {
+                    id: 13,
+                    bacaanRef: 'bacaan2',
+                    pertanyaan: 'Opini penulis yang terdapat dalam bacaan tersebut adalah...',
+                    opsi: [
+                        'A. Data Kementerian Pertanian menunjukkan penyusutan lahan sawah mencapai puluhan ribu hektar per tahun.',
+                        'B. Indonesia memiliki populasi lebih dari 270 juta jiwa.',
+                        'C. Generasi muda semakin enggan berkecimpung di sektor pertanian.',
+                        'D. Subsidi harus diarahkan juga pada riset dan pengembangan varietas unggul tahan iklim.',
+                        'E. Alih fungsi lahan pertanian terus berlangsung secara masif di Pulau Jawa.'
+                    ],
+                    jawaban: 3,
+                    pembahasan: 'Pilihan D adalah opini atau saran penulis tentang ke mana subsidi seharusnya diarahkan. Pilihan A, B, C, dan E adalah fakta atau data yang disajikan dalam bacaan, bukan opini.'
+                },
+
+                // === Soal 14-15: Soal Independen ===
+                {
+                    id: 14,
+                    bacaanRef: null,
+                    pertanyaan: 'Perhatikan pernyataan berikut!\n\nPremis 1: Semua peserta lomba debat adalah siswa kelas XII.\nPremis 2: Rina bukan siswa kelas XII.\n\nKesimpulan yang sah berdasarkan penalaran logis adalah...',
+                    opsi: [
+                        'A. Rina adalah peserta lomba debat.',
+                        'B. Rina bukan peserta lomba debat.',
+                        'C. Semua siswa kelas XII adalah peserta lomba debat.',
+                        'D. Rina mungkin peserta lomba debat.',
+                        'E. Tidak dapat ditarik kesimpulan.'
+                    ],
+                    jawaban: 1,
+                    pembahasan: 'Ini adalah silogisme dengan modus tollens. Jika semua A adalah B, dan X bukan B, maka X bukan A. Semua peserta lomba debat (A) adalah siswa kelas XII (B). Rina bukan B, maka Rina bukan A (bukan peserta lomba debat).'
+                }, {
+                    id: 15,
+                    bacaanRef: null,
+                    pertanyaan: 'Manakah di antara kalimat berikut yang termasuk kalimat BAKU?',
+                    opsi: [
+                        'A. Kemarin, saya sudah bilang sama dia kalau rapatnya diundur.',
+                        'B. Hasil daripada penelitian itu menunjukkan adanya peningkatan yang signifikan.',
+                        'C. Para tamu undangan dipersilakan untuk menempati tempat yang telah disediakan.',
+                        'D. Buku ini adalah merupakan karya terbaik dari penulis terkenal itu.',
+                        'E. Dia pergi ke pasar untuk membeli sayur-sayuran dan buah-buahan segar.'
+                    ],
+                    jawaban: 2,
+                    pembahasan: 'Pilihan C adalah kalimat baku. Pilihan A tidak baku karena menggunakan "sama" (seharusnya "kepada") dan "bilang" (seharusnya "mengatakan"). Pilihan B: "daripada" digunakan untuk perbandingan, bukan kepemilikan (seharusnya "dari"). Pilihan D: "adalah merupakan" adalah pleonasme. Pilihan E: "sayur-sayuran" dan "buah-buahan" dengan pengulangan tidak diperlukan (cukup "sayur dan buah segar" atau "sayuran dan buah-buahan").'
+                }
+            ];
+
+            // ==================== STATE ====================
+            const TOTAL_SOAL = soalData.length;
+            const TOTAL_WAKTU = 25 * 60; // 25 menit dalam detik
+            let currentIndex = 0; // 0-based
+            let userAnswers = new Array(TOTAL_SOAL).fill(null); // null = belum dijawab
+            let waktuTersisa = TOTAL_WAKTU;
+            let timerInterval = null;
+            let quizSelesai = false;
+            let waktuHabis = false;
+
+            // ==================== DOM REF ====================
+            const $timerDisplay = document.getElementById('timerDisplay');
+            const $timerBox = document.getElementById('timerBox');
+            const $progressBar = document.getElementById('progressBar');
+            const $progressText = document.getElementById('progressText');
+            const $navNumbers = document.getElementById('navNumbers');
+            const $cardSoal = document.getElementById('cardSoal');
+            const $btnPrev = document.getElementById('btnPrev');
+            const $btnNext = document.getElementById('btnNext');
+            const $btnSubmit = document.getElementById('btnSubmit');
+            const $btnRow = document.getElementById('btnRow');
+            const $resultContainer = document.getElementById('resultContainer');
+            const $modalConfirm = document.getElementById('modalConfirm');
+            const $modalUnanswered = document.getElementById('modalUnanswered');
+            const $modalTimeLeft = document.getElementById('modalTimeLeft');
+
+            // ==================== FUNCTIONS ====================
+            function formatWaktu(detik) {
+                const m = Math.floor(detik / 60);
+                const s = detik % 60;
+                return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+            }
+
+            function updateProgress() {
+                const answered = userAnswers.filter(a => a !== null).length;
+                const percent = (answered / TOTAL_SOAL) * 100;
+                $progressBar.style.width = percent + '%';
+                $progressText.textContent = answered + '/' + TOTAL_SOAL;
+            }
+
+            function updateTimerUI() {
+                $timerDisplay.textContent = formatWaktu(waktuTersisa);
+                if (waktuTersisa <= 300) {
+                    $timerBox.classList.add('warning');
+                } else {
+                    $timerBox.classList.remove('warning');
+                }
+            }
+
+            function updateNavNumbers() {
+                let html = '';
+                for (let i = 0; i < TOTAL_SOAL; i++) {
+                    let cls = 'nav-num';
+                    if (i === currentIndex) cls += ' active';
+                    if (userAnswers[i] !== null) cls += ' answered';
+                    html += `<button class="${cls}" onclick="goToSoal(${i})" title="Soal ${i+1}">${i+1}</button>`;
+                }
+                $navNumbers.innerHTML = html;
+            }
+
+            function updateButtons() {
+                $btnPrev.disabled = (currentIndex === 0);
+                if (currentIndex === TOTAL_SOAL - 1) {
+                    $btnNext.style.display = 'none';
+                    $btnSubmit.style.display = 'inline-flex';
+                } else {
+                    $btnNext.style.display = 'inline-flex';
+                    $btnSubmit.style.display = 'none';
+                }
+            }
+
+            function renderSoal(index) {
+                if (quizSelesai) return;
+                const soal = soalData[index];
+                let html = '';
+
+                // Jika ada bacaan terkait
+                if (soal.bacaanRef && bacaanData[soal.bacaanRef]) {
+                    const bacaan = bacaanData[soal.bacaanRef];
+                    html += `
+                <div class="bacaan-box">
+                  <h4>📖 ${bacaan.judul}</h4>
+                  ${bacaan.teks}
+                </div>`;
+                }
+
+                html += `
+              <span class="soal-label">Soal ${soal.id} dari ${TOTAL_SOAL}</span>
+              <div class="soal-pertanyaan">${soal.pertanyaan.replace(/\n/g, '<br>')}</div>
+              <div class="opsi-list">`;
+
+                const labels = ['A', 'B', 'C', 'D', 'E'];
+                for (let i = 0; i < soal.opsi.length; i++) {
+                    let cls = 'opsi-item';
+                    if (userAnswers[index] === i) cls += ' selected';
+                    html += `
+                <div class="${cls}" onclick="pilihJawaban(${index}, ${i})" id="opsi-${index}-${i}">
+                  <div class="opsi-indicator">${labels[i]}</div>
+                  <div class="opsi-text">${soal.opsi[i].substring(2).trim()}</div>
+                </div>`;
+                }
+
+                html += `</div>`;
+
+                // Update card dengan animasi
+                $cardSoal.classList.remove('fade-in');
+                void $cardSoal.offsetWidth; // reflow
+                $cardSoal.innerHTML = html;
+                $cardSoal.classList.add('fade-in');
+
+                updateNavNumbers();
+                updateButtons();
+                updateProgress();
+            }
+
+            window.pilihJawaban = function(soalIndex, opsiIndex) {
+                if (quizSelesai) return;
+                userAnswers[soalIndex] = opsiIndex;
+                // Update tampilan opsi tanpa re-render seluruh soal
+                const soal = soalData[soalIndex];
+                const labels = ['A', 'B', 'C', 'D', 'E'];
+                for (let i = 0; i < soal.opsi.length; i++) {
+                    const el = document.getElementById('opsi-' + soalIndex + '-' + i);
+                    if (el) {
+                        el.classList.remove('selected');
+                        if (i === opsiIndex) el.classList.add('selected');
+                    }
+                }
+                updateNavNumbers();
+                updateProgress();
+            };
+
+            window.goToSoal = function(index) {
+                if (quizSelesai) return;
+                if (index < 0 || index >= TOTAL_SOAL) return;
+                currentIndex = index;
+                renderSoal(currentIndex);
+            };
+
+            window.prevSoal = function() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    renderSoal(currentIndex);
+                }
+            };
+
+            window.nextSoal = function() {
+                if (currentIndex < TOTAL_SOAL - 1) {
+                    currentIndex++;
+                    renderSoal(currentIndex);
+                }
+            };
+
+            function startTimer() {
+                updateTimerUI();
+                timerInterval = setInterval(() => {
+                    waktuTersisa--;
+                    updateTimerUI();
+                    if (waktuTersisa <= 0) {
+                        clearInterval(timerInterval);
+                        waktuHabis = true;
+                        submitQuiz();
+                    }
+                }, 1000);
+            }
+
+            function getUnansweredCount() {
+                return userAnswers.filter(a => a === null).length;
+            }
+
+            window.openSubmitModal = function() {
+                if (quizSelesai) return;
+                const unanswered = getUnansweredCount();
+                $modalUnanswered.innerHTML = 'Anda belum menjawab <strong>' + unanswered +
+                    '</strong> soal. Soal yang tidak dijawab akan dianggap salah.';
+                $modalTimeLeft.textContent = formatWaktu(waktuTersisa);
+                $modalConfirm.style.display = 'flex';
+            };
+
+            window.closeModal = function() {
+                $modalConfirm.style.display = 'none';
+            };
+
+            window.submitQuiz = function() {
+                if (quizSelesai) return;
+                quizSelesai = true;
+                clearInterval(timerInterval);
+                $modalConfirm.style.display = 'none';
+
+                // Hitung skor
+                let benar = 0;
+                let detailHasil = [];
+                for (let i = 0; i < TOTAL_SOAL; i++) {
+                    const jawabanUser = userAnswers[i];
+                    const jawabanBenar = soalData[i].jawaban;
+                    const isBenar = (jawabanUser === jawabanBenar);
+                    if (isBenar) benar++;
+                    detailHasil.push({
+                        soal: soalData[i],
+                        jawabanUser: jawabanUser,
+                        isBenar: isBenar
+                    });
+                }
+                const skor = Math.round((benar / TOTAL_SOAL) * 100);
+
+                // Tampilkan hasil
+                let grade = '';
+                let gradeColor = '';
+                if (skor >= 90) { grade = '🏆 Sangat Baik';
+                    gradeColor = '#059669'; } else if (skor >= 75) { grade = '👍 Baik';
+                    gradeColor = '#2563eb'; } else if (skor >= 60) { grade = '📚 Cukup';
+                    gradeColor = '#d97706'; } else if (skor >= 40) { grade = '📉 Kurang';
+                    gradeColor = '#dc2626'; } else { grade = '⚠️ Perlu Banyak Latihan';
+                    gradeColor = '#991b1b'; }
+
+                let resultHTML = `
+            <div class="result-card">
+              <div style="font-size:0.9rem;color:var(--text-light);margin-bottom:4px;">SKOR AKHIR</div>
+              <div class="result-score">${skor}</div>
+              <div class="result-grade" style="color:${gradeColor};">${grade}</div>
+              <div class="result-detail">
+                <div class="result-stat">
+                  <div class="result-stat-val" style="color:#10b981;">${benar}</div>
+                  <div class="result-stat-lbl">✅ Benar</div>
+                </div>
+                <div class="result-stat">
+                  <div class="result-stat-val" style="color:#ef4444;">${TOTAL_SOAL - benar}</div>
+                  <div class="result-stat-lbl">❌ Salah</div>
+                </div>
+                <div class="result-stat">
+                  <div class="result-stat-val" style="color:#6366f1;">${TOTAL_SOAL}</div>
+                  <div class="result-stat-lbl">📝 Total Soal</div>
+                </div>
+              </div>
+              ${waktuHabis ? '<p style="color:#dc2626;font-weight:600;">⏰ Waktu telah habis! Kuis dikumpulkan otomatis.</p>' : ''}
+              <div style="margin:20px 0;text-align:left;">
+                <h4 style="margin-bottom:14px;">📋 Review Jawaban:</h4>`;
+
+                const labels = ['A', 'B', 'C', 'D', 'E'];
+                for (let i = 0; i < detailHasil.length; i++) {
+                    const d = detailHasil[i];
+                    const s = d.soal;
+                    const statusIcon = d.isBenar ? '✅' : '❌';
+                    const statusText = d.isBenar ? 'BENAR' : 'SALAH';
+                    const statusColor = d.isBenar ? '#10b981' : '#ef4444';
+                    const userAnsText = d.jawabanUser !== null ? labels[d.jawabanUser] : '—';
+                    const benarAnsText = labels[s.jawaban];
+
+                    resultHTML += `
+                <div style="background:#f8fafc;border-radius:10px;padding:14px 16px;margin-bottom:10px;border-left:4px solid ${statusColor};">
+                  <strong style="color:${statusColor};">${statusIcon} Soal ${s.id} — ${statusText}</strong><br>
+                  <span style="font-size:0.85rem;">Jawaban Anda: <strong>${userAnsText}</strong> | Jawaban Benar: <strong>${benarAnsText}</strong></span>
+                  ${!d.isBenar ? `<div class="pembahasan-box">💡 <strong>Pembahasan:</strong> ${s.pembahasan}</div>` : ''}
+                </div>`;
+                }
+
+                resultHTML += `
+              </div>
+              <button class="btn btn-success" onclick="location.reload()" style="margin-top:12px;">🔄 Coba Lagi</button>
+            </div>`;
+
+                // Sembunyikan elemen kuis
+                $cardSoal.style.display = 'none';
+                $btnRow.style.display = 'none';
+                $navNumbers.style.display = 'none';
+                document.querySelector('.progress-wrap').style.display = 'none';
+                $resultContainer.style.display = 'block';
+                $resultContainer.innerHTML = resultHTML;
+                $timerBox.style.opacity = '0.6';
+            };
+
+            // ==================== EVENT LISTENERS ====================
+            $btnPrev.addEventListener('click', prevSoal);
+            $btnNext.addEventListener('click', nextSoal);
+            $btnSubmit.addEventListener('click', openSubmitModal);
+
+            // Keyboard shortcut
+            document.addEventListener('keydown', function(e) {
+                if (quizSelesai) return;
+                if (e.key === 'ArrowLeft') prevSoal();
+                if (e.key === 'ArrowRight') nextSoal();
+                if (e.key === 'Enter' && currentIndex === TOTAL_SOAL - 1) openSubmitModal();
+                // Number keys 1-5 untuk memilih opsi
+                const num = parseInt(e.key);
+                if (num >= 1 && num <= 5 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                    const opsiIndex = num - 1;
+                    if (opsiIndex < soalData[currentIndex].opsi.length) {
+                        pilihJawaban(currentIndex, opsiIndex);
+                    }
+                }
+            });
+
+            // Tutup modal dengan klik di luar
+            $modalConfirm.addEventListener('click', function(e) {
+                if (e.target === $modalConfirm) closeModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // ==================== INIT ====================
+            function init() {
+                renderSoal(0);
+                updateNavNumbers();
+                updateButtons();
+                updateProgress();
+                startTimer();
+            }
+
+            init();
+            console.log('📝 Kuis TKA Bahasa Indonesia 2024/2025 siap!');
+            console.log('   Total Soal: ' + TOTAL_SOAL + ' | Waktu: 25 menit');
+            console.log('   Shortcut: ← → navigasi | 1-5 pilih opsi | Enter submit (soal terakhir)');
+        })();
+    </script>
+</body>
+</html>
