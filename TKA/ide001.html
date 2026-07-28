@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>📚 Kuis Ide Pokok, Simpulan & Pemahaman Teks | TKA SMA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f3f6fd 0%, #e6edf7 100%);
+      font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 1rem 3rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 850px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+      margin-bottom: 0.4rem;
+    }
+
+    .header .sub {
+      color: #3e4a5f;
+      font-weight: 500;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      display: inline-block;
+      padding: 0.4rem 1.5rem;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .text-box {
+      background: #ffffff;
+      border-left: 6px solid #2a5298;
+      border-radius: 20px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 24px rgba(0, 32, 64, 0.08);
+      backdrop-filter: blur(2px);
+      transition: all 0.2s;
+    }
+
+    .text-box h3 {
+      color: #1e3c72;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .text-box p {
+      color: #253544;
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .question-card {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 1.4rem 1.5rem 1.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 28px rgba(0, 20, 50, 0.08);
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: 0.2s;
+      animation: fadeSlide 0.3s ease;
+    }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0.6; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-num {
+      background: #2a5298;
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.2rem 0.8rem;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.3px;
+    }
+
+    .question-text {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #0c1e33;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .option-btn {
+      background: #f0f4fc;
+      border: 2px solid transparent;
+      padding: 0.7rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 500;
+      color: #1a2b4a;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.95rem;
+      flex: 1 0 auto;
+      justify-content: center;
+      background: white;
+      border: 1.5px solid #d9e2f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .option-btn:hover:not(.disabled) {
+      background: #e3ecff;
+      border-color: #2a5298;
+      box-shadow: 0 6px 14px rgba(42,82,152,0.15);
+      transform: translateY(-1px);
+    }
+
+    .option-btn.correct-choice {
+      background: #d4edda;
+      border-color: #1e7e34;
+      color: #0d3b1a;
+      font-weight: 700;
+      box-shadow: 0 0 0 3px rgba(30,126,52,0.2);
+    }
+
+    .option-btn.wrong-choice {
+      background: #fce4e4;
+      border-color: #c92a2a;
+      color: #641e1e;
+      text-decoration: line-through;
+      opacity: 0.85;
+    }
+
+    .option-btn.disabled {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .feedback {
+      display: none;
+      background: #f8faff;
+      border-radius: 18px;
+      padding: 1rem 1.2rem;
+      margin-top: 0.8rem;
+      border-left: 5px solid #2a5298;
+      background: #f4f9ff;
+      font-size: 0.92rem;
+      color: #1b2b45;
+      line-height: 1.6;
+      animation: fadeSlide 0.2s ease;
+    }
+
+    .feedback.visible {
+      display: block;
+    }
+
+    .feedback .verdict {
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .verdict.correct {
+      color: #0e5f1f;
+    }
+    .verdict.wrong {
+      color: #b91c1c;
+    }
+
+    .reset-btn {
+      background: white;
+      border: 2px solid #1e3c72;
+      color: #1e3c72;
+      font-weight: 600;
+      padding: 0.7rem 2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      margin-top: 1.8rem;
+      transition: 0.2s;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1rem;
+    }
+
+    .reset-btn:hover {
+      background: #1e3c72;
+      color: white;
+    }
+
+    hr.divider {
+      margin: 1.8rem 0 1rem;
+      border: 0.5px solid #dce3f0;
+    }
+
+    @media (max-width: 500px) {
+      body {
+        padding: 1rem 0.6rem 2rem;
+      }
+      .option-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        flex: 1 1 100%;
+      }
+      .text-box, .question-card {
+        padding: 1rem 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📖 Ide Pokok · Simpulan · Pemahaman Teks</h1>
+    <div class="sub">20 Soal Komplet + Pembahasan | TKA SMA</div>
+  </div>
+  <p style="text-align:center; color:#2d4059; margin-bottom: 1.8rem; font-weight:500;">
+    ✨ Klik jawaban untuk melihat benar/salah & pembahasan detail.
+  </p>
+
+  <!-- TEKS 1 -->
+  <div class="text-box" id="text1">
+    <h3>📄 Teks 1 – Quiet Quitting</h3>
+    <p>[1] Fenomena <i>quiet quitting</i> menjadi perbincangan hangat di dunia kerja modern. [2] Istilah ini merujuk pada tindakan karyawan yang hanya melakukan pekerjaan sesuai deskripsi tugasnya, menolak lembur, dan tidak lagi termotivasi untuk "bekerja lebih" dari yang seharusnya. [3] Berbeda dengan <i>resign</i>, karyawan tidak meninggalkan pekerjaannya, melainkan hanya menetapkan batasan psikologis yang tegas antara kehidupan profesional dan personal. [4] Akibatnya, produktivitas mereka sering kali turun ke level sekadar memenuhi standar minimum.</p>
+    <p>[5] Banyak pakar berpendapat bahwa <i>quiet quitting</i> adalah gejala dari budaya kerja yang toksik dan sistem penghargaan yang tidak adil. [6] Karyawan merasa <i>effort</i> lebih yang mereka berikan tidak dihargai secara proporsional, baik dari segi finansial maupun jenjang karier. [7] Generasi milenial dan Gen Z yang kini mendominasi angkatan kerja dinilai lebih vokal dalam memperjuangkan keseimbangan hidup dan kesehatan mental. [8] Oleh karena itu, perusahaan perlu melakukan evaluasi fundamental, bukan hanya pada beban kerja, tetapi juga pada makna pekerjaan itu sendiri bagi karyawan.</p>
+  </div>
+
+  <!-- QUESTIONS 1-4 (Teks 1) -->
+  <div id="questions-container"></div>
+
+  <!-- TEKS 2 -->
+  <div class="text-box" id="text2" style="margin-top:1.8rem;">
+    <h3>📄 Teks 2 – Climate Anxiety</h3>
+    <p>(1) Fenomena <i>climate anxiety</i> atau kecemasan terhadap perubahan iklim semakin meningkat di kalangan anak muda global, termasuk Indonesia. (2) Berdasarkan survei lembaga psikologi internasional tahun 2024, lebih dari 60% pemuda berusia 16-25 tahun merasa sangat khawatir akan masa depan bumi. (3) Mereka merasa pemerintah dan korporasi besar lamban dalam mengambil tindakan nyata untuk mengurangi emisi karbon.</p>
+    <p>(4) Dampak psikologis ini tidak bisa diremehkan. (5) Banyak remaja yang mengalami gangguan tidur, pesimisme terhadap masa depan, hingga keengganan untuk memiliki anak di masa depan. (6) Oleh karena itu, diperlukan intervensi dari berbagai pihak, mulai dari dukungan psikososial di sekolah hingga pelibatan generasi muda dalam pembuatan kebijakan lingkungan, agar kecemasan ini dapat diubah menjadi aksi positif.</p>
+  </div>
+
+  <!-- TEKS 3 -->
+  <div class="text-box" id="text3" style="margin-top:1.8rem;">
+    <h3>📄 Teks 3 – Microsleep</h3>
+    <p>(1) Microsleep adalah kondisi tidur singkat yang berlangsung hanya beberapa detik tanpa disadari. (2) Fenomena ini sangat berbahaya, terutama bagi pengendara kendaraan bermotor. (3) Microsleep umumnya terjadi karena kelelahan ekstrem, kurang tidur, atau gangguan tidur seperti sleep apnea. (4) Saat microsleep menyerang, otak tiba-tiba memasuki fase tidur meskipun mata tetap terbuka, sehingga seseorang kehilangan kesadaran akan lingkungan sekitar.</p>
+    <p>(5) Untuk mencegah microsleep, penting untuk menjaga kualitas tidur yang cukup, minimal 7 jam sehari. (6) Menghindari mengemudi pada jam biologis tidur, yaitu antara pukul 01.00–05.00, juga sangat dianjurkan. (7) Jika merasa mengantuk saat berkendara, menepi dan tidur sejenak selama 15–20 menit adalah langkah paling efektif. (8) Dengan demikian, risiko kecelakaan lalu lintas akibat microsleep dapat diminimalkan.</p>
+  </div>
+
+  <!-- TEKS 4 -->
+  <div class="text-box" id="text4" style="margin-top:1.8rem;">
+    <h3>📄 Teks 4 – Budaya Literasi Digital</h3>
+    <p>(1) Di era banjir informasi, literasi digital menjadi kemampuan krusial yang harus dimiliki setiap individu. (2) Literasi digital bukan sekadar mampu menggunakan gawai atau mengakses internet, melainkan mencakup kemampuan mencari, mengevaluasi, dan menggunakan informasi secara bertanggung jawab. (3) Sayangnya, tingkat literasi digital masyarakat Indonesia masih tergolong rendah dibandingkan negara ASEAN lainnya. (4) Hal ini terbukti dari maraknya penyebaran hoaks dan ujaran kebencian di media sosial.</p>
+    <p>(5) Rendahnya literasi digital berdampak luas, mulai dari polarisasi sosial hingga kerugian ekonomi akibat penipuan daring. (6) Untuk mengatasi masalah ini, diperlukan upaya kolaboratif antara pemerintah, institusi pendidikan, dan platform digital. (7) Sekolah harus mulai mengintegrasikan kurikulum literasi digital sejak dini, sementara platform media sosial perlu memperketat moderasi konten dan gencar mengedukasi penggunanya. (8) Dengan demikian, masyarakat Indonesia diharapkan tidak hanya menjadi konsumen informasi yang cerdas, tetapi juga produsen konten yang etis.</p>
+  </div>
+
+  <button class="reset-btn" id="resetAllBtn">🔄 Ulangi Semua Jawaban</button>
+  <hr class="divider">
+  <p style="text-align:center; color:#4b5563; font-size:0.9rem;">🧠 Klik pilihanmu. Pembahasan langsung muncul. Belajar jadi lebih asyik!</p>
+</div>
+
+<script>
+  (function() {
+    // Question bank with all 20 questions
+    const questions = [
+      // Teks 1 questions (4 soal)
+      {
+        id: 1,
+        textRef: "text1",
+        question: "1. Ide pokok paragraf pertama teks (Teks 1) adalah ...",
+        options: ["(A) Perdebatan tentang fenomena quiet quitting di dunia kerja.", "(B) Cara karyawan menolak lembur dan pekerjaan tambahan.", "(C) Definisi dan karakteristik utama dari fenomena quiet quitting.", "(D) Turunnya produktivitas karyawan ke level standar minimum.", "(E) Perbedaan mendasar antara quiet quitting dan resign."],
+        correct: 2, // index 2 -> C
+        explanation: "✅ <strong>Jawaban Benar: C.</strong> Kalimat [2] dan [3] menjelaskan definisi dan karakteristik 'apa itu quiet quitting'. Kalimat [1] hanya pengantar, [4] adalah akibat. Jadi intinya adalah definisi dan ciri utamanya."
+      },
+      {
+        id: 2,
+        textRef: "text1",
+        question: "2. Manakah pernyataan berikut yang TIDAK SESUAI dengan isi Teks 1?",
+        options: ["(A) Quiet quitting adalah tindakan menetapkan batasan tegas antara kerja dan hidup.", "(B) Karyawan yang melakukan quiet quitting tetap menerima gaji dari perusahaan.", "(C) Generasi tua lebih vokal memperjuangkan kesehatan mental dibanding Gen Z.", "(D) Sistem penghargaan yang tidak adil diduga menjadi pemicu quiet quitting.", "(E) Produktivitas karyawan bisa menurun hanya ke level standar minimum."],
+        correct: 2,
+        explanation: "❌ <strong>Jawaban Benar: C (tidak sesuai).</strong> Kalimat [7] menyebut 'Generasi milenial dan Gen Z ... dinilai lebih vokal'. Jadi Gen Z-lah yang lebih vokal, bukan generasi tua. Pernyataan C bertolak belakang."
+      },
+      {
+        id: 3,
+        textRef: "text1",
+        question: "3. Simpulan yang paling tepat untuk keseluruhan Teks 1 adalah ...",
+        options: ["(A) Karyawan yang tidak dihargai akan mencari pekerjaan baru yang lebih baik.", "(B) Quiet quitting adalah masalah individual karyawan yang tidak menyukai lembur.", "(C) Fenomena quiet quitting merupakan respons terhadap budaya kerja toksik dan menuntut perusahaan untuk mengevaluasi sistem kerja mereka.", "(D) Generasi milenial dan Gen Z adalah generasi yang malas bekerja keras.", "(E) Produktivitas perusahaan menurun drastis karena banyaknya karyawan yang melakukan quiet quitting."],
+        correct: 2,
+        explanation: "✅ <strong>Jawaban Benar: C.</strong> Paragraf 1: definisi & ciri, Paragraf 2: penyebab (budaya toksik) & solusi (evaluasi fundamental). Simpulan harus merangkum keduanya secara objektif. Pilihan lain terlalu parsial atau mengandung opini liar."
+      },
+      {
+        id: 4,
+        textRef: "text1",
+        question: "4. Sikap penulis terhadap fenomena quiet quitting dalam Teks 1 adalah ...",
+        options: ["(A) Meremehkan, karena dianggap sebagai aksi karyawan pemalas.", "(B) Analitis, karena menjelaskan fenomena dari definisi hingga akar masalahnya.", "(C) Mendukung penuh, karena setuju dengan aksi karyawan.", "(D) Tidak peduli, karena hanya menulis berita faktual tanpa opini.", "(E) Menolak, karena berbahaya bagi produktivitas perusahaan."],
+        correct: 1,
+        explanation: "🔍 <strong>Jawaban Benar: B (Analitis).</strong> Penulis menjelaskan definisi [2][3], sebab [5][6], dan solusi [8] secara objektif tanpa menghakimi. Inilah sikap analitis."
+      },
+      // Teks 2 questions (4 soal)
+      {
+        id: 5,
+        textRef: "text2",
+        question: "5. Gagasan utama Teks 2 (Climate Anxiety) adalah ...",
+        options: ["(A) Dampak pemanasan global terhadap kesehatan fisik generasi muda.", "(B) Meningkatnya kecemasan anak muda terhadap perubahan iklim dan perlunya penanganan yang tepat.", "(C) Keengganan generasi muda memiliki anak akibat rusaknya bumi.", "(D) Lambannya pemerintah dan korporasi dalam mengatasi emisi karbon.", "(E) Dukungan psikososial di sekolah untuk anak muda."],
+        correct: 1,
+        explanation: "✅ <strong>Jawaban Benar: B.</strong> Paragraf 1: meningkatnya kecemasan iklim, Paragraf 2: dampak & solusi. Opsi B merangkum inti seluruh teks dengan sempurna."
+      },
+      {
+        id: 6,
+        textRef: "text2",
+        question: "6. Pernyataan yang SESUAI dengan Teks 2 adalah ...",
+        options: ["(A) Pemerintah telah berhasil mengurangi emisi karbon secara signifikan.", "(B) Mayoritas pemuda usia 16-25 tahun merasa khawatir akan masa depan bumi.", "(C) Kecemasan iklim hanya terjadi di Indonesia.", "(D) Tidak ada hubungan antara perubahan iklim dan kesehatan mental.", "(E) Generasi muda enggan terlibat dalam kebijakan lingkungan."],
+        correct: 1,
+        explanation: "✅ <strong>Jawaban Benar: B.</strong> Kalimat (2) menyebut 'lebih dari 60% pemuda ... merasa sangat khawatir'. Itu menunjukkan mayoritas. Pilihan lain bertentangan dengan teks."
+      },
+      {
+        id: 7,
+        textRef: "text2",
+        question: "7. (Inferensi) Berdasarkan Teks 2, jika tingkat climate anxiety tinggi, dapat diasumsikan ...",
+        options: ["(A) Pemerintah akan segera menurunkan emisi.", "(B) Dukungan psikososial dan pelibatan pemuda dalam kebijakan lingkungan menjadi sangat penting.", "(C) Semua remaja akan menolak memiliki anak.", "(D) Korporasi besar tidak peduli terhadap lingkungan.", "(E) Survei psikologi tidak akurat."],
+        correct: 1,
+        explanation: "🔎 <strong>Jawaban Benar: B.</strong> Kalimat (6) menekankan perlunya intervensi berbagai pihak. Jika kecemasan tinggi, maka asumsi logisnya adalah dukungan itu makin krusial. Inferensi = fakta + logika."
+      },
+      {
+        id: 8,
+        textRef: "text2",
+        question: "8. Tujuan penulis dalam Teks 2 adalah ...",
+        options: ["(A) Mengkritik kebijakan pemerintah.", "(B) Menjelaskan proses terjadinya perubahan iklim.", "(C) Menginformasikan fenomena climate anxiety sekaligus mengajak pembaca untuk melakukan tindakan positif.", "(D) Menghibur pembaca dengan cerita remaja.", "(E) Meyakinkan bahwa perubahan iklim adalah hoaks."],
+        correct: 2,
+        explanation: "🎯 <strong>Jawaban Benar: C.</strong> Teks memberi fakta tentang climate anxiety dan diakhiri ajakan 'diperlukan intervensi ... agar diubah menjadi aksi positif'. Tujuan: menginformasikan + mengajak."
+      },
+      // Teks 3 questions (6 soal)
+      {
+        id: 9,
+        textRef: "text3",
+        question: "9. Ide pokok paragraf pertama Teks 3 (Microsleep) adalah ...",
+        options: ["(A) Bahaya microsleep bagi pengendara.", "(B) Definisi dan penyebab terjadinya microsleep.", "(C) Cara mencegah microsleep saat berkendara.", "(D) Gangguan tidur sleep apnea.", "(E) Pentingnya tidur 7 jam sehari."],
+        correct: 1,
+        explanation: "✅ <strong>Jawaban Benar: B.</strong> Kalimat (1) definisi, (3) penyebab. Itu inti paragraf pertama. Bahaya disebut sekilas, tetapi fokus utamanya definisi dan penyebab."
+      },
+      {
+        id: 10,
+        textRef: "text3",
+        question: "10. Pernyataan yang TIDAK sesuai dengan Teks 3 adalah ...",
+        options: ["(A) Microsleep dapat terjadi meskipun mata tetap terbuka.", "(B) Kelelahan ekstrem adalah salah satu penyebab microsleep.", "(C) Mengemudi pada pukul 01.00–05.00 sangat dianjurkan.", "(D) Tidur singkat 15–20 menit bisa menghilangkan kantuk.", "(E) Microsleep berlangsung hanya beberapa detik."],
+        correct: 2,
+        explanation: "❌ <strong>Jawaban Benar: C (tidak sesuai).</strong> Teks menganjurkan untuk <strong>menghindari</strong> mengemudi pada jam tersebut, bukan menganjurkan mengemudi. Jadi pernyataan C terbalik."
+      },
+      {
+        id: 11,
+        textRef: "text3",
+        question: "11. Simpulan yang tepat untuk Teks 3 adalah ...",
+        options: ["(A) Microsleep adalah tidur singkat yang tidak berbahaya.", "(B) Pengendara harus tidur 15-20 menit setiap jam.", "(C) Microsleep merupakan kondisi berbahaya yang disebabkan kelelahan dan dapat dicegah dengan tidur cukup serta menghindari jam rawan.", "(D) Semua pengendara pasti mengalami microsleep.", "(E) Kecelakaan lalu lintas hanya disebabkan oleh microsleep."],
+        correct: 2,
+        explanation: "✅ <strong>Jawaban Benar: C.</strong> Mencakup definisi bahaya (paragraf 1), penyebab, dan solusi pencegahan (paragraf 2). Ringkas, logis, dan tidak menambah opini baru."
+      },
+      {
+        id: 12,
+        textRef: "text3",
+        question: "12. (Inferensi) Jika seseorang sering mengalami microsleep saat berkendara, dapat diasumsikan bahwa ...",
+        options: ["(A) Ia mengidap penyakit jantung.", "(B) Ia kurang menjaga kualitas dan kuantitas tidurnya.", "(C) Ia tidak pernah mengantuk.", "(D) Ia adalah pengemudi profesional.", "(E) Ia tidur lebih dari 7 jam sehari."],
+        correct: 1,
+        explanation: "🔎 <strong>Jawaban Benar: B.</strong> Microsleep disebabkan kelelahan/kurang tidur. Jika sering terjadi, asumsi paling logis adalah kualitas tidurnya buruk."
+      },
+      {
+        id: 13,
+        textRef: "text3",
+        question: "13. Sikap penulis terhadap microsleep dalam teks adalah ...",
+        options: ["(A) Meremehkan.", "(B) Menganggap wajar.", "(C) Waspada dan mengajak pencegahan.", "(D) Tidak peduli.", "(E) Menentang tidur siang."],
+        correct: 2,
+        explanation: "⚠️ <strong>Jawaban Benar: C.</strong> Penulis menyebut 'sangat berbahaya' dan memberi langkah pencegahan. Ini menunjukkan sikap waspada dan preventif."
+      },
+      {
+        id: 14,
+        textRef: "text3",
+        question: "14. Makna kata 'efektif' dalam kalimat (7) Teks 3 adalah ...",
+        options: ["(A) Tepat guna / manjur.", "(B) Murah.", "(C) Mahal.", "(D) Lambat.", "(E) Rumit."],
+        correct: 0,
+        explanation: "📖 <strong>Jawaban Benar: A.</strong> 'Efektif' berarti memberikan hasil sesuai tujuan, tepat guna. Dalam konteks: tidur singkat 15-20 menit adalah langkah yang paling tepat guna."
+      },
+      // Teks 4 questions (6 soal)
+      {
+        id: 15,
+        textRef: "text4",
+        question: "15. Ide pokok paragraf kedua Teks 4 (Literasi Digital) adalah ...",
+        options: ["(A) Maraknya hoaks di media sosial.", "(B) Dampak rendahnya literasi digital dan upaya kolaboratif yang diperlukan.", "(C) Platform media sosial harus memperketat moderasi konten.", "(D) Sekolah harus mengintegrasikan kurikulum literasi digital.", "(E) Kerugian ekonomi akibat penipuan daring."],
+        correct: 1,
+        explanation: "✅ <strong>Jawaban Benar: B.</strong> Paragraf 2 (kalimat 5-7) membahas dampak luas rendahnya literasi digital dan perlunya upaya kolaboratif berbagai pihak."
+      },
+      {
+        id: 16,
+        textRef: "text4",
+        question: "16. Pernyataan yang SESUAI dengan Teks 4 adalah ...",
+        options: ["(A) Literasi digital hanya mencakup kemampuan menggunakan gawai.", "(B) Tingkat literasi digital Indonesia sudah sangat tinggi.", "(C) Rendahnya literasi digital dapat menyebabkan polarisasi sosial.", "(D) Pemerintah tidak perlu terlibat dalam peningkatan literasi digital.", "(E) Hoaks tidak berhubungan dengan literasi digital."],
+        correct: 2,
+        explanation: "✅ <strong>Jawaban Benar: C.</strong> Kalimat (5) menyebut dampak 'polarisasi sosial'. Jadi pernyataan C benar dan didukung teks."
+      },
+      {
+        id: 17,
+        textRef: "text4",
+        question: "17. Simpulan Teks 4 yang paling tepat adalah ...",
+        options: ["(A) Literasi digital penting hanya untuk pelajar.", "(B) Hoaks adalah satu-satunya masalah media sosial.", "(C) Rendahnya literasi digital di Indonesia menimbulkan berbagai dampak negatif sehingga perlu peningkatan melalui kolaborasi berbagai pihak.", "(D) Platform digital harus ditutup.", "(E) Masyarakat Indonesia sudah cerdas menggunakan internet."],
+        correct: 2,
+        explanation: "✅ <strong>Jawaban Benar: C.</strong> Merangkum masalah (rendahnya literasi, dampak negatif) dan solusi (kolaborasi). Objektif dan tidak berlebihan."
+      },
+      {
+        id: 18,
+        textRef: "text4",
+        question: "18. Tujuan penulis dalam Teks 4 adalah ...",
+        options: ["(A) Menghibur pembaca dengan cerita media sosial.", "(B) Menjelaskan cara membuat hoaks.", "(C) Menginformasikan kondisi literasi digital dan mengajak pembaca untuk mendukung peningkatannya.", "(D) Menolak penggunaan internet.", "(E) Memuji kinerja pemerintah."],
+        correct: 2,
+        explanation: "🎯 <strong>Jawaban Benar: C.</strong> Penulis memberi data kondisi literasi digital dan mengajak melalui kata 'diperlukan', 'harus mulai'. Menginformasikan + persuasif."
+      },
+      {
+        id: 19,
+        textRef: "text4",
+        question: "19. Hubungan antarparagraf pada Teks 4 adalah ...",
+        options: ["(A) Paragraf 1 menyajikan masalah, paragraf 2 menyajikan solusi.", "(B) Paragraf 1 dan 2 sama-sama menyajikan contoh hoaks.", "(C) Paragraf 1 berisi definisi, paragraf 2 berisi kritik.", "(D) Paragraf 1 dan 2 tidak saling berkaitan.", "(E) Paragraf 1 berisi solusi, paragraf 2 berisi masalah."],
+        correct: 0,
+        explanation: "🔗 <strong>Jawaban Benar: A.</strong> Paragraf 1 memaparkan rendahnya literasi digital (masalah), paragraf 2 menguraikan dampak dan upaya kolaboratif (solusi)."
+      },
+      {
+        id: 20,
+        textRef: "text4",
+        question: "20. Kalimat yang berisi OPINI pada Teks 4 adalah ...",
+        options: ["(A) Kalimat (1): Di era banjir informasi, literasi digital menjadi kemampuan krusial...", "(B) Kalimat (2): Literasi digital bukan sekadar mampu menggunakan gawai...", "(C) Kalimat (3): ...tingkat literasi digital masyarakat Indonesia masih tergolong rendah...", "(D) Kalimat (6): Untuk mengatasi masalah ini, diperlukan upaya kolaboratif...", "(E) Kalimat (7): Sekolah harus mulai mengintegrasikan kurikulum literasi digital sejak dini..."],
+        correct: 4,
+        explanation: "💬 <strong>Jawaban Benar: E (opini).</strong> Kalimat (7) mengandung kata 'harus' yang merupakan anjuran/pendapat subjektif. Kalimat lain berupa definisi atau fakta yang bisa diverifikasi."
+      }
+    ];
+
+    const container = document.getElementById('questions-container');
+
+    function renderQuestions() {
+      container.innerHTML = '';
+      questions.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.dataset.qid = q.id;
+        card.innerHTML = `
+          <span class="q-num">Soal ${q.id}</span>
+          <div class="question-text">${q.question}</div>
+          <div class="options" data-qid="${q.id}">
+            ${q.options.map((opt, optIdx) => `
+              <button class="option-btn" data-opt-index="${optIdx}" data-qid="${q.id}">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="feedback" id="feedback-${q.id}"></div>
+        `;
+        container.appendChild(card);
+      });
+
+      // attach event listeners
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', optionClickHandler);
+      });
+    }
+
+    function optionClickHandler(e) {
+      const btn = e.currentTarget;
+      const qid = parseInt(btn.dataset.qid);
+      const optIndex = parseInt(btn.dataset.optIndex);
+      const question = questions.find(q => q.id === qid);
+      if (!question) return;
+
+      // Disable all buttons in this question
+      const allOptions = document.querySelectorAll(`.option-btn[data-qid="${qid}"]`);
+      allOptions.forEach(b => b.classList.add('disabled'));
+
+      const feedbackDiv = document.getElementById(`feedback-${qid}`);
+      const isCorrect = (optIndex === question.correct);
+
+      // Mark chosen button
+      if (isCorrect) {
+        btn.classList.add('correct-choice');
+        feedbackDiv.innerHTML = `
+          <div class="verdict correct">✅ Jawaban Benar!</div>
+          <div>${question.explanation}</div>
+        `;
+      } else {
+        btn.classList.add('wrong-choice');
+        // Highlight correct answer
+        allOptions.forEach(b => {
+          if (parseInt(b.dataset.optIndex) === question.correct) {
+            b.classList.add('correct-choice');
+          }
+        });
+        feedbackDiv.innerHTML = `
+          <div class="verdict wrong">❌ Jawaban Kurang Tepat</div>
+          <div>${question.explanation}</div>
+        `;
+      }
+      feedbackDiv.classList.add('visible');
+    }
+
+    function resetAll() {
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('disabled', 'correct-choice', 'wrong-choice');
+      });
+      document.querySelectorAll('.feedback').forEach(div => {
+        div.classList.remove('visible');
+        div.innerHTML = '';
+      });
+      // Re-attach listeners (they remain, but buttons are enabled again)
+    }
+
+    document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+
+    // Initial render
+    renderQuestions();
+
+    // Ensure text boxes are placed correctly: we inserted them manually before the questions container,
+    // but questions are rendered in #questions-container. Need to intersperse? The container is after all text boxes.
+    // That's fine: all texts appear, then all questions. But user might want to see texts before their questions.
+    // I'll reorganize by grouping questions under each text using sections. Better: move rendering so that each text
+    // is followed by its questions. I'll restructure dynamically: remove static text boxes and build entire layout.
+    // Simpler: place container after each text? We'll just place questions container after all texts; order is clear.
+    // The texts are already above, students can scroll. It's acceptable. I'll add small anchors.
+    // I'll insert a mini header before questions of each text by adjusting rendering? Might be complex. I'll keep as is,
+    // but add a subtle label in the question card using data attribute? I'll modify render to prepend text reference.
+    // I'll add a small badge inside each question card indicating which text it belongs to.
+    // Update: after rendering, I'll modify card to include text label.
+    // I'll adjust renderQuestions to include text badge based on textRef.
+    function renderQuestionsWithBadge() {
+      container.innerHTML = '';
+      const textMap = {
+        text1: 'Teks 1 – Quiet Quitting',
+        text2: 'Teks 2 – Climate Anxiety',
+        text3: 'Teks 3 – Microsleep',
+        text4: 'Teks 4 – Literasi Digital'
+      };
+      questions.forEach(q => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        const badgeText = textMap[q.textRef] || '';
+        card.innerHTML = `
+          <span style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+            <span class="q-num">Soal ${q.id}</span>
+            <span style="font-size:0.8rem; background:#eef3ff; color:#1e3c72; padding:0.2rem 1rem; border-radius:20px; font-weight:600;">📌 ${badgeText}</span>
+          </span>
+          <div class="question-text" style="margin-top:0.6rem;">${q.question}</div>
+          <div class="options" data-qid="${q.id}">
+            ${q.options.map((opt, optIdx) => `
+              <button class="option-btn" data-opt-index="${optIdx}" data-qid="${q.id}">${opt}</button>
+            `).join('')}
+          </div>
+          <div class="feedback" id="feedback-${q.id}"></div>
+        `;
+        container.appendChild(card);
+      });
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', optionClickHandler);
+      });
+    }
+
+    // Re-render with badges
+    container.innerHTML = '';
+    renderQuestionsWithBadge();
+
+    // Keep reset functional
+    document.getElementById('resetAllBtn').addEventListener('click', function() {
+      resetAll();
+      // Re-attach listeners if needed, but they are already on buttons.
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>📚 Kuis Ide Pokok, Simpulan & Pemahaman Teks | TKA SMA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f4ff 0%, #d9e4f5 100%);
+      font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .quiz-container {
+      max-width: 750px;
+      width: 100%;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(16px);
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0,20,50,0.12), 0 4px 12px rgba(0,0,0,0.05);
+      padding: 1.8rem 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .progress-indicator {
+      background: #e6edf8;
+      border-radius: 50px;
+      padding: 0.35rem 1.1rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1e3c72;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .text-section {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1rem 1.3rem;
+      border-left: 5px solid #2a5298;
+      max-height: 220px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #1b2b45;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      transition: all 0.2s;
+    }
+
+    .text-section h4 {
+      font-size: 1rem;
+      color: #0f2b5c;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .question-box {
+      background: transparent;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #0b1c33;
+      line-height: 1.5;
+      margin: 0.2rem 0 0.5rem;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin: 0.4rem 0 0.5rem;
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #d0dbf0;
+      border-radius: 18px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: #fafcff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      color: #1a2b4a;
+    }
+
+    .option-btn:hover:not(.disabled) {
+      background: #e3ecff;
+      border-color: #2a5298;
+      box-shadow: 0 8px 16px rgba(42,82,152,0.12);
+      transform: translateY(-2px);
+    }
+
+    .option-btn.correct {
+      background: #d4edda;
+      border-color: #1e7e34;
+      color: #0d3b1a;
+      font-weight: 700;
+      box-shadow: 0 0 0 3px rgba(30,126,52,0.15);
+    }
+
+    .option-btn.wrong {
+      background: #fce4e4;
+      border-color: #c92a2a;
+      color: #641e1e;
+      text-decoration: line-through;
+      opacity: 0.9;
+    }
+
+    .option-btn.disabled {
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    .feedback-panel {
+      background: #f3f7ff;
+      border-radius: 18px;
+      padding: 1rem 1.2rem;
+      margin: 0.8rem 0 0.3rem;
+      border-left: 5px solid #2a5298;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #1b2b45;
+      display: none;
+      animation: fadeSlide 0.25s ease;
+    }
+
+    .feedback-panel.visible {
+      display: block;
+    }
+
+    .verdict {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+    .verdict.correct-text { color: #0e5f1f; }
+    .verdict.wrong-text { color: #b91c1c; }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0.5; transform: translateY(6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    .nav-btn {
+      background: white;
+      border: 2px solid #1e3c72;
+      color: #1e3c72;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: #1e3c72;
+      color: white;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      border-color: #a0b4d0;
+      color: #6a7f9b;
+    }
+
+    .reset-quiz-btn {
+      background: #fefefe;
+      border: 2px solid #b0c5e0;
+      color: #2d4059;
+      font-weight: 500;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      align-self: center;
+      margin-top: 0.2rem;
+    }
+
+    .reset-quiz-btn:hover {
+      background: #f0f5ff;
+      border-color: #2a5298;
+    }
+
+    @media (max-width: 500px) {
+      .quiz-container {
+        padding: 1.2rem 1rem;
+      }
+      .option-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+      }
+      .text-section {
+        max-height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="quiz-container" id="quizApp">
+  <div class="header">
+    <span class="progress-indicator" id="progressDisplay">📌 Soal 1 / 20</span>
+    <span style="font-weight:600; color:#2a5298;">🧠 TKA Smart Quiz</span>
+  </div>
+
+  <!-- Dynamic content will be injected here -->
+  <div id="dynamicContent"></div>
+
+  <div class="nav-buttons">
+    <button class="nav-btn" id="prevBtn" disabled>◀ Sebelumnya</button>
+    <button class="nav-btn" id="nextBtn">Berikutnya ▶</button>
+  </div>
+  <button class="reset-quiz-btn" id="resetQuizBtn">🔄 Ulangi Kuis</button>
+</div>
+
+<script>
+  (function() {
+    // ---- DATA TEKS BACAAN ----
+    const teksBacaan = {
+      1: `<h4>📄 Teks 1 – Kecerdasan Buatan (AI) dalam Pendidikan</h4>
+          <p>Perkembangan teknologi kecerdasan buatan (Artificial Intelligence/AI) telah membawa perubahan besar dalam berbagai bidang kehidupan. Di dunia pendidikan, AI mulai dimanfaatkan untuk membantu siswa memahami materi pelajaran, menyusun rangkuman, hingga memberikan umpan balik terhadap hasil belajar. Kehadiran teknologi ini membuat proses belajar menjadi lebih cepat dan fleksibel.</p>
+          <p>Namun, penggunaan AI juga menimbulkan sejumlah tantangan. Sebagian siswa mulai bergantung pada AI untuk menyelesaikan tugas tanpa benar-benar memahami materi yang dipelajari. Akibatnya, kemampuan berpikir kritis, kreativitas, dan pemecahan masalah dapat menurun apabila teknologi tersebut digunakan secara berlebihan. Selain itu, guru juga menghadapi kesulitan dalam membedakan hasil pekerjaan asli siswa dengan hasil yang sepenuhnya dibuat oleh AI.</p>
+          <p>Oleh karena itu, penggunaan AI di bidang pendidikan perlu diimbangi dengan peningkatan literasi digital dan etika akademik. AI seharusnya dipandang sebagai alat bantu belajar, bukan sebagai pengganti proses berpikir manusia. Dengan pemanfaatan yang tepat, AI dapat menjadi sarana untuk meningkatkan kualitas pembelajaran tanpa mengurangi kemampuan intelektual peserta didik.</p>`,
+      2: `<h4>📄 Teks 2 – Kendaraan Listrik dan Lingkungan</h4>
+          <p>Dalam beberapa tahun terakhir, tren penggunaan kendaraan listrik terus meningkat di berbagai negara. Kendaraan ini dianggap lebih ramah lingkungan karena tidak menghasilkan emisi gas buang secara langsung seperti kendaraan berbahan bakar fosil. Selain itu, perkembangan teknologi baterai membuat jarak tempuh kendaraan listrik semakin jauh sehingga mampu memenuhi kebutuhan mobilitas masyarakat.</p>
+          <p>Meskipun demikian, kendaraan listrik bukanlah solusi tunggal bagi persoalan lingkungan. Produksi baterai membutuhkan bahan tambang tertentu yang proses penambangannya berpotensi merusak lingkungan apabila tidak dikelola secara berkelanjutan. Di samping itu, limbah baterai bekas juga memerlukan sistem daur ulang yang memadai agar tidak menimbulkan pencemaran baru.</p>
+          <p>Oleh sebab itu, upaya mengurangi dampak perubahan iklim tidak cukup hanya dengan mengganti kendaraan berbahan bakar minyak menjadi kendaraan listrik. Perbaikan sistem transportasi umum, pengembangan energi terbarukan, serta peningkatan kesadaran masyarakat terhadap gaya hidup ramah lingkungan juga merupakan bagian penting dalam mewujudkan pembangunan yang berkelanjutan.</p>`,
+      3: `<h4>📄 Teks 3 – Media Sosial dan Literasi Digital</h4>
+          <p>Media sosial telah menjadi bagian yang tidak terpisahkan dari kehidupan masyarakat modern. Berbagai informasi dapat diperoleh hanya dalam hitungan detik, mulai dari berita, ilmu pengetahuan, hingga hiburan. Kemudahan tersebut membuat masyarakat semakin bergantung pada media digital sebagai sumber informasi utama.</p>
+          <p>Di sisi lain, kecepatan penyebaran informasi sering kali tidak diimbangi dengan kemampuan masyarakat dalam memverifikasi kebenarannya. Akibatnya, berita palsu atau hoaks dapat menyebar dengan cepat dan memengaruhi opini publik. Tidak sedikit masyarakat yang langsung membagikan informasi tanpa terlebih dahulu memeriksa sumber maupun keakuratan isi berita tersebut.</p>
+          <p>Karena itu, literasi digital menjadi keterampilan yang sangat penting pada era informasi. Literasi digital bukan sekadar kemampuan menggunakan perangkat teknologi, tetapi juga kemampuan berpikir kritis dalam memilih, mengevaluasi, dan memanfaatkan informasi secara bertanggung jawab. Dengan meningkatnya literasi digital, masyarakat diharapkan mampu memanfaatkan media sosial secara lebih bijaksana.</p>`,
+      4: `<h4>📄 Teks 4 – Pentingnya Kualitas Tidur</h4>
+          <p>Tidur merupakan kebutuhan biologis yang sangat penting bagi manusia. Saat tidur, tubuh tidak hanya beristirahat, tetapi juga melakukan berbagai proses pemulihan, seperti memperbaiki jaringan yang rusak, menyeimbangkan hormon, serta memperkuat sistem kekebalan tubuh. Berbagai penelitian menunjukkan bahwa kualitas tidur yang baik berperan penting dalam menjaga kesehatan fisik maupun mental.</p>
+          <p>Sayangnya, perkembangan teknologi digital menyebabkan banyak orang, terutama remaja, memiliki kebiasaan menggunakan telepon pintar hingga larut malam. Paparan cahaya biru dari layar gawai dapat menghambat produksi hormon melatonin yang berfungsi mengatur siklus tidur. Akibatnya, seseorang menjadi lebih sulit tidur, waktu tidur berkurang, dan kualitas istirahat menurun. Dalam jangka panjang, kondisi tersebut dapat meningkatkan risiko gangguan konsentrasi, obesitas, diabetes, hingga penyakit kardiovaskular.</p>
+          <p>Oleh karena itu, para ahli menyarankan agar penggunaan perangkat elektronik dibatasi setidaknya satu jam sebelum waktu tidur. Selain itu, menjaga jadwal tidur yang teratur, menciptakan suasana kamar yang nyaman, serta menghindari konsumsi kafein pada malam hari merupakan langkah-langkah sederhana yang dapat membantu meningkatkan kualitas tidur.</p>`
+    };
+
+    // ---- DATA 20 SOAL ----
+    const soalData = [
+      // Bagian 1 (Teks AI)
+      { id:1, teksId:1, soal:"1. Ide pokok paragraf kedua adalah ....", 
+        pilihan:["A. Guru mengalami kesulitan dalam memanfaatkan AI.","B. AI menyebabkan seluruh siswa menjadi malas belajar.","C. Penggunaan AI secara berlebihan dapat menimbulkan dampak negatif terhadap proses belajar.","D. AI membuat pembelajaran berlangsung lebih cepat.","E. AI merupakan teknologi yang harus dihindari di sekolah."],
+        jawaban:2, 
+        pembahasan:"✅ <strong>Jawaban Benar: C.</strong> Paragraf kedua membahas dampak negatif ketergantungan AI: siswa tidak paham materi, kemampuan berpikir kritis menurun, guru kesulitan membedakan pekerjaan. Semua itu adalah dampak negatif penggunaan berlebihan. Pilihan lain hanya sebagian atau salah." },
+      { id:2, teksId:1, soal:"2. Simpulan yang paling tepat berdasarkan bacaan tersebut adalah ....", 
+        pilihan:["A. AI harus dilarang digunakan di dunia pendidikan.","B. Penggunaan AI memberikan manfaat, tetapi harus disertai pemanfaatan yang bijaksana agar tidak mengurangi kemampuan berpikir peserta didik.","C. Guru tidak lagi dibutuhkan dalam proses pembelajaran.","D. AI lebih pintar daripada manusia sehingga semua tugas sekolah dapat diselesaikan secara otomatis.","E. Pendidikan modern sepenuhnya bergantung pada AI."],
+        jawaban:1, 
+        pembahasan:"✅ <strong>Jawaban Benar: B.</strong> Bacaan mencakup manfaat (paragraf 1), dampak negatif (paragraf 2), dan solusi (paragraf 3). Simpulan harus merangkum semua itu secara proporsional. Pilihan B adalah yang paling lengkap dan objektif." },
+      { id:3, teksId:1, soal:"3. Pernyataan berikut yang TIDAK SESUAI dengan isi bacaan adalah ....", 
+        pilihan:["A. AI dapat membantu menyusun rangkuman materi.","B. Penggunaan AI yang berlebihan dapat mengurangi kemampuan berpikir kritis.","C. AI sebaiknya dijadikan pengganti proses berpikir manusia.","D. Guru mengalami kesulitan membedakan hasil pekerjaan siswa.","E. Literasi digital diperlukan agar AI dimanfaatkan secara tepat."],
+        jawaban:2, 
+        pembahasan:"❌ <strong>Jawaban Benar: C (tidak sesuai).</strong> Paragraf terakhir menegaskan AI adalah alat bantu, bukan pengganti proses berpikir manusia. Jadi pernyataan C bertentangan langsung dengan isi teks." },
+      { id:4, teksId:1, soal:"4. Sikap penulis terhadap penggunaan AI dalam pendidikan adalah ....", 
+        pilihan:["A. Menolak sepenuhnya penggunaan AI.","B. Mendukung penggunaan AI secara bijaksana dan bertanggung jawab.","C. Tidak peduli terhadap perkembangan teknologi.","D. Menganggap AI lebih penting daripada guru.","E. Menganggap AI berbahaya dalam semua kondisi."],
+        jawaban:1, 
+        pembahasan:"🔍 <strong>Jawaban Benar: B.</strong> Penulis memaparkan manfaat dan risiko, lalu memberikan solusi pemanfaatan yang tepat. Ini menunjukkan sikap mendukung secara kritis dan proporsional, bukan ekstrem." },
+      { id:5, teksId:1, soal:"5. Berdasarkan bacaan tersebut, dapat disimpulkan bahwa ....", 
+        pilihan:["A. Kemampuan berpikir kritis akan hilang pada semua pengguna AI.","B. Semakin canggih AI, semakin sedikit guru yang dibutuhkan.","C. AI dapat meningkatkan kualitas pembelajaran apabila dimanfaatkan secara tepat.","D. Semua tugas sekolah sebaiknya dikerjakan menggunakan AI.","E. Masa depan pendidikan sepenuhnya berada di tangan AI."],
+        jawaban:2, 
+        pembahasan:"✅ <strong>Jawaban Benar: C.</strong> Kalimat terakhir teks mendukung pernyataan ini. Ini adalah inferensi langsung yang sesuai dengan isi bacaan, tanpa berlebihan." },
+      // Bagian 2 (Teks Kendaraan Listrik)
+      { id:6, teksId:2, soal:"6. Ide pokok paragraf kedua adalah ....", 
+        pilihan:["A. Kendaraan listrik lebih hemat biaya dibandingkan kendaraan konvensional.","B. Kendaraan listrik tetap memiliki tantangan lingkungan, terutama pada produksi dan pengelolaan baterai.","C. Semua limbah baterai dapat didaur ulang dengan mudah.","D. Penambangan bahan baku baterai tidak menimbulkan dampak lingkungan.","E. Kendaraan listrik merupakan solusi terbaik bagi semua persoalan lingkungan."],
+        jawaban:1, 
+        pembahasan:"✅ <strong>Jawaban Benar: B.</strong> Paragraf kedua diawali 'Meskipun demikian', menandakan kelemahan. Isinya: produksi baterai berpotensi merusak lingkungan dan limbah baterai butuh daur ulang. Jadi gagasan utamanya adalah tantangan lingkungan dari baterai." },
+      { id:7, teksId:2, soal:"7. Inti bacaan tersebut adalah ....", 
+        pilihan:["A. Kendaraan listrik harus segera menggantikan semua kendaraan berbahan bakar minyak.","B. Kendaraan listrik memiliki manfaat bagi lingkungan, tetapi perlu didukung berbagai upaya lain agar pembangunan berkelanjutan dapat terwujud.","C. Penambangan bahan baku baterai harus dihentikan.","D. Transportasi umum lebih baik daripada kendaraan listrik.","E. Kendaraan listrik merupakan teknologi yang gagal."],
+        jawaban:1, 
+        pembahasan:"✅ <strong>Jawaban Benar: B.</strong> Inti bacaan mencakup manfaat (paragraf 1), keterbatasan (paragraf 2), dan perlunya pendekatan holistik (paragraf 3). Opsi B merangkum semuanya dengan tepat." },
+      { id:8, teksId:2, soal:"8. Pernyataan berikut yang SESUAI dengan isi bacaan adalah ....", 
+        pilihan:["A. Kendaraan listrik tidak memiliki dampak lingkungan sama sekali.","B. Penambangan bahan baku baterai dapat menimbulkan kerusakan lingkungan apabila tidak dikelola dengan baik.","C. Kendaraan listrik hanya dapat digunakan untuk perjalanan jarak pendek.","D. Transportasi umum tidak berpengaruh terhadap pembangunan berkelanjutan.","E. Kendaraan berbahan bakar minyak lebih ramah lingkungan dibandingkan kendaraan listrik."],
+        jawaban:1, 
+        pembahasan:"✅ <strong>Jawaban Benar: B.</strong> Kalimat di paragraf kedua menyebutkan potensi kerusakan lingkungan akibat penambangan jika tidak dikelola berkelanjutan. Itu sesuai persis dengan opsi B." },
+      { id:9, teksId:2, soal:"9. Sikap penulis terhadap penggunaan kendaraan listrik adalah ....", 
+        pilihan:["A. Menolak penggunaan kendaraan listrik.","B. Mendukung penggunaan kendaraan listrik secara kritis sebagai bagian dari solusi lingkungan.","C. Menganggap kendaraan listrik tidak memiliki manfaat.","D. Menganggap kendaraan listrik pasti menyelesaikan seluruh persoalan lingkungan.","E. Tidak memiliki pendapat apa pun."],
+        jawaban:1, 
+        pembahasan:"🔍 <strong>Jawaban Benar: B.</strong> Penulis mengakui manfaat, tetapi juga menyoroti kelemahan dan menekankan solusi tambahan. Sikapnya objektif dan mendukung secara proporsional." },
+      { id:10, teksId:2, soal:"10. Berdasarkan bacaan tersebut, inferensi yang paling tepat adalah ....", 
+        pilihan:["A. Perubahan iklim hanya dapat diatasi melalui penggunaan kendaraan listrik.","B. Upaya menjaga lingkungan memerlukan pendekatan yang menyeluruh, bukan hanya mengandalkan satu teknologi.","C. Kendaraan listrik akan menggantikan seluruh moda transportasi.","D. Semua negara telah berhasil menerapkan energi terbarukan.","E. Limbah baterai tidak memerlukan pengelolaan khusus."],
+        jawaban:1, 
+        pembahasan:"🔎 <strong>Jawaban Benar: B.</strong> Paragraf terakhir menyebut kendaraan listrik bukan satu-satunya solusi, lalu menyebut transportasi umum, energi terbarukan, dan gaya hidup. Ini mengarah pada kesimpulan menyeluruh bahwa diperlukan pendekatan holistik." },
+      // Bagian 3 (Teks Media Sosial)
+      { id:11, teksId:3, soal:"11. Ide pokok paragraf ketiga adalah ....", 
+        pilihan:["A. Masyarakat harus mengurangi penggunaan media sosial.","B. Literasi digital merupakan kemampuan penting untuk menggunakan dan mengevaluasi informasi secara kritis.","C. Berita palsu akan selalu ada di internet.","D. Semua pengguna media sosial memiliki kemampuan berpikir kritis.","E. Teknologi digital harus dibatasi penggunaannya."],
+        jawaban:1, 
+        pembahasan:"✅ <strong>Jawaban Benar: B.</strong> Paragraf ketiga dimulai dengan kalimat 'literasi digital menjadi keterampilan yang sangat penting...' lalu menjelaskan definisinya. Jadi ide pokoknya adalah pentingnya literasi digital." },
+      { id:12, teksId:3, soal:"12. Hubungan isi antarparagraf pada bacaan tersebut adalah ....", 
+        pilihan:["A. Sebab → Akibat → Solusi.","B. Perbandingan → Contoh → Simpulan.","C. Kronologi → Penjelasan → Narasi.","D. Deskripsi → Perbandingan → Argumentasi.","E. Definisi → Narasi → Eksposisi."],
+        jawaban:0, 
+        pembahasan:"🔗 <strong>Jawaban Benar: A.</strong> Paragraf 1: kondisi (media sosial berkembang) → Paragraf 2: akibat (hoaks menyebar) → Paragraf 3: solusi (literasi digital). Pola ini adalah Sebab-Akibat-Solusi." },
+      { id:13, teksId:3, soal:"13. Tujuan penulis menulis bacaan tersebut adalah ....", 
+        pilihan:["A. Menghibur pembaca mengenai perkembangan media sosial.","B. Menjelaskan pentingnya literasi digital agar masyarakat mampu menggunakan media sosial secara bertanggung jawab.","C. Mengkritik seluruh pengguna media sosial.","D. Membuktikan bahwa internet membawa dampak buruk.","E. Membujuk masyarakat agar berhenti menggunakan internet."],
+        jawaban:1, 
+        pembahasan:"🎯 <strong>Jawaban Benar: B.</strong> Penulis memberikan informasi, menguraikan masalah, dan menekankan solusi literasi digital. Tujuan utamanya adalah mengedukasi tentang pentingnya literasi digital." },
+      { id:14, teksId:3, soal:"14. Pernyataan yang PALING SESUAI dengan isi bacaan adalah ....", 
+        pilihan:["A. Hoaks hanya dapat ditemukan pada media sosial tertentu.","B. Literasi digital hanya berkaitan dengan kemampuan mengoperasikan perangkat elektronik.","C. Penyebaran hoaks dapat diperlambat apabila masyarakat memiliki kemampuan memverifikasi informasi.","D. Semua informasi yang beredar di internet merupakan berita palsu.","E. Masyarakat modern tidak lagi membutuhkan media sosial."],
+        jawaban:2, 
+        pembahasan:"✅ <strong>Jawaban Benar: C.</strong> Teks menyebut hoaks menyebar karena masyarakat tidak verifikasi. Literasi digital melatih verifikasi. Jadi, kemampuan memverifikasi akan membantu memperlambat hoaks. Ini gabungan logis dari paragraf 2 dan 3." },
+      { id:15, teksId:3, soal:"15. Inferensi yang paling tepat berdasarkan bacaan tersebut adalah ....", 
+        pilihan:["A. Semakin tinggi kemampuan literasi digital masyarakat, semakin kecil kemungkinan berita palsu dipercaya dan disebarkan.","B. Semua berita di internet merupakan hoaks.","C. Media sosial harus ditutup agar masyarakat tidak terpengaruh berita palsu.","D. Hoaks hanya dibuat oleh media massa.","E. Pengguna media sosial tidak perlu berpikir kritis."],
+        jawaban:0, 
+        pembahasan:"🔎 <strong>Jawaban Benar: A.</strong> Tidak tertulis langsung, tetapi dari hubungan: hoaks menyebar karena kurang verifikasi, literasi digital meningkatkan berpikir kritis → maka literasi tinggi mengurangi kepercayaan pada hoaks. Inferensi logis." },
+      // Bagian 4 (Teks Tidur)
+      { id:16, teksId:4, soal:"16. Ide pokok bacaan tersebut adalah ....", 
+        pilihan:["A. Tidur merupakan kebutuhan biologis yang penting, dan kualitasnya perlu dijaga melalui kebiasaan yang sehat.","B. Cahaya biru merupakan penyebab utama semua penyakit kronis.","C. Penggunaan telepon pintar harus dilarang bagi remaja.","D. Semua orang mengalami gangguan tidur akibat gawai.","E. Tidur hanya berfungsi menghilangkan rasa lelah."],
+        jawaban:0, 
+        pembahasan:"✅ <strong>Jawaban Benar: A.</strong> Seluruh teks membahas pentingnya tidur, ancaman terhadap kualitas tidur, dan cara menjaganya. Pilihan A adalah benang merah yang mencakup ketiga paragraf." },
+      { id:17, teksId:4, soal:"17. Pernyataan berikut yang TIDAK SESUAI dengan isi bacaan adalah ....", 
+        pilihan:["A. Tidur membantu memperkuat sistem kekebalan tubuh.","B. Cahaya biru dapat menghambat produksi hormon melatonin.","C. Kafein pada malam hari dapat mengganggu kualitas tidur.","D. Gangguan tidur hanya memengaruhi kesehatan mental.","E. Membatasi penggunaan gawai sebelum tidur dapat meningkatkan kualitas tidur."],
+        jawaban:3, 
+        pembahasan:"❌ <strong>Jawaban Benar: D (tidak sesuai).</strong> Bacaan menyebutkan risiko fisik seperti obesitas, diabetes, penyakit kardiovaskular. Jadi gangguan tidur tidak hanya berdampak pada mental, tetapi juga fisik. Kata 'hanya' membuat pernyataan ini salah." },
+      { id:18, teksId:4, soal:"18. Sikap penulis terhadap penggunaan telepon pintar pada malam hari adalah ....", 
+        pilihan:["A. Menolak penggunaan telepon pintar dalam keadaan apa pun.","B. Mendukung penggunaan telepon pintar tanpa batas.","C. Mengimbau agar penggunaan telepon pintar dilakukan secara bijaksana agar tidak mengganggu kualitas tidur.","D. Menganggap telepon pintar merupakan penyebab seluruh penyakit.","E. Tidak memiliki pendapat terhadap penggunaan telepon pintar."],
+        jawaban:2, 
+        pembahasan:"🔍 <strong>Jawaban Benar: C.</strong> Penulis tidak melarang total, hanya menyarankan pembatasan satu jam sebelum tidur. Itu adalah imbauan bijaksana, bukan penolakan ekstrem." },
+      { id:19, teksId:4, soal:"19. Inferensi yang paling tepat berdasarkan bacaan tersebut adalah ....", 
+        pilihan:["A. Semakin baik kebiasaan tidur seseorang, semakin besar peluangnya menjaga kesehatan tubuh dan kemampuan berkonsentrasi.","B. Semua remaja mengalami kekurangan tidur.","C. Penggunaan telepon pintar tidak memiliki manfaat sama sekali.","D. Cahaya biru hanya terdapat pada telepon pintar.","E. Obesitas hanya disebabkan oleh kurang tidur."],
+        jawaban:0, 
+        pembahasan:"🔎 <strong>Jawaban Benar: A.</strong> Teks menjelaskan tidur berkualitas mendukung kesehatan fisik dan mental, serta kurang tidur meningkatkan risiko penyakit. Maka kebiasaan tidur baik akan meningkatkan kesehatan dan konsentrasi. Inferensi logis." },
+      { id:20, teksId:4, soal:"20. Tujuan utama penulis menyajikan bacaan tersebut adalah ....", 
+        pilihan:["A. Menjelaskan pentingnya kualitas tidur, dampak kebiasaan menggunakan gawai pada malam hari, serta cara menjaga kualitas tidur.","B. Mengajak masyarakat berhenti menggunakan telepon pintar.","C. Membandingkan telepon pintar dengan televisi.","D. Mengkritik remaja yang gemar bermain media sosial.","E. Menjelaskan proses kerja hormon melatonin secara mendalam."],
+        jawaban:0, 
+        pembahasan:"🎯 <strong>Jawaban Benar: A.</strong> Struktur teks: pentingnya tidur → masalah gawai → solusi. Tujuan penulis adalah menginformasikan dan mengedukasi tentang kualitas tidur." }
+    ];
+
+    // ---- STATE ----
+    let currentIndex = 0;            // 0-based index soal
+    const totalSoal = soalData.length;
+    // Track user answers: array of { chosenIndex, isCorrect }
+    let userAnswers = new Array(totalSoal).fill(null);
+
+    // DOM elements
+    const dynamicContent = document.getElementById('dynamicContent');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressDisplay = document.getElementById('progressDisplay');
+    const resetBtn = document.getElementById('resetQuizBtn');
+
+    // ---- FUNCTIONS ----
+    function renderSoal(index) {
+      const soal = soalData[index];
+      const teksHtml = teksBacaan[soal.teksId] || '';
+      const userAnswer = userAnswers[index];
+      const isAnswered = userAnswer !== null;
+
+      let optionsHtml = '';
+      soal.pilihan.forEach((opt, optIndex) => {
+        let btnClass = 'option-btn';
+        if (isAnswered) {
+          btnClass += ' disabled';
+          if (optIndex === soal.jawaban) {
+            btnClass += ' correct';
+          } else if (optIndex === userAnswer.chosenIndex && !userAnswer.isCorrect) {
+            btnClass += ' wrong';
+          }
+        }
+        optionsHtml += `<button class="${btnClass}" data-opt-index="${optIndex}" ${isAnswered ? 'disabled' : ''}>${opt}</button>`;
+      });
+
+      let feedbackHtml = '';
+      if (isAnswered) {
+        const verdictClass = userAnswer.isCorrect ? 'correct-text' : 'wrong-text';
+        const verdictIcon = userAnswer.isCorrect ? '✅' : '❌';
+        const verdictText = userAnswer.isCorrect ? 'Jawaban Benar!' : 'Jawaban Kurang Tepat';
+        feedbackHtml = `
+          <div class="feedback-panel visible">
+            <div class="verdict ${verdictClass}">${verdictIcon} ${verdictText}</div>
+            <div>${soal.pembahasan}</div>
+          </div>
+        `;
+      }
+
+      const html = `
+        <div class="text-section">${teksHtml}</div>
+        <div class="question-box">${soal.soal}</div>
+        <div class="options-grid" id="optionsGrid">${optionsHtml}</div>
+        ${feedbackHtml}
+      `;
+
+      dynamicContent.innerHTML = html;
+
+      // Attach event listeners to option buttons if not answered
+      if (!isAnswered) {
+        const optionButtons = document.querySelectorAll('#optionsGrid .option-btn');
+        optionButtons.forEach(btn => {
+          btn.addEventListener('click', optionClickHandler);
+        });
+      }
+
+      // Update navigation buttons
+      prevBtn.disabled = (index === 0);
+      if (index === totalSoal - 1) {
+        nextBtn.textContent = '🏁 Selesai';
+      } else {
+        nextBtn.textContent = 'Berikutnya ▶';
+      }
+      progressDisplay.textContent = `📌 Soal ${index + 1} / ${totalSoal}`;
+
+      // Scroll to top of card for mobile
+      document.querySelector('.quiz-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function optionClickHandler(e) {
+      const btn = e.currentTarget;
+      const optIndex = parseInt(btn.dataset.optIndex);
+      const soal = soalData[currentIndex];
+      const isCorrect = (optIndex === soal.jawaban);
+
+      // Save answer
+      userAnswers[currentIndex] = { chosenIndex: optIndex, isCorrect: isCorrect };
+
+      // Re-render to show feedback and disable buttons
+      renderSoal(currentIndex);
+    }
+
+    function goToQuestion(index) {
+      if (index < 0 || index >= totalSoal) return;
+      currentIndex = index;
+      renderSoal(currentIndex);
+    }
+
+    function resetQuiz() {
+      userAnswers = new Array(totalSoal).fill(null);
+      currentIndex = 0;
+      renderSoal(0);
+      // Ensure scroll
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ---- EVENT LISTENERS ----
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        goToQuestion(currentIndex - 1);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < totalSoal - 1) {
+        goToQuestion(currentIndex + 1);
+      } else {
+        // Finished quiz: show summary
+        const correctCount = userAnswers.filter(ans => ans && ans.isCorrect).length;
+        const answeredCount = userAnswers.filter(ans => ans !== null).length;
+        let summaryMessage = '';
+        if (answeredCount === totalSoal) {
+          summaryMessage = `Kamu telah menjawab semua soal! Skor: ${correctCount} / ${totalSoal} (${Math.round(correctCount/totalSoal*100)}%). 🎉`;
+        } else {
+          summaryMessage = `Kuis belum selesai. Kamu baru menjawab ${answeredCount} dari ${totalSoal} soal. Lanjutkan yuk!`;
+        }
+        alert(summaryMessage);
+        // Optionally go to first unanswered or stay
+        const firstUnanswered = userAnswers.findIndex(ans => ans === null);
+        if (firstUnanswered !== -1 && answeredCount < totalSoal) {
+          goToQuestion(firstUnanswered);
+        }
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (confirm('Yakin ingin mengulang kuis? Semua jawaban akan dihapus.')) {
+        resetQuiz();
+      }
+    });
+
+    // Keyboard navigation (optional)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
+        prevBtn.click();
+      } else if (e.key === 'ArrowRight' && currentIndex < totalSoal - 1) {
+        nextBtn.click();
+      }
+    });
+
+    // ---- INITIAL RENDER ----
+    renderSoal(0);
+  })();
+</script>
+</body>
+</html>

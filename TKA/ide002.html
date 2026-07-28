@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Master TKA: Bahasa Indonesia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --success: #10B981;
+            --danger: #EF4444;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #E5E7EB;
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .progress {
+            font-weight: 600;
+            color: var(--text-muted);
+            background: #E0E7FF;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .reading-text {
+            background-color: #F8FAFC;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px 8px 8px 4px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background-color: #FFFFFF;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover:not(.disabled) {
+            border-color: var(--primary);
+            background-color: #EEF2FF;
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background-color: #D1FAE5;
+            color: #065F46;
+            font-weight: 600;
+        }
+
+        .option.wrong {
+            border-color: var(--danger);
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .option-letter {
+            font-weight: bold;
+            margin-right: 15px;
+            background: #F3F4F6;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .correct .option-letter { background: var(--success); color: white; }
+        .wrong .option-letter { background: var(--danger); color: white; }
+
+        .explanation {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .explanation.correct-exp { background-color: #D1FAE5; border-left: 5px solid var(--success); }
+        .explanation.wrong-exp { background-color: #FEF2F2; border-left: 5px solid var(--danger); }
+
+        .explanation h3 { margin-bottom: 10px; font-size: 1.1rem; }
+        .explanation p { font-size: 0.95rem; line-height: 1.5; }
+
+        .btn-next {
+            margin-top: 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            display: none;
+            transition: background 0.3s;
+        }
+
+        .btn-next:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .result-container h2 { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .result-container p { font-size: 1.1rem; margin-bottom: 20px; color: var(--text-muted); }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) 0%, #E5E7EB 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .btn-restart {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .quiz-container { padding: 20px; }
+            .header { flex-direction: column; gap: 10px; text-align: center; }
+            .option { padding: 12px 15px; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-app">
+        <div id="quiz-content">
+            <div class="header">
+                <h1>📚 Latihan UTBK: PBM</h1>
+                <div class="progress" id="progress-text">Soal 1 / 20</div>
+            </div>
+            
+            <div class="reading-text" id="reading-text">
+                <!-- Teks bacaan muncul di sini -->
+            </div>
+
+            <div class="question" id="question">
+                <!-- Pertanyaan muncul di sini -->
+            </div>
+
+            <div class="options" id="options">
+                <!-- Pilihan ganda muncul di sini -->
+            </div>
+
+            <div class="explanation" id="explanation">
+                <h3 id="exp-title">Jawaban</h3>
+                <p id="exp-text">Pembahasan akan muncul di sini.</p>
+            </div>
+
+            <button class="btn-next" id="btn-next" onclick="nextQuestion()">Soal Selanjutnya ➡️</button>
+        </div>
+
+        <div class="result-container" id="result-container">
+            <h2>Kuis Selesai! 🎉</h2>
+            <p>Kerja bagus! Inilah hasil belajarmu:</p>
+            <div class="score-circle" id="score-circle">
+                <span id="score-text">0%</span>
+            </div>
+            <p id="score-message">Terus semangat berlatih!</p>
+            <button class="btn-restart" onclick="restartQuiz()">🔄 Ulangi Kuis</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                text: "[1] Penggunaan plastik sekali pakai masih menjadi masalah utama lingkungan di Indonesia. [2] Setiap tahun, jutaan ton sampah plastik berakhir di lautan dan mengancam ekosistem. [3] Meskipun pemerintah telah mengeluarkan regulasi kantong plastik berbayar, tingkat kesadaran masyarakat masih sangat rendah. [4] Oleh karena itu, diperlukan kampanye edukasi yang lebih masif dan penegakan hukum yang lebih tegas.",
+                question: "1. Ide pokok paragraf di atas adalah...",
+                options: [
+                    "Penggunaan plastik sekali pakai menjadi masalah utama lingkungan.",
+                    "Jutaan ton sampah plastik mengancam ekosistem laut tiap tahun.",
+                    "Pemerintah gagal menerapkan regulasi kantong plastik berbayar.",
+                    "Perlunya edukasi masif dan penegakan hukum terkait plastik."
+                ],
+                correct: 0,
+                explanation: "Teks ini berpola deduktif. Kalimat [1] adalah kalimat utama yang bersifat umum. Kalimat [2] sampai [4] adalah penjelas dari masalah utama tersebut (dampak, upaya, dan solusinya). Jadi, ide pokoknya ada di awal."
+            },
+            {
+                text: "[1] Penggunaan plastik sekali pakai masih menjadi masalah utama lingkungan di Indonesia. [2] Setiap tahun, jutaan ton sampah plastik berakhir di lautan dan mengancam ekosistem. [3] Meskipun pemerintah telah mengeluarkan regulasi kantong plastik berbayar, tingkat kesadaran masyarakat masih sangat rendah. [4] Oleh karena itu, diperlukan kampanye edukasi yang lebih masif dan penegakan hukum yang lebih tegas.",
+                question: "2. Kesimpulan yang paling tepat dari teks tersebut adalah...",
+                options: [
+                    "Sampah plastik sekali pakai akan selalu mengancam ekosistem lautan Indonesia selamanya.",
+                    "Masalah sampah plastik memerlukan regulasi kantong berbayar di semua minimarket.",
+                    "Rendahnya kesadaran masyarakat menyebabkan masalah sampah plastik sulit diatasi meski ada regulasi, sehingga butuh edukasi dan ketegasan hukum.",
+                    "Kampanye edukasi dan penegakan hukum adalah satu-satunya cara mengatasi sampah."
+                ],
+                correct: 2,
+                explanation: "Simpulan merangkum seluruh isi (Masalah [1,2] + Fakta lapangan [3] + Solusi [4]). Opsi yang merangkum keseluruhan tanpa menambah kata mutlak ('selamanya', 'satu-satunya') adalah pilihan ketiga."
+            },
+            {
+                text: "[1] Penggunaan plastik sekali pakai masih menjadi masalah utama lingkungan di Indonesia. [2] Setiap tahun, jutaan ton sampah plastik berakhir di lautan dan mengancam ekosistem. [3] Meskipun pemerintah telah mengeluarkan regulasi kantong plastik berbayar, tingkat kesadaran masyarakat masih sangat rendah. [4] Oleh karena itu, diperlukan kampanye edukasi yang lebih masif dan penegakan hukum yang lebih tegas.",
+                question: "3. Tujuan penulis menulis teks tersebut adalah untuk...",
+                options: [
+                    "Mendeskripsikan jenis-jenis sampah plastik yang ada di lautan.",
+                    "Meyakinkan pembaca perlunya edukasi dan penegakan hukum atasi masalah plastik.",
+                    "Mengkritik pemerintah yang tidak serius mengurus sampah.",
+                    "Membandingkan kesadaran masyarakat Indonesia dengan negara lain."
+                ],
+                correct: 1,
+                explanation: "Tujuan penulis terlihat jelas pada kalimat [4] yang diawali 'Oleh karena itu, diperlukan...'. Penulis ingin meyakinkan perlunya langkah konkret berupa edukasi masif dan penegakan hukum."
+            },
+            {
+                text: "[1] Penggunaan plastik sekali pakai masih menjadi masalah utama lingkungan di Indonesia. [2] Setiap tahun, jutaan ton sampah plastik berakhir di lautan dan mengancam ekosistem. [3] Meskipun pemerintah telah mengeluarkan regulasi kantong plastik berbayar, tingkat kesadaran masyarakat masih sangat rendah. [4] Oleh karena itu, diperlukan kampanye edukasi yang lebih masif dan penegakan hukum yang lebih tegas.",
+                question: "4. Pernyataan berikut yang TIDAK SESUAI dengan isi teks adalah...",
+                options: [
+                    "Sampah plastik berpotensi merusak kehidupan di laut.",
+                    "Masyarakat Indonesia sudah memiliki kesadaran tinggi terkait bahaya plastik.",
+                    "Pemerintah sudah mencoba mengatasi masalah dengan regulasi plastik berbayar.",
+                    "Edukasi yang lebih luas sangat dibutuhkan saat ini."
+                ],
+                correct: 1,
+                explanation: "Kalimat [3] jelas menyebutkan: 'tingkat kesadaran masyarakat masih sangat rendah'. Pernyataan kedua bertentangan dengan fakta teks tersebut."
+            },
+            {
+                text: "[1] Kecerdasan buatan (AI) telah mengubah lanskap industri kreatif secara drastis. [2] Banyak desainer dan penulis yang memanfaatkan AI untuk mempercepat proses kerja mereka. [3] Namun, di sisi lain, muncul kekhawatiran terkait pelanggaran hak cipta dan hilangnya orisinalitas karya manusia. [4] Hal ini memicu perdebatan panjang tentang perlunya regulasi khusus. [5] Bagaimanapun, teknologi ini ibarat pisau bermata dua yang harus dikelola bijak.",
+                question: "5. Inti bacaan (ide pokok) paragraf tersebut adalah...",
+                options: [
+                    "AI sangat membantu desainer dan penulis.",
+                    "Kecerdasan buatan memicu pelanggaran hak cipta berat.",
+                    "Perlunya regulasi khusus untuk mengatur teknologi canggih.",
+                    "Perubahan industri kreatif akibat AI yang membawa dampak positif sekaligus kekhawatiran."
+                ],
+                correct: 3,
+                explanation: "Teks membahas AI yang mengubah industri kreatif [1], dengan manfaat [2] dan kekhawatiran/dampak negatif [3]. Jadi intinya adalah dua sisi dari perubahan AI tersebut (pisau bermata dua)."
+            },
+            {
+                text: "[1] Kecerdasan buatan (AI) telah mengubah lanskap industri kreatif secara drastis. [2] Banyak desainer dan penulis yang memanfaatkan AI untuk mempercepat proses kerja mereka. [3] Namun, di sisi lain, muncul kekhawatiran terkait pelanggaran hak cipta dan hilangnya orisinalitas karya manusia. [4] Hal ini memicu perdebatan panjang tentang perlunya regulasi khusus. [5] Bagaimanapun, teknologi ini ibarat pisau bermata dua yang harus dikelola bijak.",
+                question: "6. Sikap penulis terhadap fenomena AI dalam teks tersebut adalah...",
+                options: [
+                    "Menolak keras kehadiran AI di industri kreatif.",
+                    "Mendukung sepenuhnya penggunaan AI tanpa syarat.",
+                    "Objektif dan berhati-hati, melihat AI dari dua sisi.",
+                    "Apatis (tidak peduli) terhadap hilangnya orisinalitas."
+                ],
+                correct: 2,
+                explanation: "Penulis memaparkan keuntungan [2] dan kerugian [3], lalu menyimpulkan AI ibarat 'pisau bermata dua yang harus dikelola bijak'. Sikap ini sangat objektif dan analitis."
+            },
+            {
+                text: "[1] Kecerdasan buatan (AI) telah mengubah lanskap industri kreatif secara drastis. [2] Banyak desainer dan penulis yang memanfaatkan AI untuk mempercepat proses kerja mereka. [3] Namun, di sisi lain, muncul kekhawatiran terkait pelanggaran hak cipta dan hilangnya orisinalitas karya manusia. [4] Hal ini memicu perdebatan panjang tentang perlunya regulasi khusus. [5] Bagaimanapun, teknologi ini ibarat pisau bermata dua yang harus dikelola bijak.",
+                question: "7. Kalimat opini dalam teks di atas ditandai oleh nomor...",
+                options: [
+                    "(1) dan (2)",
+                    "(2) dan (3)",
+                    "(3) dan (4)",
+                    "(5)"
+                ],
+                correct: 3,
+                explanation: "Kalimat [5] 'teknologi ini ibarat pisau bermata dua yang harus dikelola bijak' adalah sebuah penilaian/pandangan/saran pribadi penulis, sehingga tergolong opini."
+            },
+            {
+                text: "[1] Kecerdasan buatan (AI) telah mengubah lanskap industri kreatif secara drastis. [2] Banyak desainer dan penulis yang memanfaatkan AI untuk mempercepat proses kerja mereka. [3] Namun, di sisi lain, muncul kekhawatiran terkait pelanggaran hak cipta dan hilangnya orisinalitas karya manusia. [4] Hal ini memicu perdebatan panjang tentang perlunya regulasi khusus. [5] Bagaimanapun, teknologi ini ibarat pisau bermata dua yang harus dikelola bijak.",
+                question: "8. (Inferensi) Berdasarkan teks, jika regulasi khusus terkait AI tidak kunjung dibuat, yang paling mungkin terjadi adalah...",
+                options: [
+                    "AI akan berhenti digunakan oleh para desainer grafis.",
+                    "Potensi pelanggaran hak cipta di industri kreatif akan semakin marak.",
+                    "Orisinalitas karya manusia akan 100% diakui secara global.",
+                    "Industri kreatif akan runtuh dan kembali ke metode tradisional."
+                ],
+                correct: 1,
+                explanation: "Inferensi (kesimpulan tersirat). Teks menyatakan ada kekhawatiran pelanggaran hak cipta sehingga butuh regulasi. Logikanya, jika regulasi tidak ada, kekhawatiran itu (pelanggaran) akan benar-benar terjadi/makin marak."
+            },
+            {
+                text: "[1] Penggunaan media sosial berlebihan di kalangan remaja berpotensi memicu masalah kesehatan mental, seperti depresi dan kecemasan. [2] Pakar psikologi menemukan bahwa remaja sering membandingkan kehidupan nyata mereka dengan kehidupan ideal yang ditampilkan di dunia maya. [3] Akibatnya, rasa percaya diri mereka menurun. [4] Untuk mengatasi hal ini, peran orang tua dalam membatasi waktu layar (*screen time*) sangatlah vital.",
+                question: "9. Kata 'vital' pada kalimat (4) memiliki makna yang sama dengan...",
+                options: [
+                    "Tidak berarti",
+                    "Sangat penting / krusial",
+                    "Mendadak",
+                    "Berbahaya"
+                ],
+                correct: 1,
+                explanation: "Dalam konteks ini, peran orang tua sangat 'vital' berarti sangat penting, pokok, atau krusial untuk mengatasi masalah kesehatan mental anak."
+            },
+            {
+                text: "[1] Penggunaan media sosial berlebihan di kalangan remaja berpotensi memicu masalah kesehatan mental, seperti depresi dan kecemasan. [2] Pakar psikologi menemukan bahwa remaja sering membandingkan kehidupan nyata mereka dengan kehidupan ideal yang ditampilkan di dunia maya. [3] Akibatnya, rasa percaya diri mereka menurun. [4] Untuk mengatasi hal ini, peran orang tua dalam membatasi waktu layar (*screen time*) sangatlah vital.",
+                question: "10. Hubungan sebab-akibat yang benar berdasarkan paragraf tersebut adalah...",
+                options: [
+                    "Orang tua membatasi waktu layar berakibat anak menjadi depresi.",
+                    "Rasa percaya diri menurun mengakibatkan anak main media sosial.",
+                    "Membandingkan diri dengan standar dunia maya mengakibatkan krisis percaya diri.",
+                    "Kesehatan mental terganggu mengakibatkan kehidupan ideal tercapai."
+                ],
+                correct: 2,
+                explanation: "Kalimat [2] menyebut remaja membandingkan kehidupannya. Kalimat [3] melanjutkannya dengan 'Akibatnya, rasa percaya diri menurun'. Jelas ini adalah hubungan sebab-akibat yang tepat."
+            },
+            {
+                text: "[1] Tingkat literasi membaca siswa di Indonesia masih memprihatinkan dibandingkan negara lain. [2] Kurangnya akses buku berkualitas di daerah pelosok menjadi salah satu penyebab. [3] Selain itu, gempuran hiburan digital instan membuat minat baca buku fisik menurun. [4] Jika kondisi ini dibiarkan, generasi mendatang akan kesulitan bersaing. [5] Pemerintah pusat dan daerah harus segera bersinergi memperbanyak perpustakaan dan digitalisasi buku.",
+                question: "11. Simpulan yang paling tepat untuk teks di atas adalah...",
+                options: [
+                    "Rendahnya literasi siswa disebabkan kurangnya buku dan hiburan digital, sehingga butuh sinergi pemerintah untuk mengatasinya.",
+                    "Generasi mendatang tidak akan bisa bekerja karena literasi di Indonesia memprihatinkan.",
+                    "Pemerintah adalah satu-satunya pihak yang bersalah atas rendahnya minat baca siswa di pelosok.",
+                    "Digitalisasi buku adalah cara instan mengatasi gempuran hiburan digital."
+                ],
+                correct: 0,
+                explanation: "Simpulan yang baik harus mencakup masalah (literasi rendah) + penyebab (kurang buku & hiburan digital) + solusi (sinergi pemerintah). Pilihan pertama merangkum semua unsur utama ini."
+            },
+            {
+                text: "[1] Tingkat literasi membaca siswa di Indonesia masih memprihatinkan dibandingkan negara lain. [2] Kurangnya akses buku berkualitas di daerah pelosok menjadi salah satu penyebab. [3] Selain itu, gempuran hiburan digital instan membuat minat baca buku fisik menurun. [4] Jika kondisi ini dibiarkan, generasi mendatang akan kesulitan bersaing. [5] Pemerintah pusat dan daerah harus segera bersinergi memperbanyak perpustakaan dan digitalisasi buku.",
+                question: "12. Pernyataan yang SESUAI dengan isi teks adalah...",
+                options: [
+                    "Minat baca buku fisik meningkat seiring dengan adanya hiburan digital.",
+                    "Literasi anak Indonesia adalah yang terbaik di Asia Tenggara.",
+                    "Akses buku yang kurang di pelosok turut menyumbang rendahnya literasi.",
+                    "Pemerintah sudah berhasil melakukan digitalisasi buku di seluruh sekolah."
+                ],
+                correct: 2,
+                explanation: "Sesuai dengan kalimat [2]: 'Kurangnya akses buku berkualitas di daerah pelosok menjadi salah satu penyebab [literasi memprihatinkan]'."
+            },
+            {
+                text: "[1] UMKM memegang peranan krusial sebagai tulang punggung ekonomi nasional, terutama saat krisis. [2] Saat pandemi melanda, sektor inilah yang mampu bertahan dan menyerap tenaga kerja yang terkena PHK. [3] Sayangnya, banyak pelaku UMKM yang belum melek teknologi digital sehingga jangkauan pasar terbatas. [4] Pelatihan *digital marketing* dan akses permodalan sangat dibutuhkan agar mereka bisa 'naik kelas'.",
+                question: "13. Ide pokok teks tersebut berada pada kalimat nomor...",
+                options: [
+                    "(1)",
+                    "(2)",
+                    "(3)",
+                    "(4)"
+                ],
+                correct: 0,
+                explanation: "Paragraf ini berpola deduktif. Kalimat [1] menyampaikan ide utama bahwa UMKM adalah tulang punggung ekonomi. Kalimat [2], [3], [4] adalah penjelas yang menguraikan daya tahan, kendala, dan solusi UMKM tersebut."
+            },
+            {
+                text: "[1] UMKM memegang peranan krusial sebagai tulang punggung ekonomi nasional, terutama saat krisis. [2] Saat pandemi melanda, sektor inilah yang mampu bertahan dan menyerap tenaga kerja yang terkena PHK. [3] Sayangnya, banyak pelaku UMKM yang belum melek teknologi digital sehingga jangkauan pasar terbatas. [4] Pelatihan *digital marketing* dan akses permodalan sangat dibutuhkan agar mereka bisa 'naik kelas'.",
+                question: "14. Sikap penulis terhadap UMKM dalam teks tersebut adalah...",
+                options: [
+                    "Pesimis",
+                    "Netral/Faktual saja",
+                    "Apatis",
+                    "Suportif/Mendukung"
+                ],
+                correct: 3,
+                explanation: "Penulis memuji UMKM sebagai 'tulang punggung', menyoroti kendala mereka secara simpatik ('Sayangnya...'), dan memberikan solusi agar UMKM bisa 'naik kelas'. Sikapnya sangat suportif/mendukung kemajuan UMKM."
+            },
+            {
+                text: "[1] Fenomena *quiet quitting* merujuk pada karyawan yang hanya bekerja sesuai *job desc* tanpa mau berlebih atau lembur. [2] Ini bukan berarti mereka malas, melainkan menetapkan batas tegas antara profesional dan personal. [3] Pakar menyebut ini adalah imbas dari budaya kerja *toxic* dan *overwork* tanpa kompensasi adil. [4] Perusahaan perlu membenahi sistem *reward* agar semangat kerja kembali tumbuh.",
+                question: "15. Inti bacaan teks di atas adalah membahas tentang...",
+                options: [
+                    "Definisi karyawan malas di era modern.",
+                    "Penyebab turunnya pendapatan perusahaan akibat lembur.",
+                    "Fenomena *quiet quitting* sebagai batas profesionalitas akibat budaya kerja *toxic*.",
+                    "Pentingnya perusahaan memberi gaji yang sangat besar."
+                ],
+                correct: 2,
+                explanation: "Teks membahas apa itu *quiet quitting* [1,2] dan mengapa itu terjadi [3]. Pilihan ke-3 merangkum definisi sekaligus akar permasalahannya sesuai isi teks."
+            },
+            {
+                text: "[1] Fenomena *quiet quitting* merujuk pada karyawan yang hanya bekerja sesuai *job desc* tanpa mau berlebih atau lembur. [2] Ini bukan berarti mereka malas, melainkan menetapkan batas tegas antara profesional dan personal. [3] Pakar menyebut ini adalah imbas dari budaya kerja *toxic* dan *overwork* tanpa kompensasi adil. [4] Perusahaan perlu membenahi sistem *reward* agar semangat kerja kembali tumbuh.",
+                question: "16. (Inferensi) Jika sebuah perusahaan menerapkan sistem kompensasi dan *reward* yang adil, kemungkinan yang terjadi adalah...",
+                options: [
+                    "Karyawan akan tetap melakukan *quiet quitting*.",
+                    "Angka *quiet quitting* berpotensi menurun karena karyawan merasa dihargai.",
+                    "Semua karyawan akan resign masal.",
+                    "Perusahaan akan bangkrut karena kehabisan dana bayar lembur."
+                ],
+                correct: 1,
+                explanation: "Inferensi berdasar kalimat [3] & [4]. Jika pemicunya adalah *reward* tidak adil, maka perbaikannya logisnya akan mengurangi fenomena tersebut dan menumbuhkan semangat kembali."
+            },
+            {
+                text: "[1] Perubahan iklim berdampak ekstrem pada sektor pertanian. [2] Musim kemarau panjang membuat lahan persawahan di Jawa kekeringan parah. [3] Akibatnya, produksi padi nasional kuartal ketiga tahun ini turun hingga 15%. [4] Jika tidak ada antisipasi teknologi irigasi cerdas, krisis pangan bisa mengancam tahun depan.",
+                question: "17. Berdasarkan paragraf di atas, manakah yang merupakan kalimat FAKTA?",
+                options: [
+                    "Kalimat (1)",
+                    "Kalimat (2) dan (3)",
+                    "Kalimat (4)",
+                    "Semua kalimat adalah opini."
+                ],
+                correct: 1,
+                explanation: "Kalimat [2] dan [3] memuat peristiwa nyata yang sedang terjadi dan data angka (turun 15%) yang bisa dibuktikan kebenarannya. Kalimat [4] adalah prediksi/opini (ditandai dengan kata 'Jika' dan 'bisa mengancam')."
+            },
+            {
+                text: "[1] Kendaraan listrik (EV) diklaim lebih ramah lingkungan karena nol emisi gas buang. [2] Namun, proses pembuatan baterainya membutuhkan penambangan nikel masif yang merusak lingkungan lokal. [3] Selain itu, listrik untuk *charge* EV di Indonesia masih mayoritas dari PLTU batu bara. [4] Oleh karena itu, label 'ramah lingkungan' EV masih menjadi perdebatan.",
+                question: "18. Simpulan dari teks di atas yang paling tepat adalah...",
+                options: [
+                    "Kendaraan listrik terbukti merusak lingkungan daripada mobil bensin.",
+                    "Klaim ramah lingkungan kendaraan listrik masih diperdebatkan karena masalah proses pembuatan baterai dan sumber listrik.",
+                    "PLTU batu bara harus ditutup agar kendaraan listrik benar-benar bersih.",
+                    "Pemerintah melarang penambangan nikel untuk baterai EV."
+                ],
+                correct: 1,
+                explanation: "Simpulan merangkum ide pokok keseluruhan. Teks membandingkan klaim EV ramah lingkungan vs fakta merusak dari baterai & PLTU, sehingga berujung pada 'masih menjadi perdebatan'."
+            },
+            {
+                text: "[1] Di era digital, data pribadi menjadi aset yang sangat berharga. [2] Banyak aplikasi gratis yang sebenarnya diam-diam mengumpulkan data lokasi, kontak, dan kebiasaan *browsing* pengguna. [3] Data tersebut lalu dijual ke pihak ketiga untuk target iklan. [4] Pengguna sebaiknya membaca *syarat dan ketentuan* sebelum menginstal aplikasi apa pun.",
+                question: "19. Tujuan penulis pada teks di atas adalah...",
+                options: [
+                    "Mempromosikan aplikasi berbayar yang aman.",
+                    "Melarang pengguna memakai internet dan *smartphone*.",
+                    "Memberikan peringatan dan mengedukasi pembaca agar berhati-hati melindungi data pribadi.",
+                    "Menganalisis cara pihak ketiga membuat iklan di aplikasi gratis."
+                ],
+                correct: 2,
+                explanation: "Penulis memaparkan bahaya pencurian data [1,2,3], lalu diakhiri saran di kalimat [4]. Tujuannya jelas untuk memperingatkan dan mengedukasi (*awareness*) pengguna."
+            },
+            {
+                text: "[1] Di era digital, data pribadi menjadi aset yang sangat berharga. [2] Banyak aplikasi gratis yang sebenarnya diam-diam mengumpulkan data lokasi, kontak, dan kebiasaan *browsing* pengguna. [3] Data tersebut lalu dijual ke pihak ketiga untuk target iklan. [4] Pengguna sebaiknya membaca *syarat dan ketentuan* sebelum menginstal aplikasi apa pun.",
+                question: "20. Ciri yang membuktikan kalimat (4) sebagai opini (saran) adalah...",
+                options: [
+                    "Memuat kata 'sebaiknya'.",
+                    "Terdapat kata 'aplikasi'.",
+                    "Tidak ada angka.",
+                    "Terletak di akhir paragraf."
+                ],
+                correct: 0,
+                explanation: "Kata 'sebaiknya' adalah penanda khas sebuah kalimat opini, opini berupa anjuran atau saran (subjektivitas dari penulis terhadap tindakan pembaca)."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const readingTextEl = document.getElementById('reading-text');
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const explanationEl = document.getElementById('explanation');
+        const expTitle = document.getElementById('exp-title');
+        const expText = document.getElementById('exp-text');
+        const btnNext = document.getElementById('btn-next');
+        const progressText = document.getElementById('progress-text');
+        const quizContent = document.getElementById('quiz-content');
+        const resultContainer = document.getElementById('result-container');
+
+        function loadQuestion() {
+            // Reset state
+            explanationEl.className = 'explanation';
+            btnNext.style.display = 'none';
+            
+            const currentData = quizData[currentQuestionIndex];
+            
+            // Update Text & Question
+            progressText.innerText = `Soal ${currentQuestionIndex + 1} / ${quizData.length}`;
+            readingTextEl.innerHTML = currentData.text;
+            questionEl.innerText = currentData.question;
+            
+            // Render Options
+            optionsEl.innerHTML = '';
+            const labels = ['A', 'B', 'C', 'D'];
+            currentData.options.forEach((opt, index) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'option';
+                optDiv.innerHTML = `<span class="option-letter">${labels[index]}</span> <span>${opt}</span>`;
+                optDiv.onclick = () => checkAnswer(index, optDiv);
+                optionsEl.appendChild(optDiv);
+            });
+        }
+
+        function checkAnswer(selectedIndex, selectedDiv) {
+            const currentData = quizData[currentQuestionIndex];
+            const allOptions = optionsEl.querySelectorAll('.option');
+            
+            // Disable all options
+            allOptions.forEach(opt => opt.classList.add('disabled'));
+
+            if(selectedIndex === currentData.correct) {
+                selectedDiv.classList.add('correct');
+                score++;
+                showExplanation(true, currentData.explanation);
+            } else {
+                selectedDiv.classList.add('wrong');
+                // Highlight correct option
+                allOptions[currentData.correct].classList.add('correct');
+                showExplanation(false, currentData.explanation);
+            }
+            
+            btnNext.style.display = 'block';
+            if(currentQuestionIndex === quizData.length - 1) {
+                btnNext.innerText = "Lihat Hasil Akhir 🏁";
+            }
+        }
+
+        function showExplanation(isCorrect, text) {
+            explanationEl.classList.add('show');
+            if(isCorrect) {
+                explanationEl.classList.add('correct-exp');
+                expTitle.innerHTML = '✅ Tepat Sekali!';
+                expTitle.style.color = 'var(--success)';
+            } else {
+                explanationEl.classList.add('wrong-exp');
+                expTitle.innerHTML = '❌ Kurang Tepat!';
+                expTitle.style.color = 'var(--danger)';
+            }
+            expText.innerText = text;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizContent.style.display = 'none';
+            resultContainer.style.display = 'block';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            const scoreText = document.getElementById('score-text');
+            const scoreCircle = document.getElementById('score-circle');
+            const scoreMsg = document.getElementById('score-message');
+            
+            scoreText.innerText = percentage + '%';
+            
+            let color = 'var(--success)';
+            if(percentage < 50) color = 'var(--danger)';
+            else if(percentage < 80) color = '#F59E0B'; // yellow/orange
+
+            scoreCircle.style.background = `conic-gradient(${color} ${percentage}%, #E5E7EB 0%)`;
+            scoreText.style.color = color;
+
+            if(percentage >= 80) {
+                scoreMsg.innerText = "Luar Biasa! Kamu sudah menguasai materi PBM UTBK! 🚀";
+            } else if (percentage >= 50) {
+                scoreMsg.innerText = "Bagus! Tinggal asah sedikit lagi Logika Membacanya! 👍";
+            } else {
+                scoreMsg.innerText = "Jangan menyerah! Yuk, baca ulang materi dasarnya dan coba lagi. 💪";
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultContainer.style.display = 'none';
+            quizContent.style.display = 'block';
+            btnNext.innerText = "Soal Selanjutnya ➡️";
+            loadQuestion();
+        }
+
+        // Init Kuis
+        loadQuestion();
+    </script>
+</body>
+</html>
