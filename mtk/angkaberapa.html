@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuis Mengenal Angka</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
@@ -15,7 +15,7 @@
         }
 
         body {
-            background-color: #87CEEB;
+            background-color: #87CEEB; /* Warna langit */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,7 +33,7 @@
             background: white;
             padding: 30px 20px;
             border-radius: 30px;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
             width: 100%;
             max-width: 480px;
             border: 8px solid #FFD700;
@@ -48,7 +48,7 @@
             color: #FF4500;
             font-size: clamp(2em, 6vw, 3em);
             margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         h2 {
@@ -81,7 +81,6 @@
             width: 100%;
             max-width: 320px;
             touch-action: manipulation;
-            user-select: none;
         }
 
         button:hover {
@@ -99,10 +98,9 @@
             background-color: #FF69B4;
             box-shadow: 0 8px 0 #C71585;
         }
-        #btn-jawab:hover {
-            background-color: #FF1493;
-        }
-
+        #btn-jawab:hover { background-color: #FF1493; }
+        
+        /* Gaya tombol saat mikrofon aktif */
         #btn-jawab.listening {
             background-color: #FF4500;
             box-shadow: 0 8px 0 #B22222;
@@ -118,27 +116,50 @@
             margin-bottom: 10px;
             width: auto;
         }
-        .btn-audio:hover {
-            background-color: #00A8B0;
-        }
+        .btn-audio:hover { background-color: #00A8B0; }
 
         .status-text {
-            margin-top: 15px;
-            font-size: clamp(1em, 3.5vw, 1.2em);
+            margin-top: 12px;
+            font-size: clamp(1em, 3.5vw, 1.1em);
             color: #555;
-            min-height: 40px;
+            min-height: 25px;
             padding: 0 10px;
+        }
+
+        /* Box Tampilan Input Suara Penjawab */
+        .speech-result-box {
+            margin-top: 10px;
+            background-color: #FFF8DC;
+            border: 3px dashed #FF8C00;
+            border-radius: 15px;
+            padding: 10px 15px;
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .speech-label {
+            font-size: 0.9em;
+            color: #8B4513;
+            font-weight: bold;
+        }
+
+        .speech-detected {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #D2691E;
+            min-height: 35px;
             word-break: break-word;
         }
 
-        /* Feedback overlay */
+        /* Animasi Pop Up Feedback */
         .feedback-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.92);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.92);
             display: none;
             justify-content: center;
             align-items: center;
@@ -146,9 +167,7 @@
             padding: 20px;
         }
 
-        .feedback-overlay.active {
-            display: flex;
-        }
+        .feedback-overlay.active { display: flex; }
 
         .feedback-content {
             font-size: clamp(2.8em, 10vw, 4.5em);
@@ -157,61 +176,35 @@
 
         .correct {
             color: #32CD32;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .wrong {
             color: #FF4500;
-            animation: shake 0.4s;
+            animation: shake 0.5s;
         }
 
-        /* Animations */
+        /* Keyframes Animasi */
         @keyframes popIn {
-            0% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         @keyframes bounce {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-15px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            20%,
-            60% {
-                transform: translateX(-15px);
-            }
-            40%,
-            80% {
-                transform: translateX(15px);
-            }
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-15px); }
+            40%, 80% { transform: translateX(15px); }
         }
 
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         .confetti {
@@ -236,7 +229,15 @@
         <button id="btn-putar-soal" class="btn-audio">🔊 Dengar Soal</button>
         <div class="number-display" id="angka-tampil">1</div>
         <button id="btn-jawab">🎙️ Jawab</button>
+        
+        <!-- Status Mikrofon -->
         <div class="status-text" id="status-mikrofon">Klik tombol Jawab dan sebutkan angkanya!</div>
+
+        <!-- Box Hasil Deteksi Suara Penjawab -->
+        <div class="speech-result-box">
+            <span class="speech-label">Suara Terdeteksi:</span>
+            <span class="speech-detected" id="hasil-suara">-</span>
+        </div>
     </div>
 
     <!-- Halaman Selesai -->
@@ -252,18 +253,15 @@
     </div>
 
     <script>
-        // =====================================================
-        // DATA
-        // =====================================================
+        // Array angka 1 sampai 10
         let daftarAngka = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         let soalSekarang = 0;
         let angkaSaatIni = 0;
 
+        // Kata dalam bahasa Indonesia untuk pencocokan teks
         const kataAngka = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh"];
 
-        // =====================================================
-        // DOM
-        // =====================================================
+        // Setup DOM Elements
         const screenAwal = document.getElementById('screen-awal');
         const screenKuis = document.getElementById('screen-kuis');
         const screenSelesai = document.getElementById('screen-selesai');
@@ -272,251 +270,181 @@
         const btnJawab = document.getElementById('btn-jawab');
         const btnPutarSoal = document.getElementById('btn-putar-soal');
         const statusMikrofon = document.getElementById('status-mikrofon');
+        const hasilSuara = document.getElementById('hasil-suara');
         const feedbackOverlay = document.getElementById('feedback');
         const feedbackText = document.getElementById('feedback-text');
 
-        // =====================================================
-        // SPEECH SYNTHESIS (suara)
-        // =====================================================
-        function ucapkan(teks, onEndCallback) {
+        // Fitur Suara (Text-to-Speech)
+        function ucapkan(teks, onEndCallback = null) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
+                window.speechSynthesis.cancel(); // Hentikan suara yang sedang aktif
                 const utterance = new SpeechSynthesisUtterance(teks);
                 utterance.lang = 'id-ID';
                 utterance.rate = 0.9;
                 utterance.pitch = 1.1;
+                
                 if (onEndCallback) {
                     utterance.onend = onEndCallback;
                 }
+                
                 window.speechSynthesis.speak(utterance);
             }
         }
 
-        // =====================================================
-        // SPEECH RECOGNITION (mikrofon) — dioptimalkan untuk kecepatan & akurasi
-        // =====================================================
+        // Setup Speech Recognition (Web Speech API)
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
+        
         let recognition;
         if (window.SpeechRecognition) {
             recognition = new SpeechRecognition();
-            recognition.lang = 'id-ID';
-            recognition.continuous = false;
-            recognition.interimResults = true;   // dapatkan hasil sementara
-            recognition.maxAlternatives = 1;
+            recognition.lang = 'id-ID'; // Bahasa Indonesia
+            recognition.interimResults = false;
         } else {
             alert("Maaf, browser kamu tidak mendukung fitur suara. Gunakan Google Chrome versi terbaru.");
         }
 
-        // =====================================================
-        // STATE
-        // =====================================================
-        let sudahDijawab = false;
-        let timerFeedback = null;
-
-        // =====================================================
-        // FUNGSI UTAMA
-        // =====================================================
-        function acakSoal(arr) {
-            for (let i = arr.length - 1; i > 0; i--) {
+        // Acak urutan soal
+        function acakSoal(array) {
+            for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
+                [array[i], array[j]] = [array[j], array[i]];
             }
         }
 
+        // Fungsi Tampilkan Layar
         function showScreen(screen) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             screen.classList.add('active');
         }
 
-        function getRandomColor() {
-            const colors = ['#FF4500', '#1E90FF', '#32CD32', '#FF1493', '#8A2BE2', '#FF8C00'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        function resetBtnJawab() {
-            btnJawab.classList.remove('listening');
-            btnJawab.textContent = '🎙️ Jawab';
-        }
-
-        // =====================================================
-        // MUAT SOAL
-        // =====================================================
-        function muatSoal() {
-            if (soalSekarang < daftarAngka.length) {
-                angkaSaatIni = daftarAngka[soalSekarang];
-                angkaTampil.textContent = angkaSaatIni;
-                angkaTampil.style.color = getRandomColor();
-                statusMikrofon.textContent = 'Klik tombol Jawab dan sebutkan angkanya!';
-                sudahDijawab = false;
-                resetBtnJawab();
-                ucapkan('Angka berapa ini?');
-            } else {
-                showScreen(screenSelesai);
-                ucapkan('Terima kasih! Semangat belajar terus ya!');
-            }
-        }
-
-        // =====================================================
-        // CEK JAWABAN (lebih longgar dan toleran)
-        // =====================================================
-        function cekJawaban(teks) {
-            // Bersihkan teks: lowercasing, hapus karakter aneh, spasi ganda
-            const cleaned = teks.toLowerCase()
-                .replace(/[^a-z0-9 ]/g, '')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            const kataKunci = kataAngka[angkaSaatIni];
-            const angkaKunci = String(angkaSaatIni);
-
-            // Cek apakah teks mengandung kata kunci (misal "satu") atau angka ("1")
-            // dan juga cek jika teks hanya terdiri dari angka (misal "1")
-            return cleaned.includes(kataKunci) || cleaned.includes(angkaKunci);
-        }
-
-        // =====================================================
-        // TAMPILKAN FEEDBACK — waktu dipersingkat!
-        // =====================================================
-        function tampilkanAnimasi(isBenar) {
-            if (timerFeedback) {
-                clearTimeout(timerFeedback);
-                timerFeedback = null;
-            }
-
-            feedbackOverlay.classList.add('active');
-
-            if (isBenar) {
-                feedbackText.innerHTML = "Hebat! 🎉<br><span class='confetti'>🌟✨👏</span>";
-                feedbackText.className = 'feedback-content correct';
-                ucapkan('Hebat!');
-
-                timerFeedback = setTimeout(() => {
-                    feedbackOverlay.classList.remove('active');
-                    soalSekarang++;
-                    muatSoal();
-                    timerFeedback = null;
-                }, 700);
-            } else {
-                feedbackText.innerHTML = "Maaf Salah! 😅<br><span class='confetti'>💪 Coba Lagi!</span>";
-                feedbackText.className = 'feedback-content wrong';
-                ucapkan('Maaf Salah!');
-
-                timerFeedback = setTimeout(() => {
-                    feedbackOverlay.classList.remove('active');
-                    statusMikrofon.textContent = 'Yuk coba lagi. Klik tombol Jawab!';
-                    sudahDijawab = false;
-                    resetBtnJawab();
-                    timerFeedback = null;
-                }, 900);
-            }
-        }
-
-        // =====================================================
-        // START MIKROFON
-        // =====================================================
-        function mulaiMikrofon() {
-            if (!recognition) return;
-
-            // Batalkan suara TTS agar tidak tertangkap mikrofon
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
-
-            try {
-                sudahDijawab = false;
-                recognition.start();
-                statusMikrofon.textContent = '🎙️ Dengarkan... sebutkan angkanya!';
-                btnJawab.classList.add('listening');
-                btnJawab.textContent = '🎙️ Mendengarkan...';
-            } catch (e) {
-                statusMikrofon.textContent = 'Klik lagi untuk mencoba.';
-                resetBtnJawab();
-            }
-        }
-
-        // =====================================================
-        // EVENT: hasil speech recognition (⚡ diproses INSTAN)
-        // =====================================================
-        if (recognition) {
-            recognition.addEventListener('result', function(e) {
-                if (sudahDijawab) return;
-
-                const result = e.results[0];
-                if (!result) return;
-
-                // Ambil transkrip dan bersihkan
-                const raw = result[0].transcript.toLowerCase().trim();
-                const cleaned = raw.replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
-
-                statusMikrofon.textContent = `Kamu bilang: "${cleaned}"`;
-
-                // ⚡ Cek kecocokan secara INSTAN (termasuk hasil interim)
-                if (cekJawaban(cleaned)) {
-                    sudahDijawab = true;
-                    recognition.stop();
-                    resetBtnJawab();
-                    tampilkanAnimasi(true);
-                    return;
-                }
-
-                // Jika hasil final dan tidak cocok → salah
-                if (result.isFinal) {
-                    sudahDijawab = true;
-                    recognition.stop();
-                    resetBtnJawab();
-                    tampilkanAnimasi(false);
-                }
-                // Jika interim dan belum cocok, kita diamkan (tunggu final)
-            });
-
-            // Saat speech berakhir, kita hanya reset UI, TIDAK otomatis salah
-            recognition.addEventListener('speechend', function() {
-                recognition.stop();
-                resetBtnJawab();
-                // Jika belum dijawab sama sekali, biarkan user coba lagi
-                if (!sudahDijawab) {
-                    statusMikrofon.textContent = 'Coba klik tombol Jawab lagi.';
-                }
-            });
-
-            recognition.addEventListener('error', function(e) {
-                if (!sudahDijawab) {
-                    statusMikrofon.textContent = 'Suara kurang jelas, coba klik lagi!';
-                }
-                resetBtnJawab();
-                try { recognition.stop(); } catch (_) {}
-            });
-        }
-
-        // =====================================================
-        // TOMBOL
-        // =====================================================
-        btnMulai.addEventListener('click', function() {
+        // Mulai Game
+        btnMulai.addEventListener('click', () => {
             acakSoal(daftarAngka);
             soalSekarang = 0;
             showScreen(screenKuis);
             muatSoal();
         });
 
-        btnJawab.addEventListener('click', function() {
-            if (feedbackOverlay.classList.contains('active')) return;
-            // Reset flag agar bisa menjawab ulang di soal yang sama
-            if (sudahDijawab) {
-                sudahDijawab = false;
+        // Muat Soal Baru
+        function muatSoal() {
+            if (soalSekarang < daftarAngka.length) {
+                angkaSaatIni = daftarAngka[soalSekarang];
+                angkaTampil.textContent = angkaSaatIni;
+                angkaTampil.style.color = getRandomColor();
+                statusMikrofon.textContent = "Klik tombol Jawab dan sebutkan angkanya!";
+                hasilSuara.textContent = "-"; // Reset indikator suara
+                
+                // Putar suara soal
+                ucapkan("Angka berapa ini?");
+            } else {
+                showScreen(screenSelesai);
+                ucapkan("Terima kasih! Semangat belajar terus ya!");
             }
-            mulaiMikrofon();
+        }
+
+        // Tombol putar soal manual
+        btnPutarSoal.addEventListener('click', () => {
+            ucapkan("Angka berapa ini?");
         });
 
-        btnPutarSoal.addEventListener('click', function() {
-            if (feedbackOverlay.classList.contains('active')) return;
-            ucapkan('Angka berapa ini?');
+        // Fungsi Warna Acak agar menarik
+        function getRandomColor() {
+            const colors = ['#FF4500', '#1E90FF', '#32CD32', '#FF1493', '#8A2BE2', '#FF8C00'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Jalankan Mikrofon
+        btnJawab.addEventListener('click', () => {
+            if(recognition) {
+                try {
+                    if ('speechSynthesis' in window) {
+                        window.speechSynthesis.cancel();
+                    }
+                    recognition.start();
+                    statusMikrofon.textContent = "🎙️ Sedang mendengarkan...";
+                    hasilSuara.textContent = "Mendengarkan suara...";
+                    btnJawab.classList.add('listening');
+                    btnJawab.textContent = "🎙️ Mendengarkan...";
+                } catch(e) {
+                    statusMikrofon.textContent = "Silakan coba klik lagi.";
+                    resetBtnJawab();
+                }
+            }
         });
 
-        // =====================================================
-        // INIT
-        // =====================================================
-        showScreen(screenAwal);
+        function resetBtnJawab() {
+            btnJawab.classList.remove('listening');
+            btnJawab.textContent = "🎙️ Jawab";
+        }
+
+        // Tangkap hasil suara
+        if(recognition) {
+            recognition.addEventListener('result', (e) => {
+                const jawabanSuara = e.results[0][0].transcript.toLowerCase();
+                
+                // Tampilkan ucapan yang berhasil ditangkap di layar
+                hasilSuara.textContent = `"${jawabanSuara}"`;
+                statusMikrofon.textContent = "Jawaban terdeteksi!";
+                
+                resetBtnJawab();
+                cekJawaban(jawabanSuara);
+            });
+
+            recognition.addEventListener('speechend', () => {
+                recognition.stop();
+                resetBtnJawab();
+            });
+
+            recognition.addEventListener('error', (e) => {
+                statusMikrofon.textContent = "Suara tidak terdengar jelas.";
+                hasilSuara.textContent = "Tidak terdengar / Coba lagi";
+                resetBtnJawab();
+            });
+        }
+
+        // Cek Kebenaran Jawaban
+        function cekJawaban(jawabanTeks) {
+            const kataKunci = kataAngka[angkaSaatIni];
+            const angkaKunci = angkaSaatIni.toString();
+
+            if (jawabanTeks.includes(kataKunci) || jawabanTeks.includes(angkaKunci)) {
+                tampilkanAnimasi(true);
+            } else {
+                tampilkanAnimasi(false);
+            }
+        }
+
+        // Tampilkan Animasi Benar / Salah & Bunyikan Suara Feedback
+        function tampilkanAnimasi(isBenar) {
+            feedbackOverlay.classList.add('active');
+            
+            if (isBenar) {
+                feedbackText.innerHTML = "Hebat! 🎉<br><span class='confetti'>🌟✨👏</span>";
+                feedbackText.className = "feedback-content correct";
+                
+                // Ucapkan "Hebat!"
+                ucapkan("Hebat!");
+
+                // Lanjut ke soal berikutnya jika benar
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('active');
+                    soalSekarang++;
+                    muatSoal();
+                }, 2000);
+            } else {
+                feedbackText.innerHTML = "Maaf Salah! 😅<br><span class='confetti'>💪 Coba Lagi!</span>";
+                feedbackText.className = "feedback-content wrong";
+                
+                // Ucapkan "Maaf Salah!"
+                ucapkan("Maaf Salah!");
+
+                // Ulangi soal yang sama
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('active');
+                    statusMikrofon.textContent = "Yuk coba lagi. Klik tombol Jawab!";
+                }, 2200);
+            }
+        }
     </script>
 </body>
 </html>
