@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Tebak Angka</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Neue', cursive, sans-serif;
+        }
+
+        body {
+            background-color: #FFDE59; /* Warna kuning cerah */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+            color: #333;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 500px;
+            border: 8px solid #FF914D;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: popIn 0.5s ease-out;
+        }
+
+        h1 {
+            color: #FF5757;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            color: #008080;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .btn-suara {
+            background-color: #00C2CB;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.3em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #008080;
+            margin-bottom: 30px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-suara:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #008080;
+        }
+
+        /* Container 3 Tombol Angka */
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-option {
+            background-color: #5CE1E6;
+            color: #333;
+            border: 4px solid #00C2CB;
+            font-size: 4em;
+            font-weight: bold;
+            border-radius: 20px;
+            width: 100px;
+            height: 110px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #008080;
+            transition: transform 0.2s, background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-option:hover {
+            transform: translateY(-5px);
+            background-color: #C1F4F6;
+        }
+
+        .btn-option:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #008080;
+        }
+
+        .btn-utama {
+            background-color: #7ED957;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.8em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #008080;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-utama:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #008080;
+        }
+
+        /* Overlay Notifikasi Interaktif */
+        .feedback-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .feedback-overlay.active { display: flex; }
+
+        .feedback-content {
+            font-size: 4.5em;
+            font-weight: bold;
+        }
+
+        .correct {
+            color: #7ED957;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .wrong {
+            color: #FF5757;
+            animation: shake 0.5s;
+        }
+
+        /* Animations */
+        @keyframes popIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-15px); }
+            40%, 80% { transform: translateX(15px); }
+        }
+
+        .emoji-detail {
+            font-size: 1.2em;
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Halaman Awal -->
+    <div id="screen-awal" class="screen active">
+        <h1>Mengenal Angka</h1>
+        <p style="font-size: 1.5em; color: #666; margin-bottom: 25px;">Dengarkan suaranya lalu pilih angka yang tepat!</p>
+        <button id="btn-mulai" class="btn-utama">Mulai 🚀</button>
+    </div>
+
+    <!-- Halaman Kuis -->
+    <div id="screen-kuis" class="screen">
+        <h2>Dengarkan Pertanyaan!</h2>
+        <button id="btn-putar-suara" class="btn-suara">
+            🔊 Putar Ulang Suara
+        </button>
+
+        <!-- 3 Pilihan Tombol Angka -->
+        <div class="options-container" id="container-pilihan">
+            <!-- Tombol angka akan dihasilkan otomatis lewat JS -->
+        </div>
+    </div>
+
+    <!-- Halaman Selesai -->
+    <div id="screen-selesai" class="screen">
+        <h1>Luar Biasa! 🎉</h1>
+        <p style="font-size: 1.8em; color: #7ED957; font-weight: bold; margin-bottom: 20px;">
+            Tetap belajar yang rajin ya! ❤️
+        </p>
+        <button onclick="location.reload()" class="btn-utama" style="background-color: #FF914D; box-shadow: 0 8px 0 #CC6A27;">Main Lagi 🔄</button>
+    </div>
+
+    <!-- Notifikasi Jawaban (Benar / Salah) -->
+    <div class="feedback-overlay" id="feedback">
+        <div class="feedback-content" id="feedback-text"></div>
+    </div>
+
+    <script>
+        // Array angka 1 sampai 10
+        const daftarAngka = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const kataAngka = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh"];
+        
+        let soalSisa = [];
+        let angkaJawaban = 0;
+
+        // Elements DOM
+        const screenAwal = document.getElementById('screen-awal');
+        const screenKuis = document.getElementById('screen-kuis');
+        const screenSelesai = document.getElementById('screen-selesai');
+        const btnMulai = document.getElementById('btn-mulai');
+        const btnPutarSuara = document.getElementById('btn-putar-suara');
+        const containerPilihan = document.getElementById('container-pilihan');
+        const feedbackOverlay = document.getElementById('feedback');
+        const feedbackText = document.getElementById('feedback-text');
+
+        // Fungsi Fitur Pengucap Suara (Speech Synthesis)
+        function ucapkan(teks) {
+            if ('speechSynthesis' in window) {
+                // Hentikan suara sebelumnya jika masih berjalan
+                window.speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(teks);
+                utterance.lang = 'id-ID'; // Bahasa Indonesia
+                utterance.rate = 0.85;    // Kecepatan sedikit diperlambat agar jelas untuk anak-anak
+                utterance.pitch = 1.1;     // Pitch sedikit dinaikkan agar terkesan ramah
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Tampilkan Layar
+        function showScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            screen.classList.add('active');
+        }
+
+        // Acak Elemen Array
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        // Mulai Game
+        btnMulai.addEventListener('click', () => {
+            soalSisa = [...daftarAngka];
+            shuffleArray(soalSisa);
+            showScreen(screenKuis);
+            muatSoal();
+        });
+
+        // Muat Soal Baru
+        function muatSoal() {
+            if (soalSisa.length > 0) {
+                angkaJawaban = soalSisa[0]; // Ambil angka pertama dari sisa soal
+                
+                // Buat 3 Pilihan Angka (1 jawaban benar + 2 pilihan acak)
+                let pilihan = [angkaJawaban];
+                while (pilihan.length < 3) {
+                    let acak = Math.floor(Math.random() * 10) + 1;
+                    if (!pilihan.includes(acak)) {
+                        pilihan.push(acak);
+                    }
+                }
+                shuffleArray(pilihan);
+
+                // Tampilkan Tombol Angka ke Layar
+                containerPilihan.innerHTML = '';
+                pilihan.forEach(angka => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-option';
+                    btn.textContent = angka;
+                    btn.onclick = () => cekJawaban(angka);
+                    containerPilihan.appendChild(btn);
+                });
+
+                // Ucapkan Pertanyaan
+                putarPertanyaan();
+            } else {
+                // Semua Soal Selesai
+                showScreen(screenSelesai);
+                ucapkan("Luar biasa! Tetap belajar yang rajin ya!");
+            }
+        }
+
+        // Fungsi Memutar Suara Soal
+        function putarPertanyaan() {
+            const teksSoal = `Manakah yang angka ${kataAngka[angkaJawaban]}`;
+            ucapkan(teksSoal);
+        }
+
+        btnPutarSuara.addEventListener('click', putarPertanyaan);
+
+        // Cek Jawaban Anak
+        function cekJawaban(pilihanAnak) {
+            if (pilihanAnak === angkaJawaban) {
+                // JAWABAN BENAR
+                soalSisa.shift(); // Hapus soal yang berhasil dijawab
+                tampilkanNotifikasi(true);
+            } else {
+                // JAWABAN SALAH
+                tampilkanNotifikasi(false);
+            }
+        }
+
+        // Tampilkan Notifikasi Interaktif
+        function tampilkanNotifikasi(isBenar) {
+            feedbackOverlay.classList.add('active');
+
+            if (isBenar) {
+                feedbackText.innerHTML = "Hore! Benar! <br><span class='emoji-detail'>🌟🎉👏</span>";
+                feedbackText.className = "feedback-content correct";
+                ucapkan("Hore! Jawabannya benar!");
+
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('active');
+                    muatSoal(); // Lanjut ke soal berikutnya
+                }, 1800);
+            } else {
+                feedbackText.innerHTML = "Tetot! Salah <br><span class='emoji-detail'>Coba lagi ya! 💪</span>";
+                feedbackText.className = "feedback-content wrong";
+                ucapkan("Tetot! Jawaban salah. Coba lagi ya!");
+
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('active');
+                    putarPertanyaan(); // Ulangi pertanyaan soal yang sama
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
