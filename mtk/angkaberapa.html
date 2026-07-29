@@ -293,7 +293,7 @@
         }
 
         // =====================================================
-        // SPEECH RECOGNITION (mikrofon) — dioptimalkan untuk kecepatan
+        // SPEECH RECOGNITION (mikrofon) — dioptimalkan untuk kecepatan & akurasi
         // =====================================================
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -302,7 +302,7 @@
             recognition = new SpeechRecognition();
             recognition.lang = 'id-ID';
             recognition.continuous = false;
-            recognition.interimResults = true; // ⚡ hasil cepat saat bicara
+            recognition.interimResults = true;   // dapatkan hasil sementara
             recognition.maxAlternatives = 1;
         } else {
             alert("Maaf, browser kamu tidak mendukung fitur suara. Gunakan Google Chrome versi terbaru.");
@@ -311,7 +311,7 @@
         // =====================================================
         // STATE
         // =====================================================
-        let sudahDijawab = false; // cegah multiple feedback
+        let sudahDijawab = false;
         let timerFeedback = null;
 
         // =====================================================
@@ -350,7 +350,6 @@
                 statusMikrofon.textContent = 'Klik tombol Jawab dan sebutkan angkanya!';
                 sudahDijawab = false;
                 resetBtnJawab();
-                // Suara otomatis
                 ucapkan('Angka berapa ini?');
             } else {
                 showScreen(screenSelesai);
@@ -359,21 +358,27 @@
         }
 
         // =====================================================
-        // CEK JAWABAN (cepat, case-insensitive)
+        // CEK JAWABAN (lebih longgar dan toleran)
         // =====================================================
         function cekJawaban(teks) {
-            const teksBersih = teks.trim().toLowerCase();
+            // Bersihkan teks: lowercasing, hapus karakter aneh, spasi ganda
+            const cleaned = teks.toLowerCase()
+                .replace(/[^a-z0-9 ]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
             const kataKunci = kataAngka[angkaSaatIni];
             const angkaKunci = String(angkaSaatIni);
-            // Cek apakah teks mengandung kata angka (misal "satu") atau angka literal ("1")
-            return teksBersih.includes(kataKunci) || teksBersih.includes(angkaKunci);
+
+            // Cek apakah teks mengandung kata kunci (misal "satu") atau angka ("1")
+            // dan juga cek jika teks hanya terdiri dari angka (misal "1")
+            return cleaned.includes(kataKunci) || cleaned.includes(angkaKunci);
         }
 
         // =====================================================
         // TAMPILKAN FEEDBACK — waktu dipersingkat!
         // =====================================================
         function tampilkanAnimasi(isBenar) {
-            // Hapus timer sebelumnya biar ga tumpang tindih
             if (timerFeedback) {
                 clearTimeout(timerFeedback);
                 timerFeedback = null;
@@ -386,7 +391,6 @@
                 feedbackText.className = 'feedback-content correct';
                 ucapkan('Hebat!');
 
-                // ✅ benar → lanjut soal berikutnya setelah 700ms (cepat!)
                 timerFeedback = setTimeout(() => {
                     feedbackOverlay.classList.remove('active');
                     soalSekarang++;
@@ -398,7 +402,6 @@
                 feedbackText.className = 'feedback-content wrong';
                 ucapkan('Maaf Salah!');
 
-                // ❌ salah → ulangi soal setelah 900ms (lebih cepat dari sebelumnya)
                 timerFeedback = setTimeout(() => {
                     feedbackOverlay.classList.remove('active');
                     statusMikrofon.textContent = 'Yuk coba lagi. Klik tombol Jawab!';
@@ -410,7 +413,7 @@
         }
 
         // =====================================================
-        // START / STOP MIKROFON
+        // START MIKROFON
         // =====================================================
         function mulaiMikrofon() {
             if (!recognition) return;
@@ -437,21 +440,19 @@
         // =====================================================
         if (recognition) {
             recognition.addEventListener('result', function(e) {
-                // Jika sudah dijawab, abaikan hasil tambahan
                 if (sudahDijawab) return;
 
                 const result = e.results[0];
                 if (!result) return;
 
-                const transcript = result[0].transcript.toLowerCase().trim();
-                const isFinal = result.isFinal;
+                // Ambil transkrip dan bersihkan
+                const raw = result[0].transcript.toLowerCase().trim();
+                const cleaned = raw.replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
 
-                // Tampilkan transkrip di status
-                statusMikrofon.textContent = `Kamu bilang: "${transcript}"`;
+                statusMikrofon.textContent = `Kamu bilang: "${cleaned}"`;
 
-                // ⚡ Cek kecocokan secara INSTAN
-                if (cekJawaban(transcript)) {
-                    // Cocok! langsung benar
+                // ⚡ Cek kecocokan secara INSTAN (termasuk hasil interim)
+                if (cekJawaban(cleaned)) {
                     sudahDijawab = true;
                     recognition.stop();
                     resetBtnJawab();
@@ -460,34 +461,30 @@
                 }
 
                 // Jika hasil final dan tidak cocok → salah
-                if (isFinal) {
+                if (result.isFinal) {
                     sudahDijawab = true;
                     recognition.stop();
                     resetBtnJawab();
                     tampilkanAnimasi(false);
                 }
-                // jika interim dan belum cocok, diamkan — tunggu final
+                // Jika interim dan belum cocok, kita diamkan (tunggu final)
             });
 
+            // Saat speech berakhir, kita hanya reset UI, TIDAK otomatis salah
             recognition.addEventListener('speechend', function() {
-                // Jika belum dijawab sampai speech selesai → anggap salah
-                if (!sudahDijawab) {
-                    sudahDijawab = true;
-                    recognition.stop();
-                    resetBtnJawab();
-                    tampilkanAnimasi(false);
-                }
                 recognition.stop();
                 resetBtnJawab();
+                // Jika belum dijawab sama sekali, biarkan user coba lagi
+                if (!sudahDijawab) {
+                    statusMikrofon.textContent = 'Coba klik tombol Jawab lagi.';
+                }
             });
 
             recognition.addEventListener('error', function(e) {
-                // Error → reset state, biarkan user coba lagi
                 if (!sudahDijawab) {
                     statusMikrofon.textContent = 'Suara kurang jelas, coba klik lagi!';
                 }
                 resetBtnJawab();
-                // Hentikan recognition agar tidak menggantung
                 try { recognition.stop(); } catch (_) {}
             });
         }
@@ -503,13 +500,9 @@
         });
 
         btnJawab.addEventListener('click', function() {
-            // Jika feedback sedang tampil, abaikan
             if (feedbackOverlay.classList.contains('active')) return;
-            // Jika sudah dijawab di soal ini, biarkan tombol tetap bisa diklik untuk coba ulang
-            // tapi kita reset flag agar bisa jawab lagi
+            // Reset flag agar bisa menjawab ulang di soal yang sama
             if (sudahDijawab) {
-                // Kalau sudah dijawab dan feedback sudah hilang, kita reset agar bisa coba lagi
-                // Tapi hanya jika soal belum berpindah (masih di soal yang sama)
                 sudahDijawab = false;
             }
             mulaiMikrofon();
@@ -521,7 +514,7 @@
         });
 
         // =====================================================
-        // INIT: tampilkan layar awal
+        // INIT
         // =====================================================
         showScreen(screenAwal);
     </script>
