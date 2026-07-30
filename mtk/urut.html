@@ -491,7 +491,7 @@
     <div id="screen-awal" class="screen active">
         <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
         <h1>Membilang Urut</h1>
-        <p class="sub-title">Isi data dulu, lalu kerjakan 30 soal seru!</p>
+        <p class="sub-title">Isi data dulu, lalu kerjakan 40 soal seru!</p>
 
         <div class="form-group">
             <label for="input-nama">Nama</label>
@@ -511,8 +511,8 @@
     <!-- ===== Halaman Kuis ===== -->
     <div id="screen-kuis" class="screen">
         <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
-        <div class="soal-counter" id="soal-counter">Soal 1 / 30</div>
-        <div class="soal-teks" id="soal-teks">... , 78, 79, 80</div>
+        <div class="soal-counter" id="soal-counter">Soal 1 / 40</div>
+        <div class="soal-teks" id="soal-teks">..., 78, 79, 80</div>
         <div class="soal-prompt">Pilih angka yang tepat untuk mengisi titik‑titik!</div>
         <div class="options-container" id="container-pilihan">
             <!-- Tombol dihasilkan JS -->
@@ -663,84 +663,91 @@
         }
 
         // ============================================================
-        //  GENERATE SOAL
+        //  GENERATE SOAL – 40 SOAL, NAIK & TURUN
         // ============================================================
-        function generateSoal(jumlah = 30) {
+        function generateSoal(jumlah = 40) {
             const soal = [];
-            const types = ['A', 'B', 'C'];
 
-            // Pastikan tipe terdistribusi merata
-            let typePool = [];
+            // Tipe: { arah: 'naik' atau 'turun', posisi: 0=awal, 1=tengah, 2=akhir }
+            const tipeDasar = [
+                { arah: 'naik', posisi: 0 },
+                { arah: 'naik', posisi: 1 },
+                { arah: 'naik', posisi: 2 },
+                { arah: 'turun', posisi: 0 },
+                { arah: 'turun', posisi: 1 },
+                { arah: 'turun', posisi: 2 }
+            ];
+
+            // Buat pool tipe dengan distribusi merata
+            let tipePool = [];
             for (let i = 0; i < jumlah; i++) {
-                typePool.push(types[i % types.length]);
+                tipePool.push(tipeDasar[i % tipeDasar.length]);
             }
-            shuffleArray(typePool);
+            shuffleArray(tipePool);
 
             let attempts = 0;
-            while (soal.length < jumlah && attempts < 1000) {
+            while (soal.length < jumlah && attempts < 2000) {
                 attempts++;
-                const tipe = typePool[soal.length];
-                let a, b, c, d, jawaban, display, correctAns;
+                const tipe = tipePool[soal.length];
+                const arah = tipe.arah;
+                const posisi = tipe.posisi;
 
-                // Pilih angka acak yang valid untuk tipe
+                // Pilih angka dasar agar deret valid (10-100)
+                let n, deret, jawaban, display;
                 let found = false;
                 let tries = 0;
-                while (!found && tries < 50) {
+                while (!found && tries < 60) {
                     tries++;
-                    const base = Math.floor(Math.random() * 85) + 12; // 12-96
-                    if (tipe === 'A') {
-                        // ..., a, a+1, a+2 → jawaban = a-1
-                        a = base;
-                        if (a - 1 >= 10 && a + 2 <= 100) {
+                    if (arah === 'naik') {
+                        n = Math.floor(Math.random() * 88) + 10; // 10-97, agar n+3 <= 100
+                        if (n + 3 <= 100) {
+                            deret = [n, n + 1, n + 2, n + 3];
                             found = true;
-                            correctAns = a - 1;
-                            display = `..., ${a}, ${a+1}, ${a+2}`;
-                            jawaban = correctAns;
                         }
-                    } else if (tipe === 'B') {
-                        // a, ..., a+2, a+3 → jawaban = a+1
-                        a = base;
-                        if (a >= 10 && a + 3 <= 100) {
+                    } else { // turun
+                        n = Math.floor(Math.random() * 88) + 13; // 13-100, agar n-3 >= 10
+                        if (n - 3 >= 10) {
+                            deret = [n, n - 1, n - 2, n - 3];
                             found = true;
-                            correctAns = a + 1;
-                            display = `${a}, ..., ${a+2}, ${a+3}`;
-                            jawaban = correctAns;
-                        }
-                    } else { // C
-                        // a, a+1, a+2, ... → jawaban = a+3
-                        a = base;
-                        if (a >= 10 && a + 3 <= 100) {
-                            found = true;
-                            correctAns = a + 3;
-                            display = `${a}, ${a+1}, ${a+2}, ...`;
-                            jawaban = correctAns;
                         }
                     }
                 }
 
                 if (!found) continue;
 
-                // Buat 2 pilihan salah (unik, dekat dengan jawaban)
+                // Tentukan jawaban dan tampilan berdasarkan posisi
+                if (posisi === 0) { // titik di awal
+                    // tampilkan "..., a2, a3, a4" dan jawaban = a1
+                    display = `..., ${deret[1]}, ${deret[2]}, ${deret[3]}`;
+                    jawaban = deret[0];
+                } else if (posisi === 1) { // titik di tengah (antara indeks 0 dan 1)
+                    // tampilkan "a1, ..., a3, a4" dan jawaban = a2
+                    display = `${deret[0]}, ..., ${deret[2]}, ${deret[3]}`;
+                    jawaban = deret[1];
+                } else { // posisi 2, titik di akhir
+                    // tampilkan "a1, a2, a3, ..." dan jawaban = a4
+                    display = `${deret[0]}, ${deret[1]}, ${deret[2]}, ...`;
+                    jawaban = deret[3];
+                }
+
+                // Buat 2 pengecoh (unik, dekat dengan jawaban)
                 const wrongs = new Set();
                 let offset = 1;
-                while (wrongs.size < 2 && offset < 10) {
-                    const candidate1 = jawaban + offset;
-                    const candidate2 = jawaban - offset;
-                    if (candidate1 !== jawaban && candidate1 >= 10 && candidate1 <= 100 && !wrongs.has(candidate1) &&
-                        candidate1 !== correctAns) {
-                        wrongs.add(candidate1);
-                    }
-                    if (candidate2 !== jawaban && candidate2 >= 10 && candidate2 <= 100 && !wrongs.has(candidate2) &&
-                        candidate2 !== correctAns) {
-                        wrongs.add(candidate2);
+                while (wrongs.size < 2 && offset < 15) {
+                    const candidates = [jawaban + offset, jawaban - offset, jawaban + 2, jawaban - 2];
+                    for (let cand of candidates) {
+                        if (cand !== jawaban && cand >= 10 && cand <= 100 && !wrongs.has(cand) && cand !== jawaban) {
+                            wrongs.add(cand);
+                            if (wrongs.size >= 2) break;
+                        }
                     }
                     offset++;
                 }
 
-                // Jika belum dapat 2 wrongs, tambahkan angka acak
+                // Fallback jika masih kurang
                 let fallback = 10;
                 while (wrongs.size < 2 && fallback <= 100) {
-                    if (fallback !== jawaban && fallback !== correctAns && !wrongs.has(fallback)) {
+                    if (fallback !== jawaban && !wrongs.has(fallback)) {
                         wrongs.add(fallback);
                     }
                     fallback++;
@@ -750,44 +757,31 @@
                 shuffleArray(pilihan);
 
                 soal.push({
-                    tipe: tipe,
                     display: display,
                     jawaban: jawaban,
                     pilihan: pilihan
                 });
             }
 
-            // Jika masih kurang, tambahkan soal sederhana
+            // Jika masih kurang (sangat jarang), tambahkan soal sederhana
             while (soal.length < jumlah) {
-                const base = Math.floor(Math.random() * 70) + 15;
-                const tipe = types[soal.length % types.length];
-                let jawaban, display;
-                if (tipe === 'A') {
-                    jawaban = base - 1;
-                    display = `..., ${base}, ${base+1}, ${base+2}`;
-                } else if (tipe === 'B') {
-                    jawaban = base + 1;
-                    display = `${base}, ..., ${base+2}, ${base+3}`;
+                const n = Math.floor(Math.random() * 70) + 15;
+                const deret = [n, n + 1, n + 2, n + 3];
+                const pos = Math.floor(Math.random() * 3);
+                let display, jawaban;
+                if (pos === 0) {
+                    display = `..., ${deret[1]}, ${deret[2]}, ${deret[3]}`;
+                    jawaban = deret[0];
+                } else if (pos === 1) {
+                    display = `${deret[0]}, ..., ${deret[2]}, ${deret[3]}`;
+                    jawaban = deret[1];
                 } else {
-                    jawaban = base + 3;
-                    display = `${base}, ${base+1}, ${base+2}, ...`;
+                    display = `${deret[0]}, ${deret[1]}, ${deret[2]}, ...`;
+                    jawaban = deret[3];
                 }
-                const pilihan = [jawaban];
-                let w1 = jawaban + 2,
-                    w2 = jawaban - 2;
-                if (w1 < 10) w1 = jawaban + 3;
-                if (w2 < 10) w2 = jawaban + 4;
-                if (w1 === jawaban) w1 = jawaban + 5;
-                if (w2 === jawaban) w2 = jawaban - 3;
-                if (w2 < 10) w2 = jawaban + 6;
-                pilihan.push(w1, w2);
+                const pilihan = [jawaban, jawaban + 1, jawaban - 1];
                 shuffleArray(pilihan);
-                soal.push({
-                    tipe: tipe,
-                    display: display,
-                    jawaban: jawaban,
-                    pilihan: pilihan
-                });
+                soal.push({ display, jawaban, pilihan });
             }
 
             return shuffleArray(soal);
@@ -802,7 +796,7 @@
             namaSiswa = inputNama.value.trim();
             kelasSiswa = inputKelas.value.trim();
 
-            daftarSoal = generateSoal(30);
+            daftarSoal = generateSoal(40);
             indexSoal = 0;
 
             showScreen(screenKuis);
@@ -964,7 +958,7 @@
             audioPlayer.volume = 1;
         }, { once: true });
 
-        console.log('🎯 Membilang Urut siap!');
+        console.log('🎯 Membilang Urut (Naik & Turun) siap!');
     </script>
 </body>
 </html>
