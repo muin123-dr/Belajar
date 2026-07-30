@@ -37,11 +37,31 @@
             width: 100%;
             max-width: 500px;
             border: 8px solid #FF914D;
+            position: relative;
         }
 
         .screen.active {
             display: flex;
             animation: popIn 0.5s ease-out;
+        }
+
+        /* LOGO STCM – efek flip horizontal (kanan‑kiri) */
+        .logo {
+            width: 90px;
+            height: auto;
+            margin-bottom: 12px;
+            animation: flip 30s linear infinite;
+            display: block;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes flip {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
         }
 
         h1 {
@@ -314,6 +334,9 @@
                 font-size: 1.1em;
                 padding: 10px 18px;
             }
+            .logo {
+                width: 70px;
+            }
         }
 
         @media (max-width: 380px) {
@@ -325,6 +348,9 @@
             .options-container {
                 gap: 8px;
             }
+            .logo {
+                width: 60px;
+            }
         }
     </style>
 </head>
@@ -332,6 +358,7 @@
 
     <!-- ===== Halaman Awal + Form ===== -->
     <div id="screen-awal" class="screen active">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
         <h1>Mengenal Angka</h1>
         <p style="font-size: 1.3em; color: #666; margin-bottom: 20px;">
             Isi data dulu ya, lalu dengarkan suaranya dan pilih angka yang tepat!
@@ -354,6 +381,7 @@
 
     <!-- ===== Halaman Kuis ===== -->
     <div id="screen-kuis" class="screen">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
         <div class="soal-counter" id="soal-counter">Soal 1 / 20</div>
         <h2>Dengarkan Pertanyaan!</h2>
         <button id="btn-putar-suara" class="btn-suara">
@@ -367,6 +395,7 @@
 
     <!-- ===== Halaman Selesai ===== -->
     <div id="screen-selesai" class="screen">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
         <h1>🎉 Luar Biasa! 🎉</h1>
         <p style="font-size: 1.6em; color: #7ED957; font-weight: bold; margin-bottom: 6px;">
             Alhamdulillah!
@@ -473,7 +502,6 @@
                 audioPlayer.addEventListener('error', onError);
 
                 audioPlayer.play().catch(() => {
-                    // fallback jika play() ditolak
                     audioPlayer.removeEventListener('ended', onEnd);
                     audioPlayer.removeEventListener('error', onError);
                     resolve();
@@ -561,7 +589,6 @@
                 if (e.key === 'Enter') btnMulai.click();
             });
             inp.addEventListener('input', () => {
-                // hilangkan error saat mengetik
                 if (inp.id === 'input-nama') errorNama.style.display = 'none';
                 if (inp.id === 'input-kelas') errorKelas.style.display = 'none';
             });
@@ -577,7 +604,6 @@
             sedangMemuat = true;
 
             if (indexSoal >= daftarSoal.length) {
-                // Selesai semua
                 sedangMemuat = false;
                 selesaiSemua();
                 return;
@@ -645,29 +671,22 @@
             if (isPlaying) return;
             isPlaying = true;
 
-            // Disable semua tombol sementara
             document.querySelectorAll('.btn-option').forEach(b => b.disabled = true);
             btnPutarSuara.disabled = true;
 
             const benar = (pilihanAnak === angkaJawaban);
 
             if (benar) {
-                // Jawaban benar
                 tampilkanNotifikasi(true).then(() => {
-                    // Lanjut ke soal berikutnya
                     indexSoal++;
                     isPlaying = false;
                     muatSoal();
                 });
             } else {
-                // Jawaban salah
                 tampilkanNotifikasi(false).then(() => {
-                    // Ulangi pertanyaan yang sama
                     isPlaying = false;
-                    // Enable tombol
                     document.querySelectorAll('.btn-option').forEach(b => b.disabled = false);
                     btnPutarSuara.disabled = false;
-                    // Putar ulang suara
                     playPertanyaan(angkaJawaban);
                 });
             }
@@ -683,7 +702,6 @@
                 if (isBenar) {
                     feedbackText.innerHTML = "Hore! Benar! <br><span class='emoji-detail'>🌟🎉👏</span>";
                     feedbackText.className = "feedback-content correct";
-                    // Putar suara "masya"
                     playAudio(BASE_URL + AUDIO_BENAR).then(() => {
                         setTimeout(() => {
                             feedbackOverlay.classList.remove('active');
@@ -698,7 +716,6 @@
                 } else {
                     feedbackText.innerHTML = "Tetot! Salah <br><span class='emoji-detail'>Coba lagi ya! 💪</span>";
                     feedbackText.className = "feedback-content wrong";
-                    // Tidak ada suara khusus untuk salah
                     setTimeout(() => {
                         feedbackOverlay.classList.remove('active');
                         resolve();
@@ -711,9 +728,7 @@
         //  SELESAI SEMUA
         // ============================================================
         function selesaiSemua() {
-            // Putar alhm.mp3
             playAudio(BASE_URL + AUDIO_SELESAI).catch(() => {});
-
             showScreen(screenSelesai);
         }
 
@@ -746,9 +761,8 @@
         });
 
         // ============================================================
-        //  INIT: pastikan audio bisa autoplay (klik user)
+        //  INIT
         // ============================================================
-        // Hanya untuk memicu konteks audio di browser modern
         document.addEventListener('click', () => {
             audioPlayer.volume = 1;
         }, { once: true });
