@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menulis Angka</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Neue', cursive, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f9e7b3 0%, #f5d78c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+            text-align: center;
+            color: #333;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 30px 22px 28px;
+            border-radius: 40px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 520px;
+            border: 8px solid #FF914D;
+            position: relative;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: popIn 0.45s ease-out;
+        }
+
+        /* LOGO – flip horizontal dengan glow */
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 8px;
+            animation: flipGlow 4s ease-in-out infinite;
+            display: block;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.15));
+            border-radius: 50%;
+        }
+
+        @keyframes flipGlow {
+            0% {
+                transform: rotateY(0deg) scale(1);
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            }
+            25% {
+                transform: rotateY(90deg) scale(1.04);
+                filter: drop-shadow(0 8px 18px rgba(255, 145, 77, 0.5));
+            }
+            50% {
+                transform: rotateY(180deg) scale(1);
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            }
+            75% {
+                transform: rotateY(270deg) scale(1.04);
+                filter: drop-shadow(0 8px 18px rgba(255, 145, 77, 0.5));
+            }
+            100% {
+                transform: rotateY(360deg) scale(1);
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            }
+        }
+
+        h1 {
+            color: #FF5757;
+            font-size: 2.7em;
+            margin-bottom: 6px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.10);
+            letter-spacing: 1px;
+        }
+
+        .sub-title {
+            font-size: 1.2em;
+            color: #777;
+            margin-bottom: 18px;
+        }
+
+        /* Form */
+        .form-group {
+            width: 100%;
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 3px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1.1em;
+            border: 3px solid #ddd;
+            border-radius: 16px;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            border-color: #FF914D;
+            box-shadow: 0 0 0 4px rgba(255, 145, 77, 0.25);
+            background: #fff;
+        }
+
+        .form-error {
+            color: #FF5757;
+            font-size: 0.85em;
+            margin-top: 3px;
+            display: none;
+        }
+
+        .btn-utama {
+            background-color: #7ED957;
+            color: white;
+            border: none;
+            padding: 14px 0;
+            font-size: 1.9em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #4CAF50;
+            transition: all 0.12s;
+            margin-top: 6px;
+            width: 100%;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn-utama:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #4CAF50;
+        }
+        .btn-utama:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #4CAF50;
+        }
+        .btn-utama:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #4CAF50;
+            pointer-events: none;
+        }
+
+        /* Halaman Kuis */
+        .soal-counter {
+            font-size: 1.1em;
+            color: #888;
+            background: #f0f0f0;
+            padding: 4px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .angka-besar {
+            font-size: 5.5em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 4px 0 2px;
+            letter-spacing: 4px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        /* Canvas untuk menebali */
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            margin: 8px auto 12px;
+            background: #fcfcfc;
+            border-radius: 28px;
+            border: 4px dashed #aaa;
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.04);
+            touch-action: none;
+        }
+
+        #drawCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
+            border-radius: 24px;
+            background: #fcfcfc;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="30" viewBox="0 0 24 30"><circle cx="12" cy="12" r="10" fill="%23FF914D" opacity="0.5" stroke="%23FF5757" stroke-width="2"/><path d="M12 22 L12 28 M8 26 L16 26" stroke="%23FF5757" stroke-width="2"/></svg>') 12 12, auto;
+        }
+
+        .tombol-hapus {
+            background: #ffb3b3;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 22px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #a00;
+            box-shadow: 0 4px 0 #cc8888;
+            cursor: pointer;
+            transition: all 0.12s;
+            margin: 4px 0 10px;
+        }
+
+        .tombol-hapus:hover {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #cc8888;
+        }
+        .tombol-hapus:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #cc8888;
+        }
+
+        .btn-kirim {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 14px 0;
+            font-size: 1.7em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #1DA851;
+            transition: all 0.12s;
+            margin-top: 6px;
+            width: 100%;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-kirim:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #1DA851;
+        }
+        .btn-kirim:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #1DA851;
+        }
+
+        .btn-secondary {
+            background: #FF914D;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            font-size: 1.4em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #CC6A27;
+            transition: all 0.12s;
+            margin-top: 10px;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #CC6A27;
+        }
+        .btn-secondary:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #CC6A27;
+        }
+
+        /* Feedback overlay */
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.94);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+        .feedback-overlay.active {
+            display: flex;
+        }
+        .feedback-content {
+            font-size: 4em;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+        }
+        .feedback-correct {
+            color: #7ED957;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .feedback-wrong {
+            color: #FF5757;
+            animation: shake 0.5s;
+        }
+        .emoji-detail {
+            font-size: 1.2em;
+            display: block;
+            margin-top: 6px;
+        }
+
+        /* Halaman Selesai – Juara */
+        .juara {
+            animation: juaraPop 1s ease-out;
+        }
+        @keyframes juaraPop {
+            0% {
+                transform: scale(0.3) rotate(-5deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(3deg);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(0.95) rotate(-1deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        .confetti {
+            font-size: 3.8em;
+            animation: confettiRain 2s ease-in-out infinite alternate;
+        }
+        @keyframes confettiRain {
+            0% {
+                transform: translateY(-8px) rotate(0deg) scale(1);
+            }
+            100% {
+                transform: translateY(8px) rotate(15deg) scale(1.06);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20%,
+            60% {
+                transform: translateX(-18px);
+            }
+            40%,
+            80% {
+                transform: translateX(18px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .screen {
+                padding: 22px 14px;
+                border-width: 6px;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            .angka-besar {
+                font-size: 4.2em;
+            }
+            .btn-utama,
+            .btn-kirim,
+            .btn-secondary {
+                font-size: 1.4em;
+                padding: 12px 0;
+            }
+            .logo {
+                width: 65px;
+            }
+            .feedback-content {
+                font-size: 2.8em;
+            }
+            .tombol-hapus {
+                font-size: 1em;
+                padding: 6px 16px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .angka-besar {
+                font-size: 3.4em;
+            }
+            .logo {
+                width: 55px;
+            }
+            .feedback-content {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== Halaman Awal ===== -->
+    <div id="screen-awal" class="screen active">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
+        <h1>Menulis Angka</h1>
+        <p class="sub-title">Isi data, lalu ikuti garis putus‑putus!</p>
+
+        <div class="form-group">
+            <label for="input-nama">Nama</label>
+            <input type="text" id="input-nama" placeholder="Masukkan namamu..." autocomplete="off" />
+            <div class="form-error" id="error-nama">Nama harus diisi!</div>
+        </div>
+
+        <div class="form-group">
+            <label for="input-kelas">Kelas</label>
+            <input type="text" id="input-kelas" placeholder="Misal: 1A" autocomplete="off" />
+            <div class="form-error" id="error-kelas">Kelas harus diisi!</div>
+        </div>
+
+        <button id="btn-mulai" class="btn-utama">🚀 Mulai</button>
+    </div>
+
+    <!-- ===== Halaman Kuis ===== -->
+    <div id="screen-kuis" class="screen">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
+        <div class="soal-counter" id="soal-counter">Soal 1 / 20</div>
+        <div class="angka-besar" id="angka-tampil">2</div>
+        <div style="font-size: 2em; font-weight: bold; color: #008080; margin: -4px 0 6px;" id="tulisan-tampil">dua</div>
+
+        <div class="canvas-wrapper">
+            <canvas id="drawCanvas" width="400" height="300"></canvas>
+        </div>
+
+        <button class="tombol-hapus" id="btn-hapus">🧽 Hapus</button>
+        <button id="btn-cek" class="btn-utama" style="font-size:1.5em; padding:12px 0; margin-top:0;">✅ Cek Jawaban</button>
+    </div>
+
+    <!-- ===== Halaman Selesai (Juara) ===== -->
+    <div id="screen-selesai" class="screen">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
+        <div class="juara">
+            <h1 style="color: #FFD700; text-shadow: 0 0 20px #FFD700, 0 0 40px #FFA500;">🏆 JUARA! 🏆</h1>
+        </div>
+        <div class="confetti">🎉🎊✨🌟🎉🎊✨🌟</div>
+        <p style="font-size: 1.8em; color: #7ED957; font-weight: bold; margin: 2px 0 2px;">
+            Alhamdulillah!
+        </p>
+        <p style="font-size: 1.1em; color: #555; margin-bottom: 16px;">
+            Kamu hebat sudah menulis semua angka ❤️
+        </p>
+        <button id="btn-kirim-wa" class="btn-kirim">💬 Kirim WA</button>
+        <button onclick="location.reload()" class="btn-secondary">🔄 Main Lagi</button>
+    </div>
+
+    <!-- ===== Feedback Overlay ===== -->
+    <div class="feedback-overlay" id="feedback">
+        <div class="feedback-content" id="feedback-text"></div>
+    </div>
+
+    <!-- ===== Audio Player ===== -->
+    <audio id="audio-player" preload="auto"></audio>
+
+    <script>
+        // ============================================================
+        //  KONFIGURASI
+        // ============================================================
+        const BASE_URL = 'https://muin123-dr.github.io/Belajar/mtk/audio/';
+        const AUDIO_MAP = {
+            0: 'tl000.mp3',
+            1: 'tl001.mp3',
+            2: 'tl002.mp3',
+            3: 'tl003.mp3',
+            4: 'tl004.mp3',
+            5: 'tl005.mp3',
+            6: 'tl006.mp3',
+            7: 'tl007.mp3',
+            8: 'tl008.mp3',
+            9: 'tl009.mp3'
+        };
+        const AUDIO_BENAR = 'masya.mp3';
+        const AUDIO_SELESAI = 'alhm.mp3';
+
+        const KATA_ANGKA = ['nol', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan'];
+
+        // ============================================================
+        //  DOM REFS
+        // ============================================================
+        const screenAwal = document.getElementById('screen-awal');
+        const screenKuis = document.getElementById('screen-kuis');
+        const screenSelesai = document.getElementById('screen-selesai');
+
+        const inputNama = document.getElementById('input-nama');
+        const inputKelas = document.getElementById('input-kelas');
+        const errorNama = document.getElementById('error-nama');
+        const errorKelas = document.getElementById('error-kelas');
+        const btnMulai = document.getElementById('btn-mulai');
+
+        const soalCounter = document.getElementById('soal-counter');
+        const angkaTampil = document.getElementById('angka-tampil');
+        const tulisanTampil = document.getElementById('tulisan-tampil');
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        const btnHapus = document.getElementById('btn-hapus');
+        const btnCek = document.getElementById('btn-cek');
+
+        const feedbackOverlay = document.getElementById('feedback');
+        const feedbackText = document.getElementById('feedback-text');
+        const btnKirimWA = document.getElementById('btn-kirim-wa');
+
+        const audioPlayer = document.getElementById('audio-player');
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let daftarSoal = []; // array angka 0-9, masing-masing 2x
+        let indexSoal = 0;
+        let angkaSekarang = 0;
+        let namaSiswa = '';
+        let kelasSiswa = '';
+        let isWaiting = false;
+        let isDrawing = false;
+        let lastX = 0,
+            lastY = 0;
+
+        // ============================================================
+        //  CANVAS DRAWING (garis putus-putus + freehand)
+        // ============================================================
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            // canvas sudah punya dimensi tetap 400x300, scaling via CSS
+        }
+
+        // Gambar garis putus-putus sebagai panduan (angka & tulisan)
+        function drawGuidelines(angka) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Gambar angka besar sebagai garis putus-putus (hollow)
+            ctx.save();
+            ctx.setLineDash([8, 12]);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#aaaaaa';
+            ctx.shadowColor = 'rgba(0,0,0,0.05)';
+            ctx.shadowBlur = 4;
+
+            const teks = String(angka);
+            ctx.font = 'bold 140px "Comic Neue", cursive';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.strokeText(teks, canvas.width / 2, canvas.height / 2 - 20);
+
+            // Gambar tulisan (nama angka) di bawah dengan garis putus-putus
+            ctx.font = 'bold 48px "Comic Neue", cursive';
+            ctx.textBaseline = 'top';
+            const kata = KATA_ANGKA[angka];
+            ctx.strokeText(kata, canvas.width / 2, canvas.height / 2 + 72);
+
+            ctx.restore();
+
+            // Simpan data canvas sebagai referensi (tapi kita tidak akan restore, biar user gambar di atas)
+            // Untuk mencegah user menggambar di luar, kita biarkan canvas tetap transparan di area gambar.
+            // Tapi kita akan menggambar ulang guidlines setiap kali hapus.
+            // Kita gunakan komposit: kita gambar guidelines di layer bawah, lalu user di layer atas.
+            // Cara: kita simpan guidelines sebagai background, dan user drawing di atas.
+            // Kita lakukan dengan menyimpan state: kita akan gambar guidelines setiap kali, lalu drawing user ditimpa.
+            // Karena kita ingin user menggambar di atas guidelines, kita perlu memisahkan layer.
+            // Solusi: simpan drawing user di array, dan setiap kali render ulang: gambar guidelines + drawing user.
+            // Kita implementasikan dengan penyimpanan path.
+        }
+
+        // Simpan jalur gambar user
+        let userPaths = []; // array of { x, y, down }
+
+        function redrawCanvas() {
+            // Gambar guidelines
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGuidelines(angkaSekarang);
+
+            // Gambar ulang path user
+            if (userPaths.length === 0) return;
+            ctx.save();
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#FF5757';
+            ctx.shadowColor = 'rgba(255, 87, 87, 0.2)';
+            ctx.shadowBlur = 6;
+
+            let i = 0;
+            while (i < userPaths.length) {
+                const p = userPaths[i];
+                if (!p.down) {
+                    i++;
+                    continue;
+                }
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                i++;
+                while (i < userPaths.length && userPaths[i].down) {
+                    ctx.lineTo(userPaths[i].x, userPaths[i].y);
+                    i++;
+                }
+                ctx.stroke();
+                // lanjut ke next segment
+            }
+            ctx.restore();
+        }
+
+        // ============================================================
+        //  EVENT DRAWING
+        // ============================================================
+        function getCanvasCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            let clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+                e.preventDefault();
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            const x = (clientX - rect.left) * scaleX;
+            const y = (clientY - rect.top) * scaleY;
+            return { x: Math.min(Math.max(x, 0), canvas.width), y: Math.min(Math.max(y, 0), canvas.height) };
+        }
+
+        function startDraw(e) {
+            e.preventDefault();
+            const { x, y } = getCanvasCoords(e);
+            isDrawing = true;
+            lastX = x;
+            lastY = y;
+            userPaths.push({ x, y, down: true });
+            redrawCanvas();
+        }
+
+        function moveDraw(e) {
+            e.preventDefault();
+            if (!isDrawing) return;
+            const { x, y } = getCanvasCoords(e);
+            const dx = x - lastX,
+                dy = y - lastY;
+            if (dx * dx + dy * dy < 4) return;
+            lastX = x;
+            lastY = y;
+            userPaths.push({ x, y, down: true });
+            redrawCanvas();
+        }
+
+        function endDraw(e) {
+            e.preventDefault();
+            isDrawing = false;
+            // Tambahkan titik akhir dengan down=false untuk memisahkan segmen
+            if (userPaths.length > 0) {
+                const last = userPaths[userPaths.length - 1];
+                userPaths.push({ x: last.x, y: last.y, down: false });
+            }
+            redrawCanvas();
+        }
+
+        // Event listeners
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', moveDraw);
+        canvas.addEventListener('mouseup', endDraw);
+        canvas.addEventListener('mouseleave', endDraw);
+
+        canvas.addEventListener('touchstart', startDraw, { passive: false });
+        canvas.addEventListener('touchmove', moveDraw, { passive: false });
+        canvas.addEventListener('touchend', endDraw, { passive: false });
+        canvas.addEventListener('touchcancel', endDraw, { passive: false });
+
+        // ============================================================
+        //  HAPUS GAMBAR
+        // ============================================================
+        btnHapus.addEventListener('click', () => {
+            userPaths = [];
+            redrawCanvas();
+        });
+
+        // ============================================================
+        //  AUDIO HELPERS
+        // ============================================================
+        function playAudio(url) {
+            return new Promise((resolve) => {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                audioPlayer.src = url;
+                audioPlayer.load();
+
+                const onEnd = () => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                };
+                const onError = () => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                };
+                audioPlayer.addEventListener('ended', onEnd);
+                audioPlayer.addEventListener('error', onError);
+                audioPlayer.play().catch(() => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                });
+            });
+        }
+
+        function playSoal(angka) {
+            const file = AUDIO_MAP[angka];
+            if (!file) return Promise.resolve();
+            return playAudio(BASE_URL + file);
+        }
+
+        // ============================================================
+        //  SHUFFLE
+        // ============================================================
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // ============================================================
+        //  SCREEN
+        // ============================================================
+        function showScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            screen.classList.add('active');
+        }
+
+        // ============================================================
+        //  VALIDASI FORM
+        // ============================================================
+        function validateForm() {
+            let valid = true;
+            const nama = inputNama.value.trim();
+            const kelas = inputKelas.value.trim();
+            if (!nama) { errorNama.style.display = 'block';
+                valid = false; } else errorNama.style.display = 'none';
+            if (!kelas) { errorKelas.style.display = 'block';
+                valid = false; } else errorKelas.style.display = 'none';
+            return valid;
+        }
+
+        // ============================================================
+        //  MULAI GAME
+        // ============================================================
+        btnMulai.addEventListener('click', () => {
+            if (!validateForm()) return;
+            namaSiswa = inputNama.value.trim();
+            kelasSiswa = inputKelas.value.trim();
+
+            // Buat daftar angka 0-9 masing-masing 2x
+            let soal = [];
+            for (let a = 0; a <= 9; a++) {
+                soal.push(a);
+                soal.push(a);
+            }
+            daftarSoal = shuffleArray(soal);
+            indexSoal = 0;
+            showScreen(screenKuis);
+            muatSoal();
+        });
+
+        document.querySelectorAll('#input-nama, #input-kelas').forEach(inp => {
+            inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') btnMulai.click(); });
+            inp.addEventListener('input', () => {
+                if (inp.id === 'input-nama') errorNama.style.display = 'none';
+                if (inp.id === 'input-kelas') errorKelas.style.display = 'none';
+            });
+        });
+
+        // ============================================================
+        //  MUAT SOAL
+        // ============================================================
+        function muatSoal() {
+            if (indexSoal >= daftarSoal.length) {
+                selesaiSemua();
+                return;
+            }
+
+            angkaSekarang = daftarSoal[indexSoal];
+            angkaTampil.textContent = angkaSekarang;
+            tulisanTampil.textContent = KATA_ANGKA[angkaSekarang];
+            soalCounter.textContent = `Soal ${indexSoal + 1} / ${daftarSoal.length}`;
+
+            // Reset canvas
+            userPaths = [];
+            redrawCanvas();
+
+            // Putar suara "tulis angka ..."
+            playSoal(angkaSekarang).catch(() => {});
+
+            isWaiting = false;
+            btnCek.disabled = false;
+            btnCek.style.opacity = '1';
+            btnCek.style.pointerEvents = 'auto';
+        }
+
+        // ============================================================
+        //  CEK JAWABAN (selalu dianggap benar jika sudah digambar)
+        // ============================================================
+        btnCek.addEventListener('click', () => {
+            if (isWaiting) return;
+            // Cek apakah user sudah menggambar (ada path)
+            const hasDrawing = userPaths.some(p => p.down);
+            if (!hasDrawing) {
+                // Kasih tau untuk menebali dulu
+                feedbackText.innerHTML = "✏️ Tebali dulu angkanya! <br><span class='emoji-detail'>Gambar di atas garis putus‑putus</span>";
+                feedbackText.className = "feedback-content feedback-wrong";
+                feedbackOverlay.classList.add('active');
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('active');
+                }, 1500);
+                return;
+            }
+
+            // Jawaban selalu dianggap benar (karena sudah menebali)
+            isWaiting = true;
+            btnCek.disabled = true;
+            btnCek.style.opacity = '0.5';
+            btnCek.style.pointerEvents = 'none';
+
+            // Tampilkan notifikasi benar
+            feedbackText.innerHTML = "✅ Bagus! <br><span class='emoji-detail'>🌟👏</span>";
+            feedbackText.className = "feedback-content feedback-correct";
+            feedbackOverlay.classList.add('active');
+
+            playAudio(BASE_URL + AUDIO_BENAR).then(() => {
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('active');
+                    indexSoal++;
+                    isWaiting = false;
+                    muatSoal();
+                }, 500);
+            }).catch(() => {
+                setTimeout(() => {
+                    feedbackOverlay.classList.remove('active');
+                    indexSoal++;
+                    isWaiting = false;
+                    muatSoal();
+                }, 500);
+            });
+        });
+
+        // ============================================================
+        //  SELESAI SEMUA – JUARA!
+        // ============================================================
+        function selesaiSemua() {
+            playAudio(BASE_URL + AUDIO_SELESAI).catch(() => {});
+            showScreen(screenSelesai);
+        }
+
+        // ============================================================
+        //  KIRIM WA
+        // ============================================================
+        btnKirimWA.addEventListener('click', () => {
+            const now = new Date();
+            const tanggal = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const jam = now.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            const pesan =
+                `Alhamdulillah%0A%0A` +
+                `Nama: ${encodeURIComponent(namaSiswa)}%0A` +
+                `Kelas: ${encodeURIComponent(kelasSiswa)}%0A` +
+                `Bisa menyelesaikan semua latihan%0A` +
+                `Pada tanggal ${encodeURIComponent(tanggal)} jam ${encodeURIComponent(jam)}`;
+
+            const url = `https://wa.me/6285878679013?text=${pesan}`;
+            window.open(url, '_blank');
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        document.addEventListener('click', () => {
+            audioPlayer.volume = 1;
+        }, { once: true });
+
+        // Set canvas ukuran awal
+        resizeCanvas();
+        // Gambar panduan awal (angka 0)
+        angkaSekarang = 0;
+        drawGuidelines(0);
+        // Tapi kita belum di screen kuis, jadi tidak masalah
+
+        console.log('✏️ Menulis Angka siap!');
+    </script>
+</body>
+</html>
