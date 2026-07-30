@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Kelas 1 · Latihan Bertahap · STCM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #fde9e0 0%, #ffe9c4 35%, #c3e8fa 70%, #e0f0ff 100%);
+      background-size: 400% 400%;
+      animation: langitCeria 18s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    @keyframes langitCeria {
+      0% { background-position: 0% 30%; }
+      25% { background-position: 50% 70%; }
+      50% { background-position: 100% 40%; }
+      75% { background-position: 70% 10%; }
+      100% { background-position: 0% 30%; }
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      font-size: 28px;
+      user-select: none;
+      animation: melayangJatuh linear infinite;
+      opacity: 0.65;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    @keyframes melayangJatuh {
+      0% { transform: translateY(-10vh) rotate(0deg) scale(0.7); opacity: 0; }
+      15% { opacity: 0.8; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(110vh) rotate(360deg) scale(1.3); opacity: 0; }
+    }
+
+    .card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 600px;
+      background: radial-gradient(circle at 20% 30%, #ffffff 5%, #fff8ed 80%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 70px 70px 80px 80px;
+      padding: 30px 28px 38px;
+      box-shadow: 0 30px 50px rgba(251, 173, 80, 0.35),
+                  0 10px 25px rgba(0, 160, 209, 0.2),
+                  inset 0 2px 15px rgba(255,255,200,0.9);
+      border: 3px solid #ffb347;
+      text-align: center;
+      animation: masukCard 1.2s cubic-bezier(0.23, 1.1, 0.32, 1) forwards;
+    }
+
+    @keyframes masukCard {
+      0% { opacity: 0; transform: translateY(60px) scale(0.8) rotate(-2deg); }
+      100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    /* LOGO DENGAN ANIMASI 13 DETIK: 12 detik goyang+scale, 1 detik putaran cepat */
+    .logo-img {
+      width: 110px;
+      height: auto;
+      filter: drop-shadow(0 12px 18px rgba(255, 140, 0, 0.45));
+      animation: logoAjaib 13s linear infinite;
+      transform-origin: center center;
+    }
+
+    @keyframes logoAjaib {
+      /* 12 detik pertama (0% - 92.3%) : goyang & membesar-mengecil */
+      0%   { transform: rotate(0deg) scale(1); }
+      10%  { transform: rotate(9deg) scale(1.12); }
+      20%  { transform: rotate(-8deg) scale(0.93); }
+      30%  { transform: rotate(7deg) scale(1.1); }
+      40%  { transform: rotate(-5deg) scale(0.9); }
+      50%  { transform: rotate(4deg) scale(1.08); }
+      60%  { transform: rotate(-3deg) scale(0.96); }
+      70%  { transform: rotate(2deg) scale(1.04); }
+      80%  { transform: rotate(0deg) scale(1); }
+      92.3% { transform: rotate(0deg) scale(1); }  /* tepat sebelum putaran cepat */
+      /* 1 detik terakhir (92.3% - 100%) : putaran 360° cepat */
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .title-kelas {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #f45b2d;
+      text-shadow: 3px 3px 0 #ffe484, 5px 5px 0 rgba(0,0,0,0.1);
+      letter-spacing: 1px;
+      margin-top: 5px;
+      animation: hurufGembira 2.2s infinite alternate;
+    }
+
+    @keyframes hurufGembira {
+      0% { transform: scale(1) skew(0deg, 0deg); }
+      100% { transform: scale(1.03) skew(-1deg, 0.5deg); }
+    }
+
+    .sub-judul {
+      background: #ffdd99;
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #b34117;
+      margin: 12px 0 10px;
+      box-shadow: 0 10px 0 #db9f4b, 0 8px 20px rgba(255, 166, 0, 0.5);
+      border: 2px solid #fff3cf;
+      animation: ngeper 1.8s infinite alternate ease-in-out;
+    }
+
+    @keyframes ngeper {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-7px); }
+    }
+
+    .tombol-group {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin: 28px 0 18px;
+      align-items: center;
+    }
+
+    .btn-magic {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #ff7043;
+      border: none;
+      border-radius: 120px;
+      padding: 22px 36px;
+      width: 90%;
+      max-width: 400px;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 0.8px;
+      background: linear-gradient(135deg, #ff8c5a, #ff5e2c);
+      box-shadow: 0 16px 0 #c43d1a, 0 18px 30px rgba(255, 87, 34, 0.55);
+      border: 3px solid #fff2c9;
+      position: relative;
+      transition: all 0.15s ease;
+      animation: tombolMelompat 2.2s infinite;
+      cursor: pointer;
+      text-shadow: 2px 2px 0 #b33510;
+    }
+
+    .btn-magic:nth-child(2) {
+      background: linear-gradient(135deg, #5eb3f0, #2f7fd4);
+      box-shadow: 0 16px 0 #1b4f8a, 0 18px 30px rgba(37, 117, 200, 0.6);
+      border-color: #e6f7ff;
+      text-shadow: 2px 2px 0 #0d3860;
+    }
+
+    @keyframes tombolMelompat {
+      0% { transform: translateY(0) rotate(0deg); }
+      15% { transform: translateY(-6px) rotate(-0.5deg); }
+      30% { transform: translateY(0px) rotate(0.3deg); }
+      45% { transform: translateY(-3px) rotate(-0.2deg); }
+      60% { transform: translateY(0); }
+      100% { transform: translateY(0); }
+    }
+
+    .btn-magic:hover {
+      animation: none;
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 18px 0 #b33a1a, 0 22px 38px rgba(255, 81, 0, 0.7);
+      filter: brightness(1.1);
+    }
+
+    .btn-magic:active {
+      transform: translateY(6px) scale(0.96);
+      box-shadow: 0 8px 0 #a02e14, 0 12px 20px rgba(255, 81, 0, 0.5);
+      transition: 0.05s;
+    }
+
+    .icon-emoji {
+      font-size: 2.4rem;
+      filter: drop-shadow(0 6px 4px rgba(0,0,0,0.2));
+      animation: ikonPutar 2.8s infinite;
+    }
+
+    @keyframes ikonPutar {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(12deg) scale(1.15); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+
+    .hiasan-bawah {
+      font-size: 1.3rem;
+      color: #954f1c;
+      background: #fef7e4;
+      border-radius: 30px;
+      padding: 8px 18px;
+      display: inline-block;
+      margin-top: 15px;
+      border: 2px dashed #faa51a;
+      font-weight: 600;
+    }
+
+    @media (max-width: 500px) {
+      .card { border-radius: 50px; padding: 22px 18px 30px; }
+      .btn-magic { font-size: 1.4rem; padding: 16px 22px; gap: 8px; }
+      .icon-emoji { font-size: 1.9rem; }
+      .title-kelas { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="particles" id="particlesContainer"></div>
+
+<main class="card">
+  <div class="logo-container">
+    <img
+      src="https://muin123-dr.github.io/Belajar/LOGOstcm.png"
+      alt="Logo STCM"
+      class="logo-img"
+      loading="lazy"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+    >
+    <div style="display: none; font-size: 3rem; animation: logoAjaib 13s linear infinite;">
+      🌟📘🌟
+    </div>
+  </div>
+
+  <h1 class="title-kelas">🌸 Kelas 1 🌸</h1>
+  <div class="sub-judul">📚 Latihan Bertahap 📚</div>
+
+  <div class="tombol-group">
+    <a href="https://muin123-dr.github.io/Belajar/mtk/manaangka" target="_blank" rel="noopener noreferrer" class="btn-magic">
+      <span class="icon-emoji">🔢🐘</span>
+      <span>Mengenal Angka 1 - 10</span>
+      <span class="icon-emoji" style="font-size: 2rem;">✨</span>
+    </a>
+    <a href="https://muin123-dr.github.io/Belajar/mtk/tulis" target="_blank" rel="noopener noreferrer" class="btn-magic">
+      <span class="icon-emoji">✏️📝</span>
+      <span>Menulis Angka 0 – 9</span>
+      <span class="icon-emoji" style="font-size: 2rem;">🌟</span>
+    </a>
+  </div>
+
+  <div class="hiasan-bawah">
+    ⭐ Ayo belajar dengan gembira! ⭐
+  </div>
+  <div style="margin-top: 10px; font-size: 1rem; color: #b45f2a;">
+    🐣 STCM · Semangat Ceria 🐣
+  </div>
+</main>
+
+<script>
+  (function() {
+    const container = document.getElementById('particlesContainer');
+    const emojis = ['🌈','⭐','🦋','🐼','🎈','🍭','☁️','🐣','🌸','🪐','🍬','🎵','🐠','🌻','🦊','🐨'];
+    const jumlahPartikel = 32;
+
+    function createParticle() {
+      const span = document.createElement('span');
+      span.className = 'particle';
+      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+      span.textContent = randomEmoji;
+      span.style.left = Math.random() * 100 + '%';
+      span.style.animationDuration = Math.random() * 8 + 10 + 's';
+      span.style.animationDelay = Math.random() * 6 + 's';
+      span.style.fontSize = Math.floor(Math.random() * 28 + 22) + 'px';
+      span.style.opacity = Math.random() * 0.4 + 0.5;
+      container.appendChild(span);
+    }
+
+    for (let i = 0; i < jumlahPartikel; i++) {
+      createParticle();
+    }
+
+    setInterval(() => {
+      const existing = document.querySelectorAll('.particle');
+      if (existing.length > 45) {
+        for (let i = 0; i < 5; i++) {
+          if (existing[i]) existing[i].remove();
+        }
+      }
+      createParticle();
+    }, 4000);
+  })();
+</script>
+</body>
+</html>
