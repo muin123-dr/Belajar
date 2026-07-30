@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kuis Tebak Angka</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
@@ -15,12 +15,12 @@
         }
 
         body {
-            background-color: #FFDE59; /* Warna kuning cerah */
+            background-color: #FFDE59;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            padding: 20px;
             text-align: center;
             color: #333;
         }
@@ -33,8 +33,8 @@
             background: white;
             padding: 40px 30px;
             border-radius: 30px;
-            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
-            width: 90%;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
             max-width: 500px;
             border: 8px solid #FF914D;
         }
@@ -48,13 +48,50 @@
             color: #FF5757;
             font-size: 2.8em;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
         }
 
         h2 {
             color: #008080;
             font-size: 2em;
             margin-bottom: 20px;
+        }
+
+        /* Form styles */
+        .form-group {
+            width: 100%;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 18px;
+            font-size: 1.1em;
+            border: 3px solid #ddd;
+            border-radius: 16px;
+            outline: none;
+            transition: border 0.2s;
+            background: #f9f9f9;
+        }
+
+        .form-group input:focus {
+            border-color: #FF914D;
+            background: #fff;
+        }
+
+        .form-error {
+            color: #FF5757;
+            font-size: 0.9em;
+            margin-top: 4px;
+            display: none;
         }
 
         .btn-suara {
@@ -78,13 +115,20 @@
             box-shadow: 0 4px 0 #008080;
         }
 
-        /* Container 3 Tombol Angka */
+        .btn-suara:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #008080;
+            pointer-events: none;
+        }
+
         .options-container {
             display: flex;
             justify-content: center;
             gap: 20px;
             width: 100%;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-option {
@@ -114,6 +158,13 @@
             box-shadow: 0 2px 0 #008080;
         }
 
+        .btn-option:disabled {
+            opacity: 0.6;
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #008080;
+            pointer-events: none;
+        }
+
         .btn-utama {
             background-color: #7ED957;
             color: white;
@@ -124,7 +175,7 @@
             cursor: pointer;
             box-shadow: 0 8px 0 #008080;
             transition: all 0.2s;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .btn-utama:hover {
@@ -132,22 +183,56 @@
             box-shadow: 0 6px 0 #008080;
         }
 
-        /* Overlay Notifikasi Interaktif */
+        .btn-utama:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #008080;
+            pointer-events: none;
+        }
+
+        .btn-wa {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.8em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #1DA851;
+            transition: all 0.2s;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-wa:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #1DA851;
+        }
+
         .feedback-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.95);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 100;
         }
 
-        .feedback-overlay.active { display: flex; }
+        .feedback-overlay.active {
+            display: flex;
+        }
 
         .feedback-content {
             font-size: 4.5em;
             font-weight: bold;
+            text-align: center;
+            padding: 20px;
         }
 
         .correct {
@@ -160,191 +245,515 @@
             animation: shake 0.5s;
         }
 
-        /* Animations */
-        @keyframes popIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-15px); }
-            40%, 80% { transform: translateX(15px); }
-        }
-
         .emoji-detail {
             font-size: 1.2em;
             display: block;
             margin-top: 10px;
         }
+
+        .soal-counter {
+            font-size: 1.2em;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20%,
+            60% {
+                transform: translateX(-15px);
+            }
+            40%,
+            80% {
+                transform: translateX(15px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .screen {
+                padding: 25px 15px;
+            }
+            h1 {
+                font-size: 2.2em;
+            }
+            h2 {
+                font-size: 1.6em;
+            }
+            .btn-option {
+                width: 75px;
+                height: 85px;
+                font-size: 3em;
+            }
+            .options-container {
+                gap: 12px;
+            }
+            .feedback-content {
+                font-size: 3em;
+            }
+            .btn-utama,
+            .btn-wa {
+                font-size: 1.4em;
+                padding: 12px 28px;
+            }
+            .btn-suara {
+                font-size: 1.1em;
+                padding: 10px 18px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .btn-option {
+                width: 60px;
+                height: 70px;
+                font-size: 2.4em;
+            }
+            .options-container {
+                gap: 8px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Halaman Awal -->
+    <!-- ===== Halaman Awal + Form ===== -->
     <div id="screen-awal" class="screen active">
         <h1>Mengenal Angka</h1>
-        <p style="font-size: 1.5em; color: #666; margin-bottom: 25px;">Dengarkan suaranya lalu pilih angka yang tepat!</p>
+        <p style="font-size: 1.3em; color: #666; margin-bottom: 20px;">
+            Isi data dulu ya, lalu dengarkan suaranya dan pilih angka yang tepat!
+        </p>
+
+        <div class="form-group">
+            <label for="input-nama">Nama</label>
+            <input type="text" id="input-nama" placeholder="Masukkan namamu..." autocomplete="off" />
+            <div class="form-error" id="error-nama">Nama harus diisi!</div>
+        </div>
+
+        <div class="form-group">
+            <label for="input-kelas">Kelas</label>
+            <input type="text" id="input-kelas" placeholder="Misal: 1A" autocomplete="off" />
+            <div class="form-error" id="error-kelas">Kelas harus diisi!</div>
+        </div>
+
         <button id="btn-mulai" class="btn-utama">Mulai 🚀</button>
     </div>
 
-    <!-- Halaman Kuis -->
+    <!-- ===== Halaman Kuis ===== -->
     <div id="screen-kuis" class="screen">
+        <div class="soal-counter" id="soal-counter">Soal 1 / 20</div>
         <h2>Dengarkan Pertanyaan!</h2>
         <button id="btn-putar-suara" class="btn-suara">
             🔊 Putar Ulang Suara
         </button>
 
-        <!-- 3 Pilihan Tombol Angka -->
         <div class="options-container" id="container-pilihan">
-            <!-- Tombol angka akan dihasilkan otomatis lewat JS -->
+            <!-- Tombol angka dihasilkan JS -->
         </div>
     </div>
 
-    <!-- Halaman Selesai -->
+    <!-- ===== Halaman Selesai ===== -->
     <div id="screen-selesai" class="screen">
-        <h1>Luar Biasa! 🎉</h1>
-        <p style="font-size: 1.8em; color: #7ED957; font-weight: bold; margin-bottom: 20px;">
-            Tetap belajar yang rajin ya! ❤️
+        <h1>🎉 Luar Biasa! 🎉</h1>
+        <p style="font-size: 1.6em; color: #7ED957; font-weight: bold; margin-bottom: 6px;">
+            Alhamdulillah!
         </p>
-        <button onclick="location.reload()" class="btn-utama" style="background-color: #FF914D; box-shadow: 0 8px 0 #CC6A27;">Main Lagi 🔄</button>
+        <p style="font-size: 1.2em; color: #555; margin-bottom: 20px;">
+            Kamu hebat sudah menyelesaikan semua latihan ❤️
+        </p>
+        <button id="btn-kirim-wa" class="btn-wa">
+            💬 Kirim WA
+        </button>
+        <button onclick="location.reload()" class="btn-utama" style="background-color: #FF914D; box-shadow: 0 8px 0 #CC6A27; margin-top: 12px;">
+            Main Lagi 🔄
+        </button>
     </div>
 
-    <!-- Notifikasi Jawaban (Benar / Salah) -->
+    <!-- ===== Notifikasi Jawaban ===== -->
     <div class="feedback-overlay" id="feedback">
         <div class="feedback-content" id="feedback-text"></div>
     </div>
 
-    <script>
-        // Array angka 1 sampai 10
-        const daftarAngka = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        const kataAngka = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh"];
-        
-        let soalSisa = [];
-        let angkaJawaban = 0;
+    <!-- ===== Audio Player (hidden) ===== -->
+    <audio id="audio-player" preload="auto"></audio>
 
-        // Elements DOM
+    <script>
+        // ============================================================
+        //  DATA
+        // ============================================================
+        const BASE_URL = 'https://muin123-dr.github.io/Belajar/mtk/audio/';
+
+        // Mapping angka → file suara "mana angka ..."
+        const AUDIO_MAP = {
+            1: 'mn001.mp3',
+            2: 'mn002.mp3',
+            3: 'mn003.mp3',
+            4: 'mn004.mp3',
+            5: 'mn005.mp3',
+            6: 'mn006.mp3',
+            7: 'mn007.mp3',
+            8: 'mn008.mp3',
+            9: 'mn009.mp3',
+            10: 'mn010.mp3'
+        };
+
+        const AUDIO_BENAR = 'masya.mp3';
+        const AUDIO_SELESAI = 'alhm.mp3';
+
+        // ============================================================
+        //  DOM REFS
+        // ============================================================
         const screenAwal = document.getElementById('screen-awal');
         const screenKuis = document.getElementById('screen-kuis');
         const screenSelesai = document.getElementById('screen-selesai');
+
+        const inputNama = document.getElementById('input-nama');
+        const inputKelas = document.getElementById('input-kelas');
+        const errorNama = document.getElementById('error-nama');
+        const errorKelas = document.getElementById('error-kelas');
         const btnMulai = document.getElementById('btn-mulai');
+
         const btnPutarSuara = document.getElementById('btn-putar-suara');
         const containerPilihan = document.getElementById('container-pilihan');
+        const soalCounter = document.getElementById('soal-counter');
+
         const feedbackOverlay = document.getElementById('feedback');
         const feedbackText = document.getElementById('feedback-text');
 
-        // Fungsi Fitur Pengucap Suara (Speech Synthesis)
-        function ucapkan(teks) {
-            if ('speechSynthesis' in window) {
-                // Hentikan suara sebelumnya jika masih berjalan
-                window.speechSynthesis.cancel();
-                
-                const utterance = new SpeechSynthesisUtterance(teks);
-                utterance.lang = 'id-ID'; // Bahasa Indonesia
-                utterance.rate = 0.85;    // Kecepatan sedikit diperlambat agar jelas untuk anak-anak
-                utterance.pitch = 1.1;     // Pitch sedikit dinaikkan agar terkesan ramah
-                
-                window.speechSynthesis.speak(utterance);
-            }
+        const btnKirimWA = document.getElementById('btn-kirim-wa');
+
+        const audioPlayer = document.getElementById('audio-player');
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let daftarSoal = []; // array of { angka, id }
+        let indexSoal = 0;
+        let angkaJawaban = 0;
+        let namaSiswa = '';
+        let kelasSiswa = '';
+        let isPlaying = false; // untuk mencegah spam
+
+        // ============================================================
+        //  AUDIO HELPERS
+        // ============================================================
+        function playAudio(url) {
+            return new Promise((resolve) => {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                audioPlayer.src = url;
+                audioPlayer.load();
+
+                const onEnd = () => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                };
+                const onError = () => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    console.warn('Audio gagal diputar:', url);
+                    resolve();
+                };
+
+                audioPlayer.addEventListener('ended', onEnd);
+                audioPlayer.addEventListener('error', onError);
+
+                audioPlayer.play().catch(() => {
+                    // fallback jika play() ditolak
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                });
+            });
         }
 
-        // Tampilkan Layar
+        // Putar audio untuk pertanyaan angka tertentu
+        function playPertanyaan(angka) {
+            const file = AUDIO_MAP[angka];
+            if (!file) return Promise.resolve();
+            const url = BASE_URL + file;
+            return playAudio(url);
+        }
+
+        // ============================================================
+        //  SHUFFLE
+        // ============================================================
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // ============================================================
+        //  SCREEN
+        // ============================================================
         function showScreen(screen) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             screen.classList.add('active');
         }
 
-        // Acak Elemen Array
-        function shuffleArray(array) {
-            return array.sort(() => Math.random() - 0.5);
+        // ============================================================
+        //  VALIDASI FORM
+        // ============================================================
+        function validateForm() {
+            let valid = true;
+            const nama = inputNama.value.trim();
+            const kelas = inputKelas.value.trim();
+
+            if (!nama) {
+                errorNama.style.display = 'block';
+                valid = false;
+            } else {
+                errorNama.style.display = 'none';
+            }
+
+            if (!kelas) {
+                errorKelas.style.display = 'block';
+                valid = false;
+            } else {
+                errorKelas.style.display = 'none';
+            }
+
+            return valid;
         }
 
-        // Mulai Game
+        // ============================================================
+        //  MULAI GAME
+        // ============================================================
         btnMulai.addEventListener('click', () => {
-            soalSisa = [...daftarAngka];
-            shuffleArray(soalSisa);
+            if (!validateForm()) return;
+
+            namaSiswa = inputNama.value.trim();
+            kelasSiswa = inputKelas.value.trim();
+
+            // Buat daftar soal: angka 1-10 muncul 2 kali
+            const soalDasar = [];
+            for (let a = 1; a <= 10; a++) {
+                soalDasar.push({ angka: a, id: `${a}-1` });
+                soalDasar.push({ angka: a, id: `${a}-2` });
+            }
+            daftarSoal = shuffleArray(soalDasar);
+            indexSoal = 0;
+
             showScreen(screenKuis);
             muatSoal();
         });
 
-        // Muat Soal Baru
+        // Enter pada input form juga memicu mulai
+        document.querySelectorAll('#input-nama, #input-kelas').forEach(inp => {
+            inp.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') btnMulai.click();
+            });
+            inp.addEventListener('input', () => {
+                // hilangkan error saat mengetik
+                if (inp.id === 'input-nama') errorNama.style.display = 'none';
+                if (inp.id === 'input-kelas') errorKelas.style.display = 'none';
+            });
+        });
+
+        // ============================================================
+        //  MUAT SOAL
+        // ============================================================
+        let sedangMemuat = false;
+
         function muatSoal() {
-            if (soalSisa.length > 0) {
-                angkaJawaban = soalSisa[0]; // Ambil angka pertama dari sisa soal
-                
-                // Buat 3 Pilihan Angka (1 jawaban benar + 2 pilihan acak)
-                let pilihan = [angkaJawaban];
-                while (pilihan.length < 3) {
-                    let acak = Math.floor(Math.random() * 10) + 1;
-                    if (!pilihan.includes(acak)) {
-                        pilihan.push(acak);
-                    }
+            if (sedangMemuat) return;
+            sedangMemuat = true;
+
+            if (indexSoal >= daftarSoal.length) {
+                // Selesai semua
+                sedangMemuat = false;
+                selesaiSemua();
+                return;
+            }
+
+            const soal = daftarSoal[indexSoal];
+            angkaJawaban = soal.angka;
+
+            // Update counter
+            soalCounter.textContent = `Soal ${indexSoal + 1} / ${daftarSoal.length}`;
+
+            // Buat 3 pilihan (1 benar + 2 acak)
+            let pilihan = [angkaJawaban];
+            while (pilihan.length < 3) {
+                let acak = Math.floor(Math.random() * 10) + 1;
+                if (!pilihan.includes(acak)) {
+                    pilihan.push(acak);
                 }
-                shuffleArray(pilihan);
+            }
+            shuffleArray(pilihan);
 
-                // Tampilkan Tombol Angka ke Layar
-                containerPilihan.innerHTML = '';
-                pilihan.forEach(angka => {
-                    const btn = document.createElement('button');
-                    btn.className = 'btn-option';
-                    btn.textContent = angka;
-                    btn.onclick = () => cekJawaban(angka);
-                    containerPilihan.appendChild(btn);
+            // Render tombol
+            containerPilihan.innerHTML = '';
+            pilihan.forEach(angka => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.textContent = angka;
+                btn.dataset.angka = angka;
+                btn.onclick = () => cekJawaban(angka);
+                containerPilihan.appendChild(btn);
+            });
+
+            // Enable tombol suara
+            btnPutarSuara.disabled = false;
+
+            // Mainkan suara pertanyaan
+            playPertanyaan(angkaJawaban).then(() => {
+                sedangMemuat = false;
+            }).catch(() => {
+                sedangMemuat = false;
+            });
+
+            // Reset status tombol
+            document.querySelectorAll('.btn-option').forEach(b => b.disabled = false);
+        }
+
+        // ============================================================
+        //  PUTAR ULANG SUARA
+        // ============================================================
+        btnPutarSuara.addEventListener('click', () => {
+            if (angkaJawaban > 0) {
+                btnPutarSuara.disabled = true;
+                playPertanyaan(angkaJawaban).then(() => {
+                    btnPutarSuara.disabled = false;
+                }).catch(() => {
+                    btnPutarSuara.disabled = false;
                 });
-
-                // Ucapkan Pertanyaan
-                putarPertanyaan();
-            } else {
-                // Semua Soal Selesai
-                showScreen(screenSelesai);
-                ucapkan("Luar biasa! Tetap belajar yang rajin ya!");
             }
-        }
+        });
 
-        // Fungsi Memutar Suara Soal
-        function putarPertanyaan() {
-            const teksSoal = `Manakah yang angka ${kataAngka[angkaJawaban]}`;
-            ucapkan(teksSoal);
-        }
-
-        btnPutarSuara.addEventListener('click', putarPertanyaan);
-
-        // Cek Jawaban Anak
+        // ============================================================
+        //  CEK JAWABAN
+        // ============================================================
         function cekJawaban(pilihanAnak) {
-            if (pilihanAnak === angkaJawaban) {
-                // JAWABAN BENAR
-                soalSisa.shift(); // Hapus soal yang berhasil dijawab
-                tampilkanNotifikasi(true);
+            if (isPlaying) return;
+            isPlaying = true;
+
+            // Disable semua tombol sementara
+            document.querySelectorAll('.btn-option').forEach(b => b.disabled = true);
+            btnPutarSuara.disabled = true;
+
+            const benar = (pilihanAnak === angkaJawaban);
+
+            if (benar) {
+                // Jawaban benar
+                tampilkanNotifikasi(true).then(() => {
+                    // Lanjut ke soal berikutnya
+                    indexSoal++;
+                    isPlaying = false;
+                    muatSoal();
+                });
             } else {
-                // JAWABAN SALAH
-                tampilkanNotifikasi(false);
+                // Jawaban salah
+                tampilkanNotifikasi(false).then(() => {
+                    // Ulangi pertanyaan yang sama
+                    isPlaying = false;
+                    // Enable tombol
+                    document.querySelectorAll('.btn-option').forEach(b => b.disabled = false);
+                    btnPutarSuara.disabled = false;
+                    // Putar ulang suara
+                    playPertanyaan(angkaJawaban);
+                });
             }
         }
 
-        // Tampilkan Notifikasi Interaktif
+        // ============================================================
+        //  NOTIFIKASI
+        // ============================================================
         function tampilkanNotifikasi(isBenar) {
-            feedbackOverlay.classList.add('active');
+            return new Promise((resolve) => {
+                feedbackOverlay.classList.add('active');
 
-            if (isBenar) {
-                feedbackText.innerHTML = "Hore! Benar! <br><span class='emoji-detail'>🌟🎉👏</span>";
-                feedbackText.className = "feedback-content correct";
-                ucapkan("Hore! Jawabannya benar!");
-
-                setTimeout(() => {
-                    feedbackOverlay.classList.remove('active');
-                    muatSoal(); // Lanjut ke soal berikutnya
-                }, 1800);
-            } else {
-                feedbackText.innerHTML = "Tetot! Salah <br><span class='emoji-detail'>Coba lagi ya! 💪</span>";
-                feedbackText.className = "feedback-content wrong";
-                ucapkan("Tetot! Jawaban salah. Coba lagi ya!");
-
-                setTimeout(() => {
-                    feedbackOverlay.classList.remove('active');
-                    putarPertanyaan(); // Ulangi pertanyaan soal yang sama
-                }, 2000);
-            }
+                if (isBenar) {
+                    feedbackText.innerHTML = "Hore! Benar! <br><span class='emoji-detail'>🌟🎉👏</span>";
+                    feedbackText.className = "feedback-content correct";
+                    // Putar suara "masya"
+                    playAudio(BASE_URL + AUDIO_BENAR).then(() => {
+                        setTimeout(() => {
+                            feedbackOverlay.classList.remove('active');
+                            resolve();
+                        }, 400);
+                    }).catch(() => {
+                        setTimeout(() => {
+                            feedbackOverlay.classList.remove('active');
+                            resolve();
+                        }, 400);
+                    });
+                } else {
+                    feedbackText.innerHTML = "Tetot! Salah <br><span class='emoji-detail'>Coba lagi ya! 💪</span>";
+                    feedbackText.className = "feedback-content wrong";
+                    // Tidak ada suara khusus untuk salah
+                    setTimeout(() => {
+                        feedbackOverlay.classList.remove('active');
+                        resolve();
+                    }, 1200);
+                }
+            });
         }
+
+        // ============================================================
+        //  SELESAI SEMUA
+        // ============================================================
+        function selesaiSemua() {
+            // Putar alhm.mp3
+            playAudio(BASE_URL + AUDIO_SELESAI).catch(() => {});
+
+            showScreen(screenSelesai);
+        }
+
+        // ============================================================
+        //  KIRIM WA
+        // ============================================================
+        btnKirimWA.addEventListener('click', () => {
+            const now = new Date();
+            const tanggal = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const jam = now.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            const pesan =
+                `Alhamdulillah%0A%0A` +
+                `Nama: ${encodeURIComponent(namaSiswa)}%0A` +
+                `Kelas: ${encodeURIComponent(kelasSiswa)}%0A` +
+                `Bisa menyelesaikan semua latihan%0A` +
+                `Pada tanggal ${encodeURIComponent(tanggal)} jam ${encodeURIComponent(jam)}`;
+
+            const url = `https://wa.me/6285878679013?text=${pesan}`;
+            window.open(url, '_blank');
+        });
+
+        // ============================================================
+        //  INIT: pastikan audio bisa autoplay (klik user)
+        // ============================================================
+        // Hanya untuk memicu konteks audio di browser modern
+        document.addEventListener('click', () => {
+            audioPlayer.volume = 1;
+        }, { once: true });
+
+        console.log('🎯 Kuis Tebak Angka siap!');
     </script>
 </body>
 </html>
