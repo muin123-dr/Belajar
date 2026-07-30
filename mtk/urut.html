@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Membilang Urut</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Neue', cursive, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 35px 25px;
+            border-radius: 35px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 520px;
+            border: 8px solid #FF914D;
+            position: relative;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: popIn 0.5s ease-out;
+        }
+
+        /* LOGO – animasi flip horizontal + glow */
+        .logo {
+            width: 85px;
+            height: auto;
+            margin-bottom: 10px;
+            animation: flipGlow 4s ease-in-out infinite;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            border-radius: 50%;
+        }
+
+        @keyframes flipGlow {
+            0% {
+                transform: rotateY(0deg) scale(1);
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            }
+            25% {
+                transform: rotateY(90deg) scale(1.05);
+                filter: drop-shadow(0 8px 16px rgba(255, 145, 77, 0.6));
+            }
+            50% {
+                transform: rotateY(180deg) scale(1);
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            }
+            75% {
+                transform: rotateY(270deg) scale(1.05);
+                filter: drop-shadow(0 8px 16px rgba(255, 145, 77, 0.6));
+            }
+            100% {
+                transform: rotateY(360deg) scale(1);
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            }
+        }
+
+        h1 {
+            color: #FF5757;
+            font-size: 2.6em;
+            margin-bottom: 12px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.12);
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            color: #008080;
+            font-size: 1.8em;
+            margin-bottom: 16px;
+        }
+
+        .sub-title {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 18px;
+        }
+
+        /* Form styles */
+        .form-group {
+            width: 100%;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1.1em;
+            border: 3px solid #ddd;
+            border-radius: 14px;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            border-color: #FF914D;
+            box-shadow: 0 0 0 4px rgba(255, 145, 77, 0.25);
+            background: #fff;
+        }
+
+        .form-error {
+            color: #FF5757;
+            font-size: 0.85em;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .btn-utama {
+            background-color: #7ED957;
+            color: white;
+            border: none;
+            padding: 14px 44px;
+            font-size: 1.8em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #4CAF50;
+            transition: all 0.15s;
+            margin-top: 8px;
+            width: 100%;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn-utama:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #4CAF50;
+        }
+
+        .btn-utama:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #4CAF50;
+        }
+
+        .btn-utama:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #4CAF50;
+            pointer-events: none;
+        }
+
+        /* Soal */
+        .soal-counter {
+            font-size: 1.1em;
+            color: #888;
+            margin-bottom: 6px;
+            background: #f0f0f0;
+            padding: 4px 18px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .soal-teks {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 12px 0 8px;
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            border: 3px dashed #FF914D;
+            width: 100%;
+            letter-spacing: 2px;
+        }
+
+        .soal-teks .highlight {
+            color: #FF5757;
+            background: #fff3cd;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 2px solid #FF914D;
+        }
+
+        .soal-prompt {
+            font-size: 1.1em;
+            color: #555;
+            margin: 4px 0 16px;
+        }
+
+        .options-container {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            width: 100%;
+            margin: 6px 0 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-option {
+            background-color: #5CE1E6;
+            color: #1a1a2e;
+            border: 4px solid #00C2CB;
+            font-size: 2.8em;
+            font-weight: bold;
+            border-radius: 20px;
+            width: 90px;
+            height: 100px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #008080;
+            transition: transform 0.15s, background-color 0.2s, box-shadow 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1 1 80px;
+            max-width: 120px;
+        }
+
+        .btn-option:hover {
+            transform: translateY(-4px);
+            background-color: #C1F4F6;
+        }
+
+        .btn-option:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #008080;
+        }
+
+        .btn-option:disabled {
+            opacity: 0.5;
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #008080;
+            pointer-events: none;
+        }
+
+        .btn-option.benar {
+            background-color: #7ED957;
+            border-color: #4CAF50;
+            box-shadow: 0 4px 0 #2E7D32;
+        }
+
+        .btn-option.salah {
+            background-color: #FF5757;
+            border-color: #D32F2F;
+            box-shadow: 0 4px 0 #B71C1C;
+        }
+
+        /* Halaman Selesai – Juara */
+        .juara {
+            animation: juaraPop 1s ease-out;
+        }
+
+        @keyframes juaraPop {
+            0% {
+                transform: scale(0.3) rotate(-5deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(3deg);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(0.95) rotate(-1deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .confetti {
+            font-size: 4em;
+            animation: confettiRain 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes confettiRain {
+            0% {
+                transform: translateY(-10px) rotate(0deg) scale(1);
+            }
+            100% {
+                transform: translateY(10px) rotate(20deg) scale(1.1);
+            }
+        }
+
+        .btn-wa {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            font-size: 1.6em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #1DA851;
+            transition: all 0.15s;
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .btn-wa:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #1DA851;
+        }
+
+        .btn-wa:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #1DA851;
+        }
+
+        .btn-secondary {
+            background-color: #FF914D;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.4em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #CC6A27;
+            transition: all 0.15s;
+            margin-top: 10px;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #CC6A27;
+        }
+
+        .btn-secondary:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #CC6A27;
+        }
+
+        /* Feedback overlay */
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.94);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        }
+
+        .feedback-overlay.active {
+            display: flex;
+        }
+
+        .feedback-content {
+            font-size: 4em;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feedback-correct {
+            color: #7ED957;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .feedback-wrong {
+            color: #FF5757;
+            animation: shake 0.5s;
+        }
+
+        .emoji-detail {
+            font-size: 1.2em;
+            display: block;
+            margin-top: 8px;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20%,
+            60% {
+                transform: translateX(-18px);
+            }
+            40%,
+            80% {
+                transform: translateX(18px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .screen {
+                padding: 22px 14px;
+                border-width: 6px;
+            }
+            h1 {
+                font-size: 2.0em;
+            }
+            h2 {
+                font-size: 1.4em;
+            }
+            .soal-teks {
+                font-size: 1.6em;
+                padding: 10px 14px;
+            }
+            .btn-option {
+                font-size: 2.2em;
+                width: 70px;
+                height: 80px;
+                flex: 1 1 60px;
+                max-width: 90px;
+            }
+            .options-container {
+                gap: 12px;
+            }
+            .feedback-content {
+                font-size: 2.8em;
+            }
+            .btn-utama,
+            .btn-wa,
+            .btn-secondary {
+                font-size: 1.4em;
+                padding: 12px 20px;
+            }
+            .logo {
+                width: 65px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .btn-option {
+                font-size: 1.8em;
+                width: 58px;
+                height: 68px;
+                flex: 1 1 50px;
+                max-width: 72px;
+            }
+            .options-container {
+                gap: 8px;
+            }
+            .soal-teks {
+                font-size: 1.3em;
+            }
+            .logo {
+                width: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== Halaman Awal ===== -->
+    <div id="screen-awal" class="screen active">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
+        <h1>Membilang Urut</h1>
+        <p class="sub-title">Isi data dulu, lalu kerjakan 30 soal seru!</p>
+
+        <div class="form-group">
+            <label for="input-nama">Nama</label>
+            <input type="text" id="input-nama" placeholder="Masukkan namamu..." autocomplete="off" />
+            <div class="form-error" id="error-nama">Nama harus diisi!</div>
+        </div>
+
+        <div class="form-group">
+            <label for="input-kelas">Kelas</label>
+            <input type="text" id="input-kelas" placeholder="Misal: 2A" autocomplete="off" />
+            <div class="form-error" id="error-kelas">Kelas harus diisi!</div>
+        </div>
+
+        <button id="btn-mulai" class="btn-utama">🚀 Mulai</button>
+    </div>
+
+    <!-- ===== Halaman Kuis ===== -->
+    <div id="screen-kuis" class="screen">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
+        <div class="soal-counter" id="soal-counter">Soal 1 / 30</div>
+        <div class="soal-teks" id="soal-teks">... , 78, 79, 80</div>
+        <div class="soal-prompt">Pilih angka yang tepat untuk mengisi titik‑titik!</div>
+        <div class="options-container" id="container-pilihan">
+            <!-- Tombol dihasilkan JS -->
+        </div>
+    </div>
+
+    <!-- ===== Halaman Selesai (Juara) ===== -->
+    <div id="screen-selesai" class="screen">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" class="logo" alt="Logo STCM" />
+        <div class="juara">
+            <h1 style="color: #FFD700; text-shadow: 0 0 20px #FFD700, 0 0 40px #FFA500;">🏆 JUARA! 🏆</h1>
+        </div>
+        <div class="confetti">🎉🎊✨🌟🎉🎊✨🌟</div>
+        <p style="font-size: 1.8em; color: #7ED957; font-weight: bold; margin: 4px 0 2px;">
+            Alhamdulillah!
+        </p>
+        <p style="font-size: 1.2em; color: #555; margin-bottom: 16px;">
+            Kamu hebat sudah menyelesaikan semua soal ❤️
+        </p>
+        <button id="btn-kirim-wa" class="btn-wa">💬 Kirim WA</button>
+        <button onclick="location.reload()" class="btn-secondary">🔄 Main Lagi</button>
+    </div>
+
+    <!-- ===== Feedback Overlay ===== -->
+    <div class="feedback-overlay" id="feedback">
+        <div class="feedback-content" id="feedback-text"></div>
+    </div>
+
+    <!-- ===== Audio Player ===== -->
+    <audio id="audio-player" preload="auto"></audio>
+
+    <script>
+        // ============================================================
+        //  DATA & KONFIGURASI
+        // ============================================================
+        const BASE_URL = 'https://muin123-dr.github.io/Belajar/mtk/audio/';
+        const AUDIO_BENAR = 'masya.mp3';
+        const AUDIO_SELESAI = 'alhm.mp3';
+
+        // ============================================================
+        //  DOM REFS
+        // ============================================================
+        const screenAwal = document.getElementById('screen-awal');
+        const screenKuis = document.getElementById('screen-kuis');
+        const screenSelesai = document.getElementById('screen-selesai');
+
+        const inputNama = document.getElementById('input-nama');
+        const inputKelas = document.getElementById('input-kelas');
+        const errorNama = document.getElementById('error-nama');
+        const errorKelas = document.getElementById('error-kelas');
+        const btnMulai = document.getElementById('btn-mulai');
+
+        const soalCounter = document.getElementById('soal-counter');
+        const soalTeks = document.getElementById('soal-teks');
+        const containerPilihan = document.getElementById('container-pilihan');
+
+        const feedbackOverlay = document.getElementById('feedback');
+        const feedbackText = document.getElementById('feedback-text');
+
+        const btnKirimWA = document.getElementById('btn-kirim-wa');
+
+        const audioPlayer = document.getElementById('audio-player');
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let daftarSoal = [];
+        let indexSoal = 0;
+        let jawabanBenar = 0;
+        let namaSiswa = '';
+        let kelasSiswa = '';
+        let isWaiting = false;
+
+        // ============================================================
+        //  AUDIO HELPERS
+        // ============================================================
+        function playAudio(url) {
+            return new Promise((resolve) => {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                audioPlayer.src = url;
+                audioPlayer.load();
+
+                const onEnd = () => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                };
+                const onError = () => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                };
+
+                audioPlayer.addEventListener('ended', onEnd);
+                audioPlayer.addEventListener('error', onError);
+
+                audioPlayer.play().catch(() => {
+                    audioPlayer.removeEventListener('ended', onEnd);
+                    audioPlayer.removeEventListener('error', onError);
+                    resolve();
+                });
+            });
+        }
+
+        // ============================================================
+        //  SHUFFLE
+        // ============================================================
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // ============================================================
+        //  SCREEN
+        // ============================================================
+        function showScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            screen.classList.add('active');
+        }
+
+        // ============================================================
+        //  VALIDASI FORM
+        // ============================================================
+        function validateForm() {
+            let valid = true;
+            const nama = inputNama.value.trim();
+            const kelas = inputKelas.value.trim();
+
+            if (!nama) {
+                errorNama.style.display = 'block';
+                valid = false;
+            } else {
+                errorNama.style.display = 'none';
+            }
+
+            if (!kelas) {
+                errorKelas.style.display = 'block';
+                valid = false;
+            } else {
+                errorKelas.style.display = 'none';
+            }
+
+            return valid;
+        }
+
+        // ============================================================
+        //  GENERATE SOAL
+        // ============================================================
+        function generateSoal(jumlah = 30) {
+            const soal = [];
+            const types = ['A', 'B', 'C'];
+
+            // Pastikan tipe terdistribusi merata
+            let typePool = [];
+            for (let i = 0; i < jumlah; i++) {
+                typePool.push(types[i % types.length]);
+            }
+            shuffleArray(typePool);
+
+            let attempts = 0;
+            while (soal.length < jumlah && attempts < 1000) {
+                attempts++;
+                const tipe = typePool[soal.length];
+                let a, b, c, d, jawaban, display, correctAns;
+
+                // Pilih angka acak yang valid untuk tipe
+                let found = false;
+                let tries = 0;
+                while (!found && tries < 50) {
+                    tries++;
+                    const base = Math.floor(Math.random() * 85) + 12; // 12-96
+                    if (tipe === 'A') {
+                        // ..., a, a+1, a+2 → jawaban = a-1
+                        a = base;
+                        if (a - 1 >= 10 && a + 2 <= 100) {
+                            found = true;
+                            correctAns = a - 1;
+                            display = `..., ${a}, ${a+1}, ${a+2}`;
+                            jawaban = correctAns;
+                        }
+                    } else if (tipe === 'B') {
+                        // a, ..., a+2, a+3 → jawaban = a+1
+                        a = base;
+                        if (a >= 10 && a + 3 <= 100) {
+                            found = true;
+                            correctAns = a + 1;
+                            display = `${a}, ..., ${a+2}, ${a+3}`;
+                            jawaban = correctAns;
+                        }
+                    } else { // C
+                        // a, a+1, a+2, ... → jawaban = a+3
+                        a = base;
+                        if (a >= 10 && a + 3 <= 100) {
+                            found = true;
+                            correctAns = a + 3;
+                            display = `${a}, ${a+1}, ${a+2}, ...`;
+                            jawaban = correctAns;
+                        }
+                    }
+                }
+
+                if (!found) continue;
+
+                // Buat 2 pilihan salah (unik, dekat dengan jawaban)
+                const wrongs = new Set();
+                let offset = 1;
+                while (wrongs.size < 2 && offset < 10) {
+                    const candidate1 = jawaban + offset;
+                    const candidate2 = jawaban - offset;
+                    if (candidate1 !== jawaban && candidate1 >= 10 && candidate1 <= 100 && !wrongs.has(candidate1) &&
+                        candidate1 !== correctAns) {
+                        wrongs.add(candidate1);
+                    }
+                    if (candidate2 !== jawaban && candidate2 >= 10 && candidate2 <= 100 && !wrongs.has(candidate2) &&
+                        candidate2 !== correctAns) {
+                        wrongs.add(candidate2);
+                    }
+                    offset++;
+                }
+
+                // Jika belum dapat 2 wrongs, tambahkan angka acak
+                let fallback = 10;
+                while (wrongs.size < 2 && fallback <= 100) {
+                    if (fallback !== jawaban && fallback !== correctAns && !wrongs.has(fallback)) {
+                        wrongs.add(fallback);
+                    }
+                    fallback++;
+                }
+
+                const pilihan = [jawaban, ...Array.from(wrongs)];
+                shuffleArray(pilihan);
+
+                soal.push({
+                    tipe: tipe,
+                    display: display,
+                    jawaban: jawaban,
+                    pilihan: pilihan
+                });
+            }
+
+            // Jika masih kurang, tambahkan soal sederhana
+            while (soal.length < jumlah) {
+                const base = Math.floor(Math.random() * 70) + 15;
+                const tipe = types[soal.length % types.length];
+                let jawaban, display;
+                if (tipe === 'A') {
+                    jawaban = base - 1;
+                    display = `..., ${base}, ${base+1}, ${base+2}`;
+                } else if (tipe === 'B') {
+                    jawaban = base + 1;
+                    display = `${base}, ..., ${base+2}, ${base+3}`;
+                } else {
+                    jawaban = base + 3;
+                    display = `${base}, ${base+1}, ${base+2}, ...`;
+                }
+                const pilihan = [jawaban];
+                let w1 = jawaban + 2,
+                    w2 = jawaban - 2;
+                if (w1 < 10) w1 = jawaban + 3;
+                if (w2 < 10) w2 = jawaban + 4;
+                if (w1 === jawaban) w1 = jawaban + 5;
+                if (w2 === jawaban) w2 = jawaban - 3;
+                if (w2 < 10) w2 = jawaban + 6;
+                pilihan.push(w1, w2);
+                shuffleArray(pilihan);
+                soal.push({
+                    tipe: tipe,
+                    display: display,
+                    jawaban: jawaban,
+                    pilihan: pilihan
+                });
+            }
+
+            return shuffleArray(soal);
+        }
+
+        // ============================================================
+        //  MULAI GAME
+        // ============================================================
+        btnMulai.addEventListener('click', () => {
+            if (!validateForm()) return;
+
+            namaSiswa = inputNama.value.trim();
+            kelasSiswa = inputKelas.value.trim();
+
+            daftarSoal = generateSoal(30);
+            indexSoal = 0;
+
+            showScreen(screenKuis);
+            muatSoal();
+        });
+
+        // Enter pada form
+        document.querySelectorAll('#input-nama, #input-kelas').forEach(inp => {
+            inp.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') btnMulai.click();
+            });
+            inp.addEventListener('input', () => {
+                if (inp.id === 'input-nama') errorNama.style.display = 'none';
+                if (inp.id === 'input-kelas') errorKelas.style.display = 'none';
+            });
+        });
+
+        // ============================================================
+        //  MUAT SOAL
+        // ============================================================
+        function muatSoal() {
+            if (indexSoal >= daftarSoal.length) {
+                selesaiSemua();
+                return;
+            }
+
+            const soal = daftarSoal[indexSoal];
+            jawabanBenar = soal.jawaban;
+
+            soalCounter.textContent = `Soal ${indexSoal + 1} / ${daftarSoal.length}`;
+            soalTeks.innerHTML = soal.display;
+
+            containerPilihan.innerHTML = '';
+            soal.pilihan.forEach(angka => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.textContent = angka;
+                btn.dataset.angka = angka;
+                btn.onclick = () => cekJawaban(btn, angka);
+                containerPilihan.appendChild(btn);
+            });
+
+            // Aktifkan semua tombol
+            document.querySelectorAll('.btn-option').forEach(b => {
+                b.disabled = false;
+                b.className = 'btn-option';
+            });
+
+            isWaiting = false;
+        }
+
+        // ============================================================
+        //  CEK JAWABAN
+        // ============================================================
+        function cekJawaban(btn, pilihan) {
+            if (isWaiting) return;
+            isWaiting = true;
+
+            // Nonaktifkan semua tombol
+            document.querySelectorAll('.btn-option').forEach(b => b.disabled = true);
+
+            const benar = (pilihan === jawabanBenar);
+
+            if (benar) {
+                btn.classList.add('benar');
+                tampilkanNotifikasi(true).then(() => {
+                    indexSoal++;
+                    isWaiting = false;
+                    muatSoal();
+                });
+            } else {
+                btn.classList.add('salah');
+                tampilkanNotifikasi(false).then(() => {
+                    // Reset tombol yang salah, aktifkan kembali
+                    btn.className = 'btn-option';
+                    btn.disabled = false;
+                    // Aktifkan semua tombol lagi
+                    document.querySelectorAll('.btn-option').forEach(b => {
+                        b.disabled = false;
+                        b.className = 'btn-option';
+                    });
+                    isWaiting = false;
+                });
+            }
+        }
+
+        // ============================================================
+        //  NOTIFIKASI
+        // ============================================================
+        function tampilkanNotifikasi(isBenar) {
+            return new Promise((resolve) => {
+                feedbackOverlay.classList.add('active');
+
+                if (isBenar) {
+                    feedbackText.innerHTML = "✅ Benar! <br><span class='emoji-detail'>🌟🎉👏</span>";
+                    feedbackText.className = "feedback-content feedback-correct";
+                    playAudio(BASE_URL + AUDIO_BENAR).then(() => {
+                        setTimeout(() => {
+                            feedbackOverlay.classList.remove('active');
+                            resolve();
+                        }, 400);
+                    }).catch(() => {
+                        setTimeout(() => {
+                            feedbackOverlay.classList.remove('active');
+                            resolve();
+                        }, 400);
+                    });
+                } else {
+                    feedbackText.innerHTML = "❌ Coba lagi! <br><span class='emoji-detail'>💪 Pilih jawaban yang lain</span>";
+                    feedbackText.className = "feedback-content feedback-wrong";
+                    setTimeout(() => {
+                        feedbackOverlay.classList.remove('active');
+                        resolve();
+                    }, 1200);
+                }
+            });
+        }
+
+        // ============================================================
+        //  SELESAI SEMUA – JUARA!
+        // ============================================================
+        function selesaiSemua() {
+            playAudio(BASE_URL + AUDIO_SELESAI).catch(() => {});
+            showScreen(screenSelesai);
+        }
+
+        // ============================================================
+        //  KIRIM WA
+        // ============================================================
+        btnKirimWA.addEventListener('click', () => {
+            const now = new Date();
+            const tanggal = now.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const jam = now.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            const pesan =
+                `ALHAMDULILLAH%0A%0A` +
+                `Nama: ${encodeURIComponent(namaSiswa)}%0A` +
+                `Kelas: ${encodeURIComponent(kelasSiswa)}%0A%0A` +
+                `BISA MENYELESAIKAN SEMUA SOAL%0A%0A` +
+                `Pada tanggal ${encodeURIComponent(tanggal)} jam ${encodeURIComponent(jam)}`;
+
+            const url = `https://wa.me/6285878679013?text=${pesan}`;
+            window.open(url, '_blank');
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        document.addEventListener('click', () => {
+            audioPlayer.volume = 1;
+        }, { once: true });
+
+        console.log('🎯 Membilang Urut siap!');
+    </script>
+</body>
+</html>
