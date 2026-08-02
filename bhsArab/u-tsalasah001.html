@@ -40,7 +40,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ============ CONTAINER ============ */
         .main-container {
             max-width: 880px;
             margin: 0 auto;
@@ -49,7 +48,6 @@
             gap: 18px;
         }
 
-        /* ============ HEADER ============ */
         .header {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -83,7 +81,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* ============ CARD ============ */
         .card {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -93,11 +90,10 @@
             transition: var(--transition);
         }
 
-        /* ============ TEKS ARAB ============ */
         .arabic-text-section {
             position: relative;
         }
-        .arabic-text-section .section-label {
+        .section-label {
             display: inline-block;
             font-size: 0.78rem;
             text-transform: uppercase;
@@ -109,6 +105,8 @@
             padding: 4px 14px;
             border-radius: 20px;
         }
+
+        /* Container utama teks Arab */
         .arabic-text {
             font-family: var(--font-arabic);
             font-size: 1.65rem;
@@ -118,24 +116,39 @@
             direction: rtl;
             unicode-bidi: embed;
             word-spacing: 2px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
         }
-        .arabic-text .word {
-            display: inline;
+
+        /* Setiap unit kata + makna */
+        .word-unit {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 2px;
+            vertical-align: bottom;
+        }
+
+        .word-arab {
             cursor: pointer;
             padding: 2px 5px;
-            margin: 0 1px;
             border-radius: 5px;
             transition: all 0.2s ease;
-            position: relative;
             border-bottom: 2px solid transparent;
             white-space: nowrap;
+            font-family: var(--font-arabic);
+            font-size: inherit;
+            line-height: inherit;
+            color: inherit;
+            background: transparent;
         }
-        .arabic-text .word:hover {
+        .word-arab:hover {
             background: #fdf3d6;
             border-bottom-color: #b8860b;
             color: #5c3d0e;
         }
-        .arabic-text .word.active {
+        .word-arab.active {
             background: #fde8b0;
             border-bottom-color: #b8860b;
             font-weight: 700;
@@ -143,19 +156,34 @@
             box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.13);
             border-radius: 6px;
         }
-        .arabic-text .word.spacer {
-            cursor: default;
-            border-bottom: none;
-            padding: 0 2px;
-            margin: 0;
+
+        .word-makna {
+            font-size: 0.7rem;
+            color: #5c4a2e;
+            font-family: var(--font-ui);
+            background: #fef9ef;
+            border-radius: 4px;
+            padding: 0px 4px;
+            white-space: nowrap;
+            margin-top: 2px;
+            display: none;
+            /* default hidden */
+            line-height: 1.4;
         }
-        .arabic-text .word.spacer:hover {
-            background: transparent;
-            border-bottom-color: transparent;
-            color: inherit;
+        .show-makna .word-makna {
+            display: inline-block;
         }
 
-        /* ============ TOMBOL AKSI ============ */
+        /* Spacer untuk teks biasa */
+        .text-spacer {
+            white-space: pre;
+            font-family: var(--font-arabic);
+            font-size: inherit;
+            line-height: inherit;
+            color: inherit;
+            align-self: flex-end;
+        }
+
         .btn-row {
             display: flex;
             flex-wrap: wrap;
@@ -193,7 +221,7 @@
             font-size: 1.1rem;
         }
 
-        /* ============ PANEL ANALISIS ============ */
+        /* Panel Analisis */
         .analysis-panel {
             display: none;
             margin-top: 16px;
@@ -219,14 +247,35 @@
                 transform: translateY(0);
             }
         }
-        .analysis-panel .analyzed-word {
+        .analyzed-word {
             font-family: var(--font-arabic);
             font-size: 2rem;
             color: #2d6a4f;
             text-align: center;
             direction: rtl;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             font-weight: 700;
+        }
+        .makna-box {
+            background: #fffdf5;
+            border: 1px solid #e5d5a0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #5c3d0e;
+            background: linear-gradient(135deg, #fff8e7, #fef3d0);
+        }
+        .makna-box .makna-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #a08040;
+            display: block;
+            margin-bottom: 3px;
+            font-family: var(--font-ui);
         }
         .analysis-panel table {
             width: 100%;
@@ -254,7 +303,7 @@
             color: #3d2e1c;
             line-height: 1.5;
         }
-        .analysis-panel .close-analysis {
+        .close-analysis {
             display: inline-block;
             margin-top: 10px;
             padding: 7px 16px;
@@ -267,17 +316,16 @@
             color: #5c4520;
             transition: var(--transition);
         }
-        .analysis-panel .close-analysis:hover {
+        .close-analysis:hover {
             background: #e8ddd0;
         }
-        .analysis-panel .no-data {
+        .no-data {
             text-align: center;
             color: #999;
             font-style: italic;
             padding: 20px;
         }
 
-        /* ============ TERJEMAHAN & STRUKTURAL ============ */
         .translation-box,
         .structural-box {
             display: none;
@@ -317,7 +365,6 @@
             color: #5c3d0e;
         }
 
-        /* ============ TOOLTIP MOBILE ============ */
         .tap-hint {
             font-size: 0.75rem;
             color: #a09080;
@@ -326,7 +373,6 @@
             font-style: italic;
         }
 
-        /* ============ RESPONSIVE ============ */
         @media (max-width: 600px) {
             body {
                 padding: 8px;
@@ -343,11 +389,12 @@
             .arabic-text {
                 font-size: 1.35rem;
                 line-height: 2;
-                word-spacing: 1px;
             }
-            .arabic-text .word {
+            .word-arab {
                 padding: 1px 3px;
-                margin: 0 0.5px;
+            }
+            .word-makna {
+                font-size: 0.6rem;
             }
             .btn {
                 padding: 8px 14px;
@@ -361,11 +408,15 @@
             .analysis-panel table td {
                 padding: 6px 8px;
             }
-            .analysis-panel .analyzed-word {
+            .analyzed-word {
                 font-size: 1.5rem;
             }
             .btn-row {
                 gap: 6px;
+            }
+            .makna-box {
+                font-size: 1rem;
+                padding: 10px;
             }
         }
         @media (min-width: 601px) and (max-width: 1024px) {
@@ -378,8 +429,6 @@
                 font-size: 0.85rem;
             }
         }
-
-        /* ============ SCROLLBAR ============ */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -390,8 +439,6 @@
             background: #d5c8b0;
             border-radius: 10px;
         }
-
-        /* print hidden */
         @media print {
             body {
                 background: #fff;
@@ -407,24 +454,21 @@
 </head>
 <body>
     <div class="main-container">
-
-        <!-- HEADER -->
         <div class="header">
             <h1>📖 تحليل ثلاثة الأصول</h1>
             <p class="subtitle">Analisis Nahwu, Sharaf & I'rob — Matan Tsalatsatul Ushul</p>
             <p class="subtitle" style="font-size:0.8rem;color:#8b7355;">Karya Syaikhul Islam Muhammad bin Abdul Wahhab رحمه الله</p>
         </div>
 
-        <!-- TEKS ARAB -->
-        <div class="card arabic-text-section">
+        <div class="card arabic-text-section" id="mainCard">
             <span class="section-label">📜 Teks Asli (Arab)</span>
-            <div class="arabic-text" id="arabicText">
-                <!-- Kata-kata akan di-generate oleh JavaScript -->
-            </div>
-            <p class="tap-hint">👆 <em>Klik/tap setiap kata untuk melihat analisis Nahwu, Sharaf & I'rob</em></p>
+            <div class="arabic-text" id="arabicText"></div>
+            <p class="tap-hint">👆 <em>Klik kata untuk analisis detail. Aktifkan "Makna Perkata" untuk melihat arti langsung.</em></p>
 
-            <!-- Tombol Aksi -->
             <div class="btn-row">
+                <button class="btn" id="btnMakna" onclick="toggleMakna()">
+                    <span class="icon">📝</span> Makna Perkata
+                </button>
                 <button class="btn" id="btnTranslation" onclick="toggleTranslation()">
                     <span class="icon">🌐</span> Terjemahan
                 </button>
@@ -436,14 +480,16 @@
                 </button>
             </div>
 
-            <!-- Panel Analisis Kata -->
             <div class="analysis-panel" id="analysisPanel">
                 <div class="analyzed-word" id="analyzedWordDisplay"></div>
+                <div class="makna-box" id="maknaDisplay">
+                    <span class="makna-label">📌 Makna</span>
+                    <span id="maknaText"></span>
+                </div>
                 <div id="analysisContent"></div>
                 <button class="close-analysis" onclick="closeAnalysis()">✕ Tutup Analisis</button>
             </div>
 
-            <!-- Panel Terjemahan -->
             <div class="translation-box" id="translationBox">
                 <strong>📝 Terjemahan Lengkap:</strong><br><br>
                 <strong>Kitab Tiga Landasan Utama</strong><br>
@@ -457,484 +503,537 @@
                 Dalilnya adalah firman Allah Ta’ala: <em>“Demi masa. Sesungguhnya seluruh manusia benar-benar berada dalam kerugian, kecuali orang-orang yang beriman, mengerjakan amal saleh, serta saling menasihati dalam kebenaran dan saling menasihati dalam kesabaran.”</em> (QS. Al-‘Ashr: 1-3)
             </div>
 
-            <!-- Panel Penjelasan Struktural -->
             <div class="structural-box" id="structuralBox">
                 <h3>📌 Penjelasan Struktural & Kaidah Penting</h3>
-
                 <h3>1. Struktur Idhafah pada Nama Pengarang</h3>
                 <p>Rangkaian <strong>محمد بن عبد الوهاب</strong> adalah susunan <em>badal</em>/pengganti. <strong>محمد</strong> sebagai badal dari <strong>شيخ الإسلام</strong>, i'robnya mengikuti (sama-sama majrur). Kata <strong>بن</strong> adalah mudhaf, <strong>عبد</strong> adalah mudhaf ilaih sekaligus mudhaf kepada <strong>الوهاب</strong>. Karena <strong>عبد</strong> dimudhafkan ke <strong>الوهاب</strong>, ia kehilangan tanwin. Seluruh rangkaian ini berfungsi sebagai 'athaf bayan atau badal yang menjelaskan identitas pengarang.</p>
-
                 <h3>2. Jumlah Mu'taridhah (Kalimat Sisipan Doa)</h3>
                 <p>Kalimat <strong>رحمك الله</strong> terletak di antara <strong>اعلم</strong> dan <strong>أنه</strong>. Ia adalah <em>jumlah mu'taridhah</em>, yaitu kalimat sisipan yang <strong>tidak memiliki kedudukan i'rob</strong> (لا محل لها من الإعراب). Fa'il <strong>رحم</strong> adalah <strong>الله</strong>, maf'ul bih <strong>ك</strong>. Meskipun bentuknya kalimat berita, maknanya adalah doa.</p>
-
                 <h3>3. Dhamir Sya'n dan Mashdar Muawwal</h3>
                 <p>Pada <strong>أنه يجب علينا تعلم أربع مسائل</strong>, dhamir <strong>ه</strong> adalah <em>dhamir sya'n</em> (kata ganti untuk menunjuk perkara besar). Ia adalah isim <strong>أن</strong>, dan jumlah <strong>يجب علينا تعلم...</strong> menjadi khabarnya. Keseluruhan <strong>أن + isim + khabar</strong> membentuk <em>mashdar muawwal</em> yang berfungsi sebagai <strong>maf'ul bih</strong> dari <strong>اعلم</strong>. Takdirnya: <strong>اعلم وجوب تعلم...</strong> (Ketahuilah kewajiban belajar…).</p>
-
                 <h3>4. Isim Ghairu Munsharif pada مسائل</h3>
                 <p>Kata <strong>مسائل</strong> adalah jamak taksir berpola <strong>مَفَاعِل</strong> (<em>shighah muntahal jumu'</em>). Setiap isim dengan pola ini termasuk <em>ghairu munsharif</em>, tidak menerima tanwin, dan ketika majrur tandanya adalah <strong>fathah</strong> sebagai pengganti kasrah. Itulah mengapa ia dibaca <strong>مَسَائِلَ</strong> meskipun menjadi mudhaf ilaih (posisi jarr).</p>
-
                 <h3>5. Jumlah Qasam dan Jawabnya pada Surah Al-'Ashr</h3>
                 <p><strong>والعصر</strong> terdiri dari waw qasam (huruf jar untuk sumpah) dan <strong>العصر</strong> sebagai muqsam bih. Jawab qasam-nya adalah <strong>إن الإنسان لفي خسر</strong>. Jumlah jawab qasam <strong>tidak memiliki mahal i'rob</strong> karena ia penerang sumpah. Kemudian <strong>إلا الذين آمنوا...</strong> adalah pengecualian (<em>istitsna'</em>) yang mengeluarkan sebagian dari keumuman manusia yang merugi. <strong>الذين</strong> adalah mustatsna manshub.</p>
-
                 <h3>6. Shilah Maushul</h3>
                 <p><strong>الذين</strong> adalah isim maushul. Semua kalimat setelahnya, yaitu <strong>آمنوا</strong>, <strong>وعملوا</strong>, <strong>وتواصوا</strong>, adalah <em>shilah maushul</em>. Shilah maushul <strong>tidak memiliki mahal i'rob</strong>; ia murni berfungsi menjelaskan makna isim maushul. Oleh karena itu, meskipun fi'il <strong>آمنوا</strong> diakhiri waw jama'ah, ia mabni dhammah dan tidak dipengaruhi oleh kedudukan isim maushul dalam kalimat.</p>
-
                 <h3>7. Lam Muzahlaqah pada لفي خسر</h3>
                 <p>Huruf <strong>ل</strong> pada <strong>لفي</strong> adalah <em>lam taukid</em> (penegas). Asalnya lam ini berada di awal kalimat sebagai lam ibtida', tetapi karena di awal sudah ada <strong>إن</strong> (yang juga berfungsi penegas), maka lam tersebut "digeser" ke khabar <strong>إن</strong>. Inilah yang disebut <em>lam muzahlaqah</em>. Ia tidak merubah i'rob, hanya menguatkan makna bahwa manusia <strong>"benar-benar"</strong> dalam kerugian.</p>
-
                 <h3>8. 'Athaf di dalam Shilah Maushul</h3>
                 <p>Pengulangan <strong>وتواصوا بالحق وتواصوا بالصبر</strong> adalah 'athaf jumlah fi'liyah kepada jumlah fi'liyah sebelumnya. Semua tetap menjadi bagian shilah maushul, sehingga hukum "tiada mahal i'rob" berlaku untuk seluruh rangkaiannya.</p>
-
                 <h3>9. Peran Basmalah di Dua Tempat</h3>
                 <p>Basmalah pertama (di awal kitab) adalah kalimat pembuka yang berkaitan dengan fi'il tersimpan (<strong>أبدأ</strong> atau <strong>أقرأ</strong>), berfungsi sebagai jar wa majrur. Basmalah kedua yang menjadi bagian kutipan firman Allah ta'ala berstatus sebagai ayat pertama surah Al-'Ashr (atau bagian dari lafaz yang dikutip). Ia tidak berdiri sendiri, melainkan bagian dari <strong>قوله تعالى</strong>. Secara i'rob, keduanya tetap dianalisis sebagai jar wa majrur yang berta'alluq pada fi'il yang tersirat.</p>
             </div>
         </div>
-
     </div>
 
     <script>
-        // ==================== DATA ANALISIS ====================
+        // ==================== DATA ANALISIS + MAKNA ====================
         const analysisData = {
-            // --- Judul & Pengarang ---
             'k_kitab': {
                 word: 'كِتَابُ',
+                makna: 'Kitab',
                 sharaf: 'Isim jamid, mudzakkar, mufrad. Akar ك-ت-ب, wazan فَعَال (nama benda).',
                 irob: 'Marfu\' (dhammah).',
                 nahwu: 'Mubtada\' (subjek) sebagai judul kitab.'
             },
             'k_tsalatsah': {
                 word: 'ثَلَاثَةِ',
+                makna: 'Tiga',
                 sharaf: 'Isim \'adad (bilangan), mudzakkar (karena ma\'dud-nya mudzakkar: أُصُوْل), mufrad. Akar ث-ل-ث.',
                 irob: 'Majrur (kasrah), karena idhafah (mudhaf).',
                 nahwu: 'Mudhaf; bagian dari frasa idhafah.'
             },
             'k_ushul': {
                 word: 'الْأُصُوْلِ',
+                makna: 'Landasan-landasan',
                 sharaf: 'Jamak taksir dari أَصْل, mudzakkar. Akar أ-ص-ل.',
                 irob: 'Majrur (kasrah), sebagai mudhaf ilaih.',
                 nahwu: 'Mudhaf ilaih. Makna lengkap: "Kitab Tiga Landasan".'
             },
             'k_talif': {
                 word: 'تَأْلِيْفُ',
+                makna: 'Karangan',
                 sharaf: 'Mashdar dari أَلَّفَ – يُؤَلِّفُ, wazan تَفْعِيْل. Akar أ-ل-ف.',
                 irob: 'Marfu\' (dhammah).',
                 nahwu: 'Khabar dari mubtada\' mahdzuf (taqdir: هٰذَا تَأْلِيْفُ).'
             },
             'k_syaikh': {
                 word: 'شَيْخِ',
+                makna: 'Syaikh',
                 sharaf: 'Isim, mudzakkar, mufrad. Akar ش-ي-خ.',
                 irob: 'Majrur (kasrah), idhafah (mudhaf).',
                 nahwu: 'Mudhaf; bagian dari frasa idhafah.'
             },
             'k_islam1': {
                 word: 'الْإِسْلَامِ',
+                makna: 'Islam',
                 sharaf: 'Isim, mudzakkar. Akar س-ل-م.',
                 irob: 'Majrur (kasrah), mudhaf ilaih.',
                 nahwu: 'Mudhaf ilaih. Frasa: "Syaikhul Islam".'
             },
             'k_muhammad': {
                 word: 'مُحَمَّدِ',
+                makna: 'Muhammad',
                 sharaf: 'Isim \'alam, mudzakkar.',
                 irob: 'Majrur, badal/pengganti dari شَيْخِ.',
                 nahwu: 'Badal dari Syaikhul Islam, i\'rob mengikuti.'
             },
             'k_bin': {
                 word: 'بْنِ',
+                makna: 'Putra',
                 sharaf: 'Isim, mudzakkar, mufrad. Asal اِبْن, hamzah washal dibuang di tengah kalimat.',
                 irob: 'Majrur, sebagai mudhaf.',
                 nahwu: 'Mudhaf. Frasa: "Muhammad bin Abdul Wahhab".'
             },
             'k_abd': {
                 word: 'عَبْدِ',
+                makna: 'Hamba',
                 sharaf: 'Isim, mudzakkar.',
                 irob: 'Majrur, mudhaf ilaih dari ابْنِ, dan menjadi mudhaf.',
                 nahwu: 'Mudhaf.'
             },
             'k_wahhab': {
                 word: 'الْوَهَّابِ',
+                makna: 'Maha Pemberi',
                 sharaf: 'Sifat musyabbahah (makna "Maha Pemberi"), wazan فَعَّال. Akar و-ه-ب.',
                 irob: 'Majrur, mudhaf ilaih dari عَبْدِ.',
                 nahwu: 'Mudhaf ilaih. Nama lengkap: Abdul Wahhab.'
             },
             'k_qaddasa': {
                 word: 'قَدَّسَ',
+                makna: 'Menyucikan',
                 sharaf: 'Fi\'il madhi, tsulatsi mujarrad (wazan فَعَّلَ). Akar ق-د-س.',
                 irob: 'Mabni fathah.',
                 nahwu: 'Fi\'il madhi dalam doa: "semoga menyucikan". Fa\'il dhamir mustatir هُوَ (Allah).'
             },
             'k_allah1': {
                 word: 'اللَّهُ',
+                makna: 'Allah',
                 sharaf: 'Lafdzul jalalah, isim \'alam.',
                 irob: 'Marfu\', fa\'il dari قَدَّسَ.',
                 nahwu: 'Pelaku (fa\'il).'
             },
             'k_ruhahu': {
                 word: 'رُوْحَهُ',
+                makna: 'Ruhnya',
                 sharaf: 'رُوْح: isim, mudzakkar. هُ: dhamir muttashil mudhaf ilaih. Akar ر-و-ح.',
                 irob: 'Manshub (fathah), maf\'ul bih.',
                 nahwu: 'Objek doa: "menyucikan ruhnya".'
             },
             'k_mutawaffa': {
                 word: 'الْمُتَوَفَّى',
+                makna: 'Wafat',
                 sharaf: 'Isim maf\'ul dari تَوَفَّى – يَتَوَفَّى, wazan مُتَفَعِّل, makna "yang diwafatkan".',
                 irob: 'Marfu\', na\'at/sifat dari dhamir tersirat.',
                 nahwu: 'Sifat dari Muhammad bin Abdul Wahhab.'
             },
             'k_sanah': {
                 word: 'سَنَةَ',
+                makna: 'Tahun',
                 sharaf: 'Isim, muannats.',
                 irob: 'Manshub, zharaf zaman (keterangan waktu).',
                 nahwu: 'Menjelaskan waktu wafat.'
             },
             'k_1206': {
                 word: '١٢٠٦',
+                makna: '1206',
                 sharaf: '\'Adad (angka), mabni.',
                 irob: 'Mabni sukun, mahal jarr sebagai mudhaf ilaih.',
                 nahwu: 'Mudhaf ilaih dari سَنَةَ.'
             },
             'k_ha': {
                 word: 'هـ',
+                makna: 'Hijriyah',
                 sharaf: 'Singkatan dari هِجْرِيَّة, isim, muannats.',
                 irob: 'Majrur, na\'at/sifat dari سَنَةَ (taqdir: سَنَةٍ هِجْرِيَّةٍ).',
                 nahwu: 'Sifat yang i\'robnya mengikuti.'
             },
-            // --- Basmalah pertama ---
             'k_bismi1': {
                 word: 'بِسْمِ',
+                makna: 'Dengan nama',
                 sharaf: 'بِ: harf jarr. اسْمِ: isim, asal سِمْو, hamzah washal hilang karena didahului huruf jarr. Akar س-م-و.',
                 irob: 'Majrur (kasrah).',
                 nahwu: 'Jar wa majrur, berkaitan dengan fi\'il tersimpan (taqdir: أَبْدَأُ).'
             },
             'k_allah_b1': {
                 word: 'اللَّهِ',
+                makna: 'Allah',
                 sharaf: 'Lafdzul jalalah.',
                 irob: 'Majrur, mudhaf ilaih dari اسْمِ.',
                 nahwu: 'Mudhaf ilaih.'
             },
             'k_rahman1': {
                 word: 'الرَّحْمٰنِ',
+                makna: 'Maha Pengasih',
                 sharaf: 'Sifat musyabbahah, wazan فَعْلَان. Akar ر-ح-م.',
                 irob: 'Majrur, badal/na\'at dari lafdzul jalalah.',
                 nahwu: 'Sifat pertama.'
             },
             'k_rahim1': {
                 word: 'الرَّحِيْمِ',
+                makna: 'Maha Penyayang',
                 sharaf: 'Sifat musyabbahah, wazan فَعِيْل.',
                 irob: 'Majrur, na\'at kedua.',
                 nahwu: 'Sifat kedua.'
             },
-            // --- Kalimat Utama ---
             'k_ilam': {
                 word: 'اِعْلَمْ',
+                makna: 'Ketahuilah',
                 sharaf: 'Fi\'il amr (perintah), tsulatsi mujarrad. Akar ع-ل-م.',
                 irob: 'Mabni sukun.',
                 nahwu: 'Fi\'il amr. Fa\'il: mustatir أَنْتَ (kamu).'
             },
             'k_rahima': {
                 word: 'رَحِمَ',
+                makna: 'Merahmati',
                 sharaf: 'Fi\'il madhi, tsulatsi mujarrad. Akar ر-ح-م.',
                 irob: 'Mabni fathah.',
                 nahwu: 'Fi\'il dalam doa. Fa\'il: الله.'
             },
             'k_ka': {
                 word: 'كَ',
+                makna: 'Kamu',
                 sharaf: 'Dhamir muttashil, mukhatab (orang kedua).',
                 irob: 'Mahal nashab, maf\'ul bih.',
                 nahwu: 'Objek dari رَحِمَ.'
             },
             'k_allah2': {
                 word: 'اللَّهُ',
+                makna: 'Allah',
                 sharaf: 'Lafdzul jalalah.',
                 irob: 'Marfu\', fa\'il dari رَحِمَ.',
                 nahwu: 'Pelaku doa.'
             },
             'k_annahu': {
                 word: 'أَنَّهُ',
+                makna: 'Bahwa',
                 sharaf: 'أَنَّ: harf taukid. هُ: dhamir sya\'n, isim dari أَنَّ.',
                 irob: 'هُ: mahal nashab sebagai isim أَنَّ.',
                 nahwu: 'Mashdar muawwal dari أَنَّ + isim + khabar menjadi maf\'ul bih dari اِعْلَمْ.'
             },
             'k_yajibu': {
                 word: 'يَجِبُ',
+                makna: 'Wajib',
                 sharaf: 'Fi\'il mudhari\', akar و-ج-ب.',
                 irob: 'Marfu\' (dhammah).',
                 nahwu: 'Khabar dari أَنَّ.'
             },
             'k_alaina': {
                 word: 'عَلَيْنَا',
+                makna: 'Atas kita',
                 sharaf: 'عَلَى: harf jarr. نَا: dhamir muttashil.',
                 irob: 'Majrur mahallan.',
                 nahwu: 'Jar wa majrur, berta\'alluq dengan يَجِبُ.'
             },
             'k_tallamu': {
                 word: 'تَعَلُّمُ',
+                makna: 'Mempelajari',
                 sharaf: 'Mashdar dari تَعَلَّمَ – يَتَعَلَّمُ, wazan تَفَعُّل. Akar ع-ل-م.',
                 irob: 'Marfu\', fa\'il dari يَجِبُ.',
                 nahwu: 'Pelaku wajib: "wajib atas kita mempelajari".'
             },
             'k_arba': {
                 word: 'أَرْبَعِ',
+                makna: 'Empat',
                 sharaf: 'Isim \'adad, mudzakkar (ma\'dud: مَسَائِل muannats).',
                 irob: 'Majrur, mudhaf.',
                 nahwu: 'Mudhaf.'
             },
             'k_masaila': {
                 word: 'مَسَائِلَ',
+                makna: 'Masalah',
                 sharaf: 'Jamak taksir dari مَسْأَلَة, muannats.',
                 irob: 'Majrur (fathah sebagai ganti kasrah karena ghairu munsharif).',
                 nahwu: 'Mudhaf ilaih.'
             },
             'k_ula': {
                 word: 'الْأُوْلٰى',
+                makna: 'Pertama',
                 sharaf: 'Isim tafdhil/urutan, muannats, asal الأُوْلَى (alif maqsurah).',
                 irob: 'Marfu\' (dhammah muqaddarah), khabar mubtada\' mahdzuf.',
                 nahwu: '"Pertama: …"'
             },
-            // --- Perincian ---
             'k_ilmu': {
                 word: 'الْعِلْمُ',
+                makna: 'Ilmu',
                 sharaf: 'Isim, mudzakkar, akar ع-ل-م.',
                 irob: 'Marfu\', khabar dari mubtada\' mahdzuf.',
                 nahwu: 'Isi perkara pertama.'
             },
             'k_wahuwa': {
                 word: 'وَهُوَ',
+                makna: 'Dan ia',
                 sharaf: 'وَ: harf \'athaf. هُوَ: dhamir munfashil.',
                 irob: 'Mahal rafa\', mubtada\'.',
                 nahwu: 'Subjek penjelas.'
             },
             'k_marifah1': {
                 word: 'مَعْرِفَةُ',
+                makna: 'Mengenal',
                 sharaf: 'Mashdar dari عَرَفَ, akar ع-ر-ف.',
                 irob: 'Marfu\', khabar dari هُوَ.',
                 nahwu: 'Predikat: "Ia adalah mengenal".'
             },
             'k_allah3': {
                 word: 'اللَّهِ',
+                makna: 'Allah',
                 sharaf: 'Lafdzul jalalah.',
                 irob: 'Majrur, mudhaf ilaih.',
                 nahwu: 'Yang dikenal.'
             },
             'k_wamarifah_nabiyyihi': {
                 word: 'وَمَعْرِفَةُ نَبِيِّهِ',
+                makna: 'Dan mengenal Nabi-Nya',
                 sharaf: 'وَ: \'athaf. مَعْرِفَةُ: ma\'thuf marfu\', نَبِيِّ: mudhaf ilaih majrur, هِ: mudhaf ilaih.',
                 irob: 'Mengikuti i\'rob sebelumnya.',
                 nahwu: 'Pengetahuan mengenal Nabi-Nya.'
             },
             'k_wamarifah_din': {
                 word: 'وَمَعْرِفَةُ دِيْنِ الْإِسْلَامِ',
+                makna: 'Dan mengenal agama Islam',
                 sharaf: 'Pola sama. دِيْنِ: mudhaf ilaih majrur, الْإِسْلَامِ: mudhaf ilaih kedua.',
                 irob: 'Ma\'thuf.',
                 nahwu: 'Pengetahuan agama Islam.'
             },
             'k_biladillah': {
                 word: 'بِالْأَدِلَّةِ',
+                makna: 'Dengan dalil-dalil',
                 sharaf: 'بِ: harf jarr. الْأَدِلَّةِ: jamak taksir dari دَلِيْل, muannats ma\'nawi.',
                 irob: 'Majrur (kasrah), berta\'alluq dengan مَعْرِفَةُ.',
                 nahwu: 'Cara mengenal: dengan dalil-dalil.'
             },
             'k_thaniyah': {
                 word: 'الثَّانِيَةُ',
+                makna: 'Kedua',
                 sharaf: 'Isim urutan, muannats.',
                 irob: 'Marfu\', khabar mubtada\' mahdzuf.',
                 nahwu: '"Kedua".'
             },
             'k_amal': {
                 word: 'الْعَمَلُ',
+                makna: 'Amal',
                 sharaf: 'Isim, mudzakkar.',
                 irob: 'Marfu\', khabar mubtada\' mahdzuf.',
                 nahwu: 'Isi perkara kedua.'
             },
             'k_bihi': {
                 word: 'بِهِ',
+                makna: 'Dengannya',
                 sharaf: 'بِ: harf jarr. هِ: dhamir muttashil.',
                 irob: 'Majrur mahallan, berta\'alluq dengan الْعَمَلُ.',
                 nahwu: '"dengannya (ilmu itu)".'
             },
             'k_thalithah': {
                 word: 'الثَّالِثَةُ',
+                makna: 'Ketiga',
                 sharaf: 'Isim urutan.',
                 irob: 'Marfu\'.',
                 nahwu: '"Ketiga".'
             },
             'k_dakwah': {
                 word: 'الدَّعْوَةُ',
+                makna: 'Dakwah',
                 sharaf: 'Isim.',
                 irob: 'Marfu\', khabar.',
                 nahwu: 'Isi perkara ketiga.'
             },
             'k_ilaihi': {
                 word: 'إِلَيْهِ',
+                makna: 'Kepadanya',
                 sharaf: 'إِلَى: harf jarr. هِ: dhamir.',
                 irob: 'Majrur, berta\'alluq dengan الدَّعْوَةُ.',
                 nahwu: '"kepadanya (ilmu itu)".'
             },
             'k_rabiah': {
                 word: 'الرَّابِعَةُ',
+                makna: 'Keempat',
                 sharaf: 'Isim urutan.',
                 irob: 'Marfu\'.',
                 nahwu: '"Keempat".'
             },
             'k_sabr': {
                 word: 'الصَّبْرُ',
+                makna: 'Sabar',
                 sharaf: 'Isim.',
                 irob: 'Marfu\', khabar.',
                 nahwu: 'Isi perkara keempat.'
             },
             'k_ala_adza': {
                 word: 'عَلَى الْأَذَى',
+                makna: 'Atas gangguan',
                 sharaf: 'عَلَى: harf jarr. الْأَذَى: isim, mu\'rab taqdiri (alif maqsurah).',
                 irob: 'Majrur, berta\'alluq dengan الصَّبْرُ.',
                 nahwu: '"atas gangguan".'
             },
             'k_fihi': {
                 word: 'فِيْهِ',
+                makna: 'Di dalamnya',
                 sharaf: 'فِي: harf jarr. هِ: dhamir.',
                 irob: 'Majrur, berta\'alluq dengan الْأَذَى atau الصَّبْرُ.',
                 nahwu: '"di dalamnya (dalam menjalankan dakwah)".'
             },
-            // --- Dalil & Ayat ---
             'k_wad dalil': {
                 word: 'وَالدَّلِيْلُ',
+                makna: 'Dan dalil',
                 sharaf: 'وَ: isti\'nafiyah. الدَّلِيْلُ: isim.',
                 irob: 'Marfu\', mubtada\'.',
                 nahwu: 'Subjek.'
             },
             'k_qawluhu': {
                 word: 'قَوْلُهُ',
+                makna: 'Firman-Nya',
                 sharaf: 'قَوْل: isim mudhaf. هُ: dhamir mudhaf ilaih.',
                 irob: 'Marfu\', khabar.',
                 nahwu: 'Predikat. Makna: "Dalilnya adalah firman-Nya".'
             },
             'k_taala': {
                 word: 'تَعَالَى',
+                makna: 'Yang Maha Tinggi',
                 sharaf: 'Fi\'il madhi, akar ع-ل-و, wazan تَفَاعَلَ.',
                 irob: 'Mabni fathah taqdiri pada alif.',
                 nahwu: 'Doa/penghormatan. Fa\'il mustatir هُوَ.'
             },
             'k_bismi2': {
                 word: 'بِسْمِ',
+                makna: 'Dengan nama',
                 sharaf: 'Sama dengan basmalah sebelumnya.',
                 irob: 'Majrur, berta\'alluq pada fi\'il tersimpan.',
                 nahwu: 'Bagian dari ayat yang dikutip.'
             },
             'k_allah_b2': {
                 word: 'اللَّهِ',
+                makna: 'Allah',
                 sharaf: 'Lafdzul jalalah.',
                 irob: 'Majrur.',
                 nahwu: 'Mudhaf ilaih (basmalah ayat).'
             },
             'k_rahman2': {
                 word: 'الرَّحْمٰنِ',
+                makna: 'Maha Pengasih',
                 sharaf: 'Sifat musyabbahah, wazan فَعْلَان.',
                 irob: 'Majrur, na\'at.',
                 nahwu: 'Sifat.'
             },
             'k_rahim2': {
                 word: 'الرَّحِيْمِ',
+                makna: 'Maha Penyayang',
                 sharaf: 'Sifat musyabbahah, wazan فَعِيْل.',
                 irob: 'Majrur, na\'at.',
                 nahwu: 'Sifat.'
             },
             'k_wal asr': {
                 word: 'وَالْعَصْرِ',
+                makna: 'Demi masa',
                 sharaf: 'وَ: waw qasam (sumpah). الْعَصْرِ: muqsam bih.',
                 irob: 'Majrur (kasrah).',
                 nahwu: 'Jumlah qasam. Jawab qasam adalah kalimat berikutnya.'
             },
             'k_inna': {
                 word: 'إِنَّ',
+                makna: 'Sesungguhnya',
                 sharaf: 'Harf taukid.',
                 irob: '–',
                 nahwu: 'Menashabkan isim dan merafa\'kan khabar.'
             },
             'k_insan': {
                 word: 'الْإِنْسَانَ',
+                makna: 'Manusia',
                 sharaf: 'Isim.',
                 irob: 'Manshub, isim إِنَّ.',
                 nahwu: 'Subjek yang dikuatkan.'
             },
             'k_la': {
                 word: 'لَ',
+                makna: 'Benar-benar',
                 sharaf: 'Lam taukid (penegas).',
                 irob: '–',
                 nahwu: 'Masuk pada khabar untuk penguatan.'
             },
             'k_fi_khusr': {
                 word: 'فِي خُسْرٍ',
+                makna: 'Dalam kerugian',
                 sharaf: 'فِي: harf jarr. خُسْرٍ: isim.',
                 irob: 'Jar wa majrur, khabar إِنَّ.',
                 nahwu: 'Predikat: "benar-benar dalam kerugian".'
             },
             'k_illa': {
                 word: 'إِلَّا',
+                makna: 'Kecuali',
                 sharaf: 'Harf istitsna\' (pengecualian).',
                 irob: '–',
                 nahwu: 'Memulai pengecualian.'
             },
             'k_alladhina': {
                 word: 'الَّذِينَ',
+                makna: 'Orang-orang yang',
                 sharaf: 'Isim maushul (kata hubung).',
                 irob: 'Manshub sebagai mustatsna.',
                 nahwu: 'Yang dikecualikan dari الْإِنْسَان.'
             },
             'k_amanu': {
                 word: 'آمَنُوا',
+                makna: 'Beriman',
                 sharaf: 'Fi\'il madhi, jamak mudzakkar ghaib, akar أ-م-ن.',
                 irob: 'Mabni dhammah (waw jama\'ah).',
                 nahwu: 'Shilah maushul, tidak ada mahal i\'rob.'
             },
             'k_waamilu': {
                 word: 'وَعَمِلُوا',
+                makna: 'Dan mengerjakan',
                 sharaf: 'Fi\'il madhi, ma\'thuf pada آمَنُوا.',
                 irob: 'Mabni dhammah.',
                 nahwu: 'Shilah, ma\'thuf.'
             },
             'k_salihat': {
                 word: 'الصَّالِحَاتِ',
+                makna: 'Amal saleh',
                 sharaf: 'Jamak muannats salim, maf\'ul bih dari عَمِلُوا.',
                 irob: 'Manshub (kasrah, karena jamak muannats salim).',
                 nahwu: 'Objek amal.'
             },
             'k_tawasaw1': {
                 word: 'وَتَوَاصَوْا',
+                makna: 'Dan saling menasihati',
                 sharaf: 'Fi\'il madhi dari تَوَاصَى, jamak.',
                 irob: 'Mabni dhammah muqaddarah pada alif yang dibuang.',
                 nahwu: 'Shilah, ma\'thuf.'
             },
             'k_bilhaqq': {
                 word: 'بِالْحَقِّ',
+                makna: 'Dalam kebenaran',
                 sharaf: 'بِ: harf jarr. الْحَقِّ: isim.',
                 irob: 'Majrur, berta\'alluq dengan تَوَاصَوْا.',
                 nahwu: '"dalam kebenaran".'
             },
             'k_tawasaw2': {
                 word: 'وَتَوَاصَوْا',
+                makna: 'Dan saling menasihati',
                 sharaf: 'Fi\'il madhi, sama seperti sebelumnya.',
                 irob: 'Mabni dhammah muqaddarah.',
                 nahwu: 'Ma\'thuf pada تَوَاصَوْا pertama.'
             },
             'k_bissabr': {
                 word: 'بِالصَّبْرِ',
+                makna: 'Dalam kesabaran',
                 sharaf: 'بِ: harf jarr. الصَّبْرِ: isim.',
                 irob: 'Majrur, berta\'alluq.',
                 nahwu: '"dalam kesabaran".'
             },
             'k_ayat1': {
                 word: '١',
+                makna: '1',
                 sharaf: '\'Adad, mabni.',
                 irob: 'Tanpa i\'rob.',
                 nahwu: 'Nomor ayat.'
             },
         };
 
-        // ==================== TEKS ARAB DENGAN DATA-ID ====================
+        // ==================== SUSUNAN TEKS ARAB ====================
         const arabicWords = [
-            // Judul
             { id: 'k_kitab', text: 'كِتَابُ', spacerAfter: ' ' },
             { id: 'k_tsalatsah', text: 'ثَلَاثَةِ', spacerAfter: ' ' },
             { id: 'k_ushul', text: 'الْأُصُوْلِ', spacerAfter: '\n' },
-            // Pengarang
             { id: 'k_talif', text: 'تَأْلِيْفُ', spacerAfter: ' ' },
             { id: 'k_syaikh', text: 'شَيْخِ', spacerAfter: ' ' },
             { id: 'k_islam1', text: 'الْإِسْلَامِ', spacerAfter: ' ' },
@@ -949,12 +1048,10 @@
             { id: 'k_sanah', text: 'سَنَةَ', spacerAfter: ' ' },
             { id: 'k_1206', text: '١٢٠٦', spacerAfter: ' ' },
             { id: 'k_ha', text: 'هـ', spacerAfter: '\n' },
-            // Basmalah pertama
             { id: 'k_bismi1', text: 'بِسْمِ', spacerAfter: ' ' },
             { id: 'k_allah_b1', text: 'اللَّهِ', spacerAfter: ' ' },
             { id: 'k_rahman1', text: 'الرَّحْمٰنِ', spacerAfter: ' ' },
             { id: 'k_rahim1', text: 'الرَّحِيْمِ', spacerAfter: '\n' },
-            // Kalimat utama
             { id: 'k_ilam', text: 'اِعْلَمْ', spacerAfter: ' ' },
             { id: 'k_rahima', text: 'رَحِمَ', spacerAfter: '' },
             { id: 'k_ka', text: 'كَ', spacerAfter: ' ' },
@@ -965,7 +1062,6 @@
             { id: 'k_tallamu', text: 'تَعَلُّمُ', spacerAfter: ' ' },
             { id: 'k_arba', text: 'أَرْبَعِ', spacerAfter: ' ' },
             { id: 'k_masaila', text: 'مَسَائِلَ', spacerAfter: ':\n' },
-            // Perincian
             { id: 'k_ula', text: 'الْأُوْلٰى', spacerAfter: ': ' },
             { id: 'k_ilmu', text: 'الْعِلْمُ', spacerAfter: '.\n' },
             { id: 'k_wahuwa', text: 'وَهُوَ', spacerAfter: ' ' },
@@ -984,7 +1080,6 @@
             { id: 'k_sabr', text: 'الصَّبْرُ', spacerAfter: ' ' },
             { id: 'k_ala_adza', text: 'عَلَى الْأَذَى', spacerAfter: ' ' },
             { id: 'k_fihi', text: 'فِيْهِ', spacerAfter: '.\n' },
-            // Dalil
             { id: 'k_wad dalil', text: 'وَالدَّلِيْلُ', spacerAfter: ' ' },
             { id: 'k_qawluhu', text: 'قَوْلُهُ', spacerAfter: ' ' },
             { id: 'k_taala', text: 'تَعَالَى', spacerAfter: ': ' },
@@ -1011,46 +1106,61 @@
             { id: 'k_ayat1', text: '١', spacerAfter: '' },
         ];
 
-        // ==================== RENDER TEKS ARAB ====================
+        let showMakna = false; // Status tombol makna perkata
+
+        // Render teks Arab dengan dukungan makna di bawah kata
         function renderArabicText() {
             const container = document.getElementById('arabicText');
             container.innerHTML = '';
 
-            arabicWords.forEach((item, index) => {
+            // Atur class container untuk menunjukkan makna
+            if (showMakna) {
+                container.classList.add('show-makna');
+            } else {
+                container.classList.remove('show-makna');
+            }
+
+            arabicWords.forEach((item) => {
                 if (item.id && analysisData[item.id]) {
-                    const span = document.createElement('span');
-                    span.className = 'word';
-                    span.textContent = item.text;
-                    span.dataset.analysisId = item.id;
-                    span.dataset.index = index;
-                    span.addEventListener('click', function(e) {
+                    const unit = document.createElement('span');
+                    unit.className = 'word-unit';
+
+                    const wordSpan = document.createElement('span');
+                    wordSpan.className = 'word-arab';
+                    wordSpan.textContent = item.text;
+                    wordSpan.dataset.analysisId = item.id;
+                    wordSpan.addEventListener('click', function(e) {
                         e.stopPropagation();
-                        showAnalysis(item.id, span);
+                        showAnalysis(item.id, wordSpan);
                     });
-                    span.title = 'Klik untuk analisis';
-                    container.appendChild(span);
+                    wordSpan.title = 'Klik untuk analisis detail';
+
+                    const maknaSpan = document.createElement('span');
+                    maknaSpan.className = 'word-makna';
+                    maknaSpan.textContent = analysisData[item.id].makna || '—';
+
+                    unit.appendChild(wordSpan);
+                    unit.appendChild(maknaSpan);
+                    container.appendChild(unit);
                 } else if (item.id === null && (item.text === '{' || item.text === '}')) {
-                    // Kurung kurawal sebagai spacer biasa
-                    const span = document.createElement('span');
-                    span.className = 'word spacer';
-                    span.textContent = item.text;
-                    container.appendChild(span);
+                    const spacer = document.createElement('span');
+                    spacer.className = 'text-spacer';
+                    spacer.textContent = item.text;
+                    container.appendChild(spacer);
                 } else if (item.id === null) {
-                    const span = document.createElement('span');
-                    span.className = 'word spacer';
-                    span.textContent = item.text;
-                    container.appendChild(span);
+                    const spacer = document.createElement('span');
+                    spacer.className = 'text-spacer';
+                    spacer.textContent = item.text;
+                    container.appendChild(spacer);
                 } else {
-                    // Fallback: tetap buat span tapi tanpa klik
-                    const span = document.createElement('span');
-                    span.className = 'word';
-                    span.textContent = item.text;
-                    span.style.cursor = 'default';
-                    span.style.borderBottom = 'none';
-                    container.appendChild(span);
+                    const wordSpan = document.createElement('span');
+                    wordSpan.className = 'word-arab';
+                    wordSpan.textContent = item.text;
+                    wordSpan.style.cursor = 'default';
+                    wordSpan.style.borderBottom = 'none';
+                    container.appendChild(wordSpan);
                 }
 
-                // Tambahkan spacer text
                 if (item.spacerAfter) {
                     const spacerText = document.createTextNode(item.spacerAfter);
                     container.appendChild(spacerText);
@@ -1058,116 +1168,112 @@
             });
         }
 
-        // ==================== TAMPILKAN ANALISIS ====================
+        // Tombol Makna Perkata
+        function toggleMakna() {
+            showMakna = !showMakna;
+            const btn = document.getElementById('btnMakna');
+            if (showMakna) {
+                btn.classList.add('active-btn');
+                btn.innerHTML = '<span class="icon">📝</span> Sembunyikan Makna';
+            } else {
+                btn.classList.remove('active-btn');
+                btn.innerHTML = '<span class="icon">📝</span> Makna Perkata';
+            }
+            renderArabicText();
+            // Jika panel analisis terbuka, tutup agar tidak mengganggu
+            if (document.getElementById('analysisPanel').classList.contains('visible')) {
+                closeAnalysis();
+            }
+        }
+
         let currentlyActiveSpan = null;
 
         function showAnalysis(analysisId, spanElement) {
             const data = analysisData[analysisId];
             if (!data) return;
 
-            // Hapus class active dari span sebelumnya
             if (currentlyActiveSpan) {
                 currentlyActiveSpan.classList.remove('active');
             }
-            // Tandai span yang aktif
             spanElement.classList.add('active');
             currentlyActiveSpan = spanElement;
 
+            document.getElementById('analyzedWordDisplay').textContent = data.word;
+            document.getElementById('maknaText').textContent = data.makna || '—';
+            document.getElementById('analysisContent').innerHTML = `
+                <table>
+                    <tr><th>📐 Sharaf</th><td>${data.sharaf}</td></tr>
+                    <tr><th>📏 I'rob</th><td>${data.irob}</td></tr>
+                    <tr><th>🧩 Nahwu</th><td>${data.nahwu}</td></tr>
+                </table>
+            `;
             const panel = document.getElementById('analysisPanel');
-            const wordDisplay = document.getElementById('analyzedWordDisplay');
-            const content = document.getElementById('analysisContent');
-
-            wordDisplay.textContent = data.word;
-
-            content.innerHTML = `
-                        <table>
-                            <tr><th>📐 Sharaf (Bentuk Kata)</th><td>${data.sharaf}</td></tr>
-                            <tr><th>📏 I'rob (Kondisi Akhir)</th><td>${data.irob}</td></tr>
-                            <tr><th>🧩 Nahwu (Fungsi)</th><td>${data.nahwu}</td></tr>
-                        </table>
-                    `;
-
             panel.classList.add('visible');
-            // Scroll panel ke view jika perlu
             panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function closeAnalysis() {
-            const panel = document.getElementById('analysisPanel');
-            panel.classList.remove('visible');
+            document.getElementById('analysisPanel').classList.remove('visible');
             if (currentlyActiveSpan) {
                 currentlyActiveSpan.classList.remove('active');
                 currentlyActiveSpan = null;
             }
             document.getElementById('analyzedWordDisplay').textContent = '';
+            document.getElementById('maknaText').textContent = '';
             document.getElementById('analysisContent').innerHTML =
-            '<p class="no-data">Klik salah satu kata di teks Arab untuk melihat analisis.</p>';
+                '<p class="no-data">Klik salah satu kata untuk melihat makna & analisis.</p>';
         }
 
-        // ==================== TOGGLE TERJEMAHAN ====================
         function toggleTranslation() {
             const box = document.getElementById('translationBox');
             const btn = document.getElementById('btnTranslation');
             box.classList.toggle('visible');
             btn.classList.toggle('active-btn');
-            if (box.classList.contains('visible')) {
-                box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+            if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // ==================== TOGGLE STRUKTURAL ====================
         function toggleStructural() {
             const box = document.getElementById('structuralBox');
             const btn = document.getElementById('btnStructural');
             box.classList.toggle('visible');
             btn.classList.toggle('active-btn');
-            if (box.classList.contains('visible')) {
-                box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+            if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // ==================== RESET ====================
         function resetAll() {
             closeAnalysis();
             document.getElementById('translationBox').classList.remove('visible');
             document.getElementById('btnTranslation').classList.remove('active-btn');
             document.getElementById('structuralBox').classList.remove('visible');
             document.getElementById('btnStructural').classList.remove('active-btn');
-            document.getElementById('analysisContent').innerHTML =
-                '<p class="no-data">Klik salah satu kata di teks Arab untuk melihat analisis.</p>';
+            // Matikan makna perkata jika aktif
+            if (showMakna) {
+                toggleMakna(); // akan mereset ke off
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ==================== KLIK DI LUAR UNTUK MENUTUP ANALISIS ====================
         document.addEventListener('click', function(e) {
             const panel = document.getElementById('analysisPanel');
             const arabicContainer = document.getElementById('arabicText');
-            if (panel.classList.contains('visible') &&
-                !panel.contains(e.target) &&
-                !arabicContainer.contains(e.target)) {
+            if (panel.classList.contains('visible') && !panel.contains(e.target) && !arabicContainer.contains(e
+                    .target)) {
                 closeAnalysis();
             }
         });
 
-        // ==================== KEYBOARD ESC UNTUK MENUTUP ====================
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const panel = document.getElementById('analysisPanel');
-                if (panel.classList.contains('visible')) {
-                    closeAnalysis();
-                }
+            if (e.key === 'Escape' && document.getElementById('analysisPanel').classList.contains('visible')) {
+                closeAnalysis();
             }
         });
 
-        // ==================== INISIALISASI ====================
-        function init() {
+        document.addEventListener('DOMContentLoaded', function() {
             renderArabicText();
             document.getElementById('analysisContent').innerHTML =
-                '<p class="no-data">👆 Klik salah satu kata di teks Arab untuk melihat analisis Nahwu, Sharaf & I\'rob.</p>';
-        }
-
-        // Jalankan setelah DOM siap
-        document.addEventListener('DOMContentLoaded', init);
+                '<p class="no-data">👆 Klik kata di atas untuk melihat <strong>makna</strong> lalu analisis Nahwu, Sharaf & I\'rob.</p>';
+            document.getElementById('maknaText').textContent = '';
+        });
     </script>
 </body>
 </html>
