@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Lengkap — تأليف شيخ الإسلام...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f6f2ea;
+            --card-bg: #ffffff;
+            --text: #2d2a24;
+            --primary: #1a365d;
+            --primary-light: #2a4a7a;
+            --gold: #c9a84c;
+            --gold-light: #faf3e0;
+            --gold-pale: #fef8ed;
+            --border: #d4c9b5;
+            --shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 36px rgba(0, 0, 0, 0.10);
+            --radius: 14px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-arabic: 'Scheherazade New', 'Traditional Arabic', 'Times New Roman', serif;
+            --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-ui);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 16px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .main-container {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--gold), var(--primary));
+            border-radius: 4px 4px 0 0;
+        }
+        .header .badge {
+            display: inline-block;
+            background: var(--gold-light);
+            color: var(--primary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 3px 18px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            border: 1px solid #e6d9b8;
+        }
+        .header h1 {
+            font-family: var(--font-arabic);
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.6;
+            margin-bottom: 4px;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: #6b5f4a;
+            margin-top: 2px;
+        }
+        .header .subtitle em {
+            font-style: italic;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ─── CARD ─── */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #7a6b55;
+            margin-bottom: 12px;
+            font-weight: 600;
+            background: var(--gold-light);
+            padding: 4px 16px;
+            border-radius: 20px;
+            border: 1px solid #e6d9b8;
+        }
+
+        /* ─── ARABIC TEXT ─── */
+        .arabic-text {
+            font-family: var(--font-arabic);
+            font-size: 2.0rem;
+            line-height: 2.2;
+            text-align: center;
+            color: #1f1b16;
+            direction: rtl;
+            unicode-bidi: embed;
+            word-spacing: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 6px 10px;
+            padding: 8px 0;
+        }
+        .word-unit {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 1px;
+        }
+        .word-arab {
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            font-family: var(--font-arabic);
+            font-size: inherit;
+            line-height: inherit;
+            color: inherit;
+            background: transparent;
+            position: relative;
+        }
+        .word-arab:hover {
+            background: var(--gold-pale);
+            border-bottom-color: var(--gold);
+            color: #3d2e12;
+        }
+        .word-arab.active {
+            background: #f5e9c8;
+            border-bottom-color: var(--gold);
+            font-weight: 700;
+            color: #1f2a3a;
+            box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.20);
+            border-radius: 8px;
+        }
+        .word-makna {
+            font-size: 0.75rem;
+            color: #5c4e36;
+            font-family: var(--font-ui);
+            background: var(--gold-pale);
+            border-radius: 4px;
+            padding: 2px 8px;
+            white-space: nowrap;
+            margin-top: 2px;
+            display: none;
+            line-height: 1.3;
+            border: 1px solid #e6d9b8;
+        }
+        .show-makna .word-makna {
+            display: inline-block;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a3f2f;
+            transition: var(--transition);
+            font-family: var(--font-ui);
+            user-select: none;
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background: var(--gold-pale);
+            border-color: var(--gold);
+            color: #3d2e12;
+        }
+        .btn.active-btn {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .btn.active-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+
+        /* ─── PANELS ─── */
+        .analysis-panel,
+        .translation-box,
+        .structural-box {
+            display: none;
+            margin-top: 18px;
+            background: #fcf9f4;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 22px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeSlide 0.3s ease;
+            direction: ltr;
+            text-align: left;
+        }
+        .analysis-panel.visible,
+        .translation-box.visible,
+        .structural-box.visible {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .analyzed-word {
+            font-family: var(--font-arabic);
+            font-size: 2.4rem;
+            color: var(--primary);
+            text-align: center;
+            direction: rtl;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        .makna-box {
+            background: linear-gradient(135deg, var(--gold-pale), #f6edd8);
+            border: 1px solid #e0cfaa;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-bottom: 14px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3d2e12;
+        }
+        .makna-box .makna-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #a08040;
+            display: block;
+            margin-bottom: 2px;
+            font-family: var(--font-ui);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        table th,
+        table td {
+            padding: 10px 14px;
+            border: 1px solid #e0d5c1;
+            vertical-align: top;
+        }
+        table th {
+            background: #f5efe4;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        table td {
+            background: #fefcf8;
+        }
+        .close-btn {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 7px 20px;
+            background: #f0eade;
+            border: 1px solid #d4c9b5;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a3f2f;
+            transition: var(--transition);
+        }
+        .close-btn:hover {
+            background: #e0d5c1;
+        }
+        .hint {
+            font-size: 0.8rem;
+            color: #a09080;
+            text-align: center;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        /* ─── STRUCTURAL BOX ─── */
+        .structural-box {
+            max-height: 75vh;
+            overflow-y: auto;
+            padding: 22px 26px;
+            line-height: 1.8;
+            direction: ltr;
+            text-align: left;
+        }
+        .structural-box h2 {
+            color: var(--primary);
+            margin: 24px 0 12px;
+            font-size: 1.35rem;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 6px;
+        }
+        .structural-box h3 {
+            color: var(--primary-light);
+            margin: 20px 0 8px;
+            font-size: 1.15rem;
+        }
+        .structural-box h4 {
+            color: #4a3f2f;
+            margin: 16px 0 4px;
+            font-size: 1.0rem;
+        }
+        .structural-box p,
+        .structural-box li {
+            margin-bottom: 8px;
+        }
+        .structural-box ul,
+        .structural-box ol {
+            padding-left: 22px;
+            margin-bottom: 12px;
+        }
+        .structural-box strong {
+            color: var(--primary);
+        }
+        .structural-box em {
+            font-style: italic;
+            color: #5a4a30;
+        }
+        .structural-box .arabic-inline {
+            font-family: var(--font-arabic);
+            font-size: 1.2rem;
+            color: var(--primary);
+            background: var(--gold-pale);
+            padding: 0 8px;
+            border-radius: 4px;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 640px) {
+            .arabic-text {
+                font-size: 1.5rem;
+                gap: 4px 6px;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .btn {
+                padding: 7px 14px;
+                font-size: 0.78rem;
+            }
+            .analyzed-word {
+                font-size: 2.0rem;
+            }
+            table {
+                font-size: 0.78rem;
+            }
+            table th,
+            table td {
+                padding: 6px 8px;
+            }
+            .structural-box {
+                max-height: 60vh;
+                padding: 16px 18px;
+            }
+            .structural-box h2 {
+                font-size: 1.1rem;
+            }
+            .structural-box h3 {
+                font-size: 1.0rem;
+            }
+        }
+        @media (max-width: 420px) {
+            .arabic-text {
+                font-size: 1.2rem;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            .word-arab {
+                padding: 2px 6px;
+            }
+            .btn-row {
+                gap: 6px;
+            }
+            .btn {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* ─── SCROLLBAR ─── */
+        .structural-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .structural-box::-webkit-scrollbar-track {
+            background: #f0ede8;
+            border-radius: 8px;
+        }
+        .structural-box::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 8px;
+        }
+        .structural-box::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        /* ─── SPECIAL BADGE IN HEADER ─── */
+        .header .ornament {
+            color: var(--gold);
+            font-size: 1.6rem;
+            letter-spacing: 8px;
+            opacity: 0.5;
+            display: block;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+
+        <!-- ─── HEADER ─── -->
+        <div class="header">
+            <span class="badge">⸻ تحليل لغوي متكامل ⸻</span>
+            <h1>تَأْلِيْفُ شَيْخِ الْإِسْلَامِ<br>مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ</h1>
+            <p class="subtitle">Analisis <em>Nahwu · Sharaf · I‘rāb · Balāghah</em> &amp; Konteks Historis</p>
+            <span class="ornament">✦ ✦ ✦</span>
+        </div>
+
+        <!-- ─── MAIN CARD ─── -->
+        <div class="card" id="mainCard">
+            <span class="section-label">📜 Teks Arab &amp; Analisis Per Kata</span>
+
+            <div class="arabic-text" id="arabicText"></div>
+            <p class="hint">👆 Klik/tap setiap kata untuk melihat makna &amp; analisis lengkap</p>
+
+            <div class="btn-row">
+                <button class="btn" id="btnMakna" onclick="toggleMakna()">📝 Makna Perkata</button>
+                <button class="btn" id="btnTranslation" onclick="toggleTranslation()">🌐 Terjemahan</button>
+                <button class="btn" id="btnStructural" onclick="toggleStructural()">📚 Penjelasan Struktural &amp; Balaghah</button>
+                <button class="btn" id="btnReset" onclick="resetAll()">🔄 Reset</button>
+            </div>
+
+            <!-- Panel Analisis Kata -->
+            <div class="analysis-panel" id="analysisPanel">
+                <div class="analyzed-word" id="analyzedWordDisplay"></div>
+                <div class="makna-box">
+                    <span class="makna-label">📌 Makna</span>
+                    <span id="maknaText"></span>
+                </div>
+                <div id="analysisContent"></div>
+                <button class="close-btn" onclick="closeAnalysis()">✕ Tutup Analisis</button>
+            </div>
+
+            <!-- Panel Terjemahan -->
+            <div class="translation-box" id="translationBox">
+                <strong>🌐 Terjemahan:</strong><br><br>
+                <span style="font-size:1.6rem;font-family:var(--font-arabic);">تَأْلِيْفُ شَيْخِ الْإِسْلَامِ مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ قَدَّسَ اللَّهُ رُوْحَهُ الْمُتَوَفَّى سَنَةَ ١٢٠٦ هـ</span><br><br>
+                <em>“Karangan Syaikhul Islam Muhammad bin Abdul Wahhab — semoga Allah menyucikan ruhnya — yang wafat pada tahun 1206 Hijriah.”</em>
+                <br><br>
+                <span style="font-size:0.9rem;color:#6b5f4a;">Konteks: biasanya ditulis setelah judul utama <strong>كِتَابُ ثَلَاثَةِ الْأُصُولِ</strong> sebagai bagian dari keterangan kepengarangan.</span>
+            </div>
+
+            <!-- Panel Penjelasan Struktural & Balaghah -->
+            <div class="structural-box" id="structuralBox"></div>
+        </div>
+    </div>
+
+    <script>
+        // ─── DATA ANALISIS PER KATA (14 KATA) ───
+        const analysisData = {
+            'k_talif': {
+                word: 'تَأْلِيْفُ',
+                makna: 'Karangan, karya tulis, susunan.',
+                sharaf: 'Mashdar dari fi‘il <strong>أَلَّفَ – يُؤَلِّفُ</strong> (allafa – yu‘allifu). Wazan: <strong>تَفْعِيْلٌ</strong> (taf‘īl). Akar: <strong>أ-ل-ف</strong> (menyusun, mengarang).',
+                irob: 'Marfū‘ dengan ḍammah ẓāhirah. Tidak bertanwin karena menjadi <strong>mudhāf</strong>.',
+                nahwu: '<strong>Khabar</strong> dari mubtada’ yang dibuang (taqdīr: هٰذَا). Sekaligus <strong>mudhāf</strong> kepada شَيْخِ.'
+            },
+            'k_syaikh': {
+                word: 'شَيْخِ',
+                makna: 'Guru besar, tokoh, orang yang dituakan dalam ilmu.',
+                sharaf: 'Isim, mudzakkar, mufrad. Akar: <strong>ش-ي-خ</strong>. Wazan: <strong>فَعْلٌ</strong>.',
+                irob: 'Majrūr dengan kasrah ẓāhirah. Tidak bertanwin karena <strong>mudhāf</strong>.',
+                nahwu: '<strong>Mudhāf ilaih</strong> dari تَأْلِيْفُ, sekaligus <strong>mudhāf</strong> kepada الْإِسْلَامِ. Frasa <strong>شَيْخِ الْإِسْلَامِ</strong> = “Guru Besar Islam.”'
+            },
+            'k_islam': {
+                word: 'الْإِسْلَامِ',
+                makna: 'Islam, agama Islam.',
+                sharaf: 'Isim, mudzakkar, ma‘rifah (dengan alif-lām). Akar: <strong>س-ل-م</strong> (selamat, berserah). Wazan: <strong>إِفْعَالٌ</strong>.',
+                irob: 'Majrūr dengan kasrah ẓāhirah.',
+                nahwu: '<strong>Mudhāf ilaih</strong> dari شَيْخِ.'
+            },
+            'k_muhammad': {
+                word: 'مُحَمَّدِ',
+                makna: 'Muhammad — nama diri, merujuk pada pengarang kitab.',
+                sharaf: 'Isim ‘alam (nama diri), mudzakkar. Wazan: <strong>مُفَعَّلٌ</strong> (dengan tasydīd pada ‘ain). Akar: <strong>ح-م-د</strong> (puji). Makna: “Yang banyak dipuji.”',
+                irob: 'Majrūr dengan kasrah ẓāhirah.',
+                nahwu: '<strong>Badal</strong> (pengganti/penjelas) dari شَيْخِ الْإِسْلَامِ. Mengikuti i‘rāb mubdal minh-nya (majrūr).'
+            },
+            'k_ibn': {
+                word: 'بْنِ',
+                makna: 'Putra, anak laki-laki dari.',
+                sharaf: 'Isim, mudzakkar. Bentuk asal: <strong>اِبْنٌ</strong>. Akar: <strong>ب-ن-و</strong>. Hamzah washal dibuang karena jatuh di antara dua ‘alam.',
+                irob: 'Majrūr dengan kasrah ẓāhirah. Tidak bertanwin karena <strong>mudhāf</strong>.',
+                nahwu: '<strong>Badal</strong> atau <strong>‘aṭaf bayān</strong> dari مُحَمَّدِ. Sekaligus <strong>mudhāf</strong> kepada عَبْدِ.'
+            },
+            'k_abd': {
+                word: 'عَبْدِ',
+                makna: 'Hamba.',
+                sharaf: 'Isim, mudzakkar. Akar: <strong>ع-ب-د</strong>. Wazan: <strong>فَعْلٌ</strong>.',
+                irob: 'Majrūr dengan kasrah ẓāhirah. Tidak bertanwin karena <strong>mudhāf</strong>.',
+                nahwu: '<strong>Mudhāf ilaih</strong> dari بْنِ, sekaligus <strong>mudhāf</strong> kepada الْوَهَّابِ.'
+            },
+            'k_wahhab': {
+                word: 'الْوَهَّابِ',
+                makna: 'Yang Maha Memberi, Yang Banyak Memberi karunia.',
+                sharaf: 'Ṣifat musyabbahah / ṣifat mubālaghah. Wazan: <strong>فَعَّالٌ</strong> (intensitas). Akar: <strong>و-ه-ب</strong> (memberi). Salah satu Asmā’ al-Ḥusnā.',
+                irob: 'Majrūr dengan kasrah ẓāhirah.',
+                nahwu: '<strong>Mudhāf ilaih</strong> dari عَبْدِ. Nama <strong>عَبْدُ الْوَهَّابِ</strong> = “Hamba Yang Maha Pemberi.”'
+            },
+            'k_qaddasa': {
+                word: 'قَدَّسَ',
+                makna: '(Semoga) menyucikan, menguduskan, membersihkan.',
+                sharaf: 'Fi‘il māḍī, tsulātsī mazīd bi ḥarfin wāḥid, wazan <strong>فَعَّلَ</strong> (fa‘‘ala). Tasydīd untuk ta‘diyah dan mubālaghah. Akar: <strong>ق-د-س</strong> (suci).',
+                irob: 'Mabnī ‘alā al-fatḥ (tetap dengan fatḥah).',
+                nahwu: 'Fi‘il māḍī dalam konteks doa. Fā‘il-nya adalah <strong>اللَّهُ</strong>. Kalimatnya <strong>jumlah mu‘tariḍah</strong> (sisipan).'
+            },
+            'k_allah': {
+                word: 'اللَّهُ',
+                makna: 'Allah — Nama Dzat Yang Maha Esa.',
+                sharaf: 'Lafẓ al-Jalālah. Isim ‘alam, ma‘rifah, tidak bertanwin, tidak ditashrīf. Musytaqq atau ghairu musytaqq (perbedaan pendapat).',
+                irob: 'Marfū‘ dengan ḍammah ẓāhirah.',
+                nahwu: '<strong>Fā‘il</strong> (pelaku) dari fi‘il قَدَّسَ.'
+            },
+            'k_ruh': {
+                word: 'رُوْحَهُ',
+                makna: 'Ruhnya, jiwanya.',
+                sharaf: 'رُوْح: isim, mudzakkar, mufrad. Akar: <strong>ر-و-ح</strong>. <strong>هُ</strong>: ḍamīr muttaṣil (kata ganti orang ketiga tunggal mudzakkar), mabnī ‘alā al-ḍamm, mahal jarr sebagai mudhāf ilaih.',
+                irob: 'رُوْحَ: Manṣūb dengan fatḥah ẓāhirah (<strong>maf‘ūl bih</strong> dari قَدَّسَ). <strong>هُ</strong>: Mabnī, mahal jarr.',
+                nahwu: 'Objek (maf‘ūl bih) dari doa: “Semoga Allah menyucikan ruhnya.”'
+            },
+            'k_mutawaffa': {
+                word: 'الْمُتَوَفَّى',
+                makna: 'Yang diwafatkan, yang telah meninggal dunia.',
+                sharaf: 'Isim maf‘ūl dari fi‘il <strong>تَوَفَّى – يَتَوَفَّى</strong> (wazan تَفَعَّلَ). Wazan isim maf‘ūl: <strong>مُتَفَعَّلٌ</strong> → مُتَوَفَّيٌ → الْمُتَوَفَّى (dengan alif maqṣūrah).',
+                irob: 'Majrūr dengan kasrah muqaddarah pada alif maqṣūrah (ta‘adhdhur).',
+                nahwu: '<strong>Na‘at</strong> (sifat) dari مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ. Mengikuti man‘ūt-nya dalam keadaan majrūr.'
+            },
+            'k_sanah': {
+                word: 'سَنَةَ',
+                makna: 'Tahun.',
+                sharaf: 'Isim, mu‘annats. Akar: <strong>س-ن-و</strong> atau <strong>س-ن-ه</strong>. Bentuk tunggal dari سِنُوْن / سَنَوَات.',
+                irob: 'Manṣūb dengan fatḥah ẓāhirah (sebagai <strong>ẓaraf zamān</strong>). Tidak bertanwin karena <strong>mudhāf</strong>.',
+                nahwu: '<strong>Ẓaraf zamān</strong> (keterangan waktu) yang terkait dengan الْمُتَوَفَّى. Sekaligus <strong>mudhāf</strong> kepada angka ١٢٠٦.'
+            },
+            'k_1206': {
+                word: '١٢٠٦',
+                makna: 'Seribu dua ratus enam — tahun 1206 H.',
+                sharaf: '‘Adad (bilangan), <strong>mabnī</strong>.',
+                irob: 'Mabnī ‘alā as-sukūn. Mahalnya <strong>jarr</strong> sebagai mudhāf ilaih dari سَنَةَ.',
+                nahwu: '<strong>Mudhāf ilaih</strong> dari سَنَةَ. 1206 H ≈ 1792 M.'
+            },
+            'k_ha': {
+                word: 'هـ',
+                makna: 'Singkatan dari هِجْرِيَّة (Hijriah).',
+                sharaf: 'Berasal dari isim nisbah <strong>هِجْرِيّ</strong>, dinisbahkan pada الهِجْرَة.',
+                irob: 'Dalam tradisi penulisan, huruf <strong>هـ</strong> berfungsi sebagai simbol/singkatan, <strong>mabnī</strong>.',
+                nahwu: '<strong>Na‘at</strong> (sifat) dari سَنَةَ. Taqdīr: سَنَةَ ١٢٠٦ هِجْرِيَّةً.'
+            }
+        };
+
+        // ─── DAFTAR KATA ───
+        const arabicWords = [
+            { id: 'k_talif', text: 'تَأْلِيْفُ', spacer: ' ' },
+            { id: 'k_syaikh', text: 'شَيْخِ', spacer: ' ' },
+            { id: 'k_islam', text: 'الْإِسْلَامِ', spacer: ' ' },
+            { id: 'k_muhammad', text: 'مُحَمَّدِ', spacer: ' ' },
+            { id: 'k_ibn', text: 'بْنِ', spacer: ' ' },
+            { id: 'k_abd', text: 'عَبْدِ', spacer: ' ' },
+            { id: 'k_wahhab', text: 'الْوَهَّابِ', spacer: ' ' },
+            { id: 'k_qaddasa', text: 'قَدَّسَ', spacer: ' ' },
+            { id: 'k_allah', text: 'اللَّهُ', spacer: ' ' },
+            { id: 'k_ruh', text: 'رُوْحَهُ', spacer: ' ' },
+            { id: 'k_mutawaffa', text: 'الْمُتَوَفَّى', spacer: ' ' },
+            { id: 'k_sanah', text: 'سَنَةَ', spacer: ' ' },
+            { id: 'k_1206', text: '١٢٠٦', spacer: ' ' },
+            { id: 'k_ha', text: 'هـ', spacer: '' }
+        ];
+
+        let showMakna = false;
+        let currentlyActiveSpan = null;
+
+        // ─── RENDER ───
+        function renderArabicText() {
+            const container = document.getElementById('arabicText');
+            container.innerHTML = '';
+            if (showMakna) {
+                container.classList.add('show-makna');
+            } else {
+                container.classList.remove('show-makna');
+            }
+            arabicWords.forEach(item => {
+                const unit = document.createElement('span');
+                unit.className = 'word-unit';
+
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word-arab';
+                wordSpan.textContent = item.text;
+                wordSpan.dataset.analysisId = item.id;
+                wordSpan.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showAnalysis(item.id, wordSpan);
+                });
+                wordSpan.title = 'Klik untuk analisis';
+
+                const maknaSpan = document.createElement('span');
+                maknaSpan.className = 'word-makna';
+                const data = analysisData[item.id];
+                maknaSpan.textContent = data ? data.makna : '—';
+
+                unit.appendChild(wordSpan);
+                unit.appendChild(maknaSpan);
+                container.appendChild(unit);
+
+                if (item.spacer) {
+                    container.appendChild(document.createTextNode(item.spacer));
+                }
+            });
+        }
+
+        // ─── TOGGLE MAKNA ───
+        function toggleMakna() {
+            showMakna = !showMakna;
+            const btn = document.getElementById('btnMakna');
+            if (showMakna) {
+                btn.classList.add('active-btn');
+                btn.innerHTML = '📝 Sembunyikan Makna';
+            } else {
+                btn.classList.remove('active-btn');
+                btn.innerHTML = '📝 Makna Perkata';
+            }
+            renderArabicText();
+            if (document.getElementById('analysisPanel').classList.contains('visible')) {
+                closeAnalysis();
+            }
+        }
+
+        // ─── SHOW ANALYSIS ───
+        function showAnalysis(id, spanEl) {
+            const data = analysisData[id];
+            if (!data) return;
+            if (currentlyActiveSpan) {
+                currentlyActiveSpan.classList.remove('active');
+            }
+            spanEl.classList.add('active');
+            currentlyActiveSpan = spanEl;
+
+            document.getElementById('analyzedWordDisplay').textContent = data.word;
+            document.getElementById('maknaText').textContent = data.makna;
+            document.getElementById('analysisContent').innerHTML = `
+                <table>
+                    <tr><th>📐 Sharaf (Bentuk Kata)</th><td>${data.sharaf}</td></tr>
+                    <tr><th>📏 I‘rāb (Kondisi Akhir)</th><td>${data.irob}</td></tr>
+                    <tr><th>🧩 Nahwu (Fungsi)</th><td>${data.nahwu}</td></tr>
+                </table>
+            `;
+            const panel = document.getElementById('analysisPanel');
+            panel.classList.add('visible');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function closeAnalysis() {
+            document.getElementById('analysisPanel').classList.remove('visible');
+            if (currentlyActiveSpan) {
+                currentlyActiveSpan.classList.remove('active');
+                currentlyActiveSpan = null;
+            }
+            document.getElementById('analyzedWordDisplay').textContent = '';
+            document.getElementById('maknaText').textContent = '';
+            document.getElementById('analysisContent').innerHTML =
+                '<p style="text-align:center;color:#999;">👆 Klik kata di atas untuk analisis.</p>';
+        }
+
+        // ─── TOGGLE TRANSLATION ───
+        function toggleTranslation() {
+            const box = document.getElementById('translationBox');
+            const btn = document.getElementById('btnTranslation');
+            box.classList.toggle('visible');
+            btn.classList.toggle('active-btn');
+            if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ─── TOGGLE STRUCTURAL ───
+        function toggleStructural() {
+            const box = document.getElementById('structuralBox');
+            const btn = document.getElementById('btnStructural');
+            box.classList.toggle('visible');
+            btn.classList.toggle('active-btn');
+            if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ─── RESET ───
+        function resetAll() {
+            closeAnalysis();
+            document.getElementById('translationBox').classList.remove('visible');
+            document.getElementById('btnTranslation').classList.remove('active-btn');
+            document.getElementById('structuralBox').classList.remove('visible');
+            document.getElementById('btnStructural').classList.remove('active-btn');
+            if (showMakna) {
+                toggleMakna();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ─── LOAD STRUCTURAL CONTENT ───
+        function loadStructuralContent() {
+            const box = document.getElementById('structuralBox');
+            box.innerHTML = `
+            <h2>Analisis Lengkap Kalimat</h2>
+            <p style="font-size:1.2rem;font-family:var(--font-arabic);text-align:center;direction:rtl;color:var(--primary);">
+            تَأْلِيْفُ شَيْخِ الْإِسْلَامِ مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ قَدَّسَ اللَّهُ رُوْحَهُ الْمُتَوَفَّى سَنَةَ ١٢٠٦ هـ
+            </p>
+            <hr style="border:1px solid var(--border);margin:16px 0;">
+
+            <h3>I. Teks Arab dan Terjemahan</h3>
+            <p><strong>Teks:</strong><br>
+            <span style="font-family:var(--font-arabic);font-size:1.4rem;">تَأْلِيْفُ شَيْخِ الْإِسْلَامِ مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ قَدَّسَ اللَّهُ رُوْحَهُ الْمُتَوَفَّى سَنَةَ ١٢٠٦ هـ</span></p>
+            <p><strong>Terjemahan:</strong><br>
+            <em>“Karangan Syaikhul Islam Muhammad bin Abdul Wahhab — semoga Allah menyucikan ruhnya — yang wafat pada tahun 1206 Hijriah.”</em></p>
+            <p><strong>Konteks dalam Judul Lengkap:</strong><br>
+            Kalimat ini biasanya ditulis setelah judul utama:<br>
+            <span style="font-family:var(--font-arabic);font-size:1.2rem;">كِتَابُ ثَلَاثَةِ الْأُصُولِ — تَأْلِيْفُ شَيْخِ الْإِسْلَامِ مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ ...</span><br>
+            Sehingga lengkapnya bermakna: <em>“Kitab Tiga Landasan Utama — karangan Syaikhul Islam Muhammad bin Abdul Wahhab...”</em></p>
+
+            <h3>II. Analisis Per Kata</h3>
+            <p>Berikut analisis <strong>Sharaf</strong>, <strong>I‘rāb</strong>, dan <strong>Nahwu</strong> untuk setiap kata. Klik kata pada teks utama untuk melihat detailnya.</p>
+
+            <h3>III. Analisis Nahwu Struktural Keseluruhan</h3>
+
+            <h4>A. Struktur Kalimat Besar</h4>
+            <p>Jika diuraikan dalam diagram, kalimat ini memiliki struktur sebagai berikut:</p>
+            <pre style="background:#f5efe4;padding:12px 16px;border-radius:8px;font-size:0.85rem;direction:ltr;text-align:left;overflow-x:auto;white-space:pre-wrap;font-family:var(--font-ui);">
+        [هٰذَا] تَأْلِيْفُ شَيْخِ الْإِسْلَامِ مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ
+              │    │    │    │   │  │    │
+              │    │    │    │   │  │    └─ mudhāf ilaih
+              │    │    │    │   │  └─ mudhāf
+              │    │    │    │   └─ badal / 'aṭaf bayān
+              │    │    │    └─(شَيْخِ الْإِسْلَامِ) badal dari
+              │    │    └─(شَيْخِ) mudhāf ilaih dari
+              │    └─(تَأْلِيْفُ) mudhāf ilaih dari
+              └─ mudhāf
+
+        [جُمْلَة مُعْتَرِضَة:] قَدَّسَ اللَّهُ رُوْحَهُ
+
+        [نَعْت:] الْمُتَوَفَّى سَنَةَ ١٢٠٦ هـ
+            </pre>
+
+            <h4>B. Rantai Idhāfah (Silsilah al-Idhāfah)</h4>
+            <p>Rangkaian idhāfah dalam kalimat ini membentuk rantai yang panjang dan bertingkat:</p>
+            <ul>
+                <li><strong>تَأْلِيْفُ</strong> ← mudhāf → <strong>شَيْخِ</strong> (mudhāf ilaih)</li>
+                <li><strong>شَيْخِ</strong> ← mudhāf → <strong>الْإِسْلَامِ</strong> (mudhāf ilaih)</li>
+                <li><strong>بْنِ</strong> ← mudhāf → <strong>عَبْدِ</strong> (mudhāf ilaih)</li>
+                <li><strong>عَبْدِ</strong> ← mudhāf → <strong>الْوَهَّابِ</strong> (mudhāf ilaih)</li>
+                <li><strong>سَنَةَ</strong> ← mudhāf → <strong>١٢٠٦</strong> (mudhāf ilaih)</li>
+            </ul>
+            <p>Setiap kata yang berposisi sebagai <strong>mudhāf</strong> kehilangan tanwin-nya. Inilah yang disebut <em>silsilah al-idhāfah</em> (rantai penyandaran) yang menjadi ciri khas bahasa Arab dalam menyatakan hubungan kepemilikan, asal, atau atribusi.</p>
+
+            <h4>C. Badal dan ‘Aṭaf Bayān</h4>
+            <ul>
+                <li><strong>مُحَمَّدِ</strong> adalah <strong>badal</strong> (atau ‘aṭaf bayān) dari <strong>شَيْخِ الْإِسْلَامِ</strong>. Fungsinya: menjelaskan dan mengidentifikasi siapa “Syaikhul Islam” yang dimaksud.</li>
+                <li><strong>بْنِ عَبْدِ الْوَهَّابِ</strong> adalah <strong>badal</strong> (atau ‘aṭaf bayān) dari <strong>مُحَمَّدِ</strong>. Fungsinya: memperjelas nasab (garis keturunan).</li>
+            </ul>
+            <p>Kedua badal ini mengikuti <em>mubdal minh</em>-nya dalam hal i‘rāb (majrūr), bilangan (mufrad), jenis (mudzakkar), dan ta‘rīf / tankīr.</p>
+
+            <h4>D. Jumlah Mu‘tariḍah (Kalimat Sisipan)</h4>
+            <p><strong>قَدَّسَ اللَّهُ رُوْحَهُ</strong> adalah <strong>jumlah fi‘liyyah mu‘tariḍah</strong>, yaitu kalimat yang disisipkan di antara dua unsur yang saling terkait (di antara nama pengarang dan sifatnya الْمُتَوَفَّى) tanpa memiliki kedudukan i‘rāb (<em>lā maḥalla lahā min al-i‘rāb</em>).</p>
+            <p>Ciri-ciri jumlah mu‘tariḍah dalam kalimat ini:</p>
+            <ul>
+                <li>Diselipkan di tengah struktur utama.</li>
+                <li>Tidak mengubah i‘rāb kata sebelum dan sesudahnya.</li>
+                <li>Berfungsi sebagai doa, penghormatan, atau informasi tambahan.</li>
+                <li>Sering diapit oleh tanda pisah dalam penulisan modern.</li>
+            </ul>
+
+            <h4>E. Na‘at dan Man‘ūt</h4>
+            <p><strong>الْمُتَوَفَّى</strong> adalah <strong>na‘at</strong> dari <strong>مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ</strong>. Syarat na‘at-man‘ūt yang terpenuhi:</p>
+            <ul>
+                <li>Mengikuti dalam i‘rāb (majrūr).</li>
+                <li>Mengikuti dalam ta‘rīf (keduanya ma‘rifah dengan al).</li>
+                <li>Mengikuti dalam bilangan (mufrad).</li>
+                <li>Mengikuti dalam jenis (mudzakkar).</li>
+            </ul>
+            <p>Setelah na‘at الْمُتَوَفَّى, datang <strong>ẓaraf</strong> <strong>سَنَةَ ١٢٠٦ هـ</strong> yang menjelaskan kapan kewafatan itu terjadi.</p>
+
+            <h4>F. Ẓaraf Zamān</h4>
+            <p><strong>سَنَةَ ١٢٠٦ هـ</strong> berfungsi sebagai <strong>ẓaraf zamān</strong> (keterangan waktu) yang terkait dengan <strong>الْمُتَوَفَّى</strong>. Ia menjawab pertanyaan “kapan?” (مَتَى؟).</p>
+            <ul>
+                <li><strong>سَنَةَ</strong>: ẓaraf manṣūb.</li>
+                <li><strong>١٢٠٦</strong>: mudhāf ilaih (mabnī, mahal jarr).</li>
+                <li><strong>هـ</strong>: na‘at / sifat dari سَنَةَ.</li>
+            </ul>
+
+            <h3>IV. Konteks Historis dan Keilmuan</h3>
+            <h4>Tentang Pengarang</h4>
+            <p>Syaikh <strong>Muhammad bin Abdul Wahhab</strong> (1115–1206 H / 1703–1792 M) adalah ulama besar dari Najd, Jazirah Arab. Beliau dikenal sebagai tokoh pembaruan (<em>tajdīd</em>) yang menyerukan pemurnian tauhid dan pemberantasan syirik. Di antara karya-karyanya:</p>
+            <ul>
+                <li><em>Kitāb at-Tawḥīd</em></li>
+                <li><em>Tsalātsat al-Ushūl</em> (Tiga Landasan Utama)</li>
+                <li><em>Al-Qawā‘id al-Arba‘</em></li>
+                <li><em>Kitāb al-Kabā‘ir</em></li>
+                <li><em>Al-Ājurūmiyyah al-Muḥammadiyyah</em> (dalam nahwu)</li>
+            </ul>
+            <h4>Tentang Kitab Tsalātsat al-Ushūl</h4>
+            <p>Kitab ini membahas tiga pertanyaan yang akan ditanyakan di alam kubur: <em>Siapa Rabb-mu? Apa agama-mu? Siapa Nabi-mu?</em> Kitab ini menjadi materi dasar akidah di banyak pesantren dan halaqah ilmu di seluruh dunia Islam.</p>
+            <h4>Tentang Penulisan Tahun Wafat</h4>
+            <p>Dalam tradisi penulisan kitab klasik Arab, menyebutkan tahun wafat pengarang di halaman judul memiliki beberapa fungsi:</p>
+            <ul>
+                <li><strong>Identifikasi historis</strong> — membedakan penulis dari nama-nama serupa.</li>
+                <li><strong>Penghormatan</strong> — mendo’akan penulis dengan ungkapan قَدَّسَ اللَّهُ رُوْحَهُ atau رَحِمَهُ اللَّهُ.</li>
+                <li><strong>Konteks penulisan</strong> — pembaca mengetahui kapan kitab ini ditulis dan dalam konteks zaman apa.</li>
+                <li><strong>Sanad keilmuan</strong> — menghubungkan kitab dengan rantai transmisi ilmu.</li>
+            </ul>
+
+            <h3>V. Aspek Balāghah (Retorika) dan Uslūb</h3>
+            <h4>1. Uslūb al-Khabar bi Ma‘nā al-Insyā‘</h4>
+            <p>Kalimat <strong>قَدَّسَ اللَّهُ رُوْحَهُ</strong> secara lahiriah adalah <em>khabar</em> (pernyataan), tetapi secara hakikat adalah <em>insyā‘</em> (doa/permohonan). Penggunaan fi‘il māḍī untuk doa memberikan kesan kepastian dan kekhusyukan, seakan-akan doa tersebut sudah dikabulkan.</p>
+            <h4>2. At-Ta‘līm bi al-Ijmāl thumma at-Tafṣīl</h4>
+            <p>Penyebutan <strong>شَيْخِ الْإِسْلَامِ</strong> terlebih dahulu (<em>ijmāl</em> / global) kemudian dijelaskan dengan <strong>مُحَمَّدِ بْنِ عَبْدِ الْوَهَّابِ</strong> (<em>tafṣīl</em> / rinci) adalah uslub yang membangun rasa ingin tahu pembaca sebelum memberikan informasi lengkap.</p>
+            <h4>3. Al-Ījāz (Keringkasan)</h4>
+            <p>Seluruh informasi — jenis karya, gelar penulis, nama lengkap, nasab, doa, dan tahun wafat — dirangkum dalam satu kalimat tanpa kata yang berlebihan. Ini adalah ciri khas bahasa Arab klasik: <em>al-ījāz</em> (menyampaikan makna maksimal dengan lafaz minimal).</p>
+            <h4>4. Al-Iḥtirām (Penghormatan)</h4>
+            <p>Penggunaan gelar <strong>شَيْخِ الْإِسْلَامِ</strong>, doa <strong>قَدَّسَ اللَّهُ رُوْحَهُ</strong>, serta ungkapan <strong>الْمُتَوَفَّى</strong> (bukan المَيِّت atau الهَالِك) menunjukkan adab dan penghormatan yang tinggi terhadap ulama.</p>
+
+            <h3>VI. Perbandingan dengan Ungkapan Serupa</h3>
+            <p>Dalam tradisi penulisan kitab Islam, terdapat beberapa variasi ungkapan serupa:</p>
+            <table>
+                <tr><th>Ungkapan</th><th>Makna</th></tr>
+                <tr><td>رَحِمَهُ اللَّهُ</td><td>Semoga Allah merahmatinya</td></tr>
+                <tr><td>قَدَّسَ اللَّهُ رُوْحَهُ</td><td>Semoga Allah menyucikan ruhnya</td></tr>
+                <tr><td>نَوَّرَ اللَّهُ ضَرِيْحَهُ</td><td>Semoga Allah menerangi makamnya</td></tr>
+                <tr><td>تَغَمَّدَهُ اللَّهُ بِرَحْمَتِهِ</td><td>Semoga Allah meliputinya dengan rahmat-Nya</td></tr>
+                <tr><td>رَضِيَ اللَّهُ عَنْهُ</td><td>Semoga Allah meridhainya (untuk ṣaḥābat)</td></tr>
+            </table>
+            <p>Pemilihan ungkapan <strong>قَدَّسَ اللَّهُ رُوْحَهُ</strong> untuk Syaikh Muhammad bin Abdul Wahhab menunjukkan penghormatan khusus, karena kata قَدَّسَ mengandung makna penyucian yang lebih tinggi dibanding رَحِمَ.</p>
+
+            <h3>VII. Catatan Linguistik Tambahan</h3>
+            <h4>1. Perbedaan تَأْلِيْف dan تَصْنِيْف</h4>
+            <p>Keduanya bermakna “mengarang/menyusun,” namun ada nuansa berbeda:</p>
+            <ul>
+                <li><strong>تَأْلِيْف</strong> (dari أ-ل-ف): menekankan aspek “menyatukan” bagian-bagian menjadi satu kesatuan.</li>
+                <li><strong>تَصْنِيْف</strong> (dari ص-ن-ف): menekankan aspek “mengklasifikasikan” dan “mengelompokkan.”</li>
+            </ul>
+            <h4>2. Isim Maf‘ūl dengan Alif Maqṣūrah</h4>
+            <p>Kata <strong>الْمُتَوَفَّى</strong> termasuk kategori isim yang berakhir dengan <em>alif maqṣūrah</em> (alif yang ditulis ي). Isim semacam ini memiliki kekhususan:</p>
+            <ul>
+                <li>Tidak bisa menerima harakat pada huruf terakhirnya.</li>
+                <li>I‘rāb-nya ditandai dengan <em>kasrah muqaddarah</em> (untuk jarr), <em>ḍammah muqaddarah</em> (untuk rafa‘), dan <em>fatḥah muqaddarah</em> (untuk naṣb).</li>
+                <li>Kecuali jika alif-nya bertemu dengan ḍamīr: <strong>الْمُتَوَفَّاهُ</strong> (maka bisa di-fatḥah secara ẓāhir).</li>
+            </ul>
+            <h4>3. Hukum Tanwin pada Mudhāf</h4>
+            <p>Dalam kalimat ini, tidak ada satu pun kata berposisi <strong>mudhāf</strong> yang bertanwin:</p>
+            <ul>
+                <li>تَأْلِيْفُ (bukan تَأْلِيْفٌ)</li>
+                <li>شَيْخِ (bukan شَيْخٍ)</li>
+                <li>بْنِ (bukan بِنٍ)</li>
+                <li>عَبْدِ (bukan عَبْدٍ)</li>
+                <li>سَنَةَ (bukan سَنَةً)</li>
+            </ul>
+            <p>Ini sesuai kaidah: <strong>المُضَافُ لَا يُنَوَّنُ</strong> (mudhāf tidak menerima tanwin).</p>
+            <h4>4. Penggunaan Alif-Lām pada Nama Allah</h4>
+            <p>Kata <strong>الْوَهَّابِ</strong> dalam nama <strong>عَبْدِ الْوَهَّابِ</strong> menggunakan alif-lām karena merujuk pada Allah sebagai satu-satunya Yang Maha Pemberi. Tanpa alif-lām, kata وَهَّاب bisa bermakna umum (orang yang banyak memberi). Dengan alif-lām, ia menjadi <em>ma‘rifah</em> dan merujuk khusus pada Allah ﷻ.</p>
+
+            <hr style="border:1px solid var(--border);margin:22px 0;">
+            <p style="text-align:center;color:#7a6b55;font-size:0.9rem;">— selesai —</p>
+            `;
+        }
+
+        // ─── CLICK OUTSIDE ───
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('analysisPanel');
+            const arabicContainer = document.getElementById('arabicText');
+            if (panel.classList.contains('visible') && !panel.contains(e.target) && !arabicContainer.contains(e.target)) {
+                closeAnalysis();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('analysisPanel').classList.contains('visible')) {
+                closeAnalysis();
+            }
+        });
+
+        // ─── INIT ───
+        document.addEventListener('DOMContentLoaded', function() {
+            renderArabicText();
+            document.getElementById('analysisContent').innerHTML =
+                '<p style="text-align:center;color:#999;">👆 Klik kata untuk melihat makna, Sharaf, I‘rāb, dan Nahwu.</p>';
+            loadStructuralContent();
+        });
+    </script>
+</body>
+</html>
