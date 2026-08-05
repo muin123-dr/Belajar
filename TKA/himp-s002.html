@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif TKA SMA - Himpunan</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .intro {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            color: #6c757d;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .question-number {
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 30px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result-panel {
+            margin-top: 40px;
+            padding: 30px;
+            background: #d4edda;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        .result-panel h2 {
+            color: #155724;
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+        
+        /* State Classes */
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            border-radius: 4px;
+            display: none;
+            font-size: 0.95em;
+            color: #856404;
+        }
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Kuis Persiapan TKA SMA: Himpunan & Logika</h1>
+    <p class="intro">Uji pemahamanmu dengan 25 soal latihan Himpunan dan Operasi Bilangan ini. Jawab semua soal, lalu klik "Cek Hasil & Pembahasan" di bagian paling bawah untuk melihat nilaimu serta cara pengerjaannya.</p>
+    
+    <div id="quiz-container"></div>
+    
+    <button id="submit-btn" onclick="submitQuiz()">Cek Hasil & Pembahasan</button>
+    
+    <div id="result-panel" class="result-panel">
+        <h2 id="score-display"></h2>
+        <p>Silakan gulir ke atas untuk meninjau jawaban yang benar dan membaca pembahasannya.</p>
+        <button onclick="location.reload()" style="background:#2c3e50; padding:10px; width:auto; margin:20px auto 0 auto; display:inline-block;">Coba Lagi</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            q: "Diketahui himpunan bilangan cacah kurang dari 5. Himpunan tersebut adalah...",
+            options: ["{1, 2, 3, 4, 5}", "{0, 1, 2, 3, 4}", "{1, 2, 3, 4}", "{0, 1, 2, 3, 4, 5}", "{-1, 0, 1, 2, 3, 4}"],
+            ans: 1,
+            exp: "Bilangan cacah dimulai dari 0. Kurang dari 5 berarti sampai 4. Maka himpunannya adalah {0, 1, 2, 3, 4}."
+        },
+        {
+            q: "Jika A = {x | 2 ≤ x < 10, x ∈ bilangan prima}, maka anggota himpunan A adalah...",
+            options: ["{2, 3, 5, 7}", "{3, 5, 7}", "{2, 3, 5, 7, 9}", "{3, 5, 7, 9}", "{2, 4, 6, 8}"],
+            ans: 0,
+            exp: "Bilangan prima antara 2 (termasuk) sampai 9 adalah 2, 3, 5, 7. (9 bukan bilangan prima karena bisa dibagi 3)."
+        },
+        {
+            q: "Diketahui A = {1, 3, 5, 7} dan B = {2, 3, 4, 5}. Tentukan A ∩ B!",
+            options: ["{1, 2, 3, 4, 5, 7}", "{3, 5}", "{1, 7}", "{2, 4}", "Himpunan kosong (Ø)"],
+            ans: 1,
+            exp: "Irisan (∩) adalah anggota yang ada di A dan juga ada di B (yang kembar). Anggota kembarnya adalah 3 dan 5."
+        },
+        {
+            q: "Berdasarkan himpunan A = {1, 3, 5, 7} dan B = {2, 3, 4, 5}, berapakah n(A ∪ B)?",
+            options: ["2", "4", "6", "8", "10"],
+            ans: 2,
+            exp: "A ∪ B = {1, 2, 3, 4, 5, 7}. Jumlah anggotanya atau n(A ∪ B) adalah 6."
+        },
+        {
+            q: "Dari 40 siswa di kelas, 25 siswa menyukai Matematika, 20 siswa menyukai Fisika, dan 5 siswa tidak menyukai keduanya. Banyak siswa yang menyukai Matematika DAN Fisika adalah...",
+            options: ["5 siswa", "10 siswa", "15 siswa", "20 siswa", "25 siswa"],
+            ans: 1,
+            exp: "Rumus: n(S) = n(M) + n(F) - n(M ∩ F) + n(Tidak suka). <br> 40 = 25 + 20 - x + 5 <br> 40 = 50 - x <br> x = 10."
+        },
+        {
+            q: "Diketahui S = {1, 2, 3, 4, 5, 6, 7, 8}, A = {1, 2, 3, 4}, dan B = {3, 4, 5, 6}. Komplemen dari (A ∪ B) adalah...",
+            options: ["{1, 2, 5, 6}", "{3, 4}", "{7, 8}", "{1, 2, 3, 4, 5, 6}", "{ }"],
+            ans: 2,
+            exp: "A ∪ B = {1, 2, 3, 4, 5, 6}. Komplemen adalah anggota S yang BUKAN anggota A ∪ B, yaitu {7, 8}."
+        },
+        {
+            q: "P = {Faktor dari 12} dan Q = {Kelipatan 3 kurang dari 15}. Himpunan P - Q (Selisih P oleh Q) adalah...",
+            options: ["{1, 2, 4}", "{1, 2, 4, 6}", "{3, 6, 12}", "{9, 12}", "{1, 2, 4, 12}"],
+            ans: 0,
+            exp: "P = {1, 2, 3, 4, 6, 12}. Q = {3, 6, 9, 12}. P - Q adalah anggota P yang tidak ada di Q, yaitu hilangkan 3, 6, dan 12 dari P. Tersisa {1, 2, 4}."
+        },
+        {
+            q: "Sebuah himpunan K memiliki 5 anggota. Berapakah banyak himpunan bagian dari K?",
+            options: ["5", "10", "25", "32", "64"],
+            ans: 3,
+            exp: "Rumus banyak himpunan bagian adalah 2^n. Karena n = 5, maka 2^5 = 32."
+        },
+        {
+            q: "Jika M = {a, b, c}, banyaknya himpunan bagian dari M yang memiliki tepat 2 anggota adalah...",
+            options: ["2", "3", "4", "6", "8"],
+            ans: 1,
+            exp: "Anggota M ada 3. Himpunan bagian dengan 2 anggota: {a,b}, {a,c}, {b,c}. Total ada 3 himpunan."
+        },
+        {
+            q: "Dalam sebuah kelompok terdapat 50 orang. 35 orang berlangganan Netflix, 24 orang berlangganan Spotify. Jika setiap orang berlangganan setidaknya satu layanan, berapa orang yang berlangganan keduanya?",
+            options: ["5", "7", "9", "11", "15"],
+            ans: 2,
+            exp: "n(S) = n(N) + n(Sp) - n(N ∩ Sp). 50 = 35 + 24 - x. 50 = 59 - x. x = 9."
+        },
+        {
+            q: "Jika himpunan P = {x | x < 5, x ∈ bilangan asli} dan Q = {x | -2 < x < 3, x ∈ bilangan bulat}, maka P ∪ Q adalah...",
+            options: ["{-1, 0, 1, 2, 3, 4}", "{1, 2}", "{-2, -1, 0, 1, 2, 3, 4}", "{-1, 0, 1, 2, 3, 4, 5}", "{0, 1, 2, 3, 4}"],
+            ans: 0,
+            exp: "P = {1, 2, 3, 4} (asli mulai dari 1). Q = {-1, 0, 1, 2} (bulat antara -2 dan 3). P ∪ Q = {-1, 0, 1, 2, 3, 4}."
+        },
+        {
+            q: "Didefinisikan himpunan A = Ø. Maka n(A) adalah...",
+            options: ["Tidak terdefinisi", "1", "0", "-1", "Ø"],
+            ans: 2,
+            exp: "Ø adalah simbol untuk himpunan kosong. Artinya himpunan tersebut tidak memiliki anggota. Jadi, n(A) = 0."
+        },
+        {
+            q: "Diketahui n(A) = 15, n(B) = 20, dan n(A ∪ B) = 30. Nilai dari n(A ∩ B) adalah...",
+            options: ["0", "5", "10", "15", "25"],
+            ans: 1,
+            exp: "n(A ∪ B) = n(A) + n(B) - n(A ∩ B). 30 = 15 + 20 - x. 30 = 35 - x. x = 5."
+        },
+        {
+            q: "Himpunan semesta yang mungkin untuk {2, 3, 5, 7, 11} adalah...",
+            options: ["Himpunan bilangan cacah genap", "Himpunan bilangan prima", "Himpunan bilangan komposit", "Himpunan bilangan asli lebih dari 15", "Himpunan kelipatan 2"],
+            ans: 1,
+            exp: "Angka-angka tersebut adalah bilangan prima, sehingga semesta yang paling tepat adalah Himpunan bilangan prima (atau bilangan asli/cacah secara umum)."
+        },
+        {
+            q: "A adalah himpunan huruf pembentuk kata 'MATEMATIKA'. n(A) adalah...",
+            options: ["10", "9", "6", "5", "4"],
+            ans: 2,
+            exp: "Anggota himpunan ditulis tanpa pengulangan: {M, A, T, E, I, K}. Jumlahnya ada 6."
+        },
+        {
+            q: "Diketahui X = {x | 1 ≤ x < 20, x kelipatan 4} dan Y = {x | 1 ≤ x < 20, x kelipatan 6}. Tentukan X ∩ Y!",
+            options: ["{12}", "{12, 24}", "{4, 6, 8, 12, 16, 18}", "{24}", "{ }"],
+            ans: 0,
+            exp: "X = {4, 8, 12, 16}. Y = {6, 12, 18}. Irisannya adalah angka yang ada di keduanya, yaitu {12}."
+        },
+        {
+            q: "Dua himpunan dikatakan saling lepas (disjoint) jika...",
+            options: ["Gabungannya adalah himpunan semesta", "Irisannya adalah himpunan kosong", "Keduanya memiliki jumlah anggota yang sama", "Salah satu merupakan himpunan bagian yang lain", "Keduanya bukan himpunan kosong"],
+            ans: 1,
+            exp: "Saling lepas artinya tidak ada satupun anggota yang sama, sehingga irisannya adalah himpunan kosong (Ø)."
+        },
+        {
+            q: "Di suatu kelas terdapat 30 siswa. 18 siswa mengikuti ekstrakurikuler Pramuka, 15 siswa mengikuti PMR, dan 7 siswa tidak mengikuti keduanya. Berapa siswa yang hanya mengikuti Pramuka (tidak ikut PMR)?",
+            options: ["8 siswa", "10 siswa", "12 siswa", "5 siswa", "18 siswa"],
+            ans: 0,
+            exp: "Cari yang ikut keduanya dulu: 30 = 18 + 15 - x + 7 -> 30 = 40 - x -> x = 10 (ikut keduanya). Yang HANYA ikut Pramuka = 18 - 10 = 8 siswa."
+        },
+        {
+            q: "Diketahui A ⊂ B (A adalah himpunan bagian dari B). Maka A ∩ B sama dengan...",
+            options: ["B", "A", "A ∪ B", "Himpunan kosong", "S"],
+            ans: 1,
+            exp: "Jika seluruh anggota A ada di dalam B, maka irisan mereka (yang sama di keduanya) adalah himpunan A itu sendiri."
+        },
+        {
+            q: "Jika A ⊂ B, maka A ∪ B sama dengan...",
+            options: ["B", "A", "A ∩ B", "Himpunan kosong", "S"],
+            ans: 0,
+            exp: "Karena A sepenuhnya ada di dalam B, maka gabungan dari A dan B akan menghasilkan himpunan B yang lebih besar."
+        },
+        {
+            q: "A = {Faktor prima dari 30}. B = {Faktor prima dari 42}. A ∩ B = ...",
+            options: ["{2, 3, 5, 7}", "{2, 3}", "{2, 3, 5}", "{5, 7}", "{6}"],
+            ans: 1,
+            exp: "Faktor prima 30: {2, 3, 5}. Faktor prima 42: {2, 3, 7}. Irisannya adalah {2, 3}."
+        },
+        {
+            q: "Diketahui K = {x | -3 < x ≤ 2, x ∈ Z} dimana Z adalah bilangan bulat. Banyaknya himpunan bagian dari K adalah...",
+            options: ["5", "16", "32", "64", "128"],
+            ans: 2,
+            exp: "Anggota K = {-2, -1, 0, 1, 2}. n(K) = 5. Banyak himpunan bagian = 2^5 = 32."
+        },
+        {
+            q: "Notasi untuk selisih simetris (beda setangkup) dari himpunan A dan B adalah gabungan dikurangi irisan. Jika A={1,2,3} dan B={2,3,4}, selisih simetrisnya adalah...",
+            options: ["{2, 3}", "{1, 4}", "{1, 2, 3, 4}", "{ }", "{1, 2, 4}"],
+            ans: 1,
+            exp: "Gabungan = {1, 2, 3, 4}. Irisan = {2, 3}. Selisih simetris (A ⊕ B) = Gabungan - Irisan = {1, 4}. (Angka yang HANYA di A ditambah angka yang HANYA di B)."
+        },
+        {
+            q: "Di sebuah survei terhadap 100 orang pencinta olahraga: 60 suka Sepak Bola, 50 suka Basket, dan 30 suka keduanya. Persentase orang yang tidak suka keduanya adalah...",
+            options: ["10%", "20%", "30%", "40%", "0%"],
+            ans: 1,
+            exp: "Total suka = 60 + 50 - 30 = 80 orang. Yang tidak suka keduanya = 100 - 80 = 20 orang. Dari 100 orang, 20 orang = 20%."
+        },
+        {
+            q: "Himpunan ekuivalen adalah dua himpunan yang memiliki...",
+            options: ["Anggota yang sama persis", "Jumlah anggota yang sama, n(A) = n(B)", "Irisan himpunan kosong", "Semesta yang sama", "Tidak ada jawaban yang benar"],
+            ans: 1,
+            exp: "Dua himpunan dikatakan ekuivalen jika kardinalitasnya (jumlah anggota) sama, meskipun anggota-anggotanya berbeda."
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+
+    function renderQuiz() {
+        quizData.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label" id="label-${index}-${optIndex}">
+                        <input type="radio" name="q${index}" value="${optIndex}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="question-number">Soal ${index + 1} dari 25</div>
+                <div class="question-text">${q.q}</div>
+                <div class="options">
+                    ${optionsHtml}
+                </div>
+                <div class="explanation" id="exp-${index}">
+                    <strong>Pembahasan:</strong><br>
+                    ${q.exp}
+                </div>
+            `;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        let allAnswered = true;
+
+        quizData.forEach((q, index) => {
+            const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+            
+            if (!selectedOption) {
+                allAnswered = false;
+            } else {
+                const selectedAns = parseInt(selectedOption.value);
+                const correctAns = q.ans;
+                
+                // Highlight correct answer
+                document.getElementById(`label-${index}-${correctAns}`).classList.add('correct-answer');
+                
+                // Check if user's answer is wrong, highlight it red
+                if (selectedAns !== correctAns) {
+                    document.getElementById(`label-${index}-${selectedAns}`).classList.add('wrong-answer');
+                } else {
+                    score++;
+                }
+
+                // Show explanation
+                document.getElementById(`exp-${index}`).classList.add('show');
+            }
+            
+            // Disable all inputs after submission
+            const inputs = document.querySelectorAll(`input[name="q${index}"]`);
+            inputs.forEach(input => input.disabled = true);
+        });
+
+        if (!allAnswered) {
+            alert("Beberapa soal belum dijawab! Karena ini mode evaluasi, soal yang kosong dianggap salah, namun kami sarankan untuk menjawab semua jika ingin mengukur kemampuan asli.");
+        }
+
+        // Hide submit button, show result
+        document.getElementById('submit-btn').style.display = 'none';
+        const resultPanel = document.getElementById('result-panel');
+        resultPanel.style.display = 'block';
+        
+        const finalScore = (score / quizData.length) * 100;
+        let message = "";
+        
+        if(finalScore >= 80) message = "Luar Biasa! Pemahamanmu sangat matang.";
+        else if(finalScore >= 60) message = "Bagus! Terus berlatih untuk mengasah ketelitian.";
+        else message = "Jangan menyerah! Pelajari lagi konsep dasar himpunan.";
+
+        document.getElementById('score-display').innerHTML = `Nilai Kamu: ${Math.round(finalScore)} / 100 <br><span style="font-size:0.6em; color:#155724; font-weight:normal;">(${score} benar dari ${quizData.length} soal)</span><br><br><span style="font-size:0.7em">${message}</span>`;
+        
+        // Scroll to bottom
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize Quiz
+    renderQuiz();
+</script>
+
+</body>
+</html>
