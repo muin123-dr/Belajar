@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25 Soal Himpunan TKA SMA (Versi Mudah Dibaca)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f8fb;
+            color: #1a2a3a;
+            padding: 20px 16px;
+        }
+
+        .quiz-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 30px 28px;
+        }
+
+        @media (max-width: 640px) {
+            .quiz-wrapper {
+                padding: 16px 12px;
+            }
+        }
+
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #2d7fc1;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2b44;
+        }
+        .quiz-header h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4a6a85;
+            margin-left: 10px;
+        }
+
+        .score-box {
+            background: #eaf1f8;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid #cbdae6;
+        }
+        .score-box span {
+            color: #1f7bb0;
+        }
+
+        .reset-btn {
+            background: #eef4fa;
+            border: 1px solid #ccdbe8;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+
+        .question-card {
+            background: #fafdff;
+            border: 1px solid #e4ecf5;
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            transition: border 0.2s, background 0.2s;
+        }
+        .question-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .question-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+        }
+        .options input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+
+        .action-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .check-btn {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+        }
+        .check-btn:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .check-btn:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback .explain {
+            margin-top: 4px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+
+        .quiz-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #4a6a85;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .score-box {
+                text-align: center;
+            }
+            .options label {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-wrapper" id="app">
+    <div class="quiz-header">
+        <h1>📘 Soal Himpunan <small>TKA SMA</small></h1>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div class="score-box">🎯 Skor: <span id="scoreDisplay">0</span> / 25</div>
+            <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+        </div>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <div class="quiz-footer">
+        <strong>Selamat belajar!</strong> Klik tombol <em>"Periksa Jawaban"</em> untuk langsung melihat pembahasan.
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    //  25 SOAL HIMPUNAN (Full Unicode, tanpa LaTeX rumit)
+    // ============================================================
+    const questions = [{
+        id: 1,
+        text: 'Diberikan himpunan A = {x | x < 6, x ∈ Bilangan Asli}, B = {x | x bilangan genap, x ∈ Bilangan Cacah}, dan C = {x | x ≤ 10, x ∈ Bilangan Prima}. Hasil dari (A ∩ B) ∪ C adalah ...',
+        options: [
+            '{0, 2, 3, 4, 5, 7}',
+            '{2, 3, 4, 5, 7}',
+            '{2, 3, 5, 7}',
+            '{0, 2, 3, 5, 7}',
+            '{2, 3, 4, 5, 7, 10}'
+        ],
+        correct: 1,
+        explanation: 'A = {1,2,3,4,5}, B = {0,2,4,6,8,...}, C = {2,3,5,7}. A ∩ B = {2,4}. Gabungan dengan C = {2,3,4,5,7}.'
+    }, {
+        id: 2,
+        text: 'A = {x | 1 < x < 9, x ∈ Bilangan Ganjil}. Banyak anggota himpunan A adalah ...',
+        options: ['2', '3', '4', '5', '6'],
+        correct: 1,
+        explanation: 'Bilangan ganjil antara 1 dan 9 adalah {3, 5, 7}. Total ada 3.'
+    }, {
+        id: 3,
+        text: 'Diketahui S = {1,2,3,4,5,6}, A = {1,2,3}, B = {3,4,5}. Hasil dari (A − B) ∩ (B − A) adalah ...',
+        options: ['{3}', '{1,2,4,5}', '∅ (himpunan kosong)', '{1,2}', '{4,5}'],
+        correct: 2,
+        explanation: 'A − B = {1,2}, B − A = {4,5}. Irisan dari {1,2} dan {4,5} adalah ∅.'
+    }, {
+        id: 4,
+        text: 'A = {x | x² = 9} dan B = {x | x = 3}. Hubungan yang tepat antara A dan B adalah ...',
+        options: ['A = B', 'B ⊂ A', 'A ⊂ B', 'A ∩ B = ∅', 'A ∪ B = A'],
+        correct: 1,
+        explanation: 'A = {-3, 3} dan B = {3}. Jadi B adalah himpunan bagian dari A (B ⊂ A).'
+    }, {
+        id: 5,
+        text: 'Jika n(P) = 10 dan n(Q) = 7, serta P ∩ Q = ∅, maka n(P ∪ Q) = ...',
+        options: ['10', '7', '13', '17', '70'],
+        correct: 3,
+        explanation: 'Karena irisan kosong, n(P ∪ Q) = n(P) + n(Q) = 10 + 7 = 17.'
+    }, {
+        id: 6,
+        text: 'S = {0,1,2,3,4,5,6,7,8}. A = {x | x < 5, x ∈ Bilangan Asli}, B = {x | x ≥ 4, x ∈ Bilangan Cacah}. Komplemen dari (A ∩ B) adalah ...',
+        options: [
+            '{0,1,2,3,5,6,7,8}',
+            '{4}',
+            '{1,2,3,4}',
+            '{0,5,6,7,8}',
+            '{1,2,3}'
+        ],
+        correct: 0,
+        explanation: 'A = {1,2,3,4}, B = {4,5,6,7,8}. A ∩ B = {4}. Komplemennya di S = {0,1,2,3,5,6,7,8}.'
+    }, {
+        id: 7,
+        text: 'Dalam suatu kelas, 20 siswa suka basket, 15 siswa suka voli, 5 siswa suka keduanya, dan 5 siswa tidak suka keduanya. Jumlah siswa di kelas tersebut adalah ...',
+        options: ['25', '30', '35', '40', '45'],
+        correct: 2,
+        explanation: 'Total = (20 + 15 − 5) + 5 = 30 + 5 = 35 siswa.'
+    }, {
+        id: 8,
+        text: 'A = {faktor dari 12}, B = {faktor dari 18}. A ∩ B = ...',
+        options: [
+            '{1,2,3,6}',
+            '{1,2,3,4}',
+            '{1,2,3,6,9}',
+            '{1,2,3,4,6,12}',
+            '{1,2,3,6,12,18}'
+        ],
+        correct: 0,
+        explanation: 'Faktor 12 = {1,2,3,4,6,12}. Faktor 18 = {1,2,3,6,9,18}. Irisan = {1,2,3,6}.'
+    }, {
+        id: 9,
+        text: 'A = {bilangan asli kurang dari 10 yang habis dibagi 3}. Anggota himpunan A adalah ...',
+        options: [
+            '{3,6,9}',
+            '{1,3,6,9}',
+            '{3,6,9,12}',
+            '{0,3,6,9}',
+            '{3,9}'
+        ],
+        correct: 0,
+        explanation: 'Bilangan asli (1,2,3,...) kurang dari 10 yang habis dibagi 3 adalah {3,6,9}.'
+    }, {
+        id: 10,
+        text: 'Jika n(A) = 4, banyak himpunan bagian dari A yang memiliki tepat 2 anggota adalah ...',
+        options: ['4', '6', '8', '12', '16'],
+        correct: 1,
+        explanation: 'Kombinasi 4 pilih 2 = C(4,2) = 6.'
+    }, {
+        id: 11,
+        text: 'Pernyataan berikut yang benar adalah ...',
+        options: [
+            '∅ ⊂ {1,2}',
+            '∅ ∈ {1,2}',
+            '{1} ∈ {1,2}',
+            '{1,2} ⊂ {1}',
+            '{1} = {1,2}'
+        ],
+        correct: 0,
+        explanation: 'Himpunan kosong adalah subset dari semua himpunan. Opsi lain salah karena ∈ digunakan untuk anggota.'
+    }, {
+        id: 12,
+        text: 'A = {x | x adalah bilangan prima genap}. Nilai n(A) adalah ...',
+        options: ['0', '1', '2', '3', '4'],
+        correct: 1,
+        explanation: 'Satu-satunya bilangan prima genap adalah 2. Jadi n(A) = 1.'
+    }, {
+        id: 13,
+        text: 'A = {1,2,3,4}, B = {3,4,5,6}, C = {1,3,5,7}. Hasil dari (A ∪ B) ∩ C adalah ...',
+        options: [
+            '{1,3,5}',
+            '{1,3,5,7}',
+            '{1,2,3,4,5,6}',
+            '{3,5}',
+            '{1,3}'
+        ],
+        correct: 0,
+        explanation: 'A ∪ B = {1,2,3,4,5,6}. Irisan dengan C = {1,3,5}.'
+    }, {
+        id: 14,
+        text: 'A = {x | x < 10, x ∈ Bilangan Cacah} dan B = {x | x adalah faktor dari 30}. Banyak anggota A ∩ B adalah ...',
+        options: ['4', '5', '6', '7', '8'],
+        correct: 1,
+        explanation: 'A = {0,1,2,3,4,5,6,7,8,9}. Faktor 30 = {1,2,3,5,6,10,15,30}. Irisan = {1,2,3,5,6} → ada 5.'
+    }, {
+        id: 15,
+        text: 'S = {0,1,2,3,4,5}, A = {x | x² < 10, x ∈ S}. Anggota himpunan A adalah ...',
+        options: [
+            '{0,1,2,3}',
+            '{1,2,3}',
+            '{0,1,2,3,4}',
+            '{1,2,3,4}',
+            '{0,1,2}'
+        ],
+        correct: 0,
+        explanation: 'x=0→0<10, 1→1<10, 2→4<10, 3→9<10, 4→16<10 (salah). Jadi {0,1,2,3}.'
+    }, {
+        id: 16,
+        text: 'Dari 60 siswa, 35 suka matematika, 27 suka fisika, dan 18 suka keduanya. Banyak siswa yang tidak suka keduanya adalah ...',
+        options: ['8', '12', '14', '16', '18'],
+        correct: 3,
+        explanation: 'Yang suka salah satu atau keduanya = 35 + 27 − 18 = 44. Yang tidak suka = 60 − 44 = 16.'
+    }, {
+        id: 17,
+        text: 'A = {x | -2 < x < 3, x ∈ Bilangan Bulat}. Banyak anggota himpunan A adalah ...',
+        options: ['3', '4', '5', '6', '7'],
+        correct: 1,
+        explanation: 'Bilangan bulat yang memenuhi: -1, 0, 1, 2 → ada 4.'
+    }, {
+        id: 18,
+        text: 'Pernyataan "0 adalah bilangan asli" adalah ...',
+        options: ['Benar', 'Salah'],
+        correct: 1,
+        explanation: 'Bilangan asli dimulai dari 1, bukan 0. Jadi pernyataan tersebut salah.'
+    }, {
+        id: 19,
+        text: 'A = {1,2,3,4} dan B = {x | x² − 5x + 6 = 0}. Hasil dari B ∩ A adalah ...',
+        options: [
+            '{1,2}',
+            '{2,3}',
+            '{3,4}',
+            '{1,3}',
+            '{2,4}'
+        ],
+        correct: 1,
+        explanation: 'x² − 5x + 6 = 0 → (x−2)(x−3)=0 → x=2 atau 3. B = {2,3}. Irisan dengan A = {2,3}.'
+    }, {
+        id: 20,
+        text: 'P = {2,3,5,7} dan Q = {1,2,3,4,5}. Hasil dari P − Q adalah ...',
+        options: [
+            '{1,4}',
+            '{2,3,5}',
+            '{7}',
+            '{1,2,3,4,5}',
+            '{2,3,5,7}'
+        ],
+        correct: 2,
+        explanation: 'P − Q adalah anggota P yang tidak ada di Q. Anggota P yang tidak ada di Q adalah {7}.'
+    }, {
+        id: 21,
+        text: 'Dalam suatu survei, 40 orang suka kopi, 25 suka teh, 10 suka keduanya, dan 5 tidak suka keduanya. Jumlah responden adalah ...',
+        options: ['50', '55', '60', '65', '70'],
+        correct: 2,
+        explanation: 'Total = (40 + 25 − 10) + 5 = 55 + 5 = 60 responden.'
+    }, {
+        id: 22,
+        text: 'A = {x | x kelipatan 3 dan x ≤ 15}, B = {x | x kelipatan 5 dan x < 20}. A ∩ B = ...',
+        options: [
+            '∅',
+            '{15}',
+            '{5,10,15}',
+            '{3,6,9,12,15}',
+            '{5,10,15}'
+        ],
+        correct: 1,
+        explanation: 'A = {3,6,9,12,15}. B = {5,10,15}. Irisan = {15}.'
+    }, {
+        id: 23,
+        text: 'Banyak himpunan bagian dari himpunan kosong adalah ...',
+        options: ['0', '1', '2', '3', '4'],
+        correct: 1,
+        explanation: 'Himpunan kosong (∅) hanya memiliki satu himpunan bagian, yaitu ∅ itu sendiri. 2⁰ = 1.'
+    }, {
+        id: 24,
+        text: 'M = {huruf pembentuk kata "MATEMATIKA"}. Banyak anggota M adalah ...',
+        options: ['5', '6', '7', '8', '10'],
+        correct: 1,
+        explanation: 'Huruf unik dari "MATEMATIKA" adalah M, A, T, E, I, K → total 6 huruf.'
+    }, {
+        id: 25,
+        text: 'Pernyataan yang benar tentang bilangan prima adalah ...',
+        options: [
+            '1 adalah bilangan prima',
+            '2 adalah satu-satunya bilangan prima genap',
+            '3 adalah bilangan prima terkecil',
+            'Semua bilangan ganjil adalah prima',
+            '0 termasuk bilangan prima'
+        ],
+        correct: 1,
+        explanation: '2 adalah satu-satunya bilangan prima yang genap. 1 bukan prima, 3 bukan terkecil (2 lebih kecil).'
+    }];
+
+    // ============================================================
+    //  LOGIC RENDER
+    // ============================================================
+    const container = document.getElementById('quizContainer');
+    const scoreSpan = document.getElementById('scoreDisplay');
+    let userAnswers = new Array(questions.length).fill(null);
+    let isLocked = new Array(questions.length).fill(false);
+
+    function render() {
+        let html = '';
+        questions.forEach((q, idx) => {
+            const locked = isLocked[idx];
+            const selected = userAnswers[idx];
+            const isCorrect = locked && (selected === q.correct);
+            const isWrong = locked && (selected !== null && selected !== q.correct);
+
+            let cardClass = 'question-card';
+            if (locked) {
+                cardClass += isCorrect ? ' correct' : ' wrong';
+            }
+
+            html += `<div class="${cardClass}" id="qcard-${idx}">`;
+            html += `<div class="q-number">Soal ${idx+1}</div>`;
+            html += `<div class="q-text">${q.text}</div>`;
+            html += `<div class="options">`;
+
+            q.options.forEach((opt, optIdx) => {
+                const checked = (selected === optIdx) ? 'checked' : '';
+                const disabled = locked ? 'disabled' : '';
+                html += `
+                        <label>
+                            <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                            <span>${opt}</span>
+                        </label>
+                    `;
+            });
+
+            html += `</div>`;
+            html += `<div class="action-area">`;
+            html +=
+                `<button class="check-btn" id="check-${idx}" ${locked ? 'disabled' : ''}>${locked ? '✓ Diperiksa' : 'Periksa Jawaban'}</button>`;
+            html += `</div>`;
+
+            let feedbackClass = 'feedback';
+            let feedbackHtml = '';
+            if (locked) {
+                feedbackClass += ' show';
+                feedbackClass += isCorrect ? ' correct' : ' wrong';
+                const icon = isCorrect ? '✅' : '❌';
+                const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+                const correctAns = q.options[q.correct];
+                feedbackHtml = `
+                        <div class="${feedbackClass}">
+                            <strong>${icon} ${status}</strong>
+                            <div class="explain">💡 ${q.explanation}</div>
+                            <div style="margin-top:4px;font-size:0.9rem;">Jawaban yang benar: <strong>${correctAns}</strong></div>
+                        </div>
+                    `;
+            } else {
+                feedbackHtml = `<div class="feedback"></div>`;
+            }
+            html += feedbackHtml;
+            html += `</div>`;
+        });
+
+        container.innerHTML = html;
+        updateScore();
+
+        questions.forEach((_, idx) => {
+            const btn = document.getElementById(`check-${idx}`);
+            if (btn) {
+                btn.addEventListener('click', () => handleCheck(idx));
+            }
+            const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+            radios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (!isLocked[idx]) {
+                        userAnswers[idx] = parseInt(e.target.value);
+                    }
+                });
+            });
+        });
+    }
+
+    function handleCheck(idx) {
+        if (isLocked[idx]) return;
+        const selected = userAnswers[idx];
+        if (selected === null || selected === undefined) {
+            alert('Pilih salah satu opsi terlebih dahulu!');
+            return;
+        }
+        isLocked[idx] = true;
+        render();
+    }
+
+    function updateScore() {
+        let correctCount = 0;
+        for (let i = 0; i < questions.length; i++) {
+            if (isLocked[i] && userAnswers[i] === questions[i].correct) {
+                correctCount++;
+            }
+        }
+        scoreSpan.textContent = correctCount;
+    }
+
+    function resetQuiz() {
+        userAnswers = new Array(questions.length).fill(null);
+        isLocked = new Array(questions.length).fill(false);
+        render();
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+    render();
+</script>
+
+</body>
+</html>
