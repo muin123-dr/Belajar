@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Lengkap — Basmalah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #eef4f0;
+            --card-bg: #ffffff;
+            --text: #1a2a2a;
+            --primary: #1a4a5a;
+            --primary-light: #2a6a7a;
+            --accent: #5a8a7a;
+            --accent-light: #e4f0ea;
+            --accent-pale: #f2f8f4;
+            --border: #b8c8c0;
+            --shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 8px 36px rgba(0, 0, 0, 0.10);
+            --radius: 14px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-arabic: 'Scheherazade New', 'Traditional Arabic', 'Times New Roman', serif;
+            --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-ui);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 16px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .main-container {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+            border-radius: 4px 4px 0 0;
+        }
+        .header .badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--primary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 3px 18px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            border: 1px solid #c8d8d0;
+        }
+        .header h1 {
+            font-family: var(--font-arabic);
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.6;
+            margin-bottom: 4px;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: #4a6a5a;
+            margin-top: 2px;
+        }
+        .header .subtitle em {
+            font-style: italic;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ─── CARD ─── */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #4a6a5a;
+            margin-bottom: 12px;
+            font-weight: 600;
+            background: var(--accent-light);
+            padding: 4px 16px;
+            border-radius: 20px;
+            border: 1px solid #c8d8d0;
+        }
+
+        /* ─── ARABIC TEXT ─── */
+        .arabic-text {
+            font-family: var(--font-arabic);
+            font-size: 2.6rem;
+            line-height: 2.4;
+            text-align: center;
+            color: #1a2a2a;
+            direction: rtl;
+            unicode-bidi: embed;
+            word-spacing: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 4px 8px;
+            padding: 8px 0;
+        }
+        .word-unit {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 1px;
+        }
+        .word-arab {
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            font-family: var(--font-arabic);
+            font-size: inherit;
+            line-height: inherit;
+            color: inherit;
+            background: transparent;
+            position: relative;
+        }
+        .word-arab:hover {
+            background: var(--accent-pale);
+            border-bottom-color: var(--accent);
+            color: #1a3a2a;
+        }
+        .word-arab.active {
+            background: #d4e8de;
+            border-bottom-color: var(--accent);
+            font-weight: 700;
+            color: #0a2a2a;
+            box-shadow: 0 0 0 4px rgba(90, 138, 122, 0.20);
+            border-radius: 8px;
+        }
+        .word-makna {
+            font-size: 0.75rem;
+            color: #3a5a4a;
+            font-family: var(--font-ui);
+            background: var(--accent-pale);
+            border-radius: 4px;
+            padding: 2px 8px;
+            white-space: nowrap;
+            margin-top: 2px;
+            display: none;
+            line-height: 1.3;
+            border: 1px solid #c8d8d0;
+        }
+        .show-makna .word-makna {
+            display: inline-block;
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2a4a3a;
+            transition: var(--transition);
+            font-family: var(--font-ui);
+            user-select: none;
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background: var(--accent-pale);
+            border-color: var(--accent);
+            color: #1a3a2a;
+        }
+        .btn.active-btn {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .btn.active-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+
+        /* ─── PANELS ─── */
+        .analysis-panel,
+        .translation-box,
+        .structural-box {
+            display: none;
+            margin-top: 18px;
+            background: #f8fcf8;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 22px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeSlide 0.3s ease;
+            direction: ltr;
+            text-align: left;
+        }
+        .analysis-panel.visible,
+        .translation-box.visible,
+        .structural-box.visible {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .analyzed-word {
+            font-family: var(--font-arabic);
+            font-size: 2.8rem;
+            color: var(--primary);
+            text-align: center;
+            direction: rtl;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        .makna-box {
+            background: linear-gradient(135deg, var(--accent-pale), #e4eee8);
+            border: 1px solid #c0d0c8;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-bottom: 14px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a3a2a;
+        }
+        .makna-box .makna-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #4a7a6a;
+            display: block;
+            margin-bottom: 2px;
+            font-family: var(--font-ui);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        table th,
+        table td {
+            padding: 10px 14px;
+            border: 1px solid #d0dcd4;
+            vertical-align: top;
+        }
+        table th {
+            background: #eaf2ec;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        table td {
+            background: #fafffc;
+        }
+        .close-btn {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 7px 20px;
+            background: #e8f0ea;
+            border: 1px solid #c8d8d0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2a4a3a;
+            transition: var(--transition);
+        }
+        .close-btn:hover {
+            background: #d0e0d8;
+        }
+        .hint {
+            font-size: 0.8rem;
+            color: #6a8a7a;
+            text-align: center;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        /* ─── STRUCTURAL BOX ─── */
+        .structural-box {
+            max-height: 75vh;
+            overflow-y: auto;
+            padding: 22px 26px;
+            line-height: 1.8;
+            direction: ltr;
+            text-align: left;
+        }
+        .structural-box h2 {
+            color: var(--primary);
+            margin: 24px 0 12px;
+            font-size: 1.35rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 6px;
+        }
+        .structural-box h3 {
+            color: var(--primary-light);
+            margin: 20px 0 8px;
+            font-size: 1.15rem;
+        }
+        .structural-box h4 {
+            color: #2a4a3a;
+            margin: 16px 0 4px;
+            font-size: 1.0rem;
+        }
+        .structural-box p,
+        .structural-box li {
+            margin-bottom: 8px;
+        }
+        .structural-box ul,
+        .structural-box ol {
+            padding-left: 22px;
+            margin-bottom: 12px;
+        }
+        .structural-box strong {
+            color: var(--primary);
+        }
+        .structural-box em {
+            font-style: italic;
+            color: #3a5a4a;
+        }
+        .structural-box .arabic-inline {
+            font-family: var(--font-arabic);
+            font-size: 1.2rem;
+            color: var(--primary);
+            background: var(--accent-pale);
+            padding: 0 8px;
+            border-radius: 4px;
+        }
+        .structural-box hr {
+            border: 1px solid var(--border);
+            margin: 16px 0;
+        }
+        .structural-box pre {
+            background: #eaf2ec;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: var(--font-ui);
+            border: 1px solid #d0dcd4;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 640px) {
+            .arabic-text {
+                font-size: 1.8rem;
+                gap: 2px 4px;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .btn {
+                padding: 7px 14px;
+                font-size: 0.78rem;
+            }
+            .analyzed-word {
+                font-size: 2.2rem;
+            }
+            table {
+                font-size: 0.78rem;
+            }
+            table th,
+            table td {
+                padding: 6px 8px;
+            }
+            .structural-box {
+                max-height: 60vh;
+                padding: 16px 18px;
+            }
+            .structural-box h2 {
+                font-size: 1.1rem;
+            }
+            .structural-box h3 {
+                font-size: 1.0rem;
+            }
+        }
+        @media (max-width: 420px) {
+            .arabic-text {
+                font-size: 1.4rem;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            .word-arab {
+                padding: 2px 6px;
+            }
+            .btn-row {
+                gap: 6px;
+            }
+            .btn {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* ─── SCROLLBAR ─── */
+        .structural-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .structural-box::-webkit-scrollbar-track {
+            background: #e8f0ea;
+            border-radius: 8px;
+        }
+        .structural-box::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 8px;
+        }
+        .structural-box::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        /* ─── SPECIAL BADGE IN HEADER ─── */
+        .header .ornament {
+            color: var(--accent);
+            font-size: 1.6rem;
+            letter-spacing: 8px;
+            opacity: 0.5;
+            display: block;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+
+        <!-- ─── HEADER ─── -->
+        <div class="header">
+            <span class="badge">⸻ تحليل لغوي متكامل ⸻</span>
+            <h1>بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ</h1>
+            <p class="subtitle">Analisis <em>Nahwu · Sharaf · I‘rāb · Balāghah</em> &amp; Konteks Keilmuan</p>
+            <span class="ornament">✦ ✦ ✦</span>
+        </div>
+
+        <!-- ─── MAIN CARD ─── -->
+        <div class="card" id="mainCard">
+            <span class="section-label">📜 Teks Arab &amp; Analisis Per Kata</span>
+
+            <div class="arabic-text" id="arabicText"></div>
+            <p class="hint">👆 Klik/tap setiap kata untuk melihat makna &amp; analisis lengkap</p>
+
+            <div class="btn-row">
+                <button class="btn" id="btnMakna" onclick="toggleMakna()">📝 Makna Perkata</button>
+                <button class="btn" id="btnTranslation" onclick="toggleTranslation()">🌐 Terjemahan</button>
+                <button class="btn" id="btnStructural" onclick="toggleStructural()">📚 Penjelasan Struktural &amp; Balaghah</button>
+                <button class="btn" id="btnReset" onclick="resetAll()">🔄 Reset</button>
+            </div>
+
+            <!-- Panel Analisis Kata -->
+            <div class="analysis-panel" id="analysisPanel">
+                <div class="analyzed-word" id="analyzedWordDisplay"></div>
+                <div class="makna-box">
+                    <span class="makna-label">📌 Makna</span>
+                    <span id="maknaText"></span>
+                </div>
+                <div id="analysisContent"></div>
+                <button class="close-btn" onclick="closeAnalysis()">✕ Tutup Analisis</button>
+            </div>
+
+            <!-- Panel Terjemahan -->
+            <div class="translation-box" id="translationBox">
+                <strong>🌐 Terjemahan:</strong><br><br>
+                <span style="font-size:1.8rem;font-family:var(--font-arabic);">بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ</span><br><br>
+                <em>“Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang.”</em>
+                <br><br>
+                <span style="font-size:0.9rem;color:#4a6a5a;">Konteks: Basmalah adalah pembuka hampir seluruh surah Al-Qur'an, pembuka kitab-kitab para ulama, dan dianjurkan untuk mengawali setiap amal yang baik.</span>
+            </div>
+
+            <!-- Panel Penjelasan Struktural & Balaghah -->
+            <div class="structural-box" id="structuralBox"></div>
+        </div>
+    </div>
+
+    <script>
+        // ─── DATA ANALISIS PER KATA ───
+        const analysisData = {
+            'k_bismi': {
+                word: 'بِسْمِ',
+                makna: 'Dengan nama — gabungan huruf jarr بِ dan isim اِسْمِ.',
+                sharaf: '<strong>بِ:</strong> Harf jarr, mabni, tidak memiliki akar atau wazan.<br><strong>اسْمِ:</strong> Isim jāmid, mufrad, mudzakkar. Akar: س-م-و (menurut Bashrah) atau و-س-م (menurut Kufah). Bentuk asal: اِسْمٌ. Hamzah washal gugur karena didahului huruf.',
+                irob: '<strong>بِ:</strong> Harf jarr, mabnī ‘alā al-kasr.<br><strong>اسْمِ:</strong> Majrūr dengan kasrah ẓāhirah, sekaligus mudhāf.',
+                nahwu: '<strong>بِ:</strong> Harr jarr yang menyebabkan isim setelahnya majrur.<br><strong>اسْمِ:</strong> Isim majrur sekaligus mudhāf kepada اللَّهِ. Frasa <strong>بِسْمِ</strong> adalah jār wa majrūr yang muta‘allaq kepada fi‘il yang dihapus (taqdīr: أَبْدَأُ atau أَقْرَأُ).'
+            },
+            'k_allah': {
+                word: 'اللَّهِ',
+                makna: 'Allah — Nama Dzat Yang Maha Esa, Pencipta seluruh alam.',
+                sharaf: 'Isim ‘alam (nama diri), ma‘rifah, mufrad, mudzakkar. Tidak menerima tanwin, tidak ditashrīf. Mayoritas ulama menggolongkannya sebagai isim jāmid (bukan musytaq), namun sebagian berpendapat berasal dari akar أ-ل-ه (menyembah).',
+                irob: 'Majrūr dengan kasrah ẓāhirah.',
+                nahwu: '<strong>Mudhāf ilaih</strong> dari اِسْمِ. Susunan <strong>اِسْمُ اللَّهِ</strong> adalah idhāfah yang menunjukkan pengkhususan: nama Allah, bukan nama selain-Nya.'
+            },
+            'k_rahman': {
+                word: 'الرَّحْمٰنِ',
+                makna: 'Yang Maha Pengasih — rahmat-Nya meliputi seluruh makhluk di dunia.',
+                sharaf: 'Ṣifat musyabbahah / shighah mubālaghah. Akar: ر-ح-م. Wazan: <strong>فَعْلَان</strong> (menunjukkan kelimpahan, kepenuhan, dan keluasan sifat).',
+                irob: 'Majrūr dengan kasrah ẓāhirah.',
+                nahwu: '<strong>Na‘at</strong> (sifat) pertama dari اللَّهِ. Mengikuti man‘ūt-nya dalam i‘rāb (majrūr), ta‘rīf (ma‘rifah dengan al), bilangan (mufrad), dan jenis (mudzakkar).'
+            },
+            'k_rahim': {
+                word: 'الرَّحِيْمِ',
+                makna: 'Yang Maha Penyayang — rahmat-Nya terus-menerus dan sempurna, khusus bagi orang beriman di akhirat.',
+                sharaf: 'Ṣifat musyabbahah / shighah mubālaghah. Akar: ر-ح-م. Wazan: <strong>فَعِيل</strong> (menunjukkan sifat yang tetap dan terus melekat).',
+                irob: 'Majrūr dengan kasrah ẓāhirah.',
+                nahwu: '<strong>Na‘at</strong> (sifat) kedua dari اللَّهِ. Satu man‘ūt boleh memiliki lebih dari satu na‘at tanpa huruf penghubung.'
+            }
+        };
+
+        // ─── DAFTAR KATA ───
+        const arabicWords = [
+            { id: 'k_bismi', text: 'بِسْمِ', spacer: ' ' },
+            { id: 'k_allah', text: 'اللَّهِ', spacer: ' ' },
+            { id: 'k_rahman', text: 'الرَّحْمٰنِ', spacer: ' ' },
+            { id: 'k_rahim', text: 'الرَّحِيْمِ', spacer: '' }
+        ];
+
+        let showMakna = false;
+        let currentlyActiveSpan = null;
+
+        // ─── RENDER ───
+        function renderArabicText() {
+            const container = document.getElementById('arabicText');
+            container.innerHTML = '';
+            if (showMakna) {
+                container.classList.add('show-makna');
+            } else {
+                container.classList.remove('show-makna');
+            }
+            arabicWords.forEach(item => {
+                const unit = document.createElement('span');
+                unit.className = 'word-unit';
+
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word-arab';
+                wordSpan.textContent = item.text;
+                wordSpan.dataset.analysisId = item.id;
+                wordSpan.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showAnalysis(item.id, wordSpan);
+                });
+                wordSpan.title = 'Klik untuk analisis';
+
+                const maknaSpan = document.createElement('span');
+                maknaSpan.className = 'word-makna';
+                const data = analysisData[item.id];
+                maknaSpan.textContent = data ? data.makna : '—';
+
+                unit.appendChild(wordSpan);
+                unit.appendChild(maknaSpan);
+                container.appendChild(unit);
+
+                if (item.spacer) {
+                    container.appendChild(document.createTextNode(item.spacer));
+                }
+            });
+        }
+
+        // ─── TOGGLE MAKNA ───
+        function toggleMakna() {
+            showMakna = !showMakna;
+            const btn = document.getElementById('btnMakna');
+            if (showMakna) {
+                btn.classList.add('active-btn');
+                btn.innerHTML = '📝 Sembunyikan Makna';
+            } else {
+                btn.classList.remove('active-btn');
+                btn.innerHTML = '📝 Makna Perkata';
+            }
+            renderArabicText();
+            if (document.getElementById('analysisPanel').classList.contains('visible')) {
+                closeAnalysis();
+            }
+        }
+
+        // ─── SHOW ANALYSIS ───
+        function showAnalysis(id, spanEl) {
+            const data = analysisData[id];
+            if (!data) return;
+            if (currentlyActiveSpan) {
+                currentlyActiveSpan.classList.remove('active');
+            }
+            spanEl.classList.add('active');
+            currentlyActiveSpan = spanEl;
+
+            document.getElementById('analyzedWordDisplay').textContent = data.word;
+            document.getElementById('maknaText').textContent = data.makna;
+            document.getElementById('analysisContent').innerHTML = `
+                <table>
+                    <tr><th>📐 Sharaf (Bentuk Kata)</th><td>${data.sharaf}</td></tr>
+                    <tr><th>📏 I‘rāb (Kondisi Akhir)</th><td>${data.irob}</td></tr>
+                    <tr><th>🧩 Nahwu (Fungsi)</th><td>${data.nahwu}</td></tr>
+                </table>
+            `;
+            const panel = document.getElementById('analysisPanel');
+            panel.classList.add('visible');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function closeAnalysis() {
+            document.getElementById('analysisPanel').classList.remove('visible');
+            if (currentlyActiveSpan) {
+                currentlyActiveSpan.classList.remove('active');
+                currentlyActiveSpan = null;
+            }
+            document.getElementById('analyzedWordDisplay').textContent = '';
+            document.getElementById('maknaText').textContent = '';
+            document.getElementById('analysisContent').innerHTML =
+                '<p style="text-align:center;color:#6a8a7a;">👆 Klik kata di atas untuk melihat makna, Sharaf, I‘rāb, dan Nahwu.</p>';
+        }
+
+        // ─── TOGGLE TRANSLATION ───
+        function toggleTranslation() {
+            const box = document.getElementById('translationBox');
+            const btn = document.getElementById('btnTranslation');
+            box.classList.toggle('visible');
+            btn.classList.toggle('active-btn');
+            if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ─── TOGGLE STRUCTURAL ───
+        function toggleStructural() {
+            const box = document.getElementById('structuralBox');
+            const btn = document.getElementById('btnStructural');
+            box.classList.toggle('visible');
+            btn.classList.toggle('active-btn');
+            if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ─── RESET ───
+        function resetAll() {
+            closeAnalysis();
+            document.getElementById('translationBox').classList.remove('visible');
+            document.getElementById('btnTranslation').classList.remove('active-btn');
+            document.getElementById('structuralBox').classList.remove('visible');
+            document.getElementById('btnStructural').classList.remove('active-btn');
+            if (showMakna) {
+                toggleMakna();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ─── LOAD STRUCTURAL CONTENT ───
+        function loadStructuralContent() {
+            const box = document.getElementById('structuralBox');
+            box.innerHTML = `
+            <h2>Analisis Lengkap Basmalah</h2>
+            <p style="font-size:1.8rem;font-family:var(--font-arabic);text-align:center;direction:rtl;color:var(--primary);">
+            بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ
+            </p>
+            <hr>
+
+            <h3>Mukadimah</h3>
+            <p>Kalimat <strong>بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ</strong> atau yang lebih dikenal dengan <strong>Basmalah</strong> merupakan kalimat yang paling sering diucapkan oleh kaum muslimin. Ia menjadi pembuka hampir seluruh surah Al-Qur'an, pembuka berbagai kitab para ulama, serta dianjurkan untuk mengawali setiap amal yang baik.</p>
+            <p>Di balik susunannya yang singkat, Basmalah menyimpan kandungan ilmu bahasa Arab yang sangat mendalam. Hampir seluruh cabang ilmu bahasa Arab dapat ditemukan di dalamnya, mulai dari Nahwu, Sharaf, hingga Balaghah. Setiap kata memiliki kedudukan gramatikal yang jelas, setiap bentuk kata memiliki makna morfologis yang khas, dan susunan kalimatnya memancarkan keindahan retorika yang menunjukkan kemukjizatan bahasa Al-Qur'an.</p>
+
+            <h3>I. Teks Basmalah dan Terjemah</h3>
+            <p><strong>Teks Arab</strong><br>
+            <span style="font-family:var(--font-arabic);font-size:2.0rem;">بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ</span></p>
+            <p><strong>Terjemah</strong><br>
+            <em>"Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang."</em></p>
+
+            <h3>II. Analisis Kata per Kata</h3>
+
+            <h4>1. بِ</h4>
+            <p><strong>A. Makna</strong><br>
+            Huruf بِ secara umum berarti "dengan". Dalam Basmalah, para ulama menjelaskan bahwa huruf بِ mengandung makna yang lebih dalam daripada sekadar "dengan". Di antara makna yang paling kuat adalah:
+            <ul>
+                <li><strong>الاستعانة (al-Isti‘ānah)</strong>, yaitu memohon pertolongan kepada Allah dalam melakukan suatu pekerjaan.</li>
+                <li><strong>المصاحبة (al-Muṣāḥabah)</strong>, yaitu menyertakan nama Allah dalam setiap aktivitas yang dilakukan.</li>
+            </ul>
+            Mayoritas ulama Nahwu dan para mufassir lebih menguatkan makna <em>al-Isti‘ānah</em>, sehingga Basmalah dipahami sebagai ungkapan: <em>"Aku memulai pekerjaan ini dengan memohon pertolongan kepada Allah."</em></p>
+
+            <p><strong>B. Sharaf</strong><br>
+            Huruf بِ termasuk <strong>حرف</strong> (harf). Karena berupa huruf, ia: tidak memiliki akar kata; tidak memiliki wazan; tidak dapat ditashrif; termasuk huruf mabni, sehingga bentuknya tidak berubah dalam keadaan apa pun.</p>
+
+            <p><strong>C. I'rab</strong><br>
+            Huruf بِ termasuk <strong>حرف جر</strong> (harf jarr). Status i'rabnya adalah: <strong>مَبْنِيٌّ عَلَى الْكَسْرِ</strong> — "Mabni di atas harakat kasrah." Artinya, huruf ini selalu dibaca kasrah dan tidak mengalami perubahan i'rab. Fungsi utamanya ialah menjadikan isim setelahnya berstatus majrur.</p>
+
+            <p><strong>D. Nahwu</strong><br>
+            Dalam ilmu Nahwu, بِ berkedudukan sebagai <strong>harf jarr</strong>. Kehadirannya menyebabkan kata setelahnya, yaitu <strong>اسْمِ</strong>, menjadi isim majrur. Susunan <strong>بِ + اسْمِ</strong> disebut <strong>جار ومجرور</strong> (jar wa majrur). Jar wa majrur bukan merupakan kalimat sempurna. Ia harus bergantung (<em>ta'alluq</em>) kepada suatu fi'il atau isim yang mengandung makna fi'il, baik yang disebutkan maupun yang disembunyikan.</p>
+
+            <p><strong>E. Faidah Kata بِ</strong><br>
+            Beberapa faidah penting huruf بِ dalam Basmalah antara lain:
+            <ol>
+                <li><strong>Mengajarkan sikap isti'anah</strong> — Seorang muslim tidak mengandalkan kemampuan dirinya semata, tetapi memohon pertolongan Allah sebelum memulai pekerjaan.</li>
+                <li><strong>Menunjukkan ketergantungan kepada Allah</strong> — Basmalah mengajarkan bahwa seluruh amal yang berhasil hakikatnya terjadi karena pertolongan Allah.</li>
+                <li><strong>Menjadi pembuka keberkahan</strong> — Dengan mendahulukan huruf بِ yang bermakna isti'anah, seorang hamba memulai pekerjaannya dengan adab yang benar, yaitu memohon pertolongan sebelum bertindak.</li>
+            </ol></p>
+
+            <h4>2. اسْمِ (Ismi)</h4>
+            <p><strong>A. Makna</strong><br>
+            Kata <strong>اسم</strong> berarti "nama." Dalam bahasa Arab, nama bukan sekadar sebutan atau label, tetapi sesuatu yang menunjukkan dan memperkenalkan pemiliknya. Karena itu, ketika seorang muslim mengucapkan <strong>بسم الله</strong>, ia tidak sekadar menyebut nama Allah, melainkan memulai pekerjaannya dengan mengagungkan dan mengingat Allah melalui nama-Nya.</p>
+
+            <p><strong>B. Sharaf</strong><br>
+            Kata <strong>اسم</strong> merupakan <strong>isim jamid</strong>, yaitu kata benda yang tidak berasal dari perubahan bentuk kata kerja menurut pendapat mayoritas ulama. Namun, para ulama berbeda pendapat mengenai asal katanya.
+            <ul>
+                <li><strong>Pendapat Pertama (Madrasah Bashrah)</strong> — Mayoritas ulama Bashrah berpendapat bahwa اسم berasal dari akar <strong>س م و</strong> yang bermakna ketinggian, keluhuran, atau kemuliaan.</li>
+                <li><strong>Pendapat Kedua (Madrasah Kufah)</strong> — Sebagian ulama Kufah berpendapat bahwa اسم berasal dari akar <strong>و س م</strong> yang berarti tanda atau ciri.</li>
+            </ul>
+            Bentuk morfologis: isim, mufrad, mudzakkar, jamak: <strong>أسماء</strong>.<br>
+            Bentuk asal ketika berdiri sendiri: <strong>اِسْمٌ</strong>. Ketika dimasuki huruf بِ, bentuknya menjadi <strong>بِاسْمِ</strong>. Namun, dalam penulisan Basmalah yang sempurna ditulis <strong>بِسْمِ</strong> dengan penghilangan alif.<br>
+            <strong>Mengapa Alif Dihilangkan?</strong> Huruf pertama pada اسم adalah <strong>Hamzah Washal</strong>. Hamzah Washal hanya dibaca ketika berada di awal ucapan. Apabila didahului huruf lain, Hamzah Washal gugur dalam pengucapan. Dari sisi penulisan, penghilangan alif pada Basmalah yang lengkap merupakan bentuk <strong>كثرة الاستعمال</strong> (katsratul isti'mal), yaitu karena Basmalah sangat sering ditulis dan diucapkan sehingga penulisannya diperingan.</p>
+
+            <p><strong>C. I'rab</strong><br>
+            Kata <strong>اسم</strong> berstatus <strong>اسم مجرور</strong> karena didahului huruf jarr بِ. Tanda jarr-nya adalah <strong>الكسرة الظاهرة</strong> sehingga dibaca <strong>بِسْمِ</strong>.</p>
+
+            <p><strong>D. Nahwu</strong><br>
+            Dalam susunan Basmalah, <strong>اسم</strong> memiliki dua kedudukan sekaligus:
+            <ol>
+                <li>Sebagai <strong>isim majrur</strong> karena dimasuki huruf بِ.</li>
+                <li>Sebagai <strong>مضاف</strong> (mudhaf) — kata اسم disandarkan kepada kata setelahnya, yaitu <strong>اللَّهِ</strong>, sehingga terbentuk susunan <strong>اسم الله</strong> yang merupakan salah satu contoh idhafah.</li>
+            </ol></p>
+
+            <p><strong>E. Faidah Kata اسم</strong><br>
+            <ol>
+                <li><strong>Memulai dengan menyebut nama Allah</strong> — Basmalah tidak berbunyi <em>بالله</em> melainkan <em>باسم الله</em>. Hal ini menunjukkan adab seorang hamba untuk mengawali amal dengan menyebut nama Allah sebagai bentuk pengagungan kepada-Nya.</li>
+                <li><strong>Mengandung makna tabarruk</strong> — Menyebut nama Allah di awal pekerjaan merupakan bentuk <em>tabarruk</em>, yaitu mengharap keberkahan dari Allah.</li>
+                <li><strong>Menunjukkan hubungan idhafah</strong> — Susunan <em>اسم الله</em> menghubungkan kata "nama" dengan Lafzhul Jalalah, sehingga maknanya menjadi sangat khusus.</li>
+                <li><strong>Mengajarkan adab memulai setiap amal</strong> — Dengan mendahulukan kata <em>اسم</em>, seorang muslim diajarkan agar setiap aktivitasnya dimulai dengan mengingat Allah.</li>
+            </ol></p>
+
+            <h4>3. اللَّهِ (Allāhi)</h4>
+            <p><strong>A. Makna</strong><br>
+            <strong>اللَّهِ</strong> adalah <strong>Lafẓ al-Jalālah</strong>, yaitu nama yang paling agung bagi Allah ﷻ, Dzat Yang Maha Esa, Pencipta seluruh alam semesta, dan satu-satunya yang berhak diibadahi dengan benar. Berbeda dengan nama-nama Allah yang lain (al-Asmā' al-Ḥusnā), nama Allah merupakan nama yang mencakup seluruh sifat kesempurnaan-Nya.</p>
+
+            <p><strong>B. Sharaf</strong><br>
+            Kata <strong>اللَّه</strong> termasuk <strong>isim ‘alam</strong> (nama diri) yang bersifat ma‘rifah. Mayoritas ulama Sharaf berpendapat bahwa Lafẓ al-Jalālah merupakan <strong>isim jāmid</strong>, yaitu nama yang tidak dibentuk melalui proses perubahan dari kata lain. Karakteristik: isim mufrad, isim ma‘rifah, tidak menerima tanwin, tidak dapat ditashrif, tidak digunakan untuk selain Allah.</p>
+
+            <p><strong>C. I'rab</strong><br>
+            Kata <strong>اللَّهِ</strong> berstatus <strong>مضاف إليه مجرور</strong> (Mudhaf ilaih yang majrur) karena menjadi sandaran bagi kata اسم. Tanda jarr-nya adalah <strong>الكسرة الظاهرة</strong> sehingga dibaca <strong>اللَّهِ</strong>.</p>
+
+            <p><strong>D. Nahwu</strong><br>
+            Dalam susunan Basmalah, <strong>اللَّهِ</strong> berkedudukan sebagai <strong>mudhaf ilaih</strong>. Susunan <strong>اسم الله</strong> merupakan contoh <strong>idhafah</strong>, yaitu penyandaran satu isim kepada isim lainnya. Mudhaf ilaih selalu berstatus majrur.</p>
+
+            <p><strong>E. Faidah Kata الله</strong><br>
+            <ol>
+                <li><strong>Mengkhususkan nama yang disebut</strong> — Seandainya hanya disebut <em>باسم</em> maka maknanya masih umum. Ketika ditambahkan <em>الله</em>, maknanya menjadi sangat khusus.</li>
+                <li><strong>Menunjukkan Tauhid</strong> — Basmalah mengajarkan bahwa seluruh amal hendaknya dimulai hanya dengan nama Allah, bukan dengan nama selain-Nya.</li>
+                <li><strong>Menunjukkan Keagungan</strong> — Nama Allah mencakup seluruh nama dan sifat-Nya yang sempurna.</li>
+                <li><strong>Menjadi Man‘ut bagi Dua Sifat</strong> — Kata <em>اللَّهِ</em> menjadi kata yang disifati oleh dua sifat sesudahnya: <em>الرَّحْمٰنِ</em> dan <em>الرَّحِيْمِ</em>.</li>
+            </ol></p>
+
+            <h4>4. الرَّحْمٰنِ (Ar-Raḥmān)</h4>
+            <p><strong>A. Makna</strong><br>
+            <strong>الرَّحْمٰن</strong> berarti "Yang Maha Pengasih." Seluruh ulama sepakat bahwa kata ini berasal dari akar <strong>ر-ح-م</strong> yang mengandung makna kasih sayang, kelembutan, dan belas kasih. Kasih sayang Allah yang ditunjukkan oleh nama Ar-Raḥmān bersifat sangat luas, meliputi seluruh makhluk tanpa membedakan keimanan maupun kekufuran.</p>
+
+            <p><strong>B. Sharaf</strong><br>
+            Kata <strong>الرَّحْمٰن</strong> berasal dari akar <strong>ر ح م</strong> dengan wazan <strong>فَعْلَان</strong>. Wazan <em>فَعْلَان</em> dalam ilmu Sharaf menunjukkan makna penuh, melimpah, sangat banyak, atau mencapai puncak suatu sifat. Contoh lain: <em>غَضْبَان</em> (sangat marah), <em>عَطْشَان</em> (sangat haus), <em>سَكْرَان</em> (sangat mabuk).</p>
+
+            <p><strong>C. I'rab</strong><br>
+            Kata <strong>الرَّحْمٰنِ</strong> berstatus <strong>نعت مجرور</strong> (Na'at yang majrur). Tanda jarr-nya adalah <strong>الكسرة الظاهرة</strong> karena mengikuti kata yang disifatinya, yaitu <strong>اللَّهِ</strong>.</p>
+
+            <p><strong>D. Nahwu</strong><br>
+            Dalam ilmu Nahwu, <strong>الرَّحْمٰنِ</strong> berkedudukan sebagai <strong>Na'at pertama</strong> bagi Lafẓ al-Jalālah. Na'at wajib mengikuti man‘ut dalam empat hal: I'rab, Ma'rifah atau nakirah, Jenis kelamin, dan Bilangan.</p>
+
+            <p><strong>E. Faidah Kata الرَّحْمٰن</strong><br>
+            <ol>
+                <li><strong>Menunjukkan keluasan rahmat Allah</strong> — Rahmat Allah meliputi seluruh makhluk-Nya.</li>
+                <li><strong>Menunjukkan kesempurnaan sifat rahmat</strong> — Wazan <em>فَعْلَان</em> memberikan makna intensitas dan keluasan.</li>
+                <li><strong>Menjadi sifat pertama</strong> — Penyebutan <em>الرَّحْمٰن</em> lebih dahulu menunjukkan bahwa rahmat Allah bersifat sangat luas sebelum kemudian dijelaskan sifat rahmat yang lebih khusus melalui <em>الرَّحِيْم</em>.</li>
+            </ol></p>
+
+            <h4>5. الرَّحِيْمِ (Ar-Raḥīm)</h4>
+            <p><strong>A. Makna</strong><br>
+            <strong>الرَّحِيْم</strong> berarti "Yang Maha Penyayang." Jika <em>الرَّحْمٰن</em> menggambarkan keluasan rahmat Allah, maka <em>الرَّحِيْم</em> menunjukkan rahmat-Nya yang terus-menerus, tetap, dan sempurna. Para ulama sering menjelaskan bahwa rahmat yang terkandung dalam nama <em>الرَّحِيْم</em> secara khusus diberikan kepada orang-orang yang beriman, terutama pada kehidupan akhirat.</p>
+
+            <p><strong>B. Sharaf</strong><br>
+            Kata <strong>الرَّحِيْم</strong> berasal dari akar <strong>ر ح م</strong> dengan wazan <strong>فَعِيل</strong>. Wazan <em>فعيل</em> biasanya menunjukkan sifat yang tetap dan terus melekat pada pemiliknya. Contoh lain: <em>كريم</em>, <em>حكيم</em>, <em>عليم</em>, <em>سميع</em>.</p>
+
+            <p><strong>C. I'rab</strong><br>
+            Kata <strong>الرَّحِيْمِ</strong> berstatus <strong>نعت مجرور</strong> dengan tanda <strong>الكسرة الظاهرة</strong> karena mengikuti Lafẓ al-Jalālah.</p>
+
+            <p><strong>D. Nahwu</strong><br>
+            <strong>الرَّحِيْمِ</strong> berkedudukan sebagai <strong>Na'at kedua</strong> bagi kata <strong>الله</strong>. Susunan ini menunjukkan bahwa satu isim boleh memiliki lebih dari satu sifat secara berurutan tanpa memerlukan huruf penghubung.</p>
+
+            <p><strong>E. Faidah Kata الرَّحِيْم</strong><br>
+            <ol>
+                <li><strong>Menunjukkan kesinambungan rahmat</strong> — Berbeda dengan <em>الرَّحْمٰن</em> yang menekankan keluasan rahmat, <em>الرَّحِيْم</em> menunjukkan bahwa rahmat Allah bersifat tetap, terus-menerus, dan tidak terputus.</li>
+                <li><strong>Menyempurnakan makna Basmalah</strong> — Jika hanya disebut <em>الرَّحْمٰن</em>, makna yang dipahami lebih menonjol pada keluasan rahmat. Dengan ditambah <em>الرَّحِيْم</em>, tergambar pula bahwa rahmat tersebut bersifat kekal dan terus berlangsung.</li>
+                <li><strong>Menunjukkan keindahan susunan sifat</strong> — Kedua sifat berasal dari akar kata yang sama, tetapi masing-masing mempunyai nuansa makna yang berbeda.</li>
+            </ol></p>
+
+            <h3>III. Analisis Nahwu Keseluruhan</h3>
+
+            <h4>A. Struktur Kalimat Basmalah</h4>
+            <p>Secara lahiriah, Basmalah tersusun sebagai berikut:</p>
+            <p style="font-family:var(--font-arabic);font-size:1.8rem;text-align:center;">بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+            <p>Apabila dianalisis menurut ilmu Nahwu, strukturnya adalah:</p>
+            <ul>
+                <li><strong>بِ</strong> → Harf Jarr</li>
+                <li><strong>اسْمِ</strong> → Isim Majrur sekaligus Mudhaf</li>
+                <li><strong>اللَّهِ</strong> → Mudhaf Ilaih</li>
+                <li><strong>الرَّحْمٰنِ</strong> → Na'at Pertama</li>
+                <li><strong>الرَّحِيْمِ</strong> → Na'at Kedua</li>
+            </ul>
+            <p>Seluruh kata setelah huruf <strong>بِ</strong> berstatus <strong>majrur</strong>, karena dipengaruhi oleh huruf jarr tersebut.</p>
+
+            <h4>B. Jar wa Majrur</h4>
+            <p>Susunan <strong>بِسْمِ</strong> merupakan contoh <strong>جار ومجرور</strong> (jar wa majrur). Dalam bahasa Arab, jar wa majrur bukanlah kalimat sempurna (<em>jumlah mufidah</em>), melainkan hanya sebuah unsur kalimat. Oleh sebab itu, ia memerlukan sesuatu yang menjadi tempat bergantung. Hal inilah yang disebut <strong>ta'alluq</strong>.</p>
+            <p>Salah satu kaidah penting dalam Nahwu menyatakan: <strong>كل جار ومجرور فلا بد له من متعلق</strong> — "Setiap jar wa majrur pasti memiliki sesuatu yang menjadi tempat bergantung (<em>muta'allaq</em>)."</p>
+            <p>Dalam Basmalah, <em>muta'allaq</em> tersebut tidak disebutkan secara langsung, tetapi dipahami dari konteks pembicaraan. Para ulama Nahwu menjelaskan bahwa sebelum mengucapkan Basmalah sebenarnya terdapat fi'il yang dihapus. Contohnya:
+            <ul>
+                <li>Ketika akan membaca Al-Qur'an: <strong>أَقْرَأُ بِسْمِ اللَّهِ</strong> — "Aku membaca dengan nama Allah."</li>
+                <li>Ketika mulai menulis: <strong>أَكْتُبُ بِسْمِ اللَّهِ</strong> — "Aku menulis dengan nama Allah."</li>
+                <li>Ketika menyusun kitab: <strong>أُؤَلِّفُ بِسْمِ اللَّهِ</strong> — "Aku mengarang dengan nama Allah."</li>
+            </ul></p>
+
+            <h4>C. Mengapa Fi'il Tidak Disebutkan?</h4>
+            <p>Penghilangan fi'il bukanlah kekurangan, melainkan salah satu keindahan bahasa Arab. Para ulama menjelaskan beberapa hikmahnya:</p>
+            <ol>
+                <li><strong>Al-Ijaz (Keringkasan)</strong> — Bahasa Arab sangat menghargai ungkapan yang ringkas tetapi tetap jelas. Karena jenis pekerjaan telah dipahami dari keadaan, maka fi'il tidak perlu disebutkan.</li>
+                <li><strong>Memberikan Makna yang Lebih Umum</strong> — Karena fi'il tidak disebutkan, Basmalah dapat dipakai untuk seluruh aktivitas. Seseorang dapat mengucapkannya ketika membaca, menulis, makan, bepergian, belajar, mengajar, maupun melakukan pekerjaan lainnya.</li>
+                <li><strong>Menarik Perhatian kepada Nama Allah</strong> — Dengan menghilangkan fi'il, perhatian pembaca langsung tertuju kepada <em>بِسْمِ اللَّهِ</em>. Nama Allah menjadi bagian pertama yang didengar dan dibaca.</li>
+            </ol>
+            <p>Mayoritas ulama Nahwu berpendapat bahwa bentuk asal Basmalah adalah <strong>بِسْمِ اللَّهِ أَبْدَأُ</strong> atau <strong>بِسْمِ اللَّهِ أَقْرَأُ</strong>, bukan <strong>أَبْدَأُ بِسْمِ اللَّهِ</strong>. Pendapat ini dipilih karena mengandung dua faidah penting: <strong>At-Tabarruk</strong> (mengharap keberkahan) dan <strong>Al-Ikhtishash</strong> (pengkhususan).</p>
+
+            <h4>D. Susunan Idhafah</h4>
+            <p>Bagian <strong>اسم الله</strong> merupakan contoh <strong>idhafah</strong>. Dalam susunan idhafah terdapat dua unsur: <strong>Mudhaf</strong> (اسم) dan <strong>Mudhaf Ilaih</strong> (الله). Kaidah idhafah di antaranya: makna mudhaf menjadi lebih khusus karena disandarkan kepada mudhaf ilaih. Maka makna <em>اسم</em> yang semula masih umum berubah menjadi <em>اسم الله</em> — yakni nama Allah secara khusus.</p>
+
+            <h4>E. Dua Na'at Berturut-turut</h4>
+            <p>Sesudah Lafzhul Jalalah terdapat dua sifat: <strong>الرَّحْمٰنِ</strong> dan <strong>الرَّحِيْمِ</strong>. Keduanya merupakan <strong>na'at</strong> bagi kata <strong>الله</strong>. Dalam Nahwu terdapat kaidah: <strong>يجوز تعدد النعت لمنعوت واحد</strong> — "Boleh satu man'ut memiliki lebih dari satu na'at." Karena itu tidak diperlukan huruf penghubung di antara keduanya.</p>
+
+            <h3>IV. Analisis Sharaf Mendalam</h3>
+            <p>Selain mengandung kaidah Nahwu, Basmalah juga memperlihatkan keindahan ilmu Sharaf. Melalui perubahan bentuk kata (wazan), bahasa Arab mampu menghadirkan perbedaan makna yang sangat halus namun mendalam.</p>
+
+            <h4>A. Asal Kata اسم</h4>
+            <p>Para ulama berbeda pendapat mengenai asal kata <strong>اسم</strong>:</p>
+            <ul>
+                <li><strong>Madrasah Bashrah</strong> — Berpendapat bahwa <em>اسم</em> berasal dari akar <strong>س م و</strong> yang bermakna tinggi, luhur, mulia. Nama disebut <em>اسم</em> karena ia mengangkat sesuatu sehingga dikenal dan dibedakan dari yang lain.</li>
+                <li><strong>Madrasah Kufah</strong> — Berpendapat bahwa asal katanya ialah <strong>و س م</strong> yang berarti tanda. Menurut pendapat ini, nama berfungsi sebagai tanda bagi pemiliknya.</li>
+            </ul>
+
+            <h4>B. Hamzah Washal pada Kata اسم</h4>
+            <p>Bentuk asal kata tersebut adalah <strong>اِسْمٌ</strong>. Huruf pertama berupa <strong>Hamzah Washal</strong>. Kaidah Hamzah Washal adalah: dibaca apabila berada di awal ucapan; gugur apabila didahului kata lain. Karena didahului huruf بِ, maka dibaca <strong>بِسْمِ</strong> bukan <strong>بِاسْمِ</strong>.</p>
+
+            <h4>C. Perbedaan Wazan الرَّحْمٰن dan الرَّحِيْم</h4>
+            <p>Kedua nama tersebut berasal dari akar yang sama <strong>ر ح م</strong>, namun keduanya memiliki wazan yang berbeda:</p>
+            <ul>
+                <li><strong>الرَّحْمٰن</strong> — Wazan <strong>فَعْلَان</strong> menunjukkan keluasan, kepenuhan, intensitas, dan kelimpahan suatu sifat. Menggambarkan rahmat Allah yang meliputi seluruh makhluk.</li>
+                <li><strong>الرَّحِيْم</strong> — Wazan <strong>فَعِيل</strong> menunjukkan sifat yang tetap, terus-menerus, dan melekat pada pemiliknya. Menggambarkan rahmat Allah yang terus berlangsung dan tidak pernah terputus.</li>
+            </ul>
+
+            <h4>D. Hikmah Perbedaan Wazan</h4>
+            <p>Apabila kedua kata itu menggunakan wazan yang sama, nuansa makna yang terkandung di dalamnya menjadi berkurang. Dengan memilih dua wazan yang berbeda, Al-Qur'an menghadirkan dua dimensi rahmat Allah sekaligus:</p>
+            <ul>
+                <li><strong>الرَّحْمٰن</strong> → rahmat yang sangat luas dan meliputi seluruh makhluk.</li>
+                <li><strong>الرَّحِيْم</strong> → rahmat yang tetap, terus-menerus, dan sempurna.</li>
+            </ul>
+
+            <h3>V. Analisis Balaghah</h3>
+
+            <h4>A. Taqdīm al-Jār wa al-Majrūr (Mendahulukan Jar wa Majrur)</h4>
+            <p>Secara kaidah umum, bentuk yang lazim adalah <strong>أَبْدَأُ بِاسْمِ اللَّهِ</strong> ("Aku memulai dengan nama Allah"). Namun dalam Basmalah yang digunakan justru <strong>بِسْمِ اللَّهِ</strong> dengan mendahulukan jar wa majrur dan menghilangkan fi‘il. Dalam ilmu Balaghah, pendahuluan suatu unsur yang sebenarnya dapat diakhirkan disebut <strong>taqdīm</strong>.</p>
+            <p>Faidah taqdīm:</p>
+            <ol>
+                <li><strong>At-Tabarruk</strong> (Mencari Keberkahan) — Nama Allah didahulukan sebelum menyebut pekerjaan yang akan dilakukan.</li>
+                <li><strong>Al-Ikhtiṣāṣ</strong> (Pengkhususan) — Mendahulukan sesuatu yang biasanya berada di belakang sering memberikan makna pengkhususan, seakan-akan Basmalah bermakna <em>"Hanya dengan nama Allah semata."</em></li>
+                <li><strong>Menarik Perhatian Pembaca</strong> — Karena yang didahulukan adalah nama Allah, perhatian pembaca langsung terarah kepada Allah sebelum memikirkan aktivitas yang akan dikerjakan.</li>
+            </ol>
+
+            <h4>B. Ḥadzf al-Fi‘il (Penghilangan Kata Kerja)</h4>
+            <p>Salah satu keindahan Basmalah adalah tidak disebutkannya fi‘il yang menjadi <em>muta‘allaq</em> bagi jar wa majrur. Para ulama Balaghah menyebutnya sebagai <strong>الحذف</strong> (penghilangan).</p>
+            <p>Hikmahnya:</p>
+            <ol>
+                <li><strong>Al-Ījāz</strong> (Keringkasan yang Padat Makna) — Basmalah hanya terdiri dari empat kata, tetapi dapat digunakan dalam berbagai keadaan.</li>
+                <li><strong>Memberikan Keluasan Makna</strong> — Apabila fi‘il disebutkan secara eksplisit, penggunaannya menjadi terbatas. Dengan menghilangkan fi‘il, Basmalah menjadi ungkapan universal.</li>
+                <li><strong>Memusatkan Makna pada Allah</strong> — Karena fi‘il tidak disebutkan, fokus utama kalimat berpindah kepada <em>اللَّه</em>.</li>
+            </ol>
+
+            <h4>C. At-Taraqqī dalam Penyebutan Sifat (Peningkatan Makna Bertahap)</h4>
+            <p>Setelah menyebut nama Allah, Basmalah melanjutkan dengan dua sifat: <strong>الرَّحْمٰنِ الرَّحِيْمِ</strong>. Urutan ini bukan tanpa hikmah. Dalam Balaghah terdapat konsep <strong>التَّرَقِّي</strong>, yaitu perpindahan dari satu makna menuju makna yang lebih sempurna atau lebih khusus.</p>
+            <ul>
+                <li><strong>Tahap Pertama</strong> — <em>الرَّحْمٰنِ</em> menunjukkan rahmat Allah yang sangat luas dan meliputi seluruh makhluk.</li>
+                <li><strong>Tahap Kedua</strong> — <em>الرَّحِيْمِ</em> menunjukkan rahmat yang terus-menerus, tetap, dan khusus.</li>
+            </ul>
+
+            <h4>D. Tikrār al-Ma‘nā bi Ṣūratayn (Pengulangan Makna dengan Dua Bentuk)</h4>
+            <p>Kata <strong>الرَّحْمٰنِ</strong> dan <strong>الرَّحِيْمِ</strong> sama-sama berasal dari akar <strong>ر-ح-م</strong> yang berarti kasih sayang. Sekilas keduanya tampak mengulang makna yang sama. Namun dalam Balaghah, pengulangan seperti ini bukanlah pengulangan yang sia-sia. Tujuannya adalah:</p>
+            <ol>
+                <li><strong>Ta’kīd</strong> (Penegasan) — untuk menegaskan keluasan rahmat Allah.</li>
+                <li><strong>Tafṣīl</strong> (Perincian) — untuk menjelaskan bahwa rahmat Allah memiliki berbagai dimensi dan tingkatan.</li>
+                <li><strong>Takmīl al-Ma‘nā</strong> (Penyempurnaan Makna) — kedua kata saling melengkapi sehingga menghasilkan gambaran yang lebih sempurna.</li>
+            </ol>
+
+            <h4>E. Jamāl aṣ-Ṣawt (Keindahan Bunyi)</h4>
+            <p>Salah satu aspek yang sering luput dari perhatian adalah keindahan fonetik Basmalah. Perhatikan susunannya: <strong>بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ</strong></p>
+            <ul>
+                <li><strong>Keserasian Akhir Kata</strong> — Empat kata utama diakhiri dengan bunyi yang berdekatan: <em>بِسْمِ</em>, <em>اللَّهِ</em>, <em>الرَّحْمٰنِ</em>, <em>الرَّحِيْمِ</em>. Dominasi bunyi kasrah menghasilkan alunan yang lembut dan mudah diucapkan.</li>
+                <li><strong>Pengulangan Huruf-Huruf Lembut</strong> — Huruf-huruf seperti <em>ر</em>, <em>ح</em>, <em>م</em> muncul berulang dalam dua sifat Allah. Pengulangan ini menciptakan kesan kelembutan yang selaras dengan makna rahmat.</li>
+                <li><strong>Keseimbangan Bunyi Pendek dan Panjang</strong> — Dalam <em>الرَّحْمٰنِ</em> terdapat bunyi panjang pada alif, sedangkan dalam <em>الرَّحِيْمِ</em> terdapat bunyi panjang pada ya'. Keseimbangan ini memberikan keindahan ritme yang khas.</li>
+            </ul>
+
+            <hr>
+            <p style="text-align:center;color:#4a6a5a;font-size:0.9rem;">— selesai —</p>
+            `;
+        }
+
+        // ─── CLICK OUTSIDE ───
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('analysisPanel');
+            const arabicContainer = document.getElementById('arabicText');
+            if (panel.classList.contains('visible') && !panel.contains(e.target) && !arabicContainer.contains(e.target)) {
+                closeAnalysis();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('analysisPanel').classList.contains('visible')) {
+                closeAnalysis();
+            }
+        });
+
+        // ─── INIT ───
+        document.addEventListener('DOMContentLoaded', function() {
+            renderArabicText();
+            document.getElementById('analysisContent').innerHTML =
+                '<p style="text-align:center;color:#6a8a7a;">👆 Klik kata untuk melihat makna, Sharaf, I‘rāb, dan Nahwu.</p>';
+            loadStructuralContent();
+        });
+    </script>
+</body>
+</html>
