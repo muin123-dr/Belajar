@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 Soal Geometri & Trigonometri - TKA SMA</title>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f2f7fc;
+            color: #1a2a3a;
+            padding: 20px 16px;
+        }
+
+        .quiz-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 30px 28px;
+        }
+
+        @media (max-width: 640px) {
+            .quiz-wrapper {
+                padding: 16px 12px;
+            }
+        }
+
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #2d7fc1;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2b44;
+        }
+        .quiz-header h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4a6a85;
+            margin-left: 10px;
+        }
+
+        .score-box {
+            background: #eaf1f8;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid #cbdae6;
+        }
+        .score-box span {
+            color: #1f7bb0;
+        }
+
+        .reset-btn {
+            background: #eef4fa;
+            border: 1px solid #ccdbe8;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+
+        .question-card {
+            background: #fafdff;
+            border: 1px solid #e4ecf5;
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            transition: border 0.2s, background 0.2s;
+        }
+        .question-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .question-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        /* Fallback for math symbols if KaTeX fails */
+        .q-text .math-tex {
+            font-family: 'Times New Roman', 'STIX', serif;
+            font-style: italic;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+        }
+        .options input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+
+        .action-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .check-btn {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+        }
+        .check-btn:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .check-btn:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback .explain {
+            margin-top: 4px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+
+        .quiz-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #4a6a85;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .score-box {
+                text-align: center;
+            }
+            .options label {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* KaTeX fallback: ensure display properly */
+        .katex-display {
+            display: inline-block !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-wrapper">
+        <div class="quiz-header">
+            <h1>📐 Geometri & Trigonometri <small>30 Soal TKA SMA</small></h1>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                <div class="score-box">🎯 Skor: <span id="scoreDisplay">0</span> / 30</div>
+                <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="quiz-footer">
+            <strong>Garis · Sudut · Bangun Datar · Ruang · Transformasi · Trigonometri</strong> — Klik <em>"Periksa Jawaban"</em> untuk pembahasan.
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  30 SOAL GEOMETRI & TRIGONOMETRI (TKA SMA)
+        //  Semua teks menggunakan Unicode & KaTeX-friendly
+        // ============================================================
+        const questions = [{
+            id: 1,
+            text: 'Dua sudut saling berpelurus. Jika besar sudut A = 65°, maka besar sudut B adalah ...',
+            options: ['25°', '95°', '105°', '115°', '125°'],
+            correct: 3,
+            explanation: 'Sudut berpelurus jumlahnya 180°. Maka B = 180 - 65 = 115°.'
+        }, {
+            id: 2,
+            text: 'Pada dua garis sejajar yang dipotong oleh garis transversal, pasangan sudut dalam sepihak berjumlah ...',
+            options: ['90°', '180°', '270°', '360°', 'sama besar'],
+            correct: 1,
+            explanation: 'Sudut dalam sepihak pada dua garis sejajar berjumlah 180°.'
+        }, {
+            id: 3,
+            text: 'Sebuah persegi memiliki panjang diagonal 10√2 cm. Luas persegi tersebut adalah ... cm².',
+            options: ['50', '100', '150', '200', '400'],
+            correct: 1,
+            explanation: 'Diagonal persegi d = s√2. Maka s = 10 cm. Luas = 10² = 100 cm².'
+        }, {
+            id: 4,
+            text: 'Sebuah bangun gabungan terdiri dari persegi panjang berukuran 10 cm × 6 cm dan setengah lingkaran pada sisi lebar (diameter 6 cm). Keliling bangun tersebut adalah ... cm. (π = 3,14)',
+            options: ['32,42', '35,42', '38,42', '41,42', '44,42'],
+            correct: 1,
+            explanation: 'Keliling = 10 + 10 + 6 + (½ × π × 6) = 20 + 6 + 9,42 = 35,42 cm.'
+        }, {
+            id: 5,
+            text: 'Luas layang-layang adalah 120 cm² dan salah satu diagonalnya 16 cm. Untuk menentukan keliling layang-layang, pernyataan berikut yang benar adalah ...',
+            options: [
+                'Cukup dengan luas saja',
+                'Cukup dengan diagonal saja',
+                'Perlu panjang salah satu sisi',
+                'Luas dan diagonal sudah cukup',
+                'Tidak cukup dengan informasi apapun'
+            ],
+            correct: 2,
+            explanation: 'Luas hanya memberi hubungan diagonal. Tanpa panjang sisi (atau rasio diagonal), keliling tidak dapat ditentukan. Jadi perlu panjang salah satu sisi.'
+        }, {
+            id: 6,
+            text: 'Dua trapesium sebangun. Trapesium pertama memiliki sisi atas 6 cm dan alas 10 cm. Trapesium kedua memiliki sisi atas 9 cm. Panjang alas trapesium kedua adalah ... cm.',
+            options: ['12', '13', '14', '15', '16'],
+            correct: 3,
+            explanation: 'Skala = 9/6 = 1,5. Maka alas kedua = 10 × 1,5 = 15 cm.'
+        }, {
+            id: 7,
+            text: 'Pada balok ABCD.EFGH, bidang yang sejajar dengan bidang ADHE adalah ...',
+            options: ['ABCD', 'BCGF', 'ABFE', 'DCGH', 'EFGH'],
+            correct: 1,
+            explanation: 'Pada balok, bidang ADHE sejajar dengan bidang BCGF.'
+        }, {
+            id: 8,
+            text: 'Sebuah balok berukuran 6 cm × 8 cm × 10 cm. Panjang diagonal ruang balok tersebut adalah ... cm.',
+            options: ['10√2', '10√3', '12√2', '12√3', '15√2'],
+            correct: 0,
+            explanation: 'Diagonal ruang = √(6² + 8² + 10²) = √(36+64+100) = √200 = 10√2 cm.'
+        }, {
+            id: 9,
+            text: 'Sebuah ruangan berbentuk balok berukuran 8 m × 6 m × 4 m. Tali ditarik dari pojok lantai ke titik tengah langit-langit. Panjang tali tersebut adalah ... m.',
+            options: ['√41', '√89', '√109', '√129', '√149'],
+            correct: 0,
+            explanation: 'Diagonal lantai = √(8²+6²) = 10. Setengah diagonal = 5. Panjang tali = √(5²+4²) = √41.'
+        }, {
+            id: 10,
+            text: 'Sebuah truk bak dengan ukuran 6 m × 4 m × 3 m akan dimuati kardus berukuran 1 m × 0,5 m × 0,4 m. Kardus tidak boleh dibalik, tetapi boleh menghadap depan atau samping. Berapa jumlah maksimum kardus yang dapat dimuat?',
+            options: ['300', '360', '420', '480', '540'],
+            correct: 1,
+            explanation: 'Orientasi 1: (6/1)×(4/0,5)×(3/0,4) = 6×8×7 = 336. Orientasi 2: (6/0,5)×(4/1)×(3/0,4) = 12×4×7 = 336. Orientasi 3: (6/1)×(4/0,4)×(3/0,5) = 6×10×6 = 360. Maksimum 360.'
+        }, {
+            id: 11,
+            text: 'Sebuah tabung tanpa tutup memiliki diameter 14 cm dan tinggi 25 cm. Luas selimut tabung tersebut adalah ... cm². (π = 22/7)',
+            options: ['1.000', '1.100', '1.200', '1.300', '1.400'],
+            correct: 1,
+            explanation: 'Jari-jari = 7 cm. Luas selimut = 2 × (22/7) × 7 × 25 = 1.100 cm².'
+        }, {
+            id: 12,
+            text: 'Garis l memotong sumbu X di titik (4,0) dan sumbu Y di titik (0,6). Daerah penyelesaian berada di bawah garis l dan di kuadran I. Pertidaksamaan yang tepat adalah ...',
+            options: ['3x + 2y ≤ 12', '3x + 2y ≥ 12', '2x + 3y ≤ 12', '2x + 3y ≥ 12', '6x + 4y ≤ 24'],
+            correct: 0,
+            explanation: 'Garis: x/4 + y/6 = 1 → 3x + 2y = 12. Daerah bawah (0,0) memenuhi 3(0)+2(0) = 0 ≤ 12. Jadi 3x+2y ≤ 12.'
+        }, {
+            id: 13,
+            text: 'Titik A(2,3) direfleksikan terhadap garis y = 1. Bayangan titik A adalah ...',
+            options: ['(2,-1)', '(2,5)', '(-2,3)', '(2,-2)', '(-2,-1)'],
+            correct: 0,
+            explanation: 'Refleksi terhadap y=k: (x, 2k−y). Maka (2, 2(1)−3) = (2, -1).'
+        }, {
+            id: 14,
+            text: 'Titik B(5,-2) dirotasikan sebesar 180° dengan pusat O(0,0). Bayangan titik B adalah ...',
+            options: ['(-5,2)', '(5,2)', '(-5,-2)', '(5,-2)', '(2,-5)'],
+            correct: 0,
+            explanation: 'Rotasi 180°: (x,y) → (-x,-y). Maka (-5,2).'
+        }, {
+            id: 15,
+            text: 'Titik C(3,4) direfleksikan terhadap sumbu Y, kemudian dirotasi 90° berlawanan arah jarum jam. Bayangan akhir titik C adalah ...',
+            options: ['(-4,3)', '(4,-3)', '(-4,-3)', '(4,3)', '(-3,4)'],
+            correct: 2,
+            explanation: 'Refleksi sumbu Y: (-3,4). Rotasi 90° CCW: (-y,x) → (-4,-3).'
+        }, {
+            id: 16,
+            text: 'Pada segitiga siku-siku, sisi di depan sudut α adalah 3 cm dan sisi miring 5 cm. Nilai cos α adalah ...',
+            options: ['3/5', '4/5', '3/4', '5/3', '4/3'],
+            correct: 1,
+            explanation: 'Sisi depan = 3, miring = 5 → sisi samping = 4. cos α = samping/miring = 4/5.'
+        }, {
+            id: 17,
+            text: 'Nilai dari sin² 30° + cos² 30° adalah ...',
+            options: ['0', '1/2', '√2/2', '1', '3/2'],
+            correct: 3,
+            explanation: 'Identitas trigonometri: sin² θ + cos² θ = 1.'
+        }, {
+            id: 18,
+            text: 'Jika sin α = 3/5 dan α + β = 90°, maka nilai cos β adalah ...',
+            options: ['3/5', '4/5', '5/3', '5/4', '1'],
+            correct: 0,
+            explanation: 'Jika α + β = 90°, maka sin α = cos β. Jadi cos β = 3/5.'
+        }, {
+            id: 19,
+            text: 'Nilai dari sin 45° + cos 45° adalah ...',
+            options: ['1/2', '√2', '√2/2', '2√2', '1'],
+            correct: 1,
+            explanation: 'sin 45° = √2/2, cos 45° = √2/2. Jumlah = √2.'
+        }, {
+            id: 20,
+            text: 'Diketahui cos α = 2/3. Nilai sin α adalah ...',
+            options: ['1/3', '√5/3', '2√2/3', '3/2', '√3/2'],
+            correct: 1,
+            explanation: 'sin² α = 1 − cos² α = 1 − 4/9 = 5/9. Maka sin α = √5/3.'
+        }, {
+            id: 21,
+            text: 'Sebuah taman berbentuk persegi panjang dengan panjang 10 m dan lebar 6 m. Pada salah satu sisi lebar dibuat setengah lingkaran (diameter 6 m). Keliling taman tersebut adalah ... m. (π = 3,14)',
+            options: ['32,42', '35,42', '38,42', '41,42', '44,42'],
+            correct: 1,
+            explanation: 'Keliling = 10 + 10 + 6 + (½ × π × 6) = 20 + 6 + 9,42 = 35,42 m.'
+        }, {
+            id: 22,
+            text: 'Volume tabung dengan jari-jari 7 cm dan tinggi 20 cm adalah ... cm³. (π = 22/7)',
+            options: ['2.560', '2.860', '3.080', '3.280', '3.480'],
+            correct: 2,
+            explanation: 'Volume = π r² t = (22/7) × 7² × 20 = 22 × 7 × 20 = 3.080 cm³.'
+        }, {
+            id: 23,
+            text: 'Dua segitiga sebangun. Segitiga pertama memiliki sisi 3 cm, 4 cm, dan 5 cm. Segitiga kedua memiliki sisi 6 cm, 8 cm, dan 10 cm. Faktor skala dari segitiga pertama ke segitiga kedua adalah ...',
+            options: ['1', '1,5', '2', '2,5', '3'],
+            correct: 2,
+            explanation: 'Perbandingan sisi: 6/3 = 2, 8/4 = 2, 10/5 = 2. Faktor skala = 2.'
+        }, {
+            id: 24,
+            text: 'Titik P(2,5) ditranslasikan oleh vektor (3, -2). Bayangan titik P adalah ...',
+            options: ['(5,3)', '(5,7)', '(-1,3)', '(-1,7)', '(2,3)'],
+            correct: 0,
+            explanation: 'Translasi: (x+a, y+b) = (2+3, 5-2) = (5,3).'
+        }, {
+            id: 25,
+            text: 'Titik Q(2,3) didilatasi dengan pusat O(0,0) dan faktor skala 2. Bayangan titik Q adalah ...',
+            options: ['(1,1,5)', '(4,6)', '(-4,-6)', '(2,6)', '(4,3)'],
+            correct: 1,
+            explanation: 'Dilatasi skala k: (kx, ky) = (2×2, 3×2) = (4,6).'
+        }, {
+            id: 26,
+            text: 'Titik R(3,4) dirotasikan sebesar 90° searah jarum jam dengan pusat O(0,0). Bayangan titik R adalah ...',
+            options: ['(-4,3)', '(4,-3)', '(-3,4)', '(3,-4)', '(-4,-3)'],
+            correct: 1,
+            explanation: 'Rotasi 90° searah jarum jam: (x,y) → (y,-x). Maka (4,-3).'
+        }, {
+            id: 27,
+            text: 'Luas segitiga dengan alas 12 cm dan tinggi 8 cm adalah ... cm².',
+            options: ['32', '40', '48', '56', '96'],
+            correct: 2,
+            explanation: 'Luas = ½ × 12 × 8 = 48 cm².'
+        }, {
+            id: 28,
+            text: 'Panjang diagonal bidang pada persegi panjang berukuran 6 cm × 8 cm adalah ... cm.',
+            options: ['8', '10', '12', '14', '16'],
+            correct: 1,
+            explanation: 'Diagonal = √(6² + 8²) = √(36+64) = 10 cm.'
+        }, {
+            id: 29,
+            text: 'Luas permukaan bola dengan jari-jari 7 cm adalah ... cm². (π = 22/7)',
+            options: ['462', '616', '924', '1.232', '1.848'],
+            correct: 1,
+            explanation: 'Luas permukaan bola = 4πr² = 4 × (22/7) × 7² = 4 × 22 × 7 = 616 cm².'
+        }, {
+            id: 30,
+            text: 'Daerah yang diarsir dibatasi oleh garis x + y = 6, sumbu X, dan sumbu Y. Luas daerah arsir tersebut adalah ... satuan luas.',
+            options: ['12', '15', '18', '21', '24'],
+            correct: 2,
+            explanation: 'Garis memotong sumbu X di (6,0) dan sumbu Y di (0,6). Luas segitiga = ½ × 6 × 6 = 18.'
+        }];
+
+        // ============================================================
+        //  RENDER & LOGIC
+        // ============================================================
+        const container = document.getElementById('quizContainer');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        let userAnswers = new Array(questions.length).fill(null);
+        let isLocked = new Array(questions.length).fill(false);
+
+        function render() {
+            let html = '';
+            questions.forEach((q, idx) => {
+                const locked = isLocked[idx];
+                const selected = userAnswers[idx];
+                const isCorrect = locked && (selected === q.correct);
+                const isWrong = locked && (selected !== null && selected !== q.correct);
+
+                let cardClass = 'question-card';
+                if (locked) {
+                    cardClass += isCorrect ? ' correct' : ' wrong';
+                }
+
+                html += `<div class="${cardClass}" id="qcard-${idx}">`;
+                html += `<div class="q-number">Soal ${idx+1}</div>`;
+                html += `<div class="q-text">${q.text}</div>`;
+                html += `<div class="options">`;
+
+                q.options.forEach((opt, optIdx) => {
+                    const checked = (selected === optIdx) ? 'checked' : '';
+                    const disabled = locked ? 'disabled' : '';
+                    html += `
+                            <label>
+                                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                });
+
+                html += `</div>`;
+                html += `<div class="action-area">`;
+                html +=
+                    `<button class="check-btn" id="check-${idx}" ${locked ? 'disabled' : ''}>${locked ? '✓ Diperiksa' : 'Periksa Jawaban'}</button>`;
+                html += `</div>`;
+
+                let feedbackClass = 'feedback';
+                let feedbackHtml = '';
+                if (locked) {
+                    feedbackClass += ' show';
+                    feedbackClass += isCorrect ? ' correct' : ' wrong';
+                    const icon = isCorrect ? '✅' : '❌';
+                    const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+                    const correctAns = q.options[q.correct];
+                    feedbackHtml = `
+                            <div class="${feedbackClass}">
+                                <strong>${icon} ${status}</strong>
+                                <div class="explain">💡 ${q.explanation}</div>
+                                <div style="margin-top:4px;font-size:0.9rem;">Jawaban yang benar: <strong>${correctAns}</strong></div>
+                            </div>
+                        `;
+                } else {
+                    feedbackHtml = `<div class="feedback"></div>`;
+                }
+                html += feedbackHtml;
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+            updateScore();
+
+            questions.forEach((_, idx) => {
+                const btn = document.getElementById(`check-${idx}`);
+                if (btn) {
+                    btn.addEventListener('click', () => handleCheck(idx));
+                }
+                const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        if (!isLocked[idx]) {
+                            userAnswers[idx] = parseInt(e.target.value);
+                        }
+                    });
+                });
+            });
+
+            // Render math with KaTeX for any LaTeX-like content
+            if (window.renderMathInElement) {
+                window.renderMathInElement(container, {
+                    delimiters: [
+                        { left: '\\\\(', right: '\\\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function handleCheck(idx) {
+            if (isLocked[idx]) return;
+            const selected = userAnswers[idx];
+            if (selected === null || selected === undefined) {
+                alert('Pilih salah satu opsi terlebih dahulu!');
+                return;
+            }
+            isLocked[idx] = true;
+            render();
+        }
+
+        function updateScore() {
+            let correctCount = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (isLocked[i] && userAnswers[i] === questions[i].correct) {
+                    correctCount++;
+                }
+            }
+            scoreSpan.textContent = correctCount;
+        }
+
+        function resetQuiz() {
+            userAnswers = new Array(questions.length).fill(null);
+            isLocked = new Array(questions.length).fill(false);
+            render();
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+        render();
+    </script>
+
+</body>
+</html>

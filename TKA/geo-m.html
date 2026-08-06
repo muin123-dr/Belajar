@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAB 3: Geometri dan Trigonometri - TKA SMA & SNBT</title>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        /* ----- Reset & Base ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f2f7fc;
+            color: #1a2a3a;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        /* ----- Sidebar (Table of Contents) ----- */
+        .sidebar {
+            flex: 0 0 280px;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px 16px;
+            box-shadow: 0 8px 30px rgba(0, 20, 40, 0.06);
+            border: 1px solid #e4ecf5;
+        }
+
+        .sidebar h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a6a85;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e4ecf5;
+            padding-bottom: 8px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 6px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1a3a5a;
+            text-decoration: none;
+            transition: 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar ul li a:hover {
+            background: #eef4fa;
+            border-left-color: #2d7fc1;
+            color: #0b2b44;
+        }
+
+        .sidebar ul li a.active {
+            background: #eaf1f8;
+            border-left-color: #2d7fc1;
+            font-weight: 600;
+            color: #0b2b44;
+        }
+
+        /* ----- Main Content ----- */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Header */
+        .header-title {
+            background: linear-gradient(135deg, #0b2b44 0%, #1a4a6b 100%);
+            color: #fff;
+            padding: 30px 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(11, 43, 68, 0.15);
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .header-title .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Cards */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.04);
+            border: 1px solid #eef4fa;
+            transition: box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 40, 0.06);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0b2b44;
+            border-left: 6px solid #2d7fc1;
+            padding-left: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a4a6b;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .card h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #1a4a6b;
+            margin-top: 18px;
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            margin-bottom: 14px;
+            color: #2a3a4a;
+        }
+
+        .card ul,
+        .card ol {
+            margin-left: 20px;
+            margin-bottom: 14px;
+        }
+
+        .card li {
+            margin-bottom: 6px;
+        }
+
+        /* Highlight Boxes */
+        .rumus-box {
+            background: #f0f7ff;
+            border: 1px solid #d4e2f0;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 18px 0;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .rumus-box .label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a7a9a;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .example-box {
+            background: #f8faff;
+            border-left: 5px solid #2d7fc1;
+            border-radius: 0 16px 16px 0;
+            padding: 18px 22px;
+            margin: 18px 0;
+        }
+
+        .example-box .label {
+            font-weight: 700;
+            color: #0b2b44;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example-box .label::before {
+            content: "📘";
+        }
+
+        .solution-box {
+            background: #eaf4ea;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            border: 1px solid #bcd9bc;
+        }
+
+        .solution-box .step {
+            font-weight: 600;
+            color: #0b4a2a;
+        }
+
+        .warning-box {
+            background: #fff7ec;
+            border-left: 5px solid #e67e22;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .warning-box strong {
+            color: #8a4a0a;
+        }
+
+        .tip-box {
+            background: #f0faf4;
+            border-left: 5px solid #1fa86b;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .tip-box strong {
+            color: #0b4a2a;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-grid .col {
+            background: #f8faff;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 1px solid #e4ecf5;
+        }
+
+        .info-grid .col h4 {
+            margin-top: 0;
+            border-bottom: 2px solid #d4e2f0;
+            padding-bottom: 6px;
+        }
+
+        /* Table Wrapper */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 18px 0 24px;
+            border-radius: 14px;
+            border: 1px solid #e4ecf3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+
+        th {
+            background: #eaf1f8;
+            color: #0b2b44;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 2px solid #cbdae6;
+        }
+
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #eaeef3;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* ----- Responsive Sidebar ----- */
+        @media (max-width: 900px) {
+            .sidebar {
+                flex: 1 1 100%;
+                position: static;
+                max-height: none;
+                margin-bottom: 10px;
+            }
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .sidebar ul li {
+                margin-bottom: 0;
+            }
+            .sidebar ul li a {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+                border-left: none;
+                border-bottom: 2px solid transparent;
+            }
+            .sidebar ul li a:hover {
+                border-left-color: transparent;
+                border-bottom-color: #2d7fc1;
+            }
+            .sidebar ul li a.active {
+                border-left-color: transparent;
+                border-bottom-color: #2d7fc1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title h1 {
+                font-size: 1.6rem;
+            }
+            .card {
+                padding: 16px;
+            }
+            .rumus-box {
+                font-size: 0.95rem;
+                padding: 14px;
+            }
+            .container {
+                padding: 10px 8px;
+            }
+        }
+
+        /* Print */
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            body {
+                background: #fff;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+            .header-title {
+                background: #0b2b44 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .rumus-box,
+            .example-box,
+            .solution-box,
+            .warning-box,
+            .tip-box {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ====== SIDEBAR (TOC) ====== -->
+        <nav class="sidebar" id="toc">
+            <h2>📖 Daftar Isi</h2>
+            <ul>
+                <li><a href="#tujuan">Tujuan Pembelajaran</a></li>
+                <li><a href="#petakonsep">Peta Konsep</a></li>
+                <li><a href="#garis-sudut">A. Garis dan Sudut</a></li>
+                <li><a href="#bangun-datar">B. Bangun Datar</a></li>
+                <li><a href="#kesebangunan">C. Kesebangunan & Kongruensi</a></li>
+                <li><a href="#dimensi-tiga">D. Geometri Ruang</a></li>
+                <li><a href="#sisi-lengkung">E. Bangun Ruang Sisi Lengkung</a></li>
+                <li><a href="#pertidaksamaan">F. Sistem Pertidaksamaan Linear</a></li>
+                <li><a href="#transformasi">G. Transformasi Geometri</a></li>
+                <li><a href="#trigonometri">H. Trigonometri</a></li>
+                <li><a href="#strategi">I. Strategi Khusus TKA</a></li>
+                <li><a href="#rumus-wajib">J. Rumus Wajib Hafal</a></li>
+                <li><a href="#kesalahan">K. Kesalahan Umum</a></li>
+                <li><a href="#rangkuman">L. Rangkuman Akhir</a></li>
+            </ul>
+        </nav>
+
+        <!-- ====== MAIN CONTENT ====== -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <div class="header-title">
+                <h1>📐 BAB 3: GEOMETRI DAN TRIGONOMETRI <small>TKA SMA &amp; SNBT</small></h1>
+                <div class="badge">Ringkasan Materi Lengkap · Strategi &amp; Contoh</div>
+            </div>
+
+            <!-- ===== TUJUAN ===== -->
+            <div class="card" id="tujuan">
+                <h2>🎯 Tujuan Pembelajaran</h2>
+                <p>Setelah mempelajari bab ini, peserta didik diharapkan mampu:</p>
+                <ul>
+                    <li>Memahami konsep dasar garis, sudut, dan bangun datar;</li>
+                    <li>Menyelesaikan soal kesebangunan dan kongruensi;</li>
+                    <li>Menentukan posisi titik, garis, dan bidang pada bangun ruang;</li>
+                    <li>Menghitung panjang, luas, dan volume berbagai bangun;</li>
+                    <li>Memahami transformasi geometri;</li>
+                    <li>Membaca grafik sistem pertidaksamaan linear;</li>
+                    <li>Menguasai konsep dasar trigonometri pada segitiga siku-siku.</li>
+                </ul>
+                <div class="tip-box">
+                    <strong>💡 Catatan Penting:</strong> Materi Geometri dan Trigonometri merupakan salah satu materi yang paling sering muncul pada ujian TKA SMA maupun SNBT. Sebagian besar soal berbentuk cerita, gambar, atau ilustrasi kehidupan sehari-hari, sehingga kemampuan memahami konsep jauh lebih penting daripada sekadar menghafal rumus.
+                </div>
+            </div>
+
+            <!-- ===== PETA KONSEP ===== -->
+            <div class="card" id="petakonsep">
+                <h2>🗺️ Peta Konsep</h2>
+                <div class="rumus-box" style="text-align:left; font-family: 'Segoe UI', monospace; background:#f4f9ff;">
+                    <pre style="font-family: 'Segoe UI', monospace; font-size:0.9rem; line-height:2; color:#0b2b44;">
+                GEOMETRI DAN TRIGONOMETRI
+                           │
+         ┌─────────────────┼─────────────────┐
+         │                 │                 │
+      <strong>Garis</strong>           <strong>Bangun Datar</strong>      <strong>Bangun Ruang</strong>
+         │                 │                 │
+      Sudut           Kesebangunan       Dimensi Tiga
+         │                 │                 │
+         │                 └─────────────────┤
+         │                                   │
+    Sistem Pertidaksamaan                 Transformasi
+         │                                   │
+         └─────────────────┬─────────────────┘
+                           │
+                      <strong>Trigonometri</strong>
+                    </pre>
+                </div>
+            </div>
+
+            <!-- ===== A ===== -->
+            <div class="card" id="garis-sudut">
+                <h2>A. Garis dan Sudut</h2>
+                <p>Materi ini menjadi dasar hampir seluruh pembahasan geometri.</p>
+
+                <h3>1. Sudut Berpelurus (Suplemen)</h3>
+                <p>Dua sudut dikatakan berpelurus apabila membentuk satu garis lurus.</p>
+                <div class="rumus-box">
+                    \[ \angle A + \angle B = 180^\circ \]
+                </div>
+
+                <h3>2. Sudut Berpenyiku (Komplemen)</h3>
+                <p>Dua sudut saling berpenyiku apabila jumlahnya \(90^\circ\).</p>
+
+                <h3>3. Hubungan Sudut pada Dua Garis Sejajar</h3>
+                <p>Jika dua garis sejajar dipotong garis transversal maka berlaku:</p>
+                <ul>
+                    <li>Sudut sehadap → <strong>sama besar</strong></li>
+                    <li>Sudut dalam berseberangan → <strong>sama besar</strong></li>
+                    <li>Sudut luar berseberangan → <strong>sama besar</strong></li>
+                    <li>Sudut dalam sepihak → <strong>jumlah 180°</strong></li>
+                    <li>Sudut luar sepihak → <strong>jumlah 180°</strong></li>
+                </ul>
+                <p>Materi ini hampir selalu muncul pada soal gambar.</p>
+
+                <div class="tip-box">
+                    <strong>⚡ Tips Cepat TKA:</strong><br>
+                    Jika menemukan dua garis sejajar, jangan langsung menghitung. Cari dahulu pasangan: <strong>sehadap</strong>, <strong>berseberangan</strong>, atau <strong>sepihak</strong> — karena biasanya jawabannya langsung diperoleh.
+                </div>
+            </div>
+
+            <!-- ===== B ===== -->
+            <div class="card" id="bangun-datar">
+                <h2>B. Bangun Datar</h2>
+                <p>Materi bangun datar pada TKA lebih menekankan pemahaman konsep daripada hafalan rumus.</p>
+
+                <div class="info-grid">
+                    <div class="col">
+                        <h4>📐 Persegi</h4>
+                        <p>Luas: \(L = s^2\)<br>
+                        Keliling: \(K = 4s\)<br>
+                        Diagonal: \(d = s\sqrt{2}\)</p>
+                    </div>
+                    <div class="col">
+                        <h4>📐 Persegi Panjang</h4>
+                        <p>Luas: \(L = p \times l\)<br>
+                        Keliling: \(K = 2(p+l)\)<br>
+                        Diagonal: \(d = \sqrt{p^2 + l^2}\)</p>
+                    </div>
+                    <div class="col">
+                        <h4>📐 Segitiga</h4>
+                        <p>Luas: \(L = \frac{1}{2} a t\)<br>
+                        Keliling: jumlah ketiga sisinya.</p>
+                    </div>
+                    <div class="col">
+                        <h4>📐 Lingkaran</h4>
+                        <p>Keliling: \(K = 2\pi r\)<br>
+                        Luas: \(L = \pi r^2\)</p>
+                    </div>
+                </div>
+
+                <h3>5. Keliling Bangun Gabungan</h3>
+                <p>Soal favorit TKA adalah gabungan: segitiga dan lingkaran, persegi dan setengah lingkaran, persegi panjang dan seperempat lingkaran.</p>
+                <div class="tip-box">
+                    <strong>⚡ Cara Cepat:</strong> Hanya hitung garis terluar. Jangan menghitung sisi yang saling berhimpitan.
+                </div>
+
+                <h3>6. Layang-layang</h3>
+                <p>Keliling: \(K = 2(a+b)\) &nbsp;·&nbsp; Luas: \(L = \frac{1}{2} d_1 d_2\)</p>
+                <div class="warning-box">
+                    <strong>⚠️ Analisis Kecukupan Data:</strong><br>
+                    Jika hanya diketahui luas, <strong>belum cukup</strong> menentukan keliling. Harus diketahui panjang sisi atau informasi tambahan. Tipe soal seperti ini sangat sering muncul pada TKA.
+                </div>
+            </div>
+
+            <!-- ===== C ===== -->
+            <div class="card" id="kesebangunan">
+                <h2>C. Kesebangunan dan Kongruensi</h2>
+
+                <h3>Kesebangunan</h3>
+                <p>Syarat: sudut bersesuaian sama besar, perbandingan sisi bersesuaian sama.</p>
+                <p>Jika skala \(k\), maka \(\frac{\text{sisi}_1}{\text{sisi}_2} = k\). Gunakan kali silang.</p>
+
+                <h3>Kongruen</h3>
+                <p>Bangun kongruen mempunyai bentuk sama, ukuran sama. Perbandingan semua sisi = 1.</p>
+
+                <h3>Trapesium Sebangun</h3>
+                <div class="rumus-box">
+                    \[ \frac{\text{sisi bawah}_1}{\text{sisi bawah}_2} = \frac{\text{sisi miring}_1}{\text{sisi miring}_2} \]
+                </div>
+                <div class="tip-box">
+                    <strong>⚡ Tips Cepat:</strong> Cari sisi yang paling mudah dikenali terlebih dahulu. Biasanya sisi alas.
+                </div>
+            </div>
+
+            <!-- ===== D ===== -->
+            <div class="card" id="dimensi-tiga">
+                <h2>D. Geometri Ruang (Dimensi Tiga)</h2>
+                <p>Materi ini menguji kemampuan visualisasi.</p>
+
+                <h3>1. Kedudukan Titik, Garis, dan Bidang</h3>
+                <p>Hubungan yang sering ditanyakan:</p>
+                <ul>
+                    <li>Titik pada garis, titik di luar garis</li>
+                    <li>Garis sejajar, berpotongan, bersilangan</li>
+                    <li>Garis sejajar bidang, bidang sejajar bidang, bidang berpotongan</li>
+                </ul>
+
+                <h4>Bidang Sejajar pada Balok</h4>
+                <p>Misalnya balok \(ABCD.EFGH\):</p>
+                <ul>
+                    <li>\(ABFE \parallel DCGH\)</li>
+                    <li>\(ADHE \parallel BCGF\)</li>
+                    <li>\(ABCD \parallel EFGH\)</li>
+                </ul>
+
+                <h3>2. Diagonal</h3>
+                <p>Harus dibedakan:</p>
+                <ul>
+                    <li><strong>Diagonal bidang</strong> — misalnya \(AC\) atau \(BD\)</li>
+                    <li><strong>Diagonal ruang</strong> — misalnya \(AG\) atau \(BH\)</li>
+                    <li><strong>Bidang diagonal</strong> — misalnya \(ACGE\)</li>
+                </ul>
+                <div class="warning-box">
+                    <strong>⚠️ Ini termasuk materi yang sering mengecoh peserta.</strong>
+                </div>
+
+                <h3>3. Pythagoras pada Bangun Ruang</h3>
+                <p>Rumus dasar: \(c = \sqrt{a^2 + b^2}\)</p>
+
+                <h4>Soal Panjang Tali</h4>
+                <p>Jika tali ditarik dari pojok lantai menuju tengah langit-langit, langkahnya:</p>
+                <ol>
+                    <li>Cari diagonal lantai: \(d = \sqrt{p^2 + l^2}\)</li>
+                    <li>Cari setengah diagonal: \(\frac{1}{2}d\)</li>
+                    <li>Kemudian: \(s = \sqrt{\left(\frac{1}{2}d\right)^2 + t^2}\)</li>
+                </ol>
+
+                <h4>Soal Kardus dalam Truk</h4>
+                <div class="warning-box">
+                    <strong>⚠️ Jangan menggunakan Volume Truk ÷ Volume Kardus!</strong><br>
+                    Cara benar:
+                    \[
+                    \left\lfloor \frac{P}{p} \right\rfloor \times \left\lfloor \frac{L}{l} \right\rfloor \times \left\lfloor \frac{T}{t} \right\rfloor
+                    \]
+                    Periksa pula kemungkinan kardus diputar 90° apabila diperbolehkan. Pilih orientasi yang menghasilkan jumlah terbanyak.
+                </div>
+            </div>
+
+            <!-- ===== E ===== -->
+            <div class="card" id="sisi-lengkung">
+                <h2>E. Bangun Ruang Sisi Lengkung</h2>
+
+                <h3>Tabung</h3>
+                <ul>
+                    <li>Luas selimut: \(L = 2\pi r t\)</li>
+                    <li>Luas permukaan: \(2\pi r(r + t)\)</li>
+                    <li>Volume: \(\pi r^2 t\)</li>
+                </ul>
+
+                <h3>Bola</h3>
+                <ul>
+                    <li>Luas: \(4\pi r^2\)</li>
+                    <li>Volume: \(\frac{4}{3}\pi r^3\)</li>
+                </ul>
+
+                <h3>Kerucut</h3>
+                <ul>
+                    <li>Volume: \(\frac{1}{3}\pi r^2 t\)</li>
+                    <li>Luas selimut: \(\pi r s\)</li>
+                </ul>
+
+                <h4>Soal Stiker</h4>
+                <div class="tip-box">
+                    <strong>💡 Perhatikan kata kunci:</strong> Jika soal menyebut <strong>"tanpa alas dan tutup"</strong>, berarti hanya gunakan \(2\pi r t\). Kemudian: kalikan jumlah tabung, bagi luas per lembar, bulatkan ke atas, hitung total biaya.
+                </div>
+            </div>
+
+            <!-- ===== F ===== -->
+            <div class="card" id="pertidaksamaan">
+                <h2>F. Sistem Pertidaksamaan Linear</h2>
+                <p>Materi ini hampir selalu disajikan dalam bentuk grafik.</p>
+
+                <h3>Menentukan Persamaan Garis</h3>
+                <p>Jika memotong sumbu X di \(a\) dan sumbu Y di \(b\), maka:</p>
+                <div class="rumus-box">
+                    \[ \frac{x}{a} + \frac{y}{b} = 1 \quad \text{atau} \quad bx + ay = ab \]
+                </div>
+
+                <h3>Menentukan Tanda</h3>
+                <p>Gunakan titik uji \((0,0)\). Jika memenuhi, gunakan tanda tersebut.</p>
+
+                <h3>Jenis Garis</h3>
+                <ul>
+                    <li>Garis penuh → \(\le\) atau \(\ge\)</li>
+                    <li>Garis putus-putus → \(<\) atau \(>\)</li>
+                </ul>
+
+                <div class="tip-box">
+                    <strong>⚡ Tips Cepat:</strong> Daerah di bawah garis biasanya \(\le\). Daerah di atas garis biasanya \(\ge\). Tetapi tetap lakukan uji titik agar pasti benar.
+                </div>
+            </div>
+
+            <!-- ===== G ===== -->
+            <div class="card" id="transformasi">
+                <h2>G. Transformasi Geometri</h2>
+
+                <h3>1. Translasi</h3>
+                <p>\((x,y) \rightarrow (x+a, y+b)\)</p>
+
+                <h3>2. Refleksi</h3>
+                <ul>
+                    <li>Terhadap sumbu X: \((x,-y)\)</li>
+                    <li>Terhadap sumbu Y: \((-x,y)\)</li>
+                    <li>Terhadap titik O: \((-x,-y)\)</li>
+                    <li>Terhadap garis \(y=k\): \((x, 2k-y)\)</li>
+                </ul>
+
+                <h3>3. Rotasi</h3>
+                <ul>
+                    <li>90°: \((-y,x)\)</li>
+                    <li>180°: \((-x,-y)\)</li>
+                    <li>270°: \((y,-x)\)</li>
+                </ul>
+
+                <h3>4. Dilatasi</h3>
+                <p>Faktor skala \(k\): \((x,y) \rightarrow (kx, ky)\)</p>
+
+                <h4>Komposisi Transformasi</h4>
+                <div class="warning-box">
+                    <strong>⚠️ Kerjakan sesuai urutan!</strong><br>
+                    Refleksi dahulu, baru rotasi, atau sebaliknya. Urutan berbeda → hasil berbeda.
+                </div>
+            </div>
+
+            <!-- ===== H ===== -->
+            <div class="card" id="trigonometri">
+                <h2>H. Trigonometri</h2>
+                <p>Materi trigonometri TKA didominasi oleh segitiga siku-siku.</p>
+
+                <h3>Perbandingan Trigonometri</h3>
+                <div class="info-grid">
+                    <div class="col">
+                        <h4>📐 SIN</h4>
+                        <p>\(\sin \theta = \frac{\text{depan}}{\text{miring}}\)</p>
+                    </div>
+                    <div class="col">
+                        <h4>📐 COS</h4>
+                        <p>\(\cos \theta = \frac{\text{samping}}{\text{miring}}\)</p>
+                    </div>
+                    <div class="col">
+                        <h4>📐 TAN</h4>
+                        <p>\(\tan \theta = \frac{\text{depan}}{\text{samping}}\)</p>
+                    </div>
+                    <div class="col">
+                        <h4>📐 Identitas</h4>
+                        <p>\(\sin^2 \theta + \cos^2 \theta = 1\)</p>
+                    </div>
+                </div>
+
+                <h3>Hubungan Sudut Komplemen</h3>
+                <p>Jika \(\alpha + \beta = 90^\circ\), maka:</p>
+                <ul>
+                    <li>\(\sin \alpha = \cos \beta\)</li>
+                    <li>\(\cos \alpha = \sin \beta\)</li>
+                    <li>\(\tan \alpha = \frac{1}{\tan \beta}\)</li>
+                </ul>
+
+                <h3>Nilai Sudut Istimewa</h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sudut</th>
+                                <th>0°</th>
+                                <th>30°</th>
+                                <th>45°</th>
+                                <th>60°</th>
+                                <th>90°</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>sin</strong></td>
+                                <td>0</td>
+                                <td>½</td>
+                                <td>\(\frac{\sqrt{2}}{2}\)</td>
+                                <td>\(\frac{\sqrt{3}}{2}\)</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td><strong>cos</strong></td>
+                                <td>1</td>
+                                <td>\(\frac{\sqrt{3}}{2}\)</td>
+                                <td>\(\frac{\sqrt{2}}{2}\)</td>
+                                <td>½</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td><strong>tan</strong></td>
+                                <td>0</td>
+                                <td>\(\frac{\sqrt{3}}{3}\)</td>
+                                <td>1</td>
+                                <td>\(\sqrt{3}\)</td>
+                                <td>~</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 Menghafal tabel ini akan mempercepat pengerjaan soal.</strong>
+                </div>
+
+                <h3>Pythagoras Trigonometri</h3>
+                <p>Jika diketahui \(\cos \alpha = \frac{3}{5}\), maka segitiganya adalah 3-4-5, sehingga:</p>
+                <ul>
+                    <li>\(\sin \alpha = \frac{4}{5}\)</li>
+                    <li>\(\tan \alpha = \frac{4}{3}\)</li>
+                </ul>
+            </div>
+
+            <!-- ===== I ===== -->
+            <div class="card" id="strategi">
+                <h2>I. Strategi Khusus Menghadapi Soal TKA</h2>
+                <div class="info-grid">
+                    <div class="col">
+                        <h4>📌 Sistem Pertidaksamaan</h4>
+                        <p>Cari persamaan garis → uji titik (0,0).</p>
+                    </div>
+                    <div class="col">
+                        <h4>📌 Bangun Datar</h4>
+                        <p>Hitung hanya sisi luar. Jangan hitung sisi yang berhimpit.</p>
+                    </div>
+                    <div class="col">
+                        <h4>📌 Kesebangunan</h4>
+                        <p>Tentukan faktor skala terlebih dahulu.</p>
+                    </div>
+                    <div class="col">
+                        <h4>📌 Geometri Ruang</h4>
+                        <p>Gambar ulang balok. Bedakan diagonal bidang dan diagonal ruang.</p>
+                    </div>
+                    <div class="col">
+                        <h4>📌 Transformasi</h4>
+                        <p>Kerjakan satu transformasi setiap langkah.</p>
+                    </div>
+                    <div class="col">
+                        <h4>📌 Trigonometri</h4>
+                        <p>Hafalkan sudut istimewa. Gunakan Pythagoras jika diketahui salah satu perbandingan.</p>
+                    </div>
+                    <div class="col" style="grid-column: 1 / -1;">
+                        <h4>📌 Bangun Ruang Sisi Lengkung</h4>
+                        <p>Perhatikan kata: <strong>"tanpa alas"</strong>, <strong>"tanpa tutup"</strong>, <strong>"hanya selimut"</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== J ===== -->
+            <div class="card" id="rumus-wajib">
+                <h2>J. Rumus Wajib Hafal</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Materi</th><th>Rumus Inti</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Sudut Berpelurus</td><td>\(A+B=180^\circ\)</td></tr>
+                            <tr><td>Sudut Berpenyiku</td><td>\(A+B=90^\circ\)</td></tr>
+                            <tr><td>Keliling Lingkaran</td><td>\(2\pi r\)</td></tr>
+                            <tr><td>Luas Lingkaran</td><td>\(\pi r^2\)</td></tr>
+                            <tr><td>Luas Segitiga</td><td>\(\frac12 a t\)</td></tr>
+                            <tr><td>Diagonal Persegi</td><td>\(s\sqrt{2}\)</td></tr>
+                            <tr><td>Diagonal Persegi Panjang</td><td>\(\sqrt{p^2+l^2}\)</td></tr>
+                            <tr><td>Pythagoras</td><td>\(c^2 = a^2 + b^2\)</td></tr>
+                            <tr><td>Luas Selimut Tabung</td><td>\(2\pi r t\)</td></tr>
+                            <tr><td>Volume Tabung</td><td>\(\pi r^2 t\)</td></tr>
+                            <tr><td>Refleksi \(y=k\)</td><td>\((x, 2k-y)\)</td></tr>
+                            <tr><td>Rotasi 180°</td><td>\((-x,-y)\)</td></tr>
+                            <tr><td>Dilatasi</td><td>\((kx, ky)\)</td></tr>
+                            <tr><td>\(\sin\)</td><td>depan/miring</td></tr>
+                            <tr><td>\(\cos\)</td><td>samping/miring</td></tr>
+                            <tr><td>\(\tan\)</td><td>depan/samping</td></tr>
+                            <tr><td>Identitas Dasar</td><td>\(\sin^2\theta+\cos^2\theta=1\)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== K ===== -->
+            <div class="card" id="kesalahan">
+                <h2>K. Kesalahan yang Paling Sering Terjadi</h2>
+                <div class="warning-box">
+                    <ul>
+                        <li>❌ Salah membedakan diagonal bidang dan diagonal ruang.</li>
+                        <li>❌ Menggunakan volume untuk menentukan banyak kardus dalam truk.</li>
+                        <li>❌ Menghitung seluruh keliling bangun gabungan termasuk sisi yang berhimpitan.</li>
+                        <li>❌ Salah menentukan tanda pertidaksamaan karena tidak melakukan uji titik.</li>
+                        <li>❌ Keliru mengurutkan komposisi transformasi.</li>
+                        <li>❌ Menggunakan rumus luas permukaan tabung padahal soal hanya meminta luas selimut.</li>
+                        <li>❌ Salah menentukan sisi depan dan sisi samping pada trigonometri.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ===== L ===== -->
+            <div class="card" id="rangkuman">
+                <h2>L. Rangkuman Akhir</h2>
+                <p>Sebelum mengerjakan soal Geometri dan Trigonometri pada TKA maupun SNBT, lakukan langkah berikut:</p>
+                <ol>
+                    <li><strong>Pahami gambar</strong> terlebih dahulu dan beri label jika diperlukan.</li>
+                    <li><strong>Identifikasi konsep</strong> yang digunakan (bangun datar, ruang, transformasi, atau trigonometri).</li>
+                    <li><strong>Tuliskan semua data</strong> yang diketahui.</li>
+                    <li><strong>Pilih rumus</strong> yang sesuai dengan pertanyaan.</li>
+                    <li><strong>Periksa kembali</strong> satuan panjang, luas, atau volume.</li>
+                    <li>Untuk soal cerita, pastikan jawaban sesuai konteks (misalnya jumlah kardus harus berupa bilangan bulat, jumlah lembar stiker dibulatkan ke atas, dan sebagainya).</li>
+                </ol>
+                <div class="tip-box" style="margin-top:20px;">
+                    <strong>💡 Catatan Penting:</strong><br>
+                    Pada TKA SMA, soal Geometri dan Trigonometri lebih banyak menguji <strong>kemampuan menganalisis gambar, memilih konsep yang tepat, dan menerapkan rumus secara logis</strong> daripada sekadar menghafal rumus. Oleh karena itu, biasakan berlatih dengan soal-soal kontekstual yang melibatkan ilustrasi bangun, grafik, maupun situasi kehidupan sehari-hari.
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="text-align:center; padding:20px 0 10px; color:#6a8aa0; border-top:1px solid #e4ecf3; margin-top:20px; font-size:0.9rem;">
+                <strong>Selamat Belajar!</strong> Semoga Sukses di TKA SMA &amp; SNBT 📐📚
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== AUTO-RENDER KATEX ===== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '$', right: '$', display: false },
+                        { left: '\\(', right: '\\)', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+
+            // Active state for sidebar links based on scroll
+            const sections = document.querySelectorAll('.card[id], .header-title[id]');
+            const navLinks = document.querySelectorAll('.sidebar ul li a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif Geometri & Trigonometri TKA SMA</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --correct-bg: #d4edda;
+            --correct-border: #28a745;
+            --incorrect-bg: #f8d7da;
+            --incorrect-border: #dc3545;
+            --text-dark: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: var(--text-dark);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header h1 { margin: 0; color: var(--primary); }
+        .header p { margin: 10px 0 0; color: #666; }
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary);
+        }
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-label {
+            display: block;
+            padding: 12px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .option-label:hover:not(.disabled) {
+            background-color: #f8f9fa;
+            border-color: #cbd5e1;
+        }
+        .option-label input {
+            display: none;
+        }
+        .disabled {
+            pointer-events: none;
+        }
+        .feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        .feedback-box.correct {
+            display: block;
+            background-color: var(--correct-bg);
+            color: #155724;
+            border-left: 5px solid var(--correct-border);
+        }
+        .feedback-box.incorrect {
+            display: block;
+            background-color: var(--incorrect-bg);
+            color: #721c24;
+            border-left: 5px solid var(--incorrect-border);
+        }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.95em;
+            display: none;
+        }
+        .explanation.show {
+            display: block;
+        }
+        .explanation-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        #score-container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Kuis Interaktif Geometri & Trigonometri</h1>
+        <p>Persiapan Ujian TKA Matematika SMA | 30 Soal Pilihan Ganda</p>
+    </div>
+
+    <div class="quiz-container" id="quiz">
+        <!-- Questions will be injected here -->
+    </div>
+
+    <div id="score-container">
+        <h2 id="final-score"></h2>
+        <p>Terus berlatih untuk persiapan TKA yang lebih baik!</p>
+        <button onclick="location.reload()" style="padding:10px 20px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-size:1em;">Ulangi Kuis</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "1. Daerah yang diarsir dibatasi oleh garis yang melalui titik (0,4) dan (6,0) serta mengarah ke titik pusat (0,0). Persamaan pertidaksamaan yang tepat adalah...",
+                options: ["2x + 3y ≥ 12", "3x + 2y ≤ 12", "4x + 6y ≥ 24", "2x + 3y ≤ 12", "3x + 2y ≥ 12"],
+                ans: 3,
+                exp: "Garis melalui (0,4) dan (6,0) memiliki persamaan 4x + 6y = 24, disederhanakan menjadi 2x + 3y = 12. Karena daerah arsiran mengarah ke (0,0), substitusi (0,0) harus bernilai benar: 2(0) + 3(0) ≤ 12. Jadi, 2x + 3y ≤ 12."
+            },
+            {
+                q: "2. Suatu daerah penyelesaian terletak di atas garis yang melalui (0, -2) dan (3, 0). Pertidaksamaan yang memenuhi adalah...",
+                options: ["-2x + 3y ≥ -6", "2x - 3y ≤ 6", "-2x + 3y ≤ -6", "3x - 2y ≥ -6", "2x - 3y ≥ 6"],
+                ans: 0,
+                exp: "Garis melalui sumbu Y di -2 dan sumbu X di 3: -2x + 3y = -6. Daerah berada di atas garis, cek titik (0,0) yang letaknya di atas garis tersebut. Substitusi (0,0) ke -2x+3y menghasilkan 0. Karena 0 ≥ -6, pertidaksamaannya adalah -2x + 3y ≥ -6."
+            },
+            {
+                q: "3. Sudut A dan sudut B saling berpelurus. Jika besar sudut A adalah (3x + 15)° dan sudut B adalah (2x - 10)°, berapakah besar sudut B?",
+                options: ["35°", "60°", "120°", "105°", "75°"],
+                ans: 1,
+                exp: "Dua sudut berpelurus berjumlah 180°. (3x + 15) + (2x - 10) = 180 → 5x + 5 = 180 → 5x = 175 → x = 35. Besar sudut B = 2(35) - 10 = 70 - 10 = 60°."
+            },
+            {
+                q: "4. Perbandingan dua buah sudut yang saling bersuplemen (berpelurus) adalah 4 : 5. Selisih kedua sudut tersebut adalah...",
+                options: ["10°", "20°", "30°", "40°", "50°"],
+                ans: 1,
+                exp: "Misalkan sudutnya 4x dan 5x. 4x + 5x = 180 → 9x = 180 → x = 20. Sudutnya adalah 80° dan 100°. Selisihnya = 100° - 80° = 20°."
+            },
+            {
+                q: "5. Pada sebuah ruangan berbentuk balok ABCD.EFGH (alas ABCD), dinding yang sejajar dengan dinding depan (ABFE) adalah...",
+                options: ["ADHE", "BCGF", "DCGH", "EFGH", "ABCD"],
+                ans: 2,
+                exp: "Dinding ABFE berada di sisi depan. Dinding yang berhadapan dan sejajar dengannya di sisi belakang adalah DCGH."
+            },
+            {
+                q: "6. Sebuah ruangan berukuran 8 m × 6 m dengan tinggi 12 m. Seekor laba-laba ingin menarik jaring lurus dari salah satu pojok lantai (sudut ruangan) tepat ke titik tengah langit-langit. Panjang jaring minimum yang dibutuhkan adalah...",
+                options: ["10 m", "12 m", "13 m", "14 m", "15 m"],
+                ans: 2,
+                exp: "Diagonal lantai = √(8² + 6²) = √100 = 10 m. Jarak dari pojok ke tengah lantai = 10/2 = 5 m. Gunakan Pythagoras dengan tinggi ruangan: Panjang jaring = √(5² + 12²) = √(25 + 144) = √169 = 13 m."
+            },
+            {
+                q: "7. Suatu ruangan kubus memiliki panjang rusuk 4 m. Panjang tali terpendek dari pojok lantai menuju tengah-tengah salah satu dinding tegak di sebelahnya adalah...",
+                options: ["2√5 m", "4 m", "3 m", "2√3 m", "4√2 m"],
+                ans: 0,
+                exp: "Jarak titik pojok lantai ke proyeksi titik tengah dinding pada lantai adalah 2 m (setengah rusuk). Tinggi titik tengah dinding adalah 2 m. Pythagoras: √(2² + 4²) = √20 = 2√5 m."
+            },
+            {
+                q: "8. Sebuah bak truk berbentuk balok berukuran 3 m × 1,5 m × 1,5 m. Akan diisi kotak berbentuk kubus dengan rusuk 30 cm. Jumlah maksimal kotak yang bisa dimuat tanpa terpotong adalah...",
+                options: ["100", "125", "250", "300", "350"],
+                ans: 2,
+                exp: "Truk dalam cm = 300 × 150 × 150. Sisi p = 300/30 = 10. Sisi l = 150/30 = 5. Sisi t = 150/30 = 5. Total kardus = 10 × 5 × 5 = 250 kardus."
+            },
+            {
+                q: "9. Sebuah gudang berukuran 5m x 4m x 3m akan menyimpan kotak berukuran 60cm x 60cm x 60cm. Berapa kotak maksimal yang bisa ditumpuk tegak lurus?",
+                options: ["100", "200", "240", "192", "220"],
+                ans: 3,
+                exp: "Ukuran gudang: 500x400x300. P = ⌊500/60⌋ = 8. L = ⌊400/60⌋ = 6. T = ⌊300/60⌋ = 5. Total = 8 × 6 × 5 = 240."
+            },
+            {
+                q: "10. Dua buah trapesium siku-siku dinyatakan sebangun. Trapesium pertama memiliki panjang sisi sejajar 6 cm dan 9 cm. Jika sisi sejajar trapesium kedua yang terpendek adalah 10 cm, maka panjang sisi sejajar yang terpanjang adalah...",
+                options: ["12 cm", "15 cm", "18 cm", "20 cm", "24 cm"],
+                ans: 1,
+                exp: "Karena sebangun, perbandingan sisi-sisi yang bersesuaian sama. (Sisi atas 1)/(Sisi atas 2) = (Sisi bawah 1)/(Sisi bawah 2). 6 / 10 = 9 / x → 6x = 90 → x = 15 cm."
+            },
+            {
+                q: "11. Sebuah foto ditempel pada selembar karton berukuran 40 cm x 60 cm. Di sebelah kiri, kanan, dan atas foto masih terdapat sisa karton selebar 4 cm. Jika foto dan karton sebangun, lebar sisa karton di bagian bawah foto adalah...",
+                options: ["4 cm", "5 cm", "6 cm", "7 cm", "8 cm"],
+                ans: 4,
+                exp: "Lebar foto = 40 - 4(kiri) - 4(kanan) = 32 cm. Karton (L x T) = 40 x 60. Foto sebangun: L_foto / T_foto = 40 / 60 → 32 / T_foto = 2 / 3 → T_foto = 48 cm. Tinggi foto = 48 cm. Sisa bawah = Tinggi karton - atas - T_foto = 60 - 4 - 48 = 8 cm."
+            },
+            {
+                q: "12. Titik P(3, -5) dicerminkan terhadap garis y = 2. Koordinat bayangan titik P adalah...",
+                options: ["(3, 9)", "(3, -1)", "(1, -5)", "(-1, -5)", "(3, 7)"],
+                ans: 0,
+                exp: "Refleksi titik (x, y) terhadap y = k adalah (x, 2k - y). P' = (3, 2(2) - (-5)) = (3, 4 + 5) = (3, 9)."
+            },
+            {
+                q: "13. Titik A(-2, 4) dirotasikan sebesar 90° berlawanan arah jarum jam dengan pusat O(0,0). Bayangan titik A adalah...",
+                options: ["(4, 2)", "(-4, -2)", "(2, 4)", "(-4, 2)", "(4, -2)"],
+                ans: 1,
+                exp: "Rotasi 90° berlawanan arah jarum jam pusat (0,0) memiliki rumus (x', y') = (-y, x). Titik A(-2, 4) menjadi A'(-4, -2)."
+            },
+            {
+                q: "14. Bayangan titik K(5, 1) setelah dicerminkan terhadap garis y = -1, dilanjutkan dengan rotasi 180° berlawanan arah jarum jam dengan pusat O(0,0) adalah...",
+                options: ["(-5, -3)", "(-5, 3)", "(5, -3)", "(5, 3)", "(-3, -5)"],
+                ans: 1,
+                exp: "Langkah 1: Refleksi y = -1 → (5, 2(-1) - 1) = (5, -3). Langkah 2: Rotasi 180° berlawanan jarum jam (atau searah, sama saja) pusat (0,0) memiliki rumus (-x, -y). Maka bayangannya (-5, 3)."
+            },
+            {
+                q: "15. Titik B(x, y) ditransformasikan menghasilkan B'(-4, 6) akibat refleksi terhadap garis x = 2. Koordinat asli B adalah...",
+                options: ["(0, 6)", "(8, 6)", "(2, 6)", "(-2, 6)", "(-8, 6)"],
+                ans: 1,
+                exp: "Refleksi thd x=k rumusnya (2k-x, y). 2(2) - x = -4 → 4 - x = -4 → x = 8. Komponen y tetap = 6. Titik aslinya (8, 6)."
+            },
+            {
+                q: "16. Sebuah lapangan berbentuk persegi panjang dengan panjang 20 m dan lebar 14 m. Di salah satu sisi lebarnya menempel setengah lingkaran yang menghadap keluar. Keliling total lapangan tersebut adalah...",
+                options: ["76 m", "88 m", "94 m", "108 m", "122 m"],
+                ans: 0,
+                exp: "Keliling gabungan hanya menghitung sisi luar. Sisi luar = 2 sisi panjang (20+20) + 1 sisi lebar (14) + busur setengah lingkaran (1/2 × π × d = 1/2 × 22/7 × 14 = 22). Total = 40 + 14 + 22 = 76 m. (Sisi tempat menempel tidak dihitung)."
+            },
+            {
+                q: "17. Diketahui sebuah layang-layang ABCD. <br>(1) Luas layang-layang adalah 48 cm².<br>(2) Panjang salah satu diagonalnya adalah 8 cm.<br>Apakah data tersebut cukup untuk mencari keliling layang-layang?",
+                options: [
+                    "Pernyataan (1) SAJA cukup",
+                    "Pernyataan (2) SAJA cukup",
+                    "DUA pernyataan BERSAMA-SAMA cukup",
+                    "Satu pernyataan SAJA cukup",
+                    "Pernyataan (1) dan (2) TIDAK CUKUP"
+                ],
+                ans: 4,
+                exp: "Dari (1) dan (2), kita hanya bisa mencari diagonal kedua: L = 1/2.d1.d2 → 48 = 1/2(8).d2 → d2 = 12. Namun, keliling memerlukan panjang sisi terluar layang-layang. Tanpa mengetahui proporsi potongan tegak lurus diagonalnya (titik potong), panjang sisi luar (pitagoras) tidak bisa ditentukan. Jadi, data TIDAK CUKUP."
+            },
+            {
+                q: "18. Keliling gabungan dari sebuah segitiga sama sisi dengan panjang sisi 10 cm dan setengah lingkaran yang menempel tepat pada salah satu sisinya adalah...",
+                options: ["20 + 5π cm", "30 + 5π cm", "20 + 10π cm", "10 + 5π cm", "30 + 10π cm"],
+                ans: 0,
+                exp: "Sisi luar = 2 sisi segitiga (10+10) + busur setengah lingkaran dengan diameter 10 cm (1/2 × π × 10 = 5π). Keliling = 20 + 5π cm."
+            },
+            {
+                q: "19. Diketahui panjang sisi miring sebuah segitiga siku-siku adalah 13 cm.<br>(1) Luas segitiga adalah 30 cm².<br>(2) Keliling segitiga adalah 30 cm.<br>Manakah informasi yang cukup untuk mengetahui panjang kedua sisi penyikunya?",
+                options: [
+                    "Pernyataan (1) SAJA cukup, tapi (2) SAJA tidak",
+                    "Pernyataan (2) SAJA cukup, tapi (1) SAJA tidak",
+                    "DUA pernyataan BERSAMA-SAMA cukup",
+                    "Pernyataan (1) SAJA cukup, (2) SAJA juga cukup",
+                    "TIDAK CUKUP dengan kedua pernyataan"
+                ],
+                ans: 3,
+                exp: "Sisi miring c = 13. Sisi penyiku a dan b (a²+b²=169).<br>(1) Luas = 30 → 1/2 ab = 30 → ab = 60. Dengan sistem persamaan a²+b²=169 dan ab=60, (a+b)² = a²+b²+2ab = 169+120=289 → a+b=17. Kita bisa mencari a dan b (5 dan 12). CUKUP.<br>(2) Keliling = 30 → a+b+13 = 30 → a+b = 17. Dari a+b=17 dan a²+b²=169, kita juga bisa mencari a dan b. CUKUP.<br>Maka, SATU pernyataan saja sudah cukup."
+            },
+            {
+                q: "20. Sebuah tabung tanpa tutup memiliki diameter 14 cm dan tinggi 10 cm. Bagian selimut tabung akan dilapisi stiker. Jika harga stiker Rp 50,00 per cm², biaya minimal yang dibutuhkan adalah...",
+                options: ["Rp 15.400,00", "Rp 22.000,00", "Rp 30.800,00", "Rp 38.500,00", "Rp 44.000,00"],
+                ans: 1,
+                exp: "Karena yang dilapisi hanya selimut, kita cari Luas Selimut = 2πrt (atau πdt). L = 22/7 × 14 × 10 = 440 cm². Biaya = 440 × 50 = Rp 22.000,00."
+            },
+            {
+                q: "21. Suatu drum berbentuk tabung memiliki jari-jari alas 30 cm dan tinggi 1 meter. Luas permukaan selimut drum tersebut adalah... (gunakan π = 3,14)",
+                options: ["1.884 cm²", "18.840 cm²", "9.420 cm²", "3.768 cm²", "37.680 cm²"],
+                ans: 1,
+                exp: "Ubah tinggi ke cm: t = 100 cm. L_selimut = 2πrt = 2 × 3,14 × 30 × 100 = 6,28 × 3000 = 18.840 cm²."
+            },
+            {
+                q: "22. Dua buah tabung, A dan B, terbuat dari bahan yang sama. Tabung A memiliki jari-jari r dan tinggi t. Tabung B memiliki jari-jari 2r dan tinggi 1/2 t. Perbandingan luas selimut tabung A dan B adalah...",
+                options: ["1 : 1", "1 : 2", "2 : 1", "1 : 4", "4 : 1"],
+                ans: 0,
+                exp: "Luas selimut A = 2π(r)(t) = 2πrt. Luas selimut B = 2π(2r)(1/2 t) = 2πrt. Keduanya sama besar, maka perbandingannya 1 : 1."
+            },
+            {
+                q: "23. Pada sebuah segitiga siku-siku ABC yang siku-siku di B, diketahui nilai sin A = 5/13. Nilai dari cos A adalah...",
+                options: ["5/12", "12/13", "12/5", "13/12", "13/5"],
+                ans: 1,
+                exp: "sin A = depan/miring = 5/13. Gunakan Pythagoras untuk sisi samping: √(13² - 5²) = √(169 - 25) = √144 = 12. cos A = samping/miring = 12/13."
+            },
+            {
+                q: "24. Diketahui tan P = 3/4. Jika P adalah sudut lancip, maka nilai sin P + cos P adalah...",
+                options: ["1", "5/4", "7/5", "12/5", "7/12"],
+                ans: 2,
+                exp: "tan P = depan/samping = 3/4. Miring = √(3²+4²) = 5. sin P = 3/5. cos P = 4/5. sin P + cos P = 3/5 + 4/5 = 7/5."
+            },
+            {
+                q: "25. Seseorang dengan tinggi badan 1,6 meter melihat puncak sebuah pohon dengan sudut elevasi 45°. Jika jarak orang tersebut ke pohon adalah 15 meter, tinggi pohon tersebut adalah...",
+                options: ["15 m", "16,6 m", "13,4 m", "15√2 m", "30 m"],
+                ans: 1,
+                exp: "Gunakan tangen: tan 45° = (Tinggi pohon - tinggi orang) / jarak. 1 = (T - 1,6) / 15 → 15 = T - 1,6 → T = 16,6 meter."
+            },
+            {
+                q: "26. Sebuah tangga yang panjangnya 6 meter disandarkan pada sebuah tembok. Jika sudut yang dibentuk antara tangga dan lantai dasar adalah 60°, maka jarak pangkal tangga ke tembok adalah...",
+                options: ["2 m", "3 m", "3√2 m", "3√3 m", "6 m"],
+                ans: 1,
+                exp: "Jarak pangkal ke tembok adalah sisi samping sudut. Sisi miring (tangga) = 6 m. cos 60° = samping / miring. 1/2 = samping / 6 → samping = 3 meter."
+            },
+            {
+                q: "27. Hasil dari (sin 30° × cos 60°) + (sin 60° × cos 30°) adalah...",
+                options: ["0", "1/2", "1", "√3/2", "2"],
+                ans: 2,
+                exp: "Ini juga merupakan rumus sin(A+B) = sin(30+60) = sin 90° = 1. Secara manual: (1/2 × 1/2) + (√3/2 × √3/2) = 1/4 + 3/4 = 4/4 = 1."
+            },
+            {
+                q: "28. Jika sec x = 5/3 dan x adalah sudut lancip, maka nilai tan x adalah...",
+                options: ["3/4", "4/3", "4/5", "3/5", "5/4"],
+                ans: 1,
+                exp: "sec x = 1/cos x = miring/samping = 5/3. Depan = √(5² - 3²) = 4. tan x = depan/samping = 4/3."
+            },
+            {
+                q: "29. Diketahui segitiga siku-siku dengan panjang hipotenusa (sisi miring) 10 cm dan salah satu sudutnya 30°. Panjang sisi di depan sudut 30° adalah...",
+                options: ["5 cm", "5√3 cm", "10 cm", "10√3 cm", "20 cm"],
+                ans: 0,
+                exp: "sin 30° = depan / miring. 1/2 = depan / 10 → depan = 5 cm."
+            },
+            {
+                q: "30. Koordinat polar sebuah titik adalah (8, 30°). Koordinat kartesius (x,y) dari titik tersebut adalah...",
+                options: ["(4, 4√3)", "(4√3, 4)", "(4, 4)", "(8√3, 8)", "(8, 8√3)"],
+                ans: 1,
+                exp: "x = r cos θ = 8 × cos 30° = 8 × (√3/2) = 4√3. y = r sin θ = 8 × sin 30° = 8 × (1/2) = 4. Jadi (4√3, 4)."
+            }
+        ];
+
+        let answeredCount = 0;
+        let correctCount = 0;
+
+        const quizContainer = document.getElementById('quiz');
+
+        function renderQuiz() {
+            questions.forEach((qObj, qIndex) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = 'q' + qIndex;
+
+                const qText = document.createElement('div');
+                qText.className = 'question-text';
+                // USE innerHTML so <br> tags render properly
+                qText.innerHTML = qObj.q;
+                card.appendChild(qText);
+
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options';
+
+                qObj.options.forEach((optText, optIndex) => {
+                    const label = document.createElement('label');
+                    label.className = 'option-label';
+                    label.id = `label-${qIndex}-${optIndex}`;
+
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = 'question' + qIndex;
+                    input.value = optIndex;
+                    
+                    input.addEventListener('change', () => handleSelection(qIndex, optIndex, label));
+
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(optText));
+                    optionsContainer.appendChild(label);
+                });
+                card.appendChild(optionsContainer);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback-box';
+                card.appendChild(feedback);
+
+                const explanation = document.createElement('div');
+                explanation.className = 'explanation';
+                explanation.innerHTML = `<div class="explanation-title">Pembahasan:</div>${qObj.exp}`;
+                card.appendChild(explanation);
+
+                quizContainer.appendChild(card);
+            });
+        }
+
+        function handleSelection(qIndex, selectedOptIndex, selectedLabel) {
+            const card = document.getElementById('q' + qIndex);
+            const optionsContainer = card.querySelector('.options');
+            const feedback = card.querySelector('.feedback-box');
+            const explanation = card.querySelector('.explanation');
+            
+            // Prevent changing answer
+            optionsContainer.classList.add('disabled');
+
+            const correctOptIndex = questions[qIndex].ans;
+            const isCorrect = selectedOptIndex === correctOptIndex;
+
+            if (isCorrect) {
+                feedback.textContent = "Jawaban Anda Benar! ✓";
+                feedback.className = 'feedback-box correct';
+                selectedLabel.style.backgroundColor = 'var(--correct-bg)';
+                selectedLabel.style.borderColor = 'var(--correct-border)';
+                correctCount++;
+            } else {
+                feedback.textContent = "Jawaban Anda Salah! ✗";
+                feedback.className = 'feedback-box incorrect';
+                selectedLabel.style.backgroundColor = 'var(--incorrect-bg)';
+                selectedLabel.style.borderColor = 'var(--incorrect-border)';
+                
+                // Highlight the correct answer
+                const correctLabel = document.getElementById(`label-${qIndex}-${correctOptIndex}`);
+                if(correctLabel) {
+                    correctLabel.style.backgroundColor = 'var(--correct-bg)';
+                    correctLabel.style.borderColor = 'var(--correct-border)';
+                }
+            }
+
+            explanation.classList.add('show');
+            
+            answeredCount++;
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            if (answeredCount === questions.length) {
+                const scoreContainer = document.getElementById('score-container');
+                const scoreText = document.getElementById('final-score');
+                const score = Math.round((correctCount / questions.length) * 100);
+                scoreText.textContent = `Skor Akhir Anda: ${score} / 100 (${correctCount} Benar dari ${questions.length} Soal)`;
+                scoreContainer.style.display = 'block';
+            }
+        }
+
+        // Initialize Quiz
+        renderQuiz();
+    </script>
+</body>
+</html>
