@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif TKA SMA - Aljabar & Operasi Bilangan</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            color: var(--dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .intro {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            color: #6c757d;
+        }
+        .question-card {
+            background: var(--light);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        .question-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .question-number {
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .option-label:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 30px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result-panel {
+            margin-top: 40px;
+            padding: 30px;
+            background: #d4edda;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        .result-panel h2 {
+            color: #155724;
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+        
+        /* State Classes */
+        .correct-answer {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            border-radius: 4px;
+            display: none;
+            font-size: 0.95em;
+            color: #856404;
+        }
+        .show {
+            display: block;
+        }
+        
+        .status-correct {
+            color: #155724;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #c3e6cb;
+        }
+        .status-wrong {
+            color: #721c24;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Kuis Persiapan TKA SMA: Aljabar & Operasi Bilangan</h1>
+    <p class="intro">Tingkatkan pemahamanmu dengan 25 soal latihan Aljabar, Eksponen, Fungsi, dan SPLTV ini. <strong>Begitu kamu memilih jawaban, pembahasan dan jawaban yang benar akan langsung muncul!</strong> Jawab semua soal, lalu klik "Selesai & Lihat Skor Akhir" di bagian paling bawah untuk melihat nilaimu.</p>
+    
+    <div id="quiz-container"></div>
+    
+    <button id="submit-btn" onclick="showFinalResult()">Selesai & Lihat Skor Akhir</button>
+    
+    <div id="result-panel" class="result-panel">
+        <h2 id="score-display"></h2>
+        <p>Silakan gulir ke atas untuk meninjau kembali jawaban dan pembahasan soal.</p>
+        <button onclick="location.reload()" style="background:#2c3e50; padding:10px; width:auto; margin:20px auto 0 auto; display:inline-block;">Coba Lagi</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            q: "Sederhanakan bentuk pangkat (2<sup>3</sup> × 3<sup>2</sup>)<sup>2</sup> / (2<sup>4</sup> × 3<sup>3</sup>) adalah...",
+            options: ["6", "12", "18", "24", "36"],
+            ans: 1,
+            exp: "Selesaikan pangkat luar terlebih dahulu: (2<sup>6</sup> × 3<sup>4</sup>) / (2<sup>4</sup> × 3<sup>3</sup>). <br>Kurangkan pangkatnya (pembagian eksponen): 2<sup>6-4</sup> × 3<sup>4-3</sup> = 2<sup>2</sup> × 3<sup>1</sup> = 4 × 3 = 12."
+        },
+        {
+            q: "Jika x = 2 dan y = 1, nilai dari (x<sup>-2</sup>y<sup>3</sup>) / (x<sup>3</sup>y<sup>-1</sup>) adalah...",
+            options: ["1/16", "1/32", "1/64", "32", "16"],
+            ans: 1,
+            exp: "Sederhanakan dengan mengurangkan pangkat: x<sup>-2-3</sup> × y<sup>3-(-1)</sup> = x<sup>-5</sup>y<sup>4</sup>. <br>Substitusi x = 2, y = 1: (2)<sup>-5</sup> × (1)<sup>4</sup> = (1 / 2<sup>5</sup>) × 1 = 1/32."
+        },
+        {
+            q: "Bentuk sederhana dari √75 + 2√12 - √27 adalah...",
+            options: ["2√3", "3√3", "4√3", "5√3", "6√3"],
+            ans: 4,
+            exp: "√75 = √(25×3) = 5√3. <br>2√12 = 2√(4×3) = 2(2√3) = 4√3. <br>√27 = √(9×3) = 3√3. <br>Sehingga: 5√3 + 4√3 - 3√3 = 6√3."
+        },
+        {
+            q: "Nilai dari <sup>2</sup>log 8 + <sup>3</sup>log 9 adalah...",
+            options: ["3", "4", "5", "6", "7"],
+            ans: 2,
+            exp: "<sup>2</sup>log 8 = 3 (karena 2<sup>3</sup> = 8). <br><sup>3</sup>log 9 = 2 (karena 3<sup>2</sup> = 9). <br>Jumlahkan: 3 + 2 = 5."
+        },
+        {
+            q: "Didefinisikan operasi matematika x ∆ y = x(y - x) + y. Nilai dari 3 ∆ 5 adalah...",
+            options: ["8", "10", "11", "12", "14"],
+            ans: 2,
+            exp: "Substitusi x = 3 dan y = 5 ke dalam rumus operasi: <br>3 ∆ 5 = 3(5 - 3) + 5 <br>= 3(2) + 5 = 6 + 5 = 11."
+        },
+        {
+            q: "Jika a ⋆ b = a<sup>2</sup> - b, maka nilai dari 2 ⋆ (3 ⋆ 4) adalah...",
+            options: ["-1", "0", "1", "3", "5"],
+            ans: 0,
+            exp: "Selesaikan di dalam kurung dulu: 3 ⋆ 4 = 3<sup>2</sup> - 4 = 9 - 4 = 5. <br>Lalu hitung 2 ⋆ 5 = 2<sup>2</sup> - 5 = 4 - 5 = -1."
+        },
+        {
+            q: "Diketahui fungsi f(x) = 2x + 1 dan g(x) = x - 3. Nilai dari (f ∘ g)(2) adalah...",
+            options: ["-3", "-2", "-1", "0", "1"],
+            ans: 2,
+            exp: "(f ∘ g)(2) artinya masukkan nilai 2 ke fungsi g(x) terlebih dahulu: g(2) = 2 - 3 = -1. <br>Kemudian hasilnya dimasukkan ke f(x): f(-1) = 2(-1) + 1 = -2 + 1 = -1."
+        },
+        {
+            q: "Jika f(x) = (2x - 1) / (x + 3), maka nilai x yang memenuhi f<sup>-1</sup>(1) adalah...",
+            options: ["1", "2", "3", "4", "5"],
+            ans: 3,
+            exp: "f<sup>-1</sup>(1) menanyakan 'untuk x berapa nilai fungsi tersebut menghasilkan 1?'. <br>Jadi: (2x - 1) / (x + 3) = 1. <br>2x - 1 = x + 3 <br>x = 4."
+        },
+        {
+            q: "Sebuah toko memberikan diskon 20% untuk semua barang, dan tambahan potongan tunai Rp 10.000 jika membawa kartu member (berlaku setelah diskon utama). Jika harga awal sepatu Rp 100.000, berapa yang harus dibayar member?",
+            options: ["Rp 70.000", "Rp 72.000", "Rp 80.000", "Rp 82.000", "Rp 90.000"],
+            ans: 0,
+            exp: "Fungsi diskon beruntun (komposisi). <br>Langkah 1 (Diskon 20%): 100.000 × 0.8 = 80.000. <br>Langkah 2 (Potongan Member): 80.000 - 10.000 = Rp 70.000."
+        },
+        {
+            q: "Suhu awal suatu reaktor adalah 25°C dan terus meningkat secara linear 2°C setiap jam. Berapa suhu reaktor setelah 4 jam?",
+            options: ["29°C", "31°C", "33°C", "35°C", "37°C"],
+            ans: 2,
+            exp: "Ini merupakan fungsi linear T(x) = 2x + 25, di mana x adalah jam. <br>Setelah 4 jam: T(4) = 2(4) + 25 = 8 + 25 = 33°C."
+        },
+        {
+            q: "Koordinat titik puncak (x, y) dari grafik fungsi kuadrat y = x<sup>2</sup> - 4x + 5 adalah...",
+            options: ["(2, 1)", "(-2, 1)", "(2, -1)", "(4, 1)", "(2, 5)"],
+            ans: 0,
+            exp: "Nilai x puncak: x = -b/2a = -(-4) / 2(1) = 2. <br>Substitusi x = 2 ke persamaan: y = 2<sup>2</sup> - 4(2) + 5 = 4 - 8 + 5 = 1. <br>Jadi koordinatnya (2, 1)."
+        },
+        {
+            q: "Diketahui persamaan kuadrat x<sup>2</sup> - 5x + 6 = 0 memiliki akar-akar x<sub>1</sub> dan x<sub>2</sub>. Nilai dari x<sub>1</sub> + x<sub>2</sub> adalah...",
+            options: ["-6", "-5", "1", "5", "6"],
+            ans: 3,
+            exp: "Rumus jumlah akar persamaan kuadrat ax<sup>2</sup>+bx+c=0 adalah x<sub>1</sub>+x<sub>2</sub> = -b/a. <br>Dalam persamaan ini: a=1, b=-5, c=6. <br>-(-5)/1 = 5."
+        },
+        {
+            q: "Persamaan kuadrat baru yang akar-akarnya (x<sub>1</sub> + 1) dan (x<sub>2</sub> + 1) dari persamaan awal x<sup>2</sup> - 5x + 6 = 0 adalah...",
+            options: ["x<sup>2</sup> - 7x + 12 = 0", "x<sup>2</sup> + 7x - 12 = 0", "x<sup>2</sup> - 5x + 12 = 0", "x<sup>2</sup> - 7x + 6 = 0", "x<sup>2</sup> + 5x + 6 = 0"],
+            ans: 0,
+            exp: "Trik inversi: Karena akar barunya (x+1), ganti setiap 'x' di persamaan asal dengan kebalikannya yaitu (x-1). <br>(x-1)<sup>2</sup> - 5(x-1) + 6 = 0 <br>(x<sup>2</sup> - 2x + 1) - 5x + 5 + 6 = 0 <br>x<sup>2</sup> - 7x + 12 = 0."
+        },
+        {
+            q: "Budi membeli 2 buku dan 1 pensil seharga Rp 12.000. Andi membeli 1 buku dan 2 pensil seharga Rp 9.000. Harga 1 buku dan 1 pensil secara bersamaan adalah...",
+            options: ["Rp 5.000", "Rp 6.000", "Rp 7.000", "Rp 8.000", "Rp 9.000"],
+            ans: 2,
+            exp: "Trik Eliminasi Cepat: Jumlahkan kedua persamaan sekaligus! <br>2B + 1P = 12.000 <br>1B + 2P = 9.000 <br>-------------------- + <br>3B + 3P = 21.000. Bagi semuanya dengan 3. <br>1B + 1P = 7.000."
+        },
+        {
+            q: "Dari sistem persamaan: <br>(1) x + y + z = 6 <br>(2) 2x + y + z = 7. <br>Nilai dari variabel x adalah...",
+            options: ["1", "2", "3", "4", "5"],
+            ans: 0,
+            exp: "Persamaan (2) dapat dipecah menjadi x + (x + y + z) = 7. <br>Substitusi nilai x + y + z dari persamaan (1) yaitu 6. <br>x + 6 = 7 <br>x = 1."
+        },
+        {
+            q: "Himpunan penyelesaian dari pertidaksamaan linear 3x - 4 < 5x + 2 adalah...",
+            options: ["x < -3", "x > -3", "x < 3", "x > 3", "x > -1"],
+            ans: 1,
+            exp: "3x - 4 < 5x + 2 <br>Pindahkan x: 3x - 5x < 2 + 4 <br>-2x < 6 <br>x > -3 (ingat, membagi dengan minus membalik tanda pertidaksamaan)."
+        },
+        {
+            q: "Nilai x yang memenuhi pertidaksamaan kuadrat x<sup>2</sup> - x - 6 ≤ 0 adalah...",
+            options: ["x ≤ -2 atau x ≥ 3", "x < -2 atau x > 3", "-3 ≤ x ≤ 2", "-2 ≤ x ≤ 3", "2 ≤ x ≤ 3"],
+            ans: 3,
+            exp: "Faktorkan persamaan: (x - 3)(x + 2) ≤ 0. <br>Titik pembuat nol: x = 3 dan x = -2. <br>Karena tandanya '≤' (kurang dari sama dengan nol, bernilai negatif), daerah penyelesaiannya berada di antara kedua akar: -2 ≤ x ≤ 3."
+        },
+        {
+            q: "Di sebuah toko (A = Anggrek, B = Mawar, C = Melati):<br>Paket 1 (2A+B+C) = Rp 100.000<br>Paket 2 (A+2B+C) = Rp 110.000<br>Paket 3 (A+B+2C) = Rp 150.000<br>Berapa harga 1 bunga Melati (C)?",
+            options: ["Rp 40.000", "Rp 50.000", "Rp 60.000", "Rp 70.000", "Rp 80.000"],
+            ans: 2,
+            exp: "Trik TKA: Jumlahkan semua paket!<br>4A + 4B + 4C = 360.000. Bagi 4 didapat: A + B + C = 90.000.<br>Untuk mencari C, kurangkan Paket 3 dengan persamaan yang baru didapat:<br>(A + B + 2C) - (A + B + C) = 150.000 - 90.000<br>1C = 60.000."
+        },
+        {
+            q: "Suku ke-3 suatu barisan aritmetika adalah 10, dan suku ke-7 adalah 22. Berapakah suku ke-10 barisan tersebut?",
+            options: ["28", "29", "30", "31", "32"],
+            ans: 3,
+            exp: "Beda (b) = (U<sub>7</sub> - U<sub>3</sub>) / (7 - 3) = (22 - 10) / 4 = 12 / 4 = 3.<br>Cari suku ke-10 (U<sub>10</sub>) langsung dari U<sub>7</sub>: <br>U<sub>10</sub> = U<sub>7</sub> + 3b = 22 + 3(3) = 22 + 9 = 31."
+        },
+        {
+            q: "Suku ke-2 barisan geometri bernilai positif adalah 6 dan suku ke-4 adalah 54. Suku ke-5 barisan tersebut adalah...",
+            options: ["108", "162", "243", "324", "486"],
+            ans: 1,
+            exp: "Rasio kuadrat: r<sup>2</sup> = U<sub>4</sub> / U<sub>2</sub> = 54 / 6 = 9. Maka r = 3 (karena positif).<br>U<sub>5</sub> dapat dicari dengan mengalikan U<sub>4</sub> dengan r.<br>U<sub>5</sub> = 54 × 3 = 162."
+        },
+        {
+            q: "Jumlah 10 suku pertama (S<sub>10</sub>) dari deret aritmetika 2 + 5 + 8 + 11 + ... adalah...",
+            options: ["135", "145", "155", "165", "175"],
+            ans: 2,
+            exp: "Suku awal (a) = 2, Beda (b) = 3. <br>Rumus: S<sub>n</sub> = n/2 × [2a + (n-1)b] <br>S<sub>10</sub> = 10/2 × [2(2) + 9(3)] = 5 × (4 + 27) = 5 × 31 = 155."
+        },
+        {
+            q: "Nilai x yang memenuhi persamaan eksponen 2<sup>3x-1</sup> = 32 adalah...",
+            options: ["1", "2", "3", "4", "5"],
+            ans: 1,
+            exp: "Samakan basisnya. 32 adalah 2<sup>5</sup>.<br>2<sup>3x-1</sup> = 2<sup>5</sup> <br>Karena basis sudah sama, samakan pangkatnya: <br>3x - 1 = 5 <br>3x = 6 <br>x = 2."
+        },
+        {
+            q: "Didefinisikan sebuah operasi biner x ⊗ y = (x + y) / (x - y). Berapakah nilai dari 5 ⊗ 3?",
+            options: ["2", "3", "4", "5", "6"],
+            ans: 2,
+            exp: "Tinggal masukkan x = 5 dan y = 3 ke dalam pola fungsi: <br>(5 + 3) / (5 - 3) = 8 / 2 = 4."
+        },
+        {
+            q: "Diketahui sistem persamaan pecahan 1/x + 1/y = 5 dan 1/x - 1/y = 1. Nilai dari x + y adalah...",
+            options: ["1/6", "1/3", "1/2", "5/6", "1"],
+            ans: 3,
+            exp: "Misalkan A = 1/x dan B = 1/y. <br>A + B = 5 dan A - B = 1. <br>Jika dijumlahkan: 2A = 6 -> A = 3. Maka x = 1/3. <br>Substitusi: 3 + B = 5 -> B = 2. Maka y = 1/2. <br>x + y = 1/3 + 1/2 = 2/6 + 3/6 = 5/6."
+        },
+        {
+            q: "Jika a<sup>2</sup> - b<sup>2</sup> = 20 dan a - b = 2, maka nilai dari a + b adalah...",
+            options: ["5", "8", "10", "12", "15"],
+            ans: 2,
+            exp: "Ingat pemfaktoran aljabar dasar: a<sup>2</sup> - b<sup>2</sup> = (a - b)(a + b). <br>Masukkan nilai yang diketahui: <br>20 = (2)(a + b) <br>a + b = 20 / 2 = 10."
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+    let currentScore = 0;
+    let answeredQuestions = 0;
+
+    function renderQuiz() {
+        quizData.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label" id="label-${index}-${optIndex}">
+                        <input type="radio" name="q${index}" value="${optIndex}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="question-number">Soal ${index + 1} dari 25</div>
+                <div class="question-text">${q.q}</div>
+                <div class="options">
+                    ${optionsHtml}
+                </div>
+                <div class="explanation" id="exp-${index}">
+                    <div id="status-${index}"></div>
+                    <strong>Pembahasan:</strong><br>
+                    ${q.exp}
+                </div>
+            `;
+            quizContainer.appendChild(card);
+        });
+
+        // Add event listeners after rendering
+        quizData.forEach((q, index) => {
+            const inputs = document.querySelectorAll(`input[name="q${index}"]`);
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    handleAnswerSelection(index, parseInt(this.value));
+                });
+            });
+        });
+    }
+
+    function handleAnswerSelection(questionIndex, selectedValue) {
+        const q = quizData[questionIndex];
+        const correctAns = q.ans;
+        const statusDiv = document.getElementById(`status-${questionIndex}`);
+        
+        // Highlight correct answer
+        document.getElementById(`label-${questionIndex}-${correctAns}`).classList.add('correct-answer');
+        
+        // Highlight wrong answer if selected and set status text
+        if (selectedValue !== correctAns) {
+            document.getElementById(`label-${questionIndex}-${selectedValue}`).classList.add('wrong-answer');
+            statusDiv.className = 'status-wrong';
+            statusDiv.innerHTML = '❌ Jawaban Kamu Salah!';
+        } else {
+            currentScore++;
+            statusDiv.className = 'status-correct';
+            statusDiv.innerHTML = '✅ Jawaban Kamu Benar!';
+        }
+
+        // Show explanation
+        document.getElementById(`exp-${questionIndex}`).classList.add('show');
+        
+        // Disable all inputs for this question to prevent changing answer
+        const inputs = document.querySelectorAll(`input[name="q${questionIndex}"]`);
+        inputs.forEach(input => {
+            input.disabled = true;
+            // modify parent label cursor so it looks disabled
+            input.parentElement.style.cursor = "not-allowed";
+        });
+
+        answeredQuestions++;
+    }
+
+    function showFinalResult() {
+        if (answeredQuestions < quizData.length) {
+            alert("Perhatian: Beberapa soal belum dijawab! Soal yang belum dijawab akan dianggap salah dalam perhitungan skor akhir.");
+        }
+
+        // Hide submit button, show result
+        document.getElementById('submit-btn').style.display = 'none';
+        const resultPanel = document.getElementById('result-panel');
+        resultPanel.style.display = 'block';
+        
+        const finalScore = (currentScore / quizData.length) * 100;
+        let message = "";
+        
+        if(finalScore >= 80) message = "Luar Biasa! Pemahaman Aljabarmu sangat kuat.";
+        else if(finalScore >= 60) message = "Bagus! Terus tingkatkan akurasi menghitungmu.";
+        else message = "Tetap semangat! Pelajari kembali rumus-rumus dasarnya.";
+
+        document.getElementById('score-display').innerHTML = `Nilai Kamu: ${Math.round(finalScore)} / 100 <br><span style="font-size:0.6em; color:#155724; font-weight:normal;">(${currentScore} benar dari ${quizData.length} soal)</span><br><br><span style="font-size:0.7em">${message}</span>`;
+        
+        // Scroll to bottom
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Initialize Quiz
+    renderQuiz();
+</script>
+
+</body>
+</html>

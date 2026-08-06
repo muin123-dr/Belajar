@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>25 Soal Aljabar TKA (Unicode + Superscript)</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f8fb;
+            color: #1a2a3a;
+            padding: 20px 16px;
+        }
+
+        .quiz-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 30px 28px;
+        }
+
+        @media (max-width: 640px) {
+            .quiz-wrapper {
+                padding: 16px 12px;
+            }
+        }
+
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #2d7fc1;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2b44;
+        }
+        .quiz-header h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4a6a85;
+            margin-left: 10px;
+        }
+
+        .score-box {
+            background: #eaf1f8;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid #cbdae6;
+        }
+        .score-box span {
+            color: #1f7bb0;
+        }
+
+        .reset-btn {
+            background: #eef4fa;
+            border: 1px solid #ccdbe8;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+
+        .question-card {
+            background: #fafdff;
+            border: 1px solid #e4ecf5;
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            transition: border 0.2s, background 0.2s;
+        }
+        .question-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .question-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .q-text sup {
+            font-size: 0.75rem;
+            vertical-align: super;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+        }
+        .options input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+
+        .action-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .check-btn {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+        }
+        .check-btn:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .check-btn:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback .explain {
+            margin-top: 4px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+
+        .quiz-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #4a6a85;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .score-box {
+                text-align: center;
+            }
+            .options label {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-wrapper">
+        <div class="quiz-header">
+            <h1>🧮 Soal Aljabar & Operasi <small>TKA SMA</small></h1>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                <div class="score-box">🎯 Skor: <span id="scoreDisplay">0</span> / 25</div>
+                <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="quiz-footer">
+            <strong>25 soal di luar materi Himpunan</strong> · Simbol menggunakan Unicode + <sup>superskrip</sup>.
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  25 SOAL ALJABAR & OPERASI BILANGAN (FULL UNICODE + SUP)
+        //  Soal nomor 2 sudah diperbaiki menggunakan tag <sup>
+        // ============================================================
+        const questions = [{
+            id: 1,
+            text: 'Bentuk sederhana dari (2⁵ × 3⁴) / 6³ adalah ...',
+            options: ['8', '12', '16', '24', '36'],
+            correct: 1,
+            explanation: '6³ = (2 × 3)³ = 2³ × 3³. Maka 2⁵⁻³ × 3⁴⁻³ = 2² × 3 = 12.'
+        }, {
+            id: 2,
+            text: 'Jika 3<sup>2x+1</sup> = 27³, maka nilai x adalah ...',
+            options: ['1', '2', '3', '4', '5'],
+            correct: 3,
+            explanation: '27³ = (3³)³ = 3⁹. Maka 2x + 1 = 9 → x = 4.'
+        }, {
+            id: 3,
+            text: 'Bentuk sederhana dari (a³ b⁻²)² adalah ...',
+            options: ['a⁶ b⁻⁴', 'a⁵', 'a⁹', 'a⁶ b⁴', 'a⁵ b⁻⁴'],
+            correct: 0,
+            explanation: '(a³)² = a⁶ dan (b⁻²)² = b⁻⁴. Jadi a⁶ b⁻⁴.'
+        }, {
+            id: 4,
+            text: 'Didefinisikan a ⊕ b = a² − 2ab + b². Jika x ⊕ 3 = 16, maka nilai x yang memenuhi adalah ...',
+            options: ['1', '3', '5', '7', '9'],
+            correct: 3,
+            explanation: 'x ⊕ 3 = (x−3)² = 16 → x−3 = ±4 → x = 7 atau x = −1. Karena 7 ada di pilihan, jawabannya 7.'
+        }, {
+            id: 5,
+            text: 'Diberikan operasi a ★ b = 2a + b. Hasil dari (3 ★ 2) ★ 1 adalah ...',
+            options: ['10', '12', '15', '17', '20'],
+            correct: 3,
+            explanation: '3 ★ 2 = 2(3) + 2 = 8. Lalu 8 ★ 1 = 2(8) + 1 = 17.'
+        }, {
+            id: 6,
+            text: 'Jika a ⊙ b = (a+b) / (ab), maka nilai 2 ⊙ 4 adalah ...',
+            options: ['1/4', '1/2', '3/4', '1', '3/2'],
+            correct: 2,
+            explanation: '(2+4) / (2×4) = 6/8 = 3/4.'
+        }, {
+            id: 7,
+            text: 'Tarif taksi: y = 4000x + 5000 (x = km, y = Rp). Jika penumpang membayar Rp29.000, jarak yang ditempuh adalah ... km.',
+            options: ['2', '4', '6', '8', '10'],
+            correct: 2,
+            explanation: '4000x + 5000 = 29000 → 4000x = 24000 → x = 6 km.'
+        }, {
+            id: 8,
+            text: 'Rumus konversi: F = (9/5)C + 32. Jika F = 77, maka nilai C adalah ...',
+            options: ['15', '20', '25', '30', '35'],
+            correct: 2,
+            explanation: '77 = (9/5)C + 32 → 45 = (9/5)C → C = 45 × (5/9) = 25.'
+        }, {
+            id: 9,
+            text: 'Harga mobil turun dari Rp200.000.000 menjadi Rp140.000.000 dalam 4 tahun. Penyusutan per tahun adalah ... juta rupiah.',
+            options: ['5', '10', '15', '20', '25'],
+            correct: 2,
+            explanation: 'Penurunan total = 200 − 140 = 60 juta. Per tahun = 60/4 = 15 juta.'
+        }, {
+            id: 10,
+            text: 'Diketahui f(x) = 2x + 1 dan g(x) = x − 3. Nilai f(g(5)) adalah ...',
+            options: ['1', '3', '5', '7', '9'],
+            correct: 2,
+            explanation: 'g(5) = 5 − 3 = 2. f(2) = 2(2) + 1 = 5.'
+        }, {
+            id: 11,
+            text: 'f(x) = { 2x, jika x<2 ; x², jika x≥2 }. Nilai f(1) + f(3) adalah ...',
+            options: ['5', '7', '9', '11', '13'],
+            correct: 3,
+            explanation: 'f(1) = 2(1) = 2. f(3) = 3² = 9. Maka 2 + 9 = 11.'
+        }, {
+            id: 12,
+            text: 'Diketahui f(x) = x² dan g(x) = 3x. Nilai g(f(2)) adalah ...',
+            options: ['6', '9', '12', '16', '24'],
+            correct: 2,
+            explanation: 'f(2) = 4. g(4) = 3(4) = 12.'
+        }, {
+            id: 13,
+            text: 'Jika x + y = 10 dan x − y = 4, maka nilai x × y adalah ...',
+            options: ['10', '15', '21', '24', '30'],
+            correct: 2,
+            explanation: 'Eliminasi: 2x = 14 → x = 7. y = 3. Maka xy = 21.'
+        }, {
+            id: 14,
+            text: 'Harga 2 pulpen dan 3 buku = Rp15.000. Harga 3 pulpen dan 2 buku = Rp17.500. Harga 1 pulpen adalah ... rupiah.',
+            options: ['2.500', '3.500', '4.500', '5.500', '6.500'],
+            correct: 2,
+            explanation: 'Misal pulpen = p, buku = b. 2p+3b=15000 ; 3p+2b=17500. Eliminasi: 6p+9b=45000, 6p+4b=35000 → 5b=10000 → b=2000. Maka 2p+6000=15000 → p=4500.'
+        }, {
+            id: 15,
+            text: 'SPLTV: x+y+z=6, x+y−z=2, x−y+z=4. Nilai z adalah ...',
+            options: ['−2', '0', '2', '4', '6'],
+            correct: 2,
+            explanation: 'Kurangkan persamaan 1 dan 2: (x+y+z) − (x+y−z) = 6−2 → 2z = 4 → z = 2.'
+        }, {
+            id: 16,
+            text: 'Diketahui 2a+o+m=50.000, a+2o+m=55.000, a+o+2m=60.000. Nilai a+o+m adalah ... rupiah.',
+            options: ['30.000', '35.000', '41.250', '45.000', '50.000'],
+            correct: 2,
+            explanation: 'Jumlahkan ketiga persamaan: 4(a+o+m) = 165.000 → a+o+m = 41.250.'
+        }, {
+            id: 17,
+            text: 'Jumlah akar-akar persamaan x² − 5x + 6 = 0 adalah ...',
+            options: ['−5', '−6', '5', '6', '1'],
+            correct: 2,
+            explanation: 'Untuk ax²+bx+c=0, jumlah akar = −b/a = −(−5)/1 = 5.'
+        }, {
+            id: 18,
+            text: 'Nilai diskriminan dari x² − 4x + 4 = 0 adalah ...',
+            options: ['−4', '0', '4', '8', '16'],
+            correct: 1,
+            explanation: 'D = b² − 4ac = (−4)² − 4(1)(4) = 16 − 16 = 0.'
+        }, {
+            id: 19,
+            text: 'Himpunan penyelesaian dari 2x − 5 > 7 adalah ...',
+            options: ['x > 6', 'x > 1', 'x < 6', 'x > 12', 'x < 12'],
+            correct: 0,
+            explanation: '2x > 12 → x > 6.'
+        }, {
+            id: 20,
+            text: 'Himpunan penyelesaian dari 3x + 2 ≤ 14 adalah ...',
+            options: ['x ≤ 4', 'x ≤ 2', 'x ≥ 4', 'x ≤ 12', 'x ≥ 12'],
+            correct: 0,
+            explanation: '3x ≤ 12 → x ≤ 4.'
+        }, {
+            id: 21,
+            text: 'Himpunan penyelesaian dari |x − 3| = 5 adalah ...',
+            options: ['{−2, 8}', '{2, 8}', '{−8, 2}', '{−8, −2}', '{3, 5}'],
+            correct: 0,
+            explanation: 'x−3 = 5 → x=8. x−3 = −5 → x=−2. Maka {−2, 8}.'
+        }, {
+            id: 22,
+            text: 'Himpunan penyelesaian dari |2x + 1| > 7 adalah ...',
+            options: ['x > 3', 'x < −4', 'x > 3 atau x < −4', 'x < 3', '−4 < x < 3'],
+            correct: 2,
+            explanation: '2x+1 > 7 → x>3. 2x+1 < −7 → x<−4. Jadi x > 3 atau x < −4.'
+        }, {
+            id: 23,
+            text: 'Perbandingan usia Andi : Budi = 3 : 4. Lima tahun lagi, jumlah usia mereka 45 tahun. Usia Andi sekarang adalah ... tahun.',
+            options: ['10', '15', '20', '25', '30'],
+            correct: 1,
+            explanation: 'Misal Andi = 3x, Budi = 4x. (3x+5)+(4x+5)=45 → 7x+10=45 → x=5. Andi = 3(5)=15.'
+        }, {
+            id: 24,
+            text: 'Pedagang membeli Rp80.000 dan menjual Rp100.000. Persentase keuntungan adalah ... %',
+            options: ['15', '20', '25', '30', '40'],
+            correct: 2,
+            explanation: 'Untung = 100.000 − 80.000 = 20.000. Persentase = (20.000/80.000)×100% = 25%.'
+        }, {
+            id: 25,
+            text: 'Bentuk sederhana dari √75 + √12 − √27 adalah ...',
+            options: ['2√3', '3√3', '4√3', '5√3', '6√3'],
+            correct: 2,
+            explanation: '√75 = 5√3, √12 = 2√3, √27 = 3√3. Maka 5√3 + 2√3 − 3√3 = 4√3.'
+        }];
+
+        // ============================================================
+        //  RENDER & LOGIC
+        // ============================================================
+        const container = document.getElementById('quizContainer');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        let userAnswers = new Array(questions.length).fill(null);
+        let isLocked = new Array(questions.length).fill(false);
+
+        function render() {
+            let html = '';
+            questions.forEach((q, idx) => {
+                const locked = isLocked[idx];
+                const selected = userAnswers[idx];
+                const isCorrect = locked && (selected === q.correct);
+                const isWrong = locked && (selected !== null && selected !== q.correct);
+
+                let cardClass = 'question-card';
+                if (locked) {
+                    cardClass += isCorrect ? ' correct' : ' wrong';
+                }
+
+                html += `<div class="${cardClass}" id="qcard-${idx}">`;
+                html += `<div class="q-number">Soal ${idx+1}</div>`;
+                html += `<div class="q-text">${q.text}</div>`;
+                html += `<div class="options">`;
+
+                q.options.forEach((opt, optIdx) => {
+                    const checked = (selected === optIdx) ? 'checked' : '';
+                    const disabled = locked ? 'disabled' : '';
+                    html += `
+                            <label>
+                                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                });
+
+                html += `</div>`;
+                html += `<div class="action-area">`;
+                html +=
+                    `<button class="check-btn" id="check-${idx}" ${locked ? 'disabled' : ''}>${locked ? '✓ Diperiksa' : 'Periksa Jawaban'}</button>`;
+                html += `</div>`;
+
+                let feedbackClass = 'feedback';
+                let feedbackHtml = '';
+                if (locked) {
+                    feedbackClass += ' show';
+                    feedbackClass += isCorrect ? ' correct' : ' wrong';
+                    const icon = isCorrect ? '✅' : '❌';
+                    const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+                    const correctAns = q.options[q.correct];
+                    feedbackHtml = `
+                            <div class="${feedbackClass}">
+                                <strong>${icon} ${status}</strong>
+                                <div class="explain">💡 ${q.explanation}</div>
+                                <div style="margin-top:4px;font-size:0.9rem;">Jawaban yang benar: <strong>${correctAns}</strong></div>
+                            </div>
+                        `;
+                } else {
+                    feedbackHtml = `<div class="feedback"></div>`;
+                }
+                html += feedbackHtml;
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+            updateScore();
+
+            questions.forEach((_, idx) => {
+                const btn = document.getElementById(`check-${idx}`);
+                if (btn) {
+                    btn.addEventListener('click', () => handleCheck(idx));
+                }
+                const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        if (!isLocked[idx]) {
+                            userAnswers[idx] = parseInt(e.target.value);
+                        }
+                    });
+                });
+            });
+        }
+
+        function handleCheck(idx) {
+            if (isLocked[idx]) return;
+            const selected = userAnswers[idx];
+            if (selected === null || selected === undefined) {
+                alert('Pilih salah satu opsi terlebih dahulu!');
+                return;
+            }
+            isLocked[idx] = true;
+            render();
+        }
+
+        function updateScore() {
+            let correctCount = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (isLocked[i] && userAnswers[i] === questions[i].correct) {
+                    correctCount++;
+                }
+            }
+            scoreSpan.textContent = correctCount;
+        }
+
+        function resetQuiz() {
+            userAnswers = new Array(questions.length).fill(null);
+            isLocked = new Array(questions.length).fill(false);
+            render();
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+        render();
+    </script>
+
+</body>
+</html>
