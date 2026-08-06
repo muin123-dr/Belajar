@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAB 2: Barisan dan Deret - TKA SMA & SNBT</title>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        /* ----- Reset & Base ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f2f7fc;
+            color: #1a2a3a;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        /* ----- Sidebar (Table of Contents) ----- */
+        .sidebar {
+            flex: 0 0 280px;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px 16px;
+            box-shadow: 0 8px 30px rgba(0, 20, 40, 0.06);
+            border: 1px solid #e4ecf5;
+        }
+
+        .sidebar h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a6a85;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e4ecf5;
+            padding-bottom: 8px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 6px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1a3a5a;
+            text-decoration: none;
+            transition: 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar ul li a:hover {
+            background: #eef4fa;
+            border-left-color: #2d7fc1;
+            color: #0b2b44;
+        }
+
+        .sidebar ul li a.active {
+            background: #eaf1f8;
+            border-left-color: #2d7fc1;
+            font-weight: 600;
+            color: #0b2b44;
+        }
+
+        /* ----- Main Content ----- */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Header */
+        .header-title {
+            background: linear-gradient(135deg, #0b2b44 0%, #1a4a6b 100%);
+            color: #fff;
+            padding: 30px 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(11, 43, 68, 0.15);
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .header-title .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Cards */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.04);
+            border: 1px solid #eef4fa;
+            transition: box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 40, 0.06);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0b2b44;
+            border-left: 6px solid #2d7fc1;
+            padding-left: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a4a6b;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .card h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #1a4a6b;
+            margin-top: 18px;
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            margin-bottom: 14px;
+            color: #2a3a4a;
+        }
+
+        .card ul,
+        .card ol {
+            margin-left: 20px;
+            margin-bottom: 14px;
+        }
+
+        .card li {
+            margin-bottom: 6px;
+        }
+
+        /* Highlight Boxes */
+        .rumus-box {
+            background: #f0f7ff;
+            border: 1px solid #d4e2f0;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 18px 0;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .rumus-box .label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a7a9a;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .example-box {
+            background: #f8faff;
+            border-left: 5px solid #2d7fc1;
+            border-radius: 0 16px 16px 0;
+            padding: 18px 22px;
+            margin: 18px 0;
+        }
+
+        .example-box .label {
+            font-weight: 700;
+            color: #0b2b44;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example-box .label::before {
+            content: "📘";
+        }
+
+        .solution-box {
+            background: #eaf4ea;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            border: 1px solid #bcd9bc;
+        }
+
+        .solution-box .step {
+            font-weight: 600;
+            color: #0b4a2a;
+        }
+
+        .warning-box {
+            background: #fff7ec;
+            border-left: 5px solid #e67e22;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .warning-box strong {
+            color: #8a4a0a;
+        }
+
+        .tip-box {
+            background: #f0faf4;
+            border-left: 5px solid #1fa86b;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .tip-box strong {
+            color: #0b4a2a;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-grid .col {
+            background: #f8faff;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 1px solid #e4ecf5;
+        }
+
+        .info-grid .col h4 {
+            margin-top: 0;
+            border-bottom: 2px solid #d4e2f0;
+            padding-bottom: 6px;
+        }
+
+        /* Table Wrapper */
+        .table-wrap {
+            overflow-x: auto;
+            margin: 18px 0 24px;
+            border-radius: 14px;
+            border: 1px solid #e4ecf3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+
+        th {
+            background: #eaf1f8;
+            color: #0b2b44;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 2px solid #cbdae6;
+        }
+
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #eaeef3;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ----- Responsive Sidebar ----- */
+        @media (max-width: 900px) {
+            .sidebar {
+                flex: 1 1 100%;
+                position: static;
+                max-height: none;
+                margin-bottom: 10px;
+            }
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .sidebar ul li {
+                margin-bottom: 0;
+            }
+            .sidebar ul li a {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+                border-left: none;
+                border-bottom: 2px solid transparent;
+            }
+            .sidebar ul li a:hover {
+                border-left-color: transparent;
+                border-bottom-color: #2d7fc1;
+            }
+            .sidebar ul li a.active {
+                border-left-color: transparent;
+                border-bottom-color: #2d7fc1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title h1 {
+                font-size: 1.6rem;
+            }
+            .card {
+                padding: 16px;
+            }
+            .rumus-box {
+                font-size: 0.95rem;
+                padding: 14px;
+            }
+            .container {
+                padding: 10px 8px;
+            }
+        }
+
+        /* Print */
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            body {
+                background: #fff;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+            .header-title {
+                background: #0b2b44 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .rumus-box,
+            .example-box,
+            .solution-box,
+            .warning-box,
+            .tip-box {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ====== SIDEBAR (TOC) ====== -->
+        <nav class="sidebar" id="toc">
+            <h2>📖 Daftar Isi</h2>
+            <ul>
+                <li><a href="#tujuan">Tujuan Pembelajaran</a></li>
+                <li><a href="#pengertian">A. Barisan vs Deret</a></li>
+                <li><a href="#aritmetika">B. Barisan Aritmetika</a></li>
+                <li><a href="#contoh-kursi">C. Contoh TKA (Kursi)</a></li>
+                <li><a href="#contoh-stadion">D. Contoh TKA (Stadion)</a></li>
+                <li><a href="#deret-aritmetika">E. Deret Aritmetika</a></li>
+                <li><a href="#geometri">F. Barisan Geometri</a></li>
+                <li><a href="#deret-geometri">G. Deret Geometri</a></li>
+                <li><a href="#pertumbuhan">H. Pertumbuhan</a></li>
+                <li><a href="#peluruhan">I. Peluruhan</a></li>
+                <li><a href="#contoh-peluruhan">J. Contoh Peluruhan</a></li>
+                <li><a href="#multijawab">K. Soal Multijawab</a></li>
+                <li><a href="#membedakan">L. Membedakan Tipe</a></li>
+                <li><a href="#tabel">M. Tabel Perbedaan</a></li>
+                <li><a href="#langkah">N. Langkah Soal Cerita</a></li>
+                <li><a href="#kesalahan">O. Kesalahan Umum</a></li>
+                <li><a href="#strategi">P. Strategi Cepat</a></li>
+                <li><a href="#rumus">Q. Ringkasan Rumus</a></li>
+                <li><a href="#petakonsep">R. Peta Konsep</a></li>
+                <li><a href="#tips">S. Tips Ujian</a></li>
+            </ul>
+        </nav>
+
+        <!-- ====== MAIN CONTENT ====== -->
+        <main class="main-content">
+
+            <!-- Header -->
+            <div class="header-title">
+                <h1>📘 BAB 2: BARISAN DAN DERET <small>(ARITMETIKA & GEOMETRI)</small></h1>
+                <div class="badge">Ringkasan Materi Lengkap · TKA SMA &amp; SNBT</div>
+            </div>
+
+            <!-- ===== TUJUAN ===== -->
+            <div class="card" id="tujuan">
+                <h2>🎯 Tujuan Pembelajaran</h2>
+                <p>Setelah mempelajari bab ini, peserta didik diharapkan mampu:</p>
+                <ul>
+                    <li>Mengenali pola barisan aritmetika dan geometri;</li>
+                    <li>Menentukan suku ke-\(n\) suatu barisan;</li>
+                    <li>Menghitung jumlah \(n\) suku pertama (deret);</li>
+                    <li>Menyelesaikan soal cerita yang berkaitan dengan pola pertumbuhan maupun peluruhan;</li>
+                    <li>Memilih rumus yang tepat pada soal kontekstual TKA maupun SNBT.</li>
+                </ul>
+            </div>
+
+            <!-- ===== A ===== -->
+            <div class="card" id="pengertian">
+                <h2>A. Memahami Barisan dan Deret</h2>
+                <p>Banyak persoalan kehidupan sehari-hari mengikuti suatu pola. Contohnya: jumlah kursi dalam gedung, jumlah penonton stadion, susunan batu bata, tabungan yang bertambah tetap, pertumbuhan bakteri, penyusutan nilai kendaraan, peluruhan zat radioaktif, dan penurunan kadar obat dalam tubuh.</p>
+
+                <div class="info-grid">
+                    <div class="col">
+                        <h4>📌 Barisan</h4>
+                        <p>Barisan adalah <strong>urutan bilangan</strong>.<br><br> <strong>Contoh:</strong> 2, 5, 8, 11, 14, ...<br> <em>Yang diperhatikan adalah nilai setiap suku.</em></p>
+                    </div>
+                    <div class="col">
+                        <h4>📌 Deret</h4>
+                        <p>Deret adalah <strong>penjumlahan seluruh suku</strong> pada barisan.<br><br> <strong>Contoh:</strong> 2 + 5 + 8 + 11 + 14<br> <em>Yang diperhatikan adalah jumlah seluruh suku.</em></p>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>🔑 Kunci Mengingat:</strong><br>
+                    Jika soal bertanya <em>"Berapa banyak pada urutan ke-10?"</em> → gunakan <strong>Barisan (\(U_n\))</strong>.<br>
+                    Jika bertanya <em>"Berapa jumlah seluruhnya?"</em> → gunakan <strong>Deret (\(S_n\))</strong>.
+                </div>
+            </div>
+
+            <!-- ===== B ===== -->
+            <div class="card" id="aritmetika">
+                <h2>B. Barisan Aritmetika</h2>
+                <h3>Pengertian</h3>
+                <p>Barisan aritmetika adalah barisan yang memiliki <strong>selisih (beda)</strong> yang selalu tetap.</p>
+                <p><strong>Contoh:</strong> 3, 7, 11, 15, 19, ... → Selisihnya selalu <strong>+4</strong>.</p>
+
+                <h3>Unsur-unsur</h3>
+                <ul>
+                    <li><strong>\(a\)</strong> = suku pertama</li>
+                    <li><strong>\(b\)</strong> = beda (selisih)</li>
+                    <li><strong>\(n\)</strong> = urutan suku</li>
+                    <li><strong>\(U_n\)</strong> = suku ke-\(n\)</li>
+                </ul>
+
+                <div class="rumus-box">
+                    <span class="label">Rumus Suku ke-\(n\)</span>
+                    \[ U_n = a + (n-1)b \]
+                </div>
+
+                <div class="rumus-box">
+                    <span class="label">Rumus Jumlah \(n\) Suku Pertama (Deret)</span>
+                    \[ S_n = \frac{n}{2} \big( 2a + (n-1)b \big) \quad \text{atau} \quad S_n = \frac{n}{2} (a + U_n) \]
+                </div>
+
+                <h3>Cara Cepat Menentukan Beda</h3>
+                <p>\[ b = U_2 - U_1 \quad \text{atau} \quad b = U_3 - U_2 \]</p>
+            </div>
+
+            <!-- ===== C ===== -->
+            <div class="card" id="contoh-kursi">
+                <h2>C. Contoh Soal TKA (Susunan Kursi Gedung)</h2>
+                <div class="example-box">
+                    <div class="label">Soal</div>
+                    <p>Baris pertama terdapat 15 kursi. Setiap baris berikutnya bertambah 4 kursi.</p>
+                    <p><strong>a.</strong> Banyak kursi pada baris ke-12</p>
+                </div>
+                <div class="solution-box">
+                    <span class="step">Penyelesaian:</span><br>
+                    Diketahui: \(a = 15\), \(b = 4\), \(n = 12\)<br>
+                    \[ U_{12} = 15 + (12-1)(4) = 15 + 44 = 59 \]
+                    <strong>Jawaban: 59 kursi</strong>
+                </div>
+
+                <div class="example-box" style="margin-top:20px;">
+                    <div class="label">Soal</div>
+                    <p><strong>b.</strong> Total kursi jika ada 15 baris</p>
+                </div>
+                <div class="solution-box">
+                    <span class="step">Penyelesaian:</span><br>
+                    \[ S_{15} = \frac{15}{2} \big( 2(15) + (15-1)(4) \big) \]
+                    \[ S_{15} = \frac{15}{2} (30 + 56) = \frac{15}{2} \times 86 = 645 \]
+                    <strong>Jawaban: 645 kursi</strong>
+                </div>
+            </div>
+
+            <!-- ===== D ===== -->
+            <div class="card" id="contoh-stadion">
+                <h2>D. Contoh TKA (Koreografi Stadion)</h2>
+                <div class="example-box">
+                    <div class="label">Soal</div>
+                    <p>Baris pertama terdiri atas 400 orang. Baris kedua 550 orang. Setiap baris bertambah sama banyak. Ditanya jumlah orang pada baris ke-5.</p>
+                </div>
+                <div class="solution-box">
+                    <span class="step">Penyelesaian:</span><br>
+                    Beda: \(b = 550 - 400 = 150\)<br>
+                    \[ U_5 = 400 + (5-1)(150) = 400 + 600 = 1000 \]
+                    <strong>Jawaban: 1.000 orang</strong>
+                </div>
+            </div>
+
+            <!-- ===== E ===== -->
+            <div class="card" id="deret-aritmetika">
+                <h2>E. Deret Aritmetika</h2>
+                <p>Deret aritmetika digunakan ketika soal menanyakan <strong>jumlah seluruh</strong> kursi, penonton, pohon, total uang tabungan, total produksi, dll.</p>
+                <p><strong>Kata kunci:</strong> jumlah keseluruhan, total, seluruh, akumulasi → langsung mengarah ke rumus \(S_n\).</p>
+            </div>
+
+            <!-- ===== F ===== -->
+            <div class="card" id="geometri">
+                <h2>F. Barisan Geometri</h2>
+                <h3>Pengertian</h3>
+                <p>Barisan geometri adalah barisan yang mempunyai <strong>rasio tetap</strong> (bukan selisih).</p>
+                <p><strong>Contoh:</strong> 2, 6, 18, 54, ... <br>Karena \(6 \div 2 = 3\), \(18 \div 6 = 3\), \(54 \div 18 = 3\) → Rasionya selalu <strong>3</strong>.</p>
+
+                <h3>Unsur</h3>
+                <ul>
+                    <li><strong>\(a\)</strong> = suku pertama</li>
+                    <li><strong>\(r\)</strong> = rasio</li>
+                    <li><strong>\(U_n\)</strong> = suku ke-\(n\)</li>
+                </ul>
+
+                <div class="rumus-box">
+                    <span class="label">Rumus Suku ke-\(n\)</span>
+                    \[ U_n = a \times r^{n-1} \]
+                </div>
+
+                <h3>Cara Menentukan Rasio</h3>
+                <p>\[ r = \frac{U_2}{U_1} \]</p>
+            </div>
+
+            <!-- ===== G ===== -->
+            <div class="card" id="deret-geometri">
+                <h2>G. Deret Geometri</h2>
+                <p>Jika yang ditanyakan jumlah seluruh suku geometri, gunakan:</p>
+                <div class="rumus-box">
+                    <span class="label">Untuk \(r > 1\)</span>
+                    \[ S_n = \frac{a(r^n - 1)}{r - 1} \]
+                </div>
+                <div class="rumus-box">
+                    <span class="label">Untuk \(0 < r < 1\)</span>
+                    \[ S_n = \frac{a(1 - r^n)}{1 - r} \]
+                </div>
+                <p>Materi ini memang lebih jarang muncul dibanding peluruhan, tetapi tetap perlu dikuasai.</p>
+            </div>
+
+            <!-- ===== H ===== -->
+            <div class="card" id="pertumbuhan">
+                <h2>H. Pertumbuhan</h2>
+                <p>Jika suatu besaran <strong>bertambah</strong> dengan persentase tetap. Misalnya: investasi, jumlah bakteri, populasi, saldo tabungan berbunga majemuk.</p>
+                <div class="rumus-box">
+                    <span class="label">Rumus Pertumbuhan</span>
+                    \[ M_n = M_0 (1 + p)^n \]
+                </div>
+                <p>Keterangan: \(p\) adalah persen kenaikan. Misalnya naik 15%, maka \(1 + p = 1{,}15\).</p>
+            </div>
+
+            <!-- ===== I ===== -->
+            <div class="card" id="peluruhan">
+                <h2>I. Peluruhan</h2>
+                <p>Peluruhan merupakan aplikasi barisan geometri. Nilai selalu <strong>berkurang</strong> menurut persentase tetap. Contoh: kadar obat, radioaktif, penyusutan harga mobil, kadar gula/kolesterol/asam urat.</p>
+                <div class="rumus-box">
+                    <span class="label">Rumus Peluruhan</span>
+                    \[ M_n = M_0 (1 - p)^n \]
+                </div>
+                <p>Keterangan: \(M_0\) = nilai awal, \(M_n\) = nilai akhir, \(p\) = persentase penurunan, \(n\) = lama waktu.</p>
+
+                <h3>Rasio Peluruhan</h3>
+                <ul>
+                    <li>Jika turun 20% → rasio = \(1 - 20\% = 0{,}8\)</li>
+                    <li>Jika turun 15% → rasio = 0,85</li>
+                    <li>Jika turun 5% → rasio = 0,95</li>
+                </ul>
+            </div>
+
+            <!-- ===== J ===== -->
+            <div class="card" id="contoh-peluruhan">
+                <h2>J. Contoh TKA (Penurunan Kadar Asam Urat)</h2>
+                <div class="example-box">
+                    <div class="label">Soal</div>
+                    <p>Kadar awal 10 mg/dL. Turun 20% setiap hari. Ditanya kadar hari ke-3.</p>
+                </div>
+                <div class="solution-box">
+                    <span class="step">Penyelesaian:</span><br>
+                    \[ M_3 = 10 \times (0{,}8)^3 = 10 \times 0{,}512 = 5{,}12 \]
+                    <strong>Jawaban: 5,12 mg/dL</strong>
+                </div>
+            </div>
+
+            <!-- ===== K ===== -->
+            <div class="card" id="multijawab">
+                <h2>K. Soal TKA Multijawab (Peluruhan)</h2>
+                <div class="example-box">
+                    <div class="label">Soal</div>
+                    <p>Pasien memiliki kadar asam urat 13 mg/dL. Turun 20% setiap hari. Nyaman jika < 7. Sembuh jika < 5.</p>
+                </div>
+                <div class="solution-box">
+                    <span class="step">Perhitungan Bertahap:</span><br>
+                    <ul>
+                        <li>Hari 1: 13</li>
+                        <li>Hari 2: 13 × 0,8 = 10,4</li>
+                        <li>Hari 3: 10,4 × 0,8 = 8,32</li>
+                        <li>Hari 4: 8,32 × 0,8 = 6,656 ✅ (Nyaman, belum sembuh karena >5)</li>
+                        <li>Hari 5: 6,656 × 0,8 = 5,3248 ✅ (Nyaman, belum sembuh karena >5)</li>
+                        <li>Hari 6: 5,3248 × 0,8 = 4,2598 ❌ (Sembuh, sudah <5)</li>
+                    </ul>
+                    <strong>Jawaban: Hari ke-4 dan ke-5</strong>
+                </div>
+            </div>
+
+            <!-- ===== L ===== -->
+            <div class="card" id="membedakan">
+                <h2>L. Membedakan Tipe Soal</h2>
+                <div class="info-grid">
+                    <div class="col">
+                        <h4>📈 Gunakan <strong>Aritmetika</strong></h4>
+                        <p>Jika terdapat kata:</p>
+                        <ul>
+                            <li>bertambah 5 orang</li>
+                            <li>naik 2 kursi</li>
+                            <li>turun Rp2.000</li>
+                            <li>selisih tetap</li>
+                            <li>bertambah sama banyak</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h4>📊 Gunakan <strong>Geometri</strong></h4>
+                        <p>Jika terdapat kata:</p>
+                        <ul>
+                            <li>naik 20%</li>
+                            <li>turun 10%</li>
+                            <li>menyusut</li>
+                            <li>berkembang dua kali lipat</li>
+                            <li>membelah diri</li>
+                            <li>bunga majemuk</li>
+                            <li>peluruhan</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== M ===== -->
+            <div class="card" id="tabel">
+                <h2>M. Tabel Perbedaan</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aspek</th>
+                                <th>Aritmetika</th>
+                                <th>Geometri</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Pola</strong></td>
+                                <td>Tambah/Kurang tetap</td>
+                                <td>Kali/Bagi tetap</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Konsep</strong></td>
+                                <td>Selisih (\(b\))</td>
+                                <td>Rasio (\(r\))</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rumus</strong></td>
+                                <td>\(U_n = a + (n-1)b\)</td>
+                                <td>\(U_n = a \cdot r^{n-1}\)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Soal</strong></td>
+                                <td>Kursi, tangga, tabungan tetap</td>
+                                <td>Bakteri, bunga majemuk, peluruhan</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== N ===== -->
+            <div class="card" id="langkah">
+                <h2>N. Langkah Menyelesaikan Soal Cerita</h2>
+                <ol>
+                    <li>Tentukan apa yang diketahui.</li>
+                    <li>Cari suku pertama (\(a\)).</li>
+                    <li>Tentukan beda (\(b\)) atau rasio (\(r\)).</li>
+                    <li>Tentukan apa yang ditanya (\(U_n\) atau \(S_n\)).</li>
+                    <li>Pilih rumus yang sesuai.</li>
+                    <li>Hitung secara sistematis.</li>
+                    <li>Periksa kembali satuan jawaban.</li>
+                </ol>
+            </div>
+
+            <!-- ===== O ===== -->
+            <div class="card" id="kesalahan">
+                <h2>O. Kesalahan yang Paling Sering Terjadi</h2>
+                <div class="warning-box">
+                    <strong>❌ Kesalahan Umum:</strong>
+                    <ul>
+                        <li>Salah menentukan suku pertama (\(a\)).</li>
+                        <li>Lupa bahwa rumus menggunakan \((n-1)\), bukan \(n\).</li>
+                        <li>Menggunakan rumus jumlah (\(S_n\)) padahal yang diminta suku ke-\(n\).</li>
+                        <li>Menganggap penurunan 20% berarti dikurangi 20 terus-menerus (padahal harus dikali 0,8 setiap periode).</li>
+                        <li>Salah mengubah persen menjadi desimal. 20% = 0,20 (bukan 20).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ===== P ===== -->
+            <div class="card" id="strategi">
+                <h2>P. Strategi Cepat Mengerjakan Soal TKA</h2>
+                <ul>
+                    <li><strong>Langkah 1:</strong> Cari kata kunci. "tambah tetap" → Aritmetika ; "persen" → Geometri.</li>
+                    <li><strong>Langkah 2:</strong> Tentukan \(a\), \(b\), atau \(r\).</li>
+                    <li><strong>Langkah 3:</strong> Lihat pertanyaan. "urutan ke-" → \(U_n\). "jumlah seluruh" → \(S_n\).</li>
+                    <li><strong>Langkah 4:</strong> Pada soal peluruhan, lebih aman menghitung bertahap setiap periode jika pilihan jawabannya berupa rentang hari atau lebih dari satu jawaban.</li>
+                </ul>
+            </div>
+
+            <!-- ===== Q ===== -->
+            <div class="card" id="rumus">
+                <h2>Q. Ringkasan Rumus Wajib Hafal</h2>
+                <div class="info-grid">
+                    <div class="col">
+                        <h4>📐 Barisan Aritmetika</h4>
+                        <p>\(b = U_2 - U_1\)<br>
+                        \(U_n = a + (n-1)b\)<br>
+                        \(S_n = \frac{n}{2} (2a + (n-1)b)\)</p>
+                    </div>
+                    <div class="col">
+                        <h4>📐 Barisan Geometri</h4>
+                        <p>\(r = \frac{U_2}{U_1}\)<br>
+                        \(U_n = a \cdot r^{n-1}\)<br>
+                        \(S_n = \frac{a(r^n - 1)}{r - 1}\)</p>
+                    </div>
+                    <div class="col">
+                        <h4>📈 Pertumbuhan</h4>
+                        <p>\[ M_n = M_0 (1 + p)^n \]</p>
+                    </div>
+                    <div class="col">
+                        <h4>📉 Peluruhan</h4>
+                        <p>\[ M_n = M_0 (1 - p)^n \]</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== R ===== -->
+            <div class="card" id="petakonsep">
+                <h2>R. Peta Konsep Cepat</h2>
+                <div class="rumus-box" style="text-align: left; font-family: monospace; background: #f4f9ff;">
+                    <pre style="font-family: 'Segoe UI', monospace; font-size: 0.9rem; line-height: 1.8; color: #0b2b44;">
+                BARISAN DAN DERET
+                         │
+           ┌─────────────┴─────────────┐
+           │                           │
+     <strong>ARITMETIKA</strong>                   <strong>GEOMETRI</strong>
+           │                           │
+     Selisih tetap               Rasio tetap
+           │                           │
+     Un = a+(n−1)b              Un = ar^(n−1)
+           │                           │
+     Sn = jumlah                 Sn = jumlah
+           │                           │
+     Kursi, tangga,              Pertumbuhan,
+     stadion, tabungan          bunga majemuk,
+     tetap                      peluruhan, bakteri
+                    </pre>
+                </div>
+            </div>
+
+            <!-- ===== S ===== -->
+            <div class="card" id="tips">
+                <h2>S. Tips Menghadapi Ujian TKA SMA</h2>
+                <ul>
+                    <li>Hafalkan rumus dasar, tetapi pahami <strong>kapan</strong> rumus tersebut digunakan.</li>
+                    <li>Biasakan mengidentifikasi <strong>kata kunci</strong> pada soal sebelum menghitung.</li>
+                    <li>Untuk soal cerita, tuliskan terlebih dahulu nilai \(a\), \(b\), \(r\), dan \(n\) agar tidak salah memilih rumus.</li>
+                    <li>Pada soal geometri yang melibatkan persentase, ubahlah persentase ke bentuk desimal atau pecahan sebelum menghitung.</li>
+                    <li>Jika soal peluruhan atau pertumbuhan menanyakan hari ke berapa atau periode ke berapa, sering kali lebih cepat membuat tabel nilai setiap periode daripada langsung menggunakan logaritma.</li>
+                    <li>Selalu periksa kembali apakah yang diminta adalah nilai suatu suku (\(U_n\)) atau jumlah seluruh suku (\(S_n\)).</li>
+                </ul>
+                <div class="tip-box" style="margin-top: 20px;">
+                    <strong>💡 Pesan Penting:</strong><br>
+                    Sebagian besar soal Barisan dan Deret pada TKA maupun SNBT bukan sekadar menguji hafalan rumus, tetapi <strong>kemampuan mengenali pola</strong> dalam konteks kehidupan sehari-hari. Kunci keberhasilannya adalah memahami perbedaan antara selisih tetap (aritmetika) dan rasio tetap (geometri) serta memilih rumus yang sesuai dengan pertanyaan.
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="text-align: center; padding: 20px 0 10px; color: #6a8aa0; border-top: 1px solid #e4ecf3; margin-top: 20px; font-size: 0.9rem;">
+                <strong>Selamat Belajar!</strong> Semoga Sukses di TKA SMA & SNBT 📚
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== AUTO-RENDER KATEX ===== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '$', right: '$', display: false },
+                        { left: '\\(', right: '\\)', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+
+            // Active state for sidebar links based on scroll
+            const sections = document.querySelectorAll('.card[id], .header-title[id]');
+            const navLinks = document.querySelectorAll('.sidebar ul li a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
