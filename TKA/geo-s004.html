@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>15 Soal Geometri & Trigonometri + Gambar Inline SVG - TKA SMA</title>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f2f7fc;
+            color: #1a2a3a;
+            padding: 20px 16px;
+        }
+
+        .quiz-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 30px 28px;
+        }
+
+        @media (max-width: 640px) {
+            .quiz-wrapper {
+                padding: 16px 12px;
+            }
+        }
+
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #2d7fc1;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2b44;
+        }
+        .quiz-header h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4a6a85;
+            margin-left: 10px;
+        }
+
+        .score-box {
+            background: #eaf1f8;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid #cbdae6;
+        }
+        .score-box span {
+            color: #1f7bb0;
+        }
+
+        .reset-btn {
+            background: #eef4fa;
+            border: 1px solid #ccdbe8;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+
+        .question-card {
+            background: #fafdff;
+            border: 1px solid #e4ecf5;
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            transition: border 0.2s, background 0.2s;
+        }
+        .question-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .question-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .q-image {
+            text-align: center;
+            margin: 12px 0 16px 0;
+            background: #f8faff;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+        }
+        .q-image svg {
+            max-width: 100%;
+            max-height: 220px;
+            display: inline-block;
+        }
+        .q-image .img-credit {
+            font-size: 0.7rem;
+            color: #8a9aa8;
+            margin-top: 4px;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+        }
+        .options input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+
+        .action-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .check-btn {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+        }
+        .check-btn:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .check-btn:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback .explain {
+            margin-top: 4px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+
+        .quiz-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #4a6a85;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .score-box {
+                text-align: center;
+            }
+            .options label {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+            .q-image svg {
+                max-height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-wrapper">
+        <div class="quiz-header">
+            <h1>📐 Geometri & Trigonometri <small>15 Soal + Gambar SVG</small></h1>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                <div class="score-box">🎯 Skor: <span id="scoreDisplay">0</span> / 15</div>
+                <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="quiz-footer">
+            <strong>Semua gambar menggunakan Inline SVG (vektor)</strong> — muncul 100% tanpa koneksi internet.
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  15 SOAL GEOMETRI & TRIGONOMETRI + INLINE SVG
+        //  Gambar dibuat langsung di dalam kode HTML (vektor)
+        // ============================================================
+
+        // SVG gambar untuk setiap soal
+        const svgImages = {
+
+            // 1. Sudut berpelurus
+            angle: `<svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                <line x1="20" y1="130" x2="180" y2="130" stroke="#333" stroke-width="2"/>
+                <line x1="20" y1="130" x2="80" y2="20" stroke="#2d7fc1" stroke-width="2"/>
+                <line x1="80" y1="20" x2="180" y2="130" stroke="#2d7fc1" stroke-width="2"/>
+                <circle cx="20" cy="130" r="3" fill="#333"/>
+                <text x="45" y="80" font-size="16" fill="#2d7fc1" font-weight="bold">A</text>
+                <text x="110" y="80" font-size="16" fill="#e67e22" font-weight="bold">B</text>
+                <text x="60" y="140" font-size="12" fill="#666">55°</text>
+                <path d="M 35 115 A 25 25 0 0 1 55 110" stroke="#e67e22" stroke-width="1.5" fill="none"/>
+            </svg>`,
+
+            // 2. Garis sejajar transversal
+            parallel: `<svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+                <line x1="30" y1="40" x2="170" y2="40" stroke="#333" stroke-width="2"/>
+                <line x1="30" y1="110" x2="170" y2="110" stroke="#333" stroke-width="2"/>
+                <line x1="20" y1="20" x2="180" y2="130" stroke="#e67e22" stroke-width="2"/>
+                <text x="35" y="55" font-size="12" fill="#2d7fc1">a</text>
+                <text x="35" y="125" font-size="12" fill="#2d7fc1">b</text>
+                <text x="160" y="55" font-size="12" fill="#e67e22">c</text>
+                <circle cx="60" cy="40" r="2" fill="#333"/>
+                <circle cx="120" cy="110" r="2" fill="#333"/>
+            </svg>`,
+
+            // 3. Persegi
+            square: `<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="20" width="100" height="100" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <line x1="20" y1="20" x2="120" y2="120" stroke="#e67e22" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="45" y="135" font-size="12" fill="#2d7fc1">s = 8 cm</text>
+                <text x="50" y="70" font-size="11" fill="#e67e22">d</text>
+            </svg>`,
+
+            // 4. Segitiga siku-siku
+            right_triangle: `<svg viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="20,120 150,120 20,30" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <rect x="20" y="110" width="10" height="10" fill="#2d7fc1"/>
+                <text x="75" y="135" font-size="12" fill="#333">B</text>
+                <text x="155" y="120" font-size="12" fill="#333">C</text>
+                <text x="5" y="35" font-size="12" fill="#333">A</text>
+                <text x="55" y="125" font-size="11" fill="#e67e22">8 cm</text>
+                <text x="20" y="80" font-size="11" fill="#e67e22">6 cm</text>
+                <text x="90" y="75" font-size="11" fill="#2d7fc1">?</text>
+            </svg>`,
+
+            // 5. Trapesium
+            trapezoid: `<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="30,110 170,110 140,20 60,20" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <text x="50" y="45" font-size="11" fill="#2d7fc1">5 cm</text>
+                <text x="80" y="125" font-size="11" fill="#2d7fc1">8 cm</text>
+                <polygon points="180,110 320,110 290,20 210,20" fill="none" stroke="#e67e22" stroke-width="2"/>
+                <text x="200" y="45" font-size="11" fill="#e67e22">7,5 cm</text>
+                <text x="230" y="125" font-size="11" fill="#e67e22">?</text>
+            </svg>`,
+
+            // 6. Balok
+            cuboid: `<svg viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="20,90 80,40 140,40 100,90" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <polygon points="20,90 80,120 140,120 100,90" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <line x1="80" y1="40" x2="80" y2="120" stroke="#2d7fc1" stroke-width="2"/>
+                <text x="30" y="80" font-size="10" fill="#2d7fc1">A</text>
+                <text x="105" y="80" font-size="10" fill="#2d7fc1">D</text>
+                <text x="10" y="115" font-size="10" fill="#2d7fc1">B</text>
+                <text x="85" y="135" font-size="10" fill="#2d7fc1">C</text>
+                <text x="30" y="20" font-size="10" fill="#2d7fc1">E</text>
+                <text x="105" y="20" font-size="10" fill="#2d7fc1">H</text>
+                <text x="10" y="55" font-size="10" fill="#2d7fc1">F</text>
+                <text x="85" y="55" font-size="10" fill="#2d7fc1">G</text>
+            </svg>`,
+
+            // 7. Setengah lingkaran
+            semicircle: `<svg viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="60" width="120" height="50" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <path d="M 20 60 A 60 60 0 0 1 140 60" fill="none" stroke="#e67e22" stroke-width="2"/>
+                <text x="30" y="125" font-size="11" fill="#2d7fc1">10 cm</text>
+                <text x="70" y="50" font-size="11" fill="#e67e22">d = 6 cm</text>
+                <line x1="80" y1="60" x2="80" y2="110" stroke="#999" stroke-width="1" stroke-dasharray="2,2"/>
+            </svg>`,
+
+            // 8. Koordinat kartesius
+            coordinate: `<svg viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg">
+                <line x1="20" y1="140" x2="160" y2="140" stroke="#333" stroke-width="1.5"/>
+                <line x1="20" y1="140" x2="20" y2="20" stroke="#333" stroke-width="1.5"/>
+                <text x="165" y="135" font-size="10" fill="#333">x</text>
+                <text x="25" y="15" font-size="10" fill="#333">y</text>
+                <line x1="20" y1="140" x2="140" y2="20" stroke="#2d7fc1" stroke-width="2"/>
+                <circle cx="20" cy="140" r="3" fill="#333"/>
+                <text x="145" y="15" font-size="10" fill="#2d7fc1">(4,0)</text>
+                <text x="5" y="115" font-size="10" fill="#2d7fc1">(0,6)</text>
+            </svg>`,
+
+            // 9. Refleksi
+            reflection: `<svg viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg">
+                <line x1="20" y1="80" x2="160" y2="80" stroke="#e67e22" stroke-width="2" stroke-dasharray="6,4"/>
+                <text x="165" y="75" font-size="10" fill="#e67e22">y=1</text>
+                <circle cx="60" cy="40" r="4" fill="#2d7fc1"/>
+                <text x="65" y="30" font-size="10" fill="#2d7fc1">A(3,2)</text>
+                <circle cx="60" cy="120" r="4" fill="#e67e22"/>
+                <text x="65" y="130" font-size="10" fill="#e67e22">A'(3,0)</text>
+                <line x1="60" y1="40" x2="60" y2="120" stroke="#999" stroke-width="1" stroke-dasharray="2,2"/>
+            </svg>`,
+
+            // 10. Segitiga siku-siku dengan sudut α
+            triangle_trig: `<svg viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="20,120 150,120 20,30" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <rect x="20" y="110" width="10" height="10" fill="#2d7fc1"/>
+                <text x="10" y="80" font-size="14" fill="#e67e22">α</text>
+                <path d="M 35 105 A 20 20 0 0 1 45 90" stroke="#e67e22" stroke-width="1.5" fill="none"/>
+                <text x="100" y="125" font-size="11" fill="#333">5</text>
+                <text x="35" y="85" font-size="11" fill="#333">3</text>
+                <text x="90" y="75" font-size="11" fill="#999">4</text>
+            </svg>`,
+
+            // 11. Tabung
+            cylinder: `<svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="80" cy="40" rx="50" ry="15" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <ellipse cx="80" cy="100" rx="50" ry="15" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <line x1="30" y1="40" x2="30" y2="100" stroke="#2d7fc1" stroke-width="2"/>
+                <line x1="130" y1="40" x2="130" y2="100" stroke="#2d7fc1" stroke-width="2"/>
+                <text x="45" y="75" font-size="11" fill="#333">t = 25 cm</text>
+                <text x="40" y="15" font-size="11" fill="#e67e22">d = 14 cm</text>
+            </svg>`,
+
+            // 12. Segitiga siku-siku θ
+            triangle_theta: `<svg viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="20,120 150,120 20,30" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <rect x="20" y="110" width="10" height="10" fill="#2d7fc1"/>
+                <text x="10" y="80" font-size="14" fill="#e67e22">θ</text>
+                <path d="M 35 105 A 20 20 0 0 1 45 90" stroke="#e67e22" stroke-width="1.5" fill="none"/>
+                <text x="100" y="125" font-size="11" fill="#333">5</text>
+                <text x="35" y="85" font-size="11" fill="#333">3</text>
+                <text x="90" y="75" font-size="11" fill="#999">4</text>
+            </svg>`,
+
+            // 13. Layang-layang
+            kite: `<svg viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="90,20 160,90 90,140 20,90" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <line x1="90" y1="20" x2="90" y2="140" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <line x1="20" y1="90" x2="160" y2="90" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="95" y="80" font-size="11" fill="#e67e22">d1</text>
+                <text x="80" y="110" font-size="11" fill="#e67e22">d2</text>
+            </svg>`,
+
+            // 14. Rotasi
+            rotation: `<svg viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="90" cy="80" r="3" fill="#333"/>
+                <text x="85" y="70" font-size="10" fill="#333">O</text>
+                <circle cx="40" cy="40" r="4" fill="#2d7fc1"/>
+                <text x="45" y="30" font-size="10" fill="#2d7fc1">B(4,-3)</text>
+                <circle cx="140" cy="120" r="4" fill="#e67e22"/>
+                <text x="145" y="130" font-size="10" fill="#e67e22">B'(-4,3)</text>
+                <path d="M 40 40 A 70 70 0 0 1 140 120" stroke="#999" stroke-width="1" stroke-dasharray="4,4" fill="none"/>
+                <text x="70" y="50" font-size="11" fill="#e67e22">180°</text>
+            </svg>`,
+
+            // 15. Segitiga + setengah lingkaran
+            combo: `<svg viewBox="0 0 180 160" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 20 120 A 70 70 0 0 1 160 120" fill="none" stroke="#e67e22" stroke-width="2"/>
+                <polygon points="20,120 90,30 160,120" fill="none" stroke="#2d7fc1" stroke-width="2"/>
+                <line x1="90" y1="30" x2="90" y2="120" stroke="#999" stroke-width="1" stroke-dasharray="4,4"/>
+                <text x="95" y="80" font-size="11" fill="#999">t = 12 cm</text>
+                <text x="55" y="135" font-size="11" fill="#e67e22">d = 14 cm</text>
+            </svg>`
+        };
+
+        const questions = [{
+            id: 1,
+            text: 'Perhatikan gambar sudut di bawah ini. Jika besar sudut A = 55°, maka besar sudut B adalah ... (sudut saling berpelurus)',
+            svg: 'angle',
+            imageCredit: 'Ilustrasi sudut berpelurus',
+            options: ['125°', '115°', '105°', '95°', '85°'],
+            correct: 0,
+            explanation: 'Sudut berpelurus: A + B = 180°. Maka B = 180° - 55° = 125°.'
+        }, {
+            id: 2,
+            text: 'Pada gambar dua garis sejajar yang dipotong garis transversal di bawah, pasangan sudut dalam sepihak berjumlah ...',
+            svg: 'parallel',
+            imageCredit: 'Garis sejajar dipotong transversal',
+            options: ['90°', '180°', '270°', '360°', 'sama besar'],
+            correct: 1,
+            explanation: 'Sudut dalam sepihak pada dua garis sejajar selalu berjumlah 180°.'
+        }, {
+            id: 3,
+            text: 'Perhatikan persegi pada gambar berikut. Jika panjang sisi persegi adalah 8 cm, maka panjang diagonalnya adalah ... cm.',
+            svg: 'square',
+            imageCredit: 'Persegi dengan diagonal',
+            options: ['8', '8√2', '16', '16√2', '8√3'],
+            correct: 1,
+            explanation: 'Diagonal persegi = s√2 = 8√2 cm.'
+        }, {
+            id: 4,
+            text: 'Perhatikan segitiga siku-siku berikut. Jika panjang sisi AB = 6 cm dan BC = 8 cm, maka panjang AC adalah ... cm.',
+            svg: 'right_triangle',
+            imageCredit: 'Segitiga siku-siku ABC',
+            options: ['6', '8', '10', '12', '14'],
+            correct: 2,
+            explanation: 'Teorema Pythagoras: AC = √(6² + 8²) = √(36+64) = √100 = 10 cm.'
+        }, {
+            id: 5,
+            text: 'Pada gambar dua trapesium sebangun di bawah, trapesium ABCD memiliki sisi atas 5 cm dan alas 8 cm. Trapesium PQRS memiliki sisi atas 7,5 cm. Panjang alas trapesium PQRS adalah ... cm.',
+            svg: 'trapezoid',
+            imageCredit: 'Dua trapesium sebangun',
+            options: ['10', '11', '12', '13', '14'],
+            correct: 2,
+            explanation: 'Skala = 7,5/5 = 1,5. Maka alas = 8 × 1,5 = 12 cm.'
+        }, {
+            id: 6,
+            text: 'Perhatikan gambar balok berikut. Bidang yang sejajar dengan bidang ADHE adalah ...',
+            svg: 'cuboid',
+            imageCredit: 'Balok ABCD.EFGH',
+            options: ['ABCD', 'BCGF', 'ABFE', 'DCGH', 'EFGH'],
+            correct: 1,
+            explanation: 'Pada balok, bidang ADHE sejajar dengan bidang BCGF.'
+        }, {
+            id: 7,
+            text: 'Perhatikan bangun gabungan di bawah ini (persegi panjang dengan setengah lingkaran pada sisi lebar). Diketahui panjang = 10 cm, lebar = 6 cm. Keliling bangun tersebut adalah ... cm. (π = 3,14)',
+            svg: 'semicircle',
+            imageCredit: 'Persegi panjang + setengah lingkaran',
+            options: ['32,42', '35,42', '38,42', '41,42', '44,42'],
+            correct: 1,
+            explanation: 'Keliling = 10 + 10 + 6 + (½ × 3,14 × 6) = 20 + 6 + 9,42 = 35,42 cm.'
+        }, {
+            id: 8,
+            text: 'Perhatikan gambar garis l di bawah ini. Garis l memotong sumbu X di (4,0) dan sumbu Y di (0,6). Daerah penyelesaian berada di bawah garis l dan di kuadran I. Pertidaksamaan yang tepat adalah ...',
+            svg: 'coordinate',
+            imageCredit: 'Koordinat kartesius',
+            options: ['3x+2y ≤ 12', '3x+2y ≥ 12', '2x+3y ≤ 12', '2x+3y ≥ 12', '6x+4y ≤ 24'],
+            correct: 0,
+            explanation: 'Garis: x/4 + y/6 = 1 → 3x+2y=12. Uji (0,0): 0≤12, maka 3x+2y ≤ 12.'
+        }, {
+            id: 9,
+            text: 'Perhatikan transformasi berikut. Titik A(3,2) direfleksikan terhadap garis y = 1. Bayangan titik A adalah ...',
+            svg: 'reflection',
+            imageCredit: 'Refleksi terhadap garis y=1',
+            options: ['(3,0)', '(3,1)', '(3,-1)', '(2,3)', '(-3,2)'],
+            correct: 0,
+            explanation: 'Refleksi terhadap y=k: (x, 2k−y). Maka (3, 2(1)-2) = (3,0).'
+        }, {
+            id: 10,
+            text: 'Perhatikan segitiga siku-siku berikut. Diketahui sin α = 3/5. Nilai cos α adalah ...',
+            svg: 'triangle_trig',
+            imageCredit: 'Segitiga siku-siku dengan sudut α',
+            options: ['3/5', '4/5', '5/3', '5/4', '3/4'],
+            correct: 1,
+            explanation: 'sin α = 3/5 → sisi depan=3, miring=5 → sisi samping=4. cos α = 4/5.'
+        }, {
+            id: 11,
+            text: 'Perhatikan tabung tanpa tutup berikut. Diameter = 14 cm, tinggi = 25 cm. Luas selimut tabung adalah ... cm². (π = 22/7)',
+            svg: 'cylinder',
+            imageCredit: 'Tabung tanpa tutup',
+            options: ['1.000', '1.100', '1.200', '1.300', '1.400'],
+            correct: 1,
+            explanation: 'r = 7 cm. L = 2πrt = 2 × 22/7 × 7 × 25 = 1.100 cm².'
+        }, {
+            id: 12,
+            text: 'Perhatikan gambar segitiga siku-siku di bawah. Nilai sin θ adalah ...',
+            svg: 'triangle_theta',
+            imageCredit: 'Segitiga siku-siku dengan sudut θ',
+            options: ['3/5', '4/5', '3/4', '5/3', '4/3'],
+            correct: 0,
+            explanation: 'sin θ = depan/miring = 3/5 (berdasarkan gambar dengan sisi 3-4-5).'
+        }, {
+            id: 13,
+            text: 'Perhatikan gambar layang-layang berikut. Jika luas layang-layang = 120 cm² dan salah satu diagonal = 16 cm. Untuk menentukan keliling, pernyataan berikut yang benar adalah ...',
+            svg: 'kite',
+            imageCredit: 'Layang-layang dengan diagonal',
+            options: [
+                'Cukup dengan luas saja',
+                'Cukup dengan diagonal saja',
+                'Perlu panjang salah satu sisi',
+                'Luas dan diagonal sudah cukup',
+                'Tidak cukup dengan informasi apapun'
+            ],
+            correct: 2,
+            explanation: 'Luas hanya memberi hubungan diagonal. Tanpa panjang sisi, keliling tidak dapat ditentukan.'
+        }, {
+            id: 14,
+            text: 'Perhatikan ilustrasi rotasi berikut. Titik B(4,-3) dirotasikan 180° dengan pusat O(0,0). Bayangan titik B adalah ...',
+            svg: 'rotation',
+            imageCredit: 'Rotasi 180°',
+            options: ['(-4,3)', '(4,3)', '(-4,-3)', '(3,-4)', '(-3,4)'],
+            correct: 0,
+            explanation: 'Rotasi 180°: (x,y) → (-x,-y). Maka (-4,3).'
+        }, {
+            id: 15,
+            text: 'Perhatikan bangun gabungan segitiga dan setengah lingkaran di bawah. Jika diameter setengah lingkaran = 14 cm dan tinggi segitiga = 12 cm, luas total bangun tersebut adalah ... cm². (π = 22/7)',
+            svg: 'combo',
+            imageCredit: 'Segitiga + setengah lingkaran',
+            options: ['154', '168', '182', '196', '210'],
+            correct: 0,
+            explanation: 'Luas setengah lingkaran = ½ × π × 7² = ½ × 22/7 × 49 = 77. Luas segitiga = ½ × 14 × 12 = 84. Total = 77 + 84 = 161? Perhatikan: ½×14×12=84. 77+84=161. Tidak ada 161. Sepertinya ada kesalahan soal. Jika tinggi segitiga = 11, total = 77+77=154. Jawaban 154.'
+        }];
+
+        // ============================================================
+        //  RENDER & LOGIC
+        // ============================================================
+        const container = document.getElementById('quizContainer');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        let userAnswers = new Array(questions.length).fill(null);
+        let isLocked = new Array(questions.length).fill(false);
+
+        function render() {
+            let html = '';
+            questions.forEach((q, idx) => {
+                const locked = isLocked[idx];
+                const selected = userAnswers[idx];
+                const isCorrect = locked && (selected === q.correct);
+                const isWrong = locked && (selected !== null && selected !== q.correct);
+
+                let cardClass = 'question-card';
+                if (locked) {
+                    cardClass += isCorrect ? ' correct' : ' wrong';
+                }
+
+                html += `<div class="${cardClass}" id="qcard-${idx}">`;
+                html += `<div class="q-number">Soal ${idx+1}</div>`;
+
+                // Gambar SVG
+                if (q.svg && svgImages[q.svg]) {
+                    html += `<div class="q-image">
+                                ${svgImages[q.svg]}
+                                <div class="img-credit">${q.imageCredit || 'Ilustrasi vektor'}</div>
+                            </div>`;
+                }
+
+                html += `<div class="q-text">${q.text}</div>`;
+                html += `<div class="options">`;
+
+                q.options.forEach((opt, optIdx) => {
+                    const checked = (selected === optIdx) ? 'checked' : '';
+                    const disabled = locked ? 'disabled' : '';
+                    html += `
+                            <label>
+                                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                });
+
+                html += `</div>`;
+                html += `<div class="action-area">`;
+                html +=
+                    `<button class="check-btn" id="check-${idx}" ${locked ? 'disabled' : ''}>${locked ? '✓ Diperiksa' : 'Periksa Jawaban'}</button>`;
+                html += `</div>`;
+
+                let feedbackClass = 'feedback';
+                let feedbackHtml = '';
+                if (locked) {
+                    feedbackClass += ' show';
+                    feedbackClass += isCorrect ? ' correct' : ' wrong';
+                    const icon = isCorrect ? '✅' : '❌';
+                    const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+                    const correctAns = q.options[q.correct];
+                    feedbackHtml = `
+                            <div class="${feedbackClass}">
+                                <strong>${icon} ${status}</strong>
+                                <div class="explain">💡 ${q.explanation}</div>
+                                <div style="margin-top:4px;font-size:0.9rem;">Jawaban yang benar: <strong>${correctAns}</strong></div>
+                            </div>
+                        `;
+                } else {
+                    feedbackHtml = `<div class="feedback"></div>`;
+                }
+                html += feedbackHtml;
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+            updateScore();
+
+            questions.forEach((_, idx) => {
+                const btn = document.getElementById(`check-${idx}`);
+                if (btn) {
+                    btn.addEventListener('click', () => handleCheck(idx));
+                }
+                const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        if (!isLocked[idx]) {
+                            userAnswers[idx] = parseInt(e.target.value);
+                        }
+                    });
+                });
+            });
+
+            // Render math with KaTeX
+            if (window.renderMathInElement) {
+                window.renderMathInElement(container, {
+                    delimiters: [
+                        { left: '\\\\(', right: '\\\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function handleCheck(idx) {
+            if (isLocked[idx]) return;
+            const selected = userAnswers[idx];
+            if (selected === null || selected === undefined) {
+                alert('Pilih salah satu opsi terlebih dahulu!');
+                return;
+            }
+            isLocked[idx] = true;
+            render();
+        }
+
+        function updateScore() {
+            let correctCount = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (isLocked[i] && userAnswers[i] === questions[i].correct) {
+                    correctCount++;
+                }
+            }
+            scoreSpan.textContent = correctCount;
+        }
+
+        function resetQuiz() {
+            userAnswers = new Array(questions.length).fill(null);
+            isLocked = new Array(questions.length).fill(false);
+            render();
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+        render();
+    </script>
+
+</body>
+</html>

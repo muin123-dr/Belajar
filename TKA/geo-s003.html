@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif Geometri & Trigonometri TKA SMA (Dengan Gambar)</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --correct-bg: #d4edda;
+            --correct-border: #28a745;
+            --incorrect-bg: #f8d7da;
+            --incorrect-border: #dc3545;
+            --text-dark: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: var(--text-dark);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .header h1 { margin: 0; color: var(--primary); }
+        .header p { margin: 10px 0 0; color: #666; }
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary);
+        }
+        .question-text {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 15px 0 25px 0;
+            background: #fafbfc;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+        }
+        .image-container svg {
+            max-width: 100%;
+            height: auto;
+            max-height: 200px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-label {
+            display: block;
+            padding: 12px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .option-label:hover:not(.disabled) {
+            background-color: #f8f9fa;
+            border-color: #cbd5e1;
+        }
+        .option-label input { display: none; }
+        .disabled { pointer-events: none; }
+        .feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        .feedback-box.correct {
+            display: block;
+            background-color: var(--correct-bg);
+            color: #155724;
+            border-left: 5px solid var(--correct-border);
+        }
+        .feedback-box.incorrect {
+            display: block;
+            background-color: var(--incorrect-bg);
+            color: #721c24;
+            border-left: 5px solid var(--incorrect-border);
+        }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.95em;
+            display: none;
+        }
+        .explanation.show { display: block; }
+        .explanation-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        #score-container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Kuis Interaktif Geometri & Trigonometri TKA</h1>
+        <p>15 Soal Pilihan Ganda Dilengkapi Ilustrasi Gambar</p>
+    </div>
+
+    <div class="quiz-container" id="quiz"></div>
+
+    <div id="score-container">
+        <h2 id="final-score"></h2>
+        <button onclick="location.reload()" style="padding:10px 20px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer; font-size:1em;">Ulangi Kuis</button>
+    </div>
+
+    <script>
+        const questions = [{"q": "1. Perhatikan gambar segitiga siku-siku di bawah ini. Panjang sisi miring AC adalah...", "image": "<svg viewBox=\"0 0 200 150\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"40,120 160,120 40,30\" fill=\"#e2e8f0\" stroke=\"#333\" stroke-width=\"2\"/><rect x=\"40\" y=\"110\" width=\"10\" height=\"10\" fill=\"none\" stroke=\"#333\" stroke-width=\"1\"/><text x=\"100\" y=\"140\" font-family=\"Arial\" font-size=\"14\">8 cm</text><text x=\"5\" y=\"80\" font-family=\"Arial\" font-size=\"14\">6 cm</text><text x=\"110\" y=\"70\" font-family=\"Arial\" font-size=\"14\">AC = ?</text></svg>", "options": ["10 cm", "12 cm", "14 cm", "15 cm", "16 cm"], "ans": 0, "exp": "Gunakan Teorema Pythagoras: AC = √(AB² + BC²) = √(8² + 6²) = √(64 + 36) = √100 = 10 cm."}, {"q": "2. Seseorang melihat puncak gedung dengan sudut elevasi 45°. Jika jarak orang tersebut ke gedung adalah 15 m (abaikan tinggi orang), tinggi gedung (t) adalah...", "image": "<svg viewBox=\"0 0 200 150\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"130\" x2=\"180\" y2=\"130\" stroke=\"#333\" stroke-width=\"2\"/><rect x=\"150\" y=\"40\" width=\"30\" height=\"90\" fill=\"#4a90e2\"/><line x1=\"20\" y1=\"130\" x2=\"150\" y2=\"40\" stroke=\"red\" stroke-width=\"2\" stroke-dasharray=\"5,5\"/><text x=\"45\" y=\"125\" font-family=\"Arial\" font-size=\"12\">45°</text><text x=\"80\" y=\"145\" font-family=\"Arial\" font-size=\"14\">15 m</text><text x=\"135\" y=\"90\" font-family=\"Arial\" font-size=\"14\">t</text></svg>", "options": ["10 m", "15 m", "15√2 m", "20 m", "30 m"], "ans": 1, "exp": "tan 45° = depan / samping = t / 15. Karena tan 45° = 1, maka 1 = t / 15 → t = 15 m."}, {"q": "3. Perhatikan segitiga sembarang berikut. Luas segitiga tersebut adalah...", "image": "<svg viewBox=\"0 0 200 150\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"30,120 170,120 100,50\" fill=\"#d4edda\" stroke=\"#28a745\" stroke-width=\"2\"/><text x=\"50\" y=\"112\" font-family=\"Arial\" font-size=\"14\">30°</text><text x=\"55\" y=\"80\" font-family=\"Arial\" font-size=\"14\">10</text><text x=\"140\" y=\"80\" font-family=\"Arial\" font-size=\"14\">12</text></svg>", "options": ["30", "45", "60", "30√3", "60√3"], "ans": 0, "exp": "Luas = 1/2 × a × b × sin C = 1/2 × 10 × 12 × sin 30° = 60 × 1/2 = 30."}, {"q": "4. Pada trapesium ABCD berikut, garis EF sejajar dengan AB dan CD. Panjang EF (p) adalah...", "image": "<svg viewBox=\"0 0 200 150\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"60,40 140,40 180,120 20,120\" fill=\"none\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"46.6\" y1=\"93.3\" x2=\"153.3\" y2=\"93.3\" stroke=\"#e24a4a\" stroke-width=\"2\"/><text x=\"95\" y=\"35\" font-family=\"Arial\" font-size=\"14\">10</text><text x=\"95\" y=\"135\" font-family=\"Arial\" font-size=\"14\">25</text><text x=\"35\" y=\"65\" font-family=\"Arial\" font-size=\"12\">2x</text><text x=\"25\" y=\"110\" font-family=\"Arial\" font-size=\"12\">x</text><text x=\"95\" y=\"88\" font-family=\"Arial\" font-size=\"14\" fill=\"#e24a4a\">p</text></svg>", "options": ["15", "17.5", "20", "22.5", "24"], "ans": 2, "exp": "Gunakan rumus perbandingan menyilang: p = (1 × 10 + 2 × 25) / (1 + 2) = (10 + 50) / 3 = 60 / 3 = 20."}, {"q": "5. Pada kubus ABCD.EFGH dengan panjang rusuk 4 cm, jarak dari titik A ke titik G adalah...", "image": "<svg viewBox=\"0 0 200 180\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"50\" y=\"60\" width=\"80\" height=\"80\" fill=\"none\" stroke=\"#333\" stroke-width=\"2\"/><rect x=\"80\" y=\"30\" width=\"80\" height=\"80\" fill=\"none\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"50\" y1=\"60\" x2=\"80\" y2=\"30\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"130\" y1=\"60\" x2=\"160\" y2=\"30\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"50\" y1=\"140\" x2=\"80\" y2=\"110\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"130\" y1=\"140\" x2=\"160\" y2=\"110\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"50\" y1=\"140\" x2=\"160\" y2=\"30\" stroke=\"red\" stroke-dasharray=\"4\" stroke-width=\"2\"/><text x=\"35\" y=\"150\" font-family=\"Arial\" font-size=\"14\">A</text><text x=\"165\" y=\"25\" font-family=\"Arial\" font-size=\"14\">G</text><text x=\"90\" y=\"155\" font-family=\"Arial\" font-size=\"14\">4 cm</text></svg>", "options": ["4√2 cm", "4√3 cm", "8 cm", "8√2 cm", "12 cm"], "ans": 1, "exp": "Jarak A ke G adalah diagonal ruang kubus. Rumus cepat diagonal ruang kubus dengan rusuk s adalah s√3. Jadi, jawabannya 4√3 cm."}, {"q": "6. Volume bangun ruang tabung di bawah ini adalah... (Gunakan π = 22/7)", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"100\" cy=\"50\" rx=\"40\" ry=\"15\" fill=\"#f0f4f8\" stroke=\"#333\" stroke-width=\"2\"/><ellipse cx=\"100\" cy=\"150\" rx=\"40\" ry=\"15\" fill=\"#f0f4f8\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"60\" y1=\"50\" x2=\"60\" y2=\"150\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"140\" y1=\"50\" x2=\"140\" y2=\"150\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"100\" y1=\"150\" x2=\"140\" y2=\"150\" stroke=\"#333\" stroke-width=\"2\"/><text x=\"110\" y=\"145\" font-family=\"Arial\" font-size=\"14\">r=7</text><text x=\"35\" y=\"100\" font-family=\"Arial\" font-size=\"14\">t=10</text></svg>", "options": ["1.540", "154", "3.080", "2.140", "770"], "ans": 0, "exp": "Volume Tabung = π × r² × t = (22/7) × 7² × 10 = (22/7) × 49 × 10 = 154 × 10 = 1.540."}, {"q": "7. Daerah yang diarsir pada grafik mempresentasikan himpunan penyelesaian dari sistem pertidaksamaan...", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"160\" x2=\"180\" y2=\"160\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"40\" y1=\"20\" x2=\"40\" y2=\"180\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"40\" y1=\"60\" x2=\"140\" y2=\"160\" stroke=\"#e24a4a\" stroke-width=\"2\"/><polygon points=\"40,160 40,60 140,160\" fill=\"#f8d7da\" opacity=\"0.8\"/><text x=\"15\" y=\"65\" font-family=\"Arial\" font-size=\"14\">4</text><text x=\"135\" y=\"175\" font-family=\"Arial\" font-size=\"14\">4</text><text x=\"175\" y=\"175\" font-family=\"Arial\" font-size=\"14\">X</text><text x=\"25\" y=\"25\" font-family=\"Arial\" font-size=\"14\">Y</text></svg>", "options": ["x + y ≥ 4", "x + y ≤ 4", "4x + y ≤ 4", "x + 4y ≤ 4", "x - y ≤ 4"], "ans": 1, "exp": "Garis memotong sumbu Y di 4 dan sumbu X di 4. Persamaannya: 4x + 4y = 16, disederhanakan menjadi x + y = 4. Arsir ke arah (0,0), substitusi (0,0) bernilai benar: 0 + 0 ≤ 4. Jadi, x + y ≤ 4 (dengan syarat x≥0, y≥0)."}, {"q": "8. Perhatikan gambar segitiga berikut. Berdasarkan aturan cosinus, nilai x adalah...", "image": "<svg viewBox=\"0 0 200 150\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"40,120 160,120 100,50\" fill=\"#f0f4f8\" stroke=\"#333\" stroke-width=\"2\"/><text x=\"50\" y=\"115\" font-family=\"Arial\" font-size=\"14\">60°</text><text x=\"55\" y=\"80\" font-family=\"Arial\" font-size=\"14\">5</text><text x=\"100\" y=\"135\" font-family=\"Arial\" font-size=\"14\">8</text><text x=\"135\" y=\"80\" font-family=\"Arial\" font-size=\"14\">x</text></svg>", "options": ["6", "7", "√49", "√59", "7 atau √49 (keduanya benar, pilih 7)"], "ans": 1, "exp": "Aturan cosinus: x² = 5² + 8² - 2(5)(8)cos(60°). x² = 25 + 64 - 80(1/2). x² = 89 - 40 = 49. Maka x = √49 = 7."}, {"q": "9. Sebuah bangun datar terbentuk dari persegi dan setengah lingkaran yang saling menempel seperti pada gambar. Keliling bangun tersebut adalah... (π = 22/7)", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"60\" y=\"80\" width=\"80\" height=\"80\" fill=\"#e2e8f0\" stroke=\"#333\" stroke-width=\"2\"/><path d=\"M 60 80 A 40 40 0 0 1 140 80\" fill=\"#cbd5e1\" stroke=\"#333\" stroke-width=\"2\"/><text x=\"95\" y=\"175\" font-family=\"Arial\" font-size=\"14\">14</text></svg>", "options": ["56", "64", "78", "86", "120"], "ans": 1, "exp": "Keliling luar = 3 sisi persegi (14 + 14 + 14 = 42) + busur setengah lingkaran. Busur = 1/2 × π × d = 1/2 × (22/7) × 14 = 22. Total Keliling = 42 + 22 = 64."}, {"q": "10. Luas selimut kerucut pada gambar di bawah ini adalah...", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"100\" cy=\"150\" rx=\"50\" ry=\"15\" fill=\"none\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"50\" y1=\"150\" x2=\"100\" y2=\"40\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"150\" y1=\"150\" x2=\"100\" y2=\"40\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"100\" y1=\"150\" x2=\"150\" y2=\"150\" stroke=\"#333\" stroke-width=\"2\" stroke-dasharray=\"4\"/><text x=\"115\" y=\"145\" font-family=\"Arial\" font-size=\"14\">r=6</text><text x=\"135\" y=\"95\" font-family=\"Arial\" font-size=\"14\">s=10</text></svg>", "options": ["36π", "60π", "96π", "120π", "160π"], "ans": 1, "exp": "Luas selimut kerucut L = π × r × s. Dengan r=6 dan garis pelukis s=10, L = π × 6 × 10 = 60π."}, {"q": "11. Perhatikan gambar lingkaran dengan titik pusat O. Jika besar sudut pusat AOB adalah 120°, maka besar sudut keliling ACB (x) adalah...", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"100\" cy=\"100\" r=\"70\" fill=\"#f0f4f8\" stroke=\"#333\" stroke-width=\"2\"/><circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#333\"/><polygon points=\"40,135 160,135 100,100\" fill=\"none\" stroke=\"#e24a4a\" stroke-width=\"2\"/><polygon points=\"40,135 160,135 100,30\" fill=\"none\" stroke=\"#4a90e2\" stroke-width=\"2\"/><text x=\"85\" y=\"115\" font-family=\"Arial\" font-size=\"14\">120°</text><text x=\"95\" y=\"55\" font-family=\"Arial\" font-size=\"14\">x°</text></svg>", "options": ["30°", "60°", "90°", "120°", "240°"], "ans": 1, "exp": "Sudut keliling dan sudut pusat yang menghadap busur yang sama memiliki sifat: Sudut Pusat = 2 × Sudut Keliling. Maka x = 120° / 2 = 60°."}, {"q": "12. Dua garis sejajar dipotong oleh sebuah garis transversal. Nilai sudut y pada gambar adalah...", "image": "<svg viewBox=\"0 0 200 150\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"30\" y1=\"50\" x2=\"170\" y2=\"50\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"30\" y1=\"100\" x2=\"170\" y2=\"100\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"60\" y1=\"20\" x2=\"140\" y2=\"130\" stroke=\"#e24a4a\" stroke-width=\"2\"/><text x=\"75\" y=\"45\" font-family=\"Arial\" font-size=\"14\">120°</text><text x=\"110\" y=\"115\" font-family=\"Arial\" font-size=\"14\">y</text></svg>", "options": ["60°", "90°", "120°", "150°", "180°"], "ans": 0, "exp": "Kedua sudut tersebut merupakan sudut dalam sepihak, yang jumlahnya selalu 180°. Maka, y + 120° = 180° → y = 60°."}, {"q": "13. Jarak antara titik A(-2, -1) dan titik B(4, 7) pada bidang koordinat kartesius adalah...", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"180\" x2=\"180\" y2=\"180\" stroke=\"#999\"/><line x1=\"20\" y1=\"20\" x2=\"20\" y2=\"180\" stroke=\"#999\"/><circle cx=\"60\" cy=\"140\" r=\"4\" fill=\"red\"/><circle cx=\"140\" cy=\"60\" r=\"4\" fill=\"red\"/><line x1=\"60\" y1=\"140\" x2=\"140\" y2=\"60\" stroke=\"red\" stroke-dasharray=\"4\"/><text x=\"25\" y=\"155\" font-family=\"Arial\" font-size=\"12\">A(-2, -1)</text><text x=\"145\" y=\"55\" font-family=\"Arial\" font-size=\"12\">B(4, 7)</text></svg>", "options": ["6", "8", "10", "12", "14"], "ans": 2, "exp": "Gunakan rumus jarak: d = √((x2-x1)² + (y2-y1)²). d = √((4 - (-2))² + (7 - (-1))²) = √(6² + 8²) = √(36 + 64) = √100 = 10."}, {"q": "14. Titik P(2, -2) dicerminkan terhadap garis y = 2. Koordinat bayangan titik P (P') adalah...", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"100\" x2=\"180\" y2=\"100\" stroke=\"#999\"/><line x1=\"100\" y1=\"20\" x2=\"100\" y2=\"180\" stroke=\"#999\"/><line x1=\"20\" y1=\"70\" x2=\"180\" y2=\"70\" stroke=\"blue\" stroke-dasharray=\"5\"/><circle cx=\"130\" cy=\"130\" r=\"4\" fill=\"red\"/><circle cx=\"130\" cy=\"10\" r=\"4\" fill=\"#28a745\"/><text x=\"135\" y=\"145\" font-family=\"Arial\" font-size=\"12\">P(2, -2)</text><text x=\"140\" y=\"15\" font-family=\"Arial\" font-size=\"12\" fill=\"#28a745\">P' ?</text><text x=\"25\" y=\"65\" font-family=\"Arial\" font-size=\"12\" fill=\"blue\">y = 2</text></svg>", "options": ["(2, -6)", "(-2, 2)", "(2, 4)", "(2, 6)", "(6, 2)"], "ans": 3, "exp": "Refleksi titik (x,y) terhadap garis y=k adalah (x, 2k-y). P'(2, 2(2) - (-2)) = P'(2, 4 + 2) = P'(2, 6)."}, {"q": "15. Luas permukaan total dari balok pada gambar di bawah ini adalah...", "image": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"40\" y=\"80\" width=\"100\" height=\"60\" fill=\"#f0f4f8\" stroke=\"#333\" stroke-width=\"2\"/><rect x=\"70\" y=\"50\" width=\"100\" height=\"60\" fill=\"none\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"40\" y1=\"80\" x2=\"70\" y2=\"50\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"140\" y1=\"80\" x2=\"170\" y2=\"50\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"40\" y1=\"140\" x2=\"70\" y2=\"110\" stroke=\"#333\" stroke-width=\"2\"/><line x1=\"140\" y1=\"140\" x2=\"170\" y2=\"110\" stroke=\"#333\" stroke-width=\"2\"/><text x=\"80\" y=\"155\" font-family=\"Arial\" font-size=\"14\">p = 10</text><text x=\"160\" y=\"135\" font-family=\"Arial\" font-size=\"14\">l = 4</text><text x=\"20\" y=\"115\" font-family=\"Arial\" font-size=\"14\">t = 5</text></svg>", "options": ["200", "220", "240", "400", "420"], "ans": 1, "exp": "Luas Permukaan Balok = 2(pl + pt + lt) = 2((10×4) + (10×5) + (4×5)) = 2(40 + 50 + 20) = 2(110) = 220."}];
+        let answeredCount = 0;
+        let correctCount = 0;
+        const quizContainer = document.getElementById('quiz');
+
+        function renderQuiz() {
+            questions.forEach((qObj, qIndex) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = 'q' + qIndex;
+
+                const qText = document.createElement('div');
+                qText.className = 'question-text';
+                qText.innerHTML = qObj.q;
+                card.appendChild(qText);
+
+                if (qObj.image) {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = 'image-container';
+                    imgContainer.innerHTML = qObj.image;
+                    card.appendChild(imgContainer);
+                }
+
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options';
+
+                qObj.options.forEach((optText, optIndex) => {
+                    const label = document.createElement('label');
+                    label.className = 'option-label';
+                    label.id = `label-${qIndex}-${optIndex}`;
+
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = 'question' + qIndex;
+                    input.value = optIndex;
+                    
+                    input.addEventListener('change', () => handleSelection(qIndex, optIndex, label));
+
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(optText));
+                    optionsContainer.appendChild(label);
+                });
+                card.appendChild(optionsContainer);
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback-box';
+                card.appendChild(feedback);
+
+                const explanation = document.createElement('div');
+                explanation.className = 'explanation';
+                explanation.innerHTML = `<div class="explanation-title">Pembahasan:</div>${qObj.exp}`;
+                card.appendChild(explanation);
+
+                quizContainer.appendChild(card);
+            });
+        }
+
+        function handleSelection(qIndex, selectedOptIndex, selectedLabel) {
+            const card = document.getElementById('q' + qIndex);
+            const optionsContainer = card.querySelector('.options');
+            const feedback = card.querySelector('.feedback-box');
+            const explanation = card.querySelector('.explanation');
+            
+            optionsContainer.classList.add('disabled');
+
+            const correctOptIndex = questions[qIndex].ans;
+            const isCorrect = selectedOptIndex === correctOptIndex;
+
+            if (isCorrect) {
+                feedback.textContent = "Jawaban Anda Benar! ✓";
+                feedback.className = 'feedback-box correct';
+                selectedLabel.style.backgroundColor = 'var(--correct-bg)';
+                selectedLabel.style.borderColor = 'var(--correct-border)';
+                correctCount++;
+            } else {
+                feedback.textContent = "Jawaban Anda Salah! ✗";
+                feedback.className = 'feedback-box incorrect';
+                selectedLabel.style.backgroundColor = 'var(--incorrect-bg)';
+                selectedLabel.style.borderColor = 'var(--incorrect-border)';
+                
+                const correctLabel = document.getElementById(`label-${qIndex}-${correctOptIndex}`);
+                if(correctLabel) {
+                    correctLabel.style.backgroundColor = 'var(--correct-bg)';
+                    correctLabel.style.borderColor = 'var(--correct-border)';
+                }
+            }
+
+            explanation.classList.add('show');
+            answeredCount++;
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            if (answeredCount === questions.length) {
+                const scoreContainer = document.getElementById('score-container');
+                const scoreText = document.getElementById('final-score');
+                const score = Math.round((correctCount / questions.length) * 100);
+                scoreText.textContent = `Skor Akhir Anda: ${score} / 100 (${correctCount} Benar dari ${questions.length} Soal)`;
+                scoreContainer.style.display = 'block';
+            }
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>
