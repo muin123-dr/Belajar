@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>25 Soal Barisan & Deret - TKA SMA</title>
+
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f2f7fc;
+            color: #1a2a3a;
+            padding: 20px 16px;
+        }
+
+        .quiz-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 30px 28px;
+        }
+
+        @media (max-width: 640px) {
+            .quiz-wrapper {
+                padding: 16px 12px;
+            }
+        }
+
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #2d7fc1;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2b44;
+        }
+        .quiz-header h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4a6a85;
+            margin-left: 10px;
+        }
+
+        .score-box {
+            background: #eaf1f8;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid #cbdae6;
+        }
+        .score-box span {
+            color: #1f7bb0;
+        }
+
+        .reset-btn {
+            background: #eef4fa;
+            border: 1px solid #ccdbe8;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+
+        .question-card {
+            background: #fafdff;
+            border: 1px solid #e4ecf5;
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            transition: border 0.2s, background 0.2s;
+        }
+        .question-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .question-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+        }
+        .options input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+
+        .action-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .check-btn {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+        }
+        .check-btn:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .check-btn:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback .explain {
+            margin-top: 4px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+
+        .quiz-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #4a6a85;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .score-box {
+                text-align: center;
+            }
+            .options label {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-wrapper">
+        <div class="quiz-header">
+            <h1>🧮 Barisan & Deret <small>25 Soal TKA SMA</small></h1>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                <div class="score-box">🎯 Skor: <span id="scoreDisplay">0</span> / 25</div>
+                <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="quiz-footer">
+            <strong>Aritmetika · Geometri · Pertumbuhan · Peluruhan</strong> — Klik <em>"Periksa Jawaban"</em> untuk melihat pembahasan.
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  SOAL BARISAN & DERET (25 SOAL)
+        // ============================================================
+        const questions = [{
+            id: 1,
+            text: 'Suku ke-12 dari barisan aritmetika dengan suku pertama 5 dan beda 7 adalah ...',
+            options: ['77', '82', '87', '92', '97'],
+            correct: 1,
+            explanation: '\(U_n = a + (n-1)b\). \(U_{12} = 5 + (11)(7) = 5 + 77 = 82\).'
+        }, {
+            id: 2,
+            text: 'Diketahui barisan aritmetika: 4, 10, 16, 22, ... . Suku ke-n bernilai 64. Nilai \(n\) adalah ...',
+            options: ['9', '10', '11', '12', '13'],
+            correct: 2,
+            explanation: '\(a=4, b=6\). \(4 + (n-1)6 = 64 \\rightarrow 6n - 2 = 64 \\rightarrow n = 11\).'
+        }, {
+            id: 3,
+            text: 'Jumlah 15 suku pertama dari deret aritmetika \(3 + 8 + 13 + 18 + ...\) adalah ...',
+            options: ['570', '580', '590', '600', '610'],
+            correct: 0,
+            explanation: '\(a=3, b=5\). \(S_{15} = \\frac{15}{2}(2(3) + (14)(5)) = \\frac{15}{2}(6 + 70) = 570\).'
+        }, {
+            id: 4,
+            text: 'Dalam sebuah gedung teater, baris pertama berisi 25 kursi, baris kedua 30 kursi, dan seterusnya bertambah 5 kursi setiap baris. Banyak kursi pada baris ke-20 adalah ...',
+            options: ['110', '115', '120', '125', '130'],
+            correct: 2,
+            explanation: '\(a=25, b=5, n=20\). \(U_{20} = 25 + (19)(5) = 25 + 95 = 120\).'
+        }, {
+            id: 5,
+            text: 'Berdasarkan soal nomor 4, total kursi dalam gedung tersebut jika terdapat 20 baris adalah ...',
+            options: ['1.350', '1.400', '1.450', '1.500', '1.550'],
+            correct: 2,
+            explanation: '\(S_{20} = \\frac{20}{2}(25 + 120) = 10 \\times 145 = 1.450\).'
+        }, {
+            id: 6,
+            text: 'Suku ke-7 dari barisan geometri 5, 15, 45, ... adalah ...',
+            options: ['3.645', '3.655', '3.665', '3.675', '3.685'],
+            correct: 0,
+            explanation: '\(a=5, r=3\). \(U_7 = 5 \\times 3^{6} = 5 \\times 729 = 3.645\).'
+        }, {
+            id: 7,
+            text: 'Diketahui barisan geometri \(U_3 = 24\) dan \(U_6 = 192\). Rasio barisan tersebut adalah ...',
+            options: ['1', '2', '3', '4', '6'],
+            correct: 1,
+            explanation: '\(U_6 / U_3 = r^3 = 192/24 = 8 \\rightarrow r = 2\).'
+        }, {
+            id: 8,
+            text: 'Jumlah 6 suku pertama dari deret geometri \(2 + 8 + 32 + ...\) adalah ...',
+            options: ['2.730', '2.740', '2.750', '2.760', '2.770'],
+            correct: 0,
+            explanation: '\(a=2, r=4\). \(S_6 = \\frac{2(4^6 - 1)}{4 - 1} = \\frac{2(4096 - 1)}{3} = 2.730\).'
+        }, {
+            id: 9,
+            text: 'Bakteri membelah diri menjadi 2 setiap 30 menit. Jika mula-mula ada 50 bakteri, jumlah bakteri setelah 3 jam adalah ...',
+            options: ['1.600', '2.400', '3.200', '4.800', '6.400'],
+            correct: 2,
+            explanation: '3 jam = 6 periode. \(50 \\times 2^6 = 50 \\times 64 = 3.200\).'
+        }, {
+            id: 10,
+            text: 'Jumlah penduduk suatu kota 500.000 jiwa. Jika setiap tahun meningkat 8%, maka jumlah penduduk setelah 2 tahun adalah ...',
+            options: ['558.200', '568.200', '578.200', '583.200', '588.200'],
+            correct: 3,
+            explanation: '\(M_n = M_0(1+p)^n\). \(500.000 \\times (1,08)^2 = 500.000 \\times 1,1664 = 583.200\).'
+        }, {
+            id: 11,
+            text: 'Sebuah mesin dibeli seharga Rp100.000.000. Setiap tahun nilainya menyusut 10%. Nilai mesin setelah 3 tahun adalah ...',
+            options: ['Rp70.000.000', 'Rp71.900.000', 'Rp72.900.000', 'Rp73.900.000', 'Rp74.900.000'],
+            correct: 2,
+            explanation: '\(M_n = M_0(1-p)^n\). \(100.000.000 \\times (0,9)^3 = 100.000.000 \\times 0,729 = 72.900.000\).'
+        }, {
+            id: 12,
+            text: 'Kadar obat dalam darah pasien adalah 80 mg. Setiap jam kadar obat berkurang 20%. Kadar obat setelah 4 jam adalah ... mg.',
+            options: ['28,768', '30,768', '32,768', '34,768', '36,768'],
+            correct: 2,
+            explanation: '\(80 \\times (0,8)^4 = 80 \\times 0,4096 = 32,768\).'
+        }, {
+            id: 13,
+            text: 'Diketahui barisan aritmetika dengan \(a=7\) dan \(b=4\). Nilai \(U_{10} - U_3\) adalah ...',
+            options: ['24', '26', '28', '30', '32'],
+            correct: 2,
+            explanation: '\(U_{10}=7+9(4)=43\). \(U_3=7+2(4)=15\). Selisih = \(43 - 15 = 28\).'
+        }, {
+            id: 14,
+            text: 'Suku pertama suatu deret aritmetika adalah 10 dan suku ke-10 adalah 55. Jumlah 10 suku pertama adalah ...',
+            options: ['315', '320', '325', '330', '335'],
+            correct: 2,
+            explanation: '\(S_{10} = \\frac{10}{2}(10 + 55) = 5 \\times 65 = 325\).'
+        }, {
+            id: 15,
+            text: 'Tumpukan kayu di bagian paling bawah berjumlah 40 batang, di atasnya 37 batang, dan seterusnya hingga paling atas 4 batang. Banyak tumpukan kayu adalah ...',
+            options: ['11', '12', '13', '14', '15'],
+            correct: 2,
+            explanation: 'Barisan aritmetika: 40, 37, ..., 4. \(b = -3\). \(n = \\frac{40 - 4}{3} + 1 = 12 + 1 = 13\).'
+        }, {
+            id: 16,
+            text: 'Suku ke-5 suatu barisan geometri adalah 162. Jika rasionya 3, maka suku pertamanya adalah ...',
+            options: ['1', '2', '3', '4', '5'],
+            correct: 1,
+            explanation: '\(U_5 = a \\times 3^4 = 81a = 162 \\rightarrow a = 2\).'
+        }, {
+            id: 17,
+            text: 'Jumlah deret geometri tak hingga: \(20 + 10 + 5 + \\frac{5}{2} + ...\) adalah ...',
+            options: ['30', '35', '40', '45', '50'],
+            correct: 2,
+            explanation: '\(a=20, r=\\frac{1}{2}\). \(S_\\infty = \\frac{20}{1 - 1/2} = 40\).'
+        }, {
+            id: 18,
+            text: 'Gaji seorang karyawan saat ini Rp3.000.000. Jika gaji naik 10% setiap tahun, gaji setelah 5 tahun adalah ... (pembulatan terdekat)',
+            options: ['Rp4.431.530', 'Rp4.631.530', 'Rp4.731.530', 'Rp4.831.530', 'Rp4.931.530'],
+            correct: 3,
+            explanation: '\(3.000.000 \\times (1,1)^5 = 3.000.000 \\times 1,61051 = 4.831.530\).'
+        }, {
+            id: 19,
+            text: 'Populasi ikan di danau menurun 25% per tahun. Jika populasi saat ini 2.000 ekor, populasi setelah 2 tahun adalah ...',
+            options: ['1.025', '1.075', '1.125', '1.175', '1.225'],
+            correct: 2,
+            explanation: '\(2.000 \\times (0,75)^2 = 2.000 \\times 0,5625 = 1.125\).'
+        }, {
+            id: 20,
+            text: 'Pabrik sepatu memproduksi 80 pasang di bulan pertama, 100 pasang di bulan kedua, dan terus meningkat dengan pola yang sama. Total produksi selama 10 bulan pertama adalah ... pasang.',
+            options: ['1.600', '1.650', '1.700', '1.750', '1.800'],
+            correct: 2,
+            explanation: '\(a=80, b=20\). \(S_{10} = \\frac{10}{2}(2(80) + 9(20)) = 5(160 + 180) = 1.700\).'
+        }, {
+            id: 21,
+            text: 'Suku ke-7 dari barisan geometri 81, 27, 9, ... adalah ...',
+            options: ['\(\\frac{1}{3}\)', '\(\\frac{1}{6}\)', '\(\\frac{1}{9}\)', '\(\\frac{1}{12}\)', '\(\\frac{1}{18}\)'],
+            correct: 2,
+            explanation: '\(a=81, r=\\frac{1}{3}\). \(U_7 = 81 \\times (\\frac{1}{3})^6 = \\frac{81}{729} = \\frac{1}{9}\).'
+        }, {
+            id: 22,
+            text: 'Diketahui barisan aritmetika dengan \(U_4 = 14\) dan \(U_8 = 30\). Nilai \(U_{12}\) adalah ...',
+            options: ['38', '42', '44', '46', '48'],
+            correct: 3,
+            explanation: '\(U_8 - U_4 = 4b = 16 \\rightarrow b=4\). \(U_4 = a+12=14 \\rightarrow a=2\). \(U_{12} = 2 + 11(4) = 46\).'
+        }, {
+            id: 23,
+            text: 'Seorang nasabah menabung Rp10.000.000 dengan bunga majemuk 12% per tahun. Saldo setelah 2 tahun adalah ...',
+            options: ['Rp11.544.000', 'Rp12.044.000', 'Rp12.544.000', 'Rp13.044.000', 'Rp13.544.000'],
+            correct: 2,
+            explanation: '\(10.000.000 \\times (1,12)^2 = 10.000.000 \\times 1,2544 = 12.544.000\).'
+        }, {
+            id: 24,
+            text: 'Zat radioaktif berkurang 30% setiap tahun. Jika massa awal 1.500 gram, massa yang tersisa setelah 3 tahun adalah ... gram.',
+            options: ['486,5', '504,5', '514,5', '524,5', '534,5'],
+            correct: 2,
+            explanation: '\(1.500 \\times (0,7)^3 = 1.500 \\times 0,343 = 514,5\).'
+        }, {
+            id: 25,
+            text: 'Baris pertama dari susunan kursi berbentuk piramida berisi 20 kursi, baris ke-10 berisi 56 kursi. Jika selisih antar baris tetap, banyak kursi pada baris ke-6 adalah ...',
+            options: ['36', '38', '40', '42', '44'],
+            correct: 2,
+            explanation: '\(a=20, U_{10}=56\). \(b = \\frac{56-20}{9} = 4\). \(U_6 = 20 + 5(4) = 40\).'
+        }];
+
+        // ============================================================
+        //  RENDER & LOGIC
+        // ============================================================
+        const container = document.getElementById('quizContainer');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        let userAnswers = new Array(questions.length).fill(null);
+        let isLocked = new Array(questions.length).fill(false);
+
+        function render() {
+            let html = '';
+            questions.forEach((q, idx) => {
+                const locked = isLocked[idx];
+                const selected = userAnswers[idx];
+                const isCorrect = locked && (selected === q.correct);
+                const isWrong = locked && (selected !== null && selected !== q.correct);
+
+                let cardClass = 'question-card';
+                if (locked) {
+                    cardClass += isCorrect ? ' correct' : ' wrong';
+                }
+
+                html += `<div class="${cardClass}" id="qcard-${idx}">`;
+                html += `<div class="q-number">Soal ${idx+1}</div>`;
+                html += `<div class="q-text">${q.text}</div>`;
+                html += `<div class="options">`;
+
+                q.options.forEach((opt, optIdx) => {
+                    const checked = (selected === optIdx) ? 'checked' : '';
+                    const disabled = locked ? 'disabled' : '';
+                    html += `
+                            <label>
+                                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                });
+
+                html += `</div>`;
+                html += `<div class="action-area">`;
+                html +=
+                    `<button class="check-btn" id="check-${idx}" ${locked ? 'disabled' : ''}>${locked ? '✓ Diperiksa' : 'Periksa Jawaban'}</button>`;
+                html += `</div>`;
+
+                let feedbackClass = 'feedback';
+                let feedbackHtml = '';
+                if (locked) {
+                    feedbackClass += ' show';
+                    feedbackClass += isCorrect ? ' correct' : ' wrong';
+                    const icon = isCorrect ? '✅' : '❌';
+                    const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+                    const correctAns = q.options[q.correct];
+                    feedbackHtml = `
+                            <div class="${feedbackClass}">
+                                <strong>${icon} ${status}</strong>
+                                <div class="explain">💡 ${q.explanation}</div>
+                                <div style="margin-top:4px;font-size:0.9rem;">Jawaban yang benar: <strong>${correctAns}</strong></div>
+                            </div>
+                        `;
+                } else {
+                    feedbackHtml = `<div class="feedback"></div>`;
+                }
+                html += feedbackHtml;
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+            updateScore();
+
+            questions.forEach((_, idx) => {
+                const btn = document.getElementById(`check-${idx}`);
+                if (btn) {
+                    btn.addEventListener('click', () => handleCheck(idx));
+                }
+                const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        if (!isLocked[idx]) {
+                            userAnswers[idx] = parseInt(e.target.value);
+                        }
+                    });
+                });
+            });
+
+            // Re-render math
+            if (window.renderMathInElement) {
+                window.renderMathInElement(container, {
+                    delimiters: [
+                        { left: '\\\\(', right: '\\\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function handleCheck(idx) {
+            if (isLocked[idx]) return;
+            const selected = userAnswers[idx];
+            if (selected === null || selected === undefined) {
+                alert('Pilih salah satu opsi terlebih dahulu!');
+                return;
+            }
+            isLocked[idx] = true;
+            render();
+        }
+
+        function updateScore() {
+            let correctCount = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (isLocked[i] && userAnswers[i] === questions[i].correct) {
+                    correctCount++;
+                }
+            }
+            scoreSpan.textContent = correctCount;
+        }
+
+        function resetQuiz() {
+            userAnswers = new Array(questions.length).fill(null);
+            isLocked = new Array(questions.length).fill(false);
+            render();
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+        render();
+    </script>
+
+</body>
+</html>
