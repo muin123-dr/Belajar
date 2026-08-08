@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistika, Kombinatorika, dan Peluang - TKA SMA</title>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f2f7fc;
+            color: #1a2a3a;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .sidebar {
+            flex: 0 0 280px;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px 16px;
+            box-shadow: 0 8px 30px rgba(0, 20, 40, 0.06);
+            border: 1px solid #e4ecf5;
+        }
+
+        .sidebar h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4a6a85;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e4ecf5;
+            padding-bottom: 8px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #1a3a5a;
+            text-decoration: none;
+            transition: 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar ul li a:hover {
+            background: #eef4fa;
+            border-left-color: #2d7fc1;
+            color: #0b2b44;
+        }
+
+        .sidebar ul li a.active {
+            background: #eaf1f8;
+            border-left-color: #2d7fc1;
+            font-weight: 600;
+            color: #0b2b44;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .header-title {
+            background: linear-gradient(135deg, #0b2b44 0%, #1a4a6b 100%);
+            color: #fff;
+            padding: 30px 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(11, 43, 68, 0.15);
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .header-title .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.04);
+            border: 1px solid #eef4fa;
+            transition: box-shadow 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 40, 0.06);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0b2b44;
+            border-left: 6px solid #2d7fc1;
+            padding-left: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a4a6b;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .card h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #1a4a6b;
+            margin-top: 18px;
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            margin-bottom: 14px;
+            color: #2a3a4a;
+        }
+
+        .card ul,
+        .card ol {
+            margin-left: 20px;
+            margin-bottom: 14px;
+        }
+
+        .card li {
+            margin-bottom: 6px;
+        }
+
+        /* ---- Gambar ---- */
+        .fig-container {
+            text-align: center;
+            margin: 18px 0 22px 0;
+            background: #f8faff;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid #e4ecf5;
+        }
+        .fig-container img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 8px;
+        }
+        .fig-container .caption {
+            font-size: 0.8rem;
+            color: #6a8aa0;
+            margin-top: 6px;
+        }
+
+        .rumus-box {
+            background: #f0f7ff;
+            border: 1px solid #d4e2f0;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 18px 0;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .rumus-box .label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4a7a9a;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .example-box {
+            background: #f8faff;
+            border-left: 5px solid #2d7fc1;
+            border-radius: 0 16px 16px 0;
+            padding: 18px 22px;
+            margin: 18px 0;
+        }
+
+        .example-box .label {
+            font-weight: 700;
+            color: #0b2b44;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example-box .label::before {
+            content: "📘";
+        }
+
+        .solution-box {
+            background: #eaf4ea;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 12px;
+            border: 1px solid #bcd9bc;
+        }
+
+        .solution-box .step {
+            font-weight: 600;
+            color: #0b4a2a;
+        }
+
+        .warning-box {
+            background: #fff7ec;
+            border-left: 5px solid #e67e22;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .warning-box strong {
+            color: #8a4a0a;
+        }
+
+        .tip-box {
+            background: #f0faf4;
+            border-left: 5px solid #1fa86b;
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 18px 0;
+        }
+
+        .tip-box strong {
+            color: #0b4a2a;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-grid .col {
+            background: #f8faff;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 1px solid #e4ecf5;
+        }
+
+        .info-grid .col h4 {
+            margin-top: 0;
+            border-bottom: 2px solid #d4e2f0;
+            padding-bottom: 6px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 18px 0 24px;
+            border-radius: 14px;
+            border: 1px solid #e4ecf3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+
+        th {
+            background: #eaf1f8;
+            color: #0b2b44;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 2px solid #cbdae6;
+        }
+
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #eaeef3;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                flex: 1 1 100%;
+                position: static;
+                max-height: none;
+                margin-bottom: 10px;
+            }
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .sidebar ul li {
+                margin-bottom: 0;
+            }
+            .sidebar ul li a {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+                border-left: none;
+                border-bottom: 2px solid transparent;
+            }
+            .sidebar ul li a:hover {
+                border-left-color: transparent;
+                border-bottom-color: #2d7fc1;
+            }
+            .sidebar ul li a.active {
+                border-left-color: transparent;
+                border-bottom-color: #2d7fc1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title h1 {
+                font-size: 1.6rem;
+            }
+            .card {
+                padding: 16px;
+            }
+            .rumus-box {
+                font-size: 0.95rem;
+                padding: 14px;
+            }
+            .container {
+                padding: 10px 8px;
+            }
+            .fig-container img {
+                max-height: 200px;
+            }
+        }
+
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            body {
+                background: #fff;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+            .header-title {
+                background: #0b2b44 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .rumus-box,
+            .example-box,
+            .solution-box,
+            .warning-box,
+            .tip-box,
+            .fig-container {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .card ul ul {
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <nav class="sidebar" id="toc">
+            <h2>📖 Daftar Isi</h2>
+            <ul>
+                <li><a href="#peta-materi">Peta Materi</a></li>
+                <li><a href="#statistika">I. Statistika</a>
+                    <ul style="margin-left: 12px; list-style: none; font-size: 0.85rem;">
+                        <li><a href="#stat-pengertian">Pengertian</a></li>
+                        <li><a href="#stat-interpretasi">Interpretasi Grafik</a></li>
+                        <li><a href="#stat-mean">Mean</a></li>
+                        <li><a href="#stat-median">Median</a></li>
+                        <li><a href="#stat-modus">Modus &amp; Range</a></li>
+                        <li><a href="#stat-kuartil">Kuartil</a></li>
+                        <li><a href="#stat-tabel">Tabel Frekuensi</a></li>
+                        <li><a href="#stat-pengaruh">Pengaruh Perubahan Data</a></li>
+                    </ul>
+                </li>
+                <li><a href="#kombinatorika">II. Kombinatorika</a>
+                    <ul style="margin-left: 12px; list-style: none; font-size: 0.85rem;">
+                        <li><a href="#komb-aturan">Aturan Perkalian &amp; Penjumlahan</a></li>
+                        <li><a href="#komb-faktorial">Faktorial (Lengkap!)</a></li>
+                        <li><a href="#komb-permutasi">Permutasi</a></li>
+                        <li><a href="#komb-syarat">Permutasi dengan Syarat</a></li>
+                        <li><a href="#komb-melingkar">Permutasi Melingkar</a></li>
+                        <li><a href="#komb-kombinasi">Kombinasi</a></li>
+                        <li><a href="#komb-vs">Permutasi vs Kombinasi</a></li>
+                    </ul>
+                </li>
+                <li><a href="#peluang">III. Peluang</a>
+                    <ul style="margin-left: 12px; list-style: none; font-size: 0.85rem;">
+                        <li><a href="#pel-pengertian">Pengertian &amp; Ruang Sampel</a></li>
+                        <li><a href="#pel-komplemen">Komplemen</a></li>
+                        <li><a href="#pel-gabungan">Gabungan &amp; Irisan</a></li>
+                        <li><a href="#pel-bersyarat">Peluang Bersyarat (Lengkap!)</a></li>
+                        <li><a href="#pel-pengembalian">Dengan/Tanpa Pengembalian</a></li>
+                        <li><a href="#pel-frekuensi">Frekuensi Harapan &amp; Strategi</a></li>
+                    </ul>
+                </li>
+                <li><a href="#perbedaan">IV. Cara Membedakan Konsep</a></li>
+                <li><a href="#ringkasan">V. Ringkasan Rumus</a></li>
+                <li><a href="#jebakan">VI. Jebakan TKA</a></li>
+                <li><a href="#strategi">VII. Strategi Cepat</a></li>
+                <li><a href="#checklist">VIII. Checklist</a></li>
+                <li><a href="#super">IX. Rangkuman Super Cepat</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+
+            <div class="header-title">
+                <h1>📘 Statistika, Kombinatorika, dan Peluang <small>TKA SMA</small></h1>
+                <div class="badge">Materi Lengkap · Rumus · Strategi · Jebakan</div>
+            </div>
+
+            <!-- ===== PETA MATERI ===== -->
+            <div class="card" id="peta-materi">
+                <h2>🎯 Peta Materi</h2>
+                <p>Secara umum, materi ini terbagi menjadi tiga kelompok besar:</p>
+                <div class="info-grid">
+                    <div class="col section-stat">
+                        <h4>📊 Statistika</h4>
+                        <ul>
+                            <li>Interpretasi tabel dan grafik</li>
+                            <li>Mean, Median, Modus</li>
+                            <li>Jangkauan (Range), Kuartil</li>
+                            <li>Rata-rata gabungan</li>
+                            <li>Perubahan data dan pengaruhnya terhadap mean/median</li>
+                            <li>Data tunggal dan tabel frekuensi</li>
+                        </ul>
+                    </div>
+                    <div class="col section-komb">
+                        <h4>🔢 Kombinatorika</h4>
+                        <ul>
+                            <li>Aturan perkalian dan penjumlahan</li>
+                            <li>Faktorial (lengkap!)</li>
+                            <li>Permutasi (dengan syarat, melingkar)</li>
+                            <li>Kombinasi</li>
+                        </ul>
+                    </div>
+                    <div class="col section-pel">
+                        <h4>🎲 Peluang</h4>
+                        <ul>
+                            <li>Ruang sampel, peluang kejadian</li>
+                            <li>Komplemen, kejadian saling lepas &amp; independen</li>
+                            <li>Peluang bersyarat (lengkap!)</li>
+                            <li>Pengambilan dengan/tanpa pengembalian</li>
+                            <li>Frekuensi harapan &amp; strategi "setidaknya satu"</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <strong>🔑 Kunci utama TKA:</strong> jangan hanya menghafalkan rumus. <em>Pahami jenis masalah yang sedang ditanyakan.</em>
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN I: STATISTIKA ===== -->
+            <div class="card" id="statistika">
+                <h2>📊 BAGIAN I — STATISTIKA</h2>
+                <div id="stat-pengertian">
+                    <h3>1. Pengertian Statistika</h3>
+                    <p>Statistika adalah ilmu yang berkaitan dengan pengumpulan, penyajian, pengolahan, analisis, dan interpretasi data.</p>
+                    <p>Dalam TKA, statistika sering disajikan dalam bentuk: tabel, diagram batang, diagram garis, diagram lingkaran, tabel frekuensi, atau data dalam bentuk soal cerita. Kemampuan yang diuji bukan hanya menghitung, tetapi juga membaca dan menarik kesimpulan dari data.</p>
+                </div>
+                <div id="stat-interpretasi">
+                    <h3>2. Interpretasi Data dari Grafik</h3>
+
+                    <h4>A. Grafik Garis</h4>
+                    <p>Grafik garis biasanya digunakan untuk menunjukkan perubahan data dari waktu ke waktu.</p>
+
+                    <!-- ===== GAMBAR GRAFIK ===== -->
+                    <div class="fig-container">
+                        <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/001.png"
+                             alt="Grafik garis contoh"
+                             loading="lazy"
+                             onerror="this.style.display='none'">
+                        <div class="caption">Contoh grafik garis perubahan data dari waktu ke waktu</div>
+                    </div>
+
+                    <p><strong>Cara membaca:</strong> Garis naik → nilai meningkat. Garis turun → nilai menurun. Garis mendatar → nilai tetap.</p>
+                    <p>Perhatikan pertanyaan: <em>"Pada tahun berapa jumlah lulusan meningkat paling besar?"</em> Jangan hanya mencari angka terbesar. Hitung perubahan antarperiode:</p>
+                    <div class="rumus-box">
+                        <span class="label">Perubahan</span>
+                        \[ \text{Perubahan} = \text{nilai sekarang} - \text{nilai sebelumnya} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>2021 → 2022: \(95-80=15\)<br>
+                        2022 → 2023: \(100-95=5\)<br>
+                        2023 → 2024: \(90-100=-10\)<br>
+                        2024 → 2025: \(120-90=30\)</p>
+                        <div class="solution-box">
+                            <span class="step">Kesimpulan:</span> Kenaikan terbesar terjadi pada 2025, yaitu 30 siswa.
+                        </div>
+                    </div>
+
+                    <h4>B. Persentase Kenaikan</h4>
+                    <div class="rumus-box">
+                        <span class="label">Persentase Kenaikan</span>
+                        \[ \frac{b-a}{a} \times 100\% \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Jumlah siswa tahun 2024 = 80. Tahun 2025 = 100.</p>
+                        <div class="solution-box">
+                            Kenaikan: \(100-80=20\)<br>
+                            Persentase kenaikan: \(\frac{20}{80}\times100\% = 25\%\)
+                        </div>
+                    </div>
+                    <div class="warning-box">
+                        <strong>⚠️ Ingat!</strong> Kenaikan terbesar belum tentu berarti persentase kenaikan terbesar.
+                    </div>
+                </div>
+                <div id="stat-mean">
+                    <h3>3. Mean (Rata-rata)</h3>
+                    <div class="rumus-box">
+                        <span class="label">Rumus Mean</span>
+                        \[ \boxed{\bar{x} = \frac{\sum x}{n}} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Data: \(6, 8, 10, 12, 14\)</p>
+                        <div class="solution-box">
+                            Jumlah: \(6+8+10+12+14=50\)<br>
+                            Banyak data = 5<br>
+                            \(\bar{x} = \frac{50}{5} = 10\)
+                        </div>
+                    </div>
+                    <h4>Trik Mean: Ubah Mean Menjadi Total</h4>
+                    <div class="rumus-box">
+                        <span class="label">Total Data</span>
+                        \[ \boxed{\text{Total} = \text{mean} \times \text{banyak data}} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh TKA</div>
+                        <p>Rata-rata 5 hari = 20. Hari ke-6 rata-rata menjadi 22. Berapa pengunjung hari ke-6?</p>
+                        <div class="solution-box">
+                            <span class="step">Langkah 1:</span> Total 5 hari = \(5 \times 20 = 100\)<br>
+                            <span class="step">Langkah 2:</span> Total 6 hari = \(6 \times 22 = 132\)<br>
+                            <span class="step">Langkah 3:</span> Hari ke-6 = \(132 - 100 = 32\)<br>
+                            <strong>Jawaban: 32 orang</strong>
+                        </div>
+                    </div>
+                    <h4>Mean Jika Data Ditambahkan/Dihapus</h4>
+                    <div class="rumus-box">
+                        <span class="label">Data Ditambahkan</span>
+                        \[ \text{Mean baru} = \frac{n\bar{x} + a}{n+1} \]
+                    </div>
+                    <div class="rumus-box">
+                        <span class="label">Data Dihapus</span>
+                        \[ \text{Mean baru} = \frac{n\bar{x} - a}{n-1} \]
+                    </div>
+                    <div class="warning-box">
+                        <strong>⚠️ Jebakan:</strong> Jangan langsung hitung rata-rata sisa data. Gunakan total data terlebih dahulu.
+                    </div>
+                    <h4>Mean Gabungan</h4>
+                    <div class="rumus-box">
+                        <span class="label">Rata-rata Gabungan</span>
+                        \[ \boxed{\bar{x}_{\text{gab}} = \frac{n_1\bar{x}_1 + n_2\bar{x}_2}{n_1 + n_2}} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Kelas A: 20 siswa, rata-rata 70. Kelas B: 30 siswa, rata-rata 80.</p>
+                        <div class="solution-box">
+                            \(\bar{x} = \frac{20(70) + 30(80)}{50} = \frac{1400 + 2400}{50} = 76\)
+                        </div>
+                    </div>
+                </div>
+                <div id="stat-median">
+                    <h3>4. Median</h3>
+                    <p>Median adalah nilai tengah setelah data diurutkan. <span class="warning-box" style="display:inline-block; padding:2px 12px; font-weight:600;">⚠️ Data harus diurutkan!</span></p>
+                    <h4>Banyak Data Ganjil</h4>
+                    <div class="rumus-box">
+                        \[ \text{Posisi median} = \frac{n+1}{2} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Data: \(3, 5, 7, 8, 10\)</p>
+                        <div class="solution-box">
+                            \(n=5\), posisi = 3 → median = 7
+                        </div>
+                    </div>
+                    <h4>Banyak Data Genap</h4>
+                    <p>Median adalah rata-rata dua data tengah.</p>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Data: \(2, 4, 6, 8, 10, 12\)</p>
+                        <div class="solution-box">
+                            Dua data tengah: 6 dan 8 → median = 7
+                        </div>
+                    </div>
+                </div>
+                <div id="stat-modus">
+                    <h3>5. Modus dan Jangkauan</h3>
+                    <h4>Modus</h4>
+                    <p>Nilai yang paling sering muncul.</p>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Data: \(2, 3, 3, 4, 5, 3, 6\)</p>
+                        <div class="solution-box">
+                            Modus = 3 (muncul 3 kali)
+                        </div>
+                    </div>
+                    <h4>Jangkauan (Range)</h4>
+                    <div class="rumus-box">
+                        \[ \boxed{R = \text{nilai maksimum} - \text{nilai minimum}} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Data: \(4, 7, 9, 12, 15\)</p>
+                        <div class="solution-box">
+                            \(R = 15 - 4 = 11\)
+                        </div>
+                    </div>
+                </div>
+                <div id="stat-kuartil">
+                    <h3>6. Kuartil</h3>
+                    <ul>
+                        <li>\(Q_1\) = kuartil bawah (25% data)</li>
+                        <li>\(Q_2\) = median (50% data)</li>
+                        <li>\(Q_3\) = kuartil atas (75% data)</li>
+                    </ul>
+                    <div class="rumus-box">
+                        <span class="label">Jangkauan Antarkuartil (IQR)</span>
+                        \[ \boxed{IQR = Q_3 - Q_1} \]
+                    </div>
+                </div>
+                <div id="stat-tabel">
+                    <h3>7. Tabel Frekuensi</h3>
+                    <div class="rumus-box">
+                        <span class="label">Mean Tabel Frekuensi</span>
+                        \[ \boxed{\bar{x} = \frac{\sum fx}{\sum f}} \]
+                    </div>
+                    <p>Untuk median pada tabel frekuensi, gunakan frekuensi kumulatif.</p>
+                </div>
+                <div id="stat-pengaruh">
+                    <h3>8. Pengaruh Perubahan Data</h3>
+                    <p>Jika semua data ditambah \(k\), mean bertambah \(k\). Jika semua data dikali \(k\), mean dikali \(k\).</p>
+                </div>
+                <div class="tip-box">
+                    <strong>📌 Kesimpulan Statistika:</strong><br>
+                    • Mean → Total = mean × n<br>
+                    • Median → Urutkan data.<br>
+                    • Modus → Paling sering muncul.<br>
+                    • Range → max − min.<br>
+                    • Persentase perubahan → \(\frac{\text{perubahan}}{\text{nilai awal}} \times 100\%\)
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN II: KOMBINATORIKA ===== -->
+            <div class="card" id="kombinatorika">
+                <h2>🔢 BAGIAN II — KOMBINATORIKA</h2>
+
+                <div id="komb-aturan">
+                    <h3>1. Aturan Perkalian dan Penjumlahan</h3>
+                    <h4>Perkalian</h4>
+                    <div class="rumus-box">
+                        \[ \boxed{\text{Total} = a \times b} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>3 baju × 4 celana = 12 kombinasi.</p>
+                    </div>
+                    <h4>Penjumlahan</h4>
+                    <div class="rumus-box">
+                        \[ \boxed{\text{Total} = a + b} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>4 minuman panas + 3 minuman dingin = 7 pilihan.</p>
+                    </div>
+                </div>
+
+                <div id="komb-faktorial">
+                    <h3>2. Faktorial — Penjelasan Lengkap!</h3>
+
+                    <h4>📖 Apa itu Faktorial?</h4>
+                    <p>Faktorial adalah perkalian beruntun dari suatu bilangan bulat positif, mulai dari bilangan itu sendiri sampai dengan 1.</p>
+                    <div class="rumus-box">
+                        \[ \boxed{n! = n \times (n-1) \times (n-2) \times \dots \times 2 \times 1} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh Dasar</div>
+                        <p>\(4! = 4 \times 3 \times 2 \times 1 = 24\)<br>
+                        \(5! = 5 \times 4 \times 3 \times 2 \times 1 = 120\)</p>
+                    </div>
+
+                    <h4>🔗 Sifat Rekursif (Pola Berantai)</h4>
+                    <div class="rumus-box">
+                        \[ \boxed{n! = n \times (n-1)!} \]
+                    </div>
+                    <p>Artinya: \(5! = 5 \times 4!\). Jika hafal \(4! = 24\), maka \(5! = 120\) tanpa hitung dari awal.</p>
+
+                    <h4>🤔 Kenapa \(0! = 1\)?</h4>
+                    <div class="warning-box">
+                        <strong>⚠️ Jangan pernah menganggap \(0! = 0\)!</strong>
+                    </div>
+                    <p><strong>Alasan 1 (Pola Pembagian):</strong><br>
+                    \(\frac{5!}{5}=4!\), \(\frac{4!}{4}=3!\), \(\frac{3!}{3}=2!\), \(\frac{2!}{2}=1!\), \(\frac{1!}{1}=0!\) → \(\frac{1}{1}=1\). Jadi \(0! = 1\).</p>
+                    <p><strong>Alasan 2 (Kombinatorika):</strong> Berapa cara menyusun 0 buku di rak? Hanya <strong>1 cara</strong> (rak kosong).</p>
+                    <div class="tip-box">
+                        <strong>💡 Hafalkan:</strong> \(\boxed{0! = 1}\) adalah harga mati!
+                    </div>
+
+                    <h4>🚨 Jebakan Faktorial di TKA</h4>
+                    <div class="warning-box">
+                        <strong>Jebakan 1 — Penjumlahan:</strong> \(3! + 2! \neq 5!\)<br>
+                        ✅ \(3! + 2! = 6 + 2 = 8\)
+                    </div>
+                    <div class="warning-box">
+                        <strong>Jebakan 2 — Perkalian:</strong> \(3! \times 2! \neq 6!\)<br>
+                        ✅ \(3! \times 2! = 6 \times 2 = 12\)
+                    </div>
+                    <div class="warning-box">
+                        <strong>Jebakan 3 — Pembagian (Coret!):</strong><br>
+                        \(\frac{6!}{4!} = \frac{6 \times 5 \times 4 \times 3 \times 2 \times 1}{4 \times 3 \times 2 \times 1} = 6 \times 5 = 30\)
+                    </div>
+
+                    <h4>📊 Tabel Cepat Wajib Hafal</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>\(n\)</th><th>\(n!\)</th><th>Hasil</th></tr></thead>
+                            <tbody>
+                                <tr><td>0</td><td>0!</td><td><strong>1</strong></td></tr>
+                                <tr><td>1</td><td>1!</td><td>1</td></tr>
+                                <tr><td>2</td><td>2!</td><td>2</td></tr>
+                                <tr><td>3</td><td>3!</td><td>6</td></tr>
+                                <tr><td>4</td><td>4!</td><td>24</td></tr>
+                                <tr><td>5</td><td>5!</td><td>120</td></tr>
+                                <tr><td>6</td><td>6!</td><td>720</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p><em>Di TKA, faktorial di atas 6 biasanya akan saling mencoret dengan penyebut, jadi tidak perlu dihitung utuh.</em></p>
+                </div>
+
+                <div id="komb-permutasi">
+                    <h3>3. Permutasi</h3>
+                    <div class="rumus-box">
+                        <span class="label">Permutasi</span>
+                        \[ \boxed{P(n,r) = \frac{n!}{(n-r)!}} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Memilih ketua, wakil, sekretaris dari 6 siswa.</p>
+                        <div class="solution-box">
+                            \(P(6,3) = \frac{6!}{3!} = 6 \times 5 \times 4 = 120\)
+                        </div>
+                    </div>
+                    <h4>Permutasi Semua Objek</h4>
+                    <div class="rumus-box">
+                        \[ \boxed{n!} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>5 buku berbeda disusun berjajar: \(5! = 120\).</p>
+                    </div>
+                </div>
+
+                <div id="komb-syarat">
+                    <h3>4. Permutasi dengan Syarat</h3>
+                    <h4>Berdampingan</h4>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>A, B, C, D, E. A dan B harus berdampingan.</p>
+                        <div class="solution-box">
+                            Blok (AB) + C + D + E = 4 objek → \(4! = 24\)<br>
+                            Internal AB: \(2! = 2\)<br>
+                            Total = \(24 \times 2 = 48\)
+                        </div>
+                    </div>
+                    <h4>Tidak Berdampingan</h4>
+                    <div class="rumus-box">
+                        \[ \text{Total} - \text{Berdampingan} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>5 objek, A dan B tidak berdampingan.</p>
+                        <div class="solution-box">
+                            Total = \(5! = 120\)<br>
+                            Berdampingan = \(4! \times 2! = 48\)<br>
+                            Tidak = \(120 - 48 = 72\)
+                        </div>
+                    </div>
+                    <h4>Kasus "Di Antara"</h4>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>5 stan, C di antara A dan D (A-C-D atau D-C-A).</p>
+                        <div class="solution-box">
+                            Pilih posisi ketiga objek: \(\binom{5}{3} = 10\)<br>
+                            Susunan A,C,D: 2 cara<br>
+                            2 objek lain: \(2! = 2\)<br>
+                            Total = \(10 \times 2 \times 2 = 40\)
+                        </div>
+                    </div>
+                </div>
+
+                <div id="komb-melingkar">
+                    <h3>5. Permutasi Melingkar</h3>
+                    <div class="rumus-box">
+                        \[ \boxed{(n-1)!} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>6 orang duduk melingkar: \((6-1)! = 5! = 120\).</p>
+                    </div>
+                </div>
+
+                <div id="komb-kombinasi">
+                    <h3>6. Kombinasi</h3>
+                    <div class="rumus-box">
+                        <span class="label">Kombinasi</span>
+                        \[ \boxed{C(n,r) = \binom{n}{r} = \frac{n!}{r!(n-r)!}} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Dari 10 siswa dipilih 3 orang (tanpa jabatan).</p>
+                        <div class="solution-box">
+                            \(C(10,3) = \frac{10!}{3!7!} = 120\)
+                        </div>
+                    </div>
+                </div>
+
+                <div id="komb-vs">
+                    <h3>7. Permutasi vs Kombinasi</h3>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Situasi</th><th>Gunakan</th></tr></thead>
+                            <tbody>
+                                <tr><td>Ketua, wakil, sekretaris</td><td>Permutasi</td></tr>
+                                <tr><td>Menyusun barisan</td><td>Permutasi</td></tr>
+                                <tr><td>Memilih anggota kelompok</td><td>Kombinasi</td></tr>
+                                <tr><td>Memilih siswa untuk lomba</td><td>Kombinasi</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tip-box">
+                        <strong>🔑 Trik:</strong> Posisi/peran berbeda → <strong>Permutasi</strong>. Hanya memilih → <strong>Kombinasi</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN III: PELUANG ===== -->
+            <div class="card" id="peluang">
+                <h2>🎲 BAGIAN III — PELUANG</h2>
+
+                <div id="pel-pengertian">
+                    <h3>1. Pengertian Peluang dan Ruang Sampel</h3>
+                    <div class="rumus-box">
+                        <span class="label">Peluang Kejadian</span>
+                        \[ \boxed{P(A) = \frac{n(A)}{n(S)}} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Dadu: \(S=\{1,2,3,4,5,6\}\). A = genap \(\{2,4,6\}\).</p>
+                        <div class="solution-box">
+                            \(P(A) = \frac{3}{6} = \frac{1}{2}\)
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pel-komplemen">
+                    <h3>2. Peluang Komplemen</h3>
+                    <div class="rumus-box">
+                        \[ \boxed{P(A^c) = 1 - P(A)} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Peluang lulus = 0,8 → tidak lulus = \(1 - 0,8 = 0,2\).</p>
+                    </div>
+                </div>
+
+                <div id="pel-gabungan">
+                    <h3>3. Gabungan dan Irisan</h3>
+                    <h4>"DAN" (Irisan) — Independen</h4>
+                    <div class="rumus-box">
+                        \[ \boxed{P(A \cap B) = P(A) \times P(B)} \]
+                    </div>
+                    <h4>"ATAU" (Gabungan)</h4>
+                    <div class="rumus-box">
+                        \[ \boxed{P(A \cup B) = P(A) + P(B) - P(A \cap B)} \]
+                    </div>
+                    <p>Jika saling lepas (\(P(A \cap B)=0\)): \(P(A \cup B) = P(A) + P(B)\).</p>
+                </div>
+
+                <div id="pel-bersyarat">
+                    <h3>4. Peluang Bersyarat — Penjelasan Lengkap!</h3>
+
+                    <h4>📖 Definisi</h4>
+                    <p>Peluang bersyarat adalah peluang terjadinya kejadian <strong>A</strong> dengan <strong>syarat</strong> kejadian <strong>B</strong> sudah terjadi atau diketahui terjadi.</p>
+                    <div class="rumus-box">
+                        \[ \boxed{P(A|B) = \frac{P(A \cap B)}{P(B)}} \]
+                    </div>
+                    <p><strong>Dibaca:</strong> "Peluang A terjadi, jika diketahui B telah terjadi."</p>
+                    <p><strong>Makna:</strong> Karena B sudah terjadi, ruang sampel menyempit menjadi <strong>B</strong> saja. Oleh karena itu, kita bagi dengan \(P(B)\).</p>
+
+                    <div class="tip-box">
+                        <strong>🔑 Kata Kunci di Soal:</strong><br>
+                        "Diketahui bahwa...", "Jika diketahui...", "Dengan syarat...", "Setelah diketahui bahwa..." → Langsung gunakan rumus bersyarat!
+                    </div>
+
+                    <div class="example-box">
+                        <div class="label">Contoh Soal (Bola Merah & Biru)</div>
+                        <p>Dalam kotak ada 5 bola merah dan 3 bola biru. Diambil 2 bola secara berurutan <strong>tanpa pengembalian</strong>. Berapa peluang bola kedua biru, <strong>jika diketahui</strong> bola pertama merah?</p>
+                        <div class="solution-box">
+                            <span class="step">Langkah 1:</span> Definisikan A = bola kedua biru, B = bola pertama merah.<br>
+                            <span class="step">Langkah 2:</span> \(P(B) = \frac{5}{8}\)<br>
+                            <span class="step">Langkah 3:</span> \(P(A \cap B) = \frac{5}{8} \times \frac{3}{7} = \frac{15}{56}\)<br>
+                            <span class="step">Langkah 4:</span> \(P(A|B) = \frac{\frac{15}{56}}{\frac{5}{8}} = \frac{15}{56} \times \frac{8}{5} = \frac{3}{7}\)<br>
+                            <strong>Kesimpulan:</strong> Peluang bola kedua biru dengan syarat bola pertama merah adalah \(\frac{3}{7}\).
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pel-pengembalian">
+                    <h3>5. Dengan / Tanpa Pengembalian — Penjelasan Lengkap!</h3>
+
+                    <h4>📦 Contoh Soal Kotak Undian (Diperbaiki)</h4>
+                    <div class="example-box">
+                        <div class="label">Soal</div>
+                        <p>Sebuah kotak berisi:
+                            <ul>
+                                <li>6 kertas "Minuman Gratis"</li>
+                                <li>4 kertas "Makanan Gratis"</li>
+                                <li>5 kertas kosong</li>
+                            </ul>
+                            <strong>Aturan:</strong> Kosong selalu <strong>dikembalikan</strong>. Hadiah <strong>tidak dikembalikan</strong>.<br>
+                            Ani adalah orang ke-5. Jika 4 orang sebelumnya <strong>semuanya mendapat kosong</strong>, berapa peluang Ani mendapat hadiah?
+                        </p>
+                        <div class="solution-box">
+                            <span class="step">Langkah 1:</span> Total awal = 15. Hadiah = 10. Kosong = 5.<br>
+                            <span class="step">Langkah 2:</span> 4 orang ambil kosong. Karena kosong dikembalikan, jumlah kosong tetap 5, hadiah tetap 10, total tetap 15.<br>
+                            <span class="step">Langkah 3:</span> Peluang Ani = \(\frac{10}{15} = \frac{2}{3}\).<br>
+                            <strong>Kesimpulan:</strong> Peluang Ani mendapat hadiah adalah \(\frac{2}{3}\).
+                        </div>
+                    </div>
+
+                    <h4>📊 Perbandingan (Supaya Lebih Paham)</h4>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Skenario 4 Orang Sebelumnya</th><th>Peluang Ani Hadiah</th></tr></thead>
+                            <tbody>
+                                <tr><td>Ambil kosong (dikembalikan)</td><td>\(\frac{10}{15} = \frac{2}{3}\)</td></tr>
+                                <tr><td>Ambil hadiah (misal 2 minuman + 2 makanan)</td><td>\(\frac{6}{11}\)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tip-box">
+                        <strong>💡 Pelajaran:</strong><br>
+                        • Jika dikembalikan → total tetap.<br>
+                        • Jika tidak dikembalikan → total dan jumlah hadiah berkurang.
+                    </div>
+
+                    <h4>Contoh: Dengan Pengembalian</h4>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>4 merah, 6 biru. Diambil 1, dikembalikan. Peluang merah kemudian biru:</p>
+                        <div class="solution-box">
+                            \(\frac{4}{10} \times \frac{6}{10} = \frac{24}{100} = \frac{6}{25}\)
+                        </div>
+                    </div>
+                    <h4>Contoh: Tanpa Pengembalian</h4>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>4 merah, 6 biru. Diambil 1, tidak dikembalikan. Peluang merah kemudian biru:</p>
+                        <div class="solution-box">
+                            \(\frac{4}{10} \times \frac{6}{9} = \frac{24}{90} = \frac{4}{15}\)
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pel-frekuensi">
+                    <h3>6. Frekuensi Harapan & Strategi "Setidaknya Satu"</h3>
+
+                    <h4>📖 Frekuensi Harapan</h4>
+                    <p>Frekuensi harapan adalah perkiraan jumlah kemunculan suatu kejadian jika percobaan dilakukan berkali-kali.</p>
+                    <div class="rumus-box">
+                        <span class="label">Frekuensi Harapan</span>
+                        \[ \boxed{F_h = n \times P(A)} \]
+                    </div>
+                    <div class="example-box">
+                        <div class="label">Contoh Dadu</div>
+                        <p>Dadu dilempar 600 kali. Peluang muncul 6 = \(\frac{1}{6}\).</p>
+                        <div class="solution-box">
+                            \(F_h = 600 \times \frac{1}{6} = 100\)<br>
+                            <strong>Angka 6 diharapkan muncul 100 kali.</strong>
+                        </div>
+                    </div>
+
+                    <h4>📖 Peluang dari Kombinatorika</h4>
+                    <div class="example-box">
+                        <div class="label">Contoh</div>
+                        <p>Dari 10 siswa (6 perempuan, 4 laki-laki), dipilih 3 orang acak. Peluang ketiganya perempuan:</p>
+                        <div class="solution-box">
+                            \(P = \frac{C(6,3)}{C(10,3)} = \frac{20}{120} = \frac{1}{6}\)
+                        </div>
+                    </div>
+
+                    <h4>⚡ Strategi "Setidaknya Satu" (WAJIB KUASAI!)</h4>
+                    <p>Menghitung "setidaknya satu" secara langsung bisa rumit (berhasil 1 kali, 2 kali, atau 3 kali). <strong>Solusi cerdas:</strong> Gunakan komplemen!</p>
+                    <div class="rumus-box">
+                        \[ \boxed{P(\text{setidaknya satu}) = 1 - P(\text{tidak ada satupun})} \]
+                    </div>
+                    <p>Lawan dari "setidaknya satu berhasil" adalah "gagal semua".</p>
+
+                    <div class="example-box">
+                        <div class="label">Contoh Pemanah</div>
+                        <p>Peluang mengenai sasaran dalam satu tembakan = \(\frac{1}{2}\). Tembak 3 kali independen. Berapa peluang setidaknya satu mengenai sasaran?</p>
+                        <div class="solution-box">
+                            <span class="step">Langkah 1:</span> Peluang gagal dalam satu tembakan = \(1 - \frac{1}{2} = \frac{1}{2}\).<br>
+                            <span class="step">Langkah 2:</span> Peluang gagal semua = \(\left(\frac{1}{2}\right)^3 = \frac{1}{8}\).<br>
+                            <span class="step">Langkah 3:</span> Peluang setidaknya satu = \(1 - \frac{1}{8} = \frac{7}{8}\).<br>
+                            <strong>Kesimpulan:</strong> \(\frac{7}{8}\) (87,5%).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== BAGIAN IV - IX (RINGKASAN, JEBAKAN, DLL) ===== -->
+            <div class="card" id="perbedaan">
+                <h2>🧠 BAGIAN IV — CARA MEMBEDAKAN KONSEP</h2>
+                <h3>Permutasi atau Kombinasi?</h3>
+                <div class="tip-box">
+                    <strong>🔑 Tanyakan:</strong> Apakah urutan penting?<br>
+                    Ya → <strong>Permutasi</strong>. Tidak → <strong>Kombinasi</strong>.
+                </div>
+                <h3>Saling Lepas atau Independen?</h3>
+                <ul>
+                    <li><strong>Saling lepas</strong> → \(P(A \cap B)=0\).</li>
+                    <li><strong>Independen</strong> → \(P(A \cap B)=P(A)P(B)\).</li>
+                </ul>
+                <h3>Dengan atau Tanpa Pengembalian?</h3>
+                <ul>
+                    <li><strong>Dengan</strong> → jumlah total tetap.</li>
+                    <li><strong>Tanpa</strong> → jumlah total berkurang.</li>
+                </ul>
+            </div>
+
+            <div class="card" id="ringkasan">
+                <h2>📌 BAGIAN V — RINGKASAN RUMUS</h2>
+                <div class="info-grid">
+                    <div class="col"><h4>Statistika</h4><p>\(\bar{x} = \frac{\sum x}{n}\)<br>\(\sum x = n\bar{x}\)<br>\(R = \max-\min\)</p></div>
+                    <div class="col"><h4>Kombinatorika</h4><p>\(P(n,r)=\frac{n!}{(n-r)!}\)<br>\(C(n,r)=\frac{n!}{r!(n-r)!}\)<br>\((n-1)!\)</p></div>
+                    <div class="col"><h4>Peluang</h4><p>\(P(A)=\frac{n(A)}{n(S)}\)<br>\(P(A^c)=1-P(A)\)<br>\(P(A|B)=\frac{P(A\cap B)}{P(B)}\)<br>\(F_h=nP(A)\)</p></div>
+                </div>
+            </div>
+
+            <div class="card" id="jebakan">
+                <h2>🚨 BAGIAN VI — JEBAKAN TKA</h2>
+                <div class="warning-box"><strong>1.</strong> Tidak mengurutkan data untuk median.</div>
+                <div class="warning-box"><strong>2.</strong> Menganggap kenaikan terbesar = persentase terbesar.</div>
+                <div class="warning-box"><strong>3.</strong> Salah membedakan permutasi & kombinasi.</div>
+                <div class="warning-box"><strong>4.</strong> Lupa pengembalian mengubah ruang sampel.</div>
+                <div class="warning-box"><strong>5.</strong> "ATAU" selalu ditambah (padahal pakai \(P(A)+P(B)-P(A\cap B)\)).</div>
+                <div class="warning-box"><strong>6.</strong> "DAN" selalu dikali (padahal harus independen).</div>
+                <div class="warning-box"><strong>7.</strong> Mengabaikan kata "setidaknya" (pakai komplemen).</div>
+            </div>
+
+            <div class="card" id="strategi">
+                <h2>⚡ BAGIAN VII — STRATEGI CEPAT</h2>
+                <div class="tip-box"><strong>Langkah 1:</strong> Tentukan topik (Statistika/Kombinatorika/Peluang).</div>
+                <div class="tip-box"><strong>Langkah 2:</strong> Cari kata kunci (mean, median, permutasi, kombinasi, dikembalikan, dsb).</div>
+                <div class="tip-box"><strong>Langkah 3:</strong> Gunakan rumus yang tepat.</div>
+            </div>
+
+            <div class="card" id="checklist">
+                <h2>📋 BAGIAN VIII — CHECKLIST</h2>
+                <div class="info-grid">
+                    <div class="col"><h4>📊 Statistika</h4><ul><li>Data sudah diurutkan?</li><li>Total = mean × n?</li></ul></div>
+                    <div class="col"><h4>🔢 Kombinatorika</h4><ul><li>Urutan penting?</li><li>Ada syarat berdampingan?</li></ul></div>
+                    <div class="col"><h4>🎲 Peluang</h4><ul><li>Dengan/tanpa pengembalian?</li><li>Setidaknya satu → pakai komplemen?</li></ul></div>
+                </div>
+            </div>
+
+            <div class="card" id="super">
+                <h2>🌟 BAGIAN IX — RANGKUMAN SUPER CEPAT</h2>
+                <div class="info-grid">
+                    <div class="col"><h4>📊 Statistika</h4><p>Mean = total/n<br>Median = urutkan<br>Modus = paling sering</p></div>
+                    <div class="col"><h4>🔢 Kombinatorika</h4><p>Urutan penting → Permutasi<br>Tidak penting → Kombinasi<br>Melingkar → (n-1)!</p></div>
+                    <div class="col"><h4>🎲 Peluang</h4><p>\(P(A)=\frac{n(A)}{n(S)}\)<br>Dengan pengembalian = tetap<br>Tanpa = berkurang<br>Setidaknya satu = \(1-P(\text{gagal semua})\)</p></div>
+                </div>
+                <div class="tip-box" style="margin-top:20px;">
+                    <strong>🎯 PENUTUP</strong><br>
+                    Pegang tiga pertanyaan utama:<br>
+                    📊 STATISTIKA: <em>"Apa yang dapat disimpulkan dari data?"</em><br>
+                    🔢 KOMBINATORIKA: <em>"Ada berapa banyak kemungkinan?"</em><br>
+                    🎲 PELUANG: <em>"Seberapa besar kemungkinan terjadi?"</em><br>
+                    Baca situasi, tentukan konsep, baru pilih rumus!
+                </div>
+            </div>
+
+            <div style="text-align:center; padding:20px 0 10px; color:#6a8aa0; border-top:1px solid #e4ecf3; margin-top:20px; font-size:0.9rem;">
+                <strong>Selamat Belajar!</strong> Semoga Sukses di TKA SMA &amp; SNBT 📚✨
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== AUTO-RENDER KATEX ===== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '$', right: '$', display: false },
+                        { left: '\\(', right: '\\)', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+
+            // Active state for sidebar links based on scroll
+            const sections = document.querySelectorAll('.card[id], .header-title[id]');
+            const navLinks = document.querySelectorAll('.sidebar ul li a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    if (window.scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

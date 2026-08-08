@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Soal Statistika, Kombinatorika, dan Peluang - TKA SMA</title>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f2f7fc;
+            color: #1a2a3a;
+            padding: 20px 16px;
+        }
+
+        .quiz-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 30px 28px;
+        }
+
+        @media (max-width: 640px) {
+            .quiz-wrapper {
+                padding: 16px 12px;
+            }
+        }
+
+        .quiz-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #2d7fc1;
+            padding-bottom: 16px;
+            margin-bottom: 28px;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2b44;
+        }
+        .quiz-header h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4a6a85;
+            margin-left: 10px;
+        }
+
+        .score-box {
+            background: #eaf1f8;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid #cbdae6;
+        }
+        .score-box span {
+            color: #1f7bb0;
+        }
+
+        .reset-btn {
+            background: #eef4fa;
+            border: 1px solid #ccdbe8;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+
+        .question-card {
+            background: #fafdff;
+            border: 1px solid #e4ecf5;
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            transition: border 0.2s, background 0.2s;
+        }
+
+        .question-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .question-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+        .question-card.answered {
+            opacity: 0.95;
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            margin-bottom: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+
+        .options label:hover:not(.disabled) {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+
+        .options input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+        }
+
+        .options input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+
+        .options label.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+
+        .options label.correct-answer {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .options label.wrong-answer {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .feedback-box {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-box.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+
+        .feedback-box.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+
+        .feedback-box .explain {
+            margin-top: 6px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+
+        .quiz-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #4a6a85;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+        }
+
+        @media (max-width: 500px) {
+            .quiz-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .score-box {
+                text-align: center;
+            }
+            .options label {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 1px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            background: #eef4fa;
+            color: #4a6a85;
+        }
+
+        .tag.stat {
+            background: #dbeafe;
+            color: #1a4a8a;
+        }
+        .tag.komb {
+            background: #fdebd0;
+            color: #8a4a0a;
+        }
+        .tag.pel {
+            background: #d5f5e3;
+            color: #0b4a2a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-wrapper">
+        <div class="quiz-header">
+            <h1>📚 Latihan Soal <small>Statistika · Kombinatorika · Peluang</small></h1>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                <div class="score-box">🎯 Skor: <span id="scoreDisplay">0</span> / 25</div>
+                <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div class="quiz-footer">
+            <strong>25 Soal Latihan</strong> — Klik salah satu pilihan untuk melihat jawaban dan pembahasan.
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  25 SOAL STATISTIKA, KOMBINATORIKA, DAN PELUANG
+        // ============================================================
+        const questions = [{
+            id: 1,
+            tag: 'stat',
+            text: 'Rata-rata nilai 8 siswa adalah 75. Jika satu siswa dengan nilai 90 bergabung, rata-rata baru menjadi ...',
+            options: ['76', '76,67', '77', '77,5', '78'],
+            correct: 1,
+            explanation: 'Total awal = 8 × 75 = 600. Total baru = 600 + 90 = 690. Banyak siswa baru = 9. Rata-rata baru = 690/9 = 76,67.'
+        }, {
+            id: 2,
+            tag: 'stat',
+            text: 'Data: 8, 3, 10, 5, 7. Median dari data tersebut adalah ...',
+            options: ['5', '6', '7', '8', '10'],
+            correct: 2,
+            explanation: 'Urutkan data: 3, 5, 7, 8, 10. Banyak data = 5 (ganjil), median = data ke-3 = 7.'
+        }, {
+            id: 3,
+            tag: 'stat',
+            text: 'Modus dari data: 4, 6, 4, 8, 6, 4, 9, 6, 6 adalah ...',
+            options: ['4', '6', '8', '9', '4 dan 6'],
+            correct: 1,
+            explanation: 'Frekuensi: 4 muncul 3 kali, 6 muncul 4 kali, 8 muncul 1 kali, 9 muncul 1 kali. Nilai paling sering = 6.'
+        }, {
+            id: 4,
+            tag: 'stat',
+            text: 'Jangkauan (range) dari data: 12, 7, 15, 9, 20, 11 adalah ...',
+            options: ['5', '8', '11', '13', '15'],
+            correct: 2,
+            explanation: 'Nilai maksimum = 20, minimum = 7. Range = 20 - 7 = 13.'
+        }, {
+            id: 5,
+            tag: 'stat',
+            text: 'Rata-rata 5 bilangan adalah 18. Jika salah satu bilangan adalah 24, rata-rata 4 bilangan sisanya adalah ...',
+            options: ['15', '16', '16,5', '17', '17,5'],
+            correct: 2,
+            explanation: 'Total 5 bilangan = 5 × 18 = 90. Jumlah 4 bilangan sisanya = 90 - 24 = 66. Rata-rata = 66/4 = 16,5.'
+        }, {
+            id: 6,
+            tag: 'stat',
+            text: 'Dari grafik garis, jika data tahun 2021 = 80, 2022 = 95, 2023 = 100, 2024 = 90, 2025 = 120. Kenaikan terbesar terjadi pada tahun ...',
+            options: ['2022', '2023', '2024', '2025', '2022 dan 2025'],
+            correct: 3,
+            explanation: 'Perubahan: 2022 = +15, 2023 = +5, 2024 = -10, 2025 = +30. Kenaikan terbesar = 2025 (+30).'
+        }, {
+            id: 7,
+            tag: 'stat',
+            text: 'Persentase kenaikan dari 80 menjadi 100 adalah ...',
+            options: ['20%', '25%', '30%', '40%', '50%'],
+            correct: 1,
+            explanation: 'Kenaikan = 100 - 80 = 20. Persentase = (20/80) × 100% = 25%.'
+        }, {
+            id: 8,
+            tag: 'komb',
+            text: 'Nilai dari 5! + 3! adalah ...',
+            options: ['8', '120', '123', '126', '720'],
+            correct: 2,
+            explanation: '5! = 120, 3! = 6. 120 + 6 = 126.'
+        }, {
+            id: 9,
+            tag: 'komb',
+            text: 'Nilai dari \\(\\frac{6!}{4!}\\) adalah ...',
+            options: ['6', '12', '24', '30', '720'],
+            correct: 3,
+            explanation: '\\frac{6!}{4!} = \\frac{6 \\times 5 \\times 4 \\times 3 \\times 2 \\times 1}{4 \\times 3 \\times 2 \\times 1} = 6 \\times 5 = 30.'
+        }, {
+            id: 10,
+            tag: 'komb',
+            text: 'Banyak cara menyusun 4 buku berbeda dalam satu baris adalah ...',
+            options: ['4', '12', '24', '48', '120'],
+            correct: 2,
+            explanation: 'Permutasi 4 objek: 4! = 4 × 3 × 2 × 1 = 24.'
+        }, {
+            id: 11,
+            tag: 'komb',
+            text: 'Ada 6 siswa. Akan dipilih ketua, wakil, dan sekretaris. Banyak cara adalah ...',
+            options: ['20', '60', '120', '240', '720'],
+            correct: 2,
+            explanation: 'Karena jabatan berbeda, urutan diperhatikan. P(6,3) = 6 × 5 × 4 = 120.'
+        }, {
+            id: 12,
+            tag: 'komb',
+            text: 'Dari 10 siswa dipilih 3 orang untuk lomba (tanpa jabatan). Banyak cara adalah ...',
+            options: ['30', '60', '120', '240', '720'],
+            correct: 2,
+            explanation: 'Kombinasi C(10,3) = 10!/(3!7!) = (10×9×8)/(3×2×1) = 120.'
+        }, {
+            id: 13,
+            tag: 'komb',
+            text: '5 orang duduk melingkar. Banyak cara duduk yang berbeda adalah ...',
+            options: ['24', '60', '120', '240', '720'],
+            correct: 0,
+            explanation: 'Permutasi melingkar: (5-1)! = 4! = 24.'
+        }, {
+            id: 14,
+            tag: 'komb',
+            text: '5 buku dengan 2 buku (A dan B) harus selalu berdampingan. Banyak susunan adalah ...',
+            options: ['24', '48', '72', '120', '144'],
+            correct: 1,
+            explanation: 'Blok AB + 3 buku lain = 4 objek → 4! = 24. Internal AB = 2! = 2. Total = 48.'
+        }, {
+            id: 15,
+            tag: 'komb',
+            text: '0! = ...',
+            options: ['0', '1', '2', 'Tidak terdefinisi', '-1'],
+            correct: 1,
+            explanation: '0! = 1 (definisi dasar faktorial).'
+        }, {
+            id: 16,
+            tag: 'pel',
+            text: 'Sebuah dadu dilempar sekali. Peluang muncul angka genap adalah ...',
+            options: ['1/6', '1/3', '1/2', '2/3', '5/6'],
+            correct: 2,
+            explanation: 'Ruang sampel {1,2,3,4,5,6}. Angka genap {2,4,6} → n(A)=3, n(S)=6. P = 3/6 = 1/2.'
+        }, {
+            id: 17,
+            tag: 'pel',
+            text: 'Peluang seorang siswa lulus = 0,75. Peluang siswa tidak lulus adalah ...',
+            options: ['0,15', '0,20', '0,25', '0,30', '0,35'],
+            correct: 2,
+            explanation: 'Komplemen: P(tidak lulus) = 1 - P(lulus) = 1 - 0,75 = 0,25.'
+        }, {
+            id: 18,
+            tag: 'pel',
+            text: 'Dua buah dadu dilempar bersamaan. Peluang muncul mata dadu berjumlah 7 adalah ...',
+            options: ['1/36', '1/18', '1/12', '1/6', '1/4'],
+            correct: 3,
+            explanation: 'Pasangan berjumlah 7: (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) → 6 pasang. Total 36. P = 6/36 = 1/6.'
+        }, {
+            id: 19,
+            tag: 'pel',
+            text: 'Dari 5 bola merah dan 3 bola biru, diambil 2 bola satu per satu tanpa pengembalian. Peluang merah kemudian biru adalah ...',
+            options: ['15/64', '15/56', '5/28', '5/14', '15/28'],
+            correct: 1,
+            explanation: 'P(merah) = 5/8. Setelah merah diambil, sisa 4 merah, 3 biru, total 7. P(biru | merah) = 3/7. Total = 5/8 × 3/7 = 15/56.'
+        }, {
+            id: 20,
+            tag: 'pel',
+            text: 'Dalam kotak: 6 minuman, 4 makanan, 5 kosong. Kosong dikembalikan, hadiah tidak. Jika 4 orang sebelumnya mendapat kosong, peluang orang ke-5 mendapat hadiah adalah ...',
+            options: ['1/3', '1/2', '2/3', '3/4', '4/5'],
+            correct: 2,
+            explanation: 'Total hadiah = 10, total kertas = 15. Karena kosong dikembalikan, total tetap 15. P = 10/15 = 2/3.'
+        }, {
+            id: 21,
+            tag: 'pel',
+            text: 'Peluang seorang pemanah tepat sasaran = 1/3. Jika ia menembak 2 kali, peluang setidaknya satu kena adalah ...',
+            options: ['1/9', '2/9', '4/9', '5/9', '8/9'],
+            correct: 3,
+            explanation: 'Peluang gagal sekali = 2/3. Gagal semua = (2/3)^2 = 4/9. Setidaknya satu = 1 - 4/9 = 5/9.'
+        }, {
+            id: 22,
+            tag: 'pel',
+            text: 'Peluang muncul angka 5 pada dadu dalam 120 kali lemparan diharapkan muncul ...',
+            options: ['10', '15', '20', '25', '30'],
+            correct: 2,
+            explanation: 'Frekuensi harapan = n × P(5) = 120 × 1/6 = 20.'
+        }, {
+            id: 23,
+            tag: 'pel',
+            text: 'Dua kejadian A dan B saling lepas. Jika P(A) = 0,3 dan P(B) = 0,4, maka P(A ∪ B) = ...',
+            options: ['0,1', '0,3', '0,4', '0,7', '1,0'],
+            correct: 3,
+            explanation: 'Saling lepas → P(A ∩ B) = 0. P(A ∪ B) = P(A) + P(B) = 0,3 + 0,4 = 0,7.'
+        }, {
+            id: 24,
+            tag: 'pel',
+            text: 'A dan B independen. Jika P(A) = 0,5 dan P(B) = 0,3, maka P(A ∩ B) = ...',
+            options: ['0,15', '0,3', '0,5', '0,8', '0,95'],
+            correct: 0,
+            explanation: 'Independen → P(A ∩ B) = P(A) × P(B) = 0,5 × 0,3 = 0,15.'
+        }, {
+            id: 25,
+            tag: 'pel',
+            text: 'Dari 10 siswa (6 putra, 4 putri), dipilih 2 orang secara acak. Peluang terpilih keduanya putri adalah ...',
+            options: ['1/10', '2/15', '1/5', '4/15', '1/3'],
+            correct: 1,
+            explanation: 'Total cara = C(10,2) = 45. Cara memilih 2 putri = C(4,2) = 6. P = 6/45 = 2/15.'
+        }];
+
+        // ============================================================
+        //  RENDER & LOGIC
+        // ============================================================
+        const container = document.getElementById('quizContainer');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        let answered = new Array(questions.length).fill(false);
+        let selectedAnswers = new Array(questions.length).fill(null);
+
+        function render() {
+            let html = '';
+            let correctCount = 0;
+
+            questions.forEach((q, idx) => {
+                const isAnswered = answered[idx];
+                const selected = selectedAnswers[idx];
+                const isCorrect = isAnswered && (selected === q.correct);
+                const isWrong = isAnswered && (selected !== null && selected !== q.correct);
+
+                if (isAnswered && isCorrect) correctCount++;
+
+                let cardClass = 'question-card';
+                if (isAnswered) {
+                    cardClass += isCorrect ? ' correct' : ' wrong';
+                    cardClass += ' answered';
+                }
+
+                // Tag warna
+                let tagClass = 'tag';
+                if (q.tag === 'stat') tagClass += ' stat';
+                else if (q.tag === 'komb') tagClass += ' komb';
+                else if (q.tag === 'pel') tagClass += ' pel';
+                const tagLabel = q.tag === 'stat' ? 'Statistika' : (q.tag === 'komb' ? 'Kombinatorika' : 'Peluang');
+
+                html += `<div class="${cardClass}" id="qcard-${idx}">`;
+                html += `<div class="q-number">Soal ${idx+1} <span class="${tagClass}">${tagLabel}</span></div>`;
+                html += `<div class="q-text">${q.text}</div>`;
+                html += `<div class="options">`;
+
+                q.options.forEach((opt, optIdx) => {
+                    let labelClass = '';
+                    let disabled = '';
+                    let checked = '';
+
+                    if (isAnswered) {
+                        disabled = 'disabled';
+                        if (optIdx === q.correct) labelClass += ' correct-answer';
+                        if (optIdx === selected && optIdx !== q.correct) labelClass += ' wrong-answer';
+                        if (optIdx === selected) checked = 'checked';
+                    }
+
+                    html += `
+                            <label class="${labelClass} ${disabled}">
+                                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                                <span>${opt}</span>
+                            </label>
+                        `;
+                });
+
+                html += `</div>`;
+
+                // Feedback
+                let feedbackClass = 'feedback-box';
+                let feedbackHtml = '';
+                if (isAnswered) {
+                    feedbackClass += ' show';
+                    feedbackClass += isCorrect ? ' correct' : ' wrong';
+                    const icon = isCorrect ? '✅' : '❌';
+                    const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+                    const correctAns = q.options[q.correct];
+                    feedbackHtml = `
+                            <div class="${feedbackClass}">
+                                <strong>${icon} ${status}</strong>
+                                <div class="explain">💡 ${q.explanation}</div>
+                                <div style="margin-top:4px;font-size:0.9rem;">Jawaban yang benar: <strong>${correctAns}</strong></div>
+                            </div>
+                        `;
+                } else {
+                    feedbackHtml = `<div class="feedback-box"></div>`;
+                }
+                html += feedbackHtml;
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+            scoreSpan.textContent = correctCount;
+
+            // Attach event listeners to radio buttons
+            questions.forEach((_, idx) => {
+                const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        if (!answered[idx]) {
+                            selectedAnswers[idx] = parseInt(this.value);
+                            answered[idx] = true;
+                            render();
+                            // Scroll to the question card for better UX
+                            document.getElementById(`qcard-${idx}`).scrollIntoView({ behavior: 'smooth',
+                                block: 'center' });
+                        }
+                    });
+                });
+            });
+
+            // Re-render math with KaTeX
+            if (window.renderMathInElement) {
+                window.renderMathInElement(container, {
+                    delimiters: [
+                        { left: '\\\\(', right: '\\\\)', display: false },
+                        { left: '\\[', right: '\\]', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function resetQuiz() {
+            answered = new Array(questions.length).fill(false);
+            selectedAnswers = new Array(questions.length).fill(null);
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+
+        // Initial render
+        render();
+    </script>
+
+</body>
+</html>
