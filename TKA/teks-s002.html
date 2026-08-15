@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Latihan — Format & Karakteristik Teks TKA Bahasa Inggris</title>
+<style>
+    :root {
+        --bg: #f5f7fa;
+        --card: #ffffff;
+        --border: #d0d7de;
+        --text: #1f2328;
+        --muted: #57606a;
+        --primary: #2563eb;
+        --correct: #16a34a;
+        --correct-bg: #e8f5e9;
+        --incorrect: #dc2626;
+        --incorrect-bg: #fee2e2;
+        --shadow: 0 2px 8px rgba(0,0,0,0.06);
+        --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: var(--bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text);
+        line-height: 1.6;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
+    .container {
+        max-width: 800px;
+        width: 100%;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #0f172a;
+    }
+    .score-board {
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        font-weight: 600;
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 10px;
+        z-index: 10;
+    }
+    .question-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow);
+    }
+    .question-number {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-bottom: 8px;
+    }
+    .question-text {
+        font-weight: 600;
+        margin-bottom: 16px;
+        font-size: 1.1rem;
+    }
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .option-btn {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.15s;
+        color: var(--text);
+    }
+    .option-btn:hover:not(:disabled) {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+    }
+    .option-btn.correct {
+        background: var(--correct-bg);
+        border-color: var(--correct);
+        color: #14532d;
+    }
+    .option-btn.incorrect {
+        background: var(--incorrect-bg);
+        border-color: var(--incorrect);
+        color: #7f1d1d;
+    }
+    .option-btn:disabled {
+        cursor: default;
+        opacity: 0.9;
+    }
+    .feedback {
+        margin-top: 12px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        display: none;
+    }
+    .feedback.show {
+        display: block;
+    }
+    .feedback-message {
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+    .feedback-message.correct {
+        color: var(--correct);
+    }
+    .feedback-message.incorrect {
+        color: var(--incorrect);
+    }
+    .explanation {
+        color: #1e293b;
+        font-size: 0.95rem;
+    }
+    .reset-btn {
+        display: block;
+        margin: 20px auto;
+        background: #0f172a;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .reset-btn:hover {
+        background: #1e293b;
+    }
+    @media (max-width: 600px) {
+        body { padding: 10px; }
+        .question-card { padding: 16px; }
+        .score-board { flex-direction: column; gap: 5px; text-align: center; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>📝 Quiz: Memahami Jenis & Karakteristik Teks TKA Bahasa Inggris</h1>
+
+    <div class="score-board">
+        <span>Skor: <span id="score">0</span> / <span id="total">0</span></span>
+        <span id="progress">Dijawab: 0</span>
+    </div>
+
+    <div id="quiz-container"></div>
+
+    <button class="reset-btn" id="resetBtn">🔄 Ulangi Quiz</button>
+</div>
+
+<script>
+const questions = [
+    {
+        question: "A text that describes a person, place, animal, or thing in detail is called...",
+        options: ["Recount text", "Descriptive text", "Narrative text", "Procedure text"],
+        correct: 1,
+        explanation: "Descriptive text bertujuan menggambarkan objek secara khusus. Ciri utamanya menggunakan banyak kata sifat (adjectives)."
+    },
+    {
+        question: "What is the main purpose of a recount text?",
+        options: ["To describe something", "To retell past events or experiences", "To entertain with a story", "To explain how to make something"],
+        correct: 1,
+        explanation: "Recount text menceritakan kembali kejadian atau pengalaman yang sudah terjadi, biasanya menggunakan Simple Past Tense."
+    },
+    {
+        question: "Which structure is typical of a narrative text?",
+        options: ["Identification - Description", "Orientation - Events - Reorientation", "Orientation - Complication - Resolution", "Goal - Materials - Steps"],
+        correct: 2,
+        explanation: "Narrative text memiliki alur: Orientation (pengenalan), Complication (masalah), Resolution (penyelesaian), dan sering ditambah moral lesson."
+    },
+    {
+        question: "A procedure text usually contains...",
+        options: ["Arguments and thesis", "Steps or instructions", "Past events in order", "Descriptive details"],
+        correct: 1,
+        explanation: "Procedure text menjelaskan cara melakukan/membuat sesuatu dengan langkah-langkah (steps) dan sering menggunakan kata kerja perintah (imperative)."
+    },
+    {
+        question: "Analytical exposition text aims to...",
+        options: ["Persuade or convince readers", "Describe a place", "Retell a past event", "Entertain with a story"],
+        correct: 0,
+        explanation: "Analytical exposition menyampaikan pendapat dan alasan-alasan untuk meyakinkan pembaca. Strukturnya: Thesis, Arguments, Reiteration."
+    },
+    {
+        question: "Which of the following is a characteristic of descriptive text?",
+        options: ["Uses simple past tense", "Uses many adjectives", "Uses imperative verbs", "Uses arguments and evidence"],
+        correct: 1,
+        explanation: "Descriptive text banyak menggunakan kata sifat (adjective) untuk menggambarkan objek, seperti beautiful, tall, green, dll."
+    },
+    {
+        question: "In a narrative text, the 'complication' is...",
+        options: ["The introduction of characters", "The problem or conflict", "The moral lesson", "The resolution of the story"],
+        correct: 1,
+        explanation: "Complication adalah bagian yang memunculkan masalah atau konflik yang dialami tokoh, sebelum akhirnya diselesaikan di resolution."
+    },
+    {
+        question: "Which conjunction indicates contrast?",
+        options: ["and", "but", "because", "first"],
+        correct: 1,
+        explanation: "'But' digunakan untuk menunjukkan pertentangan atau kontras. Contoh: She was tired, but she kept working."
+    },
+    {
+        question: "'Because' is used to show...",
+        options: ["Addition", "Contrast", "Cause / reason", "Effect / result"],
+        correct: 2,
+        explanation: "'Because' menunjukkan alasan atau sebab. Contoh: He stayed home because it was raining."
+    },
+    {
+        question: "'Therefore' is used to show...",
+        options: ["Addition", "Contrast", "Cause", "Effect / result"],
+        correct: 3,
+        explanation: "'Therefore' menunjukkan akibat atau hasil. Contoh: It rained heavily, therefore the match was cancelled."
+    },
+    {
+        question: "In reading, 'scanning' means...",
+        options: [
+            "Reading every word carefully to understand details",
+            "Looking for specific information quickly",
+            "Reading for the general idea of the text",
+            "Translating word by word"
+        ],
+        correct: 1,
+        explanation: "Scanning adalah teknik mencari informasi tertentu dengan cepat, seperti mencari nama, tanggal, atau kata kunci tanpa membaca seluruh teks."
+    },
+    {
+        question: "'Skimming' is used to...",
+        options: [
+            "Find specific details",
+            "Get a general overview of the text",
+            "Understand every word",
+            "Identify grammar mistakes"
+        ],
+        correct: 1,
+        explanation: "Skimming adalah membaca cepat untuk mendapatkan gambaran umum teks, biasanya dengan melihat judul, kalimat awal/akhir, dan kata yang diulang."
+    },
+    {
+        question: "Which of the following is a type of context clue to guess word meaning?",
+        options: ["Punctuation", "Definition", "Font size", "Page number"],
+        correct: 1,
+        explanation: "Context clue meliputi definition, example, contrast, cause-effect, dan synonym. Punctuation bukan jenis context clue."
+    },
+    {
+        question: "In multiple-choice, a choice containing 'always', 'never', or 'only' is often...",
+        options: ["Likely correct", "Likely incorrect", "Always correct", "Neutral"],
+        correct: 1,
+        explanation: "Pilihan dengan kata ekstrem seperti always, never, only biasanya terlalu mutlak dan seringkali salah karena teks tidak mendukung pernyataan absolut."
+    },
+    {
+        question: "To answer an inference question, you should...",
+        options: [
+            "Use only the exact words from the text",
+            "Combine evidence from the text with reasoning",
+            "Guess randomly",
+            "Translate the question"
+        ],
+        correct: 1,
+        explanation: "Inference (kesimpulan) membutuhkan bukti dari teks + penalaran. Jawaban tidak selalu tertulis langsung, tetapi harus didukung oleh petunjuk."
+    },
+    {
+        question: "What does 'it' refer to in: 'The school introduced a new program. It helps students.'?",
+        options: ["The school", "The new program", "Students", "Helps"],
+        correct: 1,
+        explanation: "Kata ganti 'it' merujuk pada kata benda yang disebut sebelumnya dan cocok secara makna, yaitu 'the new program'."
+    },
+    {
+        question: "'First, boil water. Next, add tea. Then, pour into cup.' is an example of...",
+        options: ["Descriptive text", "Recount text", "Narrative text", "Procedure text"],
+        correct: 3,
+        explanation: "Teks tersebut berisi langkah-langkah (first, next, then) dan kata kerja perintah (boil, add, pour), ciri khas procedure text."
+    },
+    {
+        question: "Which text type typically uses 'once upon a time' as a time marker?",
+        options: ["Recount", "Narrative", "Procedure", "Analytical Exposition"],
+        correct: 1,
+        explanation: "'Once upon a time' adalah penanda pembuka khas narrative text (dongeng/legenda) untuk memperkenalkan latar cerita."
+    },
+    {
+        question: "Which of the following is an opinion?",
+        options: [
+            "The school library has 5000 books.",
+            "The library is the best place to study.",
+            "The library closes at 5 p.m.",
+            "The library has many computers."
+        ],
+        correct: 1,
+        explanation: "'The best place to study' adalah pendapat karena bersifat subjektif. Kalimat lain adalah fakta yang bisa diverifikasi."
+    },
+    {
+        question: "A text that gives arguments and tries to convince readers is...",
+        options: ["Descriptive text", "Analytical exposition text", "Narrative text", "Procedure text"],
+        correct: 1,
+        explanation: "Analytical exposition text bertujuan meyakinkan pembaca dengan menyajikan thesis (pendapat) dan arguments (alasan/bukti)."
+    }
+];
+
+const quizContainer = document.getElementById('quiz-container');
+const scoreSpan = document.getElementById('score');
+const totalSpan = document.getElementById('total');
+const progressSpan = document.getElementById('progress');
+const resetBtn = document.getElementById('resetBtn');
+
+let answeredCount = 0;
+let correctCount = 0;
+
+function renderQuiz() {
+    quizContainer.innerHTML = '';
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.dataset.index = index;
+
+        const qNum = document.createElement('div');
+        qNum.className = 'question-number';
+        qNum.textContent = `Soal ${index + 1} dari ${questions.length}`;
+
+        const qText = document.createElement('div');
+        qText.className = 'question-text';
+        qText.textContent = q.question;
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options';
+
+        q.options.forEach((opt, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+            btn.addEventListener('click', () => selectAnswer(index, optIndex, btn));
+            optionsDiv.appendChild(btn);
+        });
+
+        const feedback = document.createElement('div');
+        feedback.className = 'feedback';
+        feedback.id = `feedback-${index}`;
+
+        card.appendChild(qNum);
+        card.appendChild(qText);
+        card.appendChild(optionsDiv);
+        card.appendChild(feedback);
+        quizContainer.appendChild(card);
+    });
+    totalSpan.textContent = questions.length;
+    updateScore();
+}
+
+function selectAnswer(qIndex, optIndex, clickedBtn) {
+    const card = document.querySelector(`.question-card[data-index="${qIndex}"]`);
+    const allBtns = card.querySelectorAll('.option-btn');
+    const feedback = document.getElementById(`feedback-${qIndex}`);
+
+    // Disable all buttons
+    allBtns.forEach(btn => btn.disabled = true);
+
+    const q = questions[qIndex];
+    const isCorrect = optIndex === q.correct;
+
+    // Highlight correct and incorrect
+    allBtns.forEach((btn, idx) => {
+        if (idx === q.correct) {
+            btn.classList.add('correct');
+        } else if (idx === optIndex) {
+            btn.classList.add('incorrect');
+        }
+    });
+
+    // Show feedback
+    feedback.classList.add('show');
+    feedback.innerHTML = `
+        <div class="feedback-message ${isCorrect ? 'correct' : 'incorrect'}">
+            ${isCorrect ? '✅ Benar!' : '❌ Salah.'}
+        </div>
+        <div class="explanation">${q.explanation}</div>
+    `;
+
+    // Update score
+    if (!card.dataset.answered) {
+        card.dataset.answered = 'true';
+        answeredCount++;
+        if (isCorrect) correctCount++;
+        updateScore();
+    }
+}
+
+function updateScore() {
+    scoreSpan.textContent = correctCount;
+    progressSpan.textContent = `Dijawab: ${answeredCount}`;
+}
+
+function resetQuiz() {
+    answeredCount = 0;
+    correctCount = 0;
+    renderQuiz();
+}
+
+resetBtn.addEventListener('click', resetQuiz);
+
+// Initial render
+renderQuiz();
+</script>
+</body>
+</html>

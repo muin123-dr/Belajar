@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Latihan — Pemahaman Teks TKA Bahasa Inggris</title>
+<style>
+    :root {
+        --bg: #f5f7fa;
+        --card: #ffffff;
+        --border: #d0d7de;
+        --text: #1f2328;
+        --muted: #57606a;
+        --primary: #2563eb;
+        --correct: #16a34a;
+        --correct-bg: #e8f5e9;
+        --incorrect: #dc2626;
+        --incorrect-bg: #fee2e2;
+        --shadow: 0 2px 8px rgba(0,0,0,0.06);
+        --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        background: var(--bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text);
+        line-height: 1.6;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
+    .container {
+        max-width: 800px;
+        width: 100%;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #0f172a;
+    }
+    .score-board {
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        font-weight: 600;
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 10px;
+        z-index: 10;
+    }
+    .question-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow);
+    }
+    .question-number {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-bottom: 8px;
+    }
+    .question-text {
+        font-weight: 600;
+        margin-bottom: 16px;
+        font-size: 1.1rem;
+    }
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .option-btn {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.15s;
+        color: var(--text);
+    }
+    .option-btn:hover:not(:disabled) {
+        background: #e2e8f0;
+        border-color: #94a3b8;
+    }
+    .option-btn.correct {
+        background: var(--correct-bg);
+        border-color: var(--correct);
+        color: #14532d;
+    }
+    .option-btn.incorrect {
+        background: var(--incorrect-bg);
+        border-color: var(--incorrect);
+        color: #7f1d1d;
+    }
+    .option-btn:disabled {
+        cursor: default;
+        opacity: 0.9;
+    }
+    .feedback {
+        margin-top: 12px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        display: none;
+    }
+    .feedback.show {
+        display: block;
+    }
+    .feedback-message {
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+    .feedback-message.correct {
+        color: var(--correct);
+    }
+    .feedback-message.incorrect {
+        color: var(--incorrect);
+    }
+    .explanation {
+        color: #1e293b;
+        font-size: 0.95rem;
+    }
+    .reset-btn {
+        display: block;
+        margin: 20px auto;
+        background: #0f172a;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .reset-btn:hover {
+        background: #1e293b;
+    }
+    @media (max-width: 600px) {
+        body { padding: 10px; }
+        .question-card { padding: 16px; }
+        .score-board { flex-direction: column; gap: 5px; text-align: center; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>📝 Quiz: Pemahaman Teks TKA Bahasa Inggris</h1>
+
+    <div class="score-board">
+        <span>Skor: <span id="score">0</span> / <span id="total">0</span></span>
+        <span id="progress">Dijawab: 0</span>
+    </div>
+
+    <div id="quiz-container"></div>
+
+    <button class="reset-btn" id="resetBtn">🔄 Ulangi Quiz</button>
+</div>
+
+<script>
+const questions = [
+    {
+        question: "Information that is written directly in the text is called...",
+        options: ["Implicit information", "Explicit information", "Inferred information", "Summary"],
+        correct: 1,
+        explanation: "Informasi eksplisit adalah informasi yang tertulis langsung di dalam teks. Kamu bisa menemukannya tanpa perlu menebak."
+    },
+    {
+        question: "Which reading technique is used to find a specific piece of information quickly?",
+        options: ["Skimming", "Scanning", "Summarizing", "Synthesizing"],
+        correct: 1,
+        explanation: "Scanning adalah teknik mencari informasi spesifik seperti nama, angka, atau tanggal dengan cepat tanpa membaca seluruh teks."
+    },
+    {
+        question: "If a question asks 'Why did Rina go to the library?', what should you look for?",
+        options: ["A place", "A time", "A reason", "A method"],
+        correct: 2,
+        explanation: "Kata tanya 'Why' menanyakan alasan. Jadi kamu harus mencari kata-kata seperti because, since, due to, atau to + verb."
+    },
+    {
+        question: "In the text: 'Lion, tiger, and bear are mammals. Parrot is a bird.' Which group does parrot belong to?",
+        options: ["Mammals", "Birds", "Fish", "Reptiles"],
+        correct: 1,
+        explanation: "Teks menyatakan 'Parrot is a bird', jadi parrot termasuk kelompok burung (birds)."
+    },
+    {
+        question: "What is the best outline for this text: 'First, boil water. Next, add tea. Then, pour into cup. Finally, stir well.'",
+        options: [
+            "1. Stir well → 2. Boil water → 3. Add tea → 4. Pour into cup",
+            "1. Boil water → 2. Add tea → 3. Pour into cup → 4. Stir well",
+            "1. Pour into cup → 2. Boil water → 3. Stir well → 4. Add tea",
+            "1. Add tea → 2. Boil water → 3. Stir well → 4. Pour into cup"
+        ],
+        correct: 1,
+        explanation: "Urutan yang benar sesuai teks: boil, add, pour, stir. Pilihan B mencerminkan urutan tersebut."
+    },
+    {
+        question: "What is the best summary of this text: 'Many students sleep late because they play online games. As a result, they feel tired at school. Their grades may decrease.'",
+        options: [
+            "Students play online games.",
+            "Students feel tired at school.",
+            "Playing games late can make students tired and lower their grades.",
+            "Online games are bad."
+        ],
+        correct: 2,
+        explanation: "Ringkasan yang baik mencakup sebab (bermain game larut) dan akibat (lelah dan nilai menurun). Pilihan lain terlalu sempit atau terlalu luas."
+    },
+    {
+        question: "Text A: 'Solar panels produce clean electricity.' Text B: 'Solar panels can save money in the long run.' What is the best synthesis?",
+        options: [
+            "Solar panels are expensive.",
+            "Solar panels provide clean energy and may save money over time.",
+            "Solar panels are only for rich people.",
+            "Solar panels are not useful."
+        ],
+        correct: 1,
+        explanation: "Sintesis menggabungkan inti dari kedua teks: energi bersih dari Teks A dan penghematan dari Teks B."
+    },
+    {
+        question: "What is the main idea of this paragraph: 'Many students use bicycles to go to school. Cycling is healthy, saves money, and reduces pollution.'",
+        options: [
+            "Cycling reduces pollution.",
+            "Cycling to school has several benefits.",
+            "Students go to school by bicycle.",
+            "Pollution is bad."
+        ],
+        correct: 1,
+        explanation: "Ide pokok adalah gagasan yang mencakup seluruh isi paragraf. Paragraf ini membahas manfaat bersepeda, bukan hanya satu detail."
+    },
+    {
+        question: "Which sentence has the same meaning as: 'The program provides many benefits'?",
+        options: [
+            "The program offers several advantages.",
+            "The program is expensive.",
+            "The program is new.",
+            "The program is difficult."
+        ],
+        correct: 0,
+        explanation: "Ini adalah parafrase: provides = offers, benefits = advantages. Maknanya tetap sama."
+    },
+    {
+        question: "Which option is likely incorrect because it uses an extreme word?",
+        options: [
+            "Some students enjoy reading.",
+            "All students enjoy reading.",
+            "Many students enjoy reading.",
+            "A few students enjoy reading."
+        ],
+        correct: 1,
+        explanation: "Kata 'all' membuat pernyataan menjadi mutlak. Teks biasanya tidak mendukung pernyataan yang menyeluruh seperti itu."
+    },
+    {
+        question: "In the sentence 'The elephant is huge, much bigger than a car', what does 'huge' mean?",
+        options: ["Very small", "Very big", "Very fast", "Very slow"],
+        correct: 1,
+        explanation: "Konteks 'much bigger than a car' memberi petunjuk bahwa 'huge' berarti sangat besar."
+    },
+    {
+        question: "If a question begins with 'According to the text...', what does it mean?",
+        options: [
+            "Answer based on personal opinion.",
+            "Answer based on outside knowledge.",
+            "Answer based on the text only.",
+            "Answer based on a guess."
+        ],
+        correct: 2,
+        explanation: "Frasa 'According to the text' menuntut jawaban yang didukung teks, bukan pendapat pribadi atau pengetahuan luar."
+    },
+    {
+        question: "Text: 'Rina likes reading and writing. Dodi likes swimming and playing football.' Which activity belongs to Rina?",
+        options: ["Reading", "Swimming", "Football", "None"],
+        correct: 0,
+        explanation: "Teks menyebutkan Rina suka reading dan writing. Jadi jawabannya reading."
+    },
+    {
+        question: "Text: 'Every morning, Andi leaves home at 6:30 a.m. He rides his motorcycle to school.' What time does Andi leave home?",
+        options: ["6:30 a.m.", "7:00 a.m.", "6:50 a.m.", "5:30 a.m."],
+        correct: 0,
+        explanation: "Informasi eksplisit dalam teks: 'leaves home at 6:30 a.m.'"
+    },
+    {
+        question: "Which outline is correct for making tea? Text: 'First, boil water. Next, put a tea bag in a cup. Then, pour hot water. Finally, add sugar.'",
+        options: [
+            "1. Add sugar → 2. Boil water → 3. Put tea bag → 4. Pour hot water",
+            "1. Boil water → 2. Put tea bag → 3. Pour hot water → 4. Add sugar",
+            "1. Put tea bag → 2. Boil water → 3. Add sugar → 4. Pour hot water",
+            "1. Pour hot water → 2. Boil water → 3. Put tea bag → 4. Add sugar"
+        ],
+        correct: 1,
+        explanation: "Urutan yang benar sesuai kata penanda: first, next, then, finally."
+    },
+    {
+        question: "A text discusses the causes and effects of plastic pollution. What is the best summary?",
+        options: [
+            "Plastic pollution is a serious problem with many causes and harmful effects.",
+            "Plastic is useful.",
+            "People use plastic bags.",
+            "Plastic is cheap."
+        ],
+        correct: 0,
+        explanation: "Ringkasan harus mencakup topik (plastic pollution) serta aspek penyebab dan akibatnya."
+    },
+    {
+        question: "Text A: 'Eating vegetables provides vitamins.' Text B: 'Vegetables are low in calories.' What is the best synthesis?",
+        options: [
+            "Vegetables are green.",
+            "Vegetables are healthy because they provide vitamins and are low in calories.",
+            "Vegetables are expensive.",
+            "Vegetables taste bad."
+        ],
+        correct: 1,
+        explanation: "Sintesis menggabungkan kedua informasi: vitamin dari Teks A dan rendah kalori dari Teks B."
+    },
+    {
+        question: "Which is a detail, not a main idea, from this sentence: 'Exercise improves health, increases energy, reduces stress, and helps sleep.'",
+        options: [
+            "Exercise has many benefits.",
+            "Exercise helps sleep.",
+            "Exercise is important.",
+            "Exercise is good for you."
+        ],
+        correct: 1,
+        explanation: "'Helps sleep' hanyalah satu detail spesifik, sedangkan pilihan lain menyatakan gagasan umum tentang manfaat olahraga."
+    },
+    {
+        question: "If a text says: 'Dina put her bag down, sat on the sofa, and immediately closed her eyes', what can you infer?",
+        options: ["Dina was hungry.", "Dina was tired.", "Dina was angry.", "Dina was happy."],
+        correct: 1,
+        explanation: "Tindakan duduk dan menutup mata mengindikasikan kelelahan. Ini adalah kesimpulan dari bukti tidak langsung."
+    },
+    {
+        question: "Which reading technique would you use to get a general idea of a text?",
+        options: ["Scanning", "Skimming", "Intensive reading", "Translating"],
+        correct: 1,
+        explanation: "Skimming adalah membaca cepat untuk memperoleh gambaran umum, sedangkan scanning mencari informasi spesifik."
+    }
+];
+
+const quizContainer = document.getElementById('quiz-container');
+const scoreSpan = document.getElementById('score');
+const totalSpan = document.getElementById('total');
+const progressSpan = document.getElementById('progress');
+const resetBtn = document.getElementById('resetBtn');
+
+let answeredCount = 0;
+let correctCount = 0;
+
+function renderQuiz() {
+    quizContainer.innerHTML = '';
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.dataset.index = index;
+
+        const qNum = document.createElement('div');
+        qNum.className = 'question-number';
+        qNum.textContent = `Soal ${index + 1} dari ${questions.length}`;
+
+        const qText = document.createElement('div');
+        qText.className = 'question-text';
+        qText.textContent = q.question;
+
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options';
+
+        q.options.forEach((opt, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+            btn.addEventListener('click', () => selectAnswer(index, optIndex, btn));
+            optionsDiv.appendChild(btn);
+        });
+
+        const feedback = document.createElement('div');
+        feedback.className = 'feedback';
+        feedback.id = `feedback-${index}`;
+
+        card.appendChild(qNum);
+        card.appendChild(qText);
+        card.appendChild(optionsDiv);
+        card.appendChild(feedback);
+        quizContainer.appendChild(card);
+    });
+    totalSpan.textContent = questions.length;
+    updateScore();
+}
+
+function selectAnswer(qIndex, optIndex, clickedBtn) {
+    const card = document.querySelector(`.question-card[data-index="${qIndex}"]`);
+    const allBtns = card.querySelectorAll('.option-btn');
+    const feedback = document.getElementById(`feedback-${qIndex}`);
+
+    allBtns.forEach(btn => btn.disabled = true);
+
+    const q = questions[qIndex];
+    const isCorrect = optIndex === q.correct;
+
+    allBtns.forEach((btn, idx) => {
+        if (idx === q.correct) {
+            btn.classList.add('correct');
+        } else if (idx === optIndex) {
+            btn.classList.add('incorrect');
+        }
+    });
+
+    feedback.classList.add('show');
+    feedback.innerHTML = `
+        <div class="feedback-message ${isCorrect ? 'correct' : 'incorrect'}">
+            ${isCorrect ? '✅ Benar!' : '❌ Salah.'}
+        </div>
+        <div class="explanation">${q.explanation}</div>
+    `;
+
+    if (!card.dataset.answered) {
+        card.dataset.answered = 'true';
+        answeredCount++;
+        if (isCorrect) correctCount++;
+        updateScore();
+    }
+}
+
+function updateScore() {
+    scoreSpan.textContent = correctCount;
+    progressSpan.textContent = `Dijawab: ${answeredCount}`;
+}
+
+function resetQuiz() {
+    answeredCount = 0;
+    correctCount = 0;
+    renderQuiz();
+}
+
+resetBtn.addEventListener('click', resetQuiz);
+
+renderQuiz();
+</script>
+</body>
+</html>

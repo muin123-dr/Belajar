@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis TKA Bahasa Inggris - Pemahaman Teks</title>
+<style>
+:root{--blue:#2563eb;--bluebg:#dbeafe;--green:#15803d;--greenbg:#dcfce7;--red:#b91c1c;--redbg:#fee2e2;--gray:#64748b;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#eff6ff,#f8fafc 40%,#f5f7fb);font-family:Arial,Helvetica,sans-serif;color:#1f2937;line-height:1.6}
+.container{max-width:980px;margin:auto;padding:18px}.hero,.card,.result{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 25px rgba(15,23,42,.06)}
+.hero{padding:24px;margin-bottom:18px}h1{margin:0 0 8px;font-size:clamp(26px,4vw,38px)}.sub{margin:0;color:var(--gray)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.stat{background:#f8fafc;border:1px solid var(--line);border-radius:12px;text-align:center;padding:12px}.stat strong{display:block;font-size:22px}
+.progress{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:16px}.fill{height:100%;width:0;background:var(--blue);transition:.3s}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border:0;padding:10px 14px;border-radius:10px;font:inherit;font-weight:700;cursor:pointer}.primary{background:var(--blue);color:#fff}.secondary{background:#e2e8f0}
+.card{padding:22px;margin-bottom:16px}.top{display:flex;gap:11px;align-items:flex-start}.num{min-width:38px;height:38px;border-radius:10px;background:var(--bluebg);color:#1d4ed8;display:flex;align-items:center;justify-content:center;font-weight:800}.tag{font-size:12px;font-weight:700;color:#475569;background:#f1f5f9;padding:4px 8px;border-radius:999px;display:inline-block;margin-bottom:7px}.q{font-size:18px;font-weight:700;margin:0}
+.passage{margin:15px 0;padding:14px 16px;background:#f8fafc;border-left:4px solid #93c5fd;border-radius:8px}.options{display:grid;gap:10px;margin-top:15px}.option{width:100%;text-align:left;background:#fff;border:1px solid #cbd5e1;padding:11px 13px;border-radius:10px;color:#0f172a;font:inherit;font-weight:600;cursor:pointer}.option:hover{background:#eff6ff;border-color:#93c5fd}.option:disabled{cursor:not-allowed;opacity:1}.correct{background:var(--greenbg)!important;border-color:#86efac!important;color:#166534!important}.wrong{background:var(--redbg)!important;border-color:#fca5a5!important;color:#991b1b!important}
+.feedback{display:none;margin-top:14px;padding:13px 15px;border-radius:12px;font-weight:800}.show{display:block}.ok{background:var(--greenbg);color:var(--green)}.no{background:var(--redbg);color:var(--red)}
+.exp{display:none;margin-top:10px;padding:15px;background:#f8fafc;border:1px solid var(--line);border-radius:12px}.result{display:none;padding:22px;margin:20px 0}.badge{display:inline-block;padding:5px 9px;background:var(--bluebg);color:#1d4ed8;border-radius:999px;font-weight:800}.note{font-size:13px;color:var(--gray)}
+@media(max-width:700px){.container{padding:11px}.hero,.card,.result{padding:17px}.stats{grid-template-columns:1fr}.q{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+<section class="hero">
+<h1>📘 Kuis Pemahaman Teks TKA Bahasa Inggris</h1>
+<p class="sub">Latihan interaktif: informasi eksplisit, klasifikasi, outline, summary, sintesis, 5W+1H, skimming, scanning, main idea, dan strategi membaca.</p>
+<div class="stats"><div class="stat"><strong id="total">30</strong>Soal</div><div class="stat"><strong id="done">0</strong>Terjawab</div><div class="stat"><strong id="score">0</strong>Skor</div></div>
+<div class="progress"><div id="fill" class="fill"></div></div>
+<div class="controls"><button class="btn primary" onclick="nextQ()">➡️ Soal Belum Dijawab</button><button class="btn secondary" onclick="resetQuiz()">🔄 Ulangi Kuis</button></div>
+<p class="note">Klik satu pilihan. Setelah diklik, pilihan akan dikunci lalu muncul notifikasi <strong>BENAR/SALAH</strong> dan pembahasan.</p>
+</section>
+<div id="quiz"></div>
+<section id="result" class="result"><h2>🎉 Hasil Latihan</h2><p id="resultText"></p><p id="advice"></p></section>
+</div>
+
+<script>
+const qdata=[
+["Informasi Eksplisit","Last Saturday, Rina went to the city library. She borrowed three English books and two science magazines. She spent two hours reading there.","When did Rina go to the library?",["Last Saturday","Last Sunday","This morning","Next Saturday"],0,"<strong>When</strong> menanyakan waktu. Teks menyebutkan langsung <strong>Last Saturday</strong>. Ini adalah informasi eksplisit, jadi gunakan scanning."],
+["Informasi Eksplisit","Andi leaves home at 6:30 a.m. He rides his motorcycle to school. The journey takes about twenty minutes.","What time does Andi leave home?",["6:20 a.m.","6:30 a.m.","6:50 a.m.","7:00 a.m."],1,"Teks menyatakan langsung <strong>leaves home at 6:30 a.m.</strong>. Fokus pada angka karena soal menanyakan waktu."],
+["Informasi Eksplisit","The school has 24 classrooms, two laboratories, and a large library.","How many laboratories does the school have?",["One","Two","Twenty-four","A large number"],1,"Soal meminta jumlah laboratorium. Teks menyebut <strong>two laboratories</strong>. Jangan tertukar dengan 24 classrooms."],
+["5W+1H","Maya visited the city museum with her cousin on Friday.","Who visited the city museum with Maya?",["Her teacher","Her brother","Her cousin","Her neighbor"],2,"<strong>Who</strong> menanyakan orang. Maya pergi bersama <strong>her cousin</strong>."],
+["5W+1H","The students practiced in the school hall because the classroom was too small.","Why did the students practice in the school hall?",["Because the hall was quiet.","Because the classroom was too small.","Because the teacher was absent.","Because it was raining."],1,"Kata <strong>because</strong> menunjukkan alasan. Alasannya adalah <strong>the classroom was too small</strong>."],
+["Klasifikasi","The zoo has lions, dolphins, parrots, and crocodiles. Lions, dolphins, and crocodiles are kept in large animal areas, while parrots are kept in the bird house.","Which animal belongs to the bird category?",["Lion","Dolphin","Parrot","Crocodile"],2,"Kategori <strong>bird</strong> disebut langsung bersama <strong>parrots</strong>. Jadi jawabannya parrot."],
+["Klasifikasi","Rina likes reading and writing. Dodi likes swimming and playing football.","Which activities belong to Rina?",["Reading and swimming","Writing and reading","Swimming and football","Football and reading"],1,"Cari kategori Rina. Teks menyatakan Rina suka <strong>reading and writing</strong>."],
+["Klasifikasi","The school club offers three activities: painting, basketball, and debate. Painting is an art activity; basketball is a sport; debate is a speaking activity.","Which activity belongs to the sports category?",["Painting","Basketball","Debate","All three"],1,"Teks mengelompokkan <strong>basketball</strong> sebagai sport."],
+["Outline","First, wash the rice. Next, put it into the rice cooker. Then, add water. Finally, press the cook button.","Which outline is correct?",["Press cook → Wash rice → Add water → Put in cooker","Wash rice → Put in cooker → Add water → Press cook","Add water → Wash rice → Press cook → Put in cooker","Put in cooker → Add water → Wash rice → Press cook"],1,"Penanda <strong>First, Next, Then, Finally</strong> menunjukkan urutan. Pilihan B mengikuti urutan teks."],
+["Outline","First, Nina wakes up. Then, she takes a shower. After that, she has breakfast. Finally, she goes to school.","What is the correct sequence?",["Wakes up → breakfast → shower → school","Wakes up → shower → breakfast → school","Shower → wakes up → school → breakfast","Breakfast → shower → wakes up → school"],1,"Ikuti urutan: <strong>wakes up → shower → breakfast → school</strong>."],
+["Outline","The text explains how to prepare for a school presentation. First, choose a topic. Second, collect information. Third, make slides. Finally, practice speaking.","Which outline best represents the text?",["Choose a topic → collect information → make slides → practice","Practice → make slides → collect information → choose a topic","Collect information → practice → choose a topic → make slides","Make slides → choose a topic → practice → collect information"],0,"Outline harus mengambil poin utama sesuai urutan. Pilihan A mencakup semua langkah penting."],
+["Main Idea","Many students use bicycles to go to school. Cycling is healthy, saves money, and reduces pollution.","What is the main idea of the paragraph?",["Students buy expensive bicycles.","Cycling to school has several benefits.","Reducing pollution is impossible.","Students only cycle for exercise."],1,"Pilihan B mencakup semua detail: sehat, hemat, dan mengurangi polusi. Itulah main idea."],
+["Main Idea","Many students feel stressed during exams. They worry about grades and time. However, good time management can reduce this stress.","What is the main idea of the paragraph?",["Students hate all exams.","Grades are not important.","Good time management can reduce exam stress.","Students have too much free time."],2,"Gagasan yang menaungi isi adalah <strong>good time management can reduce exam stress</strong>. Detail sebelumnya menjelaskan sumber stres."],
+["Main Idea","The city park has become a popular place for families. It has a playground, walking paths, and several shaded benches.","What is the paragraph mainly about?",["The city park is popular and has useful facilities for families.","Families dislike the city park.","Only children can use the park.","The park has no comfortable places."],0,"Main idea harus mencakup keseluruhan. Paragraf membahas popularitas taman dan fasilitasnya."],
+["Summary","My school library is large. It has more than ten thousand books. There are many tables and chairs. Students can read and borrow books there.","What is the best summary?",["The school has many students.","The library is a large place with many books for reading and borrowing.","Students like reading books.","The library has tables and chairs."],1,"Ringkasan terbaik mencakup ukuran, koleksi, dan fungsi utama. Pilihan lain hanya mengambil satu detail."],
+["Summary","Many students sleep late because they play online games. As a result, they feel tired at school. Their grades may also decrease.","Which is the best summary?",["Students play online games.","Students feel tired at school.","Playing games late can make students tired and negatively affect their grades.","Online games are always dangerous."],2,"Summary yang baik memuat hubungan sebab-akibat: bermain hingga larut → lelah → nilai dapat menurun."],
+["Summary","Bali has beautiful beaches, green rice fields, and ancient temples. Tourists from many countries visit the island to enjoy its nature and culture.","Which summary is best?",["Bali has beaches.","Bali is an Indonesian island known for nature and culture that attracts tourists.","Tourists only visit Bali for beaches.","Ancient temples are the only attraction in Bali."],1,"Pilihan B mencakup daya tarik alam, budaya, dan wisatawan. Itu lebih lengkap daripada satu detail."],
+["Synthesis","Text 1: Plastic waste harms marine animals. Text 2: Many countries have banned single-use plastics to reduce waste.","What is the best synthesis?",["Plastic waste harms marine animals, and many countries are responding by reducing single-use plastics.","Plastic is always useful.","Marine animals are more dangerous than plastic.","Countries have banned all kinds of plastic everywhere."],0,"Sintesis menggabungkan dampak plastik dan respons negara. Jangan membuat klaim baru seperti semua jenis plastik sudah dilarang."],
+["Synthesis","Text 1: Solar panels produce clean electricity. Text 2: Although they can be expensive to install, they may save money in the long run.","What can be concluded by combining the two texts?",["Solar panels provide clean energy and may save money over time.","Solar panels are always cheap.","Solar panels produce dirty energy.","Solar panels have no financial benefit."],0,"Teks pertama memberi manfaat lingkungan, teks kedua manfaat ekonomi. Keduanya digabung dalam pilihan A."],
+["Synthesis","Text 1: Reading regularly improves vocabulary. Text 2: Students who read often are exposed to many new ideas.","Which statement best combines the two texts?",["Reading regularly can expand vocabulary and expose students to new ideas.","Reading only improves handwriting.","Students should avoid new ideas.","Vocabulary and ideas are unrelated."],0,"Sintesis yang benar menggabungkan dua manfaat yang disebutkan: vocabulary dan new ideas."],
+["Skimming","What is the main purpose of skimming?",["To translate every word.","To find a specific phone number.","To get the general idea of a text quickly.","To memorize all details."],2,"<strong>Skimming</strong> digunakan untuk memperoleh gambaran umum dengan cepat, bukan mencari satu data tertentu."],
+["Scanning","What is the main purpose of scanning?",["To understand every paragraph deeply.","To find specific information quickly.","To summarize the entire text.","To identify the writer's personality."],1,"<strong>Scanning</strong> digunakan untuk mencari informasi spesifik seperti nama, angka, tanggal, tempat, atau waktu."],
+["5W+1H","If the question asks, 'When did the event happen?', which information should you focus on first?",["A person's opinion","A place","A time or date","A description of an object"],2,"<strong>When</strong> menanyakan waktu. Cari jam, hari, tanggal, bulan, atau tahun."],
+["5W+1H","If the question asks, 'Where did they meet?', what should you search for?",["A reason","A place","A person","A number"],1,"<strong>Where</strong> menanyakan tempat. Cari nama lokasi atau frasa tempat."],
+["Paraphrase","The text says: 'The program provides many benefits for students.'","Which option has the closest meaning?",["The program offers several advantages to students.","The program creates problems for students.","Students never use the program.","The program is difficult for students."],0,"<strong>provides = offers</strong> dan <strong>benefits = advantages</strong>. Kata berbeda dapat memiliki makna yang sama."],
+["Fact/Distractor","The library closes at 5 p.m.","Which statement is TRUE according to the text?",["The library closes at 8 p.m.","The library is open all night.","The library closes at 5 p.m.","The library never closes."],2,"Jawaban harus memiliki bukti langsung. Teks menyebut <strong>closes at 5 p.m.</strong>."],
+["Context Clues","The elephant is huge. It is much bigger than a small car.","The word 'huge' is closest in meaning to...",["Very small","Very big","Very slow","Very young"],1,"Kalimat kedua menjadi <strong>context clue</strong>: gajah jauh lebih besar dari mobil kecil. Jadi huge = very big."],
+["Reference","The school introduced a new reading program. It helps students improve their vocabulary.","What does 'It' refer to?",["The school","A new reading program","Students","Vocabulary"],1,"<strong>It</strong> merujuk pada hal yang disebut sebelumnya, yaitu <strong>a new reading program</strong>."],
+["Outline vs Detail","First, choose a topic. Then, gather information. After that, make an outline. Finally, write the draft.","Which statement is NOT part of the main outline?",["Choose a topic.","Gather information.","Make an outline.","Use blue ink."],3,"Tiga pilihan pertama merupakan langkah dalam teks. <strong>Use blue ink</strong> tidak disebutkan."],
+["Eliminasi","Some students enjoy reading before bed.","Which option should be treated carefully because it is too extreme?",["Some students enjoy reading before bed.","Reading before bed can be a habit for some students.","All students enjoy reading before bed.","Some students read before sleeping."],2,"Teks hanya mengatakan <strong>some</strong>. Pilihan <strong>all</strong> membuat klaim mutlak yang tidak didukung."],
+["Strategy","What is the safest way to answer a textual comprehension question?",["Choose the longest option.","Choose the option that sounds nicest.","Use evidence from the text and check the surrounding context.","Choose the option with the most words from the question."],2,"Strategi paling aman adalah mencari <strong>bukti dalam teks</strong>, membaca konteks di sekitarnya, lalu mencocokkannya dengan pilihan."]
+];
+
+let answered=Array(qdata.length).fill(false), correct=Array(qdata.length).fill(false);
+
+function render(){
+ const root=document.getElementById("quiz"); root.innerHTML="";
+ qdata.forEach((x,i)=>{
+  const [tag,passage,q,opts,ans,exp]=x;
+  const c=document.createElement("section"); c.className="card"; c.id="q"+i;
+  c.innerHTML=`<div class="top"><div class="num">${i+1}</div><div><div class="tag">${tag}</div><p class="q">${q}</p></div></div>
+  ${passage?`<div class="passage">${passage}</div>`:""}
+  <div class="options" id="opts${i}">${opts.map((o,j)=>`<button class="option" onclick="pick(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join("")}</div>
+  <div id="fb${i}" class="feedback"></div><div id="ex${i}" class="exp"><strong>💡 Pembahasan:</strong><br>${exp}</div>`;
+  root.appendChild(c);
+ });
+ update();
+}
+
+function pick(i,j){
+ if(answered[i])return;
+ answered[i]=true; correct[i]=(j===qdata[i][4]);
+ const btns=document.querySelectorAll("#opts"+i+" .option");
+ btns.forEach((b,k)=>{b.disabled=true;if(k===qdata[i][4])b.classList.add("correct");if(k===j&&j!==qdata[i][4])b.classList.add("wrong")});
+ const fb=document.getElementById("fb"+i);
+ if(correct[i]){fb.className="feedback show ok";fb.innerHTML="✅ BENAR! Jawabanmu tepat."}
+ else{fb.className="feedback show no";fb.innerHTML="❌ SALAH. Jawaban yang benar: <strong>"+String.fromCharCode(65+qdata[i][4])+". "+qdata[i][3][qdata[i][4]]+"</strong>"}
+ document.getElementById("ex"+i).style.display="block"; update();
+ setTimeout(()=>fb.scrollIntoView({behavior:"smooth",block:"center"}),80);
+}
+
+function update(){
+ const done=answered.filter(Boolean).length, right=correct.filter(Boolean).length;
+ document.getElementById("done").textContent=done;
+ document.getElementById("score").textContent=done?Math.round(right/qdata.length*100):0;
+ document.getElementById("fill").style.width=(done/qdata.length*100)+"%";
+ if(done===qdata.length){
+  const score=Math.round(right/qdata.length*100), r=document.getElementById("result");
+  r.style.display="block";
+  document.getElementById("resultText").innerHTML=`Kamu menjawab <strong>${right}</strong> dari <strong>${qdata.length}</strong> soal dengan benar. Skor: <span class="badge">${score}/100</span>`;
+  document.getElementById("advice").textContent=score>=90?"🌟 Sangat baik! Perkuat soal sintesis dan ringkasan agar semakin mantap.":score>=75?"👍 Bagus! Ulangi lagi soal main idea, summary, dan scanning.":score>=60?"📚 Cukup baik. Pelajari kembali 5 subkompetensi dan perbedaan skimming vs scanning.":"🌱 Ulangi dari dasar: 5W+1H, informasi eksplisit, outline, summary, dan mencari bukti dalam teks.";
+ }
+}
+function nextQ(){const i=answered.findIndex(v=>!v);document.getElementById(i<0?"result":"q"+i).scrollIntoView({behavior:"smooth",block:"start"})}
+function resetQuiz(){answered=Array(qdata.length).fill(false);correct=Array(qdata.length).fill(false);document.getElementById("result").style.display="none";render();window.scrollTo({top:0,behavior:"smooth"})}
+render();
+</script>
+</body>
+</html>
