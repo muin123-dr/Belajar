@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis اِعْلَمْ رَحِمَكَ اللَّهُ أَنَّهُ يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fefaf2;
+            --card-bg: #ffffff;
+            --text: #3d2e1c;
+            --accent: #2d6a4f;
+            --gold: #b8860b;
+            --gold-light: #fff8e7;
+            --border: #e0d5c1;
+            --shadow: 0 2px 12px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+            --radius: 14px;
+            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+            --font-arabic: 'Scheherazade New', 'Traditional Arabic', 'Times New Roman', serif;
+            --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-ui);
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 16px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2d6a4f, #b8860b, #2d6a4f);
+            border-radius: 4px 4px 0 0;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            color: #2d6a4f;
+            font-family: var(--font-arabic);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: #6b5e4a;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #8b7355;
+            margin-bottom: 10px;
+            font-weight: 600;
+            background: #f5efe4;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+        .arabic-text {
+            font-family: var(--font-arabic);
+            font-size: 1.9rem;
+            line-height: 2.4;
+            text-align: center;
+            color: #2c2416;
+            direction: rtl;
+            unicode-bidi: embed;
+            word-spacing: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .word-unit {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 2px;
+        }
+        .word-arab {
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            font-family: var(--font-arabic);
+            font-size: inherit;
+            line-height: inherit;
+            color: inherit;
+            background: transparent;
+        }
+        .word-arab:hover {
+            background: #fdf3d6;
+            border-bottom-color: #b8860b;
+            color: #5c3d0e;
+        }
+        .word-arab.active {
+            background: #fde8b0;
+            border-bottom-color: #b8860b;
+            font-weight: 700;
+            color: #3d2606;
+            box-shadow: 0 0 0 4px rgba(184,134,11,0.15);
+            border-radius: 8px;
+        }
+        .word-makna {
+            font-size: 0.8rem;
+            color: #5c4a2e;
+            font-family: var(--font-ui);
+            background: #fef9ef;
+            border-radius: 4px;
+            padding: 2px 6px;
+            white-space: nowrap;
+            margin-top: 2px;
+            display: none;
+            line-height: 1.3;
+        }
+        .show-makna .word-makna {
+            display: inline-block;
+        }
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4a3f2f;
+            transition: var(--transition);
+            font-family: var(--font-ui);
+            user-select: none;
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background: #faf6ef;
+            border-color: #b8860b;
+            color: #5c3d0e;
+        }
+        .btn.active-btn {
+            background: #2d6a4f;
+            color: #fff;
+            border-color: #2d6a4f;
+        }
+        .analysis-panel,
+        .translation-box,
+        .structural-box {
+            display: none;
+            margin-top: 16px;
+            background: #fdfcf9;
+            border: 1.5px solid #e0d5c1;
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeSlide 0.3s ease;
+            direction: ltr;
+            text-align: left;
+        }
+        .analysis-panel.visible,
+        .translation-box.visible,
+        .structural-box.visible {
+            display: block;
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .analyzed-word {
+            font-family: var(--font-arabic);
+            font-size: 2.2rem;
+            color: #2d6a4f;
+            text-align: center;
+            direction: rtl;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        .makna-box {
+            background: linear-gradient(135deg, #fff8e7, #fef3d0);
+            border: 1px solid #e5d5a0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #5c3d0e;
+        }
+        .makna-box .makna-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #a08040;
+            display: block;
+            margin-bottom: 3px;
+            font-family: var(--font-ui);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        table th,
+        table td {
+            padding: 10px 12px;
+            border: 1px solid #e8ddd0;
+            vertical-align: top;
+        }
+        table th {
+            background: #faf5eb;
+            font-weight: 700;
+            color: #5c4520;
+            white-space: nowrap;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .close-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 7px 18px;
+            background: #f5efe4;
+            border: 1px solid #d5c8b0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #5c4520;
+            transition: var(--transition);
+        }
+        .close-btn:hover { background: #e8ddd0; }
+        .hint {
+            font-size: 0.8rem;
+            color: #a09080;
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .structural-box {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        .structural-box h2 {
+            color: #2d6a4f;
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+        .structural-box h3 {
+            color: #2d6a4f;
+            margin: 16px 0 6px;
+            font-size: 1.1rem;
+        }
+        .structural-box h4 {
+            color: #5c4520;
+            margin: 12px 0 4px;
+        }
+        .structural-box p,
+        .structural-box li {
+            margin-bottom: 10px;
+        }
+        .structural-box ul,
+        .structural-box ol {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        .structural-box strong {
+            color: #5c3d0e;
+        }
+        .structural-box em {
+            font-style: italic;
+            color: #3d2e1c;
+        }
+        @media (max-width: 600px) {
+            .arabic-text { font-size: 1.5rem; gap: 4px; }
+            .btn { padding: 8px 14px; font-size: 0.8rem; }
+            .analyzed-word { font-size: 1.8rem; }
+            table { font-size: 0.8rem; }
+            table th, table td { padding: 6px 8px; }
+            .structural-box { max-height: 60vh; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <div class="header">
+        <h1>اِعْلَمْ رَحِمَكَ اللَّهُ أَنَّهُ يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ</h1>
+        <p class="subtitle">Analisis Makna, Sharaf, I'rob, Nahwu, Faidah, dan Balaghah</p>
+    </div>
+
+    <div class="card" id="mainCard">
+        <span class="section-label">📜 Teks Arab</span>
+        <div class="arabic-text" id="arabicText"></div>
+        <p class="hint">👆 Klik/tap setiap kata untuk melihat makna & analisis lengkap</p>
+
+        <div class="btn-row">
+            <button class="btn" id="btnMakna" onclick="toggleMakna()">📝 Makna Perkata</button>
+            <button class="btn" id="btnTranslation" onclick="toggleTranslation()">🌐 Terjemahan</button>
+            <button class="btn" id="btnStructural" onclick="toggleStructural()">📚 Penjelasan Struktural & Balaghah</button>
+            <button class="btn" id="btnReset" onclick="resetAll()">🔄 Reset</button>
+        </div>
+
+        <!-- Panel Analisis Kata -->
+        <div class="analysis-panel" id="analysisPanel">
+            <div class="analyzed-word" id="analyzedWordDisplay"></div>
+            <div class="makna-box">
+                <span class="makna-label">📌 Makna</span>
+                <span id="maknaText"></span>
+            </div>
+            <div id="analysisContent"></div>
+            <button class="close-btn" onclick="closeAnalysis()">✕ Tutup Analisis</button>
+        </div>
+
+        <!-- Panel Terjemahan -->
+        <div class="translation-box" id="translationBox">
+            <strong>📝 Terjemahan:</strong><br>
+            <span style="font-size:1.5rem;font-family:var(--font-arabic);">اِعْلَمْ رَحِمَكَ اللَّهُ أَنَّهُ يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ</span><br>
+            <em>"Ketahuilah, semoga Allah merahmatimu, bahwa sesungguhnya wajib atas kita mempelajari empat perkara."</em>
+        </div>
+
+        <!-- Panel Penjelasan Struktural & Balaghah (LENGKAP) -->
+        <div class="structural-box" id="structuralBox">
+            <h2>Analisis Lengkap Kalimat<br>اِعْلَمْ رَحِمَكَ اللَّهُ أَنَّهُ يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ</h2>
+            <p><strong>Analisis Makna, Sharaf, I‘rab, Nahwu, Faidah, dan Balaghah</strong></p>
+
+            <h3>I. TEKS DAN TERJEMAHAN</h3>
+            <p><strong>Teks Arab:</strong> اِعْلَمْ رَحِمَكَ اللَّهُ أَنَّهُ يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ</p>
+            <p><strong>Transliterasi:</strong> I‘lam raḥimakallāhu annahu yajibu ‘alainā ta‘allumu arba‘i masā’ila.</p>
+            <p><strong>Terjemah:</strong> “Ketahuilah, semoga Allah merahmatimu, bahwa sesungguhnya wajib atas kita mempelajari empat perkara.”</p>
+            <p>Kalimat ini merupakan pembukaan yang sangat khas dalam karya-karya ulama terdahulu. Di dalamnya terdapat perpaduan antara perintah untuk belajar, doa kasih sayang, penegasan terhadap suatu perkara penting, dan penjelasan tentang kewajiban mempelajari ilmu.</p>
+            <p>Secara Nahwu, kalimat ini sangat kaya karena di dalamnya terdapat: Fi‘il amr, Fi‘il māḍī, Fi‘il muḍāri‘, Ḍamīr mustatir, Ḍamīr muttaṣil, Ḍamīr sya’n, Ḥarf taukīd wa naṣb, Jumlah mu‘tariḍah, Mashdar mu’awwal, Jār wa majrūr, Fā‘il mu’akhkhar, Iḍāfah bertingkat, Kaidah bilangan 3–10, Isim ghairu munṣarif, Uslūb amr, I‘tirāḍ, Ījāz dan ta’kīd.</p>
+
+            <h3>II. ANALISIS KATA PER KATA</h3>
+
+            <h4>1. اِعْلَمْ (I‘lam)</h4>
+            <p><strong>Makna:</strong> Ketahuilah! Maknanya bukan sekadar “mengetahui” secara pasif, tetapi merupakan perintah agar seseorang memperhatikan, memahami, dan mengetahui dengan benar perkara yang akan dijelaskan.</p>
+            <p><strong>Sharaf:</strong> Fi‘il amr dari عَلِمَ – يَعْلَمُ – اِعْلَمْ. Akar: ع-ل-م. Wazan: اِفْعَلْ. Berasal dari tsulāthī mujarrad عَلِمَ – يَعْلَمُ.</p>
+            <p><strong>I‘rab:</strong> اِعْلَمْ: فعل أمر مبني على السكون. Fa‘il-nya ḍamīr mustatir wujūban taqdīr-nya أَنْتَ.</p>
+            <p><strong>Nahwu:</strong> Fi‘il amr. Fā‘il mustatir أَنْتَ.</p>
+            <p><strong>Faidah:</strong> Penggunaan اِعْلَمْ sebagai pembuka menunjukkan bahwa penulis ingin menarik perhatian pembaca sebelum menyampaikan perkara penting.</p>
+
+            <h4>2. رَحِمَكَ (Raḥimaka)</h4>
+            <p><strong>Makna:</strong> Semoga merahmati. Secara bentuk adalah fi‘il māḍī, tetapi dalam konteks ini merupakan doa.</p>
+            <p><strong>Sharaf:</strong> رَحِمَ: fi‘il māḍī, akar ر-ح-م, wazan فَعِلَ. كَ: ḍamīr muttaṣil mukhāṭab mufrad mudzakkar.</p>
+            <p><strong>I‘rab:</strong> رَحِمَ: فعل ماضٍ مبني على الفتح. كَ: ضمير متصل مبني على الفتح في محل نصب مفعول به.</p>
+            <p><strong>Nahwu:</strong> Jumlah fi‘liyyah (doa). Fā‘il: اللَّهُ. Objek: كَ.</p>
+
+            <h4>3. اللَّهُ (Allāhu)</h4>
+            <p><strong>Makna:</strong> Allah, Dzat yang berhak diibadahi dengan benar.</p>
+            <p><strong>Sharaf:</strong> Lafẓ al-Jalālah, isim ‘alam, ma‘rifah.</p>
+            <p><strong>I‘rab:</strong> فاعل مرفوع بالضمة الظاهرة.</p>
+            <p><strong>Nahwu:</strong> Fā‘il dari رَحِمَ.</p>
+
+            <h4>4. أَنَّهُ (Annahu)</h4>
+            <p><strong>Makna:</strong> Bahwa sesungguhnya. Terdiri dari أَنَّ + هُ (ḍamīr sya’n).</p>
+            <p><strong>Sharaf:</strong> أَنَّ: ḥarf taukīd wa naṣb. هُ: ḍamīr sya’n.</p>
+            <p><strong>I‘rab:</strong> أَنَّ: حرف توكيد ونصب مبني لا محل له من الإعراب. هُ: ضمير الشأن متصل مبني على الضم في محل نصب اسم أنَّ.</p>
+            <p><strong>Nahwu:</strong> Mashdar muawwal menjadi maf‘ūl bih dari اِعْلَمْ.</p>
+
+            <h4>5. يَجِبُ (Yajibu)</h4>
+            <p><strong>Makna:</strong> Wajib, harus.</p>
+            <p><strong>Sharaf:</strong> Fi‘il muḍāri‘ dari وَجَبَ – يَجِبُ. Termasuk fi‘il mitsāl wāwī.</p>
+            <p><strong>I‘rab:</strong> فعل مضارع مرفوع بالضمة الظاهرة.</p>
+            <p><strong>Nahwu:</strong> Khabar dari أَنَّ.</p>
+
+            <h4>6. عَلَيْنَا (‘Alainā)</h4>
+            <p><strong>Makna:</strong> Atas kita.</p>
+            <p><strong>Sharaf:</strong> عَلَى: ḥarf jarr. نَا: ḍamīr muttaṣil mutakallim ma‘a al-ghayr.</p>
+            <p><strong>I‘rab:</strong> على: حرف جر. نا: ضمير متصل مبني في محل جر بحرف الجر.</p>
+            <p><strong>Nahwu:</strong> Jār wa majrūr, berta‘alluq dengan يَجِبُ.</p>
+
+            <h4>7. تَعَلُّمُ (Ta‘allumu)</h4>
+            <p><strong>Makna:</strong> Mempelajari, belajar.</p>
+            <p><strong>Sharaf:</strong> Mashdar dari تَعَلَّمَ – يَتَعَلَّمُ. Wazan: تَفَعُّلٌ. Akar: ع-ل-م.</p>
+            <p><strong>I‘rab:</strong> فاعل مرفوع بالضمة الظاهرة. Tidak bertanwin karena mudhāf.</p>
+            <p><strong>Nahwu:</strong> Fā‘il dari يَجِبُ. Sekaligus mudhāf kepada أَرْبَعِ.</p>
+
+            <h4>8. أَرْبَعِ (Arba‘i)</h4>
+            <p><strong>Makna:</strong> Empat.</p>
+            <p><strong>Sharaf:</strong> Isim ‘adad 3–10, mudzakkar (karena ma‘dūd-nya mu’annats). Akar: ر-ب-ع.</p>
+            <p><strong>I‘rab:</strong> مضاف إليه مجرور بالكسرة الظاهرة. Sekaligus mudhāf.</p>
+            <p><strong>Nahwu:</strong> Mudhāf ilaih dari تَعَلُّمُ, dan mudhāf kepada مَسَائِلَ.</p>
+
+            <h4>9. مَسَائِلَ (Masā’ila)</h4>
+            <p><strong>Makna:</strong> Masalah-masalah, perkara-perkara.</p>
+            <p><strong>Sharaf:</strong> Jamak taksīr dari مَسْأَلَة. Wazan: مَفَاعِلُ. Termasuk isim ghairu munṣarif.</p>
+            <p><strong>I‘rab:</strong> مضاف إليه مجرور بالفتحة نيابة عن الكسرة لأنه ممنوع من الصرف.</p>
+            <p><strong>Nahwu:</strong> Mudhāf ilaih dari أَرْبَعِ. Ma‘dūd.</p>
+
+            <h3>III. ANALISIS NAHWU KESELURUHAN</h3>
+            <p>Kalimat terdiri dari tiga bagian: (1) اِعْلَمْ (fi‘il amr), (2) رَحِمَكَ اللَّهُ (jumlah mu‘tariḍah), (3) أَنَّهُ يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ (maf‘ūl bih dari اِعْلَمْ).</p>
+
+            <h3>IV. JUMLAH MU‘TARIḌAH</h3>
+            <p>رَحِمَكَ اللَّهُ adalah kalimat sisipan yang tidak memiliki kedudukan i‘rab. Jika dihilangkan, struktur utama tetap sempurna: اِعْلَمْ أَنَّهُ يَجِبُ...</p>
+
+            <h3>V. ANALISIS أَنَّهُ يَجِبُ عَلَيْنَا...</h3>
+            <p>أَنَّ menashabkan isim dan merafa‘kan khabar. Isimnya هُ (ḍamīr sya’n), khabarnya jumlah fi‘liyyah يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ.</p>
+
+            <h3>VI. ḌAMĪR SYA’N</h3>
+            <p>هُ dalam أَنَّهُ adalah ḍamīr sya’n yang tidak merujuk pada kata sebelumnya, melainkan kepada perkara yang akan dijelaskan. Memberikan efek tafkhīm (penegasan).</p>
+
+            <h3>VII. MASHDAR MU’AWWAL</h3>
+            <p>Rangkaian أَنَّ + isim + khabar dapat ditakwil menjadi mashdar muawwal yang menempati posisi maf‘ūl bih dari اِعْلَمْ. Taqdīr: اِعْلَمْ وُجُوبَ...</p>
+
+            <h3>VIII. STRUKTUR KHABAR أَنَّ</h3>
+            <p>Khabar berupa jumlah fi‘liyyah: يَجِبُ (fi‘il), عَلَيْنَا (jār wa majrūr), تَعَلُّمُ (fā‘il mu’akhkhar), أَرْبَعِ مَسَائِلَ (iḍāfah).</p>
+
+            <h3>IX. FA‘IL MU’AKHKHAR</h3>
+            <p>تَعَلُّمُ adalah fā‘il dari يَجِبُ yang diakhirkan setelah jār wa majrūr عَلَيْنَا.</p>
+
+            <h3>X. IḌĀFAH BERTINGKAT</h3>
+            <p>تَعَلُّمُ أَرْبَعِ مَسَائِلَ: dua tingkat iḍāfah. Mudhāf tidak bertanwin.</p>
+
+            <h3>XI. KAIDAH BILANGAN 3–10</h3>
+            <p>Bilangan 3–10 berlawanan jenis dengan ma‘dūd. مَسْأَلَة mu’annats, maka bilangan menjadi mudzakkar أَرْبَع.</p>
+
+            <h3>XII. ANALISIS SHARAF MENDALAM</h3>
+            <p>عَلِمَ → يَعْلَمُ → اِعْلَمْ. رَحِمَ. وَجَبَ → يَجِبُ (gugur wāw). تَعَلَّمَ → تَعَلُّمٌ. مَسْأَلَة → مَسَائِل (ghairu munṣarif).</p>
+
+            <h3>XIII. ANALISIS BALAGHAH</h3>
+            <h4>1. Uslūb al-Amr</h4>
+            <p>Pembukaan dengan <strong>اِعْلَمْ</strong> merupakan <em>uslūb amr</em>. Perintah tersebut berfungsi untuk menarik perhatian, mengarahkan konsentrasi, menegaskan pentingnya perkara, dan mempersiapkan pembaca menerima ilmu. Penulis tidak memulai dengan penjelasan panjang, tetapi langsung: "Ketahuilah!" Ini menciptakan perhatian sejak awal.</p>
+            <h4>2. I‘TIRĀḌ — Penyisipan Doa</h4>
+            <p>Ungkapan <strong>رَحِمَكَ اللَّهُ</strong> disisipkan di antara <strong>اِعْلَمْ</strong> dan <strong>أَنَّهُ...</strong>. Secara balaghah, ini sangat indah. Penulis memberikan perintah dengan tegas, tetapi segera menyertainya dengan doa: "Semoga Allah merahmatimu." Sehingga hubungan guru dan murid bukan hanya hubungan transfer ilmu, tetapi juga hubungan kasih sayang dan doa.</p>
+            <h4>3. TA’KĪD — Penegasan</h4>
+            <p>Penggunaan <strong>أَنَّ</strong> merupakan bentuk <em>ta’kīd</em>. Artinya, perkara yang akan disampaikan bukan sesuatu yang ringan atau sekadar informasi tambahan. Ia akan menjelaskan suatu perkara yang harus diperhatikan dengan serius.</p>
+            <h4>4. ḌAMĪR SYA’N DAN TAFKHĪM</h4>
+            <p>Penggunaan <strong>أَنَّهُ</strong> dengan <strong>هُ</strong> sebagai ḍamīr sya’n memberikan efek <em>tafkhīm</em>, yaitu memberikan kesan penting dan agung terhadap perkara yang akan disebutkan. Seolah-olah penulis mengatakan: "Ada sebuah perkara penting yang harus kalian ketahui." Kemudian pembaca dibuat menunggu penjelasannya: <strong>يَجِبُ عَلَيْنَا...</strong></p>
+            <h4>5. ĪJĀZ</h4>
+            <p>Kalimat ini sangat singkat tetapi mengandung banyak makna: <strong>اِعْلَمْ</strong> → perintah, <strong>رَحِمَكَ اللَّهُ</strong> → doa, <strong>أَنَّهُ</strong> → penegasan dan perhatian terhadap perkara, <strong>يَجِبُ</strong> → hukum kewajiban, <strong>عَلَيْنَا</strong> → siapa yang dibebani, <strong>تَعَلُّمُ</strong> → aktivitas yang diwajibkan, <strong>أَرْبَعِ مَسَائِلَ</strong> → jumlah dan objek yang harus dipelajari. Semuanya disampaikan dalam satu kalimat pendek. Inilah salah satu bentuk <em>al-ījāz</em>, yaitu menyampaikan makna yang luas dengan lafaz yang ringkas.</p>
+
+            <h3>XIV. HUBUNGAN ANTARA NAHWU, SHARAF, DAN MAKNA</h3>
+            <p>Kalimat ini menjadi contoh bahwa perubahan bentuk kata sangat berkaitan dengan makna. <strong>اِعْلَمْ</strong> (bentuk amr) → memberikan perintah. <strong>رَحِمَكَ</strong> (bentuk māḍī) → digunakan sebagai ungkapan doa. <strong>يَجِبُ</strong> (bentuk muḍāri‘) → menunjukkan hukum yang berlaku. <strong>تَعَلُّمُ</strong> (bentuk maṣdar) → menunjukkan aktivitas/proses belajar. <strong>أَرْبَعِ</strong> (bentuk bilangan) → menunjukkan jumlah. <strong>مَسَائِلَ</strong> (bentuk jamak taksīr) → menunjukkan perkara-perkara yang jumlahnya empat. Dengan demikian, satu kalimat pendek ini sekaligus menjadi contoh nyata penerapan ilmu Sharaf (membentuk kata), Nahwu (menentukan hubungan antarkata), I‘rab (menentukan akhir kata), dan Balaghah (menjelaskan keindahan dan tujuan susunan).</p>
+
+            <h3>XV. I‘RAB LENGKAP SATU KALIMAT</h3>
+            <p>اِعْلَمْ: فعل أمر مبني على السكون. رَحِمَ: فعل ماض مبني على الفتح. كَ: ضمير متصل في محل نصب مفعول به. اللَّهُ: فاعل مرفوع. رَحِمَكَ اللَّهُ: جملة اعتراضية لا محل لها. أَنَّ: حرف توكيد ونصب. هُ: ضمير الشأن في محل نصب اسم أنَّ. يَجِبُ: فعل مضارع مرفوع. عَلَيْنَا: جار ومجرور متعلق بيجب. تَعَلُّمُ: فاعل مرفوع وهو مضاف. أَرْبَعِ: مضاف إليه مجرور وهو مضاف. مَسَائِلَ: مضاف إليه مجرور بالفتحة نيابة عن الكسرة. جملة يَجِبُ عَلَيْنَا... في محل رفع خبر أنَّ. المصدر المؤول في محل نصب مفعول به لـ اِعْلَمْ.</p>
+
+            <h3>XVI. TABEL RINGKAS I‘RAB</h3>
+            <table>
+                <tr><th>Kata</th><th>I‘rab</th><th>Kedudukan</th></tr>
+                <tr><td>اِعْلَمْ</td><td>Mabnī sukūn</td><td>Fi‘il amr</td></tr>
+                <tr><td>رَحِمَ</td><td>Mabnī fatḥah</td><td>Fi‘il māḍī (doa)</td></tr>
+                <tr><td>كَ</td><td>Mahal naṣab</td><td>Maf‘ūl bih</td></tr>
+                <tr><td>اللَّهُ</td><td>Marfū‘</td><td>Fā‘il</td></tr>
+                <tr><td>أَنَّ</td><td>–</td><td>Ḥarf taukīd wa naṣb</td></tr>
+                <tr><td>هُ</td><td>Mahal naṣab</td><td>Ism anna (ḍamīr sya’n)</td></tr>
+                <tr><td>يَجِبُ</td><td>Marfū‘ ḍammah</td><td>Fi‘il</td></tr>
+                <tr><td>عَلَيْنَا</td><td>Majrūr</td><td>Jār wa majrūr</td></tr>
+                <tr><td>تَعَلُّمُ</td><td>Marfū‘ ḍammah</td><td>Fā‘il; mudhāf</td></tr>
+                <tr><td>أَرْبَعِ</td><td>Majrūr kasrah</td><td>Mudhāf ilaih; mudhāf</td></tr>
+                <tr><td>مَسَائِلَ</td><td>Majrūr fatḥah</td><td>Mudhāf ilaih; ma‘dūd</td></tr>
+            </table>
+
+            <h3>XVII. SKEMA STRUKTUR KALIMAT</h3>
+            <p>اِعْلَمْ (fi‘il amr) → رَحِمَكَ اللَّهُ (jumlah mu‘tariḍah) → أَنَّهُ (ḍamīr sya’n + أَنَّ) → يَجِبُ عَلَيْنَا تَعَلُّمُ أَرْبَعِ مَسَائِلَ (jumlah fi‘liyyah sebagai khabar أَنَّ).</p>
+
+            <h3>XVIII. FAIDAH PENTING DARI KALIMAT</h3>
+            <p>Dari sisi bahasa, kalimat ini mengajarkan banyak kaidah:</p>
+            <ol>
+                <li><strong>Fi‘il amr</strong> — اِعْلَمْ menunjukkan perintah dan fa‘il-nya dapat berupa ḍamīr mustatir.</li>
+                <li><strong>Fi‘il māḍī untuk doa</strong> — رَحِمَكَ اللَّهُ menggunakan bentuk māḍī, tetapi maknanya adalah doa.</li>
+                <li><strong>Ḍamīr muttaṣil</strong> — كَ dan نَا menunjukkan bagaimana ḍamīr dapat melekat pada kata dan memiliki kedudukan i‘rab tertentu.</li>
+                <li><strong>Ḍamīr sya’n</strong> — هُ dalam أَنَّهُ tidak merujuk kepada kata sebelumnya, tetapi kepada perkara yang akan dijelaskan.</li>
+                <li><strong>Inna dan saudara-saudaranya</strong> — أَنَّ menashabkan isim dan merafa‘kan khabar.</li>
+                <li><strong>Jumlah fi‘liyyah sebagai khabar</strong> — Khabar tidak harus berupa satu kata. Ia dapat berupa satu jumlah lengkap: يَجِبُ عَلَيْنَا تَعَلُّمُ...</li>
+                <li><strong>Fā‘il mu’akhkhar</strong> — تَعَلُّمُ menjadi fā‘il dari يَجِبُ, meskipun letaknya setelah عَلَيْنَا.</li>
+                <li><strong>Iḍāfah bertingkat</strong> — تَعَلُّمُ أَرْبَعِ مَسَائِلَ mengandung dua hubungan iḍāfah.</li>
+                <li><strong>Bilangan 3–10</strong> — أَرْبَعِ مَسَائِلَ menunjukkan bahwa bilangan 3–10 berlawanan jenis dengan ma‘dūd.</li>
+                <li><strong>Isim ghairu munṣarif</strong> — مَسَائِلَ majrūr dengan fatḥah karena termasuk pola مَفَاعِل.</li>
+                <li><strong>Ījāz</strong> — Satu kalimat pendek memuat perintah, doa, penegasan, hukum kewajiban, objek kewajiban, dan jumlah perkara.</li>
+            </ol>
+
+            <h3>XIX. KESIMPULAN</h3>
+            <p>Kalimat ini adalah contoh sempurna bagaimana bahasa Arab mampu memadukan perintah, doa, penegasan, dan penjelasan kewajiban dalam satu susunan yang padat dan indah. Di dalamnya terkandung hampir semua kaidah penting Nahwu dan Sharaf. Memahami kalimat ini adalah kunci untuk membuka pintu analisis teks-teks Arab klasik lainnya.</p>
+            <p>وَاللَّهُ أَعْلَمُ بِالصَّوَابِ</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const analysisData = {
+        'i_lam': {
+            word: 'اِعْلَمْ',
+            makna: 'Ketahuilah',
+            sharaf: 'Fi‘il amr dari عَلِمَ – يَعْلَمُ. Akar: ع-ل-م. Wazan: اِفْعَلْ. Fi‘il amr ini mabnī ‘alā as-sukūn karena shahih akhir.',
+            irob: 'Mabnī ‘alā as-sukūn. Fa‘il-nya ḍamīr mustatir wujūban taqdīr-nya أَنْتَ.',
+            nahwu: 'Fi‘il amr. Fā‘il mustatir أَنْتَ.'
+        },
+        'rahimaka': {
+            word: 'رَحِمَكَ',
+            makna: 'Semoga merahmatimu',
+            sharaf: 'رَحِمَ: fi‘il māḍī tsulāthī mujarrad, akar ر-ح-م, wazan فَعِلَ. كَ: ḍamīr muttaṣil untuk mukhāṭab mufrad mudzakkar.',
+            irob: 'رَحِمَ: mabnī ‘alā al-fatḥ. كَ: mabnī ‘alā al-fatḥ fi maḥalli naṣbin maf‘ūl bih.',
+            nahwu: 'Jumlah fi‘liyyah (doa). Fā‘il: اللَّهُ. Objek: كَ.'
+        },
+        'allah': {
+            word: 'اللَّهُ',
+            makna: 'Allah',
+            sharaf: 'Lafẓ al-Jalālah, isim ‘alam, ma‘rifah.',
+            irob: 'Marfū‘ dengan ḍammah ẓāhirah.',
+            nahwu: 'Fā‘il dari رَحِمَ.'
+        },
+        'annahu': {
+            word: 'أَنَّهُ',
+            makna: 'Bahwa sesungguhnya',
+            sharaf: 'أَنَّ: ḥarf taukīd wa naṣb. هُ: ḍamīr sya’n, mabnī ‘alā aḍ-ḍamm.',
+            irob: 'أَنَّ: ḥarf, tidak memiliki i‘rāb. هُ: mabnī fi maḥalli naṣbin ism anna.',
+            nahwu: 'Mashdar muawwal dari أَنَّ + isim + khabar menjadi maf‘ūl bih dari اِعْلَمْ.'
+        },
+        'yajibu': {
+            word: 'يَجِبُ',
+            makna: 'Wajib',
+            sharaf: 'Fi‘il muḍāri‘ dari وَجَبَ – يَجِبُ. Akar: و-ج-ب. Wazan: يَفْعِلُ.',
+            irob: 'Marfū‘ dengan ḍammah ẓāhirah.',
+            nahwu: 'Khabar dari أَنَّ, berupa jumlah fi‘liyyah.'
+        },
+        'alaina': {
+            word: 'عَلَيْنَا',
+            makna: 'Atas kita',
+            sharaf: 'عَلَى: ḥarf jarr. نَا: ḍamīr muttaṣil untuk mutakallim ma‘a al-ghayr.',
+            irob: 'عَلَى: ḥarf jarr. نَا: mabnī fi maḥalli jarr.',
+            nahwu: 'Jār wa majrūr, berta‘alluq dengan يَجِبُ.'
+        },
+        'taallumu': {
+            word: 'تَعَلُّمُ',
+            makna: 'Mempelajari',
+            sharaf: 'Mashdar dari تَعَلَّمَ – يَتَعَلَّمُ. Wazan: تَفَعُّلٌ. Akar: ع-ل-م.',
+            irob: 'Marfū‘ dengan ḍammah ẓāhirah. Tidak bertanwin karena mudhāf.',
+            nahwu: 'Fā‘il dari يَجِبُ. Sekaligus mudhāf kepada أَرْبَعِ.'
+        },
+        'arbai': {
+            word: 'أَرْبَعِ',
+            makna: 'Empat',
+            sharaf: 'Isim ‘adad (bilangan) 3–10, mudzakkar, karena ma‘dūd-nya (مَسَائِلَ) mu’annats. Akar: ر-ب-ع.',
+            irob: 'Majrūr dengan kasrah ẓāhirah sebagai mudhāf ilaih dari تَعَلُّمُ. Sekaligus mudhāf.',
+            nahwu: 'Mudhāf ilaih pertama, dan mudhāf bagi مَسَائِلَ.'
+        },
+        'masaila': {
+            word: 'مَسَائِلَ',
+            makna: 'Perkara-perkara',
+            sharaf: 'Jamak taksīr dari مَسْأَلَة. Wazan: مَفَاعِلُ (shighah muntahā al-jumū‘). Akar: س-أ-ل.',
+            irob: 'Majrūr dengan fatḥah sebagai ganti kasrah karena isim ghairu munṣarif.',
+            nahwu: 'Mudhāf ilaih dari أَرْبَعِ. Berstatus ma‘dūd.'
+        }
+    };
+
+    const arabicWords = [
+        { id: 'i_lam', text: 'اِعْلَمْ', spacerAfter: ' ' },
+        { id: 'rahimaka', text: 'رَحِمَكَ', spacerAfter: ' ' },
+        { id: 'allah', text: 'اللَّهُ', spacerAfter: ' ' },
+        { id: 'annahu', text: 'أَنَّهُ', spacerAfter: ' ' },
+        { id: 'yajibu', text: 'يَجِبُ', spacerAfter: ' ' },
+        { id: 'alaina', text: 'عَلَيْنَا', spacerAfter: ' ' },
+        { id: 'taallumu', text: 'تَعَلُّمُ', spacerAfter: ' ' },
+        { id: 'arbai', text: 'أَرْبَعِ', spacerAfter: ' ' },
+        { id: 'masaila', text: 'مَسَائِلَ', spacerAfter: '' }
+    ];
+
+    let showMakna = false;
+    let currentlyActiveSpan = null;
+
+    function renderArabicText() {
+        const container = document.getElementById('arabicText');
+        container.innerHTML = '';
+        if (showMakna) {
+            container.classList.add('show-makna');
+        } else {
+            container.classList.remove('show-makna');
+        }
+        arabicWords.forEach(item => {
+            const unit = document.createElement('span');
+            unit.className = 'word-unit';
+
+            const wordSpan = document.createElement('span');
+            wordSpan.className = 'word-arab';
+            wordSpan.textContent = item.text;
+            wordSpan.dataset.analysisId = item.id;
+            wordSpan.addEventListener('click', function(e) {
+                e.stopPropagation();
+                showAnalysis(item.id, wordSpan);
+            });
+            wordSpan.title = 'Klik untuk analisis';
+
+            const maknaSpan = document.createElement('span');
+            maknaSpan.className = 'word-makna';
+            maknaSpan.textContent = analysisData[item.id]?.makna || '—';
+
+            unit.appendChild(wordSpan);
+            unit.appendChild(maknaSpan);
+            container.appendChild(unit);
+
+            if (item.spacerAfter) {
+                container.appendChild(document.createTextNode(item.spacerAfter));
+            }
+        });
+    }
+
+    function toggleMakna() {
+        showMakna = !showMakna;
+        const btn = document.getElementById('btnMakna');
+        if (showMakna) {
+            btn.classList.add('active-btn');
+            btn.innerHTML = '📝 Sembunyikan Makna';
+        } else {
+            btn.classList.remove('active-btn');
+            btn.innerHTML = '📝 Makna Perkata';
+        }
+        renderArabicText();
+        if (document.getElementById('analysisPanel').classList.contains('visible')) {
+            closeAnalysis();
+        }
+    }
+
+    function showAnalysis(id, spanEl) {
+        const data = analysisData[id];
+        if (!data) return;
+        if (currentlyActiveSpan) {
+            currentlyActiveSpan.classList.remove('active');
+        }
+        spanEl.classList.add('active');
+        currentlyActiveSpan = spanEl;
+
+        document.getElementById('analyzedWordDisplay').textContent = data.word;
+        document.getElementById('maknaText').textContent = data.makna;
+        document.getElementById('analysisContent').innerHTML = `
+            <table>
+                <tr><th>📐 Sharaf (Bentuk Kata)</th><td>${data.sharaf}</td></tr>
+                <tr><th>📏 I'rob (Kondisi Akhir)</th><td>${data.irob}</td></tr>
+                <tr><th>🧩 Nahwu (Fungsi)</th><td>${data.nahwu}</td></tr>
+            </table>
+        `;
+        const panel = document.getElementById('analysisPanel');
+        panel.classList.add('visible');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeAnalysis() {
+        document.getElementById('analysisPanel').classList.remove('visible');
+        if (currentlyActiveSpan) {
+            currentlyActiveSpan.classList.remove('active');
+            currentlyActiveSpan = null;
+        }
+        document.getElementById('analyzedWordDisplay').textContent = '';
+        document.getElementById('maknaText').textContent = '';
+        document.getElementById('analysisContent').innerHTML = '<p style="text-align:center;color:#999;">Klik kata di atas untuk analisis.</p>';
+    }
+
+    function toggleTranslation() {
+        const box = document.getElementById('translationBox');
+        const btn = document.getElementById('btnTranslation');
+        box.classList.toggle('visible');
+        btn.classList.toggle('active-btn');
+        if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function toggleStructural() {
+        const box = document.getElementById('structuralBox');
+        const btn = document.getElementById('btnStructural');
+        box.classList.toggle('visible');
+        btn.classList.toggle('active-btn');
+        if (box.classList.contains('visible')) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function resetAll() {
+        closeAnalysis();
+        document.getElementById('translationBox').classList.remove('visible');
+        document.getElementById('btnTranslation').classList.remove('active-btn');
+        document.getElementById('structuralBox').classList.remove('visible');
+        document.getElementById('btnStructural').classList.remove('active-btn');
+        if (showMakna) {
+            toggleMakna();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('click', function(e) {
+        const panel = document.getElementById('analysisPanel');
+        const arabicContainer = document.getElementById('arabicText');
+        if (panel.classList.contains('visible') && !panel.contains(e.target) && !arabicContainer.contains(e.target)) {
+            closeAnalysis();
+        }
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('analysisPanel').classList.contains('visible')) {
+            closeAnalysis();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderArabicText();
+        document.getElementById('analysisContent').innerHTML = '<p style="text-align:center;color:#999;">👆 Klik kata untuk melihat makna, Sharaf, I\'rob, dan Nahwu.</p>';
+    });
+</script>
+</body>
+</html>
