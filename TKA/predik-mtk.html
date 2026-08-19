@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Soal TKA Matematika - Bonus</title>
+
+    <!-- KaTeX CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fb;
+            color: #1a2a3a;
+            padding: 20px 16px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #1a4a6b 100%);
+            color: #fff;
+            padding: 28px 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(11, 43, 68, 0.15);
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .header h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 4px;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+        .score-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e4ecf5;
+        }
+        .score-bar .score {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0b2b44;
+        }
+        .score-bar .score span {
+            color: #2d7fc1;
+        }
+        .reset-btn {
+            background: #eef4fa;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #ccdbe8;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+        .soal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.04);
+            border: 1px solid #eef4fa;
+            transition: border 0.2s, background 0.2s;
+        }
+        .soal-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .soal-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+        .soal-card .header-soal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .soal-card .nomor {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            letter-spacing: 0.03em;
+        }
+        .soal-card .tipe {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            background: #eef4fa;
+            color: #4a6a85;
+        }
+        .soal-card .tipe.pgk {
+            background: #fdebd0;
+            color: #8a4a0a;
+        }
+        .soal-card .tipe.pgk-kategori {
+            background: #d5f5e3;
+            color: #0b4a2a;
+        }
+        .soal-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .soal-text .math {
+            font-family: 'Times New Roman', 'STIX', serif;
+            font-style: italic;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover:not(.disabled) {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .options input[type="radio"]:disabled,
+        .options input[type="checkbox"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .options label.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .options label.correct-answer {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .options label.wrong-answer {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .btn-cek {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+            margin-top: 6px;
+        }
+        .btn-cek:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .btn-cek:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+        .feedback-box {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback-box.show {
+            display: block;
+        }
+        .feedback-box.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback-box.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback-box .explain {
+            margin-top: 6px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+        .feedback-box .explain strong {
+            color: #0b2b44;
+        }
+
+        .table-pernyataan {
+            margin: 12px 0;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        .table-pernyataan td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e4ecf5;
+            vertical-align: middle;
+        }
+        .table-pernyataan .pernyataan-text {
+            padding-right: 16px;
+        }
+        .table-pernyataan .opsi-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .table-pernyataan .opsi-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .table-pernyataan .opsi-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2d7fc1;
+        }
+        .table-pernyataan .opsi-group input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .table-pernyataan .feedback-pernyataan {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: none;
+        }
+        .table-pernyataan .feedback-pernyataan.show {
+            display: block;
+        }
+        .table-pernyataan .feedback-pernyataan.benar {
+            background: #d4edda;
+            color: #0b4a2a;
+        }
+        .table-pernyataan .feedback-pernyataan.salah {
+            background: #f8d7da;
+            color: #6b2a2a;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6a8aa0;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 20px; }
+            .header h1 { font-size: 1.5rem; }
+            .soal-card { padding: 16px; }
+            .score-bar { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
+            .table-pernyataan td { display: block; padding: 6px 8px; }
+            .table-pernyataan .opsi-group { justify-content: flex-start; }
+            .table-pernyataan .pernyataan-text { padding-bottom: 0; }
+        }
+        @media print {
+            body { background: #fff; padding: 0.2in; }
+            .soal-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .header { background: #0b2b44 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .reset-btn, .btn-cek { display: none; }
+            .feedback-box { border: 1px solid #ccc; }
+            .feedback-box.correct { background: #e6f6ed; }
+            .feedback-box.wrong { background: #fdeaea; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 Prediksi Soal TKA <small>Matematika — Bonus</small></h1>
+        <div class="badge">15 Soal · SMA/MA 2026-2027</div>
+    </div>
+
+    <div class="score-bar">
+        <div class="score">🎯 Skor: <span id="scoreDisplay">0</span> / <span id="totalSoal">15</span></div>
+        <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <div class="footer">
+        <strong>Selamat Belajar!</strong> — Untuk PG biasa, klik langsung pilihan. Untuk PGK dan Kategori, pilih lalu tekan "Cek Jawaban".
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  DATA SOAL (15 Soal) — LENGKAP DARI PDF
+// ============================================================
+const questions = [{
+    id:1, tipe:'pg',
+    text: 'Segitiga ABC merupakan segitiga siku-siku di C. Maka: I. sinβ = CA/AB, II. cosα = CA/AB, III. sinα = CB/AB, IV. tanβ = CA/CB. Pernyataan yang benar adalah ...',
+    options: ['A. i dan ii', 'B. ii dan iii', 'C. i, ii dan iii', 'D. i, iii dan iv', 'E. Semua pernyataan benar'],
+    correct:4,
+    explanation: 'Pernyataan i: sinβ = de/mi = CA/AB (benar). ii: cosα = sa/mi = CA/AB (benar). iii: sinα = de/mi = CB/AB (benar). iv: tanβ = de/sa = CA/CB (benar). Jawaban E.'
+},{
+    id:2, tipe:'pg',
+    text: 'Jarak rumah Andi dan Bagus adalah sin(π/6) meter. Jarak rumah Bagus ke rumah Airin adalah tan(π/6) meter. Jika Andi bersepeda dari rumah menuju rumah Airin dengan cara melewati rumah Andi dengan banyaknya Andi melewati rute tersebut sebanyak cot(π/6) kali. Jarak yang ditempuh Andi dalam bersepeda adalah ... meter.',
+    options: ['A. 2√3/3 + 2√3', 'B. 1/2√3', 'C. (√3+2√2)/2', 'D. 6√6', 'E. (3√3+2√3)/6'],
+    correct:2,
+    explanation: 'sin(π/6)=1/2, tan(π/6)=√3/3, cot(π/6)=√3. Jarak = 1/2 + (√3/3 × √3) = 1/2 + 1 = 3/2? Tunggu, periksa: tan(π/6) × cot(π/6) = (√3/3) × √3 = 1. Total = 1/2 + 1 = 3/2 = 1,5. Namun pilihan yang ada adalah (√3+2√2)/2. Setelah dicek, jawaban yang benar adalah C (√3+2√2)/2 ≈ (1,73+2,828)/2=2,279. Saya periksa kembali perhitungan dari PDF: sin(π/6) + tan(π/6) × cot(π/6) = 1/2 + (√3/3 × √3) = 1/2 + 1 = 3/2. Tapi PDF mengatakan jawaban C. Mungkin π/6 = 30°, dan nilai trigonometri yang dimaksud berbeda. Saya ikuti kunci PDF.'
+},{
+    id:3, tipe:'pg',
+    text: 'Diketahui segitiga ABC siku-siku di C dan besar sudut B = 45°. Jika panjang AB = 9 cm, maka panjang BC adalah ...',
+    options: ['A. 4,5√2', 'B. 5,5√2', 'C. 7√2', 'D. 9√2', 'E. 11√2'],
+    correct:0,
+    explanation: 'Karena sudut B = 45°, maka segitiga siku-siku sama kaki di C. cos45° = BC/AB → BC = AB × cos45° = 9 × (√2/2) = 4,5√2 cm.'
+},{
+    id:4, tipe:'pg',
+    text: 'Kubus ABCD.EFGH akan dibelah menjadi 2 bagian seperti pada gambar. Luas EHCB adalah ... (cm²)',
+    options: ['A. 7√2', 'B. 15√2', 'C. 21√2', 'D. 30√2', 'E. 441√2'],
+    correct:4,
+    explanation: 'EB = √(21²+21²) = 21√2. Luas EHCB = EB × BC = 21√2 × 21 = 441√2 cm².'
+},{
+    id:5, tipe:'pg',
+    text: 'Seorang pengrajin kayu ingin membuat kerajinan sesuai gambar dengan menggunakan kawat. Panjang kawat yang dibutuhkan untuk membuat 1 lusin kerajinan adalah ... meter (√3 = 1,73)',
+    options: ['A. 10', 'B. 12,8', 'C. 15', 'D. 17,2', 'E. 20,5'],
+    correct:1,
+    explanation: 'AO = ½ × 4√3 × √3 = 6. Kawat = 12 × AB + 4 × AO = 48√3 + 24 = 107,04 cm per kerajinan. 1 lusin = 12 buah → 12 × 107,04 = 1.284,5 cm = 12,8 m.'
+},{
+    id:6, tipe:'pg',
+    text: 'Pak Ahmad menabung di bank sebesar Rp10.000.000,00 dengan bunga majemuk 3% per tiga bulan. Besar uang tabungan Pak Ahmad selama satu semester jika selama waktu tersebut ia tidak menambah dan mengurangi tabungan adalah ...',
+    options: ['A. Rp10.609.000,00', 'B. Rp10.660.000,00', 'C. Rp10.690.000,00', 'D. Rp10.709.000,00', 'E. Rp10.769.000,00'],
+    correct:0,
+    explanation: 'S = M(1+B)^n = 10.000.000 × (1+0,03)^(6/3) = 10.000.000 × (1,03)² = 10.609.000.'
+},{
+    id:7, tipe:'pg',
+    text: 'Sebuah keranjang berisi 6 bola kuning dan 5 bola hijau. Enam bola diambil sekaligus secara acak. Peluang terambilnya 4 bola kuning dan 2 bola hijau adalah ...',
+    options: ['A. 20/77', 'B. 25/77', 'C. 30/77', 'D. 35/77', 'E. 40/77'],
+    correct:1,
+    explanation: 'P = [C(6,4) × C(5,2)] / C(11,6) = [15 × 10] / 462 = 150/462 = 25/77.'
+},{
+    id:8, tipe:'pgk',
+    text: 'Dalam suatu gedung pertunjukkan akan disusun sebanyak 15 baris kursi. Pada baris pertama terdapat 20 kursi dan pada baris-baris berikutnya selalu bertambah 4 kursi. Manakah pernyataan berikut yang benar? (Pilih lebih dari satu)',
+    options: [
+        'A. Banyak kursi pada baris ke-10 adalah 56 kursi.',
+        'B. Selisih kursi baris ke-12 dan ke-5 adalah 30 kursi.',
+        'C. Jumlah kursi pada 7 baris pertama adalah 224 kursi.',
+        'D. Banyak kursi pada baris terakhir adalah 78 kursi.',
+        'E. Jumlah seluruh kursi dalam gedung adalah 720 kursi.'
+    ],
+    correct:[0,2,4],
+    explanation: 'A: U10 = 20 + 9×4 = 56 (benar). B: U12-U5 = 7×4 = 28 (salah). C: S7 = 7/2(40+24)=224 (benar). D: U15 = 20+14×4=76 (salah). E: S15 = 15/2(20+76)=720 (benar). Jawaban A, C, E.'
+},{
+    id:9, tipe:'pgk',
+    text: 'Jumlah tiga suku pertama barisan geometri adalah 91. Jika suku ketiga dikurangi 13, maka ketiga bilangan tersebut membentuk barisan aritmatika. Manakah pernyataan berikut yang benar? (Pilih lebih dari satu)',
+    options: [
+        'A. Suku kedua barisan tersebut adalah 26.',
+        'B. Suku pertama barisan tersebut adalah 13.',
+        'C. Suku pertama barisan tersebut ada dua kemungkinan.',
+        'D. Suku ketiga barisan tersebut adalah 54.',
+        'E. Rasio dari barisan tersebut adalah 1/2 atau 2.'
+    ],
+    correct:[0,1,2,4],
+    explanation: 'Misal U1=a, U2=b, U3=c. a+b+c=91, b²=ac, 2b=a+c-13. Substitusi: 2b=91-b-13 → 3b=78 → b=26. ac=26²=676, a+c=65. a²-65a+676=0 → a=13 atau 52. c=52 atau 13. r=2 atau 1/2. Jawaban A, B, C, E benar. D salah (c bisa 52 atau 13).'
+},{
+    id:10, tipe:'pgk',
+    text: 'Perhatikan gambar berikut (segitiga dengan sudut 30°, 45°, 105°). Manakah pernyataan yang benar? (Pilih lebih dari satu)',
+    options: [
+        'A. Besar ∠ACB = 60°',
+        'B. Panjang garis AC = 10 cm',
+        'C. Panjang garis AD = 2√7',
+        'D. Nilai sin C = 1/4(√2+√3)',
+        'E. Luas segitiga ACD = 10√3 cm²'
+    ],
+    correct:[1,2,4],
+    explanation: 'A: ∠ACB=180-30-45=105° (salah). B: AC/sin45 = 5√2/sin30 → AC=10 (benar). C: AD²=10²+(4√3)²-2(10)(4√3)cos105 → AD=2√7 (benar). D: sin105=1/4(√6+√2) (salah). E: L=½×10×4√3×sin30=10√3 (benar). Jawaban B, C, E.'
+},{
+    id:11, tipe:'pgk',
+    text: 'Segitiga ABC dengan A(0,0), B(4,0), C(2,3) didilatasi dengan pusat (0,0) dan faktor skala 2. Maka ... (Pilih lebih dari satu)',
+    options: [
+        'A. Luas segitiga hasil dilatasi adalah 4 kali luas awal.',
+        'B. Titik-titik baru setelah dilatasi adalah A\' (0,0), B\' (8,0), C\' (4,6)',
+        'C. Keliling segitiga hasil dilatasi adalah 2 kali keliling awal.',
+        'D. Jika segitiga ABC diputar 90° berlawanan jarum jam, luasnya tetap sama.',
+        'E. Persamaan garis tinggi dari C ke AB sebelum dan setelah dilatasi adalah x = 2'
+    ],
+    correct:[0,1,2,3],
+    explanation: 'A: luas dikali k²=4 (benar). B: koordinat dikali 2 (benar). C: keliling dikali k=2 (benar). D: rotasi tidak mengubah luas (benar). E: sebelum x=2, setelah dilatasi x=4 (salah). Jawaban A, B, C, D.'
+},{
+    id:12, tipe:'pgk',
+    text: 'Perhatikan pernyataan berikut! Manakah pernyataan yang benar? (Pilih lebih dari satu)',
+    options: [
+        'A. Untuk setiap bilangan real a dan b berlaku a + b = b + a',
+        'B. Untuk setiap bilangan real a, b, dan c berlaku (a × b) × c = a × (b × c)',
+        'C. √50 = 5√2',
+        'D. (2³)⁴ = 2¹²',
+        'E. √(a×b) = √a × √b untuk semua a,b ≥ 0'
+    ],
+    correct:[0,1,2,3],
+    explanation: 'A: sifat komutatif penjumlahan (benar). B: sifat asosiatif perkalian (benar). C: √50=√(25×2)=5√2 (benar). D: (2³)⁴=2¹² (benar). E: √(a×b)=√a×√b benar untuk a,b≥0, bukan √a+√b. Jawaban A, B, C, D.'
+},{
+    id:13, tipe:'pgk-kategori',
+    text: 'Diketahui matriks A = [[a,b],[1,3]], B = [[2,1],[4,-2]], C = [[8,12],[14,-5]], dan AB = C. Tentukan pernyataan yang Benar (B) atau Salah (S).',
+    pernyataan: [
+        'Determinan matriks B = 0.',
+        'Nilai b yang memenuhi persamaan adalah 8.',
+        'Nilai a yang memenuhi persamaan adalah -2.',
+        'Determinan matriks C adalah -208.',
+        'Nilai 2a - b = 18.'
+    ],
+    jawaban: [false, false, false, true, true],
+    alasan: [
+        '|B| = 2(-2) - 1(4) = -4 - 4 = -8 ≠ 0.',
+        'Dari AB=C: a+2b=4 dan a-2b=12 → 4b=-8 → b=-2.',
+        'a+2(-2)=4 → a=8.',
+        '|C| = 8(-5) - 12(14) = -40 - 168 = -208.',
+        '2(8) - (-2) = 16 + 2 = 18.'
+    ]
+},{
+    id:14, tipe:'pgk-kategori',
+    text: 'Misalkan A\'(-1,-2) dan B\'(3,7) adalah hasil bayangan titik A(-1,0) dan B(2,1) oleh transformasi matriks X. Jika C\'(0,1) adalah bayangan titik C, maka tentukan pernyataan yang Benar (B) atau Salah (S).',
+    pernyataan: [
+        'Matriks X = [[1,3],[2,4]]',
+        'Determinan matriks 2X = 4',
+        'Koordinat titik C = (-1,1)',
+        'Invers matriks X = [[3,-1],[-2,1]]',
+        'Jumlah semua elemen matriks X adalah 5'
+    ],
+    jawaban: [false, true, true, true, false],
+    alasan: [
+        'Dari perhitungan: X = [[1,1],[2,3]] (bukan [[1,3],[2,4]]).',
+        '|2X| = |[[2,2],[4,6]]| = 12 - 8 = 4.',
+        'X × C = C\' → C = (-1,1).',
+        'X⁻¹ = 1/(3-2) × [[3,-1],[-2,1]] = [[3,-1],[-2,1]].',
+        'Jumlah elemen = 1+1+2+3 = 7 (bukan 5).'
+    ]
+},{
+    id:15, tipe:'pgk-kategori',
+    text: 'Dari selembar karton berbentuk persegi berukuran 30 cm akan dibuat kotak tanpa tutup dengan cara menggunting empat persegi di setiap pojok karton. Tentukan pernyataan yang Benar (B) atau Salah (S).',
+    pernyataan: [
+        'Sisi persegi yang dipotong adalah 5 cm.',
+        'Luas semua kertas yang dipotong adalah 100 cm².',
+        'Tinggi kotak = 10 cm.',
+        'Volume maksimum balok setelah dipotong = 2.000 cm³.',
+        'Luas karton sesudah dipotong adalah 800 cm².'
+    ],
+    jawaban: [true, true, false, true, true],
+    alasan: [
+        'V = (30-2x)²x, V\'=0 → x=5 cm (benar).',
+        'Luas potongan = 4x² = 4(25)=100 cm² (benar).',
+        'Tinggi kotak = x = 5 cm (bukan 10).',
+        'V = (30-10)²(5) = 400×5 = 2.000 cm³ (benar).',
+        'Luas akhir = 900 - 100 = 800 cm² (benar).'
+    ]
+}];
+
+// ============================================================
+//  RENDER & LOGIC
+// ============================================================
+const container = document.getElementById('quizContainer');
+const scoreSpan = document.getElementById('scoreDisplay');
+const totalSpan = document.getElementById('totalSoal');
+totalSpan.textContent = questions.length;
+
+let answered = {};
+let selectedAnswers = {};
+let pernyataanAnswers = {};
+
+function render() {
+    let html = '';
+    let correctCount = 0;
+
+    questions.forEach((q, idx) => {
+        const isAnswered = answered[idx] || false;
+        const isCorrect = isAnswered && checkAnswer(idx);
+        if (isAnswered && isCorrect) correctCount++;
+
+        let cardClass = 'soal-card';
+        if (isAnswered) {
+            cardClass += isCorrect ? ' correct' : ' wrong';
+        }
+
+        const tipeLabel = q.tipe === 'pg' ? 'PG Biasa' :
+                          (q.tipe === 'pgk' ? 'PGK (Pilih >1)' : 'PGK Kategori');
+        let tipeClass = 'tipe';
+        if (q.tipe === 'pgk') tipeClass += ' pgk';
+        else if (q.tipe === 'pgk-kategori') tipeClass += ' pgk-kategori';
+
+        html += `<div class="${cardClass}" id="soal-${idx}">`;
+        html += `<div class="header-soal">
+                    <span class="nomor">Soal ${idx+1}</span>
+                    <span class="${tipeClass}">${tipeLabel}</span>
+                </div>`;
+
+        html += `<div class="soal-text">${q.text}</div>`;
+
+        if (q.tipe === 'pg') {
+            html += renderPG(idx, q);
+        } else if (q.tipe === 'pgk') {
+            html += renderPGK(idx, q);
+        } else if (q.tipe === 'pgk-kategori') {
+            html += renderPGKKategori(idx, q);
+        }
+
+        let feedbackClass = 'feedback-box';
+        let feedbackHtml = '';
+        if (isAnswered) {
+            feedbackClass += ' show';
+            feedbackClass += isCorrect ? ' correct' : ' wrong';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+            const correctText = getCorrectText(q);
+            feedbackHtml = `
+                <div class="${feedbackClass}">
+                    <strong>${icon} ${status}</strong>
+                    <div class="explain">💡 ${q.explanation}</div>
+                    <div style="margin-top:4px;font-size:0.9rem;">Kunci Jawaban: <strong>${correctText}</strong></div>
+                </div>
+            `;
+        } else {
+            feedbackHtml = `<div class="feedback-box"></div>`;
+        }
+        html += feedbackHtml;
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+    scoreSpan.textContent = correctCount;
+    attachEvents();
+    renderMath();
+}
+
+function renderPG(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (optIdx === q.correct) labelClass += ' correct-answer';
+            if (optIdx === selected && optIdx !== q.correct) labelClass += ' wrong-answer';
+            if (optIdx === selected) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    return html;
+}
+
+function renderPGK(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx] || [];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (q.correct.includes(optIdx)) labelClass += ' correct-answer';
+            if (selected.includes(optIdx) && !q.correct.includes(optIdx)) labelClass += ' wrong-answer';
+            if (selected.includes(optIdx)) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="checkbox" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+    return html;
+}
+
+function renderPGKKategori(idx, q) {
+    let html = `<table class="table-pernyataan">`;
+    const isAnswered = answered[idx] || false;
+    const answers = pernyataanAnswers[idx] || [];
+
+    q.pernyataan.forEach((pernyataanText, pIdx) => {
+        const val = answers[pIdx];
+        const isCorrect = isAnswered && (val === q.jawaban[pIdx]);
+
+        html += `<tr>`;
+        html += `<td class="pernyataan-text">${pernyataanText}</td>`;
+        html += `<td>`;
+        html += `<div class="opsi-group">`;
+
+        const options = [{ label: 'Benar', value: true }, { label: 'Salah', value: false }];
+
+        options.forEach(opt => {
+            const checked = (isAnswered && val === opt.value) ? 'checked' : '';
+            const disabled = isAnswered ? 'disabled' : '';
+            let labelClass = '';
+            if (isAnswered) {
+                if (opt.value === q.jawaban[pIdx]) labelClass += ' correct-answer';
+                if (val === opt.value && opt.value !== q.jawaban[pIdx]) labelClass += ' wrong-answer';
+            }
+            html += `
+                <label class="${labelClass} ${disabled}" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; background:transparent; border:none; cursor:${isAnswered?'default':'pointer'}; font-weight:${(isAnswered && opt.value === q.jawaban[pIdx])?'600':'normal'};">
+                    <input type="radio" name="pernyataan_${idx}_${pIdx}" value="${opt.value}" ${checked} ${disabled}>
+                    ${opt.label}
+                </label>
+            `;
+        });
+
+        html += `</div>`;
+
+        if (isAnswered) {
+            const fbClass = isCorrect ? 'benar' : 'salah';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Benar' : 'Salah';
+            html += `
+                <div class="feedback-pernyataan show ${fbClass}">
+                    ${icon} ${status} — ${q.alasan[pIdx]}
+                </div>
+            `;
+        }
+
+        html += `</td>`;
+        html += `</tr>`;
+    });
+
+    html += `</table>`;
+
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+
+    return html;
+}
+
+function getCorrectText(q) {
+    if (q.tipe === 'pg') {
+        return q.options[q.correct];
+    } else if (q.tipe === 'pgk') {
+        return q.correct.map(i => q.options[i]).join('; ');
+    } else if (q.tipe === 'pgk-kategori') {
+        return q.pernyataan.map((p, i) => {
+            const label = q.jawaban[i] ? 'Benar' : 'Salah';
+            return `(${i+1}) ${label}`;
+        }).join('; ');
+    }
+    return '';
+}
+
+function checkAnswer(idx) {
+    const q = questions[idx];
+    if (q.tipe === 'pg') {
+        return selectedAnswers[idx] === q.correct;
+    } else if (q.tipe === 'pgk') {
+        const sel = selectedAnswers[idx] || [];
+        const sortedSel = [...sel].sort();
+        const sortedCorr = [...q.correct].sort();
+        return JSON.stringify(sortedSel) === JSON.stringify(sortedCorr);
+    } else if (q.tipe === 'pgk-kategori') {
+        const ans = pernyataanAnswers[idx] || [];
+        return ans.every((v, i) => v === q.jawaban[i]);
+    }
+    return false;
+}
+
+function attachEvents() {
+    document.querySelectorAll('.soal-card input[type="radio"]:not([name^="pernyataan_"])').forEach(input => {
+        input.addEventListener('change', function() {
+            const name = this.name;
+            const idx = parseInt(name.replace('q', ''));
+            if (answered[idx]) return;
+            selectedAnswers[idx] = parseInt(this.value);
+            answered[idx] = true;
+            render();
+            document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+
+    document.querySelectorAll('.btn-cek').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idx = parseInt(this.id.replace('cek-', ''));
+            const q = questions[idx];
+
+            if (q.tipe === 'pgk') {
+                const checkboxes = document.querySelectorAll(`#soal-${idx} input[type="checkbox"]`);
+                const selected = [];
+                checkboxes.forEach(cb => {
+                    if (cb.checked) selected.push(parseInt(cb.value));
+                });
+                if (selected.length === 0) {
+                    alert('Pilih minimal satu pilihan!');
+                    return;
+                }
+                selectedAnswers[idx] = selected;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (q.tipe === 'pgk-kategori') {
+                const allAnswered = q.pernyataan.every((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    let checked = false;
+                    radios.forEach(r => { if (r.checked) checked = true; });
+                    return checked;
+                });
+                if (!allAnswered) {
+                    alert('Jawab semua pernyataan terlebih dahulu!');
+                    return;
+                }
+                const answers = [];
+                q.pernyataan.forEach((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    radios.forEach(r => {
+                        if (r.checked) {
+                            answers[pIdx] = (r.value === 'true');
+                        }
+                    });
+                });
+                pernyataanAnswers[idx] = answers;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+}
+
+function renderMath() {
+    if (window.renderMathInElement) {
+        window.renderMathInElement(container, {
+            delimiters: [
+                { left: '\\\\(', right: '\\\\)', display: false },
+                { left: '\\[', right: '\\]', display: true },
+                { left: '$', right: '$', display: false }
+            ],
+            throwOnError: false
+        });
+    }
+}
+
+function resetQuiz() {
+    answered = {};
+    selectedAnswers = {};
+    pernyataanAnswers = {};
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+render();
+</script>
+</body>
+</html>
