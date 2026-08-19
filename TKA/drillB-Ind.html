@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drilling Soal TKA Bahasa Indonesia - Bonus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fb;
+            color: #1a2a3a;
+            padding: 20px 16px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #1a4a6b 100%);
+            color: #fff;
+            padding: 28px 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(11, 43, 68, 0.15);
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .header h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 4px;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+        .score-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e4ecf5;
+        }
+        .score-bar .score {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0b2b44;
+        }
+        .score-bar .score span {
+            color: #2d7fc1;
+        }
+        .reset-btn {
+            background: #eef4fa;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #ccdbe8;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+        .soal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.04);
+            border: 1px solid #eef4fa;
+            transition: border 0.2s, background 0.2s;
+        }
+        .soal-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .soal-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+        .soal-card .header-soal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .soal-card .nomor {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            letter-spacing: 0.03em;
+        }
+        .soal-card .tipe {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            background: #eef4fa;
+            color: #4a6a85;
+        }
+        .soal-card .tipe.pgk {
+            background: #fdebd0;
+            color: #8a4a0a;
+        }
+        .soal-card .tipe.pgk-kategori {
+            background: #d5f5e3;
+            color: #0b4a2a;
+        }
+        .soal-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .kutipan {
+            background: #f8faff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border-left: 4px solid #2d7fc1;
+            margin: 12px 0 16px 0;
+            font-style: italic;
+            color: #1a3a5a;
+            font-weight: 400;
+            font-size: 0.98rem;
+        }
+        .kutipan p {
+            margin-bottom: 6px;
+        }
+        .kutipan p:last-child {
+            margin-bottom: 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover:not(.disabled) {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .options input[type="radio"]:disabled,
+        .options input[type="checkbox"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .options label.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .options label.correct-answer {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .options label.wrong-answer {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .btn-cek {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+            margin-top: 6px;
+        }
+        .btn-cek:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .btn-cek:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+        .feedback-box {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback-box.show {
+            display: block;
+        }
+        .feedback-box.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback-box.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback-box .explain {
+            margin-top: 6px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+        .feedback-box .explain strong {
+            color: #0b2b44;
+        }
+
+        .table-pernyataan {
+            margin: 12px 0;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        .table-pernyataan td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e4ecf5;
+            vertical-align: middle;
+        }
+        .table-pernyataan .pernyataan-text {
+            padding-right: 16px;
+        }
+        .table-pernyataan .opsi-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .table-pernyataan .opsi-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .table-pernyataan .opsi-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2d7fc1;
+        }
+        .table-pernyataan .opsi-group input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .table-pernyataan .feedback-pernyataan {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: none;
+        }
+        .table-pernyataan .feedback-pernyataan.show {
+            display: block;
+        }
+        .table-pernyataan .feedback-pernyataan.benar {
+            background: #d4edda;
+            color: #0b4a2a;
+        }
+        .table-pernyataan .feedback-pernyataan.salah {
+            background: #f8d7da;
+            color: #6b2a2a;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6a8aa0;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 20px; }
+            .header h1 { font-size: 1.5rem; }
+            .soal-card { padding: 16px; }
+            .score-bar { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
+            .table-pernyataan td { display: block; padding: 6px 8px; }
+            .table-pernyataan .opsi-group { justify-content: flex-start; }
+            .table-pernyataan .pernyataan-text { padding-bottom: 0; }
+        }
+        @media print {
+            body { background: #fff; padding: 0.2in; }
+            .soal-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .header { background: #0b2b44 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .reset-btn, .btn-cek { display: none; }
+            .feedback-box { border: 1px solid #ccc; }
+            .feedback-box.correct { background: #e6f6ed; }
+            .feedback-box.wrong { background: #fdeaea; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 Drilling Soal TKA <small>Bahasa Indonesia — Bonus</small></h1>
+        <div class="badge">20 Soal · SMA/MA 2026-2027</div>
+    </div>
+
+    <div class="score-bar">
+        <div class="score">🎯 Skor: <span id="scoreDisplay">0</span> / <span id="totalSoal">20</span></div>
+        <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <div class="footer">
+        <strong>Selamat Belajar!</strong> — Untuk soal PG biasa, klik langsung pilihan. Untuk PGK dan Kategori, pilih lalu tekan "Cek Jawaban".
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  DATA SOAL (20 Soal) — LENGKAP DENGAN KUTIPAN
+// ============================================================
+const questions = [{
+    id:1, tipe:'pg',
+    kutipan: `“Karangan saya tentang liburan adalah bohong. Bapak guru tidak tahu, bahwa saya tidak pernah ke mana-mana. Saya hanya duduk di kamar, membantu ibu membuat keripik pisang. Tapi Bapak guru tersenyum dan memuji: ‘Wah, kamu pasti senang bisa naik pesawat ke Bali.’ Saya hanya mengangguk.”`,
+    text: 'Berdasarkan kutipan tersebut, gaya penceritaan cerpen dapat dikategorikan sebagai ...',
+    options: ['A. Naratif dengan sudut pandang orang ketiga serba tahu','B. Deskriptif dengan sudut pandang orang ketiga terbatas','C. Naratif dengan sudut pandang orang pertama','D. Argumentatif dengan sudut pandang orang kedua','E. Ekspositoris dengan sudut pandang orang pertama'],
+    correct:2,
+    explanation: 'Cerpen menggunakan kata ganti “saya”, artinya memakai sudut pandang orang pertama. Narasinya menceritakan pengalaman langsung tokoh utama.'
+},{
+    id:2, tipe:'pg',
+    kutipan: `“Karangan saya tentang liburan adalah bohong. Bapak guru tidak tahu, bahwa saya tidak pernah ke mana-mana. Saya hanya duduk di kamar, membantu ibu membuat keripik pisang.”`,
+    text: 'Makna simbolis dari “membantu ibu membuat keripik pisang” dalam kutipan tersebut adalah …',
+    options: ['A. Tindakan itu menggambarkan kesederhanaan hidup tokoh.','B. Tokoh “saya” senang memasak bersama ibunya.','C. Anak-anak seharusnya bekerja membantu keluarga.','D. Tokoh sebenarnya ingin menjadi penjual makanan.','E. Membuat keripik adalah hobi tokoh utama.'],
+    correct:0,
+    explanation: '“Membantu ibu membuat keripik pisang” menggambarkan kondisi ekonomi tokoh yang sederhana. Ini menjadi kontras dengan karangan tentang liburan ke Bali, yang menunjukkan adanya ketimpangan sosial.'
+},{
+    id:3, tipe:'pg',
+    kutipan: `Sebagian besar bahan alami yang dijadikan obat herbal memang aman untuk dikonsumsi. Meski begitu, obat herbal tetap berpotensi menyebabkan efek samping. Informasi mengenai efek samping yang mungkin terjadi biasanya tertera pada kemasan produk obat herbal. Agar terhindar dari efek samping yang berbahaya, ikutilah tips-tips berikut ini saat mengonsumsi obat herbal: • Pastikan produk herbal telah terdaftar di BPOM RI. • Periksa tanggal kedaluwarsa produk. • Ikuti petunjuk pemakaian dan dosis yang tercantum di kemasan. • Hubungi layanan konsumen produk herbal jika Anda ingin mengetahui lebih jelas mengenai produk mereka. • Konsultasi dulu ke dokter sebelum mengonsumsi obat herbal. • Hentikan penggunaan obat herbal apabila gejala tidak membaik atau justru semakin parah.`,
+    text: 'Berdasarkan teks, mengapa penting untuk memeriksa tanggal kedaluwarsa pada produk obat herbal?',
+    options: ['A. Untuk memastikan bahwa obat herbal dibuat secara alami.','B. Karena tanggal kedaluwarsa menunjukkan kapan obat mulai berfungsi.','C. Karena penggunaan obat herbal yang sudah kedaluwarsa bisa membahayakan kesehatan.','D. Agar dosis obat herbal sesuai dengan anjuran dokter.'],
+    correct:2,
+    explanation: 'Tanggal kedaluwarsa penting diperiksa karena obat herbal yang telah melewati masa kedaluwarsa bisa kehilangan khasiatnya atau bahkan membahayakan kesehatan. Ini termasuk dalam tips penggunaan yang aman.'
+},{
+    id:4, tipe:'pg',
+    kutipan: `Tidak semua orang juga boleh mengonsumsi obat herbal. Ada beberapa kelompok yang perlu menghindari konsumsi obat herbal, yaitu: Ibu hamil dan menyusui; Orang yang akan menjalani operasi; Orang dengan kondisi medis tertentu, seperti gangguan fungsi hati, gangguan fungsi ginjal, atau penyakit autoimun. Selain itu, obat herbal tidak bisa dikonsumsi bersama obat-obatan tertentu, seperti obat penurun tekanan darah, obat pengencer darah, dan obat untuk diabetes, karena dapat menimbulkan interaksi obat dan efek samping yang serius.`,
+    text: 'Apa dampak paling serius jika obat herbal dikonsumsi bersamaan dengan obat medis tertentu?',
+    options: ['A. Meningkatkan dosis alami dalam tubuh','B. Mengurangi efektivitas obat herbal','C. Menyebabkan interaksi obat dan efek samping yang serius','D. Menimbulkan ketergantungan obat','E. Mengurangi gejala penyakit'],
+    correct:2,
+    explanation: 'Teks secara eksplisit menyatakan bahwa obat herbal bisa menimbulkan interaksi obat dan efek samping yang serius jika dikonsumsi bersama obat medis seperti pengencer darah, obat diabetes, dan penurun tekanan darah.'
+},{
+    id:5, tipe:'pg',
+    kutipan: `Konsumsi obat herbal tidak boleh sembarangan, apalagi jika digunakan untuk mengobati penyakit. Agar tidak mengalami efek samping yang berbahaya, terapkan cara-cara di atas untuk mengonsumsi obat herbal dengan aman.`,
+    text: 'Simpulan utama dari teks tersebut adalah …',
+    options: ['A. Obat herbal harus dikonsumsi setiap hari agar khasiatnya terasa.','B. Semua orang boleh mengonsumsi obat herbal dengan bebas.','C. Obat herbal sebaiknya digunakan untuk penyakit ringan saja.','D. Obat herbal harus dikonsumsi dengan hati-hati karena bisa menimbulkan efek samping.','E. Obat herbal lebih aman daripada obat medis.'],
+    correct:3,
+    explanation: 'Teks menekankan bahwa meskipun berbahan alami, obat herbal bisa menimbulkan efek samping jika tidak dikonsumsi dengan hati-hati. Tips dan larangan disampaikan agar konsumen menghindari dampak buruk.'
+},{
+    id:6, tipe:'pg',
+    kutipan: `Tidak semua orang juga boleh mengonsumsi obat herbal. Ada beberapa kelompok yang perlu menghindari konsumsi obat herbal, yaitu: Ibu hamil dan menyusui; Orang yang akan menjalani operasi; Orang dengan kondisi medis tertentu...`,
+    text: 'Apa alasan utama ibu hamil perlu menghindari konsumsi obat herbal menurut teks?',
+    options: ['A. Karena tubuh ibu hamil tidak membutuhkan obat tambahan','B. Karena obat herbal bisa menyebabkan ketergantungan','C. Karena dapat mempengaruhi kesehatan ibu dan janin','D. Karena tidak ada obat herbal yang terdaftar di BPOM','E. Karena ibu hamil dilarang mengonsumsi bahan alami'],
+    correct:2,
+    explanation: 'Meskipun teks tidak menjelaskan secara rinci alasan spesifik, dengan HOTS, siswa diharapkan menyimpulkan bahwa ibu hamil dilarang mengonsumsi obat herbal karena risiko efek sampingnya bisa membahayakan kesehatan ibu dan janin.'
+},{
+    id:7, tipe:'pg',
+    kutipan: `Agar terhindar dari efek samping yang berbahaya, ikutilah tips-tips berikut ini saat mengonsumsi obat herbal: ... Hentikan penggunaan obat herbal apabila gejala tidak membaik atau justru semakin parah.`,
+    text: 'Jika seseorang mengalami gejala yang memburuk setelah mengonsumsi obat herbal, tindakan paling tepat menurut teks adalah ...',
+    options: ['A. Mengganti dengan obat herbal merek lain','B. Meningkatkan dosis obat herbal','C. Mencampur dengan obat medis','D. Menghentikan penggunaan dan berkonsultasi ke dokter','E. Menambahkan suplemen vitamin'],
+    correct:3,
+    explanation: 'Teks menegaskan bahwa penggunaan harus dihentikan jika gejala memburuk, dan menyarankan konsultasi ke dokter sebelum dan selama penggunaan, terutama bila terjadi efek negatif.'
+},{
+    id:8, tipe:'pgk',
+    kutipan: `Pagi itu pelabuhan Tanjung Permai dipenuhi hiruk pikuk pedagang, nelayan, dan penumpang yang bersiap melakukan perjalanan. Di tengah keramaian itu, sebuah kapal kecil bermesin tua bernama Sinar Laut menjadi perhatian banyak orang. Kapal itu telah melayani perjalanan antar-pulau selama puluhan tahun dan dianggap sebagai saksi hidup perubahan ekonomi masyarakat pesisir. Namun, sejak beberapa bulan terakhir, kondisi mesin kapal sering bermasalah. Suara mesin terdengar tersengal-sengal, dan asap hitam tebal kerap keluar dari knalpotnya. Banyak warga mulai mengeluhkan keamanan perjalanan karena beberapa kali Sinar Laut hampir terlambat tiba akibat kerusakan mendadak. Meskipun demikian, kapal itu masih tetap beroperasi karena belum ada pengganti yang memadai, dan jalur pelayaran antar-pulau menjadi sangat vital bagi perdagangan ikan, hasil kebun, serta kebutuhan sehari-hari warga. Pemerintah daerah sebenarnya telah mengusulkan program peremajaan armada kapal kecil, tetapi prosesnya terhambat oleh birokrasi dan anggaran yang belum disetujui. Sementara itu, para nelayan dan pedagang hanya bisa berharap agar Sinar Laut tetap mampu bertahan, setidaknya sampai kapal baru tersedia. Bagi mereka, kapal itu bukan hanya alat transportasi, tetapi juga simbol harapan dan penghubung utama kehidupan ekonomi pesisir.`,
+    text: 'Berdasarkan teks tersebut, manakah ide pokok yang tepat? (Pilih lebih dari satu)',
+    options: ['A. Kapal Sinar Laut menjadi tumpuan warga pesisir meski kondisinya mulai memburuk.','B. Pemerintah daerah mempercepat program peremajaan kapal lama agar pelayanan tidak terganggu.','C. Kerusakan mesin Sinar Laut menimbulkan kekhawatiran warga karena berdampak pada aktivitas perdagangan.','D. Jalur pelayaran antar-pulau tidak lagi dibutuhkan oleh warga karena perkembangan teknologi transportasi.','E. Kapal Sinar Laut memiliki nilai ekonomi dan emosional bagi masyarakat pesisir.'],
+    correct:[0,2,4],
+    explanation: 'A (benar) — menangkap inti teks tentang ketergantungan warga pada kapal yang bermasalah. C (benar) — juga tepat sebagai ide pokok. E (benar) — sesuai dengan kalimat terakhir teks tentang simbol harapan dan penghubung ekonomi. B (salah) — bertentangan dengan teks yang menyebut proses terhambat. D (salah) — bertentangan dengan teks yang menyebut jalur sangat vital.'
+},{
+    id:9, tipe:'pgk',
+    kutipan: `Perkembangan teknologi informasi membawa perubahan besar dalam pola komunikasi masyarakat. Namun, tidak semua perubahan tersebut berdampak positif. Dalam beberapa tahun terakhir, marak ditemukan unggahan media sosial yang menggunakan bahasa secara berlebihan, tidak efektif, bahkan tidak sesuai dengan konteks komunikasi publik. Misalnya, penggunaan istilah asing yang tidak perlu dalam kalimat sederhana, seperti “Let’s improve our daily habit agar hidup lebih produktif!” Penggunaan campur kode tersebut memang tidak sepenuhnya salah, tetapi menjadi kurang tepat bila disampaikan dalam konteks kampanye kesehatan nasional yang menekankan penggunaan bahasa Indonesia yang baik dan benar. Selain itu, masih sering dijumpai kesalahan logika kalimat akibat ketidaktepatan diksi. Contohnya dalam sebuah brosur kesehatan tertulis: “Masyarakat diharapkan untuk tidak membuang sampah di sungai agar tidak terjadi banjir yang dapat mengancam keselamatan hidup manusia yang tidak bertanggung jawab.” Kalimat tersebut tidak jelas subjeknya dan menimbulkan ambiguitas, karena bagian “yang tidak bertanggung jawab” dapat merujuk pada “manusia” ataupun “banjir”. Ketidaktepatan struktur kalimat semacam ini dapat menurunkan efektivitas pesan informasi. Untuk mencapai komunikasi publik yang baik, penggunaan bahasa harus memperhatikan konteks, struktur kalimat yang jelas, pilihan kata yang tepat, dan kesesuaian antara tujuan komunikasi dengan medium yang digunakan.`,
+    text: 'Berdasarkan teks di atas, manakah pernyataan berikut yang menunjukkan penilaian ketepatan dan kesesuaian penggunaan bahasa dalam teks? (Pilih lebih dari satu)',
+    options: ['A. Penggunaan istilah asing dalam kalimat sederhana menjadi tidak tepat ketika konteks komunikasi menuntut bahasa Indonesia yang baku.','B. Kalimat pada brosur kesehatan dapat membingungkan karena struktur kalimatnya menimbulkan ambiguitas makna.','C. Campur kode dalam media sosial harus dihilangkan sepenuhnya agar masyarakat terbiasa menggunakan bahasa Indonesia baku.','D. Ketidaktepatan diksi dapat mempengaruhi kejelasan informasi dalam komunikasi publik.','E. Penggunaan kalimat panjang otomatis membuat informasi menjadi lebih efektif dan mudah dipahami.'],
+    correct:[0,1,3],
+    explanation: 'A (benar) — sesuai dengan penjelasan teks tentang kampanye kesehatan nasional yang menekankan bahasa Indonesia baik dan benar. B (benar) — sesuai dengan analisis teks tentang kalimat brosur yang tidak jelas subjeknya. D (benar) — sesuai dengan penjelasan teks tentang kesalahan logika kalimat akibat ketidaktepatan diksi. C (salah) — teks tidak menyatakan harus dihilangkan sepenuhnya, hanya “kurang tepat” dalam konteks tertentu. E (salah) — bertentangan dengan teks yang justru mengkritik kalimat panjang yang tidak efektif.'
+},{
+    id:10, tipe:'pgk',
+    kutipan: `Di sebuah desa yang dikelilingi hutan pinus, hiduplah seorang remaja bernama Darma, yang dikenal pendiam namun cermat memperhatikan keadaan sekelilingnya. Setiap sore ia berjalan menuju bukit kecil di belakang rumahnya untuk mencatat perubahan warna langit dan arah angin dalam buku catatannya. Menurut ibunya, kebiasaan itu muncul sejak Darma menemukan burung elang yang terluka dua tahun lalu; sejak saat itu, ia merasa bertanggung jawab menjaga keseimbangan alam di sekitar desa. Suatu hari, desa mereka diguncang rumor mengenai suara raungan yang terdengar dari dalam hutan pada malam hari. Banyak warga menduga suara itu berasal dari hewan liar besar yang kelaparan. Namun, Darma meyakini ada hal lain yang terjadi. Dalam salah satu catatannya, ia menemukan pola bahwa raungan tersebut hanya muncul ketika angin bertiup dari arah utara, tepat dari wilayah yang sejak lama dianggap angker oleh penduduk desa. Pada malam berikutnya, Darma memberanikan diri memasuki hutan ditemani senter kecil dan buku catatannya. Ia menemukan bekas–bekas tapak kaki yang tidak menyerupai jejak hewan mana pun yang pernah ia kenal. Tapak itu besar, seolah milik makhluk setinggi manusia, namun bentuknya lebih menyerupai cakar. Darma menyimpulkan bahwa ada sesuatu yang tidak biasa sedang terjadi, dan ia bertekad mengungkapnya meskipun nyawanya berisiko.`,
+    text: 'Berdasarkan teks di atas, manakah pernyataan berikut yang paling tepat menilai kesesuaian bagian teks dalam menggambarkan karakter, peristiwa, atau latar? (Pilih lebih dari satu)',
+    options: ['A. Bagian yang menceritakan kebiasaan Darma mencatat perubahan alam menunjukkan bahwa ia adalah sosok yang teliti dan peduli lingkungan.','B. Deskripsi adanya raungan dari arah utara memperkuat latar desa yang dipenuhi misteri dan kepercayaan masyarakat.','C. Tindakan Darma memasuki hutan seorang diri dengan senter kecil menunjukkan bahwa ia memiliki sifat pengecut dan mudah menyerah.','D. Bagian teks yang menjelaskan jejak misterius di hutan menggambarkan peristiwa yang menegangkan dan penuh tanda bahaya.','E. Penjelasan mengenai burung elang terluka tidak relevan dalam menggambarkan karakter Darma karena tidak berhubungan dengan kepribadiannya.'],
+    correct:[0,1,3],
+    explanation: 'A (benar) — sesuai dengan deskripsi Darma yang “cermat” dan merasa “bertanggung jawab menjaga keseimbangan alam”. B (benar) — sesuai dengan teks tentang wilayah yang “dianggap angker oleh penduduk desa”. D (benar) — sesuai dengan deskripsi jejak tidak biasa dan pernyataan “nyawanya berisiko”. C (salah) — justru menunjukkan keberanian, bukan pengecut. E (salah) — sangat relevan karena menjelaskan asal mula kepedulian Darma pada alam.'
+},{
+    id:11, tipe:'pg',
+    kutipan: `Pada awal tahun ajaran baru, SMP Harapan Bangsa menetapkan aturan baru mengenai penggunaan telepon genggam di lingkungan sekolah. Pihak sekolah mengumumkan bahwa siswa tidak diperbolehkan membawa gawai ke kelas kecuali untuk kebutuhan pembelajaran yang diawasi guru. Aturan ini memicu perdebatan antara siswa, orang tua, dan pihak sekolah. Beberapa siswa merasa aturan tersebut terlalu membatasi, terutama karena mereka membutuhkan telepon untuk komunikasi dengan orang tua setelah pulang sekolah. Sebaliknya, para guru menilai bahwa penggunaan gawai selama ini telah menurunkan konsentrasi belajar dan meningkatkan kasus pelanggaran seperti penggunaan media sosial saat pelajaran berlangsung. Situasi semakin rumit ketika sejumlah orang tua mengirimkan surat keberatan kepada kepala sekolah. Mereka menilai bahwa aturan itu tidak mempertimbangkan kebutuhan keamanan anak-anak mereka, terutama bagi siswa yang pulang sendiri. Sementara itu, komite sekolah berpendapat bahwa aturan tersebut penting untuk menciptakan lingkungan belajar yang lebih disiplin. Kepala sekolah kemudian berencana mengadakan pertemuan untuk meredakan ketegangan dan mencari solusi yang bisa diterima semua pihak.`,
+    text: 'Apa saja konflik yang muncul dalam bacaan tersebut? (Pilih lebih dari satu)',
+    options: ['A. Konflik antara siswa dan sekolah mengenai aturan pembatasan gawai.','B. Konflik antara orang tua dan komite sekolah terkait keamanan anak.','C. Konflik antara guru dan orang tua tentang dampak penggunaan gawai.','D. Konflik antara siswa dan guru mengenai disiplin belajar.','E. Konflik antara kepala sekolah dan komite sekolah terkait keputusan final aturan gawai.'],
+    correct:[0,2,3],
+    explanation: 'A (benar) — siswa merasa aturan terlalu membatasi, sekolah membuat aturan. C (benar) — guru menilai gawai menurunkan konsentrasi, orang tua khawatir soal keamanan. D (benar) — guru menilai gawai mengganggu konsentrasi, siswa merasa dibatasi. B (salah) — orang tua berkonflik dengan sekolah, bukan langsung dengan komite sekolah. E (salah) — tidak ada indikasi konflik antara kepala sekolah dan komite sekolah.'
+},{
+    id:12, tipe:'pgk',
+    kutipan: `Pada sebuah acara malam sastra di aula sekolah, tiga karya ditampilkan secara berurutan. Pertama, seorang siswi membacakan puisi berjudul “Lilin di Beranda”. Puisi itu menggambarkan seorang anak yang menunggu ibunya pulang bekerja pada malam hujan. Imaji tetesan air, aroma tanah basah, dan cahaya lilin yang bergetar membuat suasana terasa hening, rapuh, dan penuh kerinduan. Beberapa penonton tampak menunduk, seolah ikut merasakan kesepian sang tokoh liris. Selanjutnya, dibacakan sebuah potongan prosa dari cerpen "Langkah Pamit" yang menggambarkan seorang pemuda yang harus meninggalkan kampung halamannya setelah terjadi pertikaian keluarga. Narasi tentang perjalanan malam, rasa bersalah, dan bayangan wajah neneknya yang menangis menimbulkan suasana muram, namun sekaligus menunjukkan harapan bahwa suatu saat konflik akan mereda. Penonton tampak terdiam lama setelah pembacaan selesai. Terakhir, sebuah adegan drama singkat ditampilkan. Adegan tersebut memperlihatkan dua sahabat yang saling menyalahkan setelah kesalahpahaman besar terjadi. Suara mereka meningkat, gerak tubuh tegang, dan jeda panjang di antara dialog menciptakan atmosfer emosional yang intens. Pada bagian ketika salah satu tokoh akhirnya menangis dan meminta maaf, beberapa penonton terdenar menarik napas panjang, sementara yang lain tampak memalingkan wajah karena terharu.`,
+    text: 'Berdasarkan teks di atas, manakah pernyataan berikut yang menggambarkan respons emosional yang dapat disimpulkan dari penonton terhadap unsur puisi, prosa, dan drama? (Pilih lebih dari satu)',
+    options: ['A. Penonton merasakan kesesakan emosional dan kerinduan saat mendengarkan puisi “Lilin di Beranda.”','B. Pembacaan prosa “Langkah Pamit” membangkitkan rasa hampa dan ketidakpedulian dalam diri penonton.','C. Adegan drama membuat penonton ikut tegang dan tersentuh oleh konflik yang diperlihatkan kedua tokoh.','D. Suasana muram dalam cerpen menciptakan keheningan sebagai tanda empati dan penghayatan penonton.','E. Puisi yang dibacakan tidak memunculkan reaksi emosional karena isinya terlalu deskriptif dan tidak menyentuh.'],
+    correct:[0,2,3],
+    explanation: 'A (benar) — sesuai dengan deskripsi “hening, rapuh, dan penuh kerinduan” serta penonton “ikut merasakan kesepian”. C (benar) — sesuai dengan deskripsi “atmosfer emosional yang intens” dan penonton “terharu”. D (benar) — sesuai dengan “penonton tampak terdiam lama setelah pembacaan selesai”. B (salah) — bertentangan dengan teks yang menyebut penonton “terdiam lama” sebagai bentuk empati. E (salah) — bertentangan dengan teks yang menunjukkan penonton “ikut merasakan kesepian”.'
+},{
+    id:13, tipe:'pgk',
+    kutipan: `“Senja di Balik Jendela” — Di balik jendela itu, senja jatuh perlahan, seperti seseorang yang akhirnya mengakui lelahnya. Angin membawa suara yang tak pernah sempat kukatakan, dan langit memerah seolah menyimpan rindu yang sulit kujelaskan. Di antara cahaya yang meredup, aku belajar menerima— bahwa tidak semua perpisahan harus disesali, sebab beberapa darinya mengajarkan cara pulang pada diri sendiri.`,
+    text: 'Apa respon emosional yang kemungkinan dirasakan pembaca setelah membaca puisi tersebut? (Pilih lebih dari satu)',
+    options: ['A. Merasa tenang karena puisi menggambarkan penerimaan atas perpisahan.','B. Merasa marah karena puisi menunjukkan pertentangan antara dua tokoh.','C. Merasa sendu atau melankolis karena suasana senja dan rindu yang digambarkan.','D. Merasa bingung karena puisi berisi banyak konflik yang tidak diselesaikan.','E. Merasa tersentuh karena puisi menggambarkan perjalanan mengenali diri sendiri.'],
+    correct:[0,2,4],
+    explanation: 'A (benar) — sesuai dengan baris “aku belajar menerima” dan “tidak semua perpisahan harus disesali”. C (benar) — sesuai dengan imaji senja, rindu, dan perpisahan. E (benar) — sesuai dengan baris terakhir “mengajarkan cara pulang pada diri sendiri”. B (salah) — tidak ada unsur kemarahan atau pertentangan dalam puisi. D (salah) — puisi justru menunjukkan penyelesaian melalui penerimaan.'
+},{
+    id:14, tipe:'pgk-kategori',
+    kutipan: `“Percy berdiri di tepi Danau Camp Half-Blood sambil memandangi permukaan air yang berkilau diterpa angin. Tangannya masih gemetar setelah latihan pedang yang melelahkan bersama Annabeth. Di kejauhan, ia melihat kabut tipis bergerak dari arah hutan, sesuatu yang tidak biasa terjadi pada sore hari. Chiron pernah memperingatkan bahwa tanda-tanda seperti itu sering muncul sebelum makhluk dunia bawah keluar ke permukaan. Percy menelan ludah. Ia merasa firasat buruk itu bukan sekadar bayangan dalam pikirannya. Misi yang akan ia jalani semakin dekat, dan sepertinya sesuatu—atau seseorang— akan muncul dari balik kabut itu.”`,
+    text: 'Perhatikan tabel berikut! Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan.',
+    pernyataan: [
+        'Berdasarkan kutipan tersebut, kemungkinan lanjutan cerita adalah Percy akan menghadapi makhluk berbahaya yang muncul dari balik kabut.',
+        'Kutipan tersebut menunjukkan bahwa Percy akan meninggalkan Camp Half-Blood malam itu dan kembali ke rumah seperti biasa.',
+        'Prediksi yang logis adalah kabut yang muncul menjadi pertanda awal misi besar yang selama ini Percy persiapkan.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Ada peringatan bahwa kabut sering muncul sebelum makhluk dunia bawah keluar.',
+        'Tidak ada tanda ia akan pulang; justru sedang menunggu ancaman yang muncul dari kabut.',
+        'Kutipan menyebut misi semakin dekat dan ada peristiwa tidak biasa yang menjadi pertanda.'
+    ]
+},{
+    id:15, tipe:'pgk-kategori',
+    kutipan: `“Di serambi pondok, Alif duduk termenung sambil menatap buku catatan hafalan yang belum juga ia selesaikan. Teman-temannya sudah lebih dulu menuju aula untuk mengikuti kajian malam. Angin lembut membawa suara langkah santri lain yang bergegas, membuat Alif semakin sadar bahwa ia sedang tertinggal. Ia mengingat pesan Ustadz Salman siang tadi: ‘Tidak ada mimpi yang bisa dicapai tanpa disiplin dan usaha yang konsisten.’ Kata-kata itu kembali terngiang, mendorongnya berdiri dan berlari menyusul teman-temannya.”`,
+    text: 'Perhatikan tabel berikut! Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan.',
+    pernyataan: [
+        'Peristiwa dalam kutipan relevan dengan kehidupan sehari-hari karena banyak siswa yang menunda tugas lalu tersadar pentingnya disiplin.',
+        'Kutipan tersebut tidak memiliki relevansi dengan kehidupan nyata karena menggambarkan kebiasaan yang tidak mungkin terjadi dalam lingkungan belajar.',
+        'Relevansi kutipan dengan kehidupan sehari-hari tampak dari nilai bahwa motivasi dan dorongan orang lain dapat membuat seseorang kembali semangat belajar.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Situasi Alif yang menunda hafalan lalu tersadar oleh nasihat guru merupakan pengalaman yang umum terjadi dalam kehidupan siswa.',
+        'Kebiasaan menunda tugas, nasihat guru, dan dorongan untuk berubah sangat realisitas dan banyak terjadi.',
+        'Kutipan menunjukkan bagaimana pesan Ustaz membuat Alif kembali bersemangat, sesuai dengan pengalaman banyak pelajar.'
+    ]
+},{
+    id:16, tipe:'pgk-kategori',
+    kutipan: `“Pagi itu, Sherlock Holmes memeriksa kamar tua di rumah pedesaan milik keluarga Roylott. Ia memperhatikan setiap detail: tali lonceng yang tidak terhubung ke mana pun, ventilasi kecil di sudut ruangan, dan tempat tidur yang dipaku ke lantai. Sementara itu, Watson mencatat semua temuan itu sambil mengamati bahwa tidak ada tanda-tanda kekerasan atau kerusakan lain di kamar tersebut. Holmes kemudian berkata pelan bahwa semua petunjuk itu saling berkaitan dan bukan hal yang kebetulan.”`,
+    text: 'Perhatikan tabel berikut! Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan.',
+    pernyataan: [
+        'Informasi yang disampaikan Watson tentang tidak adanya tanda kekerasan mendukung keakuratan suasana kamar yang digambarkan dalam teks.',
+        'Pernyataan bahwa tempat tidur dipaku ke lantai tidak relevan dan tidak memberikan informasi apa pun untuk penyelidikan.',
+        'Informasi yang dikumpulkan Holmes menunjukkan kecukupan data awal untuk menyimpulkan adanya sesuatu yang mencurigakan.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Pengamatan Watson memperkuat deskripsi detail ruangan yang tampak tidak rusak.',
+        'Ini justru petunjuk penting dalam cerita asli Holmes ("The Speckled Band"), menunjukkan adanya sesuatu yang janggal.',
+        'Holmes berkata semua petunjuk saling berkaitan, menunjukkan dugaan awal sudah kuat.'
+    ]
+},{
+    id:17, tipe:'pgk-kategori',
+    kutipan: `“Di ruang makan besar Hogwarts, cahaya lilin melayang-layang di udara, menciptakan bayangan bergerak di sepanjang dinding batu tua. Harry duduk sambil menatap lembaran surat yang baru diterimanya dari Ron. Wajahnya tampak tegang; ia baru saja mengetahui bahwa seorang tahanan berbahaya berhasil kabur dari Azkaban. Suasana perayaan makan malam yang biasanya hangat terasa berbeda malam itu. Bahkan percakapan para siswa merendah ketika rumor mulai menyebar.”`,
+    text: 'Perhatikan tabel berikut! Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan.',
+    pernyataan: [
+        'Deskripsi ruang makan besar yang dipenuhi lilin melayang tepat untuk menggambarkan latar khas sekolah sihir Hogwarts.',
+        'Kalimat tentang Harry yang membaca surat dari Ron tidak membantu menunjukkan karakter Harry yang mudah cemas terhadap situasi baru.',
+        'Bagian teks yang menunjukkan suasana makan malam menjadi lebih sunyi tepat untuk menggambarkan peristiwa penting yang membuat para siswa merasa khawatir.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Ciri khas Hogwarts memang lilin melayang di Great Hall.',
+        'Justru surat itu membuatnya tegang, memperlihatkan sifat Harry yang sensitif terhadap ancaman.',
+        'Rumor tahanan kabur membuat suasana berubah menjadi lebih sunyi dan tegang.'
+    ]
+},{
+    id:18, tipe:'pgk-kategori',
+    kutipan: `“Pagi itu, Raina berjalan tergesa-gesa menuju halte bus di pinggir kota. Tangannya menganggap map berisi proposal lomba inovasi sekolah yang harus ia kumpulkan hari itu juga. Saat menunggu bus, seorang pria paruh baya menghampirinya dan berkata dengan ramah, ‘Nak, mapmu hampir terjatuh. Hati-hati ya.’ Raina tersenyum sopan dan mengucapkan terima kasih. Ia menyadari bahwa tutur bahasa pria itu lembut dan sesuai dengan usia serta situasi yang terjadi.”`,
+    text: 'Perhatikan tabel berikut! Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan.',
+    pernyataan: [
+        'Pilihan kata “Nak” pada dialog pria paruh baya sesuai konteks karena menunjukkan keakraban sekaligus perbedaan usia.',
+        'Penggunaan kata “tergesa-gesa” tidak tepat karena menggambarkan Raina berjalan sangat lambat.',
+        'Ungkapan “mapmu hampir terjatuh” tepat secara situasi karena mencerminkan kepedulian dan konteks percakapan spontan.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Pria lebih tua → wajar memakai sapaan "Nak", menunjukkan keramahan dan perbedaan usia.',
+        '"Tergesa-gesa" artinya cepat, sesuai konteks bahwa Raina buru-buru menuju halte.',
+        'Sesuai peristiwa spontan: peringatan ramah terhadap kondisi map Raina.'
+    ]
+},{
+    id:19, tipe:'pgk-kategori',
+    kutipan: `“Di halaman rumah Capulet yang diterangi cahaya bulan, Juliet berdiri memandangi langit sambil menganggap gaun tidurnya yang tipis. Suara bising pesta masih terdengar samar dari dalam gedung, namun pikirannya tertuju pada sosok yang baru saja ia temui— Romeo. Tatapannya penuh harap, sekaligus cemas. Ia tahu perasaan itu berbahaya karena keluarga mereka saling bermusuhan. Ketika angin malam berhembus, Juliet menutup matanya, membayangkan suara Romeo yang berjanji akan kembali menemuiya. Air mata kecil menetes, menunjukkan betapa hatinya dipenuhi campuran kebahagiaan dan ketakutan.”`,
+    text: 'Perhatikan tabel berikut! Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan.',
+    pernyataan: [
+        'Respons emosional Juliet dalam kutipan dapat disimpulkan sebagai campuran antara kebahagiaan karena jatuh cinta dan kecemasan akibat permusuhan keluarga.',
+        'Kutipan menunjukkan bahwa Juliet merasa marah kepada Romeo karena telah meninggalkannya sendirian di pesta.',
+        'Deskripsi air mata kecil yang jatuh tepat menggambarkan emosi mendalam Juliet yang sedang berjuang antara harapan dan rasa takut.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Ia bahagia bertemu Romeo, tetapi takut karena permusuhan keluarga.',
+        'Tidak ada indikasi marah; hanya cemas, rindu, dan takut.',
+        'Air mata memperkuat konflik batin: cinta vs ketakutan.'
+    ]
+},{
+    id:20, tipe:'pgk-kategori',
+    kutipan: `“Di beranda sekolah kecil itu, Ikal duduk memandangi papan tulis reyot yang cat putihnya mulai mengelupas. Hari ini nilai matematikanya kembali tidak memuaskan, membuat hatinya terasa sesak. Ia menggenggam kertas ulangan dengan tangan bergetar, sementara suara tawa teman-temannya dari lapangan terdengar semakin jauh. Namun, ketika ia mengingat kata-kata Bu Muslimah bahwa setiap anak memiliki potensi yang berbeda, seberkas harapan muncul di dadanya. Ikal menarik napas panjang, berusaha menata kembali keyakinannya bahwa ia bisa memperbaiki nilai itu suatu hari nanti.”`,
+    text: 'Perhatikan tabel berikut! Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan.',
+    pernyataan: [
+        'Respons emosional Ikal dalam kutipan dapat disimpulkan sebagai campuran rasa kecewa dan munculnya kembali harapan setelah mengingat nasihat gurunya.',
+        'Kutipan menunjukkan bahwa Ikal merasa marah kepada teman-temannya karena meneritawakannya ketika ia mendapat nilai buruk.',
+        'Bagian yang menggambarkan Ikal menarik napas panjang menunjukkan usahanya untuk tenang dan menguatkan dirinya kembali.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Ia sedih karena nilai buruk, lalu teringat nasihat Bu Muslimah → muncul harapan.',
+        'Teman-teman hanya tertawa di lapangan, tidak meneritawakan Ikal.',
+        'Menarik napas panjang biasa dilakukan untuk menguatkan diri dan menata perasaan.'
+    ]
+}];
+
+// ============================================================
+//  RENDER & LOGIC
+// ============================================================
+const container = document.getElementById('quizContainer');
+const scoreSpan = document.getElementById('scoreDisplay');
+const totalSpan = document.getElementById('totalSoal');
+totalSpan.textContent = questions.length;
+
+let answered = {};
+let selectedAnswers = {};
+let pernyataanAnswers = {};
+let pgkChecked = {};
+
+function render() {
+    let html = '';
+    let correctCount = 0;
+
+    questions.forEach((q, idx) => {
+        const isAnswered = answered[idx] || false;
+        const isCorrect = isAnswered && checkAnswer(idx);
+        if (isAnswered && isCorrect) correctCount++;
+
+        let cardClass = 'soal-card';
+        if (isAnswered) {
+            cardClass += isCorrect ? ' correct' : ' wrong';
+        }
+
+        const tipeLabel = q.tipe === 'pg' ? 'PG Biasa' :
+                          (q.tipe === 'pgk' ? 'PGK (Pilih >1)' : 'PGK Kategori');
+        let tipeClass = 'tipe';
+        if (q.tipe === 'pgk') tipeClass += ' pgk';
+        else if (q.tipe === 'pgk-kategori') tipeClass += ' pgk-kategori';
+
+        html += `<div class="${cardClass}" id="soal-${idx}">`;
+        html += `<div class="header-soal">
+                    <span class="nomor">Soal ${idx+1}</span>
+                    <span class="${tipeClass}">${tipeLabel}</span>
+                </div>`;
+
+        // Tampilkan kutipan jika ada
+        if (q.kutipan) {
+            html += `<div class="kutipan">${q.kutipan.replace(/\n/g, '<br>')}</div>`;
+        }
+
+        html += `<div class="soal-text">${q.text}</div>`;
+
+        // Render berdasarkan tipe
+        if (q.tipe === 'pg') {
+            html += renderPG(idx, q);
+        } else if (q.tipe === 'pgk') {
+            html += renderPGK(idx, q);
+        } else if (q.tipe === 'pgk-kategori') {
+            html += renderPGKKategori(idx, q);
+        }
+
+        // Feedback
+        let feedbackClass = 'feedback-box';
+        let feedbackHtml = '';
+        if (isAnswered) {
+            feedbackClass += ' show';
+            feedbackClass += isCorrect ? ' correct' : ' wrong';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+            const correctText = getCorrectText(q);
+            feedbackHtml = `
+                <div class="${feedbackClass}">
+                    <strong>${icon} ${status}</strong>
+                    <div class="explain">💡 ${q.explanation}</div>
+                    <div style="margin-top:4px;font-size:0.9rem;">Kunci Jawaban: <strong>${correctText}</strong></div>
+                </div>
+            `;
+        } else {
+            feedbackHtml = `<div class="feedback-box"></div>`;
+        }
+        html += feedbackHtml;
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+    scoreSpan.textContent = correctCount;
+
+    // Attach events
+    attachEvents();
+}
+
+function renderPG(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (optIdx === q.correct) labelClass += ' correct-answer';
+            if (optIdx === selected && optIdx !== q.correct) labelClass += ' wrong-answer';
+            if (optIdx === selected) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    return html;
+}
+
+function renderPGK(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx] || [];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (q.correct.includes(optIdx)) labelClass += ' correct-answer';
+            if (selected.includes(optIdx) && !q.correct.includes(optIdx)) labelClass += ' wrong-answer';
+            if (selected.includes(optIdx)) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="checkbox" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    // Tombol Cek Jawaban (hanya tampil jika belum dijawab)
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+    return html;
+}
+
+function renderPGKKategori(idx, q) {
+    let html = `<table class="table-pernyataan">`;
+    const isAnswered = answered[idx] || false;
+    const answers = pernyataanAnswers[idx] || [];
+
+    q.pernyataan.forEach((pernyataanText, pIdx) => {
+        const val = answers[pIdx];
+        const isCorrect = isAnswered && (val === q.jawaban[pIdx]);
+
+        html += `<tr>`;
+        html += `<td class="pernyataan-text">${pernyataanText}</td>`;
+        html += `<td>`;
+        html += `<div class="opsi-group">`;
+
+        const options = q.tipe === 'pgk-kategori' ?
+            [{ label: 'Setuju', value: true }, { label: 'Tidak Setuju', value: false }] :
+            [{ label: 'Sesuai', value: true }, { label: 'Tidak Sesuai', value: false }];
+
+        options.forEach(opt => {
+            const checked = (isAnswered && val === opt.value) ? 'checked' : '';
+            const disabled = isAnswered ? 'disabled' : '';
+            let labelClass = '';
+            if (isAnswered) {
+                if (opt.value === q.jawaban[pIdx]) labelClass += ' correct-answer';
+                if (val === opt.value && opt.value !== q.jawaban[pIdx]) labelClass += ' wrong-answer';
+            }
+            html += `
+                <label class="${labelClass} ${disabled}" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; background:transparent; border:none; cursor:${isAnswered?'default':'pointer'}; font-weight:${(isAnswered && opt.value === q.jawaban[pIdx])?'600':'normal'};">
+                    <input type="radio" name="pernyataan_${idx}_${pIdx}" value="${opt.value}" ${checked} ${disabled}>
+                    ${opt.label}
+                </label>
+            `;
+        });
+
+        html += `</div>`;
+
+        if (isAnswered) {
+            const fbClass = isCorrect ? 'benar' : 'salah';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Benar' : 'Salah';
+            html += `
+                <div class="feedback-pernyataan show ${fbClass}">
+                    ${icon} ${status} — ${q.alasan[pIdx]}
+                </div>
+            `;
+        }
+
+        html += `</td>`;
+        html += `</tr>`;
+    });
+
+    html += `</table>`;
+
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+
+    return html;
+}
+
+function getCorrectText(q) {
+    if (q.tipe === 'pg') {
+        return q.options[q.correct];
+    } else if (q.tipe === 'pgk') {
+        return q.correct.map(i => q.options[i]).join('; ');
+    } else if (q.tipe === 'pgk-kategori') {
+        return q.pernyataan.map((p, i) => {
+            const label = q.jawaban[i] ? 'Setuju/Sesuai' : 'Tidak Setuju/Tidak Sesuai';
+            return `(${i+1}) ${label}`;
+        }).join('; ');
+    }
+    return '';
+}
+
+function checkAnswer(idx) {
+    const q = questions[idx];
+    if (q.tipe === 'pg') {
+        return selectedAnswers[idx] === q.correct;
+    } else if (q.tipe === 'pgk') {
+        const sel = selectedAnswers[idx] || [];
+        const sortedSel = [...sel].sort();
+        const sortedCorr = [...q.correct].sort();
+        return JSON.stringify(sortedSel) === JSON.stringify(sortedCorr);
+    } else if (q.tipe === 'pgk-kategori') {
+        const ans = pernyataanAnswers[idx] || [];
+        return ans.every((v, i) => v === q.jawaban[i]);
+    }
+    return false;
+}
+
+function attachEvents() {
+    // PG radio
+    document.querySelectorAll('.soal-card input[type="radio"]:not([name^="pernyataan_"])').forEach(input => {
+        input.addEventListener('change', function() {
+            const name = this.name;
+            const idx = parseInt(name.replace('q', ''));
+            if (answered[idx]) return;
+            selectedAnswers[idx] = parseInt(this.value);
+            answered[idx] = true;
+            render();
+            document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+
+    // PGK checkbox and Kategori radio - handled by "Cek Jawaban" button
+    document.querySelectorAll('.btn-cek').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idx = parseInt(this.id.replace('cek-', ''));
+            const q = questions[idx];
+
+            if (q.tipe === 'pgk') {
+                // Get selected checkboxes
+                const checkboxes = document.querySelectorAll(`#soal-${idx} input[type="checkbox"]`);
+                const selected = [];
+                checkboxes.forEach(cb => {
+                    if (cb.checked) selected.push(parseInt(cb.value));
+                });
+                if (selected.length === 0) {
+                    alert('Pilih minimal satu pilihan!');
+                    return;
+                }
+                selectedAnswers[idx] = selected;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (q.tipe === 'pgk-kategori') {
+                // Check if all pernyataan have been answered
+                const allAnswered = q.pernyataan.every((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    let checked = false;
+                    radios.forEach(r => { if (r.checked) checked = true; });
+                    return checked;
+                });
+                if (!allAnswered) {
+                    alert('Jawab semua pernyataan terlebih dahulu!');
+                    return;
+                }
+                const answers = [];
+                q.pernyataan.forEach((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    radios.forEach(r => {
+                        if (r.checked) {
+                            answers[pIdx] = (r.value === 'true');
+                        }
+                    });
+                });
+                pernyataanAnswers[idx] = answers;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+}
+
+function resetQuiz() {
+    answered = {};
+    selectedAnswers = {};
+    pernyataanAnswers = {};
+    pgkChecked = {};
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+
+// Initial render
+render();
+</script>
+</body>
+</html>
