@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drilling Soal TKA Bahasa Inggris - Bonus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fb;
+            color: #1a2a3a;
+            padding: 20px 16px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #1a4a6b 100%);
+            color: #fff;
+            padding: 28px 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(11, 43, 68, 0.15);
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .header h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 4px;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+        .score-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e4ecf5;
+        }
+        .score-bar .score {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0b2b44;
+        }
+        .score-bar .score span {
+            color: #2d7fc1;
+        }
+        .reset-btn {
+            background: #eef4fa;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #ccdbe8;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+        .soal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.04);
+            border: 1px solid #eef4fa;
+            transition: border 0.2s, background 0.2s;
+        }
+        .soal-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .soal-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+        .soal-card .header-soal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .soal-card .nomor {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            letter-spacing: 0.03em;
+        }
+        .soal-card .tipe {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            background: #eef4fa;
+            color: #4a6a85;
+        }
+        .soal-card .tipe.pgk {
+            background: #fdebd0;
+            color: #8a4a0a;
+        }
+        .soal-card .tipe.pgk-kategori {
+            background: #d5f5e3;
+            color: #0b4a2a;
+        }
+        .soal-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .kutipan {
+            background: #f8faff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border-left: 4px solid #2d7fc1;
+            margin: 12px 0 16px 0;
+            font-style: italic;
+            color: #1a3a5a;
+            font-weight: 400;
+            font-size: 0.98rem;
+        }
+        .kutipan p {
+            margin-bottom: 6px;
+        }
+        .kutipan p:last-child {
+            margin-bottom: 0;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover:not(.disabled) {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .options input[type="radio"]:disabled,
+        .options input[type="checkbox"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .options label.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .options label.correct-answer {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .options label.wrong-answer {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .btn-cek {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+            margin-top: 6px;
+        }
+        .btn-cek:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .btn-cek:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+        .feedback-box {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback-box.show {
+            display: block;
+        }
+        .feedback-box.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback-box.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback-box .explain {
+            margin-top: 6px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+        .feedback-box .explain strong {
+            color: #0b2b44;
+        }
+
+        .table-pernyataan {
+            margin: 12px 0;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        .table-pernyataan td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e4ecf5;
+            vertical-align: middle;
+        }
+        .table-pernyataan .pernyataan-text {
+            padding-right: 16px;
+        }
+        .table-pernyataan .opsi-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .table-pernyataan .opsi-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .table-pernyataan .opsi-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2d7fc1;
+        }
+        .table-pernyataan .opsi-group input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .table-pernyataan .feedback-pernyataan {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: none;
+        }
+        .table-pernyataan .feedback-pernyataan.show {
+            display: block;
+        }
+        .table-pernyataan .feedback-pernyataan.benar {
+            background: #d4edda;
+            color: #0b4a2a;
+        }
+        .table-pernyataan .feedback-pernyataan.salah {
+            background: #f8d7da;
+            color: #6b2a2a;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6a8aa0;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 20px; }
+            .header h1 { font-size: 1.5rem; }
+            .soal-card { padding: 16px; }
+            .score-bar { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
+            .table-pernyataan td { display: block; padding: 6px 8px; }
+            .table-pernyataan .opsi-group { justify-content: flex-start; }
+            .table-pernyataan .pernyataan-text { padding-bottom: 0; }
+        }
+        @media print {
+            body { background: #fff; padding: 0.2in; }
+            .soal-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .header { background: #0b2b44 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .reset-btn, .btn-cek { display: none; }
+            .feedback-box { border: 1px solid #ccc; }
+            .feedback-box.correct { background: #e6f6ed; }
+            .feedback-box.wrong { background: #fdeaea; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 Drilling Soal TKA <small>Bahasa Inggris — Bonus</small></h1>
+        <div class="badge">20 Soal · SMA/MA 2026-2027</div>
+    </div>
+
+    <div class="score-bar">
+        <div class="score">🎯 Skor: <span id="scoreDisplay">0</span> / <span id="totalSoal">20</span></div>
+        <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <div class="footer">
+        <strong>Selamat Belajar!</strong> — Untuk PG biasa, klik langsung pilihan. Untuk PGK dan Kategori, pilih lalu tekan "Cek Jawaban".
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  DATA SOAL (20 Soal) — LENGKAP DENGAN KUTIPAN
+// ============================================================
+const questions = [{
+    id:1, tipe:'pg',
+    kutipan: `During an annual innovation fair, each class at Green Valley School was asked to propose a solution to a real-world problem using recycled materials. One group of students created a solar-powered phone charger using discarded plastic, broken solar lights, and old wires. Instead of working individually, they split into smaller task groups- design, research, and building. They communicated frequently to ensure everyone was aligned with the goal. Their project did not win first place, but it was praised for its potential to help communities without electricity. The students realized that innovation is not always about winning, but about creating meaningful change and working together.`,
+    text: 'How did the group ensure their project was successful despite limited materials?',
+    options: ['A. They let the leader do all the work','B. They worked individually and didn\'t communicate','C. They divided tasks and worked as a team','D. They asked teachers to complete the project'],
+    correct:2,
+    explanation: 'Teks menekankan pembagian kelompok berdasarkan tugas (desain, riset, pembangunan) dan koordinasi antar anggota. Ini menunjukkan kerja tim yang efektif.'
+},{
+    id:2, tipe:'pg',
+    kutipan: `During an annual innovation fair, each class at Green Valley School was asked to propose a solution to a real-world problem using recycled materials. One group of students created a solar-powered phone charger using discarded plastic, broken solar lights, and old wires. Instead of working individually, they split into smaller task groups- design, research, and building. They communicated frequently to ensure everyone was aligned with the goal. Their project did not win first place, but it was praised for its potential to help communities without electricity. The students realized that innovation is not always about winning, but about creating meaningful change and working together.`,
+    text: 'What valuable lesson did the students learn even though they didn\'t win?',
+    options: ['A. Impact and teamwork are more important than the prize','B. Expensive materials lead to success','C. Winning is the only thing that matters','D. Competitions are a waste of time'],
+    correct:0,
+    explanation: 'Pesan moral dalam teks adalah bahwa inovasi dan kerja sama memberikan nilai lebih daripada sekadar memenangkan lomba.'
+},{
+    id:3, tipe:'pg',
+    kutipan: `The villagers of Suka Maju work together every Saturday to clean their neighborhood. Some sweep the streets, others trim the plants, and children help by picking up trash. They call this activity "gotong royong." It has become a tradition that brings people closer and keeps the village clean and healthy.`,
+    text: 'What value do the villagers show in the activity?',
+    options: ['A. Competition','B. Independence','C. Ambition','D. Teamwork and community spirit'],
+    correct:3,
+    explanation: 'Kegiatan gotong royong menunjukkan kerja sama dan semangat kebersamaan dalam menjaga lingkungan desa.'
+},{
+    id:4, tipe:'pg',
+    kutipan: `Dita noticed that some students in her class couldn't afford school supplies. She suggested to the student council that they create a donation program where students who have extra items can give to those in need. Soon, everyone joined the effort, and the school created a "sharing corner" for free books and stationery.`,
+    text: 'Which Pancasila value is reflected in Dita\'s action?',
+    options: ['A. Belief in one God','B. Justice and equality for all','C. Discipline and obedience','D. Economic growth'],
+    correct:1,
+    explanation: 'Aksi Dita mencerminkan sila ke-2 dan ke-5 Pancasila: Kemanusiaan yang adil dan beradab serta Keadilan sosial bagi seluruh rakyat Indonesia.'
+},{
+    id:5, tipe:'pg',
+    kutipan: `In an English club meeting, members were asked to present their traditional cultures. Ana wore a kebaya and explained Javanese traditions, while David talked about Batak music. Some international students also presented their customs. Everyone listened respectfully and celebrated each other's culture.`,
+    text: 'What value is shown during the English club activity?',
+    options: ['A. Uniformity','B. Nationalism only','C. Respect for diversity','D. Focus on modern culture'],
+    correct:2,
+    explanation: 'Kegiatan tersebut mencerminkan penghargaan terhadap keberagaman budaya, sebuah nilai penting dalam masyarakat multikultural.'
+},{
+    id:6, tipe:'pg',
+    kutipan: `When their class was planning a farewell event, the teacher asked the students to vote on the venue and activities. Each student gave their opinion, and the decision was made based on the majority vote. Even students whose ideas were not chosen accepted the result happily.`,
+    text: 'What value is shown during the class voting activity?',
+    options: ['A. Democratic decision-making','B. Tolerance for defeat','C. Freedom of speech without responsibility','D. Authoritarian leadership'],
+    correct:0,
+    explanation: 'Pemungutan suara dan penerimaan hasil keputusan mayoritas mencerminkan sila ke-4 Pancasila: Kerakyatan yang dipimpin oleh hikmat kebijaksanaan dalam permusyawaratan/perwakilan.'
+},{
+    id:7, tipe:'pg',
+    kutipan: `During the flood season, Rafi volunteered to help distribute food and blankets to people in the temporary shelters. He said, "Helping others is not only about giving things—it's about showing that we care." His actions inspired others to help as well.`,
+    text: 'What does Rafi\'s action reflect?',
+    options: ['A. Humanity and compassion','B. Scientific knowledge','C. Political power','D. Personal interest'],
+    correct:0,
+    explanation: 'Rafi menunjukkan kepedulian dan kemanusiaan, yaitu membantu sesama tidak hanya secara materi tetapi juga dengan empati dan kehadiran.'
+},{
+    id:8, tipe:'pgk',
+    kutipan: `The annual "River Guardians Project" in Brookside Town has grown rapidly over the past three years. At first, only a handful of volunteers participated in monthly river clean-ups. However, everything changed when a local biology teacher, Mr. Donovan, discovered that the sudden decline of freshwater fish in the river was linked to plastic waste accumulated near the town's industrial zone. His report, which included photos, sample analyses, and interviews with fishermen, spread quickly through social media and caught the attention of the local government. As a result, the mayor launched a public awareness campaign that encouraged families, schools, and businesses to reduce plastic use and properly dispose of waste. Students from different schools joined the weekly activities, while several factories agreed to follow stricter waste-management procedures. Within months, the river became noticeably cleaner, and fish populations slowly began to increase again. Seeing the positive changes, the town council decided to allocate a special budget to support long-term conservation programs. They planned to build more waste-filtering systems along the riverbanks, expand educational workshops, and promote eco-friendly practices throughout the town.`,
+    text: 'Which statements best show the cause-and-effect relationships described in the text? (Pilih lebih dari satu)',
+    options: [
+        'A. Mr. Donovan\'s report raised public awareness, which led the mayor to launch an environmental campaign.',
+        'B. The factories\' stricter waste-management procedures caused a decrease in industrial profits.',
+        'C. Increased community participation in clean-ups contributed to the improvement of river conditions.',
+        'D. The town council allocated a special budget because they noticed positive results from earlier efforts.',
+        'E. Fishermen stopped catching fish after Mr. Donovan interviewed them.'
+    ],
+    correct:[0,2,3],
+    explanation: 'A (benar) — sesuai teks: "His report... spread quickly... and caught the attention... As a result, the mayor launched a public awareness campaign..." C (benar) — sesuai teks: "Students... joined the weekly activities... Within months, the river became noticeably cleaner..." D (benar) — sesuai teks: "Seeing the positive changes, the town council decided to allocate a special budget..." B (salah) — teks tidak menyebutkan penurunan keuntungan industri. E (salah) — teks tidak menyebut nelayan berhenti menangkap ikan.'
+},{
+    id:9, tipe:'pgk',
+    kutipan: `During the annual Science and Community Fair, students from Hillview High School presented various projects that aimed to solve everyday problems in the town. Among the presenters were Tara and Elliot, two students with very different personalities but equally strong dedication. Tara presented a project called "Water for All", a simple but effective filtration system made from recycled materials. In her presentation, she explained how she spent weeks visiting rural households, collecting data about water quality, and experimenting with different filter designs. Even when several early models failed, she patiently revised her work and continued testing until she found a reliable solution. Her classmates often described her as someone who "never gives up until things work the way they should." Meanwhile, Elliot introduced his project "Smart Light Guardian", a device that automatically controls home lighting to save electricity. During the fair, Elliot walked from booth to booth offering to help other students adjust their wiring, presentation slides, and even fix damaged prototypes. The teachers noted that he always volunteered to help without being asked and seemed genuinely happy to see others succeed. He also received praise for explaining complicated electrical concepts in a clear and friendly manner to younger visitors. By the end of the event, both Tara and Elliot were recognized for their contributions—not only for their inventions but also for the attitudes and values they demonstrated throughout the process.`,
+    text: 'Based on the text, which character traits best describe Tara and Elliot? (Pilih lebih dari satu)',
+    options: [
+        'A. Tara is persistent because she continued improving her project despite repeated failures.',
+        'B. Tara is reckless because she ignored data and experimented randomly.',
+        'C. Elliot is helpful because he supported other students without being asked.',
+        'D. Elliot is selfish because he focused only on winning the competition.',
+        'E. Tara is creative because she used recycled materials for her filtration system.'
+    ],
+    correct:[0,2,4],
+    explanation: 'A (benar) — sesuai teks: "Even when several early models failed, she patiently revised her work and continued testing..." C (benar) — sesuai teks: "...he always volunteered to help without being asked..." E (benar) — sesuai teks: "...a simple but effective filtration system made from recycled materials." B (salah) — bertentangan dengan teks, Tara justru "collecting data" dan bekerja dengan sabar. D (salah) — bertentangan, Elliot digambarkan membantu orang lain dan "genuinely happy to see others succeed."'
+},{
+    id:10, tipe:'pgk',
+    kutipan: `Every Friday afternoon, the students of Riverside Club gathered at the community center to work on their service project: helping elderly residents with small tasks around their homes. This week, the group was assigned to visit Mr. Callahan, a retired carpenter who had lived alone since his wife passed away three years ago. Although known in the neighborhood for his woodworking skills, he had recently stopped taking orders because of worsening arthritis. When the students arrived, they found Mr. Callahan in his workshop, surrounded by unfinished wooden toys scattered across a dusty bench. He welcomed them warmly but admitted he had been feeling discouraged. His granddaughter's birthday was coming soon, and he had dreamed of making her a wooden music box, just like the ones he crafted years ago. However, his hands were too weak to carve small details, and he feared he would disappoint her. Hearing this, the students exchanged determined glances. Mia, who loved painting miniatures, inspected the half-finished box. Aaron, the club's most skilled builder, examined the loose hinges and missing panels. The group discussed quietly, and an idea began to form. Mr. Callahan watched them curiously as they gathered tools and materials from the workshop, whispering about measurements, colors, and design patterns. The students smiled at him but said nothing-yet.`,
+    text: 'Based on the story, which outcomes are MOST LIKELY to happen next? (Pilih lebih dari satu)',
+    options: [
+        'A. The students will work together to help Mr. Callahan finish the wooden music box for his granddaughter.',
+        'B. Mr. Callahan will ask the students to leave because he dislikes anyone touching his tools.',
+        'C. The music box will be completed, allowing Mr. Callahan to give a meaningful birthday gift.',
+        'D. The students will damage the workshop, causing Mr. Callahan to become upset.',
+        'E. The students will use their individual skills to restore Mr. Callahan\'s confidence in woodworking.'
+    ],
+    correct:[0,2,4],
+    explanation: 'A (benar) — sangat mungkin karena ini masalah utama yang disampaikan Mr. Callahan dan siswa-siswa sudah saling bertukar pandangan. C (benar) — hasil logis dan memuaskan dari prediksi A. E (benar) — tema yang lebih dalam, dengan membantu mewujudkan mimpinya, mereka juga memulihkan semangatnya. B (salah) — bertentangan dengan teks, dia menyambut hangat dan "watched them curiously". D (salah) — bertentangan dengan nada cerita yang positif.'
+},{
+    id:11, tipe:'pgk',
+    kutipan: `When fourteen-year-old Lia moved with her family to the small town of Northwood, she expected nothing more than quiet streets, cold weather, and long walks to school. On her first week there, she spent most afternoons exploring the forest behind her house, fascinated by the old pine trees and the small stream that curved toward the hills. One day, while following a trail of unusual silver-colored leaves, she discovered a small wooden door built into the base of a giant tree. The door had tiny carvings that glowed faintly, almost like fireflies stuck beneath the surface. Curious, Lia touched the door—and to her shock, it swung open by itself. A warm light spilled out, revealing a tunnel that spiraled down into the ground. Before she could decide whether to enter, a small creature no taller than her knee appeared. It had shimmering wings, a coat that changed color like water, and a voice that sounded like wind chimes. "Welcome, traveler," it said. "We have been waiting for you." Lia blinked, unsure whether she was dreaming or imagining things. She took a small step back, trying to make sense of what she was seeing.`,
+    text: 'Which of the following events from the text belong to fantasy rather than real-life reality? (Pilih lebih dari satu)',
+    options: [
+        'A. Lia moves with her family to a small town.',
+        'B. Lia discovers a glowing wooden door built into a tree.',
+        'C. A small winged creature appears and speaks to her.',
+        'D. Lia explores the forest behind her new house.',
+        'E. The door opens by itself and reveals a spiraling tunnel with warm light.'
+    ],
+    correct:[1,2,4],
+    explanation: 'B (benar) — pintu kayu kecil yang berpijar pada pangkal pohon raksasa adalah elemen fantasi. C (benar) — makhluk kecil bersayap yang berbicara adalah ciri khas cerita fantasi. E (benar) — pintu yang terbuka sendiri dan terowongan ajaib adalah elemen fantasi. A (salah) — kejadian biasa dalam kehidupan nyata. D (salah) — aktivitas yang wajar dalam kehidupan nyata.'
+},{
+    id:12, tipe:'pgk',
+    kutipan: `The city of Brookdale recently introduced a new policy that limits the use of private cars in the downtown area during peak hours. According to the Transportation Department, traffic congestion in Brookdale has increased by 35% over the past five years, causing longer travel times and higher fuel consumption. The new policy aims to encourage citizens to use public transportation, bicycles, or carpooling instead. Some residents have praised the decision, stating that the air already feels cleaner and the streets less crowded during the first week of implementation. However, others disagree. Business owners in the downtown district argue that the policy is "unfair and harmful," claiming that fewer customers are willing to visit their stores. Despite the criticism, Mayor Carson insists that the policy is necessary. He stated in an interview, "Reducing traffic is the only way to create a healthier and more livable city. Anyone who opposes this policy simply cares more about convenience than the well-being of the community." His statement has sparked debate among citizens, with many questioning whether the mayor's claims are based on evidence or personal judgement.`,
+    text: 'Which of the following statements from the text are opinions rather than factual statements? (Pilih lebih dari satu)',
+    options: [
+        'A. Traffic congestion in Brookdale has increased by 35% over the past five years.',
+        'B. Business owners say the policy is "unfair and harmful."',
+        'C. The air already feels cleaner during the first week of the policy.',
+        'D. The mayor\'s claim that "reducing traffic is the only way to create a healthier city."',
+        'E. The policy aims to encourage citizens to use public transportation.'
+    ],
+    correct:[1,2,3],
+    explanation: 'B (benar) — opini dari pemilik bisnis, kata "unfair" dan "harmful" adalah penilaian subjektif. C (benar) — opini/perasaan, kata "feels" menunjukkan kesan subjektif, bukan data terukur. D (benar) — opini walikota, kata "the only way" adalah pernyataan absolut yang merupakan keyakinan pribadi. A (salah) — data statistik yang dapat diukur = fakta. E (salah) — menjelaskan tujuan kebijakan yang dapat diverifikasi = fakta.'
+},{
+    id:13, tipe:'pgk',
+    kutipan: `The Health Awareness Council of Rivertown recently published a report claiming that the number of teenagers engaging in regular physical activity has increased significantly. According to their data, 70% of high school students now exercise at least three times a week, compared to only 45% two years ago. They argue that school campaigns, improved sports facilities, and social media influence are the main reasons for this improvement. However, an independent study conducted by the National Youth Research Institute presents different findings. Their survey, conducted across ten schools in the same region, shows that only 48% of teenagers participate in regular exercise, and many of them do so only because of mandatory school programs. The institute also states that motivation among teenagers has not increased; instead, external pressure from teachers and parents plays a larger role. Local schools have expressed uncertainty regarding these conflicting results. Some teachers confirm they have seen more students in after-school sports clubs, while others argue that many students still prefer staying indoors and spending time on gadgets.`,
+    text: 'Which statements correctly evaluate the sufficiency and validity of the information in the text? (Pilih lebih dari satu)',
+    options: [
+        'A. The Health Awareness Council\'s claim may be inaccurate because their data conflicts with findings from the National Youth Research Institute.',
+        'B. The information from the institute seems more reliable because it collected data from multiple schools.',
+        'C. The Council\'s report is fully valid because it provides exact percentages.',
+        'D. The conflicting results indicate that neither source alone provides sufficient information to draw a firm conclusion.',
+        'E. The teachers\' observations cannot be considered valid evidence because they are entirely based on personal impressions.'
+    ],
+    correct:[0,3,4],
+    explanation: 'A (benar) — adanya temuan bertentangan dari sumber lain menimbulkan keraguan terhadap keakuratan laporan. D (benar) — ketika dua sumber terpercaya memberikan data berbeda, satu sumber saja tidak cukup untuk kesimpulan pasti. E (benar) — pengamatan personal tanpa metodologi sistematis tidak dapat dianggap sebagai bukti valid. B (salah) — teks tidak menyebut dari berapa sekolah Dewan Kesehatan mengumpulkan data. C (salah) — adanya angka persis tidak otomatis membuat laporan "fully valid".'
+},{
+    id:14, tipe:'pgk-kategori',
+    kutipan: `Text A: "Jake prefers to study in the library because it is quiet and he can concentrate better. He usually sits near the window, where there is good natural light, and spends several hours reviewing his notes and reading textbooks." Text B: "Emma likes studying at the cafe near her house. She enjoys the lively atmosphere and the background music, which helps her feel more relaxed. She often brings her laptop and listens to music while summarizing her study materials."`,
+    text: 'Look at the table below! Decide whether each statement is Appropriate or Not Appropriate.',
+    pernyataan: [
+        'Jake and Emma both dedicate focused time to studying, but they prefer different environments.',
+        'The library and the café are similar because both provide quiet spaces for concentration.',
+        'While Jake prefers natural light, Emma prefers a lively atmosphere with background music for her study sessions.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Teks menunjukkan Jake dan Emma sama-sama belajar dengan fokus, tetapi Jake di perpustakaan dan Emma di kafe.',
+        'Teks menunjukkan kafe Emma memiliki suasana hidup dengan musik latar, berbeda dari perpustakaan yang tenang.',
+        'Teks menyebut Jake suka cahaya alami dan Emma suka suasana hidup dengan musik latar.'
+    ]
+},{
+    id:15, tipe:'pgk-kategori',
+    kutipan: `During the summer, the river near the village overflowed due to heavy rainfall in the mountains, which had been continuous for several days. The overflowing river flooded nearby fields, damaging crops such as rice and vegetables, and caused mudslides that blocked several roads. Some villagers had to evacuate to safer areas, bringing only essential belongings. The local government quickly organized rescue teams and coordinated with volunteers to provide food, clean water, and temporary shelters for affected families. Additionally, engineers inspected damaged bridges and roads to prevent further accidents. Residents were advised to stay indoors, avoid traveling near the river, and help each other whenever possible until the water levels decreased and conditions became safe again. The community also started planning measures for future rainy seasons, such as building stronger embankments and planting trees upstream to reduce the risk of flooding.`,
+    text: 'Look at the table below! Decide whether you Agree or Disagree with each statement.',
+    pernyataan: [
+        'The continuous heavy rainfall caused the river to overflow, damaging crops and blocking roads.',
+        'The local government and volunteers provided aid, including food, water, shelters, and repairing infrastructure.',
+        'Residents were advised to stay safe indoors and take part in helping the community during the flood.'
+    ],
+    jawaban: [true, true, true],
+    alasan: [
+        'Teks menyatakan hujan lebat terus-menerus menyebabkan sungai meluap, merusak sawah dan jalan.',
+        'Teks menyebut pemerintah dan relawan "menyediakan makanan, air bersih, tempat penampungan, dan memeriksa jembatan serta jalan."',
+        'Teks menyatakan penduduk "dianjurkan tetap di rumah, menghindari perjalanan dekat sungai, dan saling membantu."'
+    ]
+},{
+    id:16, tipe:'pgk-kategori',
+    kutipan: `Michael always arrives at school early to help set up the classroom for his classmates. He carefully organizes the desks, checks the whiteboard markers, and ensures that all materials for the day's lessons are ready. Whenever a new student joins the class, Michael politely greets them and offers assistance to help them settle in. During group projects, he listens to everyone's ideas and encourages quieter classmates to share their thoughts. His teachers often praise his responsibility, patience, and friendliness, and his friends admire the way he always thinks about others before himself. Even during busy days, Michael never hesitates to help clean up after activities or assist classmates who are struggling with their work. His consistent efforts make him a role model for the class and someone everyone can rely on for support.`,
+    text: 'Look at the table below! Decide whether each statement is Appropriate or Not Appropriate.',
+    pernyataan: [
+        'Michael is shown as responsible, patient, and caring because he helps prepare the classroom and supports his classmates.',
+        'Michael is portrayed as rude and careless toward new students and group members.',
+        'His consistent actions demonstrate friendliness, helpfulness, and reliability.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Teks secara langsung menggambarkannya dengan sifat-sifat ini melalui tindakannya dan guru-gurunya memuji "tanggung jawab, kesabaran, dan keramahannya".',
+        'Teks menyatakan hal sebaliknya. Michael justru menyambut siswa baru dengan sopan dan mendorong teman sekelas yang pendiam.',
+        'Ini adalah ringkasan tepat dari keseluruhan teks, yang menunjukkan konsistensinya dalam membantu, keramahan, dan keandalan.'
+    ]
+},{
+    id:17, tipe:'pgk-kategori',
+    kutipan: `Anna had always dreamed of participating in the city marathon. For months, she trained every morning, waking up before sunrise to run along the riverbank and gradually increasing her distance. She carefully monitored her diet and practiced breathing techniques to improve her stamina. On the day of the marathon, the streets were crowded with runners, volunteers, and cheering spectators. Anna felt both nervous and excited as she lined up at the starting point. The first few kilometers went smoothly, and she kept a steady pace. Around the tenth kilometer, she saw her friends holding banners and shouting encouragement, which gave her a burst of energy. Despite feeling tired halfway through the race, Anna remembered all her hard work and motivated herself to keep going.`,
+    text: 'Look at the table below! Decide whether you Agree or Disagree with each statement.',
+    pernyataan: [
+        'Anna will likely finish the marathon successfully because she trained diligently and stayed motivated.',
+        'Anna will probably quit the race immediately after seeing her friends.',
+        'Her preparation and determination suggest that she will face challenges but continue until the finish line.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Teks menggambarkan persiapan sangat matang dan tekadnya untuk terus berjalan meski lelah, sehingga sangat mungkin dia akan menyelesaikan marathon.',
+        'Melihat teman-temannya justru memberinya "ledakan energi," yang merupakan dorongan untuk melanjutkan, bukan alasan untuk berhenti.',
+        'Teks secara eksplisit menyatakan bahwa meski merasa lelah, dia memotivasi dirinya sendiri untuk terus berjalan.'
+    ]
+},{
+    id:18, tipe:'pgk-kategori',
+    kutipan: `In a small village, a young boy named Leo discovered a hidden door at the base of an ancient tree while playing in the forest. Curious, he opened the door and found a glowing tunnel that led to a world where animals could talk and trees moved on their own. The animals welcomed Leo and showed him magical places filled with sparkling rivers and floating islands. Every day after school, Leo returned to this hidden world to play and learn from the animals. He even helped solve problems among the magical creatures and was considered a hero in that realm. Despite the wonders he saw, Leo always returned home in time for dinner, keeping the secret of the magical world to himself.`,
+    text: 'Look at the table below! Decide whether you Agree or Disagree with each statement.',
+    pernyataan: [
+        'The story describes a magical world that is unlikely to exist in real life.',
+        'Some elements, such as a boy playing in the forest, could happen in real life.',
+        'Overall, the story combines realistic and fantastical elements, making it mostly a fantasy tale.'
+    ],
+    jawaban: [true, true, true],
+    alasan: [
+        'Elemen-elemen seperti hewan yang bisa bicara dan pohon yang berjalan sendiri adalah hal-hal ajaib yang tidak terjadi dalam dunia nyata.',
+        'Latar seorang anak laki-laki bermain di hutan adalah peristiwa yang sangat mungkin dan realistis.',
+        'Cerita dimulai dengan situasi realistis tetapi dengan cepat memasuki dunia ajaib, sehingga genre utamanya adalah fantasi.'
+    ]
+},{
+    id:19, tipe:'pgk-kategori',
+    kutipan: `Eating fruits and vegetables every day is essential for maintaining good health. Studies show that people who consume at least five servings of fruits and vegetables daily have a lower risk of developing heart disease and certain types of cancer. Some nutritionists claim that organic fruits and vegetables are always healthier than conventionally grown ones because they contain more nutrients, but others argue that the difference is minimal. Eating a variety of colorful fruits and vegetables provides essential vitamins and minerals, and it is widely recommended by doctors around the world. Additionally, many health blogs emphasize that a balanced diet, combined with regular exercise, can improve overall well-being and mental clarity.`,
+    text: 'Look at the table below! Decide whether you Agree or Disagree with each statement.',
+    pernyataan: [
+        'Eating at least five servings of fruits and vegetables daily can reduce the risk of heart disease and some types of cancer (factual statement).',
+        'Organic fruits and vegetables are always healthier than conventional ones (opinion).',
+        'Maintaining a balanced diet and exercising regularly can improve overall health and well-being (supported by evidence).'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Pernyataan ini disajikan dalam teks sebagai fakta yang didukung oleh "studi" ("Studies show that...").',
+        'Teks menyajikan klaim ini sebagai pendapat yang diperdebatkan di antara para ahli gizi, sehingga tidak dapat disepakati sebagai pernyataan absolut.',
+        'Teks menyatakan bahwa ini "secara luas direkomendasikan oleh dokter di seluruh dunia" dan ditekankan oleh banyak blog kesehatan.'
+    ]
+},{
+    id:20, tipe:'pgk-kategori',
+    kutipan: `Lila had always loved visiting the old lighthouse by the coast. Every summer, she would climb the spiral staircase to the top and look out over the vast, sparkling ocean. The sound of waves crashing against the rocks below and the salty breeze made her feel calm and inspired. One day, she noticed a group of seagulls performing acrobatic maneuvers in the sky, and she laughed with delight at their playful movements. Lila often brought her sketchbook to capture the scenery and the feelings she experienced while at the lighthouse. She believed that spending time there helped her feel more connected to nature and brought her joy and creativity.`,
+    text: 'Look at the table below! Decide whether you Agree or Disagree with each statement.',
+    pernyataan: [
+        'Lila feels calm, inspired, and joyful when she visits the lighthouse.',
+        'The description of the lighthouse and the ocean makes the reader feel bored and uninterested.',
+        'Spending time at the lighthouse allows Lila to be creative and enjoy nature.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Teks secara langsung menyebutkan perasaan "calm and inspired" serta "joy and creativity" yang dia alami di sana.',
+        'Deskripsi teks tentang pemandangan yang "vast, sparkling," suara ombak, dan angin sepoi-sepoi justru menciptakan suasana menenangkan dan menarik, bukan membosankan.',
+        'Teks menyatakan bahwa dia membawa buku sketsa dan bahwa waktu di sana membantunya merasa "lebih terhubung dengan alam" serta membawa "kegembiraan dan kreativitas".'
+    ]
+}];
+
+// ============================================================
+//  RENDER & LOGIC
+// ============================================================
+const container = document.getElementById('quizContainer');
+const scoreSpan = document.getElementById('scoreDisplay');
+const totalSpan = document.getElementById('totalSoal');
+totalSpan.textContent = questions.length;
+
+let answered = {};
+let selectedAnswers = {};
+let pernyataanAnswers = {};
+
+function render() {
+    let html = '';
+    let correctCount = 0;
+
+    questions.forEach((q, idx) => {
+        const isAnswered = answered[idx] || false;
+        const isCorrect = isAnswered && checkAnswer(idx);
+        if (isAnswered && isCorrect) correctCount++;
+
+        let cardClass = 'soal-card';
+        if (isAnswered) {
+            cardClass += isCorrect ? ' correct' : ' wrong';
+        }
+
+        const tipeLabel = q.tipe === 'pg' ? 'PG Biasa' :
+                          (q.tipe === 'pgk' ? 'PGK (Pilih >1)' : 'PGK Kategori');
+        let tipeClass = 'tipe';
+        if (q.tipe === 'pgk') tipeClass += ' pgk';
+        else if (q.tipe === 'pgk-kategori') tipeClass += ' pgk-kategori';
+
+        html += `<div class="${cardClass}" id="soal-${idx}">`;
+        html += `<div class="header-soal">
+                    <span class="nomor">Soal ${idx+1}</span>
+                    <span class="${tipeClass}">${tipeLabel}</span>
+                </div>`;
+
+        if (q.kutipan) {
+            html += `<div class="kutipan">${q.kutipan.replace(/\n/g, '<br>')}</div>`;
+        }
+
+        html += `<div class="soal-text">${q.text}</div>`;
+
+        if (q.tipe === 'pg') {
+            html += renderPG(idx, q);
+        } else if (q.tipe === 'pgk') {
+            html += renderPGK(idx, q);
+        } else if (q.tipe === 'pgk-kategori') {
+            html += renderPGKKategori(idx, q);
+        }
+
+        let feedbackClass = 'feedback-box';
+        let feedbackHtml = '';
+        if (isAnswered) {
+            feedbackClass += ' show';
+            feedbackClass += isCorrect ? ' correct' : ' wrong';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+            const correctText = getCorrectText(q);
+            feedbackHtml = `
+                <div class="${feedbackClass}">
+                    <strong>${icon} ${status}</strong>
+                    <div class="explain">💡 ${q.explanation}</div>
+                    <div style="margin-top:4px;font-size:0.9rem;">Kunci Jawaban: <strong>${correctText}</strong></div>
+                </div>
+            `;
+        } else {
+            feedbackHtml = `<div class="feedback-box"></div>`;
+        }
+        html += feedbackHtml;
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+    scoreSpan.textContent = correctCount;
+    attachEvents();
+}
+
+function renderPG(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (optIdx === q.correct) labelClass += ' correct-answer';
+            if (optIdx === selected && optIdx !== q.correct) labelClass += ' wrong-answer';
+            if (optIdx === selected) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    return html;
+}
+
+function renderPGK(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx] || [];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (q.correct.includes(optIdx)) labelClass += ' correct-answer';
+            if (selected.includes(optIdx) && !q.correct.includes(optIdx)) labelClass += ' wrong-answer';
+            if (selected.includes(optIdx)) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="checkbox" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+    return html;
+}
+
+function renderPGKKategori(idx, q) {
+    let html = `<table class="table-pernyataan">`;
+    const isAnswered = answered[idx] || false;
+    const answers = pernyataanAnswers[idx] || [];
+
+    q.pernyataan.forEach((pernyataanText, pIdx) => {
+        const val = answers[pIdx];
+        const isCorrect = isAnswered && (val === q.jawaban[pIdx]);
+
+        html += `<tr>`;
+        html += `<td class="pernyataan-text">${pernyataanText}</td>`;
+        html += `<td>`;
+        html += `<div class="opsi-group">`;
+
+        const options = q.tipe === 'pgk-kategori' ?
+            [{ label: 'Setuju', value: true }, { label: 'Tidak Setuju', value: false }] :
+            [{ label: 'Sesuai', value: true }, { label: 'Tidak Sesuai', value: false }];
+
+        options.forEach(opt => {
+            const checked = (isAnswered && val === opt.value) ? 'checked' : '';
+            const disabled = isAnswered ? 'disabled' : '';
+            let labelClass = '';
+            if (isAnswered) {
+                if (opt.value === q.jawaban[pIdx]) labelClass += ' correct-answer';
+                if (val === opt.value && opt.value !== q.jawaban[pIdx]) labelClass += ' wrong-answer';
+            }
+            html += `
+                <label class="${labelClass} ${disabled}" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; background:transparent; border:none; cursor:${isAnswered?'default':'pointer'}; font-weight:${(isAnswered && opt.value === q.jawaban[pIdx])?'600':'normal'};">
+                    <input type="radio" name="pernyataan_${idx}_${pIdx}" value="${opt.value}" ${checked} ${disabled}>
+                    ${opt.label}
+                </label>
+            `;
+        });
+
+        html += `</div>`;
+
+        if (isAnswered) {
+            const fbClass = isCorrect ? 'benar' : 'salah';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Benar' : 'Salah';
+            html += `
+                <div class="feedback-pernyataan show ${fbClass}">
+                    ${icon} ${status} — ${q.alasan[pIdx]}
+                </div>
+            `;
+        }
+
+        html += `</td>`;
+        html += `</tr>`;
+    });
+
+    html += `</table>`;
+
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+
+    return html;
+}
+
+function getCorrectText(q) {
+    if (q.tipe === 'pg') {
+        return q.options[q.correct];
+    } else if (q.tipe === 'pgk') {
+        return q.correct.map(i => q.options[i]).join('; ');
+    } else if (q.tipe === 'pgk-kategori') {
+        return q.pernyataan.map((p, i) => {
+            const label = q.jawaban[i] ? 'Setuju/Sesuai' : 'Tidak Setuju/Tidak Sesuai';
+            return `(${i+1}) ${label}`;
+        }).join('; ');
+    }
+    return '';
+}
+
+function checkAnswer(idx) {
+    const q = questions[idx];
+    if (q.tipe === 'pg') {
+        return selectedAnswers[idx] === q.correct;
+    } else if (q.tipe === 'pgk') {
+        const sel = selectedAnswers[idx] || [];
+        const sortedSel = [...sel].sort();
+        const sortedCorr = [...q.correct].sort();
+        return JSON.stringify(sortedSel) === JSON.stringify(sortedCorr);
+    } else if (q.tipe === 'pgk-kategori') {
+        const ans = pernyataanAnswers[idx] || [];
+        return ans.every((v, i) => v === q.jawaban[i]);
+    }
+    return false;
+}
+
+function attachEvents() {
+    document.querySelectorAll('.soal-card input[type="radio"]:not([name^="pernyataan_"])').forEach(input => {
+        input.addEventListener('change', function() {
+            const name = this.name;
+            const idx = parseInt(name.replace('q', ''));
+            if (answered[idx]) return;
+            selectedAnswers[idx] = parseInt(this.value);
+            answered[idx] = true;
+            render();
+            document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+
+    document.querySelectorAll('.btn-cek').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idx = parseInt(this.id.replace('cek-', ''));
+            const q = questions[idx];
+
+            if (q.tipe === 'pgk') {
+                const checkboxes = document.querySelectorAll(`#soal-${idx} input[type="checkbox"]`);
+                const selected = [];
+                checkboxes.forEach(cb => {
+                    if (cb.checked) selected.push(parseInt(cb.value));
+                });
+                if (selected.length === 0) {
+                    alert('Pilih minimal satu pilihan!');
+                    return;
+                }
+                selectedAnswers[idx] = selected;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (q.tipe === 'pgk-kategori') {
+                const allAnswered = q.pernyataan.every((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    let checked = false;
+                    radios.forEach(r => { if (r.checked) checked = true; });
+                    return checked;
+                });
+                if (!allAnswered) {
+                    alert('Jawab semua pernyataan terlebih dahulu!');
+                    return;
+                }
+                const answers = [];
+                q.pernyataan.forEach((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    radios.forEach(r => {
+                        if (r.checked) {
+                            answers[pIdx] = (r.value === 'true');
+                        }
+                    });
+                });
+                pernyataanAnswers[idx] = answers;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+}
+
+function resetQuiz() {
+    answered = {};
+    selectedAnswers = {};
+    pernyataanAnswers = {};
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+render();
+</script>
+</body>
+</html>
