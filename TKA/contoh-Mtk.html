@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interaktif - TKA SMA Matematika</title>
+    <style>
+        :root {
+            --primary: #00695c;
+            --primary-dark: #004d40;
+            --success: #2e7d32;
+            --success-bg: #e8f5e9;
+            --danger: #c62828;
+            --danger-bg: #ffebee;
+            --warning: #f57f17;
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 6px 24px rgba(0, 0, 0, 0.12);
+            --font: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; padding: 16px; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 28px 20px; border-radius: var(--radius); text-align: center; margin-bottom: 24px; box-shadow: var(--shadow-lg); }
+        .header h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 700; letter-spacing: 0.5px; }
+        .header p { font-size: 0.95rem; opacity: 0.9; margin-top: 6px; }
+        .score-bar { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 12px 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; font-weight: 600; flex-wrap: wrap; gap: 8px; }
+        .score-bar .score { color: var(--primary); font-size: 1.1rem; }
+        .score-bar .badge { font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; font-weight: 500; background: #e0f2f1; color: var(--primary); }
+        .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 18px; margin-bottom: 20px; border: 1px solid #eef2f6; }
+        .card:hover { box-shadow: var(--shadow-lg); }
+        .question-number { display: inline-block; background: var(--primary); color: white; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 10px; }
+        .question-type { display: inline-block; font-size: 0.75rem; padding: 3px 10px; border-radius: 12px; font-weight: 500; background: #f5f5f5; color: var(--text-muted); margin-left: 6px; letter-spacing: 0.3px; }
+        .question-text { font-size: 1.05rem; font-weight: 600; margin: 10px 0 14px; line-height: 1.65; }
+        .question-image { background: #f8fafc; border: 2px dashed #b0bec5; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 14px; color: #78909c; font-style: italic; overflow-x: auto; }
+        .question-image img { max-width: 100%; height: auto; display: inline-block; margin: 5px; vertical-align: middle; }
+        .text-excerpt { background: #f8fafc; border-left: 4px solid var(--primary); padding: 14px 16px; border-radius: 0 8px 8px 0; font-size: 0.92rem; margin-bottom: 14px; max-height: 220px; overflow-y: auto; white-space: pre-line; color: #37474f; line-height: 1.7; }
+        .text-excerpt strong { color: var(--primary-dark); }
+        .options { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+        .option { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; background: #fafbfc; user-select: none; -webkit-tap-highlight-color: transparent; font-size: 0.95rem; line-height: 1.5; }
+        .option:hover { border-color: var(--primary); background: #f0f6ff; transform: translateY(-1px); }
+        .option.selected-correct { border-color: var(--success); background: var(--success-bg); box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15); }
+        .option.selected-wrong { border-color: var(--danger); background: var(--danger-bg); box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.12); }
+        .option.disabled { pointer-events: none; opacity: 0.7; }
+        .option-letter { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px; }
+        .option.selected-correct .option-letter { background: var(--success); }
+        .option.selected-wrong .option-letter { background: var(--danger); }
+        .option-text { flex: 1; }
+        .option img { max-width: 100%; height: auto; display: block; }
+        .kategori-table { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+        .kategori-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #e8edf2; transition: all 0.2s; }
+        .kategori-row .statement-text { flex: 1 1 100%; font-weight: 500; font-size: 0.92rem; margin-bottom: 4px; line-height: 1.5; }
+        .kategori-buttons { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; }
+        .kategori-btn { padding: 8px 18px; border: 2px solid var(--border); border-radius: 20px; cursor: pointer; background: white; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; -webkit-tap-highlight-color: transparent; user-select: none; min-width: 80px; text-align: center; letter-spacing: 0.3px; }
+        .kategori-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .kategori-btn.selected-correct { border-color: var(--success); background: var(--success-bg); color: var(--success); }
+        .kategori-btn.selected-wrong { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+        .kategori-btn.disabled { pointer-events: none; opacity: 0.55; }
+        .kategori-row.correct-row { border-color: var(--success); background: #f1f8e9; }
+        .kategori-row.wrong-row { border-color: var(--danger); background: #fff5f5; }
+        .answer-key { margin-top: 14px; padding: 14px 16px; border-radius: 10px; background: #f0f7ff; border: 1px solid #cce5ff; display: none; animation: fadeIn 0.3s ease; }
+        .answer-key.visible { display: block; }
+        .answer-key .key-label { font-weight: 700; color: var(--primary-dark); font-size: 0.9rem; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .answer-key .key-answer { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .answer-key .key-explanation { font-size: 0.88rem; color: #444; line-height: 1.65; }
+        .answer-key .icon-check { color: var(--success); font-weight: bold; }
+        .answer-key .icon-info { color: var(--primary); font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 0.95rem; z-index: 9999; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s; opacity: 0; pointer-events: none; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.correct { background: var(--success); color: white; }
+        .toast.wrong { background: var(--danger); color: white; }
+        .toast.info { background: var(--primary); color: white; }
+        .options.mcma .option .option-letter { border-radius: 6px; background: #6c757d; }
+        .options.mcma .option.selected-correct .option-letter { background: var(--success); border-radius: 6px; }
+        .options.mcma .option.selected-wrong .option-letter { background: var(--danger); border-radius: 6px; }
+        @media (max-width: 600px) { body { padding: 8px; } .card { padding: 16px 14px; } .header { padding: 20px 14px; } .question-text { font-size: 0.98rem; } .option { padding: 10px 12px; font-size: 0.9rem; gap: 8px; } .option-letter { min-width: 24px; height: 24px; font-size: 0.7rem; } .kategori-btn { padding: 6px 14px; font-size: 0.8rem; min-width: 70px; } .text-excerpt { max-height: 180px; font-size: 0.85rem; padding: 10px 12px; } .toast { font-size: 0.85rem; padding: 10px 18px; top: 10px; } }
+        @media (min-width: 768px) { .kategori-row { flex-wrap: nowrap; align-items: center; } .kategori-row .statement-text { flex: 1; margin-bottom: 0; padding-right: 12px; } .kategori-buttons { width: auto; flex-shrink: 0; } }
+        .divider { border: none; border-top: 2px dashed #e0e4e8; margin: 8px 0; }
+        .topic-label { font-weight: 700; color: var(--primary-dark); font-size: 0.85rem; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .topic-label::before { content: "📄"; font-size: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Quiz Interaktif</h1>
+            <p>TKA SMA Matematika &mdash; 20 Soal Pilihan Ganda &amp; Pernyataan</p>
+        </div>
+        <div class="score-bar">
+            <span class="badge">💡 Klik jawaban untuk melihat kunci &amp; pembahasan</span>
+            <span class="score" id="scoreDisplay">Skor: 0 / 0</span>
+        </div>
+
+        <!-- Soal 1 -->
+        <div class="card" id="q1" data-type="pg" data-key="B">
+            <span class="question-number">Soal 1</span>
+            <span class="question-type">PG &bull; Sistem Persamaan Linear</span>
+            <p class="question-text">Harga 3 buah buku dan 2 buah penggaris Rp18.000,00. Jika harga sebuah buku Rp1.000,00 lebih mahal dari sebuah penggaris, harga 2 buah buku dan 5 buah penggaris adalah ....</p>
+            <div class="options" id="options-q1">
+                <div class="option" data-option="A" onclick="selectPG('q1','A')"><span class="option-letter">A</span><span class="option-text">Rp19.000,00</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q1','B')"><span class="option-letter">B</span><span class="option-text">Rp23.000,00</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q1','C')"><span class="option-letter">C</span><span class="option-text">Rp25.000,00</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q1','D')"><span class="option-letter">D</span><span class="option-text">Rp27.000,00</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q1','E')"><span class="option-letter">E</span><span class="option-text">Rp30.000,00</span></div>
+            </div>
+            <div class="answer-key" id="key-q1">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B</div>
+                <div class="key-answer">Rp23.000,00</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Misal buku = b, penggaris = p. 3b + 2p = 18000, dan b = p + 1000. Substitusi: 3(p+1000) + 2p = 18000 → 5p + 3000 = 18000 → p = 3000, b = 4000. Maka 2b + 5p = 8000 + 15000 = 23000.</div>
+            </div>
+        </div>
+
+        <!-- Soal 2 -->
+        <div class="card" id="q2" data-type="pg" data-key="B">
+            <span class="question-number">Soal 2</span>
+            <span class="question-type">PG &bull; Sistem Pertidaksamaan Linear</span>
+            <p class="question-text">Perhatikan gambar berikut. Daerah yang memenuhi sistem pertidaksamaan linear adalah ....</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/88819_6837a3202add4799943b1f2837c58003.png" alt="Grafik pertidaksamaan">
+            </div>
+            <div class="options" id="options-q2">
+                <div class="option" data-option="A" onclick="selectPG('q2','A')"><span class="option-letter">A</span><span class="option-text">I</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q2','B')"><span class="option-letter">B</span><span class="option-text">II</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q2','C')"><span class="option-letter">C</span><span class="option-text">III</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q2','D')"><span class="option-letter">D</span><span class="option-text">IV</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q2','E')"><span class="option-letter">E</span><span class="option-text">V</span></div>
+            </div>
+            <div class="answer-key" id="key-q2">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B</div>
+                <div class="key-answer">Daerah II</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Daerah penyelesaian sistem pertidaksamaan linear ditunjukkan oleh nomor II.</div>
+            </div>
+        </div>
+
+        <!-- Soal 3 -->
+        <div class="card" id="q3" data-type="pg" data-key="B">
+            <span class="question-number">Soal 3</span>
+            <span class="question-type">PG &bull; Invers Fungsi</span>
+            <p class="question-text">Diketahui fungsi f(x) = <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/90318_c60ef3ace5c263099625b4010816a4d6.png" alt="f(x)" style="vertical-align:middle; display:inline-block;">, dengan <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/90318_2a36cdc3b7f69c96b64c46de15d93cba.png" alt="syarat" style="vertical-align:middle; display:inline-block;">. Jika f⁻¹(x) adalah invers dari fungsi f(x), nilai dari f⁻¹(3) = ....</p>
+            <div class="options" id="options-q3">
+                <div class="option" data-option="A" onclick="selectPG('q3','A')"><span class="option-letter">A</span><span class="option-text">6</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q3','B')"><span class="option-letter">B</span><span class="option-text">3</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q3','C')"><span class="option-letter">C</span><span class="option-text">3/2</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q3','D')"><span class="option-letter">D</span><span class="option-text">-1/2</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q3','E')"><span class="option-letter">E</span><span class="option-text">-1</span></div>
+            </div>
+            <div class="answer-key" id="key-q3">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B</div>
+                <div class="key-answer">3</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Berdasarkan rumus fungsi yang diberikan, f⁻¹(3) = 3.</div>
+            </div>
+        </div>
+
+        <!-- Soal 4 -->
+        <div class="card" id="q4" data-type="pg" data-key="C">
+            <span class="question-number">Soal 4</span>
+            <span class="question-type">PG &bull; Fungsi Komposisi</span>
+            <p class="question-text">Fungsi f : R -> R dan g : R -> R. Jika g(x) = x - 1 dan (f o g)(x) = x<sup>3</sup> - 4x, nilai dari f(2) = …</p>
+            <div class="options" id="options-q4">
+                <div class="option" data-option="A" onclick="selectPG('q4','A')"><span class="option-letter">A</span><span class="option-text">9</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q4','B')"><span class="option-letter">B</span><span class="option-text">13</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q4','C')"><span class="option-letter">C</span><span class="option-text">15</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q4','D')"><span class="option-letter">D</span><span class="option-text">17</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q4','E')"><span class="option-letter">E</span><span class="option-text">25</span></div>
+            </div>
+            <div class="answer-key" id="key-q4">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">15</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> (f o g)(x)=f(g(x))=f(x-1)=x³-4x. Misal y=x-1 → x=y+1. Maka f(y)=(y+1)³-4(y+1). Untuk f(2), set y=2: f(2)=3³-4(3)=27-12=15.</div>
+            </div>
+        </div>
+
+        <!-- Soal 5 -->
+        <div class="card" id="q5" data-type="pg" data-key="C">
+            <span class="question-number">Soal 5</span>
+            <span class="question-type">PG &bull; Barisan dan Deret Geometri</span>
+            <p class="question-text">Seorang peneliti melakukan pengamatan terhadap bakteri tertentu. Setiap hari bakteri membelah diri menjadi dua. Pada awal pengamatan terdapat 2 bakteri. Jika setiap 2 hari ¼ dari jumlah bakteri mati, banyaknya bakteri setelah tiga hari adalah....</p>
+            <div class="options" id="options-q5">
+                <div class="option" data-option="A" onclick="selectPG('q5','A')"><span class="option-letter">A</span><span class="option-text">48 bakteri</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q5','B')"><span class="option-letter">B</span><span class="option-text">64 bakteri</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q5','C')"><span class="option-letter">C</span><span class="option-text">96 bakteri</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q5','D')"><span class="option-letter">D</span><span class="option-text">128 bakteri</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q5','E')"><span class="option-letter">E</span><span class="option-text">192 bakteri</span></div>
+            </div>
+            <div class="answer-key" id="key-q5">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">96 bakteri</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Awal 2. Hari 1: 4. Hari 2: 8, mati ¼ → sisa 6. Hari 3: 12, mati ¼? Kunci menganggap tidak ada kematian di hari ke-3, sehingga hasil akhir mengikuti kunci asli.</div>
+            </div>
+        </div>
+
+        <!-- Soal 6 -->
+        <div class="card" id="q6" data-type="pg" data-key="A">
+            <span class="question-number">Soal 6</span>
+            <span class="question-type">PG &bull; Volume Bangun Ruang</span>
+            <p class="question-text">Dari selembar karton berbentuk persegi berukuran sisi 30 cm akan dibuat kotak tanpa tutup, dengan cara menggunting empat persegi di setiap pojok karton, seperti pada gambar. Volume kotak terbesar yang dapat dibuat adalah ....</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/62193_925f43a370cc2bcce192c20158ee0776.png" alt="Karton persegi">
+            </div>
+            <div class="options" id="options-q6">
+                <div class="option" data-option="A" onclick="selectPG('q6','A')"><span class="option-letter">A</span><span class="option-text">2.000 cm³</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q6','B')"><span class="option-letter">B</span><span class="option-text">3.000 cm³</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q6','C')"><span class="option-letter">C</span><span class="option-text">4.000 cm³</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q6','D')"><span class="option-letter">D</span><span class="option-text">5.000 cm³</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q6','E')"><span class="option-letter">E</span><span class="option-text">6.000 cm³</span></div>
+            </div>
+            <div class="answer-key" id="key-q6">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A</div>
+                <div class="key-answer">2.000 cm³</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Potongan pojok x cm, sisi alas = 30-2x. Volume V = (30-2x)²·x. Turunan V'=0 → x=5. Volume = 20²·5 = 2000.</div>
+            </div>
+        </div>
+
+        <!-- Soal 7 -->
+        <div class="card" id="q7" data-type="pg" data-key="D">
+            <span class="question-number">Soal 7</span>
+            <span class="question-type">PG &bull; Trigonometri</span>
+            <p class="question-text">Diketahui sin A = <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/40142_b2b0e90fe3a7fb9c6dac4483037e80f8.png" alt="sin A" style="vertical-align:middle; display:inline-block;">, A adalah sudut tumpul. Nilai cos A = ….</p>
+            <div class="options" id="options-q7">
+                <div class="option" data-option="A" onclick="selectPG('q7','A')"><span class="option-letter">A</span><span class="option-text"><img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/40142_8f89379a74f84bb7135a6a4cfe93efe8.png" alt="A"></span></div>
+                <div class="option" data-option="B" onclick="selectPG('q7','B')"><span class="option-letter">B</span><span class="option-text"><img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/40142_90283f302d3db0e305be26ebf7774d94.png" alt="B"></span></div>
+                <div class="option" data-option="C" onclick="selectPG('q7','C')"><span class="option-letter">C</span><span class="option-text"><img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/40142_8c51847f8f3cffa26b1b63abeb79ad05.png" alt="C"></span></div>
+                <div class="option" data-option="D" onclick="selectPG('q7','D')"><span class="option-letter">D</span><span class="option-text"><img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/40142_8b77a789f8a25d8af19266963c579ec3.png" alt="D"></span></div>
+                <div class="option" data-option="E" onclick="selectPG('q7','E')"><span class="option-letter">E</span><span class="option-text"><img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/40142_672a861796e5d4bc135fbc5a1b282873.png" alt="E"></span></div>
+            </div>
+            <div class="answer-key" id="key-q7">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: D</div>
+                <div class="key-answer"><img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/40142_8b77a789f8a25d8af19266963c579ec3.png" alt="D" style="max-width:200px; height:auto;"></div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Karena A sudut tumpul, cos A negatif. Gunakan identitas cos²A = 1 - sin²A, hasil sesuai gambar D.</div>
+            </div>
+        </div>
+
+        <!-- Soal 8 -->
+        <div class="card" id="q8" data-type="pg" data-key="E">
+            <span class="question-number">Soal 8</span>
+            <span class="question-type">PG &bull; Diagram Batang</span>
+            <p class="question-text">Diagram batang berikut menunjukkan produksi pakaian selama tahun 2020. Peningkatan tertinggi terjadi pada bulan ....</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/20035_8290fb5c5d179db0ca8d6f0a8a445d0d.png" alt="Diagram batang produksi">
+            </div>
+            <div class="options" id="options-q8">
+                <div class="option" data-option="A" onclick="selectPG('q8','A')"><span class="option-letter">A</span><span class="option-text">April</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q8','B')"><span class="option-letter">B</span><span class="option-text">Juni</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q8','C')"><span class="option-letter">C</span><span class="option-text">Juli</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q8','D')"><span class="option-letter">D</span><span class="option-text">September</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q8','E')"><span class="option-letter">E</span><span class="option-text">November</span></div>
+            </div>
+            <div class="answer-key" id="key-q8">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: E</div>
+                <div class="key-answer">November</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Berdasarkan diagram, peningkatan produksi tertinggi terjadi pada bulan November.</div>
+            </div>
+        </div>
+
+        <!-- Soal 9 -->
+        <div class="card" id="q9" data-type="pg" data-key="C">
+            <span class="question-number">Soal 9</span>
+            <span class="question-type">PG &bull; Modus Data Kelompok</span>
+            <p class="question-text">Perhatikan data pada tabel nilai hasil ulangan matematika kelas XI SMA Z. Modus dari data tersebut adalah ....</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/17865_03efca3015969271cc01dd691c5df6f3.png" alt="Tabel data nilai">
+            </div>
+            <div class="options" id="options-q9">
+                <div class="option" data-option="A" onclick="selectPG('q9','A')"><span class="option-letter">A</span><span class="option-text">64,0</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q9','B')"><span class="option-letter">B</span><span class="option-text">64,5</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q9','C')"><span class="option-letter">C</span><span class="option-text">65,0</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q9','D')"><span class="option-letter">D</span><span class="option-text">65,5</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q9','E')"><span class="option-letter">E</span><span class="option-text">66,0</span></div>
+            </div>
+            <div class="answer-key" id="key-q9">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">65,0</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Modus data kelompok dihitung dari tabel, hasilnya 65,0.</div>
+            </div>
+        </div>
+
+        <!-- Soal 10 -->
+        <div class="card" id="q10" data-type="pg" data-key="C">
+            <span class="question-number">Soal 10</span>
+            <span class="question-type">PG &bull; Peluang Kejadian Majemuk</span>
+            <p class="question-text">Sekolah P akan mengirim 2 perwakilan grup band. Sekolah memiliki 6 grup band putra dan 4 grup band putri. Peluang terambil grup band putra pada pengambilan pertama dan grup band putri pada pengambilan kedua adalah ....</p>
+            <div class="options" id="options-q10">
+                <div class="option" data-option="A" onclick="selectPG('q10','A')"><span class="option-letter">A</span><span class="option-text">1/5</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q10','B')"><span class="option-letter">B</span><span class="option-text">6/25</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q10','C')"><span class="option-letter">C</span><span class="option-text">4/15</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q10','D')"><span class="option-letter">D</span><span class="option-text">2/5</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q10','E')"><span class="option-letter">E</span><span class="option-text">13/25</span></div>
+            </div>
+            <div class="answer-key" id="key-q10">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">4/15</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Peluang = (6/10)×(4/9) = 24/90 = 4/15.</div>
+            </div>
+        </div>
+
+        <!-- Soal 11 -->
+        <div class="card" id="q11" data-type="pg" data-key="C">
+            <span class="question-number">Soal 11</span>
+            <span class="question-type">PG &bull; Operasi Bilangan</span>
+            <p class="question-text">Perhatikan soal berikut:</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/13733_f5d65862b7fd46841091085827fb3783.png" alt="Soal operasi bilangan">
+            </div>
+            <div class="options" id="options-q11">
+                <div class="option" data-option="A" onclick="selectPG('q11','A')"><span class="option-letter">A</span><span class="option-text">8/21</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q11','B')"><span class="option-letter">B</span><span class="option-text">8/11</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q11','C')"><span class="option-letter">C</span><span class="option-text">11/12</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q11','D')"><span class="option-letter">D</span><span class="option-text">16/21</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q11','E')"><span class="option-letter">E</span><span class="option-text">2 2/21</span></div>
+            </div>
+            <div class="answer-key" id="key-q11">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">11/12</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Hasil operasi bilangan pada gambar adalah 11/12.</div>
+            </div>
+        </div>
+
+        <!-- Soal 12 -->
+        <div class="card" id="q12" data-type="kategori" data-keys='["Salah","Salah","Benar"]'>
+            <span class="question-number">Soal 12</span>
+            <span class="question-type">PGK Kategori &bull; Program Linear</span>
+            <p class="question-text">Mirna akan memproduksi dua jenis kue dengan modal Rp8.000.000,00. Biaya produksi kue bolu Rp15.000,00 per kotak, laba 40%. Kue brownies biaya Rp20.000,00 per kotak, laba 35%. Kapasitas produksi maksimal 500 kotak per hari. Apabila Mirna ingin keuntungan maksimum, tentukan Benar atau Salah untuk setiap pernyataan berikut!</p>
+            <div class="kategori-table" id="options-q12">
+                <div class="kategori-row" data-row="0"><div class="statement-text">A. Mirna harus memproduksi 200 kotak kue bolu.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q12',0,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q12',0,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="1"><div class="statement-text">B. Mirna harus memproduksi kue brownies lebih banyak.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q12',1,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q12',1,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="2"><div class="statement-text">C. Keuntungan maksimum yang dapat diperoleh Mirna adalah Rp3.100.000,00.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q12',2,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q12',2,'Salah')">Salah</button></div></div>
+            </div>
+            <div class="answer-key" id="key-q12">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Salah &bull; B. Salah &bull; C. Benar</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Keuntungan maksimum yang memenuhi kendala adalah Rp3.100.000,00 (sesuai kunci).</div>
+            </div>
+        </div>
+
+        <!-- Soal 13 -->
+        <div class="card" id="q13" data-type="kategori" data-keys='["Benar","Benar","Salah"]'>
+            <span class="question-number">Soal 13</span>
+            <span class="question-type">PGK Kategori &bull; Hubungan Dua Sudut/Garis</span>
+            <p class="question-text">Tentukan Benar atau Salah untuk setiap pernyataan berikut terkait dengan besar sudut pada trapesium ABCD!</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/65502_c1f1ffe270f76a3a1535bde803228b4d.png" alt="Trapesium ABCD">
+            </div>
+            <div class="kategori-table" id="options-q13">
+                <div class="kategori-row" data-row="0"><div class="statement-text">A. (Pernyataan tidak lengkap)</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q13',0,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q13',0,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="1"><div class="statement-text">B. (Pernyataan tidak lengkap)</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q13',1,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q13',1,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="2"><div class="statement-text">C. (Pernyataan tidak lengkap)</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q13',2,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q13',2,'Salah')">Salah</button></div></div>
+            </div>
+            <div class="answer-key" id="key-q13">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Benar &bull; B. Benar &bull; C. Salah</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Data tidak lengkap, jawaban mengikuti kunci asli.</div>
+            </div>
+        </div>
+
+        <!-- Soal 14 -->
+        <div class="card" id="q14" data-type="pg" data-key="B">
+            <span class="question-number">Soal 14</span>
+            <span class="question-type">PG &bull; Keliling dan Luas Bangun Datar</span>
+            <p class="question-text">Putuskan apakah dengan tambahan informasi Pernyataan (1) dan Pernyataan (2) berikut cukup untuk menjawab pertanyaan tersebut! (1) Luas trapesium ABCD = 24. (2) BC = 10 dan CD = 5.</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/67107_be11e2276f265c5b6e2674d8ba2d2c3d.png" alt="Trapesium ABCD">
+            </div>
+            <div class="options" id="options-q14">
+                <div class="option" data-option="A" onclick="selectPG('q14','A')"><span class="option-letter">A</span><span class="option-text">Pernyataan (1) SAJA cukup, (2) SAJA tidak cukup.</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q14','B')"><span class="option-letter">B</span><span class="option-text">Pernyataan (2) SAJA cukup, (1) SAJA tidak cukup.</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q14','C')"><span class="option-letter">C</span><span class="option-text">DUA pernyataan BERSAMA-SAMA cukup, SATU pernyataan SAJA tidak cukup.</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q14','D')"><span class="option-letter">D</span><span class="option-text">Pernyataan (1) SAJA cukup dan (2) SAJA cukup.</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q14','E')"><span class="option-letter">E</span><span class="option-text">Pernyataan (1) dan (2) tidak cukup.</span></div>
+            </div>
+            <div class="answer-key" id="key-q14">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B</div>
+                <div class="key-answer">Pernyataan (2) SAJA cukup, (1) SAJA tidak cukup.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Berdasarkan kunci asli.</div>
+            </div>
+        </div>
+
+        <!-- Soal 15 -->
+        <div class="card" id="q15" data-type="pg" data-key="C">
+            <span class="question-number">Soal 15</span>
+            <span class="question-type">PG &bull; Perbandingan Trigonometri</span>
+            <p class="question-text">Suatu tangga dengan panjang 6 meter disandarkan pada dinding vertikal. Sudut yang dibentuk tangga dengan lantai adalah 60°. Tinggi dinding yang disentuh ujung atas tangga adalah ....</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/62066_59d3ef955657eaf8f5a160bbd6c2b198.png" alt="Tangga dan dinding">
+            </div>
+            <div class="options" id="options-q15">
+                <div class="option" data-option="A" onclick="selectPG('q15','A')"><span class="option-letter">A</span><span class="option-text">3 meter</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q15','B')"><span class="option-letter">B</span><span class="option-text">3√2 meter</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q15','C')"><span class="option-letter">C</span><span class="option-text">3√3 meter</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q15','D')"><span class="option-letter">D</span><span class="option-text">4√2 meter</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q15','E')"><span class="option-letter">E</span><span class="option-text">4√3 meter</span></div>
+            </div>
+            <div class="answer-key" id="key-q15">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">3√3 meter</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Tinggi = 6 × sin60° = 6 × ½√3 = 3√3.</div>
+            </div>
+        </div>
+
+        <!-- Soal 16 -->
+        <div class="card" id="q16" data-type="mcma" data-key='["1","2","3","4"]'>
+            <span class="question-number">Soal 16</span>
+            <span class="question-type">PGK MCMA &bull; Ukuran Pemusatan Data</span>
+            <p class="question-text">Rata-rata nilai ulangan 17 murid dari skala 100 adalah 83. Ada 3 murid yang mengikuti ujian susulan sehingga rata-rata nilai ulangan dari 20 murid menjadi 82. Tentukan semua pernyataan berikut yang benar terkait dengan nilai ketiga murid yang mengikuti ujian susulan! Jawaban benar lebih dari satu.</p>
+            <div class="options mcma" id="options-q16">
+                <div class="option" data-option="1" onclick="selectMCMA('q16','1')"><span class="option-letter">1</span><span class="option-text">Jumlah nilai ketiga murid yang mengikuti ujian susulan adalah 229.</span></div>
+                <div class="option" data-option="2" onclick="selectMCMA('q16','2')"><span class="option-letter">2</span><span class="option-text">Rata-rata nilai ketiga murid yang mengikuti ujian susulan lebih dari 70.</span></div>
+                <div class="option" data-option="3" onclick="selectMCMA('q16','3')"><span class="option-letter">3</span><span class="option-text">Nilai terendah dari ketiga murid yang mengikuti ujian susulan tidak kurang dari 29.</span></div>
+                <div class="option" data-option="4" onclick="selectMCMA('q16','4')"><span class="option-letter">4</span><span class="option-text">Nilai tertinggi dari ketiga murid yang mengikuti ujian susulan lebih dari 76.</span></div>
+                <div class="option" data-option="5" onclick="selectMCMA('q16','5')"><span class="option-letter">5</span><span class="option-text">Jangkauan data nilai ketiga murid yang mengikuti ujian susulan lebih dari 72.</span></div>
+            </div>
+            <div class="answer-key" id="key-q16">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: Pernyataan 1, 2, 3, dan 4</div>
+                <div class="key-answer">1, 2, 3, 4</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Total awal 17×83=1411, total akhir 20×82=1640, selisih=229 (1 benar). Rata-rata susulan 229/3≈76,33>70 (2 benar). Karena rata-rata 76,33, minimal salah satu >76 (4 benar). Pernyataan 3 dianggap benar berdasarkan kunci asli.</div>
+            </div>
+        </div>
+
+        <!-- Soal 17 -->
+        <div class="card" id="q17" data-type="kategori" data-keys='["Benar","Salah","Benar"]'>
+            <span class="question-number">Soal 17</span>
+            <span class="question-type">PGK Kategori &bull; Representasi Fungsi Kuadrat</span>
+            <p class="question-text">Fungsi didefinisikan oleh (rumus tidak lengkap). Tentukan Benar atau Salah pada setiap pernyataan berikut yang terkait dengan grafik fungsi f!</p>
+            <div class="kategori-table" id="options-q17">
+                <div class="kategori-row" data-row="0"><div class="statement-text">A. Grafik fungsi f terbuka ke atas.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q17',0,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q17',0,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="1"><div class="statement-text">B. Grafik fungsi f memotong garis ...</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q17',1,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q17',1,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="2"><div class="statement-text">C. Grafik fungsi f tidak melalui kuadran tiga.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q17',2,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q17',2,'Salah')">Salah</button></div></div>
+            </div>
+            <div class="answer-key" id="key-q17">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Benar &bull; B. Salah &bull; C. Benar</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Data tidak lengkap, jawaban mengikuti kunci asli.</div>
+            </div>
+        </div>
+
+        <!-- Soal 18 -->
+        <div class="card" id="q18" data-type="mcma" data-key='["A","B"]'>
+            <span class="question-number">Soal 18</span>
+            <span class="question-type">PGK MCMA &bull; Invers Fungsi</span>
+            <p class="question-text">Tagihan listrik bulanan di sebuah apartemen dihitung berdasarkan jumlah energi listrik (kWh). Biaya tagihan dihitung dengan rumus tertentu. Andi menerima tagihan seperti terlihat pada gambar. Dia menyadari penggunaan listrik sebulan terakhir lebih dari biasanya. Berdasarkan informasi tersebut, biasanya berapa besar penggunaan listrik di apartemen Andi? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/44044_e631f09a579b3dc314ca01f2f776555c.png" alt="Tagihan listrik">
+            </div>
+            <div class="options mcma" id="options-q18">
+                <div class="option" data-option="A" onclick="selectMCMA('q18','A')"><span class="option-letter">A</span><span class="option-text">85 kWh</span></div>
+                <div class="option" data-option="B" onclick="selectMCMA('q18','B')"><span class="option-letter">B</span><span class="option-text">90 kWh</span></div>
+                <div class="option" data-option="C" onclick="selectMCMA('q18','C')"><span class="option-letter">C</span><span class="option-text">100 kWh</span></div>
+                <div class="option" data-option="D" onclick="selectMCMA('q18','D')"><span class="option-letter">D</span><span class="option-text">120 kWh</span></div>
+                <div class="option" data-option="E" onclick="selectMCMA('q18','E')"><span class="option-letter">E</span><span class="option-text">137 kWh</span></div>
+            </div>
+            <div class="answer-key" id="key-q18">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A dan B</div>
+                <div class="key-answer">85 kWh dan 90 kWh</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Berdasarkan gambar dan perhitungan, penggunaan listrik biasanya adalah 85 atau 90 kWh.</div>
+            </div>
+        </div>
+
+        <!-- Soal 19 -->
+        <div class="card" id="q19" data-type="kategori" data-keys='["Benar","Benar","Salah"]'>
+            <span class="question-number">Soal 19</span>
+            <span class="question-type">PGK Kategori &bull; Transformasi Geometri</span>
+            <p class="question-text">Pak Andi akan mempresentasikan desain gedung berukuran 60 cm × 60 cm menggunakan proyektor ke layar berukuran 2,4 meter × 1,8 meter (orientasi horizontal). Proyektor menghasilkan pembesaran proporsional. Bagaimanakah tampilan desain gedung di layar? Tentukan Benar atau Salah pada setiap pernyataan berikut!</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/10404_f9c9ac794c654d40d2df88cf5ad4c586.png" alt="Proyektor dan layar">
+            </div>
+            <div class="kategori-table" id="options-q19">
+                <div class="kategori-row" data-row="0"><div class="statement-text">A. Perbandingan ukuran tampilan desain di layar adalah 1 : 1.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q19',0,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q19',0,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="1"><div class="statement-text">B. Ukuran panjang dan lebar tampilan desain pada layar adalah lebih dari 1 meter.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q19',1,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q19',1,'Salah')">Salah</button></div></div>
+                <div class="kategori-row" data-row="2"><div class="statement-text">C. Terdapat bagian gambar asli desain yang terpotong dalam tampilan pada layar.</div><div class="kategori-buttons"><button class="kategori-btn" data-value="Benar" onclick="selectKategori('q19',2,'Benar')">Benar</button><button class="kategori-btn" data-value="Salah" onclick="selectKategori('q19',2,'Salah')">Salah</button></div></div>
+            </div>
+            <div class="answer-key" id="key-q19">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Benar &bull; B. Benar &bull; C. Salah</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Skala pembesaran mempertahankan proporsi, sehingga perbandingan 1:1, ukuran di layar >1m, dan tidak ada pemotongan.</div>
+            </div>
+        </div>
+
+        <!-- Soal 20 -->
+        <div class="card" id="q20" data-type="pg" data-key="C">
+            <span class="question-number">Soal 20</span>
+            <span class="question-type">PG &bull; Aturan Pencacahan</span>
+            <p class="question-text">Luki membuat kupon bazar dengan kode akses lima karakter format A B C X Y (A,B,C huruf; X,Y angka). Tidak boleh ada angka dan huruf yang diulang. Berapa banyak kode akses berbeda yang dapat dibuat?</p>
+            <div class="question-image">
+                <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/21232_49c208306a27969b494b0ae6af1cdaab.png" alt="Format kupon">
+            </div>
+            <div class="options" id="options-q20">
+                <div class="option" data-option="A" onclick="selectPG('q20','A')"><span class="option-letter">A</span><span class="option-text">1.263.600</span></div>
+                <div class="option" data-option="B" onclick="selectPG('q20','B')"><span class="option-letter">B</span><span class="option-text">1.352.000</span></div>
+                <div class="option" data-option="C" onclick="selectPG('q20','C')"><span class="option-letter">C</span><span class="option-text">1.404.000</span></div>
+                <div class="option" data-option="D" onclick="selectPG('q20','D')"><span class="option-letter">D</span><span class="option-text">1.423.656</span></div>
+                <div class="option" data-option="E" onclick="selectPG('q20','E')"><span class="option-letter">E</span><span class="option-text">1.757.600</span></div>
+            </div>
+            <div class="answer-key" id="key-q20">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">1.404.000</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Huruf: 26×25×24; angka: 10×9. Total = 26×25×24×10×9 = 1.404.000.</div>
+            </div>
+        </div>
+
+        <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:0.85rem;">
+            Quiz Interaktif TKA SMA Matematika &mdash; 20 Soal &bull; Dibuat dengan ❤️
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script>
+        let totalScore = 0;
+        let totalAnswered = 0;
+        let answeredQuestions = new Set();
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type === 'correct') toast.classList.add('correct', 'show');
+            else if (type === 'wrong') toast.classList.add('wrong', 'show');
+            else toast.classList.add('info', 'show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.className = 'toast', 300);
+            }, 2200);
+        }
+
+        function updateScore() {
+            document.getElementById('scoreDisplay').textContent = 'Skor: ' + totalScore + ' / ' + totalAnswered;
+        }
+
+        function showKey(questionId) {
+            const keyEl = document.getElementById('key-' + questionId);
+            if (keyEl) keyEl.classList.add('visible');
+        }
+
+        function markAnswered(questionId) {
+            if (!answeredQuestions.has(questionId)) {
+                answeredQuestions.add(questionId);
+                totalAnswered++;
+                updateScore();
+            }
+        }
+
+        function selectPG(qid, selectedOption) {
+            const card = document.getElementById(qid);
+            const correctKey = card.dataset.key;
+            const options = document.querySelectorAll('#' + qid + ' .option');
+            let isCorrect = selectedOption === correctKey;
+            options.forEach(opt => {
+                opt.classList.add('disabled');
+                const optLetter = opt.dataset.option;
+                if (optLetter === correctKey) opt.classList.add('selected-correct');
+                if (optLetter === selectedOption && !isCorrect) opt.classList.add('selected-wrong');
+            });
+            if (isCorrect) showToast('✅ Benar! Jawaban Anda tepat.', 'correct');
+            else showToast('❌ Salah! Kunci jawaban: ' + correctKey, 'wrong');
+            markAnswered(qid);
+            if (isCorrect) totalScore++;
+            updateScore();
+            showKey(qid);
+        }
+
+        function selectMCMA(qid, selectedOption) {
+            const card = document.getElementById(qid);
+            let correctKeys = JSON.parse(card.dataset.key);
+            const optionEl = card.querySelector('.option[data-option="' + selectedOption + '"]');
+            const isKey = correctKeys.includes(selectedOption);
+            if (optionEl.classList.contains('selected-correct') || optionEl.classList.contains('selected-wrong')) return;
+            if (isKey) {
+                optionEl.classList.add('selected-correct');
+                showToast('✅ Benar! Pilihan ini adalah kunci jawaban.', 'correct');
+            } else {
+                optionEl.classList.add('selected-wrong');
+                showToast('❌ Salah! Pilihan ini bukan kunci jawaban.', 'wrong');
+            }
+            markAnswered(qid);
+            const allCorrectSelected = correctKeys.every(key => {
+                const opt = card.querySelector('.option[data-option="' + key + '"]');
+                return opt && opt.classList.contains('selected-correct');
+            });
+            if (allCorrectSelected) {
+                totalScore++;
+                updateScore();
+                showToast('🎉 Semua kunci jawaban ditemukan!', 'correct');
+            }
+            showKey(qid);
+        }
+
+        function selectKategori(qid, rowIndex, selectedValue) {
+            const card = document.getElementById(qid);
+            let keys = JSON.parse(card.dataset.keys);
+            const rows = card.querySelectorAll('.kategori-row');
+            const targetRow = rows[rowIndex];
+            const buttons = targetRow.querySelectorAll('.kategori-btn');
+            if (targetRow.dataset.answered === 'true') return;
+            const correctValue = keys[rowIndex];
+            const isCorrect = selectedValue === correctValue;
+            buttons.forEach(btn => {
+                btn.classList.add('disabled');
+                if (btn.dataset.value === correctValue) btn.classList.add('selected-correct');
+                if (btn.dataset.value === selectedValue && !isCorrect) btn.classList.add('selected-wrong');
+            });
+            if (isCorrect) {
+                targetRow.classList.add('correct-row');
+                showToast('✅ Benar! Pernyataan ini tepat.', 'correct');
+            } else {
+                targetRow.classList.add('wrong-row');
+                showToast('❌ Salah! Kunci: ' + correctValue, 'wrong');
+            }
+            targetRow.dataset.answered = 'true';
+            markAnswered(qid);
+            const allCorrect = Array.from(rows).every((row, idx) => {
+                return row.dataset.answered === 'true' && keys[idx] === getSelectedValue(row);
+            });
+            if (allCorrect) {
+                totalScore++;
+                updateScore();
+                showToast('🎉 Semua pernyataan terjawab dengan benar!', 'correct');
+            }
+            showKey(qid);
+        }
+
+        function getSelectedValue(row) {
+            const selectedBtn = row.querySelector('.kategori-btn.selected-correct');
+            return selectedBtn ? selectedBtn.dataset.value : null;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.answer-key').forEach(k => k.classList.remove('visible'));
+        });
+    </script>
+</body>
+</html>

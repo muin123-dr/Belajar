@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interaktif - TKA SMA Bahasa Indonesia</title>
+    <style>
+        :root {
+            --primary: #1a5c9e;
+            --primary-dark: #0f3a64;
+            --success: #2e7d32;
+            --success-bg: #e8f5e9;
+            --danger: #c62828;
+            --danger-bg: #ffebee;
+            --warning: #f57f17;
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --radius: 12px;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 6px 24px rgba(0, 0, 0, 0.12);
+            --font: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 16px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 28px 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+        }
+        .header h1 {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 6px;
+        }
+
+        .score-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card);
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            font-weight: 600;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .score-bar .score {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        .score-bar .badge {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            background: #e3f2fd;
+            color: var(--primary);
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px 18px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.2s;
+            border: 1px solid #eef2f6;
+        }
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-bottom: 10px;
+        }
+        .question-type {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+            background: #f5f5f5;
+            color: var(--text-muted);
+            margin-left: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 10px 0 14px;
+            line-height: 1.65;
+        }
+
+        .text-excerpt {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 14px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.92rem;
+            margin-bottom: 14px;
+            max-height: 220px;
+            overflow-y: auto;
+            white-space: pre-line;
+            color: #37474f;
+            line-height: 1.7;
+        }
+        .text-excerpt strong {
+            color: var(--primary-dark);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fafbfc;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .option:hover {
+            border-color: var(--primary);
+            background: #f0f6ff;
+            transform: translateY(-1px);
+        }
+        .option.selected-correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+        }
+        .option.selected-wrong {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+            box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.12);
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .option-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .option.selected-correct .option-letter {
+            background: var(--success);
+        }
+        .option.selected-wrong .option-letter {
+            background: var(--danger);
+        }
+        .option-text {
+            flex: 1;
+        }
+
+        /* khusus untuk opsi gambar */
+        .option.image-option {
+            justify-content: center;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .option.image-option img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .kategori-table {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .kategori-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e8edf2;
+            transition: all 0.2s;
+        }
+        .kategori-row .statement-text {
+            flex: 1 1 100%;
+            font-weight: 500;
+            font-size: 0.92rem;
+            margin-bottom: 4px;
+            line-height: 1.5;
+        }
+        .kategori-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .kategori-btn {
+            padding: 8px 18px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            background: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            min-width: 80px;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+        .kategori-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .kategori-btn.selected-correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+            color: var(--success);
+        }
+        .kategori-btn.selected-wrong {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+        .kategori-btn.disabled {
+            pointer-events: none;
+            opacity: 0.55;
+        }
+        .kategori-row.correct-row {
+            border-color: var(--success);
+            background: #f1f8e9;
+        }
+        .kategori-row.wrong-row {
+            border-color: var(--danger);
+            background: #fff5f5;
+        }
+
+        .answer-key {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: #f0f7ff;
+            border: 1px solid #cce5ff;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .answer-key.visible {
+            display: block;
+        }
+        .answer-key .key-label {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .answer-key .key-answer {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .answer-key .key-explanation {
+            font-size: 0.88rem;
+            color: #444;
+            line-height: 1.65;
+        }
+        .answer-key .icon-check {
+            color: var(--success);
+            font-weight: bold;
+        }
+        .answer-key .icon-info {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-80px);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            z-index: 9999;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+            opacity: 0;
+            pointer-events: none;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast.correct {
+            background: var(--success);
+            color: white;
+        }
+        .toast.wrong {
+            background: var(--danger);
+            color: white;
+        }
+        .toast.info {
+            background: var(--primary);
+            color: white;
+        }
+
+        .options.mcma .option .option-letter {
+            border-radius: 6px;
+            background: #6c757d;
+        }
+        .options.mcma .option.selected-correct .option-letter {
+            background: var(--success);
+            border-radius: 6px;
+        }
+        .options.mcma .option.selected-wrong .option-letter {
+            background: var(--danger);
+            border-radius: 6px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+            .card {
+                padding: 16px 14px;
+            }
+            .header {
+                padding: 20px 14px;
+            }
+            .question-text {
+                font-size: 0.98rem;
+            }
+            .option {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+                gap: 8px;
+            }
+            .option-letter {
+                min-width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+            .kategori-btn {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+                min-width: 70px;
+            }
+            .text-excerpt {
+                max-height: 180px;
+                font-size: 0.85rem;
+                padding: 10px 12px;
+            }
+            .option.image-option img {
+                border-radius: 4px;
+            }
+            .toast {
+                font-size: 0.85rem;
+                padding: 10px 18px;
+                top: 10px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .kategori-row {
+                flex-wrap: nowrap;
+                align-items: center;
+            }
+            .kategori-row .statement-text {
+                flex: 1;
+                margin-bottom: 0;
+                padding-right: 12px;
+            }
+            .kategori-buttons {
+                width: auto;
+                flex-shrink: 0;
+            }
+        }
+
+        .divider {
+            border: none;
+            border-top: 2px dashed #e0e4e8;
+            margin: 8px 0;
+        }
+
+        .topic-label {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .topic-label::before {
+            content: "📄";
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Quiz Interaktif</h1>
+            <p>TKA SMA Bahasa Indonesia &mdash; 20 Soal Pilihan Ganda &amp; Pernyataan</p>
+        </div>
+
+        <div class="score-bar">
+            <span class="badge">💡 Klik jawaban untuk melihat kunci &amp; pembahasan</span>
+            <span class="score" id="scoreDisplay">Skor: 0 / 0</span>
+        </div>
+
+        <!-- ======================== SOAL 1-4 ======================== -->
+        <div class="topic-label">Teks untuk Soal Nomor 1 s.d. 4</div>
+        <div class="text-excerpt">
+            <strong>TEKS:</strong>
+            Lautan mengalami ancaman pemanasan dan menjadi semakin asam karena kita terus memompa lebih banyak CO2 ke atmosfer. Selain itu, lautan juga menghadapi ancaman lain dari manusia, yakni penggunaan plastik. Kehidupan modern saat ini didominasi oleh kemasan makanan berbahan plastik yang diolah dengan teknologi tinggi dan digunakan setiap hari oleh masyarakat. Dalam sebuah laporan telah disebutkan bahwa pada tahun 2050 sampah plastik di laut akan lebih banyak daripada jumlah ikan apabila kecenderungan ini terus berlanjut. Hal tersebut merupakan sebuah ancaman besar.
+
+            Dibutuhkan tindakan skala besar untuk berpindah dari kecenderungan tersebut mengingat banyak pihak yang terlibat dalam bidang pekerjaan ini. Masyarakat sektor swasta dan masyarakat sipil perlu mobilisasi untuk menangkap peluang ekonomi lain di luar dari pengelolaan plastik.
+
+            Solusi tersebut tidak mudah. Fakta bahwa harga minyak yang rendah mengakibatkan biaya yang dibutuhkan untuk daur ulang plastik jauh lebih mahal daripada memproduksi yang baru. Kondisi lain yang menunjukkan ekonomi di negara berkembang tumbuh lebih besar menjadikan penggunaan plastik juga meningkat. Solusi yang dibutuhkan adalah cara kita menggunakan plastik. Misalnya dengan mengurangi penggunaan plastik dalam kemasan atau menggunakannya kembali sebanyak yang kita bisa.
+
+            Produsen plastik juga dapat membantu dalam pengelolaan plastik, seperti memproduksi barang-barang plastik yang dapat digunakan kembali atau beralih ke plastik yang dapat dijadikan kompos. Solusi apa pun akan membawa perubahan besar dalam cara menggunakan produk yang terbuat dari plastik.
+        </div>
+
+        <!-- Soal 1 -->
+        <div class="card" id="q1" data-type="pg" data-key="A">
+            <span class="question-number">Soal 1</span>
+            <span class="question-type">PG &bull; Pemahaman Tekstual</span>
+            <p class="question-text">Makna istilah <strong>mobilisasi</strong> pada paragraf kedua teks tersebut adalah ....</p>
+            <div class="options" id="options-q1">
+                <div class="option" data-option="A" onclick="selectPG('q1','A')">
+                    <span class="option-letter">A</span><span class="option-text">bergerak bersama</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q1','B')">
+                    <span class="option-letter">B</span><span class="option-text">melangkah cepat</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q1','C')">
+                    <span class="option-letter">C</span><span class="option-text">beradu cepat</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q1','D')">
+                    <span class="option-letter">D</span><span class="option-text">mengatur bersama</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q1','E')">
+                    <span class="option-letter">E</span><span class="option-text">berpikir bersama</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q1">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A</div>
+                <div class="key-answer">bergerak bersama</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kata <em>mobilisasi</em> dalam konteks tersebut berarti menggerakkan atau mengerahkan pihak-pihak (sektor swasta dan masyarakat sipil) untuk bergerak bersama mencapai tujuan, yaitu menangkap peluang ekonomi di luar pengelolaan plastik.</div>
+            </div>
+        </div>
+
+        <!-- Soal 2 -->
+        <div class="card" id="q2" data-type="pg" data-key="A">
+            <span class="question-number">Soal 2</span>
+            <span class="question-type">PG &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Apa gagasan utama yang disampaikan pada paragraf pertama teks tersebut?</p>
+            <div class="options" id="options-q2">
+                <div class="option" data-option="A" onclick="selectPG('q2','A')">
+                    <span class="option-letter">A</span><span class="option-text">Ancaman plastik terhadap lautan.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q2','B')">
+                    <span class="option-letter">B</span><span class="option-text">Efek dari pemanasan laut.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q2','C')">
+                    <span class="option-letter">C</span><span class="option-text">Kadar tingkat keasaman laut.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q2','D')">
+                    <span class="option-letter">D</span><span class="option-text">Pemompaan CO2 ke atmosfer.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q2','E')">
+                    <span class="option-letter">E</span><span class="option-text">Ancaman bagi negara berkembang.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q2">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A</div>
+                <div class="key-answer">Ancaman plastik terhadap lautan.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Paragraf pertama membahas dua ancaman bagi lautan: pemanasan/keasaman dan penggunaan plastik. Namun, fokus utama paragraf mengarah pada ancaman plastik yang semakin mendominasi, diperkuat dengan data tahun 2050.</div>
+            </div>
+        </div>
+
+        <!-- Soal 3 -->
+        <div class="card" id="q3" data-type="mcma" data-key='["A","E"]'>
+            <span class="question-number">Soal 3</span>
+            <span class="question-type">PGK MCMA &bull; Pemahaman Literal</span>
+            <p class="question-text">Mengapa lautan menghadapi ancaman pada 2050? <em>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</em></p>
+            <div class="options mcma" id="options-q3">
+                <div class="option" data-option="A" onclick="selectMCMA('q3','A')">
+                    <span class="option-letter">A</span><span class="option-text">Sampah plastik di laut akan lebih banyak daripada jumlah ikan.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectMCMA('q3','B')">
+                    <span class="option-letter">B</span><span class="option-text">Lautan akan terus mengalami pemanasan dan semakin asam.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectMCMA('q3','C')">
+                    <span class="option-letter">C</span><span class="option-text">Manusia terus memompa lebih banyak CO2 ke atmosfer.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectMCMA('q3','D')">
+                    <span class="option-letter">D</span><span class="option-text">Jumlah ikan yang terancam punah semakin banyak.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectMCMA('q3','E')">
+                    <span class="option-letter">E</span><span class="option-text">Penggunaan plastik terus meningkat dan tidak dikelola dengan baik</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q3">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A dan E</div>
+                <div class="key-answer">A. Sampah plastik di laut akan lebih banyak daripada jumlah ikan.<br>E. Penggunaan plastik terus meningkat dan tidak dikelola dengan baik.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Teks secara eksplisit menyebutkan bahwa pada tahun 2050 sampah plastik di laut akan melebihi jumlah ikan (A). Hal ini disebabkan kecenderungan penggunaan plastik yang terus meningkat dan tidak dikelola dengan baik (E). Pilihan B dan C adalah ancaman umum lautan, tetapi bukan alasan spesifik pada tahun 2050 yang disebutkan dalam teks.</div>
+            </div>
+        </div>
+
+        <!-- Soal 4 -->
+        <div class="card" id="q4" data-type="kategori" data-keys='["Salah","Benar","Salah"]'>
+            <span class="question-number">Soal 4</span>
+            <span class="question-type">PGK Kategori &bull; Evaluasi dan Apresiasi</span>
+            <p class="question-text">"Solusi tersebut tidak mudah." Mengapa penulis menggunakan kalimat tersebut pada teks? <em>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</em></p>
+            <div class="kategori-table" id="options-q4">
+                <div class="kategori-row" data-row="0">
+                    <div class="statement-text">A. Menginformasikan kepada pembaca bahwa pemecahan masalah sampah merupakan tanggung jawab utama kita sebagai masyarakat sipil sehingga sulit untuk diselesaikan.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q4',0,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q4',0,'Salah')">Salah</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="1">
+                    <div class="statement-text">B. Menunjukkan kepada pembaca bahwa permasalahan sampah plastik sangat rumit dan tidak bisa diselesaikan dalam jangka waktu singkat.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q4',1,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q4',1,'Salah')">Salah</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="2">
+                    <div class="statement-text">C. Membuktikan kepada pembaca bahwa permasalahan sampah yang rumit disebabkan pemecahan masalah yang bergantung pada perekonomian negara berkembang.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q4',2,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q4',2,'Salah')">Salah</button>
+                    </div>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q4">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Salah &bull; B. Benar &bull; C. Salah</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kalimat "Solusi tersebut tidak mudah" menegaskan kerumitan masalah sampah plastik yang membutuhkan waktu panjang untuk diselesaikan (B benar). Pernyataan A salah karena fokus kalimat bukan pada tanggung jawab masyarakat sipil saja, melainkan kompleksitas masalah. Pernyataan C salah karena kalimat tidak menyatakan bahwa kerumitan hanya bergantung pada perekonomian negara berkembang.</div>
+            </div>
+        </div>
+
+        <!-- ======================== SOAL 5-7 ======================== -->
+        <div class="topic-label" style="margin-top:32px;">Teks untuk Soal Nomor 5 s.d. 7</div>
+        <div class="text-excerpt">
+            <strong>TEKS CERPEN:</strong>
+            "E...gurumu itu orang desa ini juga. Pasti tahu bahwa saat ini musim maddongi (mengusir burung saat buah padi mulai menguning). Besok kau menghadap, sampaikan bahwa kau membantu Ayah di sawah. Nah, pasti gurumu mengerti mengapa kamu tidak ke sekolah."
+
+            Aku terpana. Jawaban Ayah benar-benar membuatku hampir menangis histeris. Bagaimana tidak. Lomba semakin dekat, sementara masih banyak materi yang belum aku paham. Terbayang aku akan hancur dan tidak bisa bersaing dengan siswa sekolah lain. Ingin rasanya aku berteriak agar Ayahku tahu bagaimana kacaunya pikiranku. Namun, aku sadar bahwa ini adalah perbuatan yang tidak akan menyelesaikan masalah. Malah akan semakin membuat Ayahku geram. Otakku terus berpikir untuk mencari solusi terbaik. Sambil berjalan mengikuti Ayah dari belakang, aku mulai menyusun strategi. "Bagaimana kalau aku ke rumah iyye-ku (nenek), menyampaikan masalahku ini. Ya, hanya dia yang mampu menundukkan Ayah."
+
+            Esok harinya, sepulang sekolah, kuayunkan sepedaku menuju rumah iyye-ku.
+
+            "Kenapa kamu lesu?" Iyye menanyakan keadaanku. Aku pun menceritakan semuanya kepada iyye.
+
+            "Ya sudah, tidak usah sedih. Nanti kusampaikan pada ayahmu. Kau ke dalam, makan dulu, baru pulang," ujar iyye-ku.
+        </div>
+
+        <!-- Soal 5 -->
+        <div class="card" id="q5" data-type="kategori" data-keys='["Benar","Salah","Salah"]'>
+            <span class="question-number">Soal 5</span>
+            <span class="question-type">PGK Kategori &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Apa permasalahan yang dihadapi tokoh <em>aku</em> dalam kutipan tersebut? <em>Tentukan Benar atau Salah untuk setiap pernyataan berikut!</em></p>
+            <div class="kategori-table" id="options-q5">
+                <div class="kategori-row" data-row="0">
+                    <div class="statement-text">A. Kekecewaan dan kesedihan tokoh aku terhadap sikap Ayahnya yang tidak mengizinkannya masuk sekolah di musim maddongi, padahal dia harus mempersiapkan diri untuk bersaing dalam lomba dengan siswa sekolah lain.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q5',0,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q5',0,'Salah')">Salah</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="1">
+                    <div class="statement-text">B. Kemarahan hati tokoh aku terhadap Ayahnya yang melarang dia pergi sekolah karena sedang musim maddongi di sawah dan dia diberi tugas menghalau burung yang hinggap pada padi di sawah mereka.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q5',1,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q5',1,'Salah')">Salah</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="2">
+                    <div class="statement-text">C. Perasaan tertekan tokoh aku terhadap peraturan keluarganya yang mengharuskan dia tidak masuk sekolah setiap musim maddongi, padahal dia ingin sekali belajar dan tidak mau ketinggalan pelajaran.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q5',2,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q5',2,'Salah')">Salah</button>
+                    </div>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q5">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Benar &bull; B. Salah &bull; C. Salah</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Tokoh <em>aku</em> merasa kecewa dan sedih karena ayahnya tidak mengizinkan sekolah saat musim maddongi, padahal lomba sudah dekat (A benar). Tokoh <em>aku</em> tidak marah, tetapi sedih dan hampir menangis histeris (B salah). Tidak disebutkan bahwa ini peraturan keluarga yang berlaku setiap musim maddongi (C salah).</div>
+            </div>
+        </div>
+
+        <!-- Soal 6 -->
+        <div class="card" id="q6" data-type="mcma" data-key='["B","D"]'>
+            <span class="question-number">Soal 6</span>
+            <span class="question-type">PGK MCMA &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Apa yang akan terjadi jika tokoh <em>aku</em> tidak datang ke rumah iyye? <em>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</em></p>
+            <div class="options mcma" id="options-q6">
+                <div class="option" data-option="A" onclick="selectMCMA('q6','A')">
+                    <span class="option-letter">A</span><span class="option-text">Iyye akan datang menasehati Ayah karena melarang tokoh aku untuk belajar.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectMCMA('q6','B')">
+                    <span class="option-letter">B</span><span class="option-text">Tokoh aku akan kehilangan kesempatan belajar untuk mengikuti.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectMCMA('q6','C')">
+                    <span class="option-letter">C</span><span class="option-text">Ayah akan tetap melarang tokoh aku untuk belajar dan mengikuti lomba.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectMCMA('q6','D')">
+                    <span class="option-letter">D</span><span class="option-text">Permasalahan tokoh aku dan ayah akan berlarut karena tidak terselesaikan.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectMCMA('q6','E')">
+                    <span class="option-letter">E</span><span class="option-text">Tokoh aku tidak akan bisa fokus untuk belajar dan mengikuti lomba yang diadakan sekolah.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q6">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B dan D</div>
+                <div class="key-answer">B. Tokoh aku akan kehilangan kesempatan belajar untuk mengikuti lomba.<br>D. Permasalahan tokoh aku dan ayah akan berlarut karena tidak terselesaikan.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Tanpa bantuan iyye, tokoh <em>aku</em> tidak akan mendapat dukungan untuk bisa belajar mengikuti lomba (B) dan masalah dengan ayahnya tidak akan terselesaikan (D). Pilihan A tidak pasti terjadi, C merupakan kondisi yang sudah ada, dan E bersifat spekulatif.</div>
+            </div>
+        </div>
+
+        <!-- Soal 7 -->
+        <div class="card" id="q7" data-type="pg" data-key="A">
+            <span class="question-number">Soal 7</span>
+            <span class="question-type">PG &bull; Evaluasi dan Apresiasi</span>
+            <p class="question-text">Keterkaitan nilai sosial dalam kutipan cerpen tersebut dengan kehidupan sehari-hari adalah &hellip;</p>
+            <div class="options" id="options-q7">
+                <div class="option" data-option="A" onclick="selectPG('q7','A')">
+                    <span class="option-letter">A</span><span class="option-text">Masih ditemukan orang tua yang tidak memedulikan pendidikan anaknya demi membantu pekerjaan mereka.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q7','B')">
+                    <span class="option-letter">B</span><span class="option-text">Terbenturnya cita-cita anak karena tradisi sebuah keluarga yang mengutamakan anak mampu bekerja mandiri.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q7','C')">
+                    <span class="option-letter">C</span><span class="option-text">Asumsi bahwa bekerja lebih bermanfaat daripada sekolah yang dianggap tidak menghasilkan apa-apa untuk keluarga.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q7','D')">
+                    <span class="option-letter">D</span><span class="option-text">Kebiasaan anak-anak tidak sekolah di musim maddongi demi menjalankan tradisi di lingkungan keluarga mereka.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q7','E')">
+                    <span class="option-letter">E</span><span class="option-text">Orang tua mengarahkan anak-anak untuk rajin bekerja membantu mereka di sawah agar bisa melanjutkan kehidupannya kelak.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q7">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A</div>
+                <div class="key-answer">Masih ditemukan orang tua yang tidak memedulikan pendidikan anaknya demi membantu pekerjaan mereka.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Nilai sosial yang paling relevan adalah masih adanya orang tua yang mengabaikan pendidikan anak demi kepentingan pekerjaan, seperti yang dialami tokoh <em>aku</em> ketika ayahnya menyuruhnya membantu di sawah.</div>
+            </div>
+        </div>
+
+        <!-- ======================== SOAL 8-10 ======================== -->
+        <div class="topic-label" style="margin-top:32px;">Teks untuk Soal Nomor 8 s.d. 10</div>
+        <div class="text-excerpt">
+            <strong>TEKS 1:</strong>
+            Rhodamin B adalah zat pewarna yang tersedia di pasar untuk industri tekstil. Zat ini sering disalahgunakan sebagai zat pewarna makanan dan kosmetik di berbagai negara. Jenis makanan yang mengandung Rhodamin B di antaranya kerupuk, terasi, dan makanan ringan. Zat ini juga banyak ditemukan pada kembang gula, sirup, manisan, dawet, bubur, ikan asap, dan cendol. Tampilan makanan yang menggunakan zat ini cenderung menarik dan terkesan menawarkan cita rasa tinggi sehingga ketika harga jualnya tidak semahal tampilannya, banyak yang tertarik untuk membeli dan mengonsumsinya. Zat ini paling berbahaya bila dikonsumsi karena menyebabkan gangguan pada fungsi hati, bahkan kanker hati. Apabila mengonsumsi makanan yang mengandung Rhodamin B, dalam tubuh akan terjadi penumpukan lemak sehingga lama-kelamaan jumlahnya akan terus bertambah. Dampaknya baru akan kelihatan setelah puluhan tahun kemudian. Jika sudah masuk dalam tubuh, akan mengendap pada jaringan hati dan lemak, tidak dapat dikeluarkan, dan dalam jangka waktu lama bisa bersifat karsinogenik.
+
+            <strong>TEKS 2:</strong>
+            Rhodamin B berbentuk serbuk kristal, berwarna hijau atau ungu kemerahan, tidak berbau, dan dalam larutan akan berwarna merah terang berpendar atau berfluoresensi. Rhodamin B merupakan zat warna golongan xanthenes dyes, dan digunakan pada industri tekstil dan kertas, sebagai pewarna kain, kosmetika, produk pembersih mulut, dan sabun. Rhodamin B memiliki berbagai nama lain, antara lain: Tetra ethyl rhodamin; Rheoninine B, D, & C; Red No. 19; Food Red 15; ADC Rhodamine B; Aizen Rhodamine; dan Brilliant Pink B. Rhodamin B mengandung senyawa klorin (Cl) yang merupakan senyawa halogen yang berbahaya dan reaktif. Jika tertelan, senyawa ini akan berusaha mencapai kestabilan dalam tubuh dengan cara mengikat senyawa lain dalam tubuh. Mengonsumsi bahan pangan yang mengandung Rhodamin B dalam jangka panjang dapat terakumulasi di dalam tubuh dan dapat menyebabkan gejala pembesaran hati dan ginjal, gangguan fungsi hati, kerusakan hati, gangguan fisiologis tubuh, bahkan dapat menyebabkan timbulnya kanker hati.
+        </div>
+
+        <!-- Soal 8 -->
+        <div class="card" id="q8" data-type="pg" data-key="D">
+            <span class="question-number">Soal 8</span>
+            <span class="question-type">PG &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Tujuan penulis sesuai teks 1 adalah ...</p>
+            <div class="options" id="options-q8">
+                <div class="option" data-option="A" onclick="selectPG('q8','A')">
+                    <span class="option-letter">A</span><span class="option-text">Menginformasikan jenis dan rasa makanan yang mengandung Rhodamin B.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q8','B')">
+                    <span class="option-letter">B</span><span class="option-text">Menjelaskan dampak penggunaan Rhodamin B pada bahan-bahan industri.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q8','C')">
+                    <span class="option-letter">C</span><span class="option-text">Mengimbau agar masyarakat tidak menggunakan barang-barang yang mengandung Rhodamin B.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q8','D')">
+                    <span class="option-letter">D</span><span class="option-text">Menginformasikan dampak mengonsumsi makanan yang mengandung Rhodamin B bagi tubuh.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q8','E')">
+                    <span class="option-letter">E</span><span class="option-text">Menjelaskan gejala yang timbul akibat mengkonsumsi makanan yang mengandung Rhodamin B.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q8">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: D</div>
+                <div class="key-answer">Menginformasikan dampak mengonsumsi makanan yang mengandung Rhodamin B bagi tubuh.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Teks 1 berfokus pada bahaya Rhodamin B bila dikonsumsi, seperti gangguan fungsi hati, penumpukan lemak, dan sifat karsinogenik. Tujuan utamanya adalah menginformasikan dampak kesehatan dari konsumsi Rhodamin B.</div>
+            </div>
+        </div>
+
+        <!-- Soal 9 -->
+        <div class="card" id="q9" data-type="pg" data-key="B">
+            <span class="question-number">Soal 9</span>
+            <span class="question-type">PG &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Pernyataan yang tepat sesuai isi kedua teks tersebut berkaitan dengan Rhodamin B adalah ...</p>
+            <div class="options" id="options-q9">
+                <div class="option" data-option="A" onclick="selectPG('q9','A')">
+                    <span class="option-letter">A</span><span class="option-text">Rhodamin B sering disalahgunakan sebagai pewarna makanan karena menawarkan cita rasa yang tinggi.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q9','B')">
+                    <span class="option-letter">B</span><span class="option-text">Rhodamin B berdampak buruk bagi kesehatan, tetapi diperlukan pada industri, seperti tekstil dan kertas.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q9','C')">
+                    <span class="option-letter">C</span><span class="option-text">Rhodamin B berdampak buruk bagi kesehatan, tetapi mudah ditemukan pada kembang gula dan sirup.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q9','D')">
+                    <span class="option-letter">D</span><span class="option-text">Rhodamin B yang berbentuk serbuk kristal dan berwarna hijau digunakan pada industri tekstil dan kertas.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q9','E')">
+                    <span class="option-letter">E</span><span class="option-text">Rhodamin B berdampak buruk bagi kesehatan, meskipun dampak itu baru terlihat beberapa tahun kemudian.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q9">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B</div>
+                <div class="key-answer">Rhodamin B berdampak buruk bagi kesehatan, tetapi diperlukan pada industri, seperti tekstil dan kertas.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kedua teks menyebutkan Rhodamin B digunakan pada industri tekstil dan kertas, sekaligus menegaskan bahayanya bagi kesehatan. Pernyataan B merangkum kedua aspek tersebut dengan tepat. Pilihan lain mengandung ketidaksesuaian dengan isi teks.</div>
+            </div>
+        </div>
+
+        <!-- Soal 10 -->
+        <div class="card" id="q10" data-type="mcma" data-key='["B","D","E"]'>
+            <span class="question-number">Soal 10</span>
+            <span class="question-type">PGK MCMA &bull; Evaluasi dan Apresiasi</span>
+            <p class="question-text">Mengapa kedua teks tersebut menyebutkan dampak kesehatan yang timbul dari konsumsi pangan yang terkontaminasi Rhodamin B? <em>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</em></p>
+            <div class="options mcma" id="options-q10">
+                <div class="option" data-option="A" onclick="selectMCMA('q10','A')">
+                    <span class="option-letter">A</span><span class="option-text">Mendorong masyarakat untuk menghindari Rhodamin B dalam berbagai keperluan.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectMCMA('q10','B')">
+                    <span class="option-letter">B</span><span class="option-text">Meningkatkan kesadaran masyarakat tentang bahaya Rhodamin B dalam makanan</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectMCMA('q10','C')">
+                    <span class="option-letter">C</span><span class="option-text">Menunjukkan bahwa Rhodamin B aman digunakan dalam industri tekstil dan kertas.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectMCMA('q10','D')">
+                    <span class="option-letter">D</span><span class="option-text">Menjelaskan bahwa Rhodamin B adalah zat berbahaya jika dikonsumsi, terutama dalam jangka panjang.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectMCMA('q10','E')">
+                    <span class="option-letter">E</span><span class="option-text">Memperingatkan masyarakat agar menghindari makanan berwarna mencolok yang berisiko mengandung Rhodamin B.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q10">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B, D, dan E</div>
+                <div class="key-answer">B. Meningkatkan kesadaran masyarakat tentang bahaya Rhodamin B dalam makanan<br>D. Menjelaskan bahwa Rhodamin B adalah zat berbahaya jika dikonsumsi, terutama dalam jangka panjang.<br>E. Memperingatkan masyarakat agar menghindari makanan berwarna mencolok yang berisiko mengandung Rhodamin B.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kedua teks mencantumkan dampak kesehatan untuk meningkatkan kesadaran (B), menjelaskan bahaya konsumsi jangka panjang (D), dan memperingatkan masyarakat tentang makanan berwarna mencolok (E). Pilihan A terlalu luas, dan C bertentangan dengan isi teks.</div>
+            </div>
+        </div>
+
+        <!-- ======================== SOAL 11-13 ======================== -->
+        <div class="topic-label" style="margin-top:32px;">Teks untuk Soal Nomor 11 s.d. 13</div>
+        <div class="text-excerpt">
+            <strong>TEKS:</strong>
+            Dampak Ekonomi Digital terhadap Pertumbuhan Usaha Kecil dan Menengah (UKM)
+
+            Ekonomi digital telah membawa perubahan besar dalam berbagai aspek bisnis, terutama bagi Usaha Kecil dan Menengah (UKM). Dengan adanya teknologi digital, UKM kini memiliki peluang lebih besar untuk berkembang dan bersaing di pasar yang lebih luas. Transformasi ini didorong oleh beberapa faktor utama, seperti perkembangan e-commerce, sistem pembayaran digital, pemasaran berbasis data, serta pemanfaatan teknologi berbasis kecerdasan buatan.
+
+            Salah satu perubahan signifikan dalam ekonomi digital adalah kemudahan akses ke platform e-commerce. UKM yang sebelumnya hanya mengandalkan toko fisik kini dapat menjual produknya melalui berbagai marketplace daring. Hal ini memungkinkan mereka menjangkau konsumen di luar wilayah lokal, bahkan hingga ke pasar internasional. Dengan biaya operasional yang lebih rendah dibandingkan toko fisik, UKM dapat mengalokasikan dana untuk inovasi dan peningkatan kualitas produk. Selain itu, sistem pengiriman yang semakin efisien memungkinkan UKM memenuhi pesanan dengan lebih cepat dan tepat waktu.
+
+            Selain akses pasar yang lebih luas, sistem pembayaran digital juga telah meningkatkan efisiensi transaksi keuangan. Penggunaan dompet digital dan pembayaran nontunai tidak hanya mempermudah konsumen dalam berbelanja, tetapi juga membantu UKM dalam mencatat keuangan secara lebih akurat. Keuntungan lain dari ekonomi digital adalah strategi pemasaran berbasis data. Melalui analisis data pelanggan, UKM dapat memahami tren pasar dan perilaku konsumen dengan lebih baik. Misalnya, penggunaan iklan digital yang ditargetkan memungkinkan UKM menjangkau segmen pasar yang lebih spesifik sehingga efektivitas promosi meningkat.
+
+            Meskipun menawarkan banyak manfaat, transformasi digital juga menghadirkan tantangan. UKM harus mampu beradaptasi dengan perkembangan teknologi dan meningkatkan literasi digital agar tetap kompetitif. Selain itu, keamanan data menjadi aspek penting yang harus diperhatikan dalam menjalankan bisnis secara digital untuk menghindari risiko peretasan dan penyalahgunaan informasi pelanggan. Dengan segala peluang dan tantangannya, ekonomi digital telah menjadi faktor kunci dalam mendorong pertumbuhan UKM. Jika dikelola dengan baik, digitalisasi dapat menjadi pendorong utama bagi keberlanjutan dan daya saing usaha kecil di era modern ini.
+        </div>
+
+        <!-- Soal 11 - OPSI GAMBAR -->
+        <div class="card" id="q11" data-type="pg" data-key="A">
+            <span class="question-number">Soal 11</span>
+            <span class="question-type">PG &bull; Pemahaman Tekstual</span>
+            <p class="question-text">Bagan yang tepat untuk menggambarkan bagian-bagian penting dalam teks tersebut adalah &hellip;</p>
+            <div class="options" id="options-q11">
+                <div class="option image-option" data-option="A" onclick="selectPG('q11','A')">
+                    <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/25068_description.png" alt="Diagram A" />
+                </div>
+                <div class="option image-option" data-option="B" onclick="selectPG('q11','B')">
+                    <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/25068_49ab5357d2bcbdb2bccfaa5f4d128808.png" alt="Diagram B" />
+                </div>
+                <div class="option image-option" data-option="C" onclick="selectPG('q11','C')">
+                    <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/25068_0a1d331f78fb32852fef358c2ce0a1c1.png" alt="Diagram C" />
+                </div>
+                <div class="option image-option" data-option="D" onclick="selectPG('q11','D')">
+                    <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/25068_ee9e5d7c03f2925e48144abb2723c967.png" alt="Diagram D" />
+                </div>
+                <div class="option image-option" data-option="E" onclick="selectPG('q11','E')">
+                    <img src="https://pusmendik.kemendikdasmen.go.id/tka/cbt_images/25068_da11f9711461225e3ac115058b1f008d.png" alt="Diagram E" />
+                </div>
+            </div>
+            <div class="answer-key" id="key-q11">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A</div>
+                <div class="key-answer">Bagan: "Dampak Ekonomi Digital terhadap Pertumbuhan UKM" dengan empat cabang: Kemudahan akses ke platform e-commerce, Sistem pembayaran digital, Pemasaran berbasis data, dan Tantangan transformasi digital.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Teks membahas empat bagian penting: (1) kemudahan akses e-commerce, (2) sistem pembayaran digital, (3) pemasaran berbasis data, dan (4) tantangan transformasi digital. Bagan A paling tepat merepresentasikan struktur tersebut.</div>
+            </div>
+        </div>
+
+        <!-- Soal 12 -->
+        <div class="card" id="q12" data-type="kategori" data-keys='["Benar","Benar","Salah"]'>
+            <span class="question-number">Soal 12</span>
+            <span class="question-type">PGK Kategori &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Bagaimana pola pengembangan paragraf ke-1, ke-2, dan ke-3 pada teks tersebut? <em>Tentukan Benar atau Salah untuk setiap pernyataan berdasarkan isi teks!</em></p>
+            <div class="kategori-table" id="options-q12">
+                <div class="kategori-row" data-row="0">
+                    <div class="statement-text">A. Paragraf pertama (1) menggunakan pola sebab-akibat karena menjelaskan bagaimana teknologi digital menyebabkan perubahan bagi UKM.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q12',0,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q12',0,'Salah')">Salah</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="1">
+                    <div class="statement-text">B. Paragraf kedua (2) menggunakan pola proses karena menjelaskan langkah-langkah bagaimana UKM memanfaatkan e-commerce.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q12',1,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q12',1,'Salah')">Salah</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="2">
+                    <div class="statement-text">C. Paragraf ketiga (3) menggunakan pola klasifikasi karena membagi sistem pembayaran UKM menjadi beberapa kategori yang berbeda.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Benar" onclick="selectKategori('q12',2,'Benar')">Benar</button>
+                        <button class="kategori-btn" data-value="Salah" onclick="selectKategori('q12',2,'Salah')">Salah</button>
+                    </div>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q12">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Benar &bull; B. Benar &bull; C. Salah</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Paragraf 1 menggunakan pola sebab-akibat (teknologi digital → perubahan bagi UKM). Paragraf 2 menggunakan pola proses (langkah-langkah UKM memanfaatkan e-commerce). Paragraf 3 bukan pola klasifikasi, melainkan pola penambahan atau rincian manfaat ekonomi digital.</div>
+            </div>
+        </div>
+
+        <!-- Soal 13 -->
+        <div class="card" id="q13" data-type="kategori" data-keys='["Tidak Setuju","Setuju","Tidak Setuju"]'>
+            <span class="question-number">Soal 13</span>
+            <span class="question-type">PGK Kategori &bull; Evaluasi dan Apresiasi</span>
+            <p class="question-text">Berdasarkan percakapan Dini, Rio, dan Sena — mengapa pendapat Sena sangat baik dalam menilai keakuratan informasi teks? <em>Tentukan Setuju atau Tidak Setuju untuk setiap alasan berikut!</em></p>
+            <div class="kategori-table" id="options-q13">
+                <div class="kategori-row" data-row="0">
+                    <div class="statement-text">A. Sena menyoroti bahwa teks harus mudah dipahami oleh semua kalangan, termasuk yang awam terhadap ekonomi.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Setuju" onclick="selectKategori('q13',0,'Setuju')">Setuju</button>
+                        <button class="kategori-btn" data-value="Tidak Setuju" onclick="selectKategori('q13',0,'Tidak Setuju')">Tidak Setuju</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="1">
+                    <div class="statement-text">B. Sena mempertimbangkan kelengkapan dan dasar bukti dari informasi yang merupakan bagian dari menilai keakuratan teks.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Setuju" onclick="selectKategori('q13',1,'Setuju')">Setuju</button>
+                        <button class="kategori-btn" data-value="Tidak Setuju" onclick="selectKategori('q13',1,'Tidak Setuju')">Tidak Setuju</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="2">
+                    <div class="statement-text">C. Sena memiliki inisiatif untuk memperbaiki isi teks dengan pendapat pribadinya sebagai ahli ekonomi agar lebih informatif.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Setuju" onclick="selectKategori('q13',2,'Setuju')">Setuju</button>
+                        <button class="kategori-btn" data-value="Tidak Setuju" onclick="selectKategori('q13',2,'Tidak Setuju')">Tidak Setuju</button>
+                    </div>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q13">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Tidak Setuju &bull; B. Setuju &bull; C. Tidak Setuju</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Pendapat Sena dinilai baik karena ia mempertimbangkan kelengkapan data dan dasar bukti (B), yang merupakan bagian dari menilai keakuratan teks. Alasan A dan C tidak tepat karena Sena tidak menyoroti kemudahan bahasa atau mengklaim sebagai ahli ekonomi.</div>
+            </div>
+        </div>
+
+        <!-- ======================== SOAL 14-16 ======================== -->
+        <div class="topic-label" style="margin-top:32px;">Teks untuk Soal Nomor 14 s.d. 16</div>
+        <div class="text-excerpt">
+            <strong>TEKS CERPEN "Seragam"</strong> karya Aris Kurniawan Basuki (dengan penyesuaian):
+            Hampir 25 tahun lalu kami berpisah karena keluarga saya harus boyongan ke kota tempat kerja Ayah yang baru di luar pulau. Tak satupun barang tertinggal di rumah lama. Begitu juga dengan sahabatku, kami harus berpisah.
+
+            Bertemu dengannya setelah sekian lama, mengingatkan kembali pada pengalaman kami dahulu. Pengalaman yang menjadikan dia, walau tidak setiap waktu, selalu lekat di ingatan saya. Tentu dia mengingatnya pula, bahkan saya yakin rasa yang diidapnya lebih besar efeknya. Karena sebagai seorang sahabat, dia jelas jauh lebih tulus dan setia daripada saya. Tak terasa mata saya mulai berkaca-kaca.
+
+            Saat malam itu saya berada di sini, memperhatikannya belajar. Selesai belajar, dia menyuruh saya pulang karena hendak pergi mencari jangkrik. Saya langsung menyatakan ingin ikut, tapi dia keberatan. Ayah dan ibunya pun melarang. Saya sering mendengar cerita mengasyikan anak-anak beramai-ramai berangkat ke sawah selepas isya untuk mencari jangkrik. Sayang, Ayah tidak pernah membolehkan saya. Tapi malam itu saya nekat dan sahabat saya itu akhirnya tidak kuasa menolak. "Tidak ganti baju?" tanya saya heran begitu dia langsung memimpin untuk berangkat. Itu hari Jumat. Seragam coklat Pramuka yang dikenakannya sejak pagi masih akan terpakai untuk bersekolah sehari lagi. Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja. Tapi memakainya untuk pergi ke sawah mencari jangkrik, rasanya sangat tidak elok.
+
+            Saya mengambil alih obor dari tangannya. Rasanya belum terlalu lama kami berada di sana dan bumbung baru terisi beberapa ekor jangkrik ketika tiba-tiba angin berubah perangai. Kaget, pantat obor itu justru saya angkat tinggi-tinggi sehingga minyak mendorong sumbunya terlepas. Api dengan cepat berpindah membakar punggung saya! Terdengar teriakannya sembari melepaskan seragam coklatnya untuk dipakai menyabet punggung saya. Baju yang saya kenakan habis sepertiganya. Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya melihat saya mulai menangis.
+
+            dan menggigil antara kesakitan dan kedinginan. Sadar saya membutuhkan pertolongan secepatnya, dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang. Napasnya memburu kelelahan, tapi rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.
+        </div>
+
+        <!-- Soal 14 -->
+        <div class="card" id="q14" data-type="pg" data-key="C">
+            <span class="question-number">Soal 14</span>
+            <span class="question-type">PG &bull; Pemahaman Tekstual</span>
+            <p class="question-text">Penggunaan kata serapan <strong>boyongan</strong> dapat memperjelas peristiwa yang dialami tokoh <em>saya</em>, yaitu ...</p>
+            <div class="options" id="options-q14">
+                <div class="option" data-option="A" onclick="selectPG('q14','A')">
+                    <span class="option-letter">A</span><span class="option-text">Peristiwa pindahan yang sering dialami pegawai suatu instansi untuk kepentingan promosi jabatan.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q14','B')">
+                    <span class="option-letter">B</span><span class="option-text">Peristiwa pindah rumah dari kampung halaman ke tempat yang jauh untuk jangka waktu lama.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q14','C')">
+                    <span class="option-letter">C</span><span class="option-text">Pindah rumah bersama seluruh anggota keluarga dengan membawa semua barang rumah tangga.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q14','D')">
+                    <span class="option-letter">D</span><span class="option-text">Pindah rumah untuk mengikuti tugas kedinasan orang tua di tempat baru yang letaknya sangat jauh.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q14','E')">
+                    <span class="option-letter">E</span><span class="option-text">Kegiatan pindah rumah untuk sementara waktu dan akan berpindah lagi ke rumah dinas yang lain.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q14">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">Pindah rumah bersama seluruh anggota keluarga dengan membawa semua barang rumah tangga.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kata <em>boyongan</em> berasal dari bahasa Jawa yang berarti pindah rumah bersama seluruh anggota keluarga dan membawa semua barang rumah tangga. Teks menyebutkan "Tak satupun barang tertinggal" yang memperkuat makna tersebut.</div>
+            </div>
+        </div>
+
+        <!-- Soal 15 -->
+        <div class="card" id="q15" data-type="kategori" data-keys='["Tepat","Tidak Tepat","Tepat"]'>
+            <span class="question-number">Soal 15</span>
+            <span class="question-type">PGK Kategori &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Peristiwa apa yang mungkin akan terjadi kepada sahabatnya jika tokoh <em>saya</em> tidak ikut mencari jangkrik malam itu? <em>Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut!</em></p>
+            <div class="kategori-table" id="options-q15">
+                <div class="kategori-row" data-row="0">
+                    <div class="statement-text">A. Sahabat tokoh saya masih memiliki seragam pramuka untuk dipakai.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Tepat" onclick="selectKategori('q15',0,'Tepat')">Tepat</button>
+                        <button class="kategori-btn" data-value="Tidak Tepat" onclick="selectKategori('q15',0,'Tidak Tepat')">Tidak Tepat</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="1">
+                    <div class="statement-text">B. Punggung sahabat tokoh saya tidak akan memiliki luka bakar.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Tepat" onclick="selectKategori('q15',1,'Tepat')">Tepat</button>
+                        <button class="kategori-btn" data-value="Tidak Tepat" onclick="selectKategori('q15',1,'Tidak Tepat')">Tidak Tepat</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="2">
+                    <div class="statement-text">C. Sahabat tokoh saya akan mencari jangkrik tanpa perlu berlari.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Tepat" onclick="selectKategori('q15',2,'Tepat')">Tepat</button>
+                        <button class="kategori-btn" data-value="Tidak Tepat" onclick="selectKategori('q15',2,'Tidak Tepat')">Tidak Tepat</button>
+                    </div>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q15">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Tepat &bull; B. Tidak Tepat &bull; C. Tepat</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Jika tokoh <em>saya</em> tidak ikut, sahabatnya tidak perlu memakai seragam pramukanya untuk memadamkan api, sehingga masih utuh (A tepat). Luka bakar terjadi di punggung tokoh <em>saya</em>, bukan sahabatnya (B tidak tepat). Sahabatnya tidak perlu berlari menggendong tokoh <em>saya</em> ke tempat pertolongan (C tepat).</div>
+            </div>
+        </div>
+
+        <!-- Soal 16 -->
+        <div class="card" id="q16" data-type="mcma" data-key='["C","D","E"]'>
+            <span class="question-number">Soal 16</span>
+            <span class="question-type">PGK MCMA &bull; Evaluasi dan Apresiasi</span>
+            <p class="question-text">Kalimat mana saja dari dalam kutipan cerpen tersebut yang membuktikan karakter sahabat tokoh <em>saya</em> merupakan seorang yang setia kawan? <em>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</em></p>
+            <div class="options mcma" id="options-q16">
+                <div class="option" data-option="A" onclick="selectMCMA('q16','A')">
+                    <span class="option-letter">A</span><span class="option-text">Saya langsung menyatakan ingin ikut, tapi dia keberatan.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectMCMA('q16','B')">
+                    <span class="option-letter">B</span><span class="option-text">Dia memang tidak memiliki banyak pakaian hingga seragam sekolah biasa dipakai kapan saja.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectMCMA('q16','C')">
+                    <span class="option-letter">C</span><span class="option-text">Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectMCMA('q16','D')">
+                    <span class="option-letter">D</span><span class="option-text">Dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectMCMA('q16','E')">
+                    <span class="option-letter">E</span><span class="option-text">Rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q16">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C, D, dan E</div>
+                <div class="key-answer">C. Sahabat saya itu tanggap melingkupi tubuh saya dengan seragam coklatnya.<br>D. Dia menggendong saya lalu berlari sembari membujuk-bujuk saya untuk tetap tenang.<br>E. Rasa tanggung jawab yang besar seperti memberinya kekuatan berlipat untuk tetap bersama saya.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kalimat C, D, dan E menunjukkan tindakan nyata kesetiaan: menyelimuti dengan seragam, menggendong sambil membujuk, dan rasa tanggung jawab yang besar. Kalimat A menunjukkan keberatan sebelum kejadian, dan B menggambarkan kondisi ekonomi sahabat.</div>
+            </div>
+        </div>
+
+        <!-- ======================== SOAL 17-20 ======================== -->
+        <div class="topic-label" style="margin-top:32px;">Teks untuk Soal Nomor 17 s.d. 20</div>
+        <div class="text-excerpt">
+            <strong>TEKS:</strong>
+            (1) Perubahan iklim yang semakin nyata dan ancaman terhadap kelestarian bumi menuntut kita untuk mencari solusi efektif dalam menjaga keseimbangan alam. (2) Salah satu solusi yang paling menjanjikan adalah penggunaan teknologi hijau. (3) Teknologi hijau juga dikenal sebagai teknologi ramah lingkungan. (4) Teknologi ini merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.
+
+            (1) Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global yang meningkat, dan naiknya permukaan air laut. (2) Hal tersebut juga memicu deforestasi, polusi, dan mengancam keberagaman hayati di seluruh dunia. (3) Oleh karena itu, kita harus mengambil langkah tegas agar dampak perubahan iklim ini tidak semakin parah. (4) Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil yang menjadi penyebab utama emisi gas rumah kaca planet ini.
+
+            (1) Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan iklim yang sudah tidak bisa dihindari. (2) Sistem pertanian presisi, infrastruktur tahan bencana alam, serta teknologi untuk menginvestigasi banjir dan kekeringan adalah contoh bagaimana teknologi hijau bisa membantu masyarakat beradaptasi dengan kondisi yang berubah.
+
+            (1) Dengan kondisi bumi yang semakin menghadapi tantangan besar, seperti pemanasan global, polusi, kelangkaan sumber daya, dan hilangnya keanekaragaman hayati, penerapan teknologi hijau adalah keharusan. (2) Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.
+        </div>
+
+        <!-- Soal 17 -->
+        <div class="card" id="q17" data-type="kategori" data-keys='["Tepat","Tidak Tepat","Tepat"]'>
+            <span class="question-number">Soal 17</span>
+            <span class="question-type">PGK Kategori &bull; Pemahaman Tekstual</span>
+            <p class="question-text">Manakah kalimat yang memiliki penggunaan kata serapan yang tepat? <em>Tentukan Tepat atau Tidak Tepat pada setiap pernyataan berikut!</em></p>
+            <div class="kategori-table" id="options-q17">
+                <div class="kategori-row" data-row="0">
+                    <div class="statement-text">A. Kata "deforestasi" pada kalimat (2) paragraf kedua.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Tepat" onclick="selectKategori('q17',0,'Tepat')">Tepat</button>
+                        <button class="kategori-btn" data-value="Tidak Tepat" onclick="selectKategori('q17',0,'Tidak Tepat')">Tidak Tepat</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="1">
+                    <div class="statement-text">B. Kata "menginvestigasi" pada kalimat (2) paragraf ketiga.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Tepat" onclick="selectKategori('q17',1,'Tepat')">Tepat</button>
+                        <button class="kategori-btn" data-value="Tidak Tepat" onclick="selectKategori('q17',1,'Tidak Tepat')">Tidak Tepat</button>
+                    </div>
+                </div>
+                <div class="kategori-row" data-row="2">
+                    <div class="statement-text">C. Kata "polusi" pada kalimat (1) paragraf keempat.</div>
+                    <div class="kategori-buttons">
+                        <button class="kategori-btn" data-value="Tepat" onclick="selectKategori('q17',2,'Tepat')">Tepat</button>
+                        <button class="kategori-btn" data-value="Tidak Tepat" onclick="selectKategori('q17',2,'Tidak Tepat')">Tidak Tepat</button>
+                    </div>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q17">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A. Tepat &bull; B. Tidak Tepat &bull; C. Tepat</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kata <em>deforestasi</em> (A) dan <em>polusi</em> (C) merupakan kata serapan yang tepat dan sudah lazim digunakan. Kata <em>menginvestigasi</em> (B) kurang tepat dalam konteks banjir dan kekeringan; seharusnya digunakan kata "mendeteksi" atau "memantau".</div>
+            </div>
+        </div>
+
+        <!-- Soal 18 -->
+        <div class="card" id="q18" data-type="pg" data-key="B">
+            <span class="question-number">Soal 18</span>
+            <span class="question-type">PG &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Hubungan makna antara kalimat (2) dan (3) pada paragraf kedua adalah &hellip;</p>
+            <div class="options" id="options-q18">
+                <div class="option" data-option="A" onclick="selectPG('q18','A')">
+                    <span class="option-letter">A</span><span class="option-text">Akibat-sebab yang diperkuat dengan contoh deforestasi dan kerusakan lingkungan</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q18','B')">
+                    <span class="option-letter">B</span><span class="option-text">Sebab-akibat yang mengajak pembaca untuk mengambil langkah tegas</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q18','C')">
+                    <span class="option-letter">C</span><span class="option-text">Penegasan yang diperinci dengan contoh konkret yang bisa diaplikasikan pembaca</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q18','D')">
+                    <span class="option-letter">D</span><span class="option-text">Perbandingan dari dua pandangan terkait dampak negatif deforestasi</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q18','E')">
+                    <span class="option-letter">E</span><span class="option-text">Penyimpulan bahwa teknologi hijau merupakan solusi masalah deforestasi</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q18">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: B</div>
+                <div class="key-answer">Sebab-akibat yang mengajak pembaca untuk mengambil langkah tegas</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Kalimat (2) menyebutkan dampak perubahan iklim (deforestasi, polusi, ancaman hayati) sebagai sebab. Kalimat (3) "Oleh karena itu, kita harus mengambil langkah tegas..." merupakan akibat/ajakan. Hubungannya adalah sebab-akibat.</div>
+            </div>
+        </div>
+
+        <!-- Soal 19 -->
+        <div class="card" id="q19" data-type="pg" data-key="C">
+            <span class="question-number">Soal 19</span>
+            <span class="question-type">PG &bull; Pemahaman Inferensial</span>
+            <p class="question-text">Kalimat yang tepat untuk mengakhiri uraian pada paragraf keempat adalah &hellip;</p>
+            <div class="options" id="options-q19">
+                <div class="option" data-option="A" onclick="selectPG('q19','A')">
+                    <span class="option-letter">A</span><span class="option-text">Pada sisi lain, teknologi hijau memunculkan deforestasi dan polusi.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectPG('q19','B')">
+                    <span class="option-letter">B</span><span class="option-text">Sehingga dampak negatif lingkungan berdampak pula pada kualitas hidup.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectPG('q19','C')">
+                    <span class="option-letter">C</span><span class="option-text">Di samping itu, teknologi hijau dapat menciptakan dunia yang lebih baik untuk generasi yang akan datang.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectPG('q19','D')">
+                    <span class="option-letter">D</span><span class="option-text">Di samping itu, bumi yang menggunakan teknologi hijau akan semakin menghadapi tantangan besar.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectPG('q19','E')">
+                    <span class="option-letter">E</span><span class="option-text">Jadi, teknologi hijau berperan dalam menghilangnya keanekaragaman hayati.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q19">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: C</div>
+                <div class="key-answer">Di samping itu, teknologi hijau dapat menciptakan dunia yang lebih baik untuk generasi yang akan datang.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Paragraf keempat membahas pentingnya teknologi hijau untuk mengurangi dampak negatif dan memperbaiki kualitas hidup. Kalimat C melanjutkan gagasan positif tersebut dengan menekankan manfaat bagi generasi mendatang.</div>
+            </div>
+        </div>
+
+        <!-- Soal 20 -->
+        <div class="card" id="q20" data-type="mcma" data-key='["A","C","E"]'>
+            <span class="question-number">Soal 20</span>
+            <span class="question-type">PGK MCMA &bull; Evaluasi dan Apresiasi</span>
+            <p class="question-text">Manakah fakta-fakta yang mendukung simpulan bahwa teknologi hijau berperan dalam perubahan iklim? <em>Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.</em></p>
+            <div class="options mcma" id="options-q20">
+                <div class="option" data-option="A" onclick="selectMCMA('q20','A')">
+                    <span class="option-letter">A</span><span class="option-text">Teknologi hijau merupakan inovasi yang dirancang untuk mengatasi berbagai tantangan lingkungan global, terutama terkait dengan perubahan iklim.</span>
+                </div>
+                <div class="option" data-option="B" onclick="selectMCMA('q20','B')">
+                    <span class="option-letter">B</span><span class="option-text">Perubahan iklim, yang dipicu oleh peningkatan emisi gas rumah kaca akibat aktivitas manusia, menyebabkan cuaca ekstrem, suhu global menurun, dan naiknya permukaan air laut.</span>
+                </div>
+                <div class="option" data-option="C" onclick="selectMCMA('q20','C')">
+                    <span class="option-letter">C</span><span class="option-text">Teknologi hijau seperti energi terbarukan (tenaga surya, angin) dapat mengurangi ketergantungan pada bahan bakar fosil.</span>
+                </div>
+                <div class="option" data-option="D" onclick="selectMCMA('q20','D')">
+                    <span class="option-letter">D</span><span class="option-text">Teknologi hijau juga sangat penting dalam upaya adaptasi terhadap dampak perubahan teknologi yang sudah tidak bisa dihindari.</span>
+                </div>
+                <div class="option" data-option="E" onclick="selectMCMA('q20','E')">
+                    <span class="option-letter">E</span><span class="option-text">Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan dan memperbaiki kualitas hidup.</span>
+                </div>
+            </div>
+            <div class="answer-key" id="key-q20">
+                <div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: A, C, dan E</div>
+                <div class="key-answer">A. Teknologi hijau merupakan inovasi untuk mengatasi tantangan lingkungan, terutama perubahan iklim.<br>C. Teknologi hijau seperti energi terbarukan dapat mengurangi ketergantungan pada bahan bakar fosil.<br>E. Melalui teknologi hijau, kita dapat mengurangi dampak negatif terhadap lingkungan.</div>
+                <div class="key-explanation"><strong>Pembahasan:</strong> Pilihan A, C, dan E adalah fakta yang mendukung peran teknologi hijau dalam perubahan iklim. Pilihan B mengandung kesalahan (seharusnya "suhu global meningkat" bukan "menurun"), dan pilihan D mengandung kesalahan (seharusnya "perubahan iklim" bukan "perubahan teknologi").</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:0.85rem;">
+            Quiz Interaktif TKA SMA Bahasa Indonesia &mdash; 20 Soal &bull; Dibuat dengan ❤️
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let totalScore = 0;
+        let totalAnswered = 0;
+        let answeredQuestions = new Set();
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type === 'correct') {
+                toast.classList.add('correct', 'show');
+            } else if (type === 'wrong') {
+                toast.classList.add('wrong', 'show');
+            } else {
+                toast.classList.add('info', 'show');
+            }
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.className = 'toast';
+                }, 300);
+            }, 2200);
+        }
+
+        function updateScore() {
+            const display = document.getElementById('scoreDisplay');
+            display.textContent = 'Skor: ' + totalScore + ' / ' + totalAnswered;
+        }
+
+        function showKey(questionId) {
+            const keyEl = document.getElementById('key-' + questionId);
+            if (keyEl) keyEl.classList.add('visible');
+        }
+
+        function markAnswered(questionId) {
+            if (!answeredQuestions.has(questionId)) {
+                answeredQuestions.add(questionId);
+                totalAnswered++;
+                updateScore();
+            }
+        }
+
+        // === PG (Single Choice) ===
+        function selectPG(qid, selectedOption) {
+            const card = document.getElementById(qid);
+            const correctKey = card.dataset.key;
+            const options = document.querySelectorAll('#' + qid + ' .option');
+            let isCorrect = selectedOption === correctKey;
+
+            options.forEach(opt => {
+                opt.classList.add('disabled');
+                const optLetter = opt.dataset.option;
+                if (optLetter === correctKey) {
+                    opt.classList.add('selected-correct');
+                }
+                if (optLetter === selectedOption && !isCorrect) {
+                    opt.classList.add('selected-wrong');
+                }
+            });
+
+            if (isCorrect) {
+                showToast('✅ Benar! Jawaban Anda tepat.', 'correct');
+            } else {
+                showToast('❌ Salah! Kunci jawaban: ' + correctKey, 'wrong');
+            }
+            markAnswered(qid);
+            if (isCorrect) totalScore++;
+            updateScore();
+            showKey(qid);
+        }
+
+        // === PGK MCMA (Multiple Choice Multiple Answers) ===
+        function selectMCMA(qid, selectedOption) {
+            const card = document.getElementById(qid);
+            let correctKeys = [];
+            try {
+                correctKeys = JSON.parse(card.dataset.key);
+            } catch (e) {
+                correctKeys = card.dataset.key.split(',').map(s => s.trim());
+            }
+
+            const optionEl = card.querySelector('.option[data-option="' + selectedOption + '"]');
+            const isKey = correctKeys.includes(selectedOption);
+
+            if (optionEl.classList.contains('selected-correct') || optionEl.classList.contains('selected-wrong')) {
+                return; // already clicked this option
+            }
+
+            if (isKey) {
+                optionEl.classList.add('selected-correct');
+                showToast('✅ Benar! Pilihan ini adalah kunci jawaban.', 'correct');
+            } else {
+                optionEl.classList.add('selected-wrong');
+                showToast('❌ Salah! Pilihan ini bukan kunci jawaban.', 'wrong');
+            }
+
+            markAnswered(qid);
+
+            // Check if all correct answers have been selected
+            const allCorrectSelected = correctKeys.every(key => {
+                const opt = card.querySelector('.option[data-option="' + key + '"]');
+                return opt && opt.classList.contains('selected-correct');
+            });
+
+            if (allCorrectSelected) {
+                totalScore++;
+                updateScore();
+                showToast('🎉 Semua kunci jawaban ditemukan!', 'correct');
+            }
+
+            // Show key after at least one click
+            showKey(qid);
+        }
+
+        // === PGK Kategori (Benar/Salah or Tepat/Tidak Tepat) ===
+        function selectKategori(qid, rowIndex, selectedValue) {
+            const card = document.getElementById(qid);
+            let keys = [];
+            try {
+                keys = JSON.parse(card.dataset.keys);
+            } catch (e) {
+                keys = card.dataset.keys.split(',').map(s => s.trim());
+            }
+
+            const rows = card.querySelectorAll('.kategori-row');
+            const targetRow = rows[rowIndex];
+            const buttons = targetRow.querySelectorAll('.kategori-btn');
+
+            // Check if already answered this row
+            if (targetRow.dataset.answered === 'true') return;
+
+            const correctValue = keys[rowIndex];
+            const isCorrect = selectedValue === correctValue;
+
+            buttons.forEach(btn => {
+                btn.classList.add('disabled');
+                if (btn.dataset.value === correctValue) {
+                    btn.classList.add('selected-correct');
+                }
+                if (btn.dataset.value === selectedValue && !isCorrect) {
+                    btn.classList.add('selected-wrong');
+                }
+            });
+
+            if (isCorrect) {
+                targetRow.classList.add('correct-row');
+                showToast('✅ Benar! Pernyataan ini tepat.', 'correct');
+            } else {
+                targetRow.classList.add('wrong-row');
+                showToast('❌ Salah! Kunci: ' + correctValue, 'wrong');
+            }
+
+            targetRow.dataset.answered = 'true';
+
+            markAnswered(qid);
+
+            // Check if all rows answered correctly
+            const allCorrect = Array.from(rows).every((row, idx) => {
+                return row.dataset.answered === 'true' && keys[idx] === getSelectedValue(row);
+            });
+
+            if (allCorrect) {
+                totalScore++;
+                updateScore();
+                showToast('🎉 Semua pernyataan terjawab dengan benar!', 'correct');
+            }
+
+            showKey(qid);
+        }
+
+        function getSelectedValue(row) {
+            const selectedBtn = row.querySelector('.kategori-btn.selected-correct');
+            return selectedBtn ? selectedBtn.dataset.value : null;
+        }
+
+        // Initialize all answer keys hidden
+        document.addEventListener('DOMContentLoaded', function() {
+            const keys = document.querySelectorAll('.answer-key');
+            keys.forEach(k => k.classList.remove('visible'));
+        });
+    </script>
+</body>
+</html>
