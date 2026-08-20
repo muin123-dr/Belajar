@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemahaman Inferensial TKA Bahasa Inggris SMA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --info: #4299e1;
+            --dark: #1a202c;
+            --gray: #718096;
+            --light: #f7fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3em;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .hero .formula-box {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 500px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero .formula-box h3 {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .hero .formula-box p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1em;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 30px;
+            height: 30px;
+            border-bottom: 3px solid white;
+            border-right: 3px solid white;
+            transform: rotate(45deg);
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-15px); }
+            60% { transform: translateX(-50%) translateY(-7px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navigation */
+        .nav-container {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-scroll {
+            display: flex;
+            overflow-x: auto;
+            padding: 15px 20px;
+            gap: 10px;
+            scrollbar-width: thin;
+        }
+
+        .nav-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-scroll::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            background: transparent;
+            color: var(--primary);
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 60px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.6em;
+            color: var(--dark);
+        }
+
+        .section-header .section-number {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .card h4 {
+            color: var(--secondary);
+            margin: 15px 0 10px;
+            font-size: 1.05em;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid;
+        }
+
+        .info-box.tip {
+            background: #f0fff4;
+            border-color: var(--success);
+        }
+
+        .info-box.warning {
+            background: #fffaf0;
+            border-color: var(--warning);
+        }
+
+        .info-box.danger {
+            background: #fff5f5;
+            border-color: var(--danger);
+        }
+
+        .info-box.info {
+            background: #ebf8ff;
+            border-color: var(--info);
+        }
+
+        .info-box.formula {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border-color: var(--primary);
+        }
+
+        .info-box .box-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box.tip .box-title { color: var(--success); }
+        .info-box.warning .box-title { color: var(--warning); }
+        .info-box.danger .box-title { color: var(--danger); }
+        .info-box.info .box-title { color: var(--info); }
+        .info-box.formula .box-title { color: var(--primary); }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #f6f8fc, #eef2ff);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .example-box .example-label {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .example-box .text-passage {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-style: italic;
+            margin: 10px 0;
+            border-left: 3px solid var(--accent);
+            color: #555;
+        }
+
+        .example-box .answer {
+            background: #f0fff4;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #c6f6d5;
+        }
+
+        .example-box .answer strong {
+            color: var(--success);
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tr:hover {
+            background: #eef2ff;
+        }
+
+        /* Comparison Box */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .comparison-item {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .comparison-item.left {
+            background: linear-gradient(135deg, #ebf8ff, #bee3f8);
+            border: 2px solid #90cdf4;
+        }
+
+        .comparison-item.right {
+            background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+            border: 2px solid #9ae6b4;
+        }
+
+        .comparison-item h4 {
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .comparison-item.left h4 { color: #2b6cb0; }
+        .comparison-item.right h4 { color: #276749; }
+
+        /* Steps */
+        .steps {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps li {
+            counter-increment: step-counter;
+            padding: 15px 15px 15px 60px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .steps li:hover {
+            transform: translateX(5px);
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .tag.blue { background: #ebf8ff; color: #2b6cb0; }
+        .tag.green { background: #f0fff4; color: #276749; }
+        .tag.orange { background: #fffaf0; color: #c05621; }
+        .tag.red { background: #fff5f5; color: #c53030; }
+        .tag.purple { background: #faf5ff; color: #6b46c1; }
+
+        /* Highlight */
+        .highlight {
+            background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-blue {
+            background: linear-gradient(120deg, #bfdbfe 0%, #93c5fd 100%);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .highlight-green {
+            background: linear-gradient(120deg, #bbf7d0 0%, #86efac 100%);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* Flow Chart */
+        .flow-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin: 20px 0;
+        }
+
+        .flow-item {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 200px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .flow-arrow {
+            font-size: 1.5em;
+            color: var(--primary);
+        }
+
+        /* Do & Don't */
+        .do-dont {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .do-box, .dont-box {
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .do-box {
+            background: #f0fff4;
+            border: 2px solid #9ae6b4;
+        }
+
+        .dont-box {
+            background: #fff5f5;
+            border: 2px solid #feb2b2;
+        }
+
+        .do-box h4 {
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .dont-box h4 {
+            color: var(--danger);
+            margin-bottom: 10px;
+        }
+
+        /* Vocabulary Grid */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .vocab-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .vocab-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .vocab-item .english {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 0.95em;
+        }
+
+        .vocab-item .indonesian {
+            color: var(--gray);
+            font-size: 0.85em;
+            margin-top: 4px;
+        }
+
+        /* Cheat Sheet */
+        .cheat-sheet {
+            background: linear-gradient(135deg, #1a202c, #2d3748);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .cheat-sheet h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4em;
+        }
+
+        .cheat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .cheat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .cheat-item .cheat-type {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .cheat-item .cheat-desc {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85em;
+        }
+
+        /* Collapsible */
+        .collapsible {
+            margin: 15px 0;
+        }
+
+        .collapsible-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .collapsible-header:hover {
+            opacity: 0.9;
+            transform: translateX(3px);
+        }
+
+        .collapsible-header .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+            background: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .collapsible-content.show {
+            max-height: 2000px;
+            padding: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--dark), #2d3748);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .footer h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .hero .subtitle {
+                font-size: 1em;
+            }
+
+            .comparison, .do-dont {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 1.3em;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .cheat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vocab-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .nav-btn {
+                font-size: 0.75em;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.6em;
+            }
+
+            .hero .formula-box {
+                padding: 20px;
+            }
+
+            .section-header {
+                flex-wrap: wrap;
+            }
+
+            .section-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+
+            .flow-item {
+                min-width: 150px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .hero {
+                min-height: auto;
+                padding: 40px;
+            }
+
+            .nav-container {
+                display: none;
+            }
+
+            .card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="top">
+        <div class="hero-content">
+            <h1>🔍 Pemahaman Inferensial</h1>
+            <p class="subtitle">Panduan Lengkap TKA Bahasa Inggris SMA — "Jalan Pintas" untuk Pemula</p>
+            <div class="formula-box">
+                <h3>🌟 Rumus Emas</h3>
+                <p><strong>INFERENCE = EVIDENCE + REASONING</strong></p>
+                <p style="margin-top: 10px; font-size: 0.95em;">Kesimpulan = Bukti dari teks + Penalaran yang logis</p>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="document.getElementById('content').scrollIntoView({behavior:'smooth'})">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <div class="nav-container" id="content">
+        <div class="nav-scroll">
+            <button class="nav-btn" onclick="scrollToSection('section1')">Pendahuluan</button>
+            <button class="nav-btn" onclick="scrollToSection('section2')">Tekstual vs Inferensial</button>
+            <button class="nav-btn" onclick="scrollToSection('section3')">Cara Berpikir</button>
+            <button class="nav-btn" onclick="scrollToSection('section4')">7 Subkompetensi</button>
+            <button class="nav-btn" onclick="scrollToSection('section5')">Sebab-Akibat</button>
+            <button class="nav-btn" onclick="scrollToSection('section6')">Karakter Tokoh</button>
+            <button class="nav-btn" onclick="scrollToSection('section7')">Prediksi</button>
+            <button class="nav-btn" onclick="scrollToSection('section8')">Membaca Kritis</button>
+            <button class="nav-btn" onclick="scrollToSection('section9')">Tone & Sikap</button>
+            <button class="nav-btn" onclick="scrollToSection('section10')">Target Pembaca</button>
+            <button class="nav-btn" onclick="scrollToSection('section11')">Moral Lesson</button>
+            <button class="nav-btn" onclick="scrollToSection('section12')">Strategi</button>
+            <button class="nav-btn" onclick="scrollToSection('section13')">Cheat Sheet</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Section 1: Pendahuluan -->
+        <div class="section" id="section1">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">🌟</div>
+                <div>
+                    <span class="section-number">PENDAHULUAN</span>
+                    <h2>Apa itu Pemahaman Inferensial?</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <p>Pada <span class="highlight-blue">Pemahaman Tekstual</span>, kamu mencari informasi yang <strong>tertulis langsung</strong> di dalam teks.</p>
+                <p style="margin-top: 10px;">Pada <span class="highlight-green">Pemahaman Inferensial</span>, kamu harus naik satu tingkat. Jawabannya <strong>tidak selalu ditulis persis</strong>. Kamu perlu membaca petunjuk, menghubungkan beberapa informasi, kemudian menarik kesimpulan yang paling masuk akal.</p>
+                
+                <div class="info-box formula" style="margin-top: 20px;">
+                    <div class="box-title">🕵️ Bayangkan kamu menjadi DETEKTIF TEKS</div>
+                    <p>Teks memberikan: <strong>PETUNJUK</strong></p>
+                    <p>Kamu melakukan: <strong>PENALARAN</strong></p>
+                    <p>Lalu menghasilkan: <strong>KESIMPULAN</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Tekstual vs Inferensial -->
+        <div class="section" id="section2">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #4299e1, #3182ce);">⚖️</div>
+                <div>
+                    <span class="section-number">BAGIAN 1</span>
+                    <h2>Pemahaman Tekstual vs Inferensial</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pemahaman Tekstual</th>
+                                <th>Pemahaman Inferensial</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jawaban tertulis langsung</td>
+                                <td>Jawaban tidak tertulis secara persis</td>
+                            </tr>
+                            <tr>
+                                <td>Mencari fakta</td>
+                                <td>Menarik kesimpulan</td>
+                            </tr>
+                            <tr>
+                                <td>Scanning sangat membantu</td>
+                                <td>Petunjuk + penalaran</td>
+                            </tr>
+                            <tr>
+                                <td>"When?" → cari waktu</td>
+                                <td>"What can be inferred?" → simpulkan</td>
+                            </tr>
+                            <tr>
+                                <td>Bukti biasanya satu kalimat</td>
+                                <td>Bukti dapat berasal dari beberapa bagian</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">
+                        "Dina put her bag down, sat on the sofa, and immediately closed her eyes."
+                    </div>
+                    <p>Apakah teks mengatakan: <em>"Dina was tired."</em>?</p>
+                    <p><strong>Tidak.</strong> Tetapi tindakan Dina menunjukkan bahwa:</p>
+                    <div class="answer">
+                        <strong>✅ Dina was probably tired.</strong>
+                        <p style="margin-top: 5px;">Inilah inferensi — bukan menebak, tapi berdasarkan bukti!</p>
+                    </div>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="box-title">⚠️ Ingat!</div>
+                    <p>Inferensi <strong>bukan menebak</strong>. Inferensi harus tetap memiliki <strong>bukti</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Cara Berpikir -->
+        <div class="section" id="section3">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #48bb78, #38a169);">🧠</div>
+                <div>
+                    <span class="section-number">BAGIAN 2</span>
+                    <h2>Cara Berpikir Saat Mengerjakan Soal</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Tiga Langkah Utama:</h3>
+                <ol class="steps">
+                    <li><strong>FIND THE CLUE</strong> — Cari petunjuk dalam teks</li>
+                    <li><strong>CONNECT THE CLUES</strong> — Hubungkan petunjuk-petunjuk tersebut</li>
+                    <li><strong>DRAW A CONCLUSION</strong> — Tarik kesimpulan yang logis</li>
+                </ol>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">
+                        "The sky became dark. Strong winds started blowing. People quickly closed their windows."
+                    </div>
+                    <p><strong>Petunjuk:</strong></p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>dark sky</li>
+                        <li>strong wind</li>
+                        <li>people closing windows</li>
+                    </ul>
+                    <div class="answer">
+                        <strong>✅ Kesimpulan:</strong> It will probably rain or a storm may come.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 7 Subkompetensi -->
+        <div class="section" id="section4">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #ed8936, #dd6b20);">📚</div>
+                <div>
+                    <span class="section-number">BAGIAN 3</span>
+                    <h2>7 Subkompetensi Pemahaman Inferensial</h2>
+                </div>
+            </div>
+
+            <!-- Sub 1: Supporting Detail -->
+            <div class="card">
+                <h3>1️⃣ Menyimpulkan Detail Pendukung</h3>
+                <p>Kamu diminta menentukan <strong>informasi tambahan</strong> yang paling tepat untuk mendukung pernyataan atau argumen dalam teks.</p>
+
+                <div class="info-box formula">
+                    <div class="box-title">🔑 Rumus</div>
+                    <p><strong>CLAIM → WHAT EVIDENCE WOULD SUPPORT IT?</strong></p>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"Reading books has many benefits for teenagers."</div>
+                    <p><strong>Pertanyaan:</strong> Which additional fact would best support the statement?</p>
+                    <div class="answer">
+                        <strong>✅ Jawaban: B</strong> — "Research shows that reading improves vocabulary and critical thinking."
+                        <p style="margin-top: 8px;"><strong>Mengapa?</strong> Karena B memberikan informasi yang secara langsung memperkuat klaim: reading → improves vocabulary and critical thinking.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub 2: Topik, Main Idea, Tujuan -->
+            <div class="card">
+                <h3>2️⃣ Menyimpulkan Topik, Ide Pokok, Tujuan, dan Pesan</h3>
+                <p>Kamu dapat diminta menemukan:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;">
+                    <span class="tag blue">topik</span>
+                    <span class="tag green">main idea</span>
+                    <span class="tag orange">tujuan penulisan</span>
+                    <span class="tag purple">target pembaca</span>
+                    <span class="tag red">pesan</span>
+                    <span class="tag blue">moral lesson</span>
+                </div>
+
+                <h4>A. Menentukan Topik</h4>
+                <p>Tanyakan: <em>"Teks ini secara keseluruhan membahas apa?"</em></p>
+                <div class="info-box tip">
+                    <div class="box-title">✅ Tips</div>
+                    <p>Pilih topik yang <strong>mencakup seluruh isi</strong>, bukan satu detail kecil.</p>
+                </div>
+
+                <h4>B. Menentukan Main Idea</h4>
+                <p>Gunakan: <strong>kalimat pertama + detail pendukung + kalimat akhir</strong></p>
+                <p>Lalu tanyakan: <em>"Apa gagasan yang menyatukan semuanya?"</em></p>
+
+                <h4>C. Menentukan Tujuan Penulis</h4>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Jenis Teks</th>
+                                <th>Tujuan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Descriptive</td>
+                                <td>to describe</td>
+                            </tr>
+                            <tr>
+                                <td>Procedure</td>
+                                <td>to explain how to do something</td>
+                            </tr>
+                            <tr>
+                                <td>Analytical Exposition</td>
+                                <td>to persuade / convince</td>
+                            </tr>
+                            <tr>
+                                <td>Narrative</td>
+                                <td>to entertain / teach a lesson</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sub 3: Urutan Kejadian -->
+            <div class="card">
+                <h3>3️⃣ Menyimpulkan Urutan Kejadian</h3>
+                <p>Soal dapat bertanya:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;">
+                    <span class="tag blue">What happened before…?</span>
+                    <span class="tag green">What happened after…?</span>
+                    <span class="tag orange">What will probably happen next?</span>
+                </div>
+
+                <h4>Kata Kunci Urutan:</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;">
+                    <span class="tag purple">first</span>
+                    <span class="tag purple">next</span>
+                    <span class="tag purple">then</span>
+                    <span class="tag purple">after that</span>
+                    <span class="tag purple">before</span>
+                    <span class="tag purple">later</span>
+                    <span class="tag purple">finally</span>
+                    <span class="tag purple">afterwards</span>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"After finishing her homework, Rina watched TV. Then she went to bed."</div>
+                    <p><strong>Pertanyaan:</strong> What did Rina do before watching TV?</p>
+                    <div class="answer">
+                        <strong>✅ Jawaban:</strong> She finished her homework.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub 4: Perbandingan -->
+            <div class="card">
+                <h3>4️⃣ Menyimpulkan Perbandingan</h3>
+                <p>Kamu harus menemukan <strong>similarity</strong> (persamaan) atau <strong>difference</strong> (perbedaan).</p>
+
+                <h4>Kata Pembanding Penting:</h4>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kata</th>
+                                <th>Fungsi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>both, similar to, like</td><td>Persamaan</td></tr>
+                            <tr><td>different from, while, whereas</td><td>Perbedaan</td></tr>
+                            <tr><td>but, however</td><td>Pertentangan</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"Rina likes tea, while Dodi prefers coffee."</div>
+                    <div class="answer">
+                        <strong>✅ Kesimpulan:</strong> Rina and Dodi have different drink preferences.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub 5: Sebab-Akibat -->
+            <div class="card" id="section5">
+                <h3>5️⃣ Menyimpulkan Hubungan Sebab-Akibat</h3>
+                
+                <div class="info-box formula">
+                    <div class="box-title">🔑 Rumus</div>
+                    <p><strong>CAUSE → EFFECT</strong></p>
+                </div>
+
+                <h4>Kata Hubung Sebab-Akibat:</h4>
+                <div class="comparison">
+                    <div class="comparison-item left">
+                        <h4>🔵 SEBAB</h4>
+                        <p>because, since, due to, because of</p>
+                    </div>
+                    <div class="comparison-item right">
+                        <h4>🟢 AKIBAT</h4>
+                        <p>therefore, so, as a result, consequently</p>
+                    </div>
+                </div>
+
+                <div class="info-box tip">
+                    <div class="box-title">🔥 Jurus Cepat</div>
+                    <p>Jika soal bertanya: <strong>"Why…?"</strong> → Cari penyebab.</p>
+                    <p>Jika soal bertanya: <strong>"What happened because of…?"</strong> → Cari akibat.</p>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"Many students use phones late at night. They feel tired at school."</div>
+                    <div class="answer">
+                        <strong>✅ Kesimpulan:</strong> Using phones late at night may cause students to feel tired at school.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub 6: Karakter Tokoh -->
+            <div class="card" id="section6">
+                <h3>6️⃣ Menyimpulkan Karakter Tokoh</h3>
+                <p>Karakter tokoh sering <strong>tidak ditulis langsung</strong>. Kamu harus melihat:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;">
+                    <span class="tag blue">tindakan</span>
+                    <span class="tag green">dialog</span>
+                    <span class="tag orange">pikiran</span>
+                    <span class="tag purple">reaksi</span>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="box-title">⚠️ Prinsip Penting</div>
+                    <p><strong>"Actions speak louder than words."</strong></p>
+                    <p>Jangan hanya melihat apa yang diucapkan tokoh. Lihat <strong>tindakannya</strong>!</p>
+                </div>
+
+                <h4>Kosakata Karakter:</h4>
+                <div class="vocab-grid">
+                    <div class="vocab-item"><div class="english">brave</div><div class="indonesian">berani</div></div>
+                    <div class="vocab-item"><div class="english">kind</div><div class="indonesian">baik</div></div>
+                    <div class="vocab-item"><div class="english">generous</div><div class="indonesian">dermawan</div></div>
+                    <div class="vocab-item"><div class="english">honest</div><div class="indonesian">jujur</div></div>
+                    <div class="vocab-item"><div class="english">hardworking</div><div class="indonesian">rajin</div></div>
+                    <div class="vocab-item"><div class="english">patient</div><div class="indonesian">sabar</div></div>
+                    <div class="vocab-item"><div class="english">helpful</div><div class="indonesian">suka menolong</div></div>
+                    <div class="vocab-item"><div class="english">caring</div><div class="indonesian">peduli</div></div>
+                    <div class="vocab-item"><div class="english">reliable</div><div class="indonesian">dapat dipercaya</div></div>
+                    <div class="vocab-item"><div class="english">selfish</div><div class="indonesian">egois</div></div>
+                    <div class="vocab-item"><div class="english">lazy</div><div class="indonesian">malas</div></div>
+                    <div class="vocab-item"><div class="english">dishonest</div><div class="indonesian">tidak jujur</div></div>
+                    <div class="vocab-item"><div class="english">arrogant</div><div class="indonesian">sombong</div></div>
+                    <div class="vocab-item"><div class="english">jealous</div><div class="indonesian">iri</div></div>
+                    <div class="vocab-item"><div class="english">greedy</div><div class="indonesian">serakah</div></div>
+                    <div class="vocab-item"><div class="english">cowardly</div><div class="indonesian">pengecut</div></div>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH 1</span>
+                    <div class="text-passage">"Although it was raining heavily, Pak Joko rode his bicycle to deliver medicine to his patient."</div>
+                    <div class="answer">
+                        <strong>✅ Sifat:</strong> dedicated and caring
+                        <p><strong>Mengapa?</strong> Karena ia tetap pergi meskipun hujan demi pasien.</p>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH 2</span>
+                    <div class="text-passage">"Andi gave his lunch to a hungry child."</div>
+                    <div class="answer">
+                        <strong>✅ Sifat:</strong> generous / kind
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub 7: Prediksi -->
+            <div class="card" id="section7">
+                <h3>7️⃣ Memprediksi Hasil Cerita</h3>
+                <p>Prediction berarti memperkirakan <strong>apa yang kemungkinan terjadi selanjutnya</strong>, bukan apa yang pasti terjadi.</p>
+                
+                <div class="info-box info">
+                    <div class="box-title">📌 Kata Kunci Prediksi</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;">
+                        <span class="tag blue">probably</span>
+                        <span class="tag blue">likely</span>
+                        <span class="tag blue">most likely</span>
+                        <span class="tag blue">may</span>
+                        <span class="tag blue">might</span>
+                        <span class="tag blue">will probably</span>
+                    </div>
+                </div>
+
+                <div class="info-box formula">
+                    <div class="box-title">🔑 Rumus</div>
+                    <p><strong>PREDICTION = CURRENT CLUES + LOGICAL NEXT STEP</strong></p>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"The final exam is next week. Rina has not studied yet. She looks very worried."</div>
+                    <p><strong>Petunjuk:</strong></p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>exam next week</li>
+                        <li>has not studied</li>
+                        <li>worried</li>
+                    </ul>
+                    <div class="answer">
+                        <strong>✅ Jawaban:</strong> She will probably start studying.
+                    </div>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="box-title">⚠️ Jangan Membuat Prediksi Terlalu Jauh!</div>
+                    <p><strong>Masuk akal:</strong> The child forgot his umbrella. Dark clouds appeared. → It may rain. ✅</p>
+                    <p><strong>Tidak masuk akal:</strong> → The child will become a professional athlete. ❌</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: Membaca Kritis -->
+        <div class="section" id="section8">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #f56565, #c53030);">🔍</div>
+                <div>
+                    <span class="section-number">BAGIAN 8-10</span>
+                    <h2>Membaca Kritis: Bukti vs Asumsi</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Bukti vs Asumsi</h3>
+                <div class="comparison">
+                    <div class="comparison-item left">
+                        <h4>📘 BUKTI</h4>
+                        <p>Informasi yang <strong>berasal dari teks</strong></p>
+                    </div>
+                    <div class="comparison-item right">
+                        <h4>📙 ASUMSI</h4>
+                        <p>Informasi yang <strong>kita tambahkan sendiri</strong></p>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"Rina arrived at school at 7 a.m."</div>
+                    <div class="do-dont">
+                        <div class="do-box">
+                            <h4>✅ Boleh Disimpulkan</h4>
+                            <p>Rina arrived at school <strong>in the morning</strong>.</p>
+                        </div>
+                        <div class="dont-box">
+                            <h4>❌ Tidak Boleh</h4>
+                            <p>Rina <strong>lives near the school</strong>. (Tidak ada bukti!)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box formula">
+                    <div class="box-title">🎯 Prinsip</div>
+                    <p><strong>Inference must stay close to the evidence.</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Level Kekuatan Inferensi</h3>
+                <div class="comparison">
+                    <div class="comparison-item left">
+                        <h4>💪 STRONG INFERENCE</h4>
+                        <p>Buktinya sangat jelas</p>
+                        <p style="font-size: 0.9em; margin-top: 8px;"><em>"He was carrying an umbrella and wearing a raincoat."</em></p>
+                        <p style="font-size: 0.9em;">→ It was probably raining.</p>
+                    </div>
+                    <div class="comparison-item right">
+                        <h4>🤔 WEAK INFERENCE</h4>
+                        <p>Petunjuknya sedikit</p>
+                        <p style="font-size: 0.9em; margin-top: 8px;"><em>"He wore a jacket."</em></p>
+                        <p style="font-size: 0.9em;">→ Belum tentu freezing!</p>
+                    </div>
+                </div>
+                <div class="info-box tip">
+                    <div class="box-title">💡 Tips</div>
+                    <p>Pilih kesimpulan yang <strong>paling kuat didukung bukti</strong>, bukan yang paling kreatif.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 9: Tone & Sikap -->
+        <div class="section" id="section9">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #9f7aea, #6b46c1);">🎭</div>
+                <div>
+                    <span class="section-number">BAGIAN 12-13</span>
+                    <h2>Nada Penulis (Tone) & Sikap Penulis</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Nada Penulis / Tone</h3>
+                <p>Tone dapat berupa:</p>
+                <div class="comparison" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="comparison-item" style="background: linear-gradient(135deg, #f0fff4, #c6f6d5); border: 2px solid #9ae6b4;">
+                        <h4 style="color: #276749;">😊 POSITIVE</h4>
+                        <p style="font-size: 0.85em;">excellent, useful, impressive, beneficial</p>
+                    </div>
+                    <div class="comparison-item" style="background: linear-gradient(135deg, #fff5f5, #fed7d7); border: 2px solid #feb2b2;">
+                        <h4 style="color: #c53030;">😠 NEGATIVE</h4>
+                        <p style="font-size: 0.85em;">harmful, disappointing, inefficient, dangerous</p>
+                    </div>
+                    <div class="comparison-item" style="background: linear-gradient(135deg, #ebf8ff, #bee3f8); border: 2px solid #90cdf4;">
+                        <h4 style="color: #2b6cb0;">😐 NEUTRAL</h4>
+                        <p style="font-size: 0.85em;">reports, states, explains, describes</p>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"The new library is comfortable, modern, and very useful for students."</div>
+                    <div class="answer">
+                        <strong>✅ Tone: Positive</strong>
+                        <p>Petunjuk: comfortable, modern, useful</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Menentukan Sikap Penulis</h3>
+                <p>Cari:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;">
+                    <span class="tag blue">kata evaluatif</span>
+                    <span class="tag green">adjective</span>
+                    <span class="tag orange">modal</span>
+                    <span class="tag purple">kesimpulan</span>
+                    <span class="tag red">pengulangan gagasan</span>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"Students should limit unnecessary screen time because it may affect sleep."</div>
+                    <div class="answer">
+                        <strong>✅ Sikap penulis:</strong> The writer believes excessive screen time should be limited.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 10: Target Pembaca -->
+        <div class="section" id="section10">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #38b2ac, #2c7a7b);">👥</div>
+                <div>
+                    <span class="section-number">BAGIAN 14-15</span>
+                    <h2>Target Pembaca & Tujuan Tersirat</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Menentukan Target Pembaca</h3>
+                <p>Pertanyaan: <em>"Who is the text most likely written for?"</em></p>
+                <p>Gunakan: <strong>topik + kosakata + konteks</strong></p>
+
+                <div class="info-box tip">
+                    <div class="box-title">💡 Prinsip</div>
+                    <p>Jangan mencari nama pembaca. Cari: <strong>siapa yang paling membutuhkan informasi tersebut.</strong></p>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <p>Jika teks membahas: <span class="tag blue">school assignments</span> <span class="tag blue">exam preparation</span> <span class="tag blue">classroom study tips</span></p>
+                    <div class="answer">
+                        <strong>✅ Target pembaca:</strong> Students
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Menentukan Tujuan Tersirat</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tujuan</th>
+                                <th>Ciri-ciri</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Informing</strong></td><td>Banyak fakta</td></tr>
+                            <tr><td><strong>Persuading</strong></td><td>Banyak pendapat + alasan</td></tr>
+                            <tr><td><strong>Warning</strong></td><td>Menekankan bahaya</td></tr>
+                            <tr><td><strong>Advising</strong></td><td>Memberikan saran</td></tr>
+                            <tr><td><strong>Entertaining</strong></td><td>Cerita + konflik</td></tr>
+                            <tr><td><strong>Recommending</strong></td><td>Mendorong memilih/melakukan sesuatu</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 11: Moral Lesson -->
+        <div class="section" id="section11">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #d69e2e, #b7791f);">💎</div>
+                <div>
+                    <span class="section-number">BAGIAN 16-17</span>
+                    <h2>Pesan Moral (Moral Lesson)</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Cara Menemukan Moral Lesson</h3>
+                
+                <div class="flow-chart">
+                    <div class="flow-item">ACTION (Tindakan Tokoh)</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item">CONSEQUENCE (Akibat)</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item">LESSON (Pelajaran)</div>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="box-title">⚠️ Kesalahan Umum</div>
+                    <p>Jangan berasumsi <strong>"Jawabannya pasti positif."</strong></p>
+                    <p>Cari pelajaran yang <strong>benar-benar didukung</strong> oleh tindakan dan akibat dalam cerita.</p>
+                </div>
+
+                <div class="example-box">
+                    <span class="example-label">CONTOH</span>
+                    <div class="text-passage">"A boy often lied to his friends. Eventually, they stopped believing him even when he told the truth."</div>
+                    <div class="answer">
+                        <p><strong>Action:</strong> lying</p>
+                        <p><strong>Consequence:</strong> loss of trust</p>
+                        <p><strong>✅ Moral:</strong> Honesty is important because repeated lies can destroy trust.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 12: Strategi -->
+        <div class="section" id="section12">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #e53e3e, #c53030);">🎯</div>
+                <div>
+                    <span class="section-number">BAGIAN 22-44</span>
+                    <h2>Strategi & Teknik Mengerjakan</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Kata Soal Inferensial yang Wajib Dikenali</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kata dalam Soal</th>
+                                <th>Makna</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>infer</td><td>menyimpulkan</td></tr>
+                            <tr><td>imply</td><td>menyiratkan</td></tr>
+                            <tr><td>suggest</td><td>mengisyaratkan</td></tr>
+                            <tr><td>conclude</td><td>menyimpulkan</td></tr>
+                            <tr><td>probably</td><td>kemungkinan besar</td></tr>
+                            <tr><td>most likely</td><td>paling mungkin</td></tr>
+                            <tr><td>can be inferred</td><td>dapat disimpulkan</td></tr>
+                            <tr><td>what can we learn</td><td>pelajaran</td></tr>
+                            <tr><td>what is implied</td><td>makna tersirat</td></tr>
+                            <tr><td>what will probably happen</td><td>prediksi</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box info">
+                    <div class="box-title">🔥 Sinyal Penting</div>
+                    <p><strong>infer = baca antara baris</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Teknik Eliminasi Inferensial</h3>
+                <p>Coret pilihan yang:</p>
+                <ol class="steps">
+                    <li><strong>Bertentangan</strong> — Teks mengatakan A, pilihan mengatakan B</li>
+                    <li><strong>Tidak relevan</strong> — Tidak berhubungan dengan pertanyaan</li>
+                    <li><strong>Terlalu ekstrem</strong> — Bukti tidak cukup untuk mendukung klaim mutlak</li>
+                    <li><strong>Terlalu jauh</strong> — Membutuhkan informasi yang tidak diberikan</li>
+                    <li><strong>Hanya menyalin detail</strong> — Tidak menjawab inti inferensi</li>
+                </ol>
+
+                <div class="info-box warning">
+                    <div class="box-title">⚠️ Waspadai Pilihan Ekstrem</div>
+                    <p>Hati-hati dengan kata: <span class="tag red">always</span> <span class="tag red">never</span> <span class="tag red">all</span> <span class="tag red">none</span> <span class="tag red">completely</span> <span class="tag red">only</span> <span class="tag red">everyone</span></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>"Jalan Pintas" yang Aman</h3>
+                <ol class="steps">
+                    <li><strong>Baca pertanyaannya dahulu</strong> — Cari: infer, imply, probably, conclude</li>
+                    <li><strong>Cari bukti utama</strong> — Fokus pada: tindakan, sebab-akibat, kata pembanding, emosi, kalimat terakhir</li>
+                    <li><strong>Hubungkan dua atau lebih petunjuk</strong> — Jangan hanya mengambil satu kata</li>
+                    <li><strong>Eliminasi pilihan ekstrem</strong> — always, never, all, none</li>
+                    <li><strong>Tanyakan: "Apakah saya bisa menunjukkan buktinya?"</strong> — Jika ya, inferensimu kuat</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>Kesalahan Pemula yang Harus Dihindari</h3>
+                <div class="do-dont">
+                    <div class="dont-box">
+                        <h4>❌ Kesalahan</h4>
+                        <ul style="font-size: 0.9em; margin-left: 15px;">
+                            <li>Menebak tanpa bukti</li>
+                            <li>Memakai pengalaman pribadi</li>
+                            <li>Mengambil satu kata lalu menyimpulkan</li>
+                            <li>Memilih jawaban paling panjang</li>
+                            <li>Memilih jawaban paling "bagus"</li>
+                            <li>Menganggap jawaban harus sama persis</li>
+                            <li>Menganggap semua jawaban harus positif</li>
+                        </ul>
+                    </div>
+                    <div class="do-box">
+                        <h4>✅ Solusi</h4>
+                        <ul style="font-size: 0.9em; margin-left: 15px;">
+                            <li>Cari petunjuk</li>
+                            <li>Gunakan pengalaman umum sebagai alat penalaran</li>
+                            <li>Baca konteks sebelum dan sesudahnya</li>
+                            <li>Panjang bukan ukuran kebenaran</li>
+                            <li>Pilih yang paling didukung teks</li>
+                            <li>Perhatikan makna dan parafrase</li>
+                            <li>Ikuti isi cerita</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 13: Cheat Sheet -->
+        <div class="section" id="section13">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #1a202c, #4a5568);">📋</div>
+                <div>
+                    <span class="section-number">BAGIAN 54-55</span>
+                    <h2>Rumus Utama & Cheat Sheet</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Rumus Utama Pemahaman Inferensial</h3>
+                <div class="flow-chart">
+                    <div class="flow-item">📖 BACA</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item">🔍 CARI PETUNJUK</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item">🔗 HUBUNGKAN</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item">💡 TARIK KESIMPULAN</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item">✅ CEK BUKTI</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item">🎯 PILIH JAWABAN</div>
+                </div>
+            </div>
+
+            <div class="cheat-sheet">
+                <h3>📋 CHEAT SHEET INFERENSIAL</h3>
+                <div class="cheat-grid">
+                    <div class="cheat-item">
+                        <div class="cheat-type">Supporting Detail</div>
+                        <div class="cheat-desc">Bukti yang memperkuat klaim</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Main Idea</div>
+                        <div class="cheat-desc">Gagasan yang mencakup isi</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Purpose</div>
+                        <div class="cheat-desc">Alasan penulis menulis</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Target Reader</div>
+                        <div class="cheat-desc">Siapa yang paling membutuhkan teks</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Sequence</div>
+                        <div class="cheat-desc">Alur sebelum/sesudah</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Comparison</div>
+                        <div class="cheat-desc">Persamaan/perbedaan</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Cause-Effect</div>
+                        <div class="cheat-desc">Penyebab dan akibat</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Character</div>
+                        <div class="cheat-desc">Sifat dari tindakan/dialog</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Prediction</div>
+                        <div class="cheat-desc">Langkah logis berikutnya</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Moral</div>
+                        <div class="cheat-desc">Pelajaran dari tindakan + akibat</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Tone</div>
+                        <div class="cheat-desc">Sikap/nuansa penulis</div>
+                    </div>
+                    <div class="cheat-item">
+                        <div class="cheat-type">Inference</div>
+                        <div class="cheat-desc">Kesimpulan dari beberapa petunjuk</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Rumus Super Cepat</h3>
+                <div class="flow-chart">
+                    <div class="flow-item" style="background: linear-gradient(135deg, #48bb78, #38a169);">🔍 CLUE — Cari petunjuk</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item" style="background: linear-gradient(135deg, #4299e1, #3182ce);">🔗 CONNECT — Hubungkan petunjuk</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item" style="background: linear-gradient(135deg, #ed8936, #dd6b20);">💡 CONCLUDE — Tarik kesimpulan</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-item" style="background: linear-gradient(135deg, #e53e3e, #c53030);">✅ CHECK — Pastikan ada bukti</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Message -->
+        <div class="section">
+            <div class="card" style="background: linear-gradient(135deg, #667eea15, #764ba215); border: 2px solid var(--primary);">
+                <h3 style="text-align: center; color: var(--primary); font-size: 1.4em;">🌟 Pesan untuk Pemula</h3>
+                <p style="text-align: center; margin: 15px 0; font-size: 1.05em;">
+                    Saat melihat soal <em>"What can be inferred…?"</em>, jangan langsung berpikir <strong>"Waduh, jawabannya tidak ada!"</strong>
+                </p>
+                <p style="text-align: center; margin: 15px 0;">
+                    Justru jawabannya <strong>ADA</strong>, tetapi dalam bentuk <span class="highlight">PETUNJUK</span>.
+                </p>
+                <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 12px;">
+                    <p>Kamu tidak harus membaca seperti seorang <strong>profesor</strong>.</p>
+                    <p style="margin-top: 10px;">Kamu hanya perlu membaca seperti seorang <strong>🕵️ DETEKTIF</strong>.</p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p><strong>Cari petunjuk → Hubungkan → Periksa bukti → Simpulkan</strong></p>
+                </div>
+                <div class="info-box formula" style="margin-top: 20px; text-align: center;">
+                    <div class="box-title" style="justify-content: center;">🔥 INGAT</div>
+                    <p style="font-size: 1.1em;"><strong>INFERENCE IS NOT GUESSING.</strong></p>
+                    <p style="font-size: 1.1em;"><strong>INFERENCE IS EVIDENCE + REASONING.</strong></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <h3>📚 Pemahaman Inferensial TKA Bahasa Inggris SMA</h3>
+        <p>Semakin sering berlatih, semakin mudah kamu mengenali petunjuk kecil yang sebelumnya terasa tidak berarti. Baca di antara baris. Temukan petunjuknya. Hubungkan maknanya. Tarik kesimpulan dengan logis.</p>
+        <p style="margin-top: 20px; color: var(--accent);">🎯 CLUE → CONNECT → CONCLUDE → CHECK</p>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        // Scroll to section
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                const navHeight = document.querySelector('.nav-container').offsetHeight;
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: elementPosition - navHeight - 20,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Progress bar
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+
+            // Show/hide scroll to top button
+            const scrollBtn = document.getElementById('scrollTopBtn');
+            if (winScroll > 500) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+
+        // Collapsible sections
+        document.querySelectorAll('.collapsible-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('show');
+            });
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

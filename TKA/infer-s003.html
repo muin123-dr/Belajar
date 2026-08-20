@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Pemahaman Inferensial - TKA Bahasa Inggris SMA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1em;
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(245, 87, 108, 0.3);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        .score-board h2 {
+            color: white;
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .score-board .score {
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question-type {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #1976d2;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+
+        .passage {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .question-text {
+            font-size: 1.05em;
+            font-weight: 600;
+            margin: 15px 0;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option {
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8edff;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            animation: pulse-green 0.5s ease;
+        }
+
+        .option.wrong {
+            border-color: #f44336;
+            background: #ffebee;
+            animation: shake 0.5s ease;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .option.disabled.correct {
+            opacity: 1;
+        }
+
+        .option-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #555;
+            font-weight: bold;
+            margin-right: 12px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .option.correct .option-letter {
+            background: #4caf50;
+            color: white;
+        }
+
+        .option.wrong .option-letter {
+            background: #f44336;
+            color: white;
+        }
+
+        .notification {
+            display: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1em;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .notification.correct {
+            display: block;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+        }
+
+        .notification.wrong {
+            display: block;
+            background: linear-gradient(135deg, #f44336, #ef5350);
+            color: white;
+        }
+
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 18px;
+            background: #fff3e0;
+            border-radius: 12px;
+            border-left: 4px solid #ff9800;
+            line-height: 1.7;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .explanation h4 {
+            color: #e65100;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .explanation p {
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        .explanation .key-answer {
+            background: #4caf50;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .reset-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 30px auto;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.4em;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+
+            .option {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+
+            .score-board {
+                position: relative;
+                top: 0;
+            }
+
+            .passage {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.2em;
+            }
+
+            .header p {
+                font-size: 0.85em;
+            }
+
+            .question-text {
+                font-size: 0.95em;
+            }
+
+            .option {
+                padding: 10px 12px;
+                font-size: 0.85em;
+            }
+
+            .option-letter {
+                width: 26px;
+                height: 26px;
+                font-size: 0.8em;
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Quiz Pemahaman Inferensial</h1>
+            <p>TKA Bahasa Inggris SMA — 20 Soal Inferensial</p>
+        </div>
+
+        <div class="score-board">
+            <h2>📊 Skor Kamu</h2>
+            <div class="score"><span id="currentScore">0</span> / <span id="totalAnswered">0</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <button class="reset-btn" onclick="resetQuiz()">🔄 Ulangi Quiz</button>
+
+        <div class="footer">
+            <p>Quiz Pemahaman Inferensial TKA Bahasa Inggris SMA</p>
+            <p>Berdasarkan materi: INFERENCE = EVIDENCE + REASONING</p>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                id: 1,
+                type: "Character Inference",
+                passage: "Although it was raining heavily and the roads were flooded, Mr. Ahmad still rode his motorcycle to deliver food to the elderly couple in the next village. When he arrived, he smiled and said, 'I promised I would come, and I never break my promises.'",
+                question: "What can be inferred about Mr. Ahmad?",
+                options: [
+                    "He is afraid of breaking traffic rules.",
+                    "He is dedicated and trustworthy.",
+                    "He enjoys riding motorcycles in the rain.",
+                    "He wants to be praised by the elderly couple.",
+                    "He has no other way to travel."
+                ],
+                correct: 1,
+                explanation: "Mr. Ahmad tetap pergi meskipun hujan deras dan jalan banjir (dedicated), dan ia mengatakan tidak pernah mengingkari janji (trustworthy). Tindakan + dialog menunjukkan sifatnya. Actions speak louder than words."
+            },
+            {
+                id: 2,
+                type: "Cause-Effect",
+                passage: "Many teenagers in the city have started spending more than four hours a day on social media. Recently, doctors have reported an increase in cases of sleep disorders and anxiety among adolescents.",
+                question: "What can be inferred from the passage?",
+                options: [
+                    "Social media companies are causing diseases intentionally.",
+                    "All teenagers will develop sleep disorders.",
+                    "Excessive social media use may contribute to health problems in teenagers.",
+                    "Doctors are exaggerating the situation.",
+                    "Teenagers should stop using social media completely."
+                ],
+                correct: 2,
+                explanation: "Teks menghubungkan peningkatan penggunaan media sosial (>4 jam) dengan peningkatan gangguan tidur dan kecemasan. Ini menunjukkan hubungan sebab-akibat: excessive use → health problems. Bukan berarti semua remaja akan sakit, tapi ada kontribusi."
+            },
+            {
+                id: 3,
+                type: "Prediction",
+                passage: "The government announced that all public transportation fares would increase by 30% starting next month. Many commuters were seen discussing the news at bus stops, and some said they would look for alternative ways to get to work.",
+                question: "What will most likely happen next?",
+                options: [
+                    "The government will cancel the fare increase.",
+                    "Some commuters may start using bicycles or carpooling.",
+                    "All commuters will stop using public transportation.",
+                    "Bus companies will go bankrupt immediately.",
+                    "The price of fuel will decrease."
+                ],
+                correct: 1,
+                explanation: "Petunjuk: 'some said they would look for alternative ways.' Prediksi logis adalah beberapa komuter mungkin beralih ke sepeda atau carpooling. Prediksi harus berdasarkan petunjuk yang ada, bukan asumsi jauh."
+            },
+            {
+                id: 4,
+                type: "Main Idea",
+                passage: "Scientists have discovered that trees in urban areas can reduce air pollution by absorbing harmful gases. They also provide shade that lowers temperatures during hot seasons. Additionally, urban trees help reduce noise pollution and improve the mental well-being of city residents.",
+                question: "What is the main idea of the passage?",
+                options: [
+                    "Trees can only grow in urban areas.",
+                    "Air pollution is the biggest problem in cities.",
+                    "Urban trees provide multiple benefits for city environments and people.",
+                    "Scientists should plant more trees in rural areas.",
+                    "Noise pollution cannot be solved without trees."
+                ],
+                correct: 2,
+                explanation: "Paragraf membahas berbagai manfaat pohon kota: mengurangi polusi udara, memberikan keteduhan, mengurangi polusi suara, dan meningkatkan kesejahteraan mental. Main idea merangkum semua detail tersebut."
+            },
+            {
+                id: 5,
+                type: "Comparison",
+                passage: "While traditional classrooms require students to be physically present at specific times, online learning allows students to access materials at their own pace. However, traditional classrooms offer more opportunities for face-to-face interaction, which many educators believe is essential for developing social skills.",
+                question: "What can be inferred about traditional and online learning?",
+                options: [
+                    "Online learning is completely better than traditional learning.",
+                    "Traditional learning has no advantages at all.",
+                    "Both methods have their own strengths and weaknesses.",
+                    "Students should only use traditional classrooms.",
+                    "Online learning does not require any interaction."
+                ],
+                correct: 2,
+                explanation: "Kata 'while' dan 'however' menunjukkan perbandingan. Traditional: fisik, interaksi langsung. Online: fleksibel, self-paced. Keduanya punya kelebihan masing-masing. Neither is completely better."
+            },
+            {
+                id: 6,
+                type: "Supporting Detail",
+                passage: "Regular exercise has been proven to improve academic performance among high school students.",
+                question: "Which additional fact would best support the statement above?",
+                options: [
+                    "Many schools have sports facilities.",
+                    "Research shows that students who exercise regularly have better concentration and memory retention.",
+                    "Some students don't like sports.",
+                    "Exercise equipment can be expensive.",
+                    "Professional athletes earn a lot of money."
+                ],
+                correct: 1,
+                explanation: "Klaim: exercise → improves academic performance. Bukti pendukung harus menghubungkan exercise dengan academic performance secara langsung. Opsi B memberikan research evidence tentang concentration dan memory retention yang mendukung klaim."
+            },
+            {
+                id: 7,
+                type: "Author's Purpose",
+                passage: "Did you know that plastic bags take up to 1,000 years to decompose? Every year, millions of marine animals die because of plastic waste. If we don't change our habits now, our oceans will become dumping grounds. Start using reusable bags today — it's a small step that makes a huge difference!",
+                question: "What is the author's main purpose in writing this text?",
+                options: [
+                    "To describe the history of plastic bags.",
+                    "To entertain readers with interesting facts.",
+                    "To persuade readers to reduce plastic bag usage.",
+                    "To explain how plastic bags are manufactured.",
+                    "To report on marine animal species."
+                ],
+                correct: 2,
+                explanation: "Teks menggunakan bahasa persuasif: 'If we don't change...', 'Start using reusable bags today!', dan fakta-fakta yang mengejutkan untuk mendorong pembaca bertindak. Ini adalah ciri analytical exposition yang bertujuan to persuade."
+            },
+            {
+                id: 8,
+                type: "Sequence",
+                passage: "After the earthquake struck the coastal region, the tsunami warning system was activated. Within minutes, authorities ordered the evacuation of all residents living near the shoreline. Most families managed to reach higher ground before the first wave hit.",
+                question: "What happened AFTER the tsunami warning system was activated?",
+                options: [
+                    "The earthquake stopped immediately.",
+                    "Authorities ordered the evacuation of coastal residents.",
+                    "Residents ignored the warning completely.",
+                    "The first wave hit before anyone moved.",
+                    "The warning system malfunctioned."
+                ],
+                correct: 1,
+                explanation: "Urutan kejadian: earthquake → warning activated → evacuation ordered → families reached higher ground → wave hit. Setelah warning activated, yang terjadi adalah authorities ordered evacuation."
+            },
+            {
+                id: 9,
+                type: "Moral Lesson",
+                passage: "A merchant lost his wallet on the road. A poor farmer found it and returned it with all the money inside. The merchant, however, claimed that there had been gold coins in the wallet and accused the farmer of stealing them. The judge heard both sides and ruled that since the farmer's found wallet contained no gold, it could not be the merchant's lost wallet. The farmer kept the wallet, and the merchant lost everything.",
+                question: "What moral lesson can be learned from the story?",
+                options: [
+                    "Poor people are always honest.",
+                    "Greed and dishonesty can lead to losing everything.",
+                    "Judges always favor poor people.",
+                    "You should never lose your wallet.",
+                    "Farmers are smarter than merchants."
+                ],
+                correct: 1,
+                explanation: "ACTION: merchant berbohong tentang gold coins (greed/dishonesty). CONSEQUENCE: merchant kehilangan dompet sepenuhnya. LESSON: Greed and dishonesty can lead to losing everything. Rumus: Action → Consequence → Lesson."
+            },
+            {
+                id: 10,
+                type: "Tone",
+                passage: "The new recycling program implemented by the city has been remarkably successful. In just three months, waste sent to landfills has decreased by 40%, and community participation has exceeded all expectations. This initiative truly demonstrates what committed citizens can achieve.",
+                question: "What is the tone of the passage?",
+                options: [
+                    "Critical and disapproving",
+                    "Neutral and objective",
+                    "Positive and appreciative",
+                    "Sad and pessimistic",
+                    "Angry and frustrated"
+                ],
+                correct: 2,
+                explanation: "Kata-kata evaluatif positif: 'remarkably successful', 'decreased by 40%', 'exceeded all expectations', 'truly demonstrates'. Ini menunjukkan tone positive and appreciative terhadap program daur ulang."
+            },
+            {
+                id: 11,
+                type: "Target Reader",
+                passage: "To prepare for your final examination, make sure to review all chapters covered during the semester. Practice solving past exam questions under timed conditions. Get at least eight hours of sleep the night before, and eat a nutritious breakfast on exam day. Remember: preparation is the key to success!",
+                question: "Who is the text most likely written for?",
+                options: [
+                    "University professors",
+                    "School students",
+                    "Parents of toddlers",
+                    "Office workers",
+                    "Retired teachers"
+                ],
+                correct: 1,
+                explanation: "Teks membahas 'final examination', 'review chapters', 'past exam questions' — semua ini berkaitan dengan konteks akademik siswa. Target pembaca adalah mereka yang paling membutuhkan informasi: school students."
+            },
+            {
+                id: 12,
+                type: "Character Inference",
+                passage: "Every morning before school, Sarah would wake up at 5 a.m. to help her mother prepare breakfast for her younger siblings. After school, she would tutor them in their lessons. Despite having little time for herself, she never complained and always maintained good grades.",
+                question: "What character trait does Sarah demonstrate?",
+                options: [
+                    "She is lazy and irresponsible.",
+                    "She is selfish and careless.",
+                    "She is hardworking and caring.",
+                    "She is arrogant and proud.",
+                    "She is dishonest and manipulative."
+                ],
+                correct: 2,
+                explanation: "Tindakan Sarah: bangun jam 5 pagi (hardworking), membantu adik (caring), mengajar adik (responsible), tidak pernah mengeluh (patient), tetap berprestasi (hardworking). Actions speak louder than words — perilaku menunjukkan sifat."
+            },
+            {
+                id: 13,
+                type: "Cause-Effect",
+                passage: "The factory was built near the river without proper waste treatment facilities. Over the years, the water in the river turned dark and emitted a foul smell. Fish populations declined dramatically, and local fishermen could no longer earn a living from the river.",
+                question: "What caused the decline in fish populations?",
+                options: [
+                    "The fishermen caught too many fish.",
+                    "The weather changed suddenly.",
+                    "The factory discharged untreated waste into the river.",
+                    "A natural disaster destroyed the river ecosystem.",
+                    "The government banned fishing in the river."
+                ],
+                correct: 2,
+                explanation: "Rantai sebab-akibat: factory without waste treatment → water turned dark and smelly → fish populations declined → fishermen lost livelihood. Penyebab utama: factory discharged untreated waste."
+            },
+            {
+                id: 14,
+                type: "Prediction",
+                passage: "Jason had been training for the marathon for six months. He ran at least 10 kilometers every day and followed a strict diet. On the morning of the race, he felt confident and well-prepared. However, halfway through the race, he suddenly felt a sharp pain in his right knee.",
+                question: "What will most likely happen to Jason?",
+                options: [
+                    "He will win the marathon easily.",
+                    "He will probably have to slow down or stop running.",
+                    "He will run faster despite the pain.",
+                    "The race will be cancelled immediately.",
+                    "His knee pain will disappear within seconds."
+                ],
+                correct: 1,
+                explanation: "Petunjuk: sharp pain in knee + halfway through race. Prediksi logis: kemungkinan harus melambat atau berhenti. Gunakan 'probably' karena ini prediksi, bukan kepastian. Good inference stays close to the text."
+            },
+            {
+                id: 15,
+                type: "Supporting Detail",
+                passage: "Learning a second language at a young age provides significant cognitive benefits for children.",
+                question: "Which fact would best support this statement?",
+                options: [
+                    "Many schools offer language classes.",
+                    "Studies show that bilingual children perform better in problem-solving tasks and have enhanced memory compared to monolingual children.",
+                    "Some children find learning languages difficult.",
+                    "Language teachers earn good salaries.",
+                    "Dictionaries are available in many languages."
+                ],
+                correct: 1,
+                explanation: "Klaim: learning second language → cognitive benefits. Bukti pendukung harus menghubungkan language learning dengan cognitive benefits secara konkret. Opsi B memberikan research evidence tentang problem-solving dan memory."
+            },
+            {
+                id: 16,
+                type: "Inference from Dialog",
+                passage: "\"I don't think I can finish this project by Friday,\" Tom said, looking at his computer screen with a worried expression. \"The data analysis alone will take three more days, and I haven't even started writing the report.\" His colleague replied, \"Let me help you. We can divide the tasks and get it done together.\"",
+                question: "What can be inferred about Tom's colleague?",
+                options: [
+                    "The colleague is jealous of Tom's position.",
+                    "The colleague is supportive and helpful.",
+                    "The colleague wants Tom to fail.",
+                    "The colleague is lazy and avoids work.",
+                    "The colleague is angry at Tom."
+                ],
+                correct: 1,
+                explanation: "Dialog: 'Let me help you. We can divide the tasks.' Tindakan menawarkan bantuan menunjukkan supportive and helpful. Inferensi dari dialog — apa yang dikatakan menunjukkan karakter."
+            },
+            {
+                id: 17,
+                type: "Comparison",
+                passage: "Country A invests heavily in renewable energy sources, with 60% of its electricity coming from solar and wind power. Country B, on the other hand, still relies primarily on coal and oil, with only 10% of its energy from renewable sources. As a result, Country A's air quality index is significantly better than Country B's.",
+                question: "What can be inferred from the comparison?",
+                options: [
+                    "Country B has a larger population than Country A.",
+                    "Renewable energy investment is associated with better air quality.",
+                    "Country A is richer than Country B.",
+                    "Coal is the best energy source available.",
+                    "Country B does not care about its citizens."
+                ],
+                correct: 1,
+                explanation: "Perbandingan: Country A (60% renewable → good air quality) vs Country B (10% renewable → poor air quality). Inferensi: renewable energy investment → better air quality. Jangan membuat asumsi yang tidak didukung teks."
+            },
+            {
+                id: 18,
+                type: "Sequence",
+                passage: "Maria noticed that her houseplants were wilting despite regular watering. She researched the problem and discovered that the pots had no drainage holes, causing water to accumulate and rot the roots. She repotted the plants with proper drainage, and within two weeks, they began to recover.",
+                question: "What did Maria do AFTER discovering the problem with the pots?",
+                options: [
+                    "She stopped watering the plants completely.",
+                    "She bought new artificial plants.",
+                    "She repotted the plants with proper drainage.",
+                    "She moved the plants outside permanently.",
+                    "She ignored the problem."
+                ],
+                correct: 2,
+                explanation: "Urutan: noticed wilting → researched → discovered no drainage holes → repotted with proper drainage → plants recovered. Setelah menemukan masalah, Maria repotted the plants."
+            },
+            {
+                id: 19,
+                type: "Author's Attitude",
+                passage: "The school board's decision to cut arts funding is deeply disappointing. Music, theater, and visual arts programs have been shown to improve creativity, boost academic performance, and develop emotional intelligence. By eliminating these programs, we are depriving students of essential learning experiences that cannot be replaced by additional math or science classes.",
+                question: "What is the writer's attitude toward the school board's decision?",
+                options: [
+                    "The writer fully supports the decision.",
+                    "The writer is neutral about the decision.",
+                    "The writer strongly disagrees with the decision.",
+                    "The writer is confused about the decision.",
+                    "The writer thinks the decision is perfectly reasonable."
+                ],
+                correct: 2,
+                explanation: "Kata evaluatif: 'deeply disappointing', 'depriving students of essential learning experiences'. Penulis menggunakan bahasa yang menunjukkan ketidaksetujuan kuat. Writer's attitude dapat dikenali dari kata evaluatif dan adjective yang digunakan."
+            },
+            {
+                id: 20,
+                type: "Complex Inference",
+                passage: "In a small town, the local bookstore was struggling to survive as more people bought books online. The owner decided to transform the space into a community hub — adding a coffee corner, hosting weekly book clubs, and organizing author meet-and-greet events. Within six months, foot traffic increased by 200%, and the bookstore became profitable again.",
+                question: "What can be inferred about the bookstore owner's strategy?",
+                options: [
+                    "The owner should have closed the bookstore earlier.",
+                    "Online bookstores are always better than physical stores.",
+                    "Adapting to community needs can help traditional businesses survive competition.",
+                    "Book clubs are the only way to attract customers.",
+                    "The owner was lucky that the strategy worked."
+                ],
+                correct: 2,
+                explanation: "Strategi: menghadapi kompetisi online → transformasi menjadi community hub → hasil: foot traffic naik 200%, profitable again. Inferensi: adapting to community needs → survive competition. Ini menunjukkan adaptasi sebagai kunci keberhasilan."
+            }
+        ];
+
+        let score = 0;
+        let totalAnswered = 0;
+        const totalQuestions = quizData.length;
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizData.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `question-${item.id}`;
+
+                let optionsHTML = '';
+                const letters = ['A', 'B', 'C', 'D', 'E'];
+                item.options.forEach((opt, optIndex) => {
+                    optionsHTML += `
+                        <li class="option" data-question="${item.id}" data-option="${optIndex}" onclick="selectAnswer(${item.id}, ${optIndex})">
+                            <span class="option-letter">${letters[optIndex]}</span>
+                            <span>${opt}</span>
+                        </li>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <span class="question-number">Soal ${index + 1}</span>
+                    <span class="question-type">${item.type}</span>
+                    <div class="passage">${item.passage}</div>
+                    <div class="question-text">${item.question}</div>
+                    <ul class="options">
+                        ${optionsHTML}
+                    </ul>
+                    <div class="notification" id="notification-${item.id}"></div>
+                    <div class="explanation" id="explanation-${item.id}">
+                        <h4>📖 Kunci Jawaban & Penjelasan:</h4>
+                        <p><strong>Jawaban: <span class="key-answer">${letters[item.correct]}. ${item.options[item.correct]}</span></strong></p>
+                        <p style="margin-top: 10px;">${item.explanation}</p>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function selectAnswer(questionId, selectedOption) {
+            const question = quizData.find(q => q.id === questionId);
+            const options = document.querySelectorAll(`[data-question="${questionId}"]`);
+            const notification = document.getElementById(`notification-${questionId}`);
+            const explanation = document.getElementById(`explanation-${questionId}`);
+
+            // Check if already answered
+            if (options[0].classList.contains('disabled')) return;
+
+            // Disable all options
+            options.forEach(opt => opt.classList.add('disabled'));
+
+            // Mark correct and wrong
+            const correctIndex = question.correct;
+            options[correctIndex].classList.add('correct');
+
+            if (selectedOption === correctIndex) {
+                // Correct answer
+                score++;
+                notification.className = 'notification correct';
+                notification.innerHTML = '✅ BENAR! Hebat!';
+            } else {
+                // Wrong answer
+                options[selectedOption].classList.add('wrong');
+                notification.className = 'notification wrong';
+                notification.innerHTML = '❌ SALAH! Lihat penjelasan di bawah.';
+            }
+
+            // Show explanation
+            explanation.classList.add('show');
+
+            // Update score
+            totalAnswered++;
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('currentScore').textContent = score;
+            document.getElementById('totalAnswered').textContent = totalAnswered;
+            const progress = (totalAnswered / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function resetQuiz() {
+            score = 0;
+            totalAnswered = 0;
+            updateScore();
+            renderQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize quiz
+        renderQuiz();
+    </script>
+</body>
+</html>

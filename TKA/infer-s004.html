@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKA English Practice — Inferential Comprehension (Fixed)</title>
+    <style>
+        :root {
+            --bg: #f5f7fa;
+            --card: #ffffff;
+            --border: #d0d7de;
+            --text: #1f2328;
+            --muted: #57606a;
+            --primary: #2563eb;
+            --correct: #16a34a;
+            --correct-bg: #e8f5e9;
+            --incorrect: #dc2626;
+            --incorrect-bg: #fee2e2;
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
+            --radius: 12px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 850px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+        .score-board {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 10px;
+            z-index: 10;
+        }
+        .passage {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            white-space: pre-line;
+            font-style: italic;
+        }
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .question-number {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.15s;
+            color: var(--text);
+        }
+        .option-btn:hover:not(:disabled) {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+        .option-btn.correct {
+            background: var(--correct-bg);
+            border-color: var(--correct);
+            color: #14532d;
+        }
+        .option-btn.incorrect {
+            background: var(--incorrect-bg);
+            border-color: var(--incorrect);
+            color: #7f1d1d;
+        }
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+        .feedback {
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback-message {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .feedback-message.correct {
+            color: var(--correct);
+        }
+        .feedback-message.incorrect {
+            color: var(--incorrect);
+        }
+        .answer-key {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .explanation {
+            color: #1e293b;
+            font-size: 0.95rem;
+        }
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .reset-btn:hover {
+            background: #1e293b;
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .question-card { padding: 16px; }
+            .score-board { flex-direction: column; gap: 5px; text-align: center; }
+            .passage { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📝 TKA English Practice</h1>
+    <p style="text-align:center; color:#475569; margin-bottom:20px;">Inferential Comprehension — 20 Questions (All clickable)</p>
+
+    <div class="score-board">
+        <span>Score: <span id="score">0</span> / <span id="total">0</span></span>
+        <span id="progress">Answered: 0</span>
+    </div>
+
+    <div id="quiz-container"></div>
+
+    <button class="reset-btn" id="resetBtn">🔄 Restart Quiz</button>
+</div>
+
+<script>
+    // Data soal: array of groups, each group has a passage and its questions
+    const passageGroups = [
+        {
+            passage: "Once upon a time, a clever mouse deer wanted to cross a river. Many crocodiles were in the river. The mouse deer needed a way to cross safely. He then used his intelligence to trick the crocodiles.",
+            questions: [
+                {
+                    question: "Why did the mouse deer trick the crocodiles?",
+                    options: [
+                        "He wanted to make friends with them",
+                        "He needed to cross the river safely",
+                        "He wanted to show off his strength",
+                        "He was angry at the crocodiles"
+                    ],
+                    correct: 1,
+                    explanation: "The text says the mouse deer needed a way to cross safely, and he used intelligence to trick the crocodiles. The reason is to cross safely."
+                },
+                {
+                    question: "What kind of character is the mouse deer?",
+                    options: [
+                        "Foolish and careless",
+                        "Clever and resourceful",
+                        "Arrogant and selfish",
+                        "Timid and lazy"
+                    ],
+                    correct: 1,
+                    explanation: "He used his intelligence to solve a problem, showing cleverness and resourcefulness."
+                },
+                {
+                    question: "What is the main idea of the story?",
+                    options: [
+                        "Crocodiles are dangerous",
+                        "The mouse deer tricked crocodiles to cross the river",
+                        "Rivers are hard to cross",
+                        "Mouse deer live near rivers"
+                    ],
+                    correct: 1,
+                    explanation: "The story focuses on the mouse deer's plan to cross the river by tricking crocodiles. Other options are details."
+                },
+                {
+                    question: "What can we learn from the story?",
+                    options: [
+                        "Don't trust crocodiles",
+                        "Intelligence can solve problems",
+                        "Rivers are dangerous",
+                        "Mouse deer are smart"
+                    ],
+                    correct: 1,
+                    explanation: "The story shows that using intelligence can help overcome obstacles. This is the moral lesson."
+                }
+            ]
+        },
+        {
+            passage: "Last weekend, my family and I went to the zoo. First, we saw the elephants. Then, we ate lunch under a big tree. After lunch, we visited the bird park. Finally, we went home. We were very tired but happy.",
+            questions: [
+                {
+                    question: "What did the family do after visiting the bird park?",
+                    options: [
+                        "They ate lunch",
+                        "They saw elephants",
+                        "They went home",
+                        "They took a rest"
+                    ],
+                    correct: 2,
+                    explanation: "The text says 'After lunch, we visited the bird park. Finally, we went home.' So after the bird park, they went home."
+                },
+                {
+                    question: "How did the family feel at the end of the trip?",
+                    options: [
+                        "Sad and bored",
+                        "Tired but happy",
+                        "Angry and hungry",
+                        "Worried and scared"
+                    ],
+                    correct: 1,
+                    explanation: "The last sentence states they were 'very tired but happy'."
+                },
+                {
+                    question: "What is the purpose of this text?",
+                    options: [
+                        "To describe the zoo",
+                        "To retell a past experience",
+                        "To persuade people to visit the zoo",
+                        "To explain how to get to the zoo"
+                    ],
+                    correct: 1,
+                    explanation: "This is a recount text, which retells a past experience. The purpose is to share what happened."
+                },
+                {
+                    question: "What will the family probably do next?",
+                    options: [
+                        "Go back to the zoo immediately",
+                        "Rest at home after the tiring trip",
+                        "Buy a pet elephant",
+                        "Visit another zoo tomorrow"
+                    ],
+                    correct: 1,
+                    explanation: "Since they were tired after the trip, it's most likely they will rest at home."
+                }
+            ]
+        },
+        {
+            passage: "Bali is a beautiful island in Indonesia. It has many beaches, green rice fields, and ancient temples. Tourists from around the world visit Bali to enjoy its culture and nature. The island is also famous for its traditional dances and crafts.",
+            questions: [
+                {
+                    question: "Who is the text most likely intended for?",
+                    options: [
+                        "Local farmers",
+                        "Tourists and travelers",
+                        "School teachers",
+                        "Government officials"
+                    ],
+                    correct: 1,
+                    explanation: "The text describes Bali's attractions and mentions tourists, indicating it is intended for travelers/tourists."
+                },
+                {
+                    question: "What is the main idea of the text?",
+                    options: [
+                        "Bali has many tourists",
+                        "Bali is a beautiful island with many attractions",
+                        "Bali is famous for dances",
+                        "Bali has green rice fields"
+                    ],
+                    correct: 1,
+                    explanation: "The text presents a general picture of Bali's beauty and attractions, not just one detail."
+                },
+                {
+                    question: "Which of the following is NOT mentioned as an attraction in Bali?",
+                    options: [
+                        "Beaches",
+                        "Ancient temples",
+                        "Shopping malls",
+                        "Traditional dances"
+                    ],
+                    correct: 2,
+                    explanation: "The text mentions beaches, rice fields, temples, and dances, but not shopping malls."
+                },
+                {
+                    question: "What is the writer's attitude toward Bali?",
+                    options: [
+                        "Negative",
+                        "Positive and admiring",
+                        "Neutral",
+                        "Critical"
+                    ],
+                    correct: 1,
+                    explanation: "Words like 'beautiful' and the overall positive description show an admiring attitude."
+                }
+            ]
+        },
+        {
+            passage: "Social media is a big part of many teenagers' daily lives. It has some benefits, such as staying connected with friends and learning about interesting topics. However, it also brings serious problems. Too much use can reduce sleep time and affect concentration. I strongly believe that social media harms teen mental health.",
+            questions: [
+                {
+                    question: "What is the author's purpose in writing this text?",
+                    options: [
+                        "To entertain readers",
+                        "To persuade readers that social media is harmful",
+                        "To describe social media platforms",
+                        "To explain how to use social media"
+                    ],
+                    correct: 1,
+                    explanation: "The text is an analytical exposition that tries to convince readers of a viewpoint."
+                },
+                {
+                    question: "Which additional fact would best support the author's argument?",
+                    options: [
+                        "The number of teenagers using social media daily",
+                        "Research data linking social media use to anxiety and depression",
+                        "A list of popular social media apps",
+                        "The age when teenagers start using social media"
+                    ],
+                    correct: 1,
+                    explanation: "Research data on mental health directly supports the claim that social media harms mental health."
+                },
+                {
+                    question: "According to the text, what is the effect of too much social media use?",
+                    options: [
+                        "Better concentration",
+                        "Reduced sleep and concentration",
+                        "Improved social skills",
+                        "Higher grades"
+                    ],
+                    correct: 1,
+                    explanation: "The text states 'Too much use can reduce sleep time and affect concentration.'"
+                },
+                {
+                    question: "What does the word 'harms' in the text mean?",
+                    options: [
+                        "Helps",
+                        "Damages",
+                        "Improves",
+                        "Supports"
+                    ],
+                    correct: 1,
+                    explanation: "In context, 'harms' means damages or has a negative effect on teen mental health."
+                }
+            ]
+        },
+        {
+            passage: "First, wash the rice. Next, put it in the rice cooker. Then, add water. Finally, press the cook button. After the rice is cooked, let it rest for five minutes before serving.",
+            questions: [
+                {
+                    question: "What should you do after pressing the cook button?",
+                    options: [
+                        "Wash the rice again",
+                        "Wait until the rice is cooked, then let it rest",
+                        "Add more water",
+                        "Serve immediately"
+                    ],
+                    correct: 1,
+                    explanation: "The text says after pressing the button, you should let the rice rest for five minutes after it is cooked before serving."
+                },
+                {
+                    question: "What is the main purpose of this text?",
+                    options: [
+                        "To describe rice",
+                        "To explain how to cook rice",
+                        "To persuade people to eat rice",
+                        "To tell a story about rice"
+                    ],
+                    correct: 1,
+                    explanation: "This is a procedure text that explains the steps to cook rice."
+                },
+                {
+                    question: "Which step comes before adding water?",
+                    options: [
+                        "Press the cook button",
+                        "Put the rice in the cooker",
+                        "Wash the rice",
+                        "Let the rice rest"
+                    ],
+                    correct: 1,
+                    explanation: "The sequence is: wash, put in cooker, add water, press button. So before adding water, you put the rice in the cooker."
+                },
+                {
+                    question: "What will happen if you serve the rice immediately after cooking?",
+                    options: [
+                        "It will taste better",
+                        "It may be too hot and not perfectly textured",
+                        "It will be cold",
+                        "It will be undercooked"
+                    ],
+                    correct: 1,
+                    explanation: "The text suggests letting it rest for five minutes; serving immediately may mean it's too hot or not ideal, though the text doesn't explicitly say. This is an inference based on the instruction."
+                }
+            ]
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+    const scoreSpan = document.getElementById('score');
+    const totalSpan = document.getElementById('total');
+    const progressSpan = document.getElementById('progress');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let answeredCount = 0;
+    let correctCount = 0;
+    let totalQuestions = 0;
+
+    // Count total questions
+    passageGroups.forEach(group => {
+        totalQuestions += group.questions.length;
+    });
+    totalSpan.textContent = totalQuestions;
+
+    function renderQuiz() {
+        quizContainer.innerHTML = '';
+        let questionNumber = 0;
+
+        passageGroups.forEach(group => {
+            // Tampilkan passage
+            if (group.passage) {
+                const passageDiv = document.createElement('div');
+                passageDiv.className = 'passage';
+                passageDiv.textContent = group.passage;
+                quizContainer.appendChild(passageDiv);
+            }
+
+            // Render setiap soal
+            group.questions.forEach((q, qIdx) => {
+                questionNumber++;
+                const globalIndex = questionNumber - 1;
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.dataset.answered = 'false';
+
+                const qNum = document.createElement('div');
+                qNum.className = 'question-number';
+                qNum.textContent = `Question ${questionNumber} of ${totalQuestions}`;
+
+                const qText = document.createElement('div');
+                qText.className = 'question-text';
+                qText.textContent = q.question;
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+
+                q.options.forEach((opt, optIndex) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+                    // Event listener langsung menangkap data soal
+                    btn.addEventListener('click', function() {
+                        handleAnswer(card, q, optIndex, btn);
+                    });
+                    optionsDiv.appendChild(btn);
+                });
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                feedback.id = `feedback-${globalIndex}`;
+
+                card.appendChild(qNum);
+                card.appendChild(qText);
+                card.appendChild(optionsDiv);
+                card.appendChild(feedback);
+                quizContainer.appendChild(card);
+            });
+        });
+    }
+
+    function handleAnswer(card, questionData, selectedIndex, clickedBtn) {
+        // Cegah jawaban ganda
+        if (card.dataset.answered === 'true') return;
+        card.dataset.answered = 'true';
+
+        // Disable semua tombol di kartu ini
+        const allBtns = card.querySelectorAll('.option-btn');
+        allBtns.forEach(btn => btn.disabled = true);
+
+        const isCorrect = selectedIndex === questionData.correct;
+
+        // Tandai jawaban benar/salah
+        allBtns.forEach((btn, idx) => {
+            if (idx === questionData.correct) {
+                btn.classList.add('correct');
+            } else if (idx === selectedIndex) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        // Tampilkan feedback
+        const feedback = card.querySelector('.feedback');
+        feedback.classList.add('show');
+        const answerLetter = String.fromCharCode(65 + questionData.correct);
+        feedback.innerHTML = `
+            <div class="feedback-message ${isCorrect ? 'correct' : 'incorrect'}">
+                ${isCorrect ? '✅ Correct!' : '❌ Incorrect.'}
+            </div>
+            <div class="answer-key">Answer Key: ${answerLetter}. ${questionData.options[questionData.correct]}</div>
+            <div class="explanation">📖 Explanation: ${questionData.explanation}</div>
+        `;
+
+        // Update skor
+        answeredCount++;
+        if (isCorrect) correctCount++;
+        updateScore();
+    }
+
+    function updateScore() {
+        scoreSpan.textContent = correctCount;
+        progressSpan.textContent = `Answered: ${answeredCount}`;
+    }
+
+    function resetQuiz() {
+        answeredCount = 0;
+        correctCount = 0;
+        renderQuiz();
+        updateScore();
+    }
+
+    resetBtn.addEventListener('click', resetQuiz);
+
+    // Render pertama kali
+    renderQuiz();
+    updateScore();
+</script>
+</body>
+</html>

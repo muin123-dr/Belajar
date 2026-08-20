@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi TKA SMA: Pemahaman Inferensial</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            line-height: 1.6;
+            padding: 15px;
+            margin: 0;
+        }
+        .quiz-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            color: #1e293b;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            font-size: 1.8em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+        .passage-box {
+            background-color: #f8fafc;
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-size: 1.05em;
+            color: #0f172a;
+        }
+        .passage-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #1d4ed8;
+        }
+        .question-card {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        .question-text {
+            font-size: 1.05em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+        .option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin: 8px 0;
+            padding: 12px 15px;
+            font-size: 1em;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #334155;
+        }
+        .option:hover:not(:disabled) {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .option:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+        .correct-btn {
+            background: #dcfce7 !important;
+            border-color: #22c55e !important;
+            color: #166534;
+            font-weight: 600;
+        }
+        .incorrect-btn {
+            background: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.95em;
+        }
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+        .feedback-correct {
+            background-color: #f0fdf4;
+            border-left: 5px solid #22c55e;
+        }
+        .feedback-incorrect {
+            background-color: #fef2f2;
+            border-left: 5px solid #ef4444;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Ujian TKA SMA: Pemahaman Inferensial</h1>
+    <p class="subtitle">Baca teks dengan seksama, lalu jawab pertanyaannya dengan mengeklik salah satu opsi.</p>
+
+    <!-- TEKS 1 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 1 (For questions 1 - 4)</div>
+        <p>A thirsty crow flew around looking for water. Finally, he found a pitcher with a little water in it. However, the neck of the pitcher was too narrow, and his beak could not reach the water. He tried to push the pitcher down, but it was too heavy. Then, he looked around and saw some pebbles. He picked up the pebbles one by one and dropped them into the pitcher. Slowly, the water level rose until it reached the top. The crow drank the water and flew away happily.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">1. From the text, we can infer that the crow was...</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Crow (gagak) itu mencari solusi, bukan pemalas.')">A. Lazy</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Benar! Tindakan menjatuhkan kerikil untuk menaikkan air menunjukkan bahwa ia cerdik/pintar (clever/smart).')">B. Clever</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Arrogant artinya sombong.')">C. Arrogant</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Greedy artinya serakah.')">D. Greedy</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">2. Why couldn't the crow drink the water at first?</div>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat! Di teks tertulis leher kendi terlalu sempit (narrow) dan airnya sedikit, sehingga paruhnya tidak sampai.')">A. The pitcher\'s opening was too small for his beak.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Bukan karena kotor, tapi tidak terjangkau.')">B. The water was too dirty to drink.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Teks menyebutkan ada sedikit air (a little water).')">C. There was no water left in the pitcher.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Gagak tidak terlalu besar, kendinya yang terlalu berat untuk didorong.')">D. The crow was too big for the pitcher.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">3. What is the moral value of the story?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Pesan moral harus positif dan sesuai cerita.')">A. We should not drink from a pitcher.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Benar! Gagak itu tidak menyerah dan menggunakan akalnya. Pesan moralnya: Jika ada kemauan, pasti ada jalan (Where there is a will, there is a way).')">B. Where there is a will, there is a way.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ini tidak nyambung dengan isi cerita.')">C. Always bring your own water.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Kendi tidak pernah rusak di dalam cerita.')">D. Do not break other people\'s things.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">4. What would probably happen if the crow did not find the pebbles?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Dia sudah mencoba mendorong kendi tapi terlalu berat (too heavy).')">A. He would easily push the pitcher down.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Teks tidak menyebutkan dia minta tolong pada hewan lain.')">B. He would ask another bird for help.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Dia tidak bisa memecahkannya.')">C. He would break the pitcher with his beak.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat! Inferensi prediksi (What will happen): Jika tidak menemukan kerikil, ia tidak akan bisa minum dan terbang dengan rasa haus (haus = thirsty).')">D. He would fly away still feeling thirsty.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 2 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 2 (For questions 5 - 8)</div>
+        <p>Many experts suggest that reading books before bedtime is better than looking at a smartphone. The blue light emitted by phone screens can trick your brain into thinking it is still daytime. This stops the production of melatonin, a hormone that helps you sleep. On the other hand, reading a physical book distracts your mind from daily stress and relaxes your body. Therefore, establishing a habit of reading at night can significantly improve your sleep quality.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">5. What is the main idea of the text?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ini adalah detail pendukung, bukan ide utamanya.')">A. Smartphones emit dangerous blue light.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Benar! Ide pokok sering ada di awal atau ditegaskan di akhir teks. Inti paragraf ini adalah membaca buku sebelum tidur itu bagus untuk kualitas tidur.')">B. Reading a book before sleeping provides benefits for sleep quality.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Melatonin hanya disebut sebagai efek, bukan topik utama.')">C. Melatonin is an important hormone for the human body.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Memang benar ada stress, tapi topik utamanya adalah membaca buku.')">D. People experience a lot of stress in their daily lives.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">6. From the text, it can be implied that people who play with their smartphones before bed might...</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Justru mereka akan sulit tidur.')">A. sleep faster and better.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Produksi melatonin akan berhenti (stops), bukan meningkat.')">B. produce more melatonin.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat! Jika layar HP menghentikan melatonin pembantu tidur, maka kesimpulan tersiratnya (implied) adalah mereka akan kesulitan tertidur (have trouble falling asleep).')">C. have trouble falling asleep.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Mereka justru bisa merasa lebih stres/lelah.')">D. feel extremely relaxed.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">7. Why does reading a physical book help people relax?</div>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Betul! Di teks tertulis penyebabnya: "reading a physical book distracts your mind from daily stress". Pilihan A memiliki makna yang sama (sinonim) dengan kalimat tersebut.')">A. Because it takes their mind away from daily problems.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Buku fisik tidak memancarkan blue light.')">B. Because it emits a soft blue light.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Teks tidak bilang membaca itu melelahkan mata.')">C. Because it makes the eyes tired faster.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Tidak ada hubungan dengan menghentikan detak jantung.')">D. Because it stops the brain from working completely.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">8. The word "Therefore" in the last sentence indicates a...</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Kontras menggunakan but / however.')">A. Contrast</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Benar! Kata "Therefore" (Oleh karena itu) digunakan untuk menunjukkan akibat atau kesimpulan (Conclusion/Effect).')">B. Conclusion</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Perbandingan menggunakan similar to / unlike.')">C. Comparison</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Contoh menggunakan for example / such as.')">D. Example</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 3 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 3 (For questions 9 - 12)</div>
+        <p>Last week, my friends and I went camping in the mountains. We were so excited that we did not check the weather forecast. When we arrived and set up our tent, the sky suddenly turned dark. An hour later, a heavy storm hit our campsite. The wind was so strong that it broke our tent pole. Rainwater flooded our sleeping bags. Shivering and wet, we ran to our car and had to sleep in it until morning. It was a disaster.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">9. What can we infer about the writer's preparation for the trip?</div>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat! Fakta bahwa mereka pergi berkemah tanpa mengecek ramalan cuaca (did not check the weather forecast) menunjukkan bahwa mereka kurang persiapan / ceroboh (careless).')">A. They were careless.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Kalau mereka profesional, mereka pasti cek cuaca.')">B. They were well-prepared.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Kalau mereka hati-hati, mereka tidak akan terjebak badai.')">C. They were very cautious.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Teks justru menunjukkan persiapan mereka kurang.')">D. They planned everything perfectly.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">10. Why did the writer and his friends sleep in the car?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Mereka di awal sangat semangat, bukan malas.')">A. Because they were too lazy to build the tent.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Mobil tidak lebih nyaman dibanding kemah yang sukses.')">B. Because the car was more comfortable than the tent.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Benar! Sebab-akibat: Mereka tidur di mobil KARENA tenda mereka patah dan kebanjiran air hujan (destroyed by the storm/rain).')">C. Because their tent was destroyed and flooded by the storm.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Mereka lupa bawa tenda itu salah, mereka bawa tenda tapi patah.')">D. Because they forgot to bring their sleeping bags.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">11. How did the writer probably feel at the end of the trip?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Proud = bangga. Mereka tidak bangga dengan kegagalan ini.')">A. Proud</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Satisfied = puas. Mereka kedinginan dan kehujanan.')">B. Satisfied</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Amused = terhibur. Mereka menyebutnya "disaster" (bencana).')">C. Amused</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat! Menyebut kejadian itu "disaster" (bencana) sambil menggigil kedinginan (shivering) menunjukkan mereka merasa sangat menyesal / kecewa (Regretful).')">D. Regretful</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">12. What is the best lesson we can learn from this recount text?</div>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Mantap! Ini adalah inferensi pesan moral. Kesalahan utama mereka adalah tidak mengecek cuaca. Jadi pelajarannya: Selalu periksa cuaca sebelum melakukan aktivitas di luar ruangan.')">A. Always check the weather forecast before doing outdoor activities.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ini ekstrem dan tidak logis.')">B. Never go to the mountains.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Tidur di mobil adalah akibat, bukan pelajaran utamanya.')">C. Sleeping in a car is better than sleeping in a tent.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Badai tidak bisa diprediksi oleh teman, tapi oleh prakiraan cuaca.')">D. We must bring a bigger car when camping.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 4 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 4 (For questions 13 - 16)</div>
+        <p>Electric vehicles (EVs) are becoming very popular. Unlike traditional gas-powered cars, EVs do not use gasoline, which means they produce zero emissions and are much better for the environment. They also run very quietly. However, traditional cars still have some advantages. Refueling a gas car only takes a few minutes, whereas fully charging an EV can take several hours. Furthermore, gas stations are much easier to find on highways compared to EV charging stations.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">13. The word "Unlike" in the second sentence shows that the author is going to...</div>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat Sekali! Kata "Unlike" (Berbeda dari) adalah kata kunci inferensi untuk membandingkan perbedaan (compare the differences) antara dua hal.')">A. compare the differences between EVs and traditional cars.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Penulis tidak mengatakan gas cars lebih baik 100%.')">B. prove that traditional cars are better than EVs.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. "Unlike" menunjukkan perbedaan, bukan persamaan.')">C. show the similarities between the two cars.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ini bukan tentang cara membuat mobil.')">D. explain how to build an electric vehicle.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">14. Based on the text, what is a major drawback (disadvantage) of electric vehicles?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Di teks EV disebut "run very quietly" (sangat pelan/tidak berisik).')">A. They are very noisy when running.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Justru EV disebut "better for the environment" (ramah lingkungan).')">B. They produce a lot of pollution.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Benar! Paragraf menyatakan "charging an EV can take several hours". Ini berarti kelemahannya adalah butuh waktu lama untuk mengisi daya (take a long time to charge).')">C. They take a long time to recharge their batteries.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Teks tidak membahas harga mobil.')">D. They are too expensive to buy.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">15. From the text, we can infer that if someone wants to go on a very long road trip across the country today, they might prefer...</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Mengecas EV lama dan pom casnya susah dicari.')">A. an electric vehicle because it is faster.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Analisis yang tajam! Karena pom bensin (gas stations) mudah dicari dan ngisinya cepat, maka kesimpulannya mobil bensin lebih nyaman/praktis (convenient) untuk perjalanan jarak jauh saat ini.')">B. a traditional gas car because refueling is faster and gas stations are easy to find.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. EV tidak menggunakan bensin (do not use gasoline).')">C. an electric vehicle because it is easy to find EV gas stations.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Tidak ada pembahasan kereta api di dalam teks.')">D. a train because it is the most popular vehicle.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">16. The author wrote this text to...</div>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat! Teks ini memaparkan kelebihan (pros) dan kekurangan (cons) dari kedua jenis mobil. Tujuan penulis (purpose) adalah memberi informasi (inform).')">A. inform the readers about the pros and cons of EVs and traditional cars.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Penulis netral dan tidak menyuruh kita membuang mobil bensin.')">B. persuade people to stop buying gas-powered cars completely.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Teks tidak berisi tata cara membuat sesuatu.')">C. explain how gasoline is made in factories.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ini bukan teks dongeng fiksi/komedi.')">D. entertain the readers with a story about a car race.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 5 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 5 (For questions 17 - 20)</div>
+        <p>While playing football inside the house, Leo accidentally kicked the ball and broke his mother's favorite vase. Panicking, he quickly swept the broken pieces under the sofa. When his mother came home, she noticed the vase was missing and asked Leo about it. At first, Leo wanted to lie, but seeing his mother's sad face, he took a deep breath. He confessed what he had done and apologized. Instead of yelling, his mother hugged him. "Thank you for telling the truth, Leo. Things can be replaced, but honesty is priceless," she said.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">17. Why did Leo sweep the broken pieces under the sofa at first?</div>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Benar! Dia panik (panicking) dan mencoba menyembunyikan pecahannya karena ia takut ketahuan dan dimarahi ibunya.')">A. He was afraid and wanted to hide his mistake.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Dia memecahkannya tanpa sengaja (accidentally), bukan ingin memberi kejutan.')">B. He wanted to surprise his mother.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Dia menyembunyikannya, bukan membersihkannya dengan niat baik.')">C. He wanted to keep the living room clean.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Dia tidak sedang memperbaiki vas tersebut.')">D. He planned to glue the pieces back together.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">18. Based on her reaction, what kind of person is Leo's mother?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Strict = galak/keras. Dia justru memeluknya.')">A. Strict and angry.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Tepat Sekali! Fakta bahwa ia memeluk (hugged) dan tidak berteriak memarahi (instead of yelling) menunjukkan bahwa ibunya sangat pemaaf dan pengertian (Forgiving and understanding).')">B. Forgiving and understanding.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Careless = ceroboh.')">C. Careless and lazy.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Cruel = kejam.')">D. Cruel and impatient.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">19. What will Leo probably do if he makes a mistake again in the future?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Setelah dipuji karena jujur, ia tidak akan berbohong lagi.')">A. He will lie to his mother immediately.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ini tindakan pengecut, tidak sesuai dengan akhir cerita.')">B. He will run away from home.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ia sudah belajar bahwa menyembunyikan itu salah.')">C. He will hide the evidence under the sofa again.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Mantap! Karena ibunya menghargai kejujurannya, prediksi tindakan Leo ke depannya adalah ia akan langsung jujur/berkata jujur (Tell the truth).')">D. He will tell the truth and apologize right away.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">20. What is the implied message of the story?</div>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Pesan ceritanya bukan tentang larangan main bola, melainkan tentang kejujuran.')">A. Never play football inside the house.</button>
+        <button class="option" data-correct="true" onclick="check(this, '✅ Lulus! Kalimat penutup sang ibu "honesty is priceless" adalah kesimpulan utama. Pesan tersiratnya: Kejujuran lebih penting (valuable) daripada benda/materi apa pun.')">B. Honesty is more valuable than material things.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Ini bukan teks tentang menabung uang.')">C. A mother\'s vase is the most expensive thing in the house.</button>
+        <button class="option" data-correct="false" onclick="check(this, '❌ Salah. Cerita ini justru menunjukkan bahwa berbohong itu buruk.')">D. Lying can save you from a lot of trouble.</button>
+        <div class="feedback"></div>
+    </div>
+
+</div>
+
+<script>
+    function check(btn, message) {
+        // Find the parent question card
+        const card = btn.closest('.question-card');
+        const buttons = card.querySelectorAll('.option');
+        const feedback = card.querySelector('.feedback');
+        
+        // Check if the answer is correct
+        const isCorrect = btn.getAttribute('data-correct') === 'true';
+
+        // Disable all buttons in this question
+        buttons.forEach(b => {
+            b.disabled = true;
+            // Highlight the correct answer if the user clicked the wrong one
+            if(b.getAttribute('data-correct') === 'true' && !isCorrect) {
+                b.classList.add('correct-btn');
+            }
+        });
+
+        // Add colors to the clicked button
+        if (isCorrect) {
+            btn.classList.add('correct-btn');
+            feedback.className = 'feedback show feedback-correct';
+            feedback.innerHTML = "<strong>✅ BENAR!</strong><br><br><strong>Pembahasan:</strong> " + message.replace('✅ ', '').replace('❌ ', '');
+        } else {
+            btn.classList.add('incorrect-btn');
+            feedback.className = 'feedback show feedback-incorrect';
+            feedback.innerHTML = "<strong>❌ SALAH!</strong><br><br><strong>Pembahasan:</strong> " + message.replace('✅ ', '').replace('❌ ', '');
+        }
+    }
+</script>
+
+</body>
+</html>
