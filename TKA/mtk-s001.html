@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz TKA Matematika (detik)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f4f7fc;
+            color: #1e293b;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(145deg, #1e3a6f, #0f2a4f);
+            color: #fff;
+            padding: 28px 24px 22px;
+            border-radius: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 12px 30px rgba(0, 20, 50, 0.25);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-top: 6px;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px 26px 20px;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e9edf4;
+            transition: box-shadow 0.2s;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #1e3a6f;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 2px 14px;
+            border-radius: 30px;
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .q-text {
+            font-size: 1.08rem;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .q-text img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 10px 0 6px;
+            display: block;
+        }
+
+        .q-text .math-block {
+            background: #f1f5f9;
+            padding: 16px 18px;
+            border-radius: 14px;
+            font-family: 'Times New Roman', 'Cambria', serif;
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 10px 0 6px;
+            overflow-x: auto;
+            color: #0b2a4a;
+        }
+
+        .math-block .frac {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .math-block .frac .num {
+            display: block;
+            border-bottom: 2px solid #1e293b;
+            padding: 0 6px 2px;
+        }
+        .math-block .frac .den {
+            display: block;
+            padding: 2px 6px 0;
+        }
+        .math-block .sqrt {
+            display: inline-block;
+            position: relative;
+        }
+        .math-block .sqrt .radicand {
+            border-top: 2px solid #1e293b;
+            padding: 0 6px 0 12px;
+            display: inline-block;
+        }
+        .math-block .sqrt::before {
+            content: "√";
+            font-size: 1.1em;
+            position: absolute;
+            left: -4px;
+            top: -2px;
+        }
+        .math-block .root-index {
+            font-size: 0.7em;
+            vertical-align: super;
+            margin-right: 2px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 14px 0 6px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: #fafcff;
+            cursor: pointer;
+            transition: all 0.18s;
+            font-size: 0.98rem;
+            line-height: 1.5;
+            width: 100%;
+            text-align: left;
+            font-weight: 450;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background: #eef4ff;
+            border-color: #b3c9f0;
+            transform: scale(1.005);
+        }
+
+        .option-btn .label {
+            font-weight: 700;
+            color: #1e3a6f;
+            min-width: 24px;
+            flex-shrink: 0;
+        }
+
+        .option-btn .text {
+            flex: 1;
+        }
+
+        .option-btn.correct {
+            border-color: #0b7e3d;
+            background: #e1f5e8;
+        }
+
+        .option-btn.correct .label {
+            color: #0b7e3d;
+        }
+
+        .option-btn.wrong {
+            border-color: #b91c1c;
+            background: #fde8e8;
+        }
+
+        .option-btn.wrong .label {
+            color: #b91c1c;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+
+        .option-btn.show-correct {
+            border-color: #0b7e3d;
+            background: #e1f5e8;
+        }
+
+        .option-btn.show-correct .label {
+            color: #0b7e3d;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            display: none;
+            background: #f8fafc;
+            border-left: 5px solid #94a3b8;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        .feedback .status {
+            font-weight: 700;
+            font-size: 1.02rem;
+            margin-bottom: 6px;
+        }
+
+        .feedback .status.benar {
+            color: #0b7e3d;
+        }
+
+        .feedback .status.salah {
+            color: #b91c1c;
+        }
+
+        .feedback .explanation {
+            color: #1e293b;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .feedback .explanation strong {
+            color: #0f2a4f;
+        }
+
+        .feedback .explanation .math {
+            font-family: 'Times New Roman', 'Cambria', serif;
+            font-size: 1.05rem;
+        }
+
+        .feedback .kunci {
+            background: #e9edf4;
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .multi-hint {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin: 6px 0 2px;
+            font-style: italic;
+        }
+
+        .btn-reset {
+            display: inline-block;
+            background: #1e3a6f;
+            color: #fff;
+            border: none;
+            padding: 12px 34px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 20px 0 10px;
+            transition: background 0.2s;
+            box-shadow: 0 4px 12px rgba(30, 58, 111, 0.3);
+        }
+
+        .btn-reset:hover {
+            background: #14305a;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 18px 0 8px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .header {
+                padding: 20px 16px 16px;
+                border-radius: 20px;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            .question-card {
+                padding: 18px 16px 16px;
+                border-radius: 18px;
+            }
+            .q-text {
+                font-size: 0.98rem;
+            }
+            .option-btn {
+                padding: 10px 14px;
+                font-size: 0.92rem;
+                gap: 10px;
+            }
+            .feedback {
+                padding: 14px 16px;
+                font-size: 0.92rem;
+            }
+            .q-text img {
+                border-radius: 8px;
+            }
+            .math-block {
+                font-size: 1.1rem !important;
+                padding: 12px 14px !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            .option-btn {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.92rem;
+            }
+            .math-block {
+                font-size: 1rem !important;
+            }
+        }
+
+        .img-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 8px 0 12px;
+        }
+
+        .img-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 8px 14px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quizApp">
+
+        <div class="header">
+            <h1>📐 TKA Matematika (detik)</h1>
+            <p>25 soal pilihan ganda &amp; benar/salah · Klik jawaban untuk cek pembahasan</p>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div style="text-align:center;">
+            <button class="btn-reset" id="resetBtn">⟳ Reset semua jawaban</button>
+        </div>
+
+        <div class="footer">
+            Selamat belajar! 🚀
+        </div>
+    </div>
+
+    <script>
+        // --------------------------------------------------------------
+        // DATA SOAL
+        // --------------------------------------------------------------
+        const soalData = [{
+            id: 1,
+            type: 'pilihan',
+            text: `Diketahui himpunan-himpunan berikut. <br> A = { x | x faktor dari 60, x ∈ bilangan asli } <br> B = { x | x ≤ 25, x kelipatan 4 } <br> C = { x | x ≤ 20, x ∈ bilangan prima } <br> Berdasarkan himpunan-himpunan tersebut, hasil (A ∪ C) − B adalah …`,
+            options: [
+                { label: 'A', text: '{1,2,3,5,6,7,10,11,13,15,17,19,30,60}' },
+                { label: 'B', text: '{1,2,3,4,5,6,7,10,11,13,15,17,19,20,30,60}' },
+                { label: 'C', text: '{1,2,3,5,6,7,8,10,11,13,15,17,19,30,60}' },
+                { label: 'D', text: '{1,2,3,5,6,7,10,11,12,13,15,17,19,30,60}' },
+                { label: 'E', text: '{1,2,3,4,5,6,7,10,11,12,13,15,17,19,20,30,60}' }
+            ],
+            jawaban: 'A',
+            pembahasan: `A = {1,2,3,4,5,6,10,12,15,20,30,60}<br>B = {4,8,12,16,20,24}<br>C = {2,3,5,7,11,13,17,19}<br>A ∪ C = {1,2,3,4,5,6,7,10,11,12,13,15,17,19,20,30,60}<br>(A ∪ C) − B = {1,2,3,5,6,7,10,11,13,15,17,19,30,60}`
+        }, {
+            id: 2,
+            type: 'pilihan',
+            text: `Nilai M dari bentuk berikut adalah …`,
+            mathExpression: `
+                <div style="font-size:1.3rem; text-align:center; padding:8px 0;">
+                    <span style="display:inline-block; vertical-align:middle;">M = </span>
+                    <span style="display:inline-block; vertical-align:middle; text-align:center; margin:0 4px;">
+                        <span style="display:block; border-bottom:3px solid #1e293b; padding:0 12px 4px;">
+                            64<sup>1/3</sup> × 27<sup>2/3</sup>
+                        </span>
+                        <span style="display:block; padding:4px 12px 0;">
+                            4<sup>1/2</sup> × 3<sup>−1</sup>
+                        </span>
+                    </span>
+                </div>
+            `,
+            options: [
+                { label: 'A', text: '18' },
+                { label: 'B', text: '27' },
+                { label: 'C', text: '36' },
+                { label: 'D', text: '54' },
+                { label: 'E', text: '81' }
+            ],
+            jawaban: 'D',
+            pembahasan: `
+                <div class="math">
+                    <strong>Langkah penyelesaian (menggunakan sifat eksponen):</strong><br><br>
+                    M = <sup>64<sup>1/3</sup> × 27<sup>2/3</sup></sup> / <sub>4<sup>1/2</sup> × 3<sup>−1</sup></sub><br><br>
+                    Sederhanakan setiap bagian:<br>
+                    • 64<sup>1/3</sup> = ∛64 = 4 &nbsp; (karena 4³ = 64)<br>
+                    • 27<sup>2/3</sup> = (∛27)² = 3² = 9 &nbsp; (karena 3³ = 27)<br>
+                    • 4<sup>1/2</sup> = √4 = 2<br>
+                    • 3<sup>−1</sup> = 1/3<br><br>
+                    Substitusi:<br>
+                    M = (4 × 9) / (2 × 1/3) = 36 / (2/3) = 36 × 3/2 = 54<br><br>
+                    <strong>Jadi, M = 54.</strong>
+                </div>
+            `
+        }, {
+            id: 3,
+            type: 'pilihan_ganda',
+            text: `Diketahui a, b, c, dan d adalah empat bilangan asli berurutan dengan a < b < c < d. Hasil kali P = a × b × c × d. Manakah pernyataan berikut yang benar? (jawaban lebih dari satu)`,
+            options: [
+                { label: '1', text: 'Nilai P selalu habis dibagi oleh 24.' },
+                { label: '2', text: 'Jika b dan d bilangan ganjil, P pasti habis dibagi oleh 48.' },
+                { label: '3', text: 'Jika P ditambah 1, hasil (P+1) selalu merupakan bilangan kuadrat sempurna.' },
+                { label: '4', text: 'Untuk semua empat bilangan asli berurutan, (a×d) − (b×c) menghasilkan satu nilai tetap berupa bilangan bulat negatif.' },
+                { label: '5', text: 'Nilai P tidak pernah menghasilkan angka 0 pada digit terakhirnya.' }
+            ],
+            jawaban: ['1', '2', '3', '4'],
+            pembahasan: `1) ✅ Hasil kali 4 bilangan berurutan selalu habis dibagi 24.<br>2) ✅ Jika b dan d ganjil, maka a dan c genap → hasil kali habis dibagi 48.<br>3) ✅ (P+1) selalu kuadrat sempurna (identitas 4 bilangan berurutan).<br>4) ✅ (a×d) − (b×c) = −2 (tetap).<br>5) ❌ P bisa berakhir 0, misal 2×3×4×5 = 120.`
+        }, {
+            id: 4,
+            type: 'pilihan',
+            text: `Masyarakat Indonesia terbiasa menggunakan satuan suhu Celsius. Hubungan Celsius dan Fahrenheit: f(x) = 9/5 x + 32 (x = suhu Celsius). Jika suhu sebuah benda 122°F, berapa Celsius suhu benda tersebut?`,
+            options: [
+                { label: 'A', text: '5°C' },
+                { label: 'B', text: '10°C' },
+                { label: 'C', text: '20°C' },
+                { label: 'D', text: '30°C' },
+                { label: 'E', text: '50°C' }
+            ],
+            jawaban: 'E',
+            pembahasan: `122 = 9/5 x + 32<br>90 = 9/5 x<br>x = 90 × 5/9 = 50°C`
+        }, {
+            id: 5,
+            type: 'pilihan',
+            text: `Fiona membuat 100 lembar kertas daur ulang. Biaya pembuatan 1 lembar Rp200. Kertas dijilid menjadi beberapa buku. Biaya jilid 1 buku Rp10.000. Jika membuat ≥5 buku, diskon 10% dari biaya jilid. Fungsi biaya pembuatan buku Fiona adalah …`,
+            options: [
+                { label: 'A', text: 'f(x) = 2 + 10x untuk 1≤x≤4 dan f(x) = 2 + 9x untuk x≥5' },
+                { label: 'B', text: 'f(x) = 2 + 10x untuk 1≤x≤5 dan f(x) = 2 + 9x untuk x>5' },
+                { label: 'C', text: 'f(x) = 10 + 18x untuk 1≤x≤4 dan f(x) = 10 + 20x untuk x≥5' },
+                { label: 'D', text: 'f(x) = 20 + 10x untuk 1≤x≤4 dan f(x) = 20 + 9x untuk x≥5' },
+                { label: 'E', text: 'f(x) = 20 + 10x untuk 1≤x≤5 dan f(x) = 20 + 9x untuk x>5' }
+            ],
+            jawaban: 'D',
+            pembahasan: `Biaya kertas = 100 × 200 = 20.000 (dalam ribuan = 20).<br>Biaya jilid per buku = 10.000 (10 ribu) untuk x≤4, dan 9.000 (9 ribu) untuk x≥5.<br>Jadi f(x) = 20 + 10x (1≤x≤4) dan f(x) = 20 + 9x (x≥5).`
+        }, {
+            id: 6,
+            type: 'pilihan_ganda',
+            text: `Sebuah organisasi lingkungan menanam mangrove. Minggu pertama 350 bibit, meningkat 25 bibit tiap minggu. Manakah pernyataan yang benar? (jawaban lebih dari satu)`,
+            options: [
+                { label: '1', text: 'Banyak bibit minggu ke-4 adalah 425.' },
+                { label: '2', text: 'Banyak bibit minggu ke-7 adalah 450.' },
+                { label: '3', text: 'Banyak bibit minggu ke-7 adalah 500.' },
+                { label: '4', text: 'Banyak bibit minggu ke-21 adalah 700.' },
+                { label: '5', text: 'Banyak bibit minggu ke-21 adalah 800.' }
+            ],
+            jawaban: ['1', '3'],
+            pembahasan: `Barisan aritmetika: Uₙ = 350 + (n−1)×25<br>U₄ = 350 + 3×25 = 425 ✅<br>U₇ = 350 + 6×25 = 500 ✅ (pernyataan 3 benar, 2 salah)<br>U₂₁ = 350 + 20×25 = 850 (pernyataan 4 & 5 salah)`
+        }, {
+            id: 7,
+            type: 'pilihan',
+            text: `Kapasitas baterai awal 5.000 mAh. Setiap siklus, kapasitas tersisa 80% dari sebelumnya. Standar layak pakai minimal 2.500 mAh. Setelah 4 siklus, kesimpulan yang tepat adalah …`,
+            options: [
+                { label: 'A', text: 'Kapasitas 4.000 mAh, masih layak.' },
+                { label: 'B', text: 'Kapasitas 3.200 mAh, masih layak.' },
+                { label: 'C', text: 'Kapasitas 3.072 mAh, masih layak.' },
+                { label: 'D', text: 'Kapasitas 2.560 mAh, masih layak.' },
+                { label: 'E', text: 'Kapasitas 2.048 mAh, harus diganti.' }
+            ],
+            jawaban: 'E',
+            pembahasan: `Setelah 4 siklus: 5000 × (0,8)⁴ = 5000 × 0,4096 = 2048 mAh.<br>2048 < 2500 → tidak layak, harus diganti.`
+        }, {
+            id: 8,
+            type: 'pilihan',
+            text: `Daerah penyelesaian sistem pertidaksamaan:<br>7x + 2y ≤ 14, x − 2y ≤ −2, 2x + 5y ≤ 20, x ≥ 0<br>ditunjukkan oleh daerah …`,
+            hasImage: true,
+            imageUrl: 'https://muin123-dr.github.io/Belajar/TKA/gbr/mtk0015.png',
+            imageAlt: 'Grafik nomor 8',
+            options: [
+                { label: 'A', text: 'I' },
+                { label: 'B', text: 'II' },
+                { label: 'C', text: 'III' },
+                { label: 'D', text: 'IV' },
+                { label: 'E', text: 'V' }
+            ],
+            jawaban: 'C',
+            pembahasan: `Dengan menggambar garis batas dan menguji titik uji, daerah yang memenuhi semua pertidaksamaan adalah daerah III.`
+        }, {
+            id: 9,
+            type: 'benar_salah',
+            text: `Diketahui SPTLDV: x + y ≤ 2, 2 ≤ y ≤ 6, x ≥ −6.<br>Tentukan Benar atau Salah untuk setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'Daerah penyelesaian SPTLDV berbentuk trapesium sama kaki.' },
+                { label: '2', text: 'Luas daerah penyelesaian SPTLDV adalah 16 satuan luas.' },
+                { label: '3', text: 'Titik (−3, 5) merupakan penyelesaian SPTLDV.' }
+            ],
+            jawaban: { 1: false, 2: false, 3: true },
+            pembahasan: `1) ❌ Daerah berbentuk trapesium siku-siku, bukan sama kaki.<br>2) ❌ Luas = 8 satuan luas (bukan 16).<br>3) ✅ (−3) + 5 = 2 ≤ 2, 2 ≤ 5 ≤ 6, −3 ≥ −6 → memenuhi.`
+        }, {
+            id: 10,
+            type: 'pilihan',
+            text: `Diketahui jajargenjang ABCD. E titik tengah AB, F titik tengah CD, G titik tengah BC, H titik tengah AD. Hubungan antara garis EG dan FH adalah …`,
+            options: [
+                { label: 'A', text: 'berpotongan di titik pusat jajargenjang' },
+                { label: 'B', text: 'tegak lurus' },
+                { label: 'C', text: 'sejajar' },
+                { label: 'D', text: 'bersilangan' },
+                { label: 'E', text: 'sama panjang' }
+            ],
+            jawaban: 'A',
+            pembahasan: `EG dan FH menghubungkan titik-titik tengah sisi yang berhadapan. Keduanya adalah diagonal dari jajargenjang yang dibentuk oleh titik-titik tengah, sehingga berpotongan di pusat jajargenjang ABCD.`
+        }, {
+            id: 11,
+            type: 'pilihan_ganda',
+            text: `Diketahui kubus ABCD.EFGH dengan ABCD bidang alas. Garis DH rusuk vertikal. Manakah garis yang tegak lurus dengan bidang ABCD? (jawaban lebih dari satu)`,
+            options: [
+                { label: 'A', text: 'Garis AE' },
+                { label: 'B', text: 'Garis AC' },
+                { label: 'C', text: 'Garis BF' },
+                { label: 'D', text: 'Garis EG' },
+                { label: 'E', text: 'Garis CG' }
+            ],
+            jawaban: ['A', 'C', 'E'],
+            pembahasan: `Garis yang tegak lurus bidang alas ABCD adalah rusuk-rusuk vertikal: AE, BF, CG, DH. <br>AC (diagonal alas) dan EG (diagonal bidang atas) tidak tegak lurus terhadap ABCD.`
+        }, {
+            id: 12,
+            type: 'pilihan',
+            text: `Alya dan Naura mengukur panjang bayangan sebuah tugu dan diperoleh 3,6 meter. Pada saat yang sama, tinggi Naura 1,4 m dan panjang bayangannya 1,8 m. Tinggi tugu tersebut adalah …`,
+            options: [
+                { label: 'A', text: '2,8 m' },
+                { label: 'B', text: '3,2 m' },
+                { label: 'C', text: '3,6 m' },
+                { label: 'D', text: '4,2 m' },
+                { label: 'E', text: '5,0 m' }
+            ],
+            jawaban: 'A',
+            pembahasan: `Dengan kesebangunan: t/3,6 = 1,4/1,8<br>t = 3,6 × 1,4 / 1,8 = 2,8 m`
+        }, {
+            id: 13,
+            type: 'benar_salah',
+            text: `Seorang tukang bangunan memperbaiki jendela lantai dua. Ujung bawah tangga 8 m dari dinding, ujung atas tepat mencapai jendela pada ketinggian 15 m. Tentukan Benar atau Salah untuk setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'Panjang tangga yang digunakan adalah 17 meter.' },
+                { label: '2', text: 'Jika jarak kaki tangga menjadi 9 m dari rumah, panjang tangga tetap 17 m.' },
+                { label: '3', text: 'Tangga 16 m tidak cukup mencapai jendela.' }
+            ],
+            jawaban: { 1: true, 2: false, 3: true },
+            pembahasan: `1) ✅ √(8² + 15²) = √289 = 17 m.<br>2) ❌ Jika jarak 9 m, panjang = √(9²+15²) = √306 ≈ 17,49 m (bukan 17).<br>3) ✅ 16 m < 17 m → tidak cukup.`
+        }, {
+            id: 14,
+            type: 'pilihan',
+            text: `Titik P(−4, 3) direfleksikan terhadap sumbu Y. Koordinat bayangan titik P adalah …`,
+            options: [
+                { label: 'A', text: '(4, 3)' },
+                { label: 'B', text: '(−4, −3)' },
+                { label: 'C', text: '(4, −3)' },
+                { label: 'D', text: '(3, −4)' },
+                { label: 'E', text: '(−3, 4)' }
+            ],
+            jawaban: 'A',
+            pembahasan: `Refleksi terhadap sumbu Y: (x,y) → (−x,y).<br>P(−4,3) → (4,3)`
+        }, {
+            id: 15,
+            type: 'pilihan',
+            text: `Diketahui titik A(1,2) dan B(7,10) pada bidang Kartesius. Jarak antara titik A dan B adalah …`,
+            options: [
+                { label: 'A', text: '8 satuan' },
+                { label: 'B', text: '9 satuan' },
+                { label: 'C', text: '10 satuan' },
+                { label: 'D', text: '12 satuan' },
+                { label: 'E', text: '14 satuan' }
+            ],
+            jawaban: 'C',
+            pembahasan: `Jarak = √((7−1)² + (10−2)²) = √(36+64) = √100 = 10 satuan.`
+        }, {
+            id: 16,
+            type: 'pilihan_ganda',
+            text: `Sebuah persegi panjang memiliki panjang (2x+5) cm dan lebar (x+3) cm. Jika kelilingnya 46 cm, manakah pernyataan yang benar? (jawaban lebih dari satu)`,
+            options: [
+                { label: '1', text: 'Keliling dapat ditulis sebagai (6x + 16) cm.' },
+                { label: '2', text: 'Nilai x = 5.' },
+                { label: '3', text: 'Panjang persegi panjang adalah 17 cm.' },
+                { label: '4', text: 'Lebar persegi panjang adalah 9 cm.' },
+                { label: '5', text: 'Luas persegi panjang adalah 120 cm².' }
+            ],
+            jawaban: ['1', '2', '5'],
+            pembahasan: `Keliling = 2[(2x+5)+(x+3)] = 2(3x+8) = 6x+16 ✅<br>6x+16 = 46 → 6x = 30 → x = 5 ✅<br>Panjang = 2(5)+5 = 15 cm (bukan 17) ❌<br>Lebar = 5+3 = 8 cm (bukan 9) ❌<br>Luas = 15×8 = 120 cm² ✅`
+        }, {
+            id: 17,
+            type: 'pilihan',
+            text: `Pak Hasan memiliki tanah berbentuk persegi panjang dengan panjang 30 m dan lebar 20 m. Tanah akan dipasang rumput sintetis harga Rp75.000/m². Biaya yang harus dikeluarkan adalah …`,
+            options: [
+                { label: 'A', text: 'Rp1.500.000' },
+                { label: 'B', text: 'Rp4.500.000' },
+                { label: 'C', text: 'Rp45.000.000' },
+                { label: 'D', text: 'Rp60.000.000' },
+                { label: 'E', text: 'Rp75.000.000' }
+            ],
+            jawaban: 'C',
+            pembahasan: `Luas = 30 × 20 = 600 m²<br>Biaya = 600 × 75.000 = 45.000.000`
+        }, {
+            id: 18,
+            type: 'benar_salah',
+            text: `Sebuah bak penampungan berbentuk prisma tegak segitiga siku-siku. Sisi penyiku alas 60 cm dan 80 cm, tinggi bak 150 cm. Bak diisi maksimal 4/5 dari tinggi. Tentukan Benar atau Salah untuk setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'Luas permukaan bagian dalam bak yang menyentuh alas dan dinding samping = 36.000 cm².' },
+                { label: '2', text: 'Kapasitas volume air maksimal yang dapat ditampung sesuai batas aman = 288 liter.' },
+                { label: '3', text: 'Jika air surut 24 liter, tinggi air menjadi 110 cm.' }
+            ],
+            jawaban: { 1: false, 2: true, 3: true },
+            pembahasan: `Alas segitiga siku-siku: luas = ½×60×80 = 2400 cm², hipotenusa = 100 cm.<br>1) ❌ Luas dalam total = 2400 + (60+80+100)×150 = 2400 + 36000 = 38400 cm² (bukan 36000).<br>2) ✅ Volume total = 2400×150 = 360.000 cm³ = 360 L, maksimal 4/5 = 288 L.<br>3) ✅ 24 L = 24.000 cm³, penurunan tinggi = 24000/2400 = 10 cm, tinggi max = 120 cm, jadi 120−10 = 110 cm.`
+        }, {
+            id: 19,
+            type: 'pilihan',
+            text: `Sebuah wadah berbentuk prisma tegak segi empat dengan alas trapesium sama kaki. Sisi sejajar 20 cm dan 32 cm, jarak kedua sisi 8 cm, tinggi prisma 50 cm. Seluruh permukaan luar dilapisi cairan serat karbon. Satu kaleng melapisi 1.500 cm². Jumlah minimal kaleng untuk 2 buah wadah adalah …`,
+            options: [
+                { label: 'A', text: '3 kaleng' },
+                { label: 'B', text: '4 kaleng' },
+                { label: 'C', text: '5 kaleng' },
+                { label: 'D', text: '6 kaleng' },
+                { label: 'E', text: '7 kaleng' }
+            ],
+            jawaban: 'D',
+            pembahasan: `Luas alas trapesium = (20+32)/2 × 8 = 208 cm².<br>Sisi miring trapesium = √(8²+6²) = 10 cm.<br>Keliling alas = 20+32+10+10 = 72 cm.<br>Luas permukaan 1 wadah = 2×208 + 72×50 = 416 + 3600 = 4016 cm².<br>2 wadah = 8032 cm².<br>Kaleng = 8032/1500 = 5,35 → 6 kaleng.`
+        }, {
+            id: 20,
+            type: 'pilihan_ganda',
+            text: `Sebuah robot pembersih lantai bergerak membentuk sudut lancip α (0°<α<90°). Posisi memenuhi 3 sec α − 1 = 11/4. Manakah pernyataan yang benar? (jawaban lebih dari satu)`,
+            options: [
+                { label: '1', text: 'Nilai cos α dalam bentuk desimal adalah 0,8.' },
+                { label: '2', text: 'Nilai sin α = 3/4.' },
+                { label: '3', text: 'Nilai tan α lebih kecil daripada sin α.' },
+                { label: '4', text: 'Nilai (sin α)² + (cos α)² = 1.' },
+                { label: '5', text: 'Nilai (1 − sin α) / cos α = 1/2.' }
+            ],
+            jawaban: ['1', '4', '5'],
+            pembahasan: `3 sec α − 1 = 11/4 → 3 sec α = 15/4 → sec α = 5/4 → cos α = 4/5 = 0,8 ✅<br>sin α = √(1−16/25) = 3/5 (bukan 3/4) ❌<br>tan α = (3/5)/(4/5) = 3/4 > 3/5 = sin α ❌<br>sin²+cos² = 1 ✅<br>(1−sinα)/cosα = (1−3/5)/(4/5) = (2/5)/(4/5) = 1/2 ✅`
+        }, {
+            id: 21,
+            type: 'pilihan',
+            text: `Data luas lahan dan hasil panen gabah dari lima kelompok tani. Koperasi memberi bantuan kepada kelompok dengan produktivitas tertinggi (hasil per hektare). Kelompok yang mendapat bantuan adalah …`,
+            options: [
+                { label: 'A', text: 'Maju Jaya' },
+                { label: 'B', text: 'Suka Makmur' },
+                { label: 'C', text: 'Tani Mukti' },
+                { label: 'D', text: 'Karya Mandiri' },
+                { label: 'E', text: 'Subur Hijau' }
+            ],
+            jawaban: 'C',
+            pembahasan: `Produktivitas = hasil/luas:<br>Maju Jaya: 18/4 = 4,5<br>Suka Makmur: 24/6 = 4<br>Tani Mukti: 25/5 = 5 ✅ tertinggi<br>Karya Mandiri: 32/8 = 4<br>Subur Hijau: 28/7 = 4`
+        }, {
+            id: 22,
+            type: 'pilihan',
+            text: `Dari 8 kandidat (5 laki-laki, 3 perempuan) akan dipilih 4 murid dengan syarat tepat 2 perempuan. Banyaknya cara membentuk tim adalah …`,
+            options: [
+                { label: 'A', text: '13 cara' },
+                { label: 'B', text: '24 cara' },
+                { label: 'C', text: '30 cara' },
+                { label: 'D', text: '60 cara' },
+                { label: 'E', text: '70 cara' }
+            ],
+            jawaban: 'C',
+            pembahasan: `Pilih 2 perempuan dari 3: C(3,2) = 3<br>Pilih 2 laki-laki dari 5: C(5,2) = 10<br>Total = 3 × 10 = 30 cara`
+        }, {
+            id: 23,
+            type: 'benar_salah',
+            text: `Data jumlah karya tulis 11 anggota klub literasi: 8, 12, 15, 18, 20, 23, 27, 30, 33, 37, 45.<br>Tentukan Benar atau Salah untuk setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'Sekitar seperempat anggota menghasilkan kurang dari 15 karya tulis.' },
+                { label: '2', text: 'Sekitar seperempat anggota menghasilkan lebih dari 30 karya tulis.' },
+                { label: '3', text: 'Sekitar tiga perempat anggota menghasilkan kurang dari 33 karya tulis.' }
+            ],
+            jawaban: { 1: false, 2: true, 3: true },
+            pembahasan: `Data terurut: 8,12,15,18,20,23,27,30,33,37,45<br>1) ❌ Kurang dari 15: hanya 8 dan 12 → 2/11 ≈ 18% (kurang dari 25%).<br>2) ✅ Lebih dari 30: 33,37,45 → 3/11 ≈ 27% (sekitar 25%).<br>3) ✅ Kurang dari 33: 8,12,15,18,20,23,27,30 → 8/11 ≈ 73% (sekitar 75%).`
+        }, {
+            id: 24,
+            type: 'pilihan',
+            text: `Asti melemparkan dadu. Asti masuk perangkap jika hasil lemparan kurang dari 3. Peluang Asti lolos dari perangkap adalah …`,
+            options: [
+                { label: 'A', text: '⅔' },
+                { label: 'B', text: '¼' },
+                { label: 'C', text: '½' },
+                { label: 'D', text: '½' },
+                { label: 'E', text: '¾' }
+            ],
+            jawaban: 'A',
+            pembahasan: `Trap: hasil 1 atau 2 (2 kemungkinan). Lolos: hasil 3,4,5,6 (4 kemungkinan).<br>Peluang lolos = 4/6 = ⅔.`
+        }, {
+            id: 25,
+            type: 'benar_salah',
+            text: `Dua kotak undian: kotak I (6 hadiah, 4 kosong), kotak II (5 hadiah, 5 kosong). Setiap peserta mengambil satu dari setiap kotak. Tentukan Benar atau Salah untuk setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'Peluang mendapat dua kupon kosong adalah ⅓.' },
+                { label: '2', text: 'Peluang mendapat dua kupon berhadiah adalah 3/10.' },
+                { label: '3', text: 'Peluang mendapat setidaknya satu kupon berhadiah lebih besar daripada peluang mendapat dua kupon kosong.' }
+            ],
+            jawaban: { 1: false, 2: true, 3: true },
+            pembahasan: `1) ❌ P(kosong,kosong) = 4/10 × 5/10 = 20/100 = 1/5 (bukan 1/3).<br>2) ✅ P(hadiah,hadiah) = 6/10 × 5/10 = 30/100 = 3/10.<br>3) ✅ P(setidaknya 1 hadiah) = 1 − P(kosong,kosong) = 1 − 1/5 = 4/5 > 1/5.`
+        }];
+
+        // --------------------------------------------------------------
+        // RENDER
+        // --------------------------------------------------------------
+        const container = document.getElementById('questionsContainer');
+
+        function renderSoal(soal, index) {
+            const qNum = index + 1;
+            let html = `<div class="question-card" data-id="${soal.id}">`;
+            html += `<div class="q-number">Soal ${qNum}</div>`;
+
+            html += `<div class="q-text">${soal.text}`;
+            if (soal.mathExpression) {
+                html += `<div class="math-block">${soal.mathExpression}</div>`;
+            }
+            if (soal.hasImage && soal.imageUrl) {
+                html += `<div class="img-wrapper"><img src="${soal.imageUrl}" alt="${soal.imageAlt || 'Gambar soal'}" loading="lazy"></div>`;
+            }
+            html += `</div>`;
+
+            if (soal.type === 'pilihan') {
+                html += `<div class="options" data-type="pilihan">`;
+                soal.options.forEach((opt) => {
+                    html += `<button class="option-btn" data-label="${opt.label}" data-qid="${soal.id}">
+                                <span class="label">${opt.label}.</span>
+                                <span class="text">${opt.text}</span>
+                             </button>`;
+                });
+                html += `</div>`;
+                html += `<div class="feedback" id="fb-${soal.id}">
+                            <div class="status"></div>
+                            <div class="explanation"></div>
+                            <div class="kunci"></div>
+                         </div>`;
+            } else if (soal.type === 'pilihan_ganda') {
+                html += `<div class="multi-hint">⚠️ Pilih semua jawaban yang benar (klik satu per satu).</div>`;
+                html += `<div class="options" data-type="pilihan_ganda">`;
+                soal.options.forEach((opt) => {
+                    html += `<button class="option-btn" data-label="${opt.label}" data-qid="${soal.id}">
+                                <span class="label">${opt.label}.</span>
+                                <span class="text">${opt.text}</span>
+                             </button>`;
+                });
+                html += `</div>`;
+                html += `<div class="feedback" id="fb-${soal.id}">
+                            <div class="status"></div>
+                            <div class="explanation"></div>
+                            <div class="kunci"></div>
+                         </div>`;
+            } else if (soal.type === 'benar_salah') {
+                html += `<div class="options" data-type="benar_salah">`;
+                soal.subPernyataan.forEach((sp) => {
+                    html += `<div style="margin-top:10px;font-weight:600;">${sp.label}. ${sp.text}</div>`;
+                    html += `<div style="display:flex;gap:12px;margin:4px 0 6px 18px;flex-wrap:wrap;">`;
+                    html += `<button class="option-btn bs-btn" data-label="${sp.label}" data-value="true" data-qid="${soal.id}" style="flex:0 1 auto;padding:6px 18px;">✅ Benar</button>`;
+                    html += `<button class="option-btn bs-btn" data-label="${sp.label}" data-value="false" data-qid="${soal.id}" style="flex:0 1 auto;padding:6px 18px;">❌ Salah</button>`;
+                    html += `</div>`;
+                });
+                html += `</div>`;
+                html += `<div class="feedback" id="fb-${soal.id}">
+                            <div class="status"></div>
+                            <div class="explanation"></div>
+                            <div class="kunci"></div>
+                         </div>`;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        container.innerHTML = soalData.map((s, i) => renderSoal(s, i)).join('');
+
+        // --------------------------------------------------------------
+        // LOGIKA KLIK
+        // --------------------------------------------------------------
+        const state = {};
+
+        function isArrayEqual(a, b) {
+            if (!a || !b) return false;
+            if (a.length !== b.length) return false;
+            const sa = [...a].sort();
+            const sb = [...b].sort();
+            return sa.every((v, i) => v === sb[i]);
+        }
+
+        function handleOptionClick(e) {
+            const btn = e.currentTarget;
+            const qid = btn.dataset.qid;
+            const soal = soalData.find(s => s.id == qid);
+            if (!soal) return;
+            const fb = document.getElementById(`fb-${qid}`);
+            const statusEl = fb.querySelector('.status');
+            const explEl = fb.querySelector('.explanation');
+            const kunciEl = fb.querySelector('.kunci');
+
+            if (state[qid] && state[qid].answered) return;
+
+            if (!state[qid]) {
+                state[qid] = { answered: false, selected: [] };
+            }
+
+            const s = state[qid];
+
+            if (soal.type === 'pilihan') {
+                const allBtns = document.querySelectorAll(`.option-btn[data-qid="${qid}"]`);
+                allBtns.forEach(b => b.classList.remove('correct', 'wrong', 'show-correct', 'disabled'));
+
+                const label = btn.dataset.label;
+                const isCorrect = label === soal.jawaban;
+
+                btn.classList.add(isCorrect ? 'correct' : 'wrong');
+                btn.classList.add('disabled');
+                allBtns.forEach(b => {
+                    if (b.dataset.label === soal.jawaban && b !== btn) {
+                        b.classList.add('show-correct');
+                    }
+                    b.classList.add('disabled');
+                });
+
+                s.answered = true;
+                s.selected = [label];
+
+                fb.classList.add('visible');
+                statusEl.className = 'status ' + (isCorrect ? 'benar' : 'salah');
+                statusEl.textContent = isCorrect ? '✅ Jawaban Benar!' : '❌ Jawaban Salah';
+                explEl.innerHTML = `<strong>Pembahasan:</strong> ${soal.pembahasan}`;
+                kunciEl.textContent = `🔑 Kunci: ${soal.jawaban}`;
+
+            } else if (soal.type === 'pilihan_ganda') {
+                const label = btn.dataset.label;
+                const idx = s.selected.indexOf(label);
+                if (idx >= 0) {
+                    s.selected.splice(idx, 1);
+                    btn.classList.remove('correct', 'wrong', 'show-correct');
+                } else {
+                    s.selected.push(label);
+                    const jawabanBenar = soal.jawaban;
+                    const isCorrect = jawabanBenar.includes(label);
+                    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+                }
+
+                const jawabanBenar = soal.jawaban;
+                if (s.selected.length === jawabanBenar.length) {
+                    const semuaBenar = isArrayEqual(s.selected, jawabanBenar);
+                    const allBtns = document.querySelectorAll(`.option-btn[data-qid="${qid}"]`);
+                    allBtns.forEach(b => {
+                        b.classList.add('disabled');
+                        if (jawabanBenar.includes(b.dataset.label) && !s.selected.includes(b.dataset.label)) {
+                            b.classList.add('show-correct');
+                        }
+                    });
+                    s.answered = true;
+                    fb.classList.add('visible');
+                    statusEl.className = 'status ' + (semuaBenar ? 'benar' : 'salah');
+                    statusEl.textContent = semuaBenar ? '✅ Semua jawaban Benar!' : '❌ Ada jawaban yang kurang/lebih';
+                    explEl.innerHTML = `<strong>Pembahasan:</strong> ${soal.pembahasan}`;
+                    kunciEl.textContent = `🔑 Kunci: ${jawabanBenar.join(', ')}`;
+                } else {
+                    fb.classList.remove('visible');
+                }
+
+            } else if (soal.type === 'benar_salah') {
+                const label = btn.dataset.label;
+                const value = btn.dataset.value === 'true';
+                const jawabanBenar = soal.jawaban[label];
+
+                const parentDiv = btn.closest('div');
+                const siblingBtns = parentDiv.querySelectorAll('.bs-btn');
+                siblingBtns.forEach(b => {
+                    b.classList.add('disabled');
+                    const bVal = b.dataset.value === 'true';
+                    if (bVal === jawabanBenar) {
+                        b.classList.add('correct');
+                    } else {
+                        b.classList.add('wrong');
+                    }
+                });
+
+                const allSubs = document.querySelectorAll(`.bs-btn[data-qid="${qid}"]`);
+                const allDisabled = Array.from(allSubs).every(b => b.classList.contains('disabled'));
+                if (allDisabled) {
+                    s.answered = true;
+                    let benarCount = 0;
+                    const subLabels = Object.keys(soal.jawaban);
+                    subLabels.forEach(lb => {
+                        const btns = document.querySelectorAll(`.bs-btn[data-qid="${qid}"][data-label="${lb}"]`);
+                        btns.forEach(b => {
+                            if (b.dataset.value === 'true' && b.classList.contains('correct')) benarCount++;
+                            if (b.dataset.value === 'false' && b.classList.contains('correct')) benarCount++;
+                        });
+                    });
+                    const totalSub = subLabels.length;
+                    const semuaBenar = (benarCount === totalSub);
+                    fb.classList.add('visible');
+                    statusEl.className = 'status ' + (semuaBenar ? 'benar' : 'salah');
+                    statusEl.textContent = semuaBenar ? '✅ Semua pernyataan Benar!' : '❌ Ada pernyataan yang salah';
+                    explEl.innerHTML = `<strong>Pembahasan:</strong> ${soal.pembahasan}`;
+                    const kunciStr = subLabels.map(lb => `${lb}: ${soal.jawaban[lb] ? 'Benar' : 'Salah'}`).join(', ');
+                    kunciEl.textContent = `🔑 Kunci: ${kunciStr}`;
+                } else {
+                    fb.classList.remove('visible');
+                }
+            }
+        }
+
+        document.querySelectorAll('.option-btn, .bs-btn').forEach(btn => {
+            btn.addEventListener('click', handleOptionClick);
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            for (const key in state) {
+                delete state[key];
+            }
+            document.querySelectorAll('.option-btn, .bs-btn').forEach(btn => {
+                btn.classList.remove('correct', 'wrong', 'show-correct', 'disabled');
+            });
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.classList.remove('visible');
+                fb.querySelector('.status').textContent = '';
+                fb.querySelector('.explanation').innerHTML = '';
+                fb.querySelector('.kunci').textContent = '';
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
