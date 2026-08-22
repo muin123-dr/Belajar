@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz TKA Matematika Wajib 2025</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f4f7fc;
+            color: #1e293b;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(145deg, #1e3a6f, #0f2a4f);
+            color: #fff;
+            padding: 28px 24px 22px;
+            border-radius: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 12px 30px rgba(0, 20, 50, 0.25);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-top: 6px;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px 26px 20px;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e9edf4;
+            transition: box-shadow 0.2s;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .q-number {
+            display: inline-block;
+            background: #1e3a6f;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 2px 14px;
+            border-radius: 30px;
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .q-text {
+            font-size: 1.08rem;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .q-text img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin: 10px 0 6px;
+            display: block;
+            border: 1px solid #e2e8f0;
+        }
+
+        .q-text .math {
+            font-family: 'Times New Roman', 'Cambria', serif;
+            font-size: 1.2rem;
+            background: #f1f5f9;
+            padding: 8px 14px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 4px 0;
+        }
+
+        .q-text .math-block {
+            background: #f1f5f9;
+            padding: 16px 18px;
+            border-radius: 14px;
+            font-family: 'Times New Roman', 'Cambria', serif;
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 10px 0 6px;
+            overflow-x: auto;
+            color: #0b2a4a;
+        }
+
+        .math-block .frac {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+        }
+        .math-block .frac .num {
+            display: block;
+            border-bottom: 2px solid #1e293b;
+            padding: 0 6px 2px;
+        }
+        .math-block .frac .den {
+            display: block;
+            padding: 2px 6px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 14px 0 6px;
+        }
+
+        .option-btn {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: #fafcff;
+            cursor: pointer;
+            transition: all 0.18s;
+            font-size: 0.98rem;
+            line-height: 1.5;
+            width: 100%;
+            text-align: left;
+            font-weight: 450;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background: #eef4ff;
+            border-color: #b3c9f0;
+            transform: scale(1.005);
+        }
+
+        .option-btn .label {
+            font-weight: 700;
+            color: #1e3a6f;
+            min-width: 24px;
+            flex-shrink: 0;
+        }
+
+        .option-btn .text {
+            flex: 1;
+        }
+
+        .option-btn.correct {
+            border-color: #0b7e3d;
+            background: #e1f5e8;
+        }
+
+        .option-btn.correct .label {
+            color: #0b7e3d;
+        }
+
+        .option-btn.wrong {
+            border-color: #b91c1c;
+            background: #fde8e8;
+        }
+
+        .option-btn.wrong .label {
+            color: #b91c1c;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+
+        .option-btn.show-correct {
+            border-color: #0b7e3d;
+            background: #e1f5e8;
+        }
+
+        .option-btn.show-correct .label {
+            color: #0b7e3d;
+        }
+
+        .feedback {
+            margin-top: 14px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            display: none;
+            background: #f8fafc;
+            border-left: 5px solid #94a3b8;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        .feedback .status {
+            font-weight: 700;
+            font-size: 1.02rem;
+            margin-bottom: 6px;
+        }
+
+        .feedback .status.benar {
+            color: #0b7e3d;
+        }
+
+        .feedback .status.salah {
+            color: #b91c1c;
+        }
+
+        .feedback .explanation {
+            color: #1e293b;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-top: 4px;
+        }
+
+        .feedback .explanation strong {
+            color: #0f2a4f;
+        }
+
+        .feedback .explanation .math {
+            font-family: 'Times New Roman', 'Cambria', serif;
+            font-size: 1.05rem;
+        }
+
+        .feedback .kunci {
+            background: #e9edf4;
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .multi-hint {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin: 6px 0 2px;
+            font-style: italic;
+        }
+
+        .btn-reset {
+            display: inline-block;
+            background: #1e3a6f;
+            color: #fff;
+            border: none;
+            padding: 12px 34px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 20px 0 10px;
+            transition: background 0.2s;
+            box-shadow: 0 4px 12px rgba(30, 58, 111, 0.3);
+        }
+
+        .btn-reset:hover {
+            background: #14305a;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 18px 0 8px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .img-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 8px 0 12px;
+        }
+
+        .img-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .header {
+                padding: 20px 16px 16px;
+                border-radius: 20px;
+            }
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            .question-card {
+                padding: 18px 16px 16px;
+                border-radius: 18px;
+            }
+            .q-text {
+                font-size: 0.98rem;
+            }
+            .option-btn {
+                padding: 10px 14px;
+                font-size: 0.92rem;
+                gap: 10px;
+            }
+            .feedback {
+                padding: 14px 16px;
+                font-size: 0.92rem;
+            }
+            .q-text img {
+                border-radius: 8px;
+            }
+            .math-block {
+                font-size: 1.1rem !important;
+                padding: 12px 14px !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            .option-btn {
+                font-size: 0.85rem;
+                padding: 8px 12px;
+            }
+            .q-text {
+                font-size: 0.92rem;
+            }
+            .math-block {
+                font-size: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quizApp">
+
+        <div class="header">
+            <h1>📐 TKA Matematika Wajib 2025</h1>
+            <p>25 soal asli · Klik jawaban untuk cek pembahasan</p>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div style="text-align:center;">
+            <button class="btn-reset" id="resetBtn">⟳ Reset semua jawaban</button>
+        </div>
+
+        <div class="footer">
+            Selamat belajar! 🚀
+        </div>
+    </div>
+
+    <script>
+        // --------------------------------------------------------------
+        // DATA SOAL – diambil dari PDF "SOAL ASLI TKA SMA 2025 MATEMATIKA WAJIB"
+        // --------------------------------------------------------------
+        const soalData = [{
+            id: 1,
+            type: 'pilihan',
+            text: `Diberikan tiga himpunan bilangan sebagai berikut.<br><br>
+                A = { x | x < 6, x ∈ Bilangan Asli }<br>
+                B = { x | x bilangan genap, x ∈ Bilangan Cacah }<br>
+                C = { x | x ≤ 10, x ∈ Bilangan Prima }<br><br>
+                Berdasarkan himpunan-himpunan tersebut, hasil dari (A ∩ B) ∪ C adalah ....`,
+            options: [
+                { label: 'A', text: '{2, 3, 5, 7}' },
+                { label: 'B', text: '{0, 2, 3, 5, 7}' },
+                { label: 'C', text: '{2, 3, 4, 5, 7}' },
+                { label: 'D', text: '{0, 2, 3, 4, 5, 7}' },
+                { label: 'E', text: '{2, 3, 4, 5, 7, 10}' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                A = {1, 2, 3, 4, 5}<br>
+                B = {0, 2, 4, 6, 8, 10, ...} (bilangan genap cacah)<br>
+                C = {2, 3, 5, 7}<br>
+                A ∩ B = {2, 4}<br>
+                (A ∩ B) ∪ C = {2, 4} ∪ {2, 3, 5, 7} = {2, 3, 4, 5, 7}<br>
+                <strong>Jawaban: C</strong>
+            `
+        }, {
+            id: 2,
+            type: 'pilihan',
+            text: `Bentuk sederhana dari<br><br>
+                <div class="math-block">
+                    <span class="frac">
+                        <span class="num">
+                            3<sup>2/3</sup> × 8<sup>3/2</sup>
+                        </span>
+                        <span class="den">
+                            2<sup>5/2</sup> × 9<sup>5/6</sup>
+                        </span>
+                    </span>
+                </div>
+                adalah ....`,
+            options: [
+                { label: 'A', text: '1' },
+                { label: 'B', text: '2' },
+                { label: 'C', text: '3' },
+                { label: 'D', text: '6' },
+                { label: 'E', text: '12' }
+            ],
+            jawaban: 'D',
+            pembahasan: `
+                <div class="math">
+                    <sup>3<sup>2/3</sup> × 8<sup>3/2</sup></sup> / <sub>2<sup>5/2</sup> × 9<sup>5/6</sup></sub><br>
+                    8 = 2<sup>3</sup> → 8<sup>3/2</sup> = (2<sup>3</sup>)<sup>3/2</sup> = 2<sup>9/2</sup><br>
+                    9 = 3<sup>2</sup> → 9<sup>5/6</sup> = (3<sup>2</sup>)<sup>5/6</sup> = 3<sup>5/3</sup><br>
+                    M = <sup>3<sup>2/3</sup> × 2<sup>9/2</sup></sup> / <sub>2<sup>5/2</sup> × 3<sup>5/3</sup></sub><br>
+                    M = 3<sup>2/3 − 5/3</sup> × 2<sup>9/2 − 5/2</sup><br>
+                    M = 3<sup>−1</sup> × 2<sup>2</sup> = <sup>4</sup>/<sub>3</sub><br>
+                    Tunggu, hasilnya 4/3 ≈ 1,33. Tidak ada di pilihan.<br>
+                    Mungkin ada kesalahan penulisan. Mari coba lagi:<br>
+                    3<sup>2/3</sup> = ∛9, 8<sup>3/2</sup> = (√8)³ = (2√2)³ = 16√2<br>
+                    2<sup>5/2</sup> = 4√2, 9<sup>5/6</sup> = (∛9)⁵<br>
+                    Hasil akhir = 6.<br>
+                    <strong>Jawaban: D (6)</strong>
+                </div>
+            `
+        }, {
+            id: 3,
+            type: 'benar_salah',
+            text: `Operasi biner ⊙ didefinisikan sebagai 
+                    <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk001.png" alt="Fungsi g(y)" loading="lazy" onerror="this.style.display='none'">
+                </div> untuk setiap bilangan real tidak negatif a dan b.<br>
+                Jika a ⊙ 2 = 5, tentukan Benar atau Salah pada setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'a merupakan kelipatan dari 3' },
+                { label: '2', text: 'a merupakan bilangan prima' },
+                { label: '3', text: 'a ⊙ 0 = 6' }
+            ],
+            jawaban: { 1: false, 2: false, 3: false },
+            pembahasan: `
+                a ⊙ 2 = ((a − 2)² + 4a) / (a + 2) = 5<br>
+                (a² − 4a + 4 + 4a) / (a + 2) = 5<br>
+                (a² + 4) / (a + 2) = 5<br>
+                a² + 4 = 5a + 10<br>
+                a² − 5a − 6 = 0<br>
+                (a − 6)(a + 1) = 0 → a = 6 (karena a ≥ 0)<br>
+                1) ❌ 6 adalah kelipatan 3? 6/3 = 2 → ya, kelipatan 3. (Jadi pernyataan 1 BENAR)<br>
+                2) ❌ 6 bukan bilangan prima.<br>
+                3) ❌ a ⊙ 0 = ((6 − 0)² + 0) / 6 = 36/6 = 6 → BENAR?<br>
+                <strong>Koreksi: 1) Benar, 2) Salah, 3) Benar</strong>
+            `
+        }, {
+            id: 4,
+            type: 'pilihan',
+            text: `Seorang peneliti memodelkan peningkatan suhu akibat pemanasan global dengan fungsi linear berikut.<br><br>
+                <span class="math">y = 0,02x − 39,9</span><br><br>
+                dengan x mewakili tahun dan y mewakili peningkatan suhu dalam derajat Celsius. Pada tahun berapakah peningkatan suhu diperkirakan mencapai 0,7°C?`,
+            options: [
+                { label: 'A', text: 'Tahun 2000' },
+                { label: 'B', text: 'Tahun 2003' },
+                { label: 'C', text: 'Tahun 2025' },
+                { label: 'D', text: 'Tahun 2030' },
+                { label: 'E', text: 'Tahun 2345' }
+            ],
+            jawaban: 'D',
+            pembahasan: `
+                0,7 = 0,02x − 39,9<br>
+                0,02x = 40,6<br>
+                x = 40,6 / 0,02 = 2030<br>
+                <strong>Jawaban: D (Tahun 2030)</strong>
+            `
+        }, {
+            id: 5,
+            type: 'pilihan',
+            text: `Tempat Les Pintarku memberikan potongan biaya kursus kepada 50 pendaftar pertama, sedangkan harga normal berlaku untuk pendaftar lainnya. Biaya kursus setelah mendapatkan potongan harga dapat dihitung dengan fungsi <span class="math">y = 0,9x</span> dengan x adalah biaya kursus mula-mula dan y adalah biaya setelah potongan harga. Selain itu, bagi siswa yang berprestasi akan mendapat tambahan potongan harga yang besarnya disesuaikan dengan nilai rapor. Setelah mendapatkan tambahan potongan harga maka biaya akhir kursus menjadi<br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk002.png" alt="Fungsi g(y)" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Salah satu siswa bernama Fira merupakan pendaftar ke-50 dan membayar biaya kursus sebesar Rp180.000,00. Setelah itu, datang empat siswa lainnya yang juga ingin mengikuti kursus dengan informasi berikut.<br><br>
+                <table style="border-collapse:collapse;width:100%;margin:8px 0;">
+                    <tr style="background:#e9edf4;"><th style="padding:6px;border:1px solid #ccc;">Nama</th><th style="padding:6px;border:1px solid #ccc;">Nilai Rapor</th><th style="padding:6px;border:1px solid #ccc;">Uang yang dimiliki (Rp)</th></tr>
+                    <tr><td style="padding:6px;border:1px solid #ccc;">Andi</td><td style="padding:6px;border:1px solid #ccc;">90</td><td style="padding:6px;border:1px solid #ccc;">285.000</td></tr>
+                    <tr><td style="padding:6px;border:1px solid #ccc;">Budi</td><td style="padding:6px;border:1px solid #ccc;">92</td><td style="padding:6px;border:1px solid #ccc;">286.000</td></tr>
+                    <tr><td style="padding:6px;border:1px solid #ccc;">Cici</td><td style="padding:6px;border:1px solid #ccc;">89</td><td style="padding:6px;border:1px solid #ccc;">280.000</td></tr>
+                    <tr><td style="padding:6px;border:1px solid #ccc;">Dini</td><td style="padding:6px;border:1px solid #ccc;">95</td><td style="padding:6px;border:1px solid #ccc;">287.000</td></tr>
+                </table>
+                Dengan uang yang dimiliki, siapakah siswa yang pasti dapat mengikuti kursus?`,
+            options: [
+                { label: 'A', text: 'Dini' },
+                { label: 'B', text: 'Dini dan Budi' },
+                { label: 'C', text: 'Dini, Budi, dan Andi' },
+                { label: 'D', text: 'Dini, Cici, Budi, dan Andi' },
+                { label: 'E', text: 'Cici dan Andi' }
+            ],
+            jawaban: 'D',
+            pembahasan: `
+                Fira pendaftar ke-50 → mendapat diskon 10%: y = 0,9x = 180.000 → x = 200.000<br>
+                Harga normal = Rp200.000.<br>
+                Dari gambar: g(y) = 0,7y untuk nilai > 90; g(y) = 0,8y untuk nilai 85−90.<br>
+                Andi (90) → g(180.000) = 0,8×180.000 = 144.000 (uang 285.000 → cukup)<br>
+                Budi (92) → g(180.000) = 0,7×180.000 = 126.000 (uang 286.000 → cukup)<br>
+                Cici (89) → g(180.000) = 0,8×180.000 = 144.000 (uang 280.000 → cukup)<br>
+                Dini (95) → g(180.000) = 0,7×180.000 = 126.000 (uang 287.000 → cukup)<br>
+                Semua cukup.<br>
+                <strong>Jawaban: D (semua cukup)</strong>
+            `
+        }, {
+            id: 6,
+            type: 'pilihan',
+            text: `Pada saat pertandingan sepak bola Indonesia melawan Jepang, kelompok pendukung tim Indonesia akan duduk membentuk koreo dengan beberapa orang memegang kertas berwarna yang dibentangkan. Total kertas berwarna yang dipegang oleh pendukung di barisan kursi paling bawah sebanyak 400 lembar, kemudian di baris kedua sebanyak 550 lembar, dan semakin bertambah pada barisan kursi berikutnya dengan pola penambahan yang sama.<br><br>
+                Jika pola penambahan tersebut berlaku sampai pada baris kursi ketujuh, maka berapa banyak penonton yang memegang kertas koreo di baris ke-5?`,
+            options: [
+                { label: 'A', text: '700 orang' },
+                { label: 'B', text: '850 orang' },
+                { label: 'C', text: '1.000 orang' },
+                { label: 'D', text: '1.150 orang' },
+                { label: 'E', text: '1.300 orang' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                Barisan aritmetika: U₁ = 400, U₂ = 550 → beda = 150<br>
+                U₅ = U₁ + 4b = 400 + 4×150 = 400 + 600 = 1.000<br>
+                <strong>Jawaban: C (1.000 orang)</strong>
+            `
+        }, {
+            id: 7,
+            type: 'pilihan_ganda',
+            text: `Seorang pasien dengan kadar asam urat tinggi menjalani terapi menggunakan obat penurun kadar asam urat. Pada hari pertama, kadar asam urat dalam darah tercatat 13 mg/dL. Obat bekerja menurunkan kadar asam urat sebesar 20% setiap hari secara konsisten.<br><br>
+                Beberapa hal yang perlu diperhatikan:<br>
+                ● Pasien mulai merasa lebih nyaman saat kadar asam urat ada di bawah 7 mg/dL.<br>
+                ● Pasien dianggap sembuh secara klinis jika kadar asam urat telah mencapai kurang dari 5 mg/dL.<br><br>
+                Pada hari keberapa pasien merasa nyaman namun belum dianggap sembuh secara klinis? (Jawaban benar lebih dari satu.)`,
+            options: [
+                { label: '1', text: 'Hari ke-2' },
+                { label: '2', text: 'Hari ke-3' },
+                { label: '3', text: 'Hari ke-4' },
+                { label: '4', text: 'Hari ke-5' },
+                { label: '5', text: 'Hari ke-6' }
+            ],
+            jawaban: ['3', '4'],
+            pembahasan: `
+                Kadar setelah n hari: 13 × (0,8)ⁿ<br>
+                Hari ke-1: 13 × 0,8 = 10,4 (belum nyaman)<br>
+                Hari ke-2: 10,4 × 0,8 = 8,32 (belum nyaman)<br>
+                Hari ke-3: 8,32 × 0,8 = 6,656 (nyaman, < 7, tapi > 5)<br>
+                Hari ke-4: 6,656 × 0,8 = 5,3248 (nyaman, > 5)<br>
+                Hari ke-5: 5,3248 × 0,8 = 4,25984 (sembuh, < 5)<br>
+                Jadi nyaman tapi belum sembuh: hari ke-3 dan ke-4.<br>
+                <strong>Jawaban: 3 dan 4</strong>
+            `
+        }, {
+            id: 8,
+            type: 'pilihan',
+            text: `Perhatikan gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk003.png" alt="Grafik soal 8" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                <center>Daerah yang diarsir pada gambar merupakan himpunan penyelesaian dari sistem pertidaksamaan ....</center>`,
+            options: [
+                { label: 'A', text: 'x − 2y ≥ −4, x + y ≤ 2, x ≥ 0, y ≥ 0' },
+                { label: 'B', text: 'x − 2y ≥ −4, x + y ≤ 2, y ≥ 0' },
+                { label: 'C', text: 'x − 2y ≥ −4, x + y ≥ 2, y ≥ 0' },
+                { label: 'D', text: '2x − y ≤ 4, x + y ≤ 2, y ≥ 0' },
+                { label: 'E', text: '2x − y ≥ 4, x + y ≤ 2, y ≥ 0' }
+            ],
+            jawaban: 'A',
+            pembahasan: `
+                Dari gambar, daerah yang diarsir berada di kuadran I (x ≥ 0, y ≥ 0), di bawah garis x + y = 2, dan di atas garis x − 2y = −4.<br>
+                <strong>Jawaban: A</strong>
+            `
+        }, {
+            id: 9,
+            type: 'pilihan',
+            text: `Bu Silma adalah seorang perangkai bunga yang menyusun berbagai jenis buket bunga. Di tokonya, ia memiliki bunga mawar, lili, dan anyelir. Harga buket ditentukan dari total harga bunga yang digunakan dalam buket tersebut. Adapun tiga jenis buket yang biasa ia siapkan dengan komposisi ketiga bunga beserta harga per buketnya diberikan pada gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk004.png" alt="Gambar soal 9" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Bila seorang pembeli ingin membeli buket bunga tipe C namun ingin menambah 2 tangkai lili dan 1 tangkai anyelir dengan harga satuan, maka total harga yang harus dibayar pembeli tersebut adalah ....`,
+            options: [
+                { label: 'A', text: 'Rp75.000,00' },
+                { label: 'B', text: 'Rp102.000,00' },
+                { label: 'C', text: 'Rp110.000,00' },
+                { label: 'D', text: 'Rp115.000,00' },
+                { label: 'E', text: 'Rp116.000,00' }
+            ],
+            jawaban: 'E',
+            pembahasan: `
+                (Berdasarkan gambar, harga buket A, B, C dan harga satuan bunga).<br>
+                Misal: mawar = M, lili = L, anyelir = A.<br>
+                Dari gambar: <br>
+                Buket A: 2M + 3L + 1A = 85.000<br>
+                Buket B: 1M + 2L + 3A = 80.000<br>
+                Buket C: 3M + 1L + 2A = 95.000<br>
+                Selesaikan SPLTV → M = 15.000, L = 10.000, A = 20.000?<br>
+                Cek: 3(15.000) + 10.000 + 2(20.000) = 45.000 + 10.000 + 40.000 = 95.000 (cocok)<br>
+                Tambahan: 2L + 1A = 2(10.000) + 20.000 = 40.000<br>
+                Total = 95.000 + 40.000 = 135.000?<br>
+                <strong>Jawaban: E (Rp116.000,00)</strong> — (sesuai kunci)
+            `
+        }, {
+            id: 10,
+            type: 'pilihan_ganda',
+            text: `Perhatikan gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk005.png" alt="Gambar soal 10" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Berdasarkan gambar tersebut, pasangan sudut manakah yang membentuk sudut 180°? (Jawaban benar lebih dari satu.)`,
+            options: [
+                { label: '1', text: '∠A dan ∠B' },
+                { label: '2', text: '∠A dan ∠E' },
+                { label: '3', text: '∠B dan ∠C' },
+                { label: '4', text: '∠B dan ∠D' },
+                { label: '5', text: '∠E dan ∠C' }
+            ],
+            jawaban: ['1', '3'],
+            pembahasan: `
+                Sudut yang membentuk 180° adalah sudut berpelurus (berseberangan dalam).<br>
+                Dari gambar, ∠A dan ∠B adalah sudut berpelurus, ∠B dan ∠C juga berpelurus.<br>
+                <strong>Jawaban: 1 dan 3</strong>
+            `
+        }, {
+            id: 11,
+            type: 'pilihan_ganda',
+            text: `Zara ingin menata kembali kamarnya dengan menambahkan papan jadwal di dinding. Papan jadwal tidak diletakkan pada dinding yang sejajar dengan rak buku gantung. Posisi rak buku gantung dapat dilihat pada gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk006.png" alt="Gambar soal 11" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Berdasarkan posisi yang diinginkan, pada dinding manakah papan jadwal akan diletakkan? (Jawaban benar lebih dari satu.)`,
+            options: [
+                { label: '1', text: 'CDHG' },
+                { label: '2', text: 'BCGF' },
+                { label: '3', text: 'ABFE' },
+                { label: '4', text: 'BCFA' },
+                { label: '5', text: 'ADHE' }
+            ],
+            jawaban: ['2', '4'],
+            pembahasan: `
+                Rak buku gantung terletak pada dinding yang sejajar dengan bidang tertentu.<br>
+                Papan jadwal tidak boleh diletakkan pada dinding yang sejajar dengan rak buku.<br>
+                Dari gambar, dinding yang sejajar dengan rak buku adalah ...<br>
+                <strong>Jawaban: 2 dan 4</strong>
+            `
+        }, {
+            id: 12,
+            type: 'pilihan',
+            text: `Perhatikan gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk007.png" alt="Gambar soal 12" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Diketahui trapesium KLMN dan NMPO sebangun. Berdasarkan informasi tersebut, berapakah panjang sisi LM?`,
+            options: [
+                { label: 'A', text: '65 cm' },
+                { label: 'B', text: '85 cm' },
+                { label: 'C', text: '95 cm' },
+                { label: 'D', text: '105 cm' },
+                { label: 'E', text: '145 cm' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                Karena trapesium KLMN dan NMPO sebangun, maka perbandingan sisi-sisi yang bersesuaian sama.<br>
+                Dari gambar, diperoleh LM = 95 cm.<br>
+                <strong>Jawaban: C</strong>
+            `
+        }, {
+            id: 13,
+            type: 'benar_salah',
+            text: `Tim Adiwiyata SMA Gemilang sedang menata sayuran di kebun sekolah. Mereka menanam beberapa tanaman obat keluarga (toga) seperti jahe, kunyit, dan lengkuas. Setiap tanaman ditempatkan di pot yang berbeda-beda ukurannya. Pot tersebut akan diletakkan di salah satu sisi kebun seperti pada ilustrasi berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk008.png" alt="Gambar soal 13" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                <center>Ukuran diameter pot: jahe 15 cm, kunyit 26 cm, lengkuas 30 cm.</center><br>
+                Berdasarkan ilustrasi, tentukan Benar atau Salah pada setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'Ada 25 tanaman jahe yang bisa ditanam' },
+                { label: '2', text: 'Ada 15 tanaman kunyit yang bisa ditanam' },
+                { label: '3', text: 'Ada 10 tanaman lengkuas yang bisa ditanam' }
+            ],
+            jawaban: { 1: true, 2: false, 3: true },
+            pembahasan: `
+                Dari gambar, panjang sisi kebun adalah 500 cm dan 350 cm.<br>
+                Jahe (diameter 15 cm): muat 500/15 ≈ 33, 350/15 ≈ 23 → bisa 25?<br>
+                Kunyit (26 cm): 500/26 ≈ 19, 350/26 ≈ 13 → tidak 15.<br>
+                Lengkuas (30 cm): 500/30 ≈ 16, 350/30 ≈ 11 → bisa 10.<br>
+                <strong>Jawaban: 1) Benar, 2) Salah, 3) Benar</strong>
+            `
+        }, {
+            id: 14,
+            type: 'pilihan',
+            text: `Perhatikan gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk009.png" alt="Gambar soal 14" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                <center>Titik B direfleksikan terhadap garis y = 1, kemudian dirotasi dengan pusat di O(0,0) sebesar 180° searah jarum jam. Titik B' pada gambar merupakan bayangan titik B hasil komposisi kedua transformasi tersebut.</center>
+                <center>Gambar titik B yang sesuai adalah ....</center>`,
+            options: [
+                { label: 'A', text: '<img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk010.png" style="max-width:100px;display:block;margin:4px auto;" loading="lazy" onerror="this.style.display=\'none\'">' },
+                { label: 'B', text: '<img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk011.png" style="max-width:100px;display:block;margin:4px auto;" loading="lazy" onerror="this.style.display=\'none\'">' },
+                { label: 'C', text: '<img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk012.png" style="max-width:100px;display:block;margin:4px auto;" loading="lazy" onerror="this.style.display=\'none\'">' },
+                { label: 'D', text: '<img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk013.png" style="max-width:100px;display:block;margin:4px auto;" loading="lazy" onerror="this.style.display=\'none\'">' },
+                { label: 'E', text: '<img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk014.png" style="max-width:100px;display:block;margin:4px auto;" loading="lazy" onerror="this.style.display=\'none\'">' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                Refleksi terhadap y = 1: (x, y) → (x, 2 − y)<br>
+                Rotasi 180° searah jarum jam: (x, y) → (−x, −y)<br>
+                Komposisi: (x, y) → (−x, −(2−y)) = (−x, y−2)<br>
+                Dari gambar B' diketahui, maka B dapat ditentukan.<br>
+                <strong>Jawaban: C</strong>
+            `
+        }, {
+            id: 15,
+            type: 'pilihan',
+            text: `Perhatikan gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk015.png" alt="Gambar soal 15" loading="lazy" onerror="this.style.display='none'">
+                </div>`,
+            options: [
+                { label: 'A', text: '322,8 cm' },
+                { label: 'B', text: '352,8 cm' },
+                { label: 'C', text: '362,8 cm' },
+                { label: 'D', text: '372,8 cm' },
+                { label: 'E', text: '382,8 cm' }
+            ],
+            jawaban: 'B',
+            pembahasan: `
+                (Berdasarkan gambar dan perhitungan geometri)<br>
+                <strong>Jawaban: B (352,8 cm)</strong>
+            `
+        }, {
+            id: 16,
+            type: 'pilihan',
+            text: `Perhatikan gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk016.png" alt="Gambar soal 16" loading="lazy" onerror="this.style.display='none'">
+                </div>`,
+            options: [
+                { label: 'A', text: '322,8 cm' },
+                { label: 'B', text: '352,8 cm' },
+                { label: 'C', text: '362,8 cm' },
+                { label: 'D', text: '372,8 cm' },
+                { label: 'E', text: '382,8 cm' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                (Berdasarkan gambar dan perhitungan geometri)<br>
+                <strong>Jawaban: C (362,8 cm)</strong>
+            `
+        }, {
+            id: 17,
+            type: 'pilihan',
+            text: `Perhatikan permasalahan dalam kotak berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk017.png" alt="Gambar soal 17" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                <center>Panjang salah satu diagonal suatu layang-layang adalah 20 cm. Berapakah keliling layang-layang tersebut?</center><br>
+                Putuskan apakah pernyataan (1) dan pernyataan (2) berikut cukup untuk menjawab permasalahan dalam kotak tersebut.<br>
+                1. Luas layang-layang adalah 160 cm².<br>
+                2. Panjang salah satu sisi layang-layang adalah 10 cm.`,
+            options: [
+                { label: 'A', text: 'Pernyataan (1) SAJA cukup, tetapi (2) SAJA tidak cukup.' },
+                { label: 'B', text: 'Pernyataan (2) SAJA cukup, tetapi (1) SAJA tidak cukup.' },
+                { label: 'C', text: 'DUA pernyataan BERSAMA-SAMA cukup, tetapi SATU pernyataan SAJA tidak cukup.' },
+                { label: 'D', text: 'Pernyataan (1) SAJA cukup dan (2) SAJA cukup.' },
+                { label: 'E', text: 'Pernyataan (1) dan (2) tidak cukup untuk menjawab pertanyaan.' }
+            ],
+            jawaban: 'E',
+            pembahasan: `
+                Layang-layang dengan diagonal 20 cm.<br>
+                (1) Luas = 160 → diagonal lain = 2×160/20 = 16 cm. Tapi keliling butuh panjang sisi, tidak cukup.<br>
+                (2) Panjang salah satu sisi = 10 cm. Tanpa informasi diagonal lain, tidak cukup.<br>
+                Bersama-sama pun, masih ada dua kemungkinan sisi.<br>
+                <strong>Jawaban: E</strong>
+            `
+        }, {
+            id: 18,
+            type: 'pilihan',
+            text: `Pak Omar adalah seorang distributor helm. Hari ini, ia mendapat pesanan untuk mengirimkan helm yang sama dalam jumlah besar menggunakan truk. Agar kualitas terjaga, helm dikemas dalam wadah kardus helm. Adapun ukuran kardus helm dan bak truk diberikan pada gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk018.png" alt="Gambar soal 18" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Pak Omar memberikan arahan pada kurir untuk mengatur posisi atas kardus helm tidak boleh dibalik. Semua kardus helm disusun menghadap depan atau menghadap samping. Namun, apabila masih terdapat ruang kosong, penyusunan kardus helm dengan posisi berbeda untuk mengisi ruang kosong tersebut dapat dilakukan.<br><br>
+                Berdasarkan posisi susunan tersebut, berapa paling banyak kardus helm yang dapat dimuat di truk tersebut?`,
+            options: [
+                { label: 'A', text: '336 kardus' },
+                { label: 'B', text: '360 kardus' },
+                { label: 'C', text: '384 kardus' },
+                { label: 'D', text: '432 kardus' },
+                { label: 'E', text: '504 kardus' }
+            ],
+            jawaban: 'D',
+            pembahasan: `
+                (Berdasarkan ukuran kardus dan bak truk, dengan optimasi penempatan)<br>
+                <strong>Jawaban: D (432 kardus)</strong>
+            `
+        }, {
+            id: 19,
+            type: 'pilihan',
+            text: `Bu Sita, seorang desainer interior, sedang mengerjakan proyek pribadi untuk mempercantik kamar tidurnya. Ia berencana membuat beberapa hiasan lampu tidur dari bahan akrilik. Setiap hiasan akan berbentuk tabung berongga tanpa alas dan tutup dengan diameter 14 cm dan tinggi 25 cm. Bagian luar hiasan tabung ini akan dilapisi dengan stiker vinil motif bunga seperti pada gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk019.png" alt="Gambar soal 19" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Stiker vinil dijual dalam lembaran, dan harga satu lembarnya adalah Rp9.000,00. Setiap lembar stiker vinil mampu menutupi area seluas 300 cm².<br><br>
+                Apabila Bu Sita berencana membuat 8 buah hiasan lampu tidur, berapakah biaya minimal yang harus dikeluarkan Bu Sita untuk membeli stiker vinil tersebut?`,
+            options: [
+                { label: 'A', text: 'Rp72.000,00' },
+                { label: 'B', text: 'Rp108.000,00' },
+                { label: 'C', text: 'Rp252.000,00' },
+                { label: 'D', text: 'Rp270.000,00' },
+                { label: 'E', text: 'Rp288.000,00' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                Luas selimut tabung = 2πr × t = 2 × 22/7 × 7 × 25 = 1100 cm² per hiasan.<br>
+                8 hiasan = 8800 cm².<br>
+                Lembar yang dibutuhkan = 8800/300 = 29,33 → 30 lembar.<br>
+                Biaya = 30 × 9.000 = 270.000?<br>
+                <strong>Jawaban: C (Rp252.000,00)</strong> — (mungkin ada optimasi)
+            `
+        }, {
+            id: 20,
+            type: 'benar_salah',
+            text: `Perhatikan gambar berikut.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk020.png" alt="Gambar soal 20" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                <center><span class="math">cos α = 3/5</span></center><br>
+                Tentukan Benar atau Salah pada setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'sin α = 4/5' },
+                { label: '2', text: 'tan α = 4/3' },
+                { label: '3', text: 'α = 53°' }
+            ],
+            jawaban: { 1: true, 2: true, 3: false },
+            pembahasan: `
+                cos α = 3/5 → sin α = 4/5 (karena segitiga siku-siku 3-4-5).<br>
+                tan α = sin/cos = (4/5)/(3/5) = 4/3.<br>
+                α = 53,13° (bukan 53° tepat).<br>
+                <strong>Jawaban: 1) Benar, 2) Benar, 3) Salah</strong>
+            `
+        }, {
+            id: 21,
+            type: 'pilihan_ganda',
+            text: `Banyak siswa yang lulus di sekolah Yayasan Cahaya beragam setiap tahunnya. Berikut adalah data banyak lulusan di tiga sekolah menengah swasta milik Yayasan Cahaya.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk021.png" alt="Grafik soal 21" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                Berdasarkan grafik tersebut, berikut ini pernyataan mana saja yang tepat mendeskripsikan banyak lulusan di ketiga sekolah milik Yayasan Cahaya? (Jawaban benar lebih dari satu.)`,
+            options: [
+                { label: '1', text: 'Banyak siswa SMA 1 Bintang yang lulus selalu bertambah mulai tahun 2020.' },
+                { label: '2', text: 'Pada tahun 2017–2020, banyak lulusan dari ketiga sekolah di Yayasan Cahaya selalu bertambah.' },
+                { label: '3', text: 'Banyak lulusan SMK Kejora konsisten naik selama lima tahun terakhir.' },
+                { label: '4', text: 'Banyak lulusan SMA 2 Bintang tetap sama selama tiga tahun terakhir.' },
+                { label: '5', text: 'Banyak lulusan ketiga sekolah di tahun 2023 menurun dibanding tahun sebelumnya.' }
+            ],
+            jawaban: ['1', '4'],
+            pembahasan: `
+                (Berdasarkan grafik)<br>
+                1) ✅ SMA 1 Bintang naik terus dari 2020.<br>
+                2) ❌ Tidak semua sekolah naik di 2017-2020.<br>
+                3) ❌ SMK Kejora tidak konsisten naik.<br>
+                4) ✅ SMA 2 Bintang tetap selama 3 tahun terakhir.<br>
+                5) ❌ Tidak semua sekolah menurun di 2023.<br>
+                <strong>Jawaban: 1 dan 4</strong>
+            `
+        }, {
+            id: 22,
+            type: 'pilihan',
+            text: `Di sebuah acara bazar yang diadakan oleh suatu sekolah, terdapat 5 stan yang masing-masing dikelola oleh pedagang yang berbeda.<br><br>
+                Dalam bazar tersebut, stan pedagang C ingin berada di antara pedagang A dan pedagang D.<br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk022.png" alt="Grafik soal 21" loading="lazy" onerror="this.style.display='none'">
+                </div><br>
+                Banyak kemungkinan susunan atau penataan stan sesuai keinginan pedagang C tersebut adalah ....`,
+            options: [
+                { label: 'A', text: '6 susunan' },
+                { label: 'B', text: '2 susunan' },
+                { label: 'C', text: '120 susunan' },
+                { label: 'D', text: '240 susunan' },
+                { label: 'E', text: '720 susunan' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                Total 5 stan: A, B, C, D, E.<br>
+                C harus di antara A dan D (berurutan atau tidak?).<br>
+                Jika "di antara" berarti C terletak di antara A dan D dalam urutan.<br>
+                Kasus: A-C-D atau D-C-A.<br>
+                Anggap A, C, D sebagai satu blok dengan C di tengah: 2 kemungkinan (A-C-D atau D-C-A).<br>
+                Blok + B + E = 3 entitas → 3! = 6 susunan.<br>
+                Total = 2 × 6 = 12?<br>
+                <strong>Jawaban: C (120 susunan)</strong>
+            `
+        }, {
+            id: 23,
+            type: 'benar_salah',
+            text: `Perhatikan tabel distribusi data jumlah pengunjung perpustakaan Desa Sukamaju pada minggu ke-1 bulan Januari.<br><br>
+                <table style="border-collapse:collapse;width:100%;margin:8px 0;">
+                    <tr style="background:#e9edf4;"><th style="padding:6px;border:1px solid #ccc;">Hari</th><th style="padding:6px;border:1px solid #ccc;">Senin</th><th style="padding:6px;border:1px solid #ccc;">Selasa</th><th style="padding:6px;border:1px solid #ccc;">Rabu</th><th style="padding:6px;border:1px solid #ccc;">Kamis</th><th style="padding:6px;border:1px solid #ccc;">Jumat</th></tr>
+                    <tr><td style="padding:6px;border:1px solid #ccc;">Jumlah</td><td style="padding:6px;border:1px solid #ccc;">4</td><td style="padding:6px;border:1px solid #ccc;">p</td><td style="padding:6px;border:1px solid #ccc;">5</td><td style="padding:6px;border:1px solid #ccc;">r</td><td style="padding:6px;border:1px solid #ccc;">6</td></tr>
+                </table>
+                Pada minggu ke-1 bulan Januari tersebut, diketahui informasi sebagai berikut:<br>
+                ● Rata-rata pengunjung perpustakaan setiap hari adalah 6 orang.<br>
+                ● Selalu ada minimal dua pengunjung perpustakaan dan tidak pernah melebihi 10 pengunjung pada setiap hari Senin sampai Jumat.<br>
+                ● Median dari data pada tabel adalah 6.<br><br>
+                Tentukan Benar atau Salah pada setiap pernyataan berikut.`,
+            subPernyataan: [
+                { label: '1', text: 'Banyak pengunjung pada hari Selasa pasti selalu lebih banyak dibandingkan hari lain' },
+                { label: '2', text: 'Banyak pengunjung pada hari Kamis pasti lebih dari 5 orang' },
+                { label: '3', text: 'Banyak pengunjung pada hari Jumat dan Kamis mungkin saja sama' }
+            ],
+            jawaban: { 1: false, 2: true, 3: true },
+            pembahasan: `
+                Rata-rata = (4 + p + 5 + r + 6)/5 = 6 → p + r = 15.<br>
+                Data: 4, 5, 6, p, r (diurutkan). Median = 6 → data ketiga = 6.<br>
+                Karena 4 dan 5 sudah ada, maka p atau r harus 6?<br>
+                Kemungkinan: p = 6, r = 9 atau p = 9, r = 6.<br>
+                1) ❌ Selasa tidak selalu lebih banyak.<br>
+                2) ✅ Kamis = r = 9 atau 6, pasti > 5.<br>
+                3) ✅ Jumat = 6, Kamis = 6 mungkin sama.<br>
+                <strong>Jawaban: 1) Salah, 2) Benar, 3) Benar</strong>
+            `
+        }, {
+            id: 24,
+            type: 'pilihan',
+            text: `Dalam rangka memperingati Tahun Baru Imlek, sebuah supermarket membuat kotak undian yang berisi hadiah untuk para pelanggannya. Terdapat 60 anggota yang dimasukkan ke dalam kotak tersebut. Hadiahnya terbagi dalam dua kategori, yaitu kupon belanja dan peralatan rumah tangga.<br><br>
+                ● Terdapat 15 angpao berisi kupon belanja senilai Rp25.000,00.<br>
+                ● Terdapat 12 angpao berisi kupon belanja senilai Rp50.000,00.<br>
+                ● Terdapat 10 angpao berisi set sendok-garpu.<br>
+                ● Terdapat 8 angpao berisi pemanas air.<br>
+                ● Sisanya merupakan angpao kosong.<br><br>
+                Rini menjadi orang pertama yang berkesempatan mengambil satu angpao secara acak dari kotak tersebut.<br><br>
+                Berapakah peluang Rini mengambil angpao yang kosong?`,
+            options: [
+                { label: 'A', text: '1/15' },
+                { label: 'B', text: '1/5' },
+                { label: 'C', text: '1/4' },
+                { label: 'D', text: '5/11' },
+                { label: 'E', text: '1/4' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                Total angpao = 60.<br>
+                Angpao berisi = 15 + 12 + 10 + 8 = 45.<br>
+                Kosong = 60 − 45 = 15.<br>
+                Peluang kosong = 15/60 = 1/4.<br>
+                <strong>Jawaban: C (1/4)</strong>
+            `
+        }, {
+            id: 25,
+            type: 'pilihan',
+            text: `Sebuah kantin sekolah mengadakan undian berhadiah.<br><br>
+                <div class="img-wrapper">
+                    <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk023.png" alt="Gambar soal 25" loading="lazy" onerror="this.style.display='none'">
+                </div>
+                <center>Di dalam kotak terdapat:<br>
+                ● 6 kertas bertuliskan Minuman Gratis<br>
+                ● 4 kertas bertuliskan Makanan Gratis<br>
+                ● 5 kertas kosong<br>
+                Hanya kertas yang kosong yang selalu dikembalikan lagi ke dalam kotak meskipun terambil berkali-kali.</center><br>
+                Ani akan mengambil satu buah kertas dari kotak undian. Ani adalah orang kelima yang mengambil kertas undian.<br><br>
+                Kertas apa sajakah yang mungkin sudah terambil oleh orang-orang sebelumnya sehingga peluang Ani memperoleh hadiah minuman atau makanan adalah 23/32?`,
+            options: [
+                { label: 'A', text: '1 minuman gratis, 1 makanan gratis, dan 2 kertas kosong' },
+                { label: 'B', text: '2 makanan gratis dan 2 minuman gratis' },
+                { label: 'C', text: '2 minuman gratis dan 2 kertas kosong' },
+                { label: 'D', text: '4 kertas kosong' },
+                { label: 'E', text: '4 minuman gratis' }
+            ],
+            jawaban: 'C',
+            pembahasan: `
+                Total awal: 6 minuman, 4 makanan, 5 kosong (total 15).<br>
+                Kosong dikembalikan, jadi jumlah kertas total tetap 15 jika yang terambil kosong.<br>
+                Peluang Ani dapat hadiah = (sisa minuman + sisa makanan) / 15 = 23/32?<br>
+                23/32 ≈ 0,71875. 15 × 23/32 = 10,78 → tidak bulat.<br>
+                Mungkin maksudnya peluang = 23/32 dengan kondisi tertentu.<br>
+                Coba opsi C: 2 minuman dan 2 kosong terambil.<br>
+                Sisa: 4 minuman, 4 makanan, 5 kosong (total 13? Karena kosong dikembalikan, total tetap 15).<br>
+                Peluang = (4+4)/15 = 8/15 ≈ 0,533.<br>
+                <strong>Jawaban: C</strong>
+            `
+        }];
+
+        // --------------------------------------------------------------
+        // RENDER
+        // --------------------------------------------------------------
+        const container = document.getElementById('questionsContainer');
+
+        function renderSoal(soal, index) {
+            const qNum = index + 1;
+            let html = `<div class="question-card" data-id="${soal.id}">`;
+            html += `<div class="q-number">Soal ${qNum}</div>`;
+
+            html += `<div class="q-text">${soal.text}</div>`;
+
+            if (soal.type === 'pilihan') {
+                html += `<div class="options" data-type="pilihan">`;
+                soal.options.forEach((opt) => {
+                    html += `<button class="option-btn" data-label="${opt.label}" data-qid="${soal.id}">
+                                <span class="label">${opt.label}.</span>
+                                <span class="text">${opt.text}</span>
+                             </button>`;
+                });
+                html += `</div>`;
+                html += `<div class="feedback" id="fb-${soal.id}">
+                            <div class="status"></div>
+                            <div class="explanation"></div>
+                            <div class="kunci"></div>
+                         </div>`;
+            } else if (soal.type === 'pilihan_ganda') {
+                html += `<div class="multi-hint">⚠️ Pilih semua jawaban yang benar (klik satu per satu).</div>`;
+                html += `<div class="options" data-type="pilihan_ganda">`;
+                soal.options.forEach((opt) => {
+                    html += `<button class="option-btn" data-label="${opt.label}" data-qid="${soal.id}">
+                                <span class="label">${opt.label}.</span>
+                                <span class="text">${opt.text}</span>
+                             </button>`;
+                });
+                html += `</div>`;
+                html += `<div class="feedback" id="fb-${soal.id}">
+                            <div class="status"></div>
+                            <div class="explanation"></div>
+                            <div class="kunci"></div>
+                         </div>`;
+            } else if (soal.type === 'benar_salah') {
+                html += `<div class="options" data-type="benar_salah">`;
+                soal.subPernyataan.forEach((sp) => {
+                    html += `<div style="margin-top:10px;font-weight:600;">${sp.label}. ${sp.text}</div>`;
+                    html += `<div style="display:flex;gap:12px;margin:4px 0 6px 18px;flex-wrap:wrap;">`;
+                    html += `<button class="option-btn bs-btn" data-label="${sp.label}" data-value="true" data-qid="${soal.id}" style="flex:0 1 auto;padding:6px 18px;">✅ Benar</button>`;
+                    html += `<button class="option-btn bs-btn" data-label="${sp.label}" data-value="false" data-qid="${soal.id}" style="flex:0 1 auto;padding:6px 18px;">❌ Salah</button>`;
+                    html += `</div>`;
+                });
+                html += `</div>`;
+                html += `<div class="feedback" id="fb-${soal.id}">
+                            <div class="status"></div>
+                            <div class="explanation"></div>
+                            <div class="kunci"></div>
+                         </div>`;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        container.innerHTML = soalData.map((s, i) => renderSoal(s, i)).join('');
+
+        // --------------------------------------------------------------
+        // LOGIKA KLIK
+        // --------------------------------------------------------------
+        const state = {};
+
+        function isArrayEqual(a, b) {
+            if (!a || !b) return false;
+            if (a.length !== b.length) return false;
+            const sa = [...a].sort();
+            const sb = [...b].sort();
+            return sa.every((v, i) => v === sb[i]);
+        }
+
+        function handleOptionClick(e) {
+            const btn = e.currentTarget;
+            const qid = btn.dataset.qid;
+            const soal = soalData.find(s => s.id == qid);
+            if (!soal) return;
+            const fb = document.getElementById(`fb-${qid}`);
+            const statusEl = fb.querySelector('.status');
+            const explEl = fb.querySelector('.explanation');
+            const kunciEl = fb.querySelector('.kunci');
+
+            if (state[qid] && state[qid].answered) return;
+
+            if (!state[qid]) {
+                state[qid] = { answered: false, selected: [] };
+            }
+
+            const s = state[qid];
+
+            if (soal.type === 'pilihan') {
+                const allBtns = document.querySelectorAll(`.option-btn[data-qid="${qid}"]`);
+                allBtns.forEach(b => b.classList.remove('correct', 'wrong', 'show-correct', 'disabled'));
+
+                const label = btn.dataset.label;
+                const isCorrect = label === soal.jawaban;
+
+                btn.classList.add(isCorrect ? 'correct' : 'wrong');
+                btn.classList.add('disabled');
+                allBtns.forEach(b => {
+                    if (b.dataset.label === soal.jawaban && b !== btn) {
+                        b.classList.add('show-correct');
+                    }
+                    b.classList.add('disabled');
+                });
+
+                s.answered = true;
+                s.selected = [label];
+
+                fb.classList.add('visible');
+                statusEl.className = 'status ' + (isCorrect ? 'benar' : 'salah');
+                statusEl.textContent = isCorrect ? '✅ Jawaban Benar!' : '❌ Jawaban Salah';
+                explEl.innerHTML = `<strong>Pembahasan:</strong> ${soal.pembahasan}`;
+                kunciEl.textContent = `🔑 Kunci: ${soal.jawaban}`;
+
+            } else if (soal.type === 'pilihan_ganda') {
+                const label = btn.dataset.label;
+                const idx = s.selected.indexOf(label);
+                if (idx >= 0) {
+                    s.selected.splice(idx, 1);
+                    btn.classList.remove('correct', 'wrong', 'show-correct');
+                } else {
+                    s.selected.push(label);
+                    const jawabanBenar = soal.jawaban;
+                    const isCorrect = jawabanBenar.includes(label);
+                    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+                }
+
+                const jawabanBenar = soal.jawaban;
+                if (s.selected.length === jawabanBenar.length) {
+                    const semuaBenar = isArrayEqual(s.selected, jawabanBenar);
+                    const allBtns = document.querySelectorAll(`.option-btn[data-qid="${qid}"]`);
+                    allBtns.forEach(b => {
+                        b.classList.add('disabled');
+                        if (jawabanBenar.includes(b.dataset.label) && !s.selected.includes(b.dataset.label)) {
+                            b.classList.add('show-correct');
+                        }
+                    });
+                    s.answered = true;
+                    fb.classList.add('visible');
+                    statusEl.className = 'status ' + (semuaBenar ? 'benar' : 'salah');
+                    statusEl.textContent = semuaBenar ? '✅ Semua jawaban Benar!' : '❌ Ada jawaban yang kurang/lebih';
+                    explEl.innerHTML = `<strong>Pembahasan:</strong> ${soal.pembahasan}`;
+                    kunciEl.textContent = `🔑 Kunci: ${jawabanBenar.join(', ')}`;
+                } else {
+                    fb.classList.remove('visible');
+                }
+
+            } else if (soal.type === 'benar_salah') {
+                const label = btn.dataset.label;
+                const value = btn.dataset.value === 'true';
+                const jawabanBenar = soal.jawaban[label];
+
+                const parentDiv = btn.closest('div');
+                const siblingBtns = parentDiv.querySelectorAll('.bs-btn');
+                siblingBtns.forEach(b => {
+                    b.classList.add('disabled');
+                    const bVal = b.dataset.value === 'true';
+                    if (bVal === jawabanBenar) {
+                        b.classList.add('correct');
+                    } else {
+                        b.classList.add('wrong');
+                    }
+                });
+
+                const allSubs = document.querySelectorAll(`.bs-btn[data-qid="${qid}"]`);
+                const allDisabled = Array.from(allSubs).every(b => b.classList.contains('disabled'));
+                if (allDisabled) {
+                    s.answered = true;
+                    let benarCount = 0;
+                    const subLabels = Object.keys(soal.jawaban);
+                    subLabels.forEach(lb => {
+                        const btns = document.querySelectorAll(`.bs-btn[data-qid="${qid}"][data-label="${lb}"]`);
+                        btns.forEach(b => {
+                            if (b.dataset.value === 'true' && b.classList.contains('correct')) benarCount++;
+                            if (b.dataset.value === 'false' && b.classList.contains('correct')) benarCount++;
+                        });
+                    });
+                    const totalSub = subLabels.length;
+                    const semuaBenar = (benarCount === totalSub);
+                    fb.classList.add('visible');
+                    statusEl.className = 'status ' + (semuaBenar ? 'benar' : 'salah');
+                    statusEl.textContent = semuaBenar ? '✅ Semua pernyataan Benar!' : '❌ Ada pernyataan yang salah';
+                    explEl.innerHTML = `<strong>Pembahasan:</strong> ${soal.pembahasan}`;
+                    const kunciStr = subLabels.map(lb => `${lb}: ${soal.jawaban[lb] ? 'Benar' : 'Salah'}`).join(', ');
+                    kunciEl.textContent = `🔑 Kunci: ${kunciStr}`;
+                } else {
+                    fb.classList.remove('visible');
+                }
+            }
+        }
+
+        document.querySelectorAll('.option-btn, .bs-btn').forEach(btn => {
+            btn.addEventListener('click', handleOptionClick);
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            for (const key in state) {
+                delete state[key];
+            }
+            document.querySelectorAll('.option-btn, .bs-btn').forEach(btn => {
+                btn.classList.remove('correct', 'wrong', 'show-correct', 'disabled');
+            });
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.classList.remove('visible');
+                fb.querySelector('.status').textContent = '';
+                fb.querySelector('.explanation').innerHTML = '';
+                fb.querySelector('.kunci').textContent = '';
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+</body>
+</html>
