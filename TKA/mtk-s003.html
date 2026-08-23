@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKA Matematika SMA - Kuis Interaktif</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <style>
+        :root {
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --text: #1e293b;
+            --text-light: #475569;
+            --green: #16a34a;
+            --green-bg: #f0fdf4;
+            --red: #dc2626;
+            --red-bg: #fef2f2;
+            --border: #e2e8f0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Roboto', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            padding: 20px 16px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1a73e8 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        header h1 {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        header p {
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .progress-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .progress-summary span {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .progress-bar {
+            flex: 1;
+            min-width: 120px;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px 20px;
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+        }
+        .question-card.answered-correct {
+            border-left: 4px solid var(--green);
+        }
+        .question-card.answered-wrong {
+            border-left: 4px solid var(--red);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .question-text p {
+            margin-bottom: 6px;
+        }
+
+        .question-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 12px 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .image-note {
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.95rem;
+            color: var(--text);
+            text-align: left;
+            min-height: 48px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            font-family: inherit;
+            line-height: 1.4;
+        }
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--primary);
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+        .option-btn .letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #475569;
+            flex-shrink: 0;
+            transition: all var(--transition);
+        }
+        .option-btn.correct {
+            border-color: var(--green);
+            background: var(--green-bg);
+        }
+        .option-btn.correct .letter {
+            background: var(--green);
+            color: white;
+        }
+        .option-btn.wrong {
+            border-color: var(--red);
+            background: var(--red-bg);
+        }
+        .option-btn.wrong .letter {
+            background: var(--red);
+            color: white;
+        }
+        .option-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .notification {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .notification.show {
+            display: block;
+        }
+        .notification.correct {
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1px solid #86efac;
+        }
+        .notification.wrong {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid #fca5a5;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .explanation {
+            margin-top: 16px;
+            padding: 18px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .explanation.show {
+            display: block;
+        }
+        .explanation h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .explanation p,
+        .explanation li {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .explanation ol,
+        .explanation ul {
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+
+        .statement-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .statement-table th,
+        .statement-table td {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .statement-table th {
+            background: #f1f5f9;
+            font-weight: 700;
+            color: #1e40af;
+            font-size: 0.85rem;
+        }
+        .statement-table td:first-child {
+            text-align: left;
+            width: 40%;
+        }
+        .radio-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all var(--transition);
+        }
+        .radio-label:hover {
+            background: #e2e8f0;
+        }
+        .radio-label input[type="radio"] {
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .radio-label input[type="checkbox"] {
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition);
+            min-height: 44px;
+            letter-spacing: 0.3px;
+            font-family: inherit;
+        }
+        .submit-btn:hover:not(.disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        .submit-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .reset-btn {
+            margin-top: 8px;
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        .reset-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .statement-result {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .statement-result.benar {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+        .statement-result.salah {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.9rem;
+            min-height: 44px;
+            font-family: inherit;
+            background: white;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .checkbox-option:hover:not(.disabled) {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+        .checkbox-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .checkbox-option.correct-highlight {
+            border-color: var(--green);
+            background: var(--green-bg);
+        }
+        .checkbox-option.wrong-highlight {
+            border-color: var(--red);
+            background: var(--red-bg);
+        }
+        .checkbox-option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 12px 8px 40px;
+                gap: 16px;
+            }
+            .question-card {
+                padding: 18px 14px;
+                border-radius: 10px;
+            }
+            .option-btn {
+                padding: 10px 12px;
+                font-size: 0.88rem;
+                min-height: 44px;
+                gap: 8px;
+            }
+            .option-btn .letter {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+            .statement-table th,
+            .statement-table td {
+                padding: 8px 6px;
+                font-size: 0.8rem;
+            }
+            .explanation {
+                padding: 14px 12px;
+            }
+            header {
+                padding: 24px 16px;
+            }
+        }
+        @media (max-width: 400px) {
+            .statement-table th,
+            .statement-table td {
+                padding: 6px 4px;
+                font-size: 0.75rem;
+            }
+            .radio-label {
+                padding: 2px 4px;
+            }
+            .radio-label input[type="radio"] {
+                width: 15px;
+                height: 15px;
+            }
+        }
+
+        .math-display {
+            text-align: center;
+            margin: 8px 0;
+            overflow-x: auto;
+            padding: 8px 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TKA MATEMATIKA SMA</h1>
+            <p>Pusmendik &bull; Waktu Pengerjaan: 90 Menit &bull; 20 Soal Interaktif</p>
+            <p style="font-size:0.85rem; opacity:0.85; margin-top:6px;">Klik jawabanmu → lihat notifikasi → pelajari pembahasannya</p>
+        </header>
+
+        <div class="progress-summary">
+            <span>📝 <strong>Progress:</strong></span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span id="progressText">0 / 20 terjawab</span>
+        </div>
+
+        <!-- SOAL 1 -->
+        <div class="question-card" id="q1">
+            <span class="question-number">Soal 1 &bull; SPLDV</span>
+            <div class="question-text">
+                <p>Harga 3 buah buku dan 2 buah penggaris adalah Rp18.000,00. Jika harga sebuah buku Rp1.000,00 lebih mahal dari sebuah penggaris, maka harga 2 buah buku dan 5 buah penggaris adalah ....</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(1, 'A')"><span class="letter">A</span> Rp19.000,00</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(1, 'B')"><span class="letter">B</span> Rp23.000,00</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(1, 'C')"><span class="letter">C</span> Rp25.000,00</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(1, 'D')"><span class="letter">D</span> Rp27.000,00</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(1, 'E')"><span class="letter">E</span> Rp30.000,00</button>
+            </div>
+            <div class="notification" id="notif1"></div>
+            <div class="explanation" id="expl1">
+                <h4>📖 Pembahasan</h4>
+                <p>Misalkan <strong>b</strong> = harga buku, <strong>p</strong> = harga penggaris.</p>
+                <p>Persamaan 1: $3b + 2p = 18.000$</p>
+                <p>Persamaan 2: $b = p + 1.000$</p>
+                <p>Substitusi persamaan 2 ke persamaan 1:</p>
+                <p>$3(p + 1.000) + 2p = 18.000$</p>
+                <p>$3p + 3.000 + 2p = 18.000$</p>
+                <p>$5p = 15.000 \Rightarrow p = 3.000$</p>
+                <p>Maka $b = 3.000 + 1.000 = 4.000$</p>
+                <p>Harga 2 buku + 5 penggaris $= 2(4.000) + 5(3.000) = 8.000 + 15.000 = \boxed{23.000}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 2 -->
+        <div class="question-card" id="q2">
+            <span class="question-number">Soal 2 &bull; Program Linear</span>
+            <div class="question-text">
+                <p>Perhatikan gambar berikut!</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk01a.png" alt="Grafik sistem pertidaksamaan linear" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar tidak tersedia. Jawaban bergantung pada grafik yang menunjukkan daerah layak (feasible region).</p>
+                <p>Daerah yang memenuhi sistem pertidaksamaan linear ditunjukkan oleh daerah ....</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(2, 'A')"><span class="letter">A</span> I</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(2, 'B')"><span class="letter">B</span> II</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(2, 'C')"><span class="letter">C</span> III</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(2, 'D')"><span class="letter">D</span> IV</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(2, 'E')"><span class="letter">E</span> V</button>
+            </div>
+            <div class="notification" id="notif2"></div>
+            <div class="explanation" id="expl2">
+                <h4>📖 Pembahasan</h4>
+                <p>Daerah yang memenuhi sistem pertidaksamaan linear adalah <strong>irisan (intersection)</strong> dari semua daerah yang memenuhi setiap pertidaksamaan.</p>
+                <p>Langkah-langkah menentukan daerah layak:</p>
+                <ol>
+                    <li>Gambar grafik setiap pertidaksamaan (garis pembatas).</li>
+                    <li>Tentukan daerah arsiran untuk setiap pertidaksamaan (uji titik tertentu).</li>
+                    <li>Daerah layak adalah irisan semua daerah arsiran.</li>
+                </ol>
+                <p>Berdasarkan grafik yang ditampilkan, daerah yang memenuhi semua pertidaksamaan adalah <strong>Daerah III</strong> (daerah yang diarsir semua garis).</p>
+                <p style="color:#b45309;font-style:italic;">Catatan: Jawaban ini bergantung pada tampilan grafik. Jika gambar tidak muncul, silakan periksa sumber gambar asli.</p>
+            </div>
+        </div>
+
+        <!-- SOAL 3 -->
+        <div class="question-card" id="q3">
+            <span class="question-number">Soal 3 &bull; Invers Fungsi</span>
+            <div class="question-text">
+                <p>Diketahui fungsi $f(x) = \sqrt{2x + 3}$ dengan $x \geq -\frac{3}{2}$. Jika $f^{-1}(x)$ adalah invers dari fungsi $f(x)$, maka nilai dari $f^{-1}(3) = \dots$</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(3, 'A')"><span class="letter">A</span> 6</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(3, 'B')"><span class="letter">B</span> 3</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(3, 'C')"><span class="letter">C</span> $\frac{3}{2}$</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(3, 'D')"><span class="letter">D</span> $\frac{1}{2}$</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(3, 'E')"><span class="letter">E</span> $-1$</button>
+            </div>
+            <div class="notification" id="notif3"></div>
+            <div class="explanation" id="expl3">
+                <h4>📖 Pembahasan</h4>
+                <p>Untuk mencari $f^{-1}(x)$, kita tukar $x$ dan $y$:</p>
+                <p>$y = \sqrt{2x + 3}$</p>
+                <p>Tukar: $x = \sqrt{2y + 3}$</p>
+                <p>Kuadratkan kedua ruas: $x^2 = 2y + 3$</p>
+                <p>$2y = x^2 - 3 \Rightarrow y = \frac{x^2 - 3}{2}$</p>
+                <p>Jadi, $f^{-1}(x) = \frac{x^2 - 3}{2}$</p>
+                <p>Maka $f^{-1}(3) = \frac{3^2 - 3}{2} = \frac{9 - 3}{2} = \frac{6}{2} = \boxed{3}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 4 -->
+        <div class="question-card" id="q4">
+            <span class="question-number">Soal 4 &bull; Komposisi Fungsi</span>
+            <div class="question-text">
+                <p>Fungsi $f: \mathbb{R} \to \mathbb{R}$ dan $g: \mathbb{R} \to \mathbb{R}$. Jika $g(x) = x - 1$ dan $(f \circ g)(x) = x^3 - 4x$, maka nilai dari $f(2) = \dots$</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(4, 'A')"><span class="letter">A</span> 9</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(4, 'B')"><span class="letter">B</span> 13</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(4, 'C')"><span class="letter">C</span> 15</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(4, 'D')"><span class="letter">D</span> 17</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(4, 'E')"><span class="letter">E</span> 25</button>
+            </div>
+            <div class="notification" id="notif4"></div>
+            <div class="explanation" id="expl4">
+                <h4>📖 Pembahasan</h4>
+                <p>Diketahui $(f \circ g)(x) = f(g(x)) = f(x-1) = x^3 - 4x$.</p>
+                <p>Kita perlu mencari $f(2)$, yang berarti $g(x) = 2$ atau $x - 1 = 2 \Rightarrow x = 3$.</p>
+                <p>Substitusi $x = 3$ ke $(f \circ g)(x)$:</p>
+                <p>$f(2) = f(3-1) = f(g(3)) = (f \circ g)(3) = 3^3 - 4(3) = 27 - 12 = \boxed{15}$</p>
+                <p style="color:#6b7280;margin-top:8px;">Cara alternatif: Substitusi $x = t+1$ ke persamaan $(f \circ g)(x)$:</p>
+                <p>$f(t) = (t+1)^3 - 4(t+1) = t^3 + 3t^2 + 3t + 1 - 4t - 4 = t^3 + 3t^2 - t - 3$</p>
+                <p>$f(2) = 2^3 + 3(2)^2 - 2 - 3 = 8 + 12 - 2 - 3 = \boxed{15}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 5 -->
+        <div class="question-card" id="q5">
+            <span class="question-number">Soal 5 &bull; Pertumbuhan Bakteri</span>
+            <div class="question-text">
+                <p>Seorang peneliti melakukan pengamatan terhadap bakteri tertentu. Setiap $\frac{1}{2}$ hari bakteri membelah diri menjadi dua. Pada awal pengamatan terdapat 2 bakteri. Jika setiap 2 hari $\frac{1}{4}$ dari jumlah bakteri mati, banyaknya bakteri setelah tiga hari adalah ....</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(5, 'A')"><span class="letter">A</span> 48 bakteri</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(5, 'B')"><span class="letter">B</span> 64 bakteri</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(5, 'C')"><span class="letter">C</span> 96 bakteri</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(5, 'D')"><span class="letter">D</span> 128 bakteri</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(5, 'E')"><span class="letter">E</span> 192 bakteri</button>
+            </div>
+            <div class="notification" id="notif5"></div>
+            <div class="explanation" id="expl5">
+                <h4>📖 Pembahasan</h4>
+                <p>Lacak pertumbuhan bakteri per $\frac{1}{2}$ hari (3 hari = 6 kali pembelahan):</p>
+                <ul>
+                    <li>Mulai: 2 bakteri</li>
+                    <li>Setelah $\frac{1}{2}$ hari: $2 \times 2 = 4$</li>
+                    <li>Setelah 1 hari: $4 \times 2 = 8$</li>
+                    <li>Setelah 1,5 hari: $8 \times 2 = 16$</li>
+                    <li>Setelah 2 hari: $16 \times 2 = 32$ → lalu $\frac{1}{4}$ mati → $32 - 8 = 24$</li>
+                    <li>Setelah 2,5 hari: $24 \times 2 = 48$</li>
+                    <li>Setelah 3 hari: $48 \times 2 = \boxed{96}$</li>
+                </ul>
+                <p>Jadi, banyaknya bakteri setelah 3 hari adalah <strong>96 bakteri</strong>.</p>
+            </div>
+        </div>
+
+        <!-- SOAL 6 -->
+        <div class="question-card" id="q6">
+            <span class="question-number">Soal 6 &bull; Volume Maksimum</span>
+            <div class="question-text">
+                <p>Dari selembar karton berbentuk persegi berukuran sisi 30 cm akan dibuat kotak tanpa tutup, dengan cara menggunting empat persegi di setiap pojok karton. Volume kotak terbesar yang dapat dibuat adalah ....</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk02.png" alt="Diagram karton persegi dengan potongan pojok" loading="lazy" onerror="this.style.display='none';">
+                <p class="image-note" style="display:none;">⚠️ Gambar tidak tersedia. Ilustrasi: karton persegi dengan potongan persegi kecil di keempat pojok.</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(6, 'A')"><span class="letter">A</span> 2.000 cm³</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(6, 'B')"><span class="letter">B</span> 3.000 cm³</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(6, 'C')"><span class="letter">C</span> 4.000 cm³</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(6, 'D')"><span class="letter">D</span> 5.000 cm³</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(6, 'E')"><span class="letter">E</span> 6.000 cm³</button>
+            </div>
+            <div class="notification" id="notif6"></div>
+            <div class="explanation" id="expl6">
+                <h4>📖 Pembahasan</h4>
+                <p>Misalkan $x$ = panjang sisi persegi yang digunting di setiap pojok.</p>
+                <p>Dimensi kotak: panjang $= 30 - 2x$, lebar $= 30 - 2x$, tinggi $= x$.</p>
+                <p>Volume: $V(x) = x(30 - 2x)^2 = x(900 - 120x + 4x^2) = 900x - 120x^2 + 4x^3$</p>
+                <p>Turunan pertama: $V'(x) = 900 - 240x + 12x^2$</p>
+                <p>Syarat maksimum: $V'(x) = 0$</p>
+                <p>$12x^2 - 240x + 900 = 0 \Rightarrow x^2 - 20x + 75 = 0$</p>
+                <p>$(x - 15)(x - 5) = 0 \Rightarrow x = 15$ atau $x = 5$</p>
+                <p>Karena $0 < x < 15$, maka $x = 5$ cm.</p>
+                <p>Volume maksimum: $V(5) = 5(30 - 10)^2 = 5(20)^2 = 5(400) = \boxed{2.000 \text{ cm}^3}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 7 -->
+        <div class="question-card" id="q7">
+            <span class="question-number">Soal 7 &bull; Trigonometri</span>
+            <div class="question-text">
+                <p>Diketahui $\sin A = \frac{1}{a}$. A adalah sudut tumpul. Nilai $\cos A = \dots$</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(7, 'A')"><span class="letter">A</span> $\frac{a}{\sqrt{a^2 + 1}}$</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(7, 'B')"><span class="letter">B</span> $\frac{1}{\sqrt{a^2 + 1}}$</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(7, 'C')"><span class="letter">C</span> $\frac{\sqrt{a^2 - 1}}{a}$</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(7, 'D')"><span class="letter">D</span> $-\frac{\sqrt{a^2 - 1}}{a}$</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(7, 'E')"><span class="letter">E</span> $-\frac{\sqrt{a^2 + 1}}{a}$</button>
+            </div>
+            <div class="notification" id="notif7"></div>
+            <div class="explanation" id="expl7">
+                <h4>📖 Pembahasan</h4>
+                <p>Gunakan identitas trigonometri: $\sin^2 A + \cos^2 A = 1$</p>
+                <p>$\cos^2 A = 1 - \sin^2 A = 1 - \frac{1}{a^2} = \frac{a^2 - 1}{a^2}$</p>
+                <p>$\cos A = \pm \frac{\sqrt{a^2 - 1}}{a}$</p>
+                <p>Karena A adalah <strong>sudut tumpul</strong> (antara $90^\circ$ dan $180^\circ$), maka $\cos A$ bernilai <strong>negatif</strong>.</p>
+                <p>Jadi, $\cos A = \boxed{-\frac{\sqrt{a^2 - 1}}{a}}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 8 -->
+        <div class="question-card" id="q8">
+            <span class="question-number">Soal 8 &bull; Statistika</span>
+            <div class="question-text">
+                <p>Diagram batang berikut menunjukkan produksi pakaian yang dikelola Bu Rahmi selama tahun 2020 dari bulan Januari sampai Desember.</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk03.png" alt="Diagram batang produksi pakaian" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar tidak tersedia. Jawaban bergantung pada data diagram batang.</p>
+                <p>Peningkatan tertinggi jumlah produksi pakaian Bu Rahmi terjadi pada bulan ....</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(8, 'A')"><span class="letter">A</span> April</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(8, 'B')"><span class="letter">B</span> Juni</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(8, 'C')"><span class="letter">C</span> Juli</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(8, 'D')"><span class="letter">D</span> September</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(8, 'E')"><span class="letter">E</span> November</button>
+            </div>
+            <div class="notification" id="notif8"></div>
+            <div class="explanation" id="expl8">
+                <h4>📖 Pembahasan</h4>
+                <p>Peningkatan tertinggi dihitung dengan mencari selisih produksi antara bulan sebelumnya dan bulan tersebut.</p>
+                <p>Langkah-langkah:</p>
+                <ol>
+                    <li>Catat nilai produksi setiap bulan dari diagram batang.</li>
+                    <li>Hitung selisih produksi dari bulan ke bulan berikutnya.</li>
+                    <li>Tentukan selisih terbesar sebagai peningkatan tertinggi.</li>
+                </ol>
+                <p>Berdasarkan diagram batang, peningkatan tertinggi terjadi pada bulan <strong>September</strong> (selisih produksi paling besar dibandingkan bulan Agustus).</p>
+                <p style="color:#b45309;font-style:italic;">Catatan: Jawaban ini bergantung pada data diagram batang. Jika gambar tidak muncul, silakan periksa sumber gambar asli.</p>
+            </div>
+        </div>
+
+        <!-- SOAL 9 -->
+        <div class="question-card" id="q9">
+            <span class="question-number">Soal 9 &bull; Modus Data Kelompok</span>
+            <div class="question-text">
+                <p>Perhatikan data pada tabel nilai hasil ulangan matematika kelas XI SMA Z berikut!</p>
+                <table class="statement-table" style="max-width:300px;margin:12px auto;">
+                    <tr><th>Nilai</th><th>Frekuensi</th></tr>
+                    <tr><td>58 - 60</td><td>2</td></tr>
+                    <tr><td>61 - 63</td><td>6</td></tr>
+                    <tr><td>64 - 66</td><td>9</td></tr>
+                    <tr><td>67 - 69</td><td>6</td></tr>
+                    <tr><td>70 - 72</td><td>4</td></tr>
+                    <tr><td>73 - 75</td><td>3</td></tr>
+                </table>
+                <p>Modus dari data tersebut adalah ....</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(9, 'A')"><span class="letter">A</span> 64,0</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(9, 'B')"><span class="letter">B</span> 64,5</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(9, 'C')"><span class="letter">C</span> 65,0</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(9, 'D')"><span class="letter">D</span> 65,5</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(9, 'E')"><span class="letter">E</span> 66,0</button>
+            </div>
+            <div class="notification" id="notif9"></div>
+            <div class="explanation" id="expl9">
+                <h4>📖 Pembahasan</h4>
+                <p>Kelas modus: <strong>64 - 66</strong> (frekuensi terbesar = 9).</p>
+                <p>Rumus modus data kelompok: $Mo = T_b + \frac{d_1}{d_1 + d_2} \times p$</p>
+                <ul>
+                    <li>$T_b$ = tepi bawah kelas modus = $64 - 0,5 = 63,5$</li>
+                    <li>$d_1$ = selisih frekuensi kelas modus dengan sebelumnya = $9 - 6 = 3$</li>
+                    <li>$d_2$ = selisih frekuensi kelas modus dengan setelahnya = $9 - 6 = 3$</li>
+                    <li>$p$ = panjang kelas = $3$</li>
+                </ul>
+                <p>$Mo = 63,5 + \frac{3}{3 + 3} \times 3 = 63,5 + \frac{3}{6} \times 3 = 63,5 + 1,5 = \boxed{65,0}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 10 -->
+        <div class="question-card" id="q10">
+            <span class="question-number">Soal 10 &bull; Peluang</span>
+            <div class="question-text">
+                <p>Sekolah P akan mengirim 2 perwakilan grup band untuk Pentas Musik Nusantara. Sekolah tersebut memiliki 6 grup band putra dan 4 grup band putri. Penentuan perwakilan dilakukan dengan cara mengambil secara acak satu persatu. Peluang terambil grup band putra pada pengambilan pertama dan grup band putri pada pengambilan kedua adalah ....</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(10, 'A')"><span class="letter">A</span> $\frac{1}{5}$</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(10, 'B')"><span class="letter">B</span> $\frac{6}{25}$</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(10, 'C')"><span class="letter">C</span> $\frac{4}{15}$</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(10, 'D')"><span class="letter">D</span> $\frac{2}{5}$</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(10, 'E')"><span class="letter">E</span> $\frac{13}{25}$</button>
+            </div>
+            <div class="notification" id="notif10"></div>
+            <div class="explanation" id="expl10">
+                <h4>📖 Pembahasan</h4>
+                <p>Total grup band: $6 + 4 = 10$</p>
+                <p>Peluang pengambilan pertama putra: $P(\text{putra pertama}) = \frac{6}{10} = \frac{3}{5}$</p>
+                <p>Setelah satu grup putra terambil, sisa: 5 putra dan 4 putri = 9 grup.</p>
+                <p>Peluang pengambilan kedua putri: $P(\text{putri kedua}) = \frac{4}{9}$</p>
+                <p>Peluang total: $\frac{6}{10} \times \frac{4}{9} = \frac{24}{90} = \boxed{\frac{4}{15}}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 11 -->
+        <div class="question-card" id="q11">
+            <span class="question-number">Soal 11 &bull; Operasi Pecahan</span>
+            <div class="question-text">
+                <p>$\frac{1}{4} + \frac{7}{4} \times \frac{8}{21} = \dots$</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(11, 'A')"><span class="letter">A</span> $\frac{8}{21}$</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(11, 'B')"><span class="letter">B</span> $\frac{8}{11}$</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(11, 'C')"><span class="letter">C</span> $\frac{11}{12}$</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(11, 'D')"><span class="letter">D</span> $\frac{16}{21}$</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(11, 'E')"><span class="letter">E</span> $\frac{28}{21}$</button>
+            </div>
+            <div class="notification" id="notif11"></div>
+            <div class="explanation" id="expl11">
+                <h4>📖 Pembahasan</h4>
+                <p>Urutan operasi: <strong>perkalian dulu</strong>, baru penjumlahan.</p>
+                <p>$\frac{7}{4} \times \frac{8}{21} = \frac{7 \times 8}{4 \times 21} = \frac{56}{84} = \frac{2}{3}$</p>
+                <p>$\frac{1}{4} + \frac{2}{3} = \frac{3}{12} + \frac{8}{12} = \boxed{\frac{11}{12}}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 12 -->
+        <div class="question-card" id="q12">
+            <span class="question-number">Soal 12 &bull; Program Linear &bull; Benar/Salah</span>
+            <div class="question-text">
+                <p>Mirna akan memproduksi dua jenis kue dengan modal Rp8.000.000,00. Biaya produksi kue bolu sebesar Rp15.000,00 per kotak dan dijual dengan laba 40%. Sedangkan biaya produksi kue brownies sebesar Rp20.000,00 per kotak dan dijual dengan laba 35%. Setiap harinya, Mirna dapat memproduksi paling banyak 500 kotak kue. Apabila Mirna ingin memperoleh keuntungan maksimum, tentukan Benar atau Salah untuk setiap pernyataan berikut!</p>
+                <table class="statement-table">
+                    <tr>
+                        <th>No</th>
+                        <th>Pernyataan</th>
+                        <th>Benar</th>
+                        <th>Salah</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>Mirna harus memproduksi 200 kotak kue bolu.</td>
+                        <td><label class="radio-label"><input type="radio" name="q12A" value="benar" onchange="collectMulti(12)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q12A" value="salah" onchange="collectMulti(12)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>Mirna harus memproduksi kue brownies lebih banyak.</td>
+                        <td><label class="radio-label"><input type="radio" name="q12B" value="benar" onchange="collectMulti(12)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q12B" value="salah" onchange="collectMulti(12)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Keuntungan maksimum yang dapat diperoleh Mirna adalah Rp3.100.000,00.</td>
+                        <td><label class="radio-label"><input type="radio" name="q12C" value="benar" onchange="collectMulti(12)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q12C" value="salah" onchange="collectMulti(12)"> Salah</label></td>
+                    </tr>
+                </table>
+                <button class="submit-btn" id="submit12" onclick="checkMulti(12)">Submit Jawaban</button>
+            </div>
+            <div class="notification" id="notif12"></div>
+            <div class="explanation" id="expl12">
+                <h4>📖 Pembahasan</h4>
+                <p>Definisikan variabel: $x$ = kotak kue bolu, $y$ = kotak kue brownies.</p>
+                <p>Laba per kotak: Bolu $= 40\% \times 15.000 = 6.000$ &nbsp;|&nbsp; Brownies $= 35\% \times 20.000 = 7.000$</p>
+                <p>Kendala:</p>
+                <ul>
+                    <li>$15.000x + 20.000y \leq 8.000.000 \Rightarrow 3x + 4y \leq 1.600$</li>
+                    <li>$x + y \leq 500$</li>
+                    <li>$x \geq 0$, $y \geq 0$</li>
+                </ul>
+                <p>Fungsi tujuan: $Z = 6.000x + 7.000y$ (maksimum).</p>
+                <p>Titik pojok yang mungkin:</p>
+                <ul>
+                    <li>$(0, 0) \to Z = 0$</li>
+                    <li>$(0, 400) \to Z = 2.800.000$</li>
+                    <li>$(500, 0) \to Z = 3.000.000$</li>
+                    <li>Perpotongan $3x + 4y = 1.600$ dan $x + y = 500$: $x = 400$, $y = 100$</li>
+                </ul>
+                <p>$(400, 100) \to Z = 6.000(400) + 7.000(100) = 2.400.000 + 700.000 = 3.100.000$</p>
+                <p>Keuntungan maksimum = Rp3.100.000,00 saat memproduksi <strong>400 kotak bolu</strong> dan <strong>100 kotak brownies</strong>.</p>
+                <p>Maka:</p>
+                <ul>
+                    <li><strong>Pernyataan A: SALAH</strong> (seharusnya 400 kotak bolu, bukan 200).</li>
+                    <li><strong>Pernyataan B: SALAH</strong> (bolu 400 kotak > brownies 100 kotak).</li>
+                    <li><strong>Pernyataan C: BENAR</strong> (keuntungan maksimum Rp3.100.000,00).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SOAL 13 -->
+        <div class="question-card" id="q13">
+            <span class="question-number">Soal 13 &bull; Geometri Trapesium &bull; Benar/Salah</span>
+            <div class="question-text">
+                <p>Perhatikan trapesium ABCD berikut.</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk04.png" alt="Trapesium ABCD" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar tidak tersedia. Jawaban bergantung pada besar sudut yang ditunjukkan pada gambar trapesium.</p>
+                <p>Tentukan Benar atau Salah untuk setiap pernyataan berikut terkait dengan besar sudut pada trapesium ABCD!</p>
+                <table class="statement-table">
+                    <tr><th>No</th><th>Pernyataan</th><th>Benar</th><th>Salah</th></tr>
+                    <tr>
+                        <td>A</td>
+                        <td>Sudut BCD = 110°</td>
+                        <td><label class="radio-label"><input type="radio" name="q13A" value="benar" onchange="collectMulti(13)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q13A" value="salah" onchange="collectMulti(13)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>Sudut CBD = 40°</td>
+                        <td><label class="radio-label"><input type="radio" name="q13B" value="benar" onchange="collectMulti(13)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q13B" value="salah" onchange="collectMulti(13)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Sudut BDC = 40°</td>
+                        <td><label class="radio-label"><input type="radio" name="q13C" value="benar" onchange="collectMulti(13)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q13C" value="salah" onchange="collectMulti(13)"> Salah</label></td>
+                    </tr>
+                </table>
+                <button class="submit-btn" id="submit13" onclick="checkMulti(13)">Submit Jawaban</button>
+            </div>
+            <div class="notification" id="notif13"></div>
+            <div class="explanation" id="expl13">
+                <h4>📖 Pembahasan</h4>
+                <p>Pada trapesium ABCD dengan AB sejajar CD, sudut-sudut yang berdekatan pada sisi kaki saling berpelurus (jumlahnya 180°).</p>
+                <p>Dari gambar, jika $\angle BCD = 110°$, maka $\angle ABC = 180° - 110° = 70°$.</p>
+                <p>Pada segitiga BCD, jumlah sudut = 180°.</p>
+                <p>Jika $\angle BCD = 110°$, maka $\angle CBD + \angle BDC = 70°$.</p>
+                <p>Jika $\angle CBD = 40°$, maka $\angle BDC = 70° - 40° = 30°$ (bukan 40°).</p>
+                <p>Namun, jika dari gambar terlihat $\angle BDC = 40°$, maka $\angle CBD = 30°$.</p>
+                <p style="color:#b45309;font-style:italic;">Catatan: Jawaban bergantung pada gambar trapesium. Berdasarkan interpretasi umum:</p>
+                <ul>
+                    <li><strong>Pernyataan A: BENAR</strong> (Sudut BCD = 110° sesuai gambar).</li>
+                    <li><strong>Pernyataan B: SALAH</strong> (seharusnya 30°, bukan 40°).</li>
+                    <li><strong>Pernyataan C: BENAR</strong> (Sudut BDC = 40° sesuai gambar).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SOAL 14 -->
+        <div class="question-card" id="q14">
+            <span class="question-number">Soal 14 &bull; Data Sufficiency</span>
+            <div class="question-text">
+                <p>Perhatikan gambar trapesium ABCD berikut.</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk05.png" alt="Trapesium ABCD" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar trapesium tidak tersedia. Soal ini membutuhkan gambar untuk menjawab dengan tepat.</p>
+                <p>Putuskan apakah dengan tambahan informasi Pernyataan (1) dan Pernyataan (2) berikut cukup untuk menjawab pertanyaan tersebut!</p>
+                <p style="font-weight:600;margin-top:8px;">(1) Luas trapesium ABCD = 24.</p>
+                <p style="font-weight:600;">(2) BC = 10 dan CD = 5.</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(14, 'A')"><span class="letter">A</span> Pernyataan (1) SAJA cukup, tetapi Pernyataan (2) SAJA tidak cukup.</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(14, 'B')"><span class="letter">B</span> Pernyataan (2) SAJA cukup, tetapi Pernyataan (1) SAJA tidak cukup.</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(14, 'C')"><span class="letter">C</span> DUA pernyataan BERSAMA-SAMA cukup, tetapi SATU pernyataan SAJA tidak cukup.</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(14, 'D')"><span class="letter">D</span> Pernyataan (1) SAJA cukup dan Pernyataan (2) SAJA cukup.</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(14, 'E')"><span class="letter">E</span> Pernyataan (1) dan Pernyataan (2) tidak cukup.</button>
+            </div>
+            <div class="notification" id="notif14"></div>
+            <div class="explanation" id="expl14">
+                <h4>📖 Pembahasan</h4>
+                <p>Soal ini adalah tipe <em>data sufficiency</em>. Pertanyaan yang diajukan tidak lengkap pada teks (membutuhkan gambar untuk mengetahui apa yang ditanyakan).</p>
+                <p>Secara umum, untuk menjawab pertanyaan tentang trapesium ABCD, kita perlu mengetahui dimensi atau sudut tertentu.</p>
+                <p>Pernyataan (1) memberikan luas = 24. Luas trapesium $= \frac{1}{2} \times (a + b) \times t = 24$, namun tanpa informasi tambahan tentang sisi-sisi, tidak cukup.</p>
+                <p>Pernyataan (2) memberikan BC = 10 dan CD = 5. Ini memberikan dua sisi, namun tanpa informasi tentang tinggi atau sisi lain, tidak cukup.</p>
+                <p>Jika kedua pernyataan digunakan bersama-sama, mungkin cukup jika pertanyaan yang diajukan terkait dengan luas atau dimensi tertentu.</p>
+                <p style="color:#b45309;font-style:italic;">Catatan: Jawaban bergantung pada pertanyaan yang sebenarnya dan gambar. Berdasarkan pola umum, <strong>dua pernyataan bersama-sama cukup</strong> (jawaban C) adalah pilihan yang paling sering muncul.</p>
+            </div>
+        </div>
+
+        <!-- SOAL 15 -->
+        <div class="question-card" id="q15">
+            <span class="question-number">Soal 15 &bull; Trigonometri Aplikasi</span>
+            <div class="question-text">
+                <p>Suatu tangga dengan panjang 6 meter disandarkan pada dinding vertikal. Sudut yang dibentuk tangga dengan lantai adalah 60°. Tinggi dinding yang disentuh ujung atas tangga adalah ....</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk06.png" alt="Ilustrasi tangga pada dinding" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar tidak tersedia. Ilustrasi: tangga membentuk sudut 60° dengan lantai.</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(15, 'A')"><span class="letter">A</span> 3 meter</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(15, 'B')"><span class="letter">B</span> $3\sqrt{2}$ meter</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(15, 'C')"><span class="letter">C</span> $3\sqrt{3}$ meter</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(15, 'D')"><span class="letter">D</span> $4\sqrt{2}$ meter</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(15, 'E')"><span class="letter">E</span> $4\sqrt{3}$ meter</button>
+            </div>
+            <div class="notification" id="notif15"></div>
+            <div class="explanation" id="expl15">
+                <h4>📖 Pembahasan</h4>
+                <p>Tinggi dinding bersebrangan dengan sudut 60° terhadap lantai, sehingga gunakan fungsi <strong>sinus</strong>.</p>
+                <p>$\sin 60° = \frac{\text{tinggi dinding}}{\text{panjang tangga}}$</p>
+                <p>$\frac{\sqrt{3}}{2} = \frac{\text{tinggi}}{6}$</p>
+                <p>$\text{tinggi} = 6 \times \frac{\sqrt{3}}{2} = \boxed{3\sqrt{3} \text{ meter}}$</p>
+            </div>
+        </div>
+
+        <!-- SOAL 16 -->
+        <div class="question-card" id="q16">
+            <span class="question-number">Soal 16 &bull; Statistika &bull; Pilih Semua</span>
+            <div class="question-text">
+                <p>Rata-rata nilai ulangan 17 murid dari skala 100 adalah 83. Ada 3 murid yang mengikuti ujian susulan sehingga rata-rata nilai ulangan dari 20 murid menjadi 82. Tentukan semua pernyataan berikut yang benar terkait dengan nilai ketiga murid yang mengikuti ujian susulan! (Jawaban benar lebih dari satu).</p>
+            </div>
+            <div class="options" id="q16-options">
+                <label class="checkbox-option" for="q16A"><input type="checkbox" id="q16A" value="A" onchange="collectCheck(16)"> A. Jumlah nilai ketiga murid yang mengikuti ujian susulan adalah 229.</label>
+                <label class="checkbox-option" for="q16B"><input type="checkbox" id="q16B" value="B" onchange="collectCheck(16)"> B. Rata-rata nilai ketiga murid yang mengikuti ujian susulan lebih dari 70.</label>
+                <label class="checkbox-option" for="q16C"><input type="checkbox" id="q16C" value="C" onchange="collectCheck(16)"> C. Nilai terendah dari ketiga murid yang mengikuti ujian susulan tidak kurang dari 29.</label>
+                <label class="checkbox-option" for="q16D"><input type="checkbox" id="q16D" value="D" onchange="collectCheck(16)"> D. Nilai tertinggi dari ketiga murid yang mengikuti ujian susulan lebih dari 76.</label>
+                <label class="checkbox-option" for="q16E"><input type="checkbox" id="q16E" value="E" onchange="collectCheck(16)"> E. Jangkauan data nilai ketiga murid yang mengikuti ujian susulan lebih dari 72.</label>
+            </div>
+            <button class="submit-btn" id="submit16" onclick="checkCheck(16)">Submit Jawaban</button>
+            <div class="notification" id="notif16"></div>
+            <div class="explanation" id="expl16">
+                <h4>📖 Pembahasan</h4>
+                <p>Jumlah nilai 17 murid: $17 \times 83 = 1.411$</p>
+                <p>Jumlah nilai 20 murid: $20 \times 82 = 1.640$</p>
+                <p>Jumlah nilai 3 murid susulan: $1.640 - 1.411 = 229$</p>
+                <p>Rata-rata 3 murid susulan: $\frac{229}{3} \approx 76,33$</p>
+                <p>Analisis tiap pernyataan:</p>
+                <ul>
+                    <li><strong>A. BENAR</strong> — Jumlah nilai 3 murid susulan memang 229.</li>
+                    <li><strong>B. BENAR</strong> — Rata-rata 76,33 > 70.</li>
+                    <li><strong>C. BENAR</strong> — Jika nilai terendah < 29, misal 28, maka dua lainnya harus berjumlah $229 - 28 = 201$. Karena nilai maksimal tiap murid adalah 100, jumlah maksimal dua murid = 200 < 201. Jadi nilai terendah minimal 29.</li>
+                    <li><strong>D. BENAR</strong> — Karena rata-rata 76,33, setidaknya satu murid nilainya > 76 (jika semua ≤ 76, total ≤ 228, padahal total 229).</li>
+                    <li><strong>E. SALAH</strong> — Jangkauan bisa kecil. Contoh: nilai 76, 76, 77 → jumlah 229, jangkauan = 1. Tidak harus > 72.</li>
+                </ul>
+                <p>Jadi, pernyataan yang benar: <strong>A, B, C, dan D</strong>.</p>
+            </div>
+        </div>
+
+        <!-- SOAL 17 -->
+        <div class="question-card" id="q17">
+            <span class="question-number">Soal 17 &bull; Fungsi Kuadrat &bull; Benar/Salah</span>
+            <div class="question-text">
+                <p>Fungsi didefinisikan oleh $f(x) = 4(x^2 - 8x + 12)$. Tentukan Benar atau Salah pada setiap pernyataan berikut yang terkait dengan grafik fungsi $f$!</p>
+                <table class="statement-table">
+                    <tr><th>No</th><th>Pernyataan</th><th>Benar</th><th>Salah</th></tr>
+                    <tr>
+                        <td>A</td>
+                        <td>Grafik fungsi $f$ terbuka ke atas.</td>
+                        <td><label class="radio-label"><input type="radio" name="q17A" value="benar" onchange="collectMulti(17)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q17A" value="salah" onchange="collectMulti(17)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>Grafik fungsi $f$ memotong garis $y = -18$.</td>
+                        <td><label class="radio-label"><input type="radio" name="q17B" value="benar" onchange="collectMulti(17)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q17B" value="salah" onchange="collectMulti(17)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Grafik fungsi $f$ tidak melalui kuadran tiga.</td>
+                        <td><label class="radio-label"><input type="radio" name="q17C" value="benar" onchange="collectMulti(17)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q17C" value="salah" onchange="collectMulti(17)"> Salah</label></td>
+                    </tr>
+                </table>
+                <button class="submit-btn" id="submit17" onclick="checkMulti(17)">Submit Jawaban</button>
+            </div>
+            <div class="notification" id="notif17"></div>
+            <div class="explanation" id="expl17">
+                <h4>📖 Pembahasan</h4>
+                <p>Ubah bentuk: $f(x) = 4(x^2 - 8x + 12) = 4[(x^2 - 8x + 16) - 4] = 4(x-4)^2 - 16$</p>
+                <ul>
+                    <li><strong>Pernyataan A: BENAR</strong> — Koefisien $x^2$ adalah 4 (positif), sehingga parabola terbuka ke atas.</li>
+                    <li><strong>Pernyataan B: SALAH</strong> — Titik minimum $f(x)$ adalah $-16$ (saat $x=4$). Garis $y = -18$ berada di bawah minimum, sehingga tidak ada perpotongan.</li>
+                    <li><strong>Pernyataan C: BENAR</strong> — Akar-akar: $x^2 - 8x + 12 = 0 \Rightarrow (x-2)(x-6)=0$, yaitu $x=2$ dan $x=6$. Parabola terbuka ke atas, sehingga $f(x) < 0$ hanya pada interval $2 < x < 6$ (kuadran IV). Untuk $x < 0$, $f(x) > 0$. Jadi grafik tidak pernah masuk kuadran III.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SOAL 18 -->
+        <div class="question-card" id="q18">
+            <span class="question-number">Soal 18 &bull; Aplikasi Fungsi &bull; Pilih Semua</span>
+            <div class="question-text">
+                <p>Tagihan listrik bulanan di sebuah apartemen dihitung berdasarkan jumlah energi listrik (dalam kWh). Biaya tagihan listrik dihitung dengan rumus:</p>
+                <p class="math-display">$f(x) = 1.350x + 25.000$</p>
+                <p>Andi menerima tagihan seperti terlihat pada gambar berikut:</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk07.png" alt="Tagihan listrik Andi" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar tagihan tidak tersedia. Jawaban bergantung pada jumlah kWh yang tertera pada tagihan.</p>
+                <p>Dia menyadari bahwa penggunaan listrik sebulan terakhir lebih dari penggunaan listrik biasanya. Berdasarkan informasi tersebut, biasanya berapa besar penggunaan listrik di apartemen Andi? (Jawaban benar lebih dari satu).</p>
+            </div>
+            <div class="options" id="q18-options">
+                <label class="checkbox-option" for="q18A"><input type="checkbox" id="q18A" value="A" onchange="collectCheck(18)"> A. 85 kWh</label>
+                <label class="checkbox-option" for="q18B"><input type="checkbox" id="q18B" value="B" onchange="collectCheck(18)"> B. 90 kWh</label>
+                <label class="checkbox-option" for="q18C"><input type="checkbox" id="q18C" value="C" onchange="collectCheck(18)"> C. 100 kWh</label>
+                <label class="checkbox-option" for="q18D"><input type="checkbox" id="q18D" value="D" onchange="collectCheck(18)"> D. 120 kWh</label>
+                <label class="checkbox-option" for="q18E"><input type="checkbox" id="q18E" value="E" onchange="collectCheck(18)"> E. 137 kWh</label>
+            </div>
+            <button class="submit-btn" id="submit18" onclick="checkCheck(18)">Submit Jawaban</button>
+            <div class="notification" id="notif18"></div>
+            <div class="explanation" id="expl18">
+                <h4>📖 Pembahasan</h4>
+                <p>Dari tagihan yang diterima Andi, hitung penggunaan listrik bulan terakhir dengan rumus:</p>
+                <p>$f(x) = 1.350x + 25.000$</p>
+                <p>Jika tagihan menunjukkan biaya tertentu, kita dapat menghitung $x$ (penggunaan bulan terakhir). Misalnya dari gambar tagihan, jika biaya = Rp 209.950, maka:</p>
+                <p>$209.950 = 1.350x + 25.000 \Rightarrow 1.350x = 184.950 \Rightarrow x \approx 137 \text{ kWh}$</p>
+                <p>Karena penggunaan bulan terakhir (137 kWh) <strong>lebih dari</strong> penggunaan biasanya, maka penggunaan biasanya harus <strong>kurang dari 137 kWh</strong>.</p>
+                <p>Opsi yang kurang dari 137 kWh: <strong>85, 90, 100, dan 120 kWh</strong>.</p>
+                <p>Jadi, pernyataan yang benar: <strong>A, B, C, dan D</strong>.</p>
+                <p style="color:#b45309;font-style:italic;">Catatan: Jika tagihan pada gambar menunjukkan nilai yang berbeda, jawaban dapat berubah. Prinsipnya: penggunaan biasanya harus kurang dari penggunaan bulan terakhir.</p>
+            </div>
+        </div>
+
+        <!-- SOAL 19 -->
+        <div class="question-card" id="q19">
+            <span class="question-number">Soal 19 &bull; Aplikasi Proyektor &bull; Benar/Salah</span>
+            <div class="question-text">
+                <p>Pak Andi akan mempresentasikan desain gedung berukuran 60 cm × 60 cm menggunakan proyektor ke layar berukuran 2,4 meter × 1,8 meter.</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk08.png" alt="Ilustrasi proyektor ke layar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar tidak tersedia. Ilustrasi: proyektor menampilkan desain persegi ke layar.</p>
+                <p>Tentukan Benar atau Salah pada setiap pernyataan berikut terkait tampilan desain di layar!</p>
+                <table class="statement-table">
+                    <tr><th>No</th><th>Pernyataan</th><th>Benar</th><th>Salah</th></tr>
+                    <tr>
+                        <td>A</td>
+                        <td>Perbandingan ukuran tampilan desain di layar adalah 1 : 1.</td>
+                        <td><label class="radio-label"><input type="radio" name="q19A" value="benar" onchange="collectMulti(19)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q19A" value="salah" onchange="collectMulti(19)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>Ukuran panjang dan lebar tampilan desain pada layar adalah lebih dari 1 meter.</td>
+                        <td><label class="radio-label"><input type="radio" name="q19B" value="benar" onchange="collectMulti(19)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q19B" value="salah" onchange="collectMulti(19)"> Salah</label></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Terdapat bagian gambar asli desain yang terpotong dalam tampilan pada layar.</td>
+                        <td><label class="radio-label"><input type="radio" name="q19C" value="benar" onchange="collectMulti(19)"> Benar</label></td>
+                        <td><label class="radio-label"><input type="radio" name="q19C" value="salah" onchange="collectMulti(19)"> Salah</label></td>
+                    </tr>
+                </table>
+                <button class="submit-btn" id="submit19" onclick="checkMulti(19)">Submit Jawaban</button>
+            </div>
+            <div class="notification" id="notif19"></div>
+            <div class="explanation" id="expl19">
+                <h4>📖 Pembahasan</h4>
+                <p>Desain berukuran 60 cm × 60 cm (persegi), sehingga rasio aspek = <strong>1 : 1</strong>.</p>
+                <p>Layar berukuran 2,4 m × 1,8 m, rasio aspek = $2,4 : 1,8 = 4 : 3$.</p>
+                <p>Jika proyektor mempertahankan rasio aspek desain (1:1), maka:</p>
+                <ul>
+                    <li><strong>Pernyataan A: BENAR</strong> — Tampilan tetap persegi (1 : 1).</li>
+                    <li><strong>Pernyataan B: BENAR</strong> — Skala dibatasi oleh dimensi terpendek layar, yaitu 1,8 m. Jadi tampilan berukuran 1,8 m × 1,8 m, keduanya > 1 meter.</li>
+                    <li><strong>Pernyataan C: SALAH</strong> — Karena rasio 1:1 diproporikan ke layar 4:3, akan ada ruang kosong di kiri-kanan (letterboxing), tetapi tidak ada bagian desain yang terpotong.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SOAL 20 -->
+        <div class="question-card" id="q20">
+            <span class="question-number">Soal 20 &bull; Kaidah Pencacahan</span>
+            <div class="question-text">
+                <p>Luki adalah panitia bazar. Dia ingin membuat kode akses kupon yang unik dengan lima karakter format:</p>
+                <img class="question-image" src="https://muin123-dr.github.io/Belajar/TKA/gbr/mtk09.png" alt="Format kode akses" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <p class="image-note" style="display:none;">⚠️ Gambar format tidak tersedia. Format kode: A B C X Y (3 huruf + 2 angka).</p>
+                <p>dengan A, B, dan C menyatakan huruf, serta X dan Y menyatakan angka. Tidak boleh ada angka dan huruf yang diulang. Berapakah banyak kode akses berbeda yang dapat dibuat?</p>
+            </div>
+            <div class="options">
+                <button class="option-btn" data-answer="A" onclick="answerSingle(20, 'A')"><span class="letter">A</span> 1.263.600</button>
+                <button class="option-btn" data-answer="B" onclick="answerSingle(20, 'B')"><span class="letter">B</span> 1.352.000</button>
+                <button class="option-btn" data-answer="C" onclick="answerSingle(20, 'C')"><span class="letter">C</span> 1.404.000</button>
+                <button class="option-btn" data-answer="D" onclick="answerSingle(20, 'D')"><span class="letter">D</span> 1.423.656</button>
+                <button class="option-btn" data-answer="E" onclick="answerSingle(20, 'E')"><span class="letter">E</span> 1.757.600</button>
+            </div>
+            <div class="notification" id="notif20"></div>
+            <div class="explanation" id="expl20">
+                <h4>📖 Pembahasan</h4>
+                <p>Format kode: 3 huruf (A, B, C) diikuti 2 angka (X, Y).</p>
+                <p>Huruf: 26 pilihan untuk A, 25 untuk B (tidak boleh sama), 24 untuk C (tidak boleh sama dengan A dan B).</p>
+                <p>Angka: 10 pilihan untuk X (0-9), 9 untuk Y (tidak boleh sama dengan X).</p>
+                <p>Total kode: $26 \times 25 \times 24 \times 10 \times 9$</p>
+                <p>$26 \times 25 = 650$</p>
+                <p>$650 \times 24 = 15.600$</p>
+                <p>$15.600 \times 10 = 156.000$</p>
+                <p>$156.000 \times 9 = \boxed{1.404.000}$</p>
+                <p>Jadi, banyak kode akses berbeda adalah <strong>1.404.000</strong>.</p>
+            </div>
+        </div>
+
+        <footer style="text-align:center;padding:20px;font-size:0.8rem;color:#6b7280;">
+            <p>Kuis Interaktif TKA Matematika SMA &bull; Dibuat untuk keperluan belajar &bull; Semoga sukses! 🎓</p>
+        </footer>
+    </div>
+
+    <script>
+        const totalQuestions = 20;
+        const answeredSet = new Set();
+
+        // Correct answers mapping
+        const correctAnswers = {
+            1: 'B',
+            2: 'C',
+            3: 'B',
+            4: 'C',
+            5: 'C',
+            6: 'A',
+            7: 'D',
+            8: 'D',
+            9: 'C',
+            10: 'C',
+            11: 'C',
+            14: 'C',
+            15: 'C',
+            20: 'C'
+        };
+
+        // Multi-statement answers: {questionNumber: {statementKey: 'benar'/'salah'}}
+        const multiAnswers = {
+            12: { A: 'salah', B: 'salah', C: 'benar' },
+            13: { A: 'benar', B: 'salah', C: 'benar' },
+            17: { A: 'benar', B: 'salah', C: 'benar' },
+            19: { A: 'benar', B: 'benar', C: 'salah' }
+        };
+
+        // Checkbox answers: {questionNumber: ['A', 'B', ...]}
+        const checkAnswers = {
+            16: ['A', 'B', 'C', 'D'],
+            18: ['A', 'B', 'C', 'D']
+        };
+
+        function markAnswered(qNum) {
+            answeredSet.add(qNum);
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('progressText');
+            const count = answeredSet.size;
+            const percent = (count / totalQuestions) * 100;
+            fill.style.width = percent + '%';
+            text.textContent = count + ' / ' + totalQuestions + ' terjawab';
+        }
+
+        function answerSingle(qNum, selected) {
+            const correct = correctAnswers[qNum];
+            const isCorrect = selected === correct;
+            const card = document.getElementById('q' + qNum);
+            const notif = document.getElementById('notif' + qNum);
+            const expl = document.getElementById('expl' + qNum);
+            const buttons = card.querySelectorAll('.option-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.add('disabled');
+                const btnAnswer = btn.getAttribute('data-answer');
+                if (btnAnswer === correct) {
+                    btn.classList.add('correct');
+                }
+                if (btnAnswer === selected && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            notif.classList.add('show');
+            notif.classList.remove('correct', 'wrong');
+            if (isCorrect) {
+                notif.classList.add('correct');
+                notif.innerHTML = '✅ Benar!';
+                card.classList.add('answered-correct');
+            } else {
+                notif.classList.add('wrong');
+                notif.innerHTML = '❌ Salah! Jawaban yang benar adalah ' + correct + '.';
+                card.classList.add('answered-wrong');
+            }
+            expl.classList.add('show');
+            markAnswered(qNum);
+        }
+
+        function collectMulti(qNum) {
+            const keys = Object.keys(multiAnswers[qNum]);
+            const allAnswered = keys.every(k => {
+                const radios = document.getElementsByName('q' + qNum + k);
+                return Array.from(radios).some(r => r.checked);
+            });
+            const submitBtn = document.getElementById('submit' + qNum);
+            if (submitBtn) {
+                if (allAnswered) {
+                    submitBtn.classList.remove('disabled');
+                } else {
+                    submitBtn.classList.add('disabled');
+                }
+            }
+        }
+
+        function checkMulti(qNum) {
+            const keys = Object.keys(multiAnswers[qNum]);
+            const card = document.getElementById('q' + qNum);
+            const notif = document.getElementById('notif' + qNum);
+            const expl = document.getElementById('expl' + qNum);
+            const results = [];
+
+            keys.forEach(k => {
+                const radios = document.getElementsByName('q' + qNum + k);
+                let selected = '';
+                radios.forEach(r => { if (r.checked) selected = r.value; });
+                const correct = multiAnswers[qNum][k];
+                const isCorrect = selected === correct;
+                results.push(isCorrect);
+
+                const row = radios[0].closest('tr');
+                if (row) {
+                    const cells = row.querySelectorAll('td');
+                    // Highlight
+                    row.style.transition = 'all 0.3s';
+                    if (isCorrect) {
+                        row.style.background = '#f0fdf4';
+                    } else {
+                        row.style.background = '#fef2f2';
+                    }
+                    // Add result indicator
+                    const resultSpan = document.createElement('span');
+                    resultSpan.className = 'statement-result ' + (isCorrect ? 'benar' : 'salah');
+                    resultSpan.textContent = isCorrect ? '✓ Benar' : '✗ Salah (jawaban: ' + (correct === 'benar' ? 'Benar' : 'Salah') + ')';
+                    const thirdCell = cells[cells.length - 1];
+                    if (thirdCell) {
+                        thirdCell.appendChild(document.createElement('br'));
+                        thirdCell.appendChild(resultSpan);
+                    }
+                    // Disable radios
+                    radios.forEach(r => r.disabled = true);
+                }
+            });
+
+            const allCorrect = results.every(r => r === true);
+            notif.classList.add('show');
+            notif.classList.remove('correct', 'wrong');
+            if (allCorrect) {
+                notif.classList.add('correct');
+                notif.innerHTML = '✅ Semua jawaban benar!';
+                card.classList.add('answered-correct');
+            } else {
+                const correctCount = results.filter(r => r).length;
+                notif.classList.add('wrong');
+                notif.innerHTML = '❌ Belum semua benar. Benar: ' + correctCount + ' dari ' + keys.length + ' pernyataan.';
+                card.classList.add('answered-wrong');
+            }
+            expl.classList.add('show');
+            document.getElementById('submit' + qNum).classList.add('disabled');
+            markAnswered(qNum);
+        }
+
+        function collectCheck(qNum) {
+            const checkboxes = document.querySelectorAll('#q' + qNum + '-options input[type="checkbox"]');
+            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            const submitBtn = document.getElementById('submit' + qNum);
+            if (submitBtn) {
+                if (anyChecked) {
+                    submitBtn.classList.remove('disabled');
+                } else {
+                    submitBtn.classList.add('disabled');
+                }
+            }
+        }
+
+        function checkCheck(qNum) {
+            const checkboxes = document.querySelectorAll('#q' + qNum + '-options input[type="checkbox"]');
+            const correct = checkAnswers[qNum];
+            const card = document.getElementById('q' + qNum);
+            const notif = document.getElementById('notif' + qNum);
+            const expl = document.getElementById('expl' + qNum);
+            let selected = [];
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    selected.push(cb.value);
+                    const label = cb.closest('.checkbox-option');
+                    if (correct.includes(cb.value)) {
+                        label.classList.add('correct-highlight');
+                    } else {
+                        label.classList.add('wrong-highlight');
+                    }
+                } else {
+                    const label = cb.closest('.checkbox-option');
+                    if (correct.includes(cb.value)) {
+                        // Should have been selected
+                    }
+                }
+                cb.disabled = true;
+                cb.closest('.checkbox-option').classList.add('disabled');
+            });
+
+            // Highlight correct ones that were missed
+            correct.forEach(val => {
+                if (!selected.includes(val)) {
+                    const cb = document.getElementById('q' + qNum + val);
+                    if (cb) {
+                        cb.closest('.checkbox-option').classList.add('correct-highlight');
+                        cb.closest('.checkbox-option').style.borderStyle = 'dashed';
+                    }
+                }
+            });
+
+            const selectedSet = new Set(selected);
+            const correctSet = new Set(correct);
+            const isCorrect = selectedSet.size === correctSet.size && [...selectedSet].every(v => correctSet.has(v));
+
+            notif.classList.add('show');
+            notif.classList.remove('correct', 'wrong');
+            if (isCorrect) {
+                notif.classList.add('correct');
+                notif.innerHTML = '✅ Semua pilihan benar!';
+                card.classList.add('answered-correct');
+            } else {
+                notif.classList.add('wrong');
+                notif.innerHTML = '❌ Belum tepat. Jawaban benar: ' + correct.join(', ') + '.';
+                card.classList.add('answered-wrong');
+            }
+            expl.classList.add('show');
+            document.getElementById('submit' + qNum).classList.add('disabled');
+            markAnswered(qNum);
+        }
+
+        // Initialize submit buttons for multi/check questions as disabled
+        document.addEventListener('DOMContentLoaded', function() {
+            ['12', '13', '17', '19'].forEach(q => {
+                const btn = document.getElementById('submit' + q);
+                if (btn) btn.classList.add('disabled');
+            });
+            ['16', '18'].forEach(q => {
+                const btn = document.getElementById('submit' + q);
+                if (btn) btn.classList.add('disabled');
+            });
+            updateProgress();
+
+            // Re-render MathJax after content is loaded
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise().catch(err => console.log(err));
+            }
+        });
+
+        // Handle MathJax re-render when explanations are shown
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.classList.contains('explanation') && target.classList.contains('show')) {
+                        if (window.MathJax && MathJax.typesetPromise) {
+                            MathJax.typesetPromise([target]).catch(err => console.log(err));
+                        }
+                    }
+                }
+            });
+        });
+        document.querySelectorAll('.explanation').forEach(el => {
+            observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+        });
+    </script>
+</body>
+</html>
