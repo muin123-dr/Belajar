@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Soal Bahasa Inggris - Quiz Interaktif</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --warning-bg: #fef9c3;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --card-bg: #ffffff;
+            --body-bg: #eef2ff;
+            --border: #c7d2fe;
+            --radius: 16px;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --transition: all 0.25s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f5f3ff 50%, #e0f2fe 100%);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 20px 16px 60px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 24px 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--primary);
+        }
+
+        header h1 {
+            font-size: 1.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            background: #eef2ff;
+            color: var(--primary);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 28px;
+            transition: var(--transition);
+            border: 1px solid #e5e7eb;
+        }
+
+        .card:hover {
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .question-number {
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .question-type {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-light);
+            background: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: #111827;
+        }
+
+        .image-wrapper {
+            text-align: center;
+            margin: 16px 0 20px;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #fafafa;
+            position: relative;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .option-label input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        .option-label .letter {
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 28px;
+        }
+
+        .option-label .option-text {
+            flex: 1;
+        }
+
+        .option-label.correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+
+        .option-label.correct .letter {
+            color: var(--success);
+        }
+
+        .option-label.incorrect {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+        }
+
+        .option-label.incorrect .letter {
+            color: var(--danger);
+        }
+
+        .option-label.disabled {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+
+        /* Multi-option (clickable div instead of label) */
+        .multi-option {
+            cursor: pointer;
+        }
+
+        .multi-option.selected {
+            border-color: var(--primary);
+            background: #e0e7ff;
+        }
+
+        .multi-option.selected .letter {
+            color: var(--primary-dark);
+        }
+
+        .multi-option .check-indicator {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            font-size: 0.8rem;
+            color: transparent;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .multi-option.selected .check-indicator {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Multi submit button */
+        .submit-btn {
+            margin-top: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Category rows */
+        .category-row {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+
+        .category-row .row-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .category-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            padding: 8px 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            color: var(--text);
+        }
+
+        .cat-btn:hover {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .cat-btn.correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .cat-btn.incorrect {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .cat-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Feedback */
+        .feedback {
+            display: none;
+            margin-top: 18px;
+            padding: 16px 18px;
+            border-radius: 12px;
+            background: #f3f4f6;
+            border-left: 5px solid var(--primary);
+            animation: fadeIn 0.35s ease;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback .key {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+
+        .feedback .explanation {
+            color: #374151;
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: white;
+            z-index: 1000;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(-20px);
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .card {
+                padding: 18px;
+            }
+            header h1 {
+                font-size: 1.5rem;
+            }
+            .question-text {
+                font-size: 0.98rem;
+            }
+            .option-label {
+                padding: 12px;
+                font-size: 0.92rem;
+            }
+            .category-buttons {
+                flex-direction: column;
+            }
+            .cat-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="badge">📚 Latihan Soal</span>
+            <h1>Pemahaman Teks Bahasa Inggris</h1>
+            <p>20 soal interaktif • Klik jawaban untuk melihat hasil</p>
+        </header>
+
+        <div id="quiz-container"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===================== DATA SOAL =====================
+        const questions = [
+            {
+                id: 1,
+                type: 'pg',
+                text: 'Which of the following outlines shows the correct main points of the story?',
+                options: [
+                    'King Hung Vuong VI wanted the best husband for his daughter. Many princes came but none was suitable. Son Tinh and Thuy Tinh both wanted to marry her. The King gave them a test. Thuy Tinh arrived first with the wedding gifts. The princess was given to Thuy Tinh.',
+                    'King Hung Vuong VI had a beautiful daughter. He announced he was looking for the right husband. Son Tinh and Thuy Tinh appeared and asked to marry her. The King gave them a test with wedding gifts. Son Tinh arrived first and married the princess. Thuy Tinh attacked with floods but was defeated.',
+                    'King Hung Vuong VI asked his daughter to choose her husband. The princess liked both Son Tinh and Thuy Tinh. The King delayed his decision for many days. Finally, he asked them to fight each other. Thuy Tinh lost the battle and left the land. The country never suffered from floods again.',
+                    'King Hung Vuong VI searched for a husband for his daughter. Son Tinh and Thuy Tinh wanted to marry her. The King gave them a challenge. Thuy Tinh lost the test and became angry. He called the waters to rise and destroy the land. Son Tinh drowned in the floods.',
+                    'The King wanted a nobleman for his daughter. He invited many princes to the palace. Son Tinh and Thuy Tinh competed for the princess. Son Tinh refused the challenge of gifts. The King chose Thuy Tinh as the winner. Thuy Tinh ruled peacefully without floods.'
+                ],
+                correct: [1],
+                keyDisplay: 'B',
+                explanation: 'Ringkasan yang benar harus berurutan: raja mengumumkan mencari suami, Son Tinh dan Thuy Tinh muncul, raja memberi tes hadiah, Son Tinh datang lebih dulu dan menikahi putri, lalu Thuy Tinh menyerang dengan banjir tetapi kalah. Opsi B paling sesuai.'
+            },
+            {
+                id: 2,
+                type: 'pg',
+                text: 'Why did Thuy Tinh attack Son Tinh after the wedding?',
+                options: [
+                    'He was jealous of Son Tinh’s victory.',
+                    'He believed the King had lied to him.',
+                    'He thought the princess loved him more.',
+                    'He wanted to show off his power to the king.',
+                    'He had promised to fight until death.'
+                ],
+                correct: [0],
+                keyDisplay: 'A',
+                explanation: 'Teks menyebutkan Thuy Tinh "angry about losing" (marah karena kalah). Perasaan itu menunjukkan kecemburuan terhadap kemenangan Son Tinh, bukan alasan lain seperti raja berbohong atau ingin pamer kekuatan.'
+            },
+            {
+                id: 3,
+                type: 'category',
+                text: 'After reading the text, decide if each trait shows a similarity or a difference between Son Tinh and Thuy Tinh.',
+                rows: [
+                    { label: 'Both are not humans.', key: 'similarity' },
+                    { label: 'They can control the elements.', key: 'similarity' },
+                    { label: 'They love the king\'s daughter.', key: 'difference' }
+                ],
+                keyDisplay: 'A: Similarity, B: Similarity, C: Difference',
+                explanation: 'Son Tinh dan Thuy Tinh sama-sama bukan manusia (roh/spirit) dan sama-sama bisa mengendalikan elemen alam. Namun untuk cinta pada putri raja, teks hanya menyebut keduanya melamar, tidak membuktikan keduanya benar-benar mencintainya. Thuy Tinh lebih tampak marah karena kalah, bukan karena cinta.'
+            },
+            {
+                id: 4,
+                type: 'pg',
+                text: 'What does the phrase “kept his promise” in the text mean?',
+                options: [
+                    'Forgot about his decision.',
+                    'Changed his mind about the wedding.',
+                    'Did what he had promised to do.',
+                    'Delayed the marriage for many days.',
+                    'The King asked the princes to bring more gifts.'
+                ],
+                correct: [2],
+                keyDisplay: 'C',
+                explanation: 'Frasa "kept his promise" berarti menepati janji, yaitu melakukan apa yang sudah dijanjikan. Dalam teks, raja menjanjikan putrinya kepada yang datang lebih dulu, dan ia menepatinya.'
+            },
+            {
+                id: 5,
+                type: 'multi',
+                text: 'What is the main lesson of the story?',
+                options: [
+                    'Accept defeat gracefully to prevent harm to others.',
+                    'Be fair and follow the agreed rules in competitions.',
+                    'Choose peaceful solutions rather than angry reactions.',
+                    'Prepare honestly and present your gifts properly.',
+                    'Respect leaders’ decisions and community agreements.'
+                ],
+                correct: [0, 1],
+                keyDisplay: 'A, B',
+                explanation: 'Pelajaran utama cerita ini adalah menerima kekalahan dengan lapang dada agar tidak merugikan orang lain (A) dan bersikap adil serta mengikuti aturan yang disepakati (B). Pilihan C juga terdengar baik, tetapi teks lebih menekankan keadilan aturan dan penerimaan kekalahan, bukan sekadar damai.'
+            },
+            {
+                id: 6,
+                type: 'category',
+                text: 'The following activities are suggested in the infographic. Categorize them as either preparation or breaks during study.',
+                rows: [
+                    { label: 'Standing up', key: 'breaks' },
+                    { label: 'Bringing a book', key: 'preparation' },
+                    { label: 'Doing stretch', key: 'breaks' }
+                ],
+                keyDisplay: 'A: Breaks, B: Preparation, C: Breaks',
+                explanation: 'Berdasarkan infografik, berdiri (standing up) dan melakukan peregangan (stretching) termasuk kegiatan istirahat (breaks), sedangkan membawa buku termasuk persiapan sebelum belajar.'
+            },
+            {
+                id: 7,
+                type: 'multi',
+                text: 'How can we decide a certain table is perfect for studying according to the text?',
+                options: [
+                    'It has good lighting.',
+                    'It provides white noise.',
+                    'It is located near the entrance.',
+                    'It is far from the toilet.',
+                    'It provides stationery.'
+                ],
+                correct: [0, 3],
+                keyDisplay: 'A, D',
+                explanation: 'Menurut teks/infografik, meja belajar yang baik memiliki pencahayaan yang baik dan jauh dari toilet. Pilihan lain (white noise, dekat pintu masuk, menyediakan alat tulis) tidak disebut sebagai syarat meja yang sempurna.'
+            },
+            {
+                id: 8,
+                type: 'pg',
+                text: 'Who needs to read this infographic?',
+                options: [
+                    'The students of that school.',
+                    'People who happen to visit the school.',
+                    'The librarian of another school.',
+                    'The headmaster of that school.',
+                    'Parents who come to pick up their kids.'
+                ],
+                correct: [0],
+                keyDisplay: 'A',
+                explanation: 'Infografik ini dipasang di depan perpustakaan sekolah dan berisi panduan untuk siswa yang akan belajar. Sasaran utamanya adalah para siswa di sekolah tersebut.'
+            },
+            {
+                id: 9,
+                type: 'multi',
+                text: 'Which actions show disrespect for other students?',
+                options: [
+                    'Speaking loudly to friends.',
+                    'Keeping the phone silent.',
+                    'Eating snacks at the desk.',
+                    'Playing music in the corner.',
+                    'Moving chairs noisily.'
+                ],
+                correct: [0, 2, 3, 4],
+                keyDisplay: 'A, C, D, E',
+                explanation: 'Berbicara keras, makan camilan di meja, memutar musik, dan menggeser kursi dengan berisik mengganggu siswa lain. Menjaga ponsel dalam mode diam adalah tindakan sopan, jadi bukan bagian dari jawaban.'
+            },
+            {
+                id: 10,
+                type: 'pg',
+                text: 'You find this infographic in front of your school library. What will you do before your next visit to the library?',
+                options: [
+                    'Making sure that I bring my water bottle and lunch with me.',
+                    'Bringing the books and stationery that I will use.',
+                    'Organizing the book that I borrowed from the library.',
+                    'Walking for five minutes so I can focus more when studying.',
+                    'Making sure you look fresh because you will meet other students.'
+                ],
+                correct: [1],
+                keyDisplay: 'B',
+                explanation: 'Sebelum ke perpustakaan, tindakan yang paling sesuai dengan infografik adalah membawa buku dan alat tulis yang akan digunakan. Pilihan lain tidak relevan dengan isi infografik.'
+            },
+            {
+                id: 11,
+                type: 'category',
+                text: 'What is the main purpose of visiting these places: to support conservation or to relax?',
+                rows: [
+                    { label: 'Munduk Waterfall', key: 'relaxation' },
+                    { label: 'West Bali National Park', key: 'conservation' },
+                    { label: 'Tegalalang Rice Terraces', key: 'relaxation' }
+                ],
+                keyDisplay: 'A: Relaxation, B: Conservation, C: Relaxation',
+                explanation: 'Munduk Waterfall digambarkan sebagai tempat yang sempurna untuk bersantai. West Bali National Park adalah kawasan lindung/konservasi. Tegalalang Rice Terraces digambarkan dengan suasana damai dan menginspirasi, sehingga tujuannya lebih ke relaksasi.'
+            },
+            {
+                id: 12,
+                type: 'pg',
+                text: 'The text mainly talks about Bali’s …',
+                options: [
+                    'wildlife species and nature lovers.',
+                    'unique cultural treasures and sites.',
+                    'stunning nature and remarkable sites.',
+                    'generations and cultural conservation.',
+                    'scenic beauty and local farming practices.'
+                ],
+                correct: [2],
+                keyDisplay: 'C',
+                explanation: 'Teks ini terutama membahas keindahan alam Bali dan tempat-tempat luar biasa seperti taman nasional, air terjun, dan sawah terasering. Jadi jawaban yang paling tepat adalah "stunning nature and remarkable sites".'
+            },
+            {
+                id: 13,
+                type: 'multi',
+                text: 'Which parts of the text best support the description of Bali as a "Bali is full of natural beauty"?',
+                options: [
+                    'A peaceful area filled with green forests, calm mangrove swamps, and colorful coral reefs along the sea.',
+                    'These terraces are shaped by generations of farmers who work the land by hand.',
+                    'Water flows gently over rocky cliffs into a cool, clear pool. Mist rises into the air, mixing with the calming sound of falling water.',
+                    'In the morning, mist rises above the fields, and sunlight reflects off the water in the paddies.',
+                    'Farmers in wide-brimmed hats plant rice carefully, their feet sinking into the soft earth.'
+                ],
+                correct: [0, 2, 3],
+                keyDisplay: 'Pernyataan 1, 3, dan 4',
+                explanation: 'Pernyataan 1, 3, dan 4 menggambarkan keindahan alam seperti hutan hijau, air terjun, dan kabut di sawah. Pernyataan 2 dan 5 lebih menekankan pada petani dan budaya, bukan keindahan alam secara langsung.'
+            },
+            {
+                id: 14,
+                type: 'pg',
+                text: 'During the internship, what did the writer do every morning?',
+                options: [
+                    'Made schedules and explained them to the coaches.',
+                    'Played football with the team and got the first aid kit.',
+                    'Prepared a club gift, guided the coaches, and gave t-shirts.',
+                    'Woke up early, arrived on time, and followed the instructions.',
+                    'Set up cones, brought water, and checked emergency schedules.'
+                ],
+                correct: [3],
+                keyDisplay: 'D',
+                explanation: 'Teks menyebutkan: "Every morning I had to wake up early, arrive on time, and follow instructions carefully." Jadi jawaban D tepat.'
+            },
+            {
+                id: 15,
+                type: 'multi',
+                text: 'What are the best words to describe the writer’s personality during the internship?',
+                options: [
+                    'Careful and ready to help',
+                    'Confident and enjoys working alone',
+                    'Responsible and willing to learn',
+                    'Friendly and works well with others',
+                    'Creative and likes to try new things'
+                ],
+                correct: [0, 2, 3],
+                keyDisplay: 'Pernyataan 1, 3, dan 4',
+                explanation: 'Penulis digambarkan berhati-hati (khawatir membuat kesalahan), bertanggung jawab (mengerjakan tugas), mau belajar (dibimbing pelatih), dan ramah/bekerja sama (diakui teamwork dan communication). Tidak ada bukti ia percaya diri berlebihan atau kreatif mencoba hal baru.'
+            },
+            {
+                id: 16,
+                type: 'pg',
+                text: 'What will the writer most likely do after finishing the internship?',
+                options: [
+                    'Considering a career in a sports medicine.',
+                    'Stop working and focus only on school.',
+                    'Look for another chance to work in a sports club.',
+                    'Study medicine to become a doctor.',
+                    'Train as a professional football player.'
+                ],
+                correct: [2],
+                keyDisplay: 'C',
+                explanation: 'Di akhir teks, penulis berkata: "I hope to work in a sports club again in the future." Artinya ia kemungkinan akan mencari kesempatan lain untuk bekerja di klub olahraga.'
+            },
+            {
+                id: 17,
+                type: 'multi',
+                text: 'What will happen if teenagers have poor sleep quality?',
+                options: [
+                    'Teenagers\' grades could drop.',
+                    'Teens struggle to focus in class.',
+                    'Teens are likely to feel stressed.',
+                    'Teenagers will be more confident.',
+                    'Teens will become mentally strong.'
+                ],
+                correct: [0, 1, 2],
+                keyDisplay: 'A, B, C',
+                explanation: 'Teks menjelaskan bahwa kurang tidur membuat remaja sulit fokus di kelas, nilai bisa menurun, dan mereka merasa stres/khawatir. Tidak ada hubungan dengan menjadi lebih percaya diri atau kuat mental.'
+            },
+            {
+                id: 18,
+                type: 'multi',
+                text: 'Which of the following additional facts would most likely make the text more persuasive?',
+                options: [
+                    'Research data showing the number of teenagers experiencing anxiety or depression because of social media.',
+                    'Personal stories from teenagers who feel happier after reducing their social media use.',
+                    'Statistics about how many teenagers use social media every day.',
+                    'A list of the most popular social media platforms among teenagers.',
+                    'Expert opinions from doctors or psychologists about the dangers of social media for mental health.'
+                ],
+                correct: [0, 1, 4],
+                keyDisplay: 'A, B, E',
+                explanation: 'Data riset tentang remaja yang cemas/depresi, cerita pribadi remaja yang lebih bahagia setelah mengurangi media sosial, dan pendapat ahli (dokter/psikolog) akan memperkuat argumen. Statistik umum pemakaian dan daftar platform kurang persuasif.'
+            },
+            {
+                id: 19,
+                type: 'multi',
+                text: 'Which statements from the text support the author’s argument that social media harms teen mental health?',
+                options: [
+                    '"When teens see pictures of people who seem perfect, they feel that they are not good enough."',
+                    '"Many teenagers use their phones late at night, which reduces sleep time and quality."',
+                    '"Schools should teach students how to use social media in healthy ways."',
+                    '"Social media helps teens stay connected with friends and learn about interesting topics."',
+                    '"Victims of cyberbullying often feel alone, scared, and helpless."'
+                ],
+                correct: [0, 1, 4],
+                keyDisplay: 'A, B, E',
+                explanation: 'Pernyataan A, B, dan E secara langsung menunjukkan dampak buruk media sosial. Pilihan C adalah saran/rekomendasi, dan D justru menunjukkan manfaat positif, bukan dukungan untuk argumen bahaya.'
+            },
+            {
+                id: 20,
+                type: 'multi',
+                text: 'What is the most prominent impression you gain from the text?',
+                options: [
+                    'Social media makes teenagers unhappy because they compare their lives to unrealistic images online.',
+                    'Teenagers should completely stop using social media to protect their mental health.',
+                    'Using social media too much can disturb teenagers\' sleep and make it harder for them to focus at school.',
+                    'Cyberbullying is a serious problem on social media and can make teenagers feel lonely and scared.',
+                    'The text explains that social media has only negative effects without any positive sides.'
+                ],
+                correct: [0, 2, 3],
+                keyDisplay: 'A, C, D',
+                explanation: 'Kesan paling kuat dari teks adalah: media sosial membuat remaja tidak bahagia karena membandingkan diri, mengganggu tidur dan fokus, serta cyberbullying membuat kesepian/takut. Teks tidak menyuruh berhenti total dan tetap mengakui sisi positif.'
+            }
+        ];
+
+        // ===================== RENDER & INTERAKSI =====================
+        const container = document.getElementById('quiz-container');
+        const toast = document.getElementById('toast');
+
+        function showToast(message, type) {
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.className = `toast ${type}`;
+            }, 2000);
+        }
+
+        function renderQuestions() {
+            let html = '';
+            let insertedImageBlock = false;
+
+            questions.forEach(q => {
+                if (q.id === 6 && !insertedImageBlock) {
+                    html += `
+                        <div class="card" style="text-align:center; border-left: 6px solid #4f46e5;">
+                            <p style="font-weight:700; font-size:1.1rem; margin-bottom:12px;">🖼️ Gambar berikut untuk menjawab soal nomor 6-10</p>
+                            <div class="image-wrapper" style="margin:0;">
+                                <img src="https://muin123-dr.github.io/Belajar/TKA/gbr/B-Ing001.png" alt="Infografik perpustakaan" style="max-width:100%; border-radius:12px; border:1px solid #e5e7eb; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+                            </div>
+                        </div>
+                    `;
+                    insertedImageBlock = true;
+                }
+                html += renderQuestion(q);
+            });
+            container.innerHTML = html;
+            attachEventListeners();
+        }
+
+        function renderQuestion(q) {
+            let qHtml = '';
+            qHtml += `<div class="card" id="q${q.id}">`;
+            qHtml += `<div class="question-header">`;
+            qHtml += `<span class="question-number">${q.id}</span>`;
+            qHtml += `<span class="question-type">${getTypeLabel(q.type)}</span>`;
+            qHtml += `</div>`;
+            qHtml += `<div class="question-text">${q.text}</div>`;
+
+            if (q.type === 'pg') {
+                qHtml += `<div class="options">`;
+                q.options.forEach((opt, idx) => {
+                    const letter = String.fromCharCode(65 + idx);
+                    qHtml += `
+                        <label class="option-label" data-question="${q.id}" data-index="${idx}">
+                            <input type="radio" name="q${q.id}" value="${idx}">
+                            <span class="letter">${letter}.</span>
+                            <span class="option-text">${opt}</span>
+                        </label>
+                    `;
+                });
+                qHtml += `</div>`;
+            } else if (q.type === 'multi') {
+                qHtml += `<div class="options">`;
+                q.options.forEach((opt, idx) => {
+                    const letter = String.fromCharCode(65 + idx);
+                    qHtml += `
+                        <div class="option-label multi-option" data-question="${q.id}" data-index="${idx}">
+                            <span class="letter">${letter}.</span>
+                            <span class="option-text">${opt}</span>
+                            <span class="check-indicator">✓</span>
+                        </div>
+                    `;
+                });
+                qHtml += `</div>`;
+                qHtml += `<button class="submit-btn" data-question="${q.id}">Periksa Jawaban</button>`;
+            } else if (q.type === 'category') {
+                qHtml += `<div class="category-container" data-question="${q.id}">`;
+                q.rows.forEach((row, rowIdx) => {
+                    qHtml += `
+                        <div class="category-row" data-row="${rowIdx}">
+                            <div class="row-label">${String.fromCharCode(65 + rowIdx)}. ${row.label}</div>
+                            <div class="category-buttons">
+                                <button class="cat-btn" data-question="${q.id}" data-row="${rowIdx}" data-value="similarity">Similarity</button>
+                                <button class="cat-btn" data-question="${q.id}" data-row="${rowIdx}" data-value="difference">Difference</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                qHtml += `</div>`;
+            }
+
+            qHtml += `<div class="feedback" id="feedback-${q.id}">`;
+            qHtml += `<div class="key">🔑 Kunci Jawaban: ${q.keyDisplay}</div>`;
+            qHtml += `<div class="explanation">${q.explanation}</div>`;
+            qHtml += `</div>`;
+            qHtml += `</div>`;
+            return qHtml;
+        }
+
+        function getTypeLabel(type) {
+            switch (type) {
+                case 'pg':
+                    return 'Pilihan Ganda';
+                case 'multi':
+                    return 'Pilihan Ganda Kompleks';
+                case 'category':
+                    return 'Kategorisasi';
+                default:
+                    return '';
+            }
+        }
+
+        function attachEventListeners() {
+            // Single choice
+            document.querySelectorAll('.option-label input[type="radio"]').forEach(input => {
+                input.addEventListener('change', function(e) {
+                    const qId = parseInt(this.closest('.option-label').dataset.question);
+                    const selectedIdx = parseInt(this.value);
+                    handleSingleAnswer(qId, selectedIdx);
+                });
+            });
+
+            // Multi choice (clickable div)
+            document.querySelectorAll('.multi-option').forEach(div => {
+                div.addEventListener('click', function() {
+                    const qId = parseInt(this.dataset.question);
+                    const card = document.getElementById(`q${qId}`);
+                    // Cek jika sudah dinilai, jangan izinkan perubahan
+                    if (card.classList.contains('answered')) return;
+                    this.classList.toggle('selected');
+                });
+            });
+
+            // Multi choice submit
+            document.querySelectorAll('.submit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const qId = parseInt(this.dataset.question);
+                    handleMultiSubmit(qId);
+                });
+            });
+
+            // Category buttons
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const qId = parseInt(this.dataset.question);
+                    const rowIdx = parseInt(this.dataset.row);
+                    const selectedValue = this.dataset.value;
+                    handleCategoryAnswer(qId, rowIdx, selectedValue, this);
+                });
+            });
+        }
+
+        function handleSingleAnswer(qId, selectedIdx) {
+            const q = questions.find(q => q.id === qId);
+            if (!q) return;
+            const card = document.getElementById(`q${qId}`);
+            const labels = card.querySelectorAll('.option-label');
+            const feedback = document.getElementById(`feedback-${qId}`);
+            
+            labels.forEach(label => label.classList.add('disabled'));
+            
+            labels.forEach((label, idx) => {
+                const input = label.querySelector('input');
+                if (idx === q.correct[0]) {
+                    label.classList.add('correct');
+                } else if (idx === selectedIdx && idx !== q.correct[0]) {
+                    label.classList.add('incorrect');
+                }
+                input.disabled = true;
+            });
+            
+            card.classList.add('answered');
+            feedback.classList.add('show');
+            
+            if (selectedIdx === q.correct[0]) {
+                showToast('✅ Benar!', 'success');
+            } else {
+                showToast('❌ Salah!', 'error');
+            }
+        }
+
+        function handleMultiSubmit(qId) {
+            const q = questions.find(q => q.id === qId);
+            if (!q) return;
+            const card = document.getElementById(`q${qId}`);
+            const options = card.querySelectorAll('.multi-option');
+            const feedback = document.getElementById(`feedback-${qId}`);
+            const btn = card.querySelector('.submit-btn');
+            
+            const selected = [];
+            options.forEach((opt, idx) => {
+                if (opt.classList.contains('selected')) selected.push(idx);
+            });
+            
+            if (selected.length === 0) {
+                showToast('⚠️ Pilih jawaban dulu!', 'error');
+                return;
+            }
+            
+            // Tandai sudah dijawab
+            card.classList.add('answered');
+            options.forEach(opt => opt.classList.add('disabled'));
+            btn.disabled = true;
+            
+            const correctSet = new Set(q.correct);
+            options.forEach((opt, idx) => {
+                if (correctSet.has(idx)) {
+                    opt.classList.add('correct');
+                } else if (selected.includes(idx) && !correctSet.has(idx)) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            feedback.classList.add('show');
+            
+            const isCorrect = selected.length === q.correct.length && selected.every(idx => correctSet.has(idx));
+            if (isCorrect) {
+                showToast('✅ Benar!', 'success');
+            } else {
+                showToast('❌ Salah!', 'error');
+            }
+        }
+
+        function handleCategoryAnswer(qId, rowIdx, selectedValue, clickedBtn) {
+            const q = questions.find(q => q.id === qId);
+            if (!q) return;
+            const card = document.getElementById(`q${qId}`);
+            const row = card.querySelector(`.category-row[data-row="${rowIdx}"]`);
+            const buttons = row.querySelectorAll('.cat-btn');
+            
+            if (row.classList.contains('answered')) return;
+            row.classList.add('answered');
+            
+            const rowData = q.rows[rowIdx];
+            const isCorrect = selectedValue === rowData.key;
+            
+            buttons.forEach(btn => {
+                btn.classList.add('disabled');
+                if (btn.dataset.value === rowData.key) {
+                    btn.classList.add('correct');
+                } else if (btn === clickedBtn && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            if (isCorrect) {
+                showToast('✅ Benar!', 'success');
+            } else {
+                showToast('❌ Salah!', 'error');
+            }
+            
+            const allRows = card.querySelectorAll('.category-row');
+            const allAnswered = Array.from(allRows).every(r => r.classList.contains('answered'));
+            if (allAnswered) {
+                card.classList.add('answered');
+                const feedback = document.getElementById(`feedback-${qId}`);
+                feedback.classList.add('show');
+            }
+        }
+
+        // Render
+        renderQuestions();
+    </script>
+</body>
+</html>

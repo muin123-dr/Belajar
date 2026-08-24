@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz TKA Bahasa Inggris - Pemahaman Teks (Pusmendik)</title>
+<style>
+  :root {
+    --primary: #4f46e5;
+    --primary-dark: #4338ca;
+    --success: #10b981;
+    --success-bg: #d1fae5;
+    --error: #ef4444;
+    --error-bg: #fee2e2;
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --text: #1f2937;
+    --text-light: #6b7280;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .header h1 { font-size: 1.5rem; margin-bottom: 8px; }
+  .header p { opacity: 0.9; font-size: 0.95rem; }
+
+  .progress-container {
+    background: #e5e7eb;
+    height: 8px;
+    width: 100%;
+  }
+
+  .progress-bar {
+    background: var(--success);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .quiz-body { padding: 25px; }
+
+  .passage-box {
+    background: #f8fafc;
+    border-left: 4px solid var(--primary);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+    color: #334155;
+    max-height: 400px;
+    overflow-y: auto;
+    line-height: 1.7;
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .passage-box h3 {
+    font-size: 1.1rem;
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    z-index: 11;
+  }
+
+  .passage-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #e2e8f0;
+  }
+
+  .question-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .q-number {
+    background: var(--primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .q-type {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-style: italic;
+    background: #eef2ff;
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+
+  .question-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .option {
+    background: white;
+    border: 2px solid #e2e8f0;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.95rem;
+  }
+
+  .option:hover:not(.disabled) {
+    border-color: var(--primary);
+    background: #eef2ff;
+  }
+
+  .option.selected {
+    border-color: var(--primary);
+    background: #eef2ff;
+    box-shadow: 0 0 0 1px var(--primary);
+  }
+
+  .option .letter {
+    background: #e2e8f0;
+    color: var(--text);
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .option.selected .letter {
+    background: var(--primary);
+    color: white;
+  }
+
+  .option.correct {
+    background: var(--success-bg);
+    border-color: var(--success);
+    color: #065f46;
+  }
+  .option.correct .letter { background: var(--success); color: white; }
+
+  .option.wrong {
+    background: var(--error-bg);
+    border-color: var(--error);
+    color: #991b1b;
+  }
+  .option.wrong .letter { background: var(--error); color: white; }
+
+  .option.disabled { cursor: default; opacity: 0.9; }
+
+  .feedback {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback.correct { background: var(--success-bg); border-left: 5px solid var(--success); }
+  .feedback.wrong { background: var(--error-bg); border-left: 5px solid var(--error); }
+
+  .feedback-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; }
+  .feedback.correct .feedback-title { color: #065f46; }
+  .feedback.wrong .feedback-title { color: #991b1b; }
+
+  .explanation {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #374151;
+  }
+
+  .explanation strong { color: var(--primary-dark); }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 25px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn:hover { background: var(--primary-dark); }
+  .btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+  .result-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary) 0deg, #e5e7eb 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    position: relative;
+  }
+
+  .score-inner {
+    width: 120px;
+    height: 120px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-value { font-size: 2.5rem; font-weight: bold; color: var(--primary); }
+  .score-label { font-size: 0.9rem; color: var(--text-light); }
+
+  .result-message {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    .quiz-body { padding: 15px; }
+    .passage-box { max-height: 300px; font-size: 0.9rem; padding: 15px; }
+    .question-text { font-size: 1rem; }
+    .option { padding: 12px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>📘 Quiz TKA Bahasa Inggris</h1>
+    <p>Pemahaman Teks (Reading Comprehension) - 20 Soal</p>
+  </div>
+  
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="quiz-body" id="quizBody">
+    <!-- Konten quiz akan di-render di sini oleh JavaScript -->
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    <h2>🎉 Quiz Selesai!</h2>
+    <div class="score-circle" id="scoreCircle">
+      <div class="score-inner">
+        <div class="score-value" id="finalScore">0</div>
+        <div class="score-label">dari 20</div>
+      </div>
+    </div>
+    <div class="result-message" id="resultMessage"></div>
+    <button class="btn" onclick="restartQuiz()" style="max-width: 300px; margin: 0 auto;">🔄 Ulangi Quiz</button>
+  </div>
+</div>
+
+<script>
+const texts = {
+  teks1: `<h3>TEKS 1 — King Hung Vuong VI</h3>King Hung Vuong VI had a beautiful daughter. He did not want her to marry just any prince. So, he made an announcement that he was looking for the right husband for her. Many princes came from faraway lands, but none of them was a good match for the princess.<br><br>Son Tinh was the Spirit of the Mountain, and Thuy Tinh was the Spirit of the Waters. One day, they both appeared as young noblemen and asked to marry the princess. They were equally talented, powerful, and respected. The King found it hard to choose, so he decided to give them a test. He said that the one who brought the proper wedding gifts first the next morning would marry his daughter.<br><br>The next day, Son Tinh arrived early with his gifts. The King kept his promise and gave the princess to him. Thuy Tinh was angry about losing. He challenged Son Tinh to fight for the princess. But Son Tinh refused, believing he had already won fairly. Furious, Thuy Tinh used his power to call the rivers and streams to rise. Soon, the land was covered with floods that destroyed crops and homes.<br><br>Son Tinh stayed calm in his mountain palace. Whenever the water rose, he made his mountains higher. After many days of fighting, Thuy Tinh grew tired and ordered the waters to retreat. Still, he never accepted his defeat. Every year, he tried again to attack, and this is how monsoons came to Vietnam.`,
+  
+  teks2: `<h3>TEKS 2 — Infografik Perpustakaan</h3><img src="https://muin123-dr.github.io/Belajar/TKA/gbr/B-Ing004.png" alt="Infografik Perpustakaan" style="width: 100%; max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #e2e8f0;">`,
+  
+  teks3: `<h3>TEKS 3 — Exploring Bali's Natural Wonders</h3>Bali, a beautiful island in Indonesia, is known for its stunning landscapes and rich culture. While many come for the beaches and temples, the island also offers natural attractions that amaze nature lovers from around the world. From national parks and waterfalls to terraced rice fields, Bali is full of natural beauty.<br><br>In the west lies West Bali National Park, a peaceful area filled with green forests, calm mangrove swamps, and colorful coral reefs along the sea. The air is fresh, and the scenery feels untouched. One of the park’s most special sights is the Bali Starling—a rare white bird with bright blue around its eyes. Its soft song adds magic to the quiet forest. Visitors can walk along clear paths and enjoy the rich variety of plants and animals in this protected area.<br><br>Heading north, travelers find the scenic Munduk Waterfall, surrounded by green hills and forests. Water flows gently over rocky cliffs into a cool clear pool. Mist rises into the air, mixing with the calming sound of falling water. The walk to the waterfall passes through narrow paths lined with coffee and clove trees. Their fresh scent fills the air, offering a pleasant and peaceful experience. Munduk is the perfect place to relax and enjoy Bali’s natural charm.<br><br>Near the cultural center Ubud, the famous Tegalalang rice terraces stretch across the hills in green steps. These terraces are shaped by generations of farmers who work the land by hand. In the morning, mist rises above the fields, and sunlight reflects off the water in the paddies. Farmers in wide-brimmed hats plant rice carefully, their feet sinking into the soft earth. Water flows gently through small canals, keeping the fields healthy and green. The quiet surroundings and slow rhythm of farm life create a peaceful and inspiring scene.<br><br>These natural wonders highlight Bali's dedication in preserving its environmental and cultural treasures. By exploring these sites, tourists not only experience the island's scenic beauty but also support ongoing conservation efforts, helping to ensure that Bali's wonders last for future generations.`,
+  
+  teks4: `<h3>TEKS 4 — My Experience as an Intern at a Sports Club</h3>Last summer, I had the opportunity to work as an intern at a local sports club. It was my first time working in a professional sports environment, and I was both nervous and excited. The internship went through a few phases, starting from orientation until finally jumping in to help during practices and games.<br><br>On my first day, I met the head coach, who welcomed me and explained my tasks. I had to set up cones for drills, bring water for the players, and check the training schedules. The first few days were challenging because I was not used to the morning routine. Every morning I had to wake up early, arrive on time, and follow instructions carefully. I worried about making mistakes, but the coaches were kind and guided me.<br><br>In the second month of my internship, I was trained to handle emergency situations. I got the chance to put that knowledge into practice when something unexpected happened. During football practice, a player fell and hurt his ankle. Everyone stopped, and I quickly ran to get the first aid kit. I helped the coach assess the injury and ensured the player stayed calm while we got him seated safely. Luckily, it wasn’t serious, but the experience reinforced an important lesson: staying alert and prepared during emergencies can make a big difference.<br><br>At the end of my internship, the coaches held an evaluation and reflection session where they shared the results of their feedback. They highlighted my strengths in teamwork, responsibility, and communication, and even gave me a club T-shirt as a gift. I felt proud because I had improved in these areas. It was a great experience, and I hope to work in a sports club again in the future.`,
+  
+  teks5: `<h3>TEKS 5 — Social Media Harms Teen Mental Health</h3>In today’s world, social media is a big part of many teenagers’ daily lives. While it has some benefits, such as staying connected with friends, meeting new people, and learning about interesting topics, it also brings serious problems. I strongly believe that social media harms teen mental health, and we must pay more attention to this issue before it becomes even worse.<br><br>First, social media often makes teenagers compare themselves to others in an unhealthy way. When teens see pictures of people who seem perfect, they feel that they are not good enough. These feelings can lower self-esteem and lead to sadness, anxiety, or even depression. The problem is that many of these online posts are edited, filtered, or fake, but teens still feel pressure to look or live the same way. They may think that their own life is boring or not successful, which is simply not true.<br><br>Second, too much time on social media affects sleep and study habits. Many teenagers use their phones late at night, checking messages or watching videos, which reduces sleep time and quality. Without enough sleep, teens cannot focus well in class, and their grades may suffer. This can increase stress and worry about the future, making them feel overwhelmed.<br><br>Finally, online bullying, or cyberbullying, is another serious danger. Unlike face-to-face bullying, it can happen at any time and be shared with many people. Victims of cyberbullying often feel alone, scared, and helpless, and in some cases, it leads to serious mental health problems.<br><br>In conclusion, although social media has some good uses, its harm to teen mental health is much greater. Teenagers need support from parents, teachers, and society to use it wisely. Schools should teach students how to use social media in healthy ways, and parents should guide their children to take breaks and spend time offline. By doing this, we can help protect young people’s mental health in this digital age.`
+};
+
+const questions = [
+  // TEKS 1 (Soal 1-5)
+  {
+    passage: texts.teks1,
+    question: "Which of the following outlines shows the correct main points of the story?",
+    options: [
+      "King Hung Vuong VI wanted the best husband... Thuy Tinh arrived first with the wedding gifts. The princess was given to Thuy Tinh.",
+      "King Hung Vuong VI had a beautiful daughter. He announced he was looking for the right husband. Son Tinh and Thuy Tinh appeared and asked to marry her. The King gave them a test with wedding gifts. Son Tinh arrived first and married the princess. Thuy Tinh attacked with floods but was defeated.",
+      "King Hung Vuong VI asked his daughter to choose her husband... Finally, he asked them to fight each other. Thuy Tinh lost the battle and left the land.",
+      "King Hung Vuong VI searched for a husband... Son Tinh drowned in the floods.",
+      "The King wanted a nobleman for his daughter... Son Tinh refused the challenge of gifts. The King chose Thuy Tinh as the winner."
+    ],
+    correct: [1],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> Pilihan B merangkum alur cerita dengan tepat: Raja mencari suami → Son Tinh & Thuy Tinh melamar → Raja memberi tes hadiah → Son Tinh datang lebih dulu dan menang → Thuy Tinh marah dan menyerang dengan banjir tetapi kalah. Pilihan lain mengandung fakta yang salah."
+  },
+  {
+    passage: texts.teks1,
+    question: "Why did Thuy Tinh attack Son Tinh after the wedding?",
+    options: [
+      "He was jealous of Son Tinh’s victory.",
+      "He believed the King had lied to him.",
+      "He thought the princess loved him more.",
+      "He wanted to show off his power to the king.",
+      "He had promised to fight until death."
+    ],
+    correct: [0],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> Teks menyatakan: <em>'Thuy Tinh was angry about losing... Furious, Thuy Tinh used his power to call the rivers...'</em>. Serangannya didasari oleh kemarahan dan rasa tidak terima karena kalah."
+  },
+  {
+    passage: texts.teks1,
+    question: "Pilih semua pernyataan yang menunjukkan KESAMAAN (Similarity) antara Son Tinh dan Thuy Tinh berdasarkan teks! (PGK)",
+    options: [
+      "Both are not humans (They are spirits).",
+      "They can control the elements (Mountain and Water).",
+      "They both wanted to marry the king's daughter.",
+      "They both accepted defeat gracefully.",
+      "They both destroyed crops and homes."
+    ],
+    correct: [0, 1, 2],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Kesamaan mereka: (1) Keduanya bukan manusia, (2) Keduanya memiliki kekuatan mengontrol elemen alam, (3) Keduanya ingin menikahi putri raja. Hanya Thuy Tinh yang tidak menerima kekalahan dan merusak tanaman/rumah."
+  },
+  {
+    passage: texts.teks1,
+    question: "What does the phrase “kept his promise” in the text mean?",
+    options: [
+      "Forgot about his decision.",
+      "Changed his mind about the wedding.",
+      "Did what he had promised to do.",
+      "Delayed the marriage for many days.",
+      "The King asked the princes to bring more gifts."
+    ],
+    correct: [2],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> 'Kept his promise' berarti menepati janji. Raja berjanji akan memberikan putrinya kepada siapa pun yang membawa hadiah lebih dulu, dan dia melakukan tepat seperti yang dia janjikan."
+  },
+  {
+    passage: texts.teks1,
+    question: "What is the main lesson of the story? (Pilih lebih dari satu jawaban yang benar)",
+    options: [
+      "Accept defeat gracefully to prevent harm to others.",
+      "Be fair and follow the agreed rules in competitions.",
+      "Choose peaceful solutions rather than angry reactions.",
+      "Prepare honestly and present your gifts properly.",
+      "Respect leaders’ decisions and community agreements."
+    ],
+    correct: [0, 1, 2],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Pelajaran utama: (A) Menerima kekalahan dengan lapang dada, (B) Bersikap adil dan mengikuti aturan yang disepakati, (C) Memilih solusi damai daripada reaksi marah."
+  },
+
+  // TEKS 2 (Soal 6-10)
+  {
+    passage: texts.teks2,
+    question: "The following activities are suggested in the infographic. Categorize them as either preparation or breaks during study. Pilih aktivitas yang termasuk 'Breaks' (Istirahat)!",
+    options: [
+      "Standing up",
+      "Bringing a book",
+      "Doing stretch"
+    ],
+    correct: [0, 2],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> 'Standing up' (berdiri) dan 'Doing stretch' (peregangan) adalah aktivitas fisik ringan yang disarankan sebagai 'Breaks' untuk menyegarkan kembali fokus. 'Bringing a book' adalah bagian dari persiapan."
+  },
+  {
+    passage: texts.teks2,
+    question: "How can we decide a certain table is perfect for studying according to the text? (Pilih lebih dari satu)",
+    options: [
+      "It has good lighting.",
+      "It provides white noise.",
+      "It is located near the entrance.",
+      "It is far from the toilet.",
+      "It provides stationery."
+    ],
+    correct: [0, 3],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Berdasarkan infografik, meja yang sempurna untuk belajar adalah yang memiliki pencahayaan baik (<em>good lighting</em>) dan jauh dari toilet (<em>far from the toilet</em>) untuk menghindari gangguan."
+  },
+  {
+    passage: texts.teks2,
+    question: "Who needs to read this infographic?",
+    options: [
+      "The students of that school.",
+      "People who happen to visit the school.",
+      "The librarian of another school.",
+      "The headmaster of that school.",
+      "Parents who come to pick up their kids."
+    ],
+    correct: [0],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> Infografik ini berisi aturan dan tips belajar di perpustakaan. Target utama yang perlu membaca dan mematuhi aturan ini adalah para siswa yang akan menggunakan fasilitas tersebut."
+  },
+  {
+    passage: texts.teks2,
+    question: "Which actions show disrespect for other students? (Pilih lebih dari satu)",
+    options: [
+      "Speaking loudly to friends.",
+      "Keeping the phone silent.",
+      "Eating snacks at the desk.",
+      "Playing music in the corner.",
+      "Moving chairs noisily."
+    ],
+    correct: [0, 2, 3, 4],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Yang termasuk ketidak sopanan di perpustakaan: bicara keras, makan di meja, memutar musik, dan menggeser kursi dengan berisik. 'Keeping the phone silent' justru adalah sikap yang baik."
+  },
+  {
+    passage: texts.teks2,
+    question: "You find this infographic in front of your school library. What will you do before your next visit to the library?",
+    options: [
+      "Making sure that I bring my water bottle and lunch with me.",
+      "Bringing the books and stationery that I will use.",
+      "Organizing the book that I borrowed from the library.",
+      "Walking for five minutes so I can focus more when studying.",
+      "Making sure you look fresh because you will meet other students."
+    ],
+    correct: [1],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> Tindakan paling logis dan sesuai dengan bagian 'Preparation' pada infografik adalah membawa buku dan alat tulis yang akan digunakan."
+  },
+
+  // TEKS 3 (Soal 11-13)
+  {
+    passage: texts.teks3,
+    question: "What is the main purpose of visiting these places: to support conservation or to relax? Klik pada kategori yang paling dominan disebutkan untuk setiap tempat! (Pilih semua yang sesuai)",
+    options: [
+      "Munduk Waterfall → Relaxation",
+      "West Bali National Park → Conservation",
+      "Tegalalang Rice Terraces → Conservation (preserving cultural treasures & farm life)"
+    ],
+    correct: [0, 1, 2],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Teks menyebut Munduk sebagai <em>'perfect place to relax'</em>. West Bali National Park disebut sebagai <em>'protected area'</em>. Tegalalang mendukung pelestarian warisan budaya dan lingkungan."
+  },
+  {
+    passage: texts.teks3,
+    question: "The text mainly talks about Bali’s …",
+    options: [
+      "wildlife species and nature lovers.",
+      "unique cultural treasures and sites.",
+      "stunning nature and remarkable sites.",
+      "generations and cultural conservation.",
+      "scenic beauty and local farming practices."
+    ],
+    correct: [2],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> Ide utama teks ada di paragraf pertama: <em>'the island also offers natural attractions that amaze nature lovers... Bali is full of natural beauty.'</em>"
+  },
+  {
+    passage: texts.teks3,
+    question: "Which parts of the text best support the description of Bali as 'full of natural beauty'? (Pilih lebih dari satu)",
+    options: [
+      "A peaceful area filled with green forests, calm mangrove swamps, and colorful coral reefs along the sea.",
+      "These terraces are shaped by generations of farmers who work the land by hand.",
+      "Water flows gently over rocky cliffs into a cool, clear pool. Mist rises into the air, mixing with the calming sound of falling water.",
+      "In the morning, mist rises above the fields, and sunlight reflects off the water in the paddies.",
+      "Farmers in wide-brimmed hats plant rice carefully, their feet sinking into the soft earth."
+    ],
+    correct: [0, 2, 3],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Pilihan 0 (hutan, bakau, terumbu karang), 2 (air terjun, kolam jernih, kabut), dan 3 (kabut pagi, pantulan sinar matahari di sawah) secara langsung mendeskripsikan keindahan alam."
+  },
+
+  // TEKS 4 (Soal 14-16)
+  {
+    passage: texts.teks4,
+    question: "During the internship, what did the writer do every morning?",
+    options: [
+      "Made schedules and explained them to the coaches.",
+      "Played football with the team and got the first aid kit.",
+      "Prepared a club gift, guided the coaches, and gave t-shirts.",
+      "Woke up early, arrived on time, and followed the instructions.",
+      "Set up cones, brought water, and checked emergency schedules."
+    ],
+    correct: [3],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> Teks menyatakan secara eksplisit di paragraf 2: <em>'Every morning I had to wake up early, arrive on time, and follow instructions carefully.'</em>"
+  },
+  {
+    passage: texts.teks4,
+    question: "What are the best words to describe the writer’s personality during the internship? (Pilih lebih dari satu)",
+    options: [
+      "Careful and ready to help.",
+      "Confident and enjoys working alone.",
+      "Responsible and willing to learn.",
+      "Friendly and works well with others.",
+      "Creative and likes to try new things."
+    ],
+    correct: [0, 2, 3],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Penulis menunjukkan sikap: (A) 'Careful and ready to help' (lari mengambil P3K), (C) 'Responsible and willing to learn' (mengikuti instruksi), (D) 'Friendly and works well with others' (dipuji dalam teamwork)."
+  },
+  {
+    passage: texts.teks4,
+    question: "What will the writer most likely do after finishing the internship?",
+    options: [
+      "Considering a career in a sports medicine.",
+      "Stop working and focus only on school.",
+      "Look for another chance to work in a sports club.",
+      "Study medicine to become a doctor.",
+      "Train as a professional football player."
+    ],
+    correct: [2],
+    isMultiple: false,
+    explanation: "<strong>Pembahasan:</strong> Kalimat terakhir teks menyatakan: <em>'It was a great experience, and I hope to work in a sports club again in the future.'</em>"
+  },
+
+  // TEKS 5 (Soal 17-20)
+  {
+    passage: texts.teks5,
+    question: "What will happen if teenagers have poor sleep quality? (Pilih lebih dari satu)",
+    options: [
+      "Teenagers' grades could drop.",
+      "Teens struggle to focus in class.",
+      "Teens are likely to feel stressed.",
+      "Teenagers will be more confident.",
+      "Teens will become mentally strong."
+    ],
+    correct: [0, 1, 2],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Paragraf 3 menyebutkan: <em>'Without enough sleep, teens cannot focus well in class (B), and their grades may suffer (A). This can increase stress (C)...'</em>."
+  },
+  {
+    passage: texts.teks5,
+    question: "Which of the following additional facts would most likely make the text more persuasive? (Pilih lebih dari satu)",
+    options: [
+      "Research data showing the number of teenagers experiencing anxiety or depression because of social media.",
+      "Personal stories from teenagers who feel happier after reducing their social media use.",
+      "Statistics about how many teenagers use social media every day.",
+      "A list of the most popular social media platforms among teenagers.",
+      "Expert opinions from doctors or psychologists about the dangers of social media for mental health."
+    ],
+    correct: [0, 1, 4],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Untuk memperkuat argumen bahwa 'media sosial merusak kesehatan mental', data penelitian (A), testimoni nyata (B), dan pendapat ahli psikolog/dokter (E) adalah bukti yang paling relevan dan kuat."
+  },
+  {
+    passage: texts.teks5,
+    question: "Which statements from the text support the author’s argument that social media harms teen mental health? (Pilih lebih dari satu)",
+    options: [
+      "\"When teens see pictures of people who seem perfect, they feel that they are not good enough.\"",
+      "\"Many teenagers use their phones late at night, which reduces sleep time and quality.\"",
+      "\"Schools should teach students how to use social media in healthy ways.\"",
+      "\"Social media helps teens stay connected with friends and learn about interesting topics.\"",
+      "\"Victims of cyberbullying often feel alone, scared, and helpless.\""
+    ],
+    correct: [0, 1, 4],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Pernyataan A (perbandingan tidak sehat), B (gangguan tidur yang berujung stres), dan E (dampak cyberbullying) secara langsung mendukung argumen bahwa media sosial merusak kesehatan mental."
+  },
+  {
+    passage: texts.teks5,
+    question: "What is the most prominent impression you gain from the text? (Pilih lebih dari satu)",
+    options: [
+      "Social media makes teenagers unhappy because they compare their lives to unrealistic images online.",
+      "Teenagers should completely stop using social media to protect their mental health.",
+      "Using social media too much can disturb teenagers' sleep and make it harder for them to focus at school.",
+      "Cyberbullying is a serious problem on social media and can make teenagers feel lonely and scared.",
+      "The text explains that social media has only negative effects without any positive sides."
+    ],
+    correct: [0, 2, 3],
+    isMultiple: true,
+    explanation: "<strong>Pembahasan:</strong> Kesan utama yang valid sesuai teks: A (paragraf 2), C (paragraf 3), dan D (paragraf 4). Pilihan B salah karena teks menyarankan 'use it wisely', bukan berhenti total. Pilihan E salah karena paragraf 1 mengakui adanya 'some benefits'."
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let selectedOptions = [];
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const quizBody = document.getElementById('quizBody');
+  
+  let passageHTML = '';
+  if (q.passage) {
+    passageHTML = `<div class="passage-box">${q.passage}</div>`;
+  }
+
+  let optionsHTML = '';
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  
+  q.options.forEach((opt, idx) => {
+    optionsHTML += `
+      <div class="option" onclick="toggleOption(${idx})" data-idx="${idx}">
+        <span class="letter">${letters[idx]}</span>
+        <span>${opt}</span>
+      </div>
+    `;
+  });
+
+  const typeText = q.isMultiple ? '📌 Pilih semua jawaban yang benar (PGK)' : '📌 Pilih satu jawaban yang paling tepat';
+
+  quizBody.innerHTML = `
+    ${passageHTML}
+    <div class="question-meta">
+      <span class="q-number">Soal ${currentQuestion + 1} / ${questions.length}</span>
+      <span class="q-type">${typeText}</span>
+    </div>
+    <div class="question-text">${q.question}</div>
+    <div class="options" id="optionsContainer">
+      ${optionsHTML}
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn" id="checkBtn" onclick="checkAnswer()" disabled>✅ Cek Jawaban</button>
+    <button class="btn" id="nextBtn" onclick="nextQuestion()" style="display: none; background: #10b981;">➡️ Soal Berikutnya</button>
+  `;
+
+  document.getElementById('progressBar').style.width = `${((currentQuestion) / questions.length) * 100}%`;
+  selectedOptions = [];
+}
+
+function toggleOption(idx) {
+  const q = questions[currentQuestion];
+  const options = document.querySelectorAll('.option');
+  
+  if (document.getElementById('checkBtn').disabled === false) return; // Sudah di-check
+
+  if (!q.isMultiple) {
+    selectedOptions = [idx];
+    options.forEach(opt => opt.classList.remove('selected'));
+    options[idx].classList.add('selected');
+  } else {
+    if (selectedOptions.includes(idx)) {
+      selectedOptions = selectedOptions.filter(i => i !== idx);
+      options[idx].classList.remove('selected');
+    } else {
+      selectedOptions.push(idx);
+      options[idx].classList.add('selected');
+    }
+  }
+
+  document.getElementById('checkBtn').disabled = selectedOptions.length === 0;
+}
+
+function checkAnswer() {
+  const q = questions[currentQuestion];
+  const options = document.querySelectorAll('.option');
+  const feedback = document.getElementById('feedback');
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+
+  // Disable further clicks
+  options.forEach(opt => opt.classList.add('disabled'));
+  document.getElementById('checkBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'block';
+
+  // Check correctness
+  const isCorrect = q.isMultiple 
+    ? (q.correct.length === selectedOptions.length && q.correct.every(val => selectedOptions.includes(val)))
+    : (q.correct[0] === selectedOptions[0]);
+
+  if (isCorrect) {
+    score++;
+    feedback.className = 'feedback correct';
+    feedback.innerHTML = `<div class="feedback-title">✅ Benar! Hebat!</div>`;
+  } else {
+    feedback.className = 'feedback wrong';
+    feedback.innerHTML = `<div class="feedback-title">❌ Kurang Tepat</div>`;
+  }
+
+  // Highlight correct and wrong
+  options.forEach((opt, idx) => {
+    if (q.correct.includes(idx)) {
+      opt.classList.add('correct');
+    } else if (selectedOptions.includes(idx) && !q.correct.includes(idx)) {
+      opt.classList.add('wrong');
+    }
+  });
+
+  const correctText = q.correct.map(i => `${letters[i]}. ${q.options[i]}`).join('<br>');
+  
+  feedback.innerHTML += `
+    <div class="explanation">
+      <strong>Kunci Jawaban:</strong><br>${correctText}<br><br>
+      <strong>Pembahasan:</strong><br>${q.explanation}
+    </div>
+  `;
+  
+  feedback.style.display = 'block';
+  
+  // Scroll to feedback
+  setTimeout(() => {
+    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function showResult() {
+  document.getElementById('quizBody').style.display = 'none';
+  document.querySelector('.progress-container').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+  
+  const percentage = (score / questions.length) * 100;
+  const degrees = (percentage / 100) * 360;
+  
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('scoreCircle').style.background = `conic-gradient(var(--primary) ${degrees}deg, #e5e7eb ${degrees}deg)`;
+  
+  let message = '';
+  if (percentage >= 85) message = "🌟 <strong>Luar Biasa!</strong> Pemahaman membaca kamu sangat baik. Kamu siap menghadapi soal TKA level tinggi!";
+  else if (percentage >= 70) message = "👏 <strong>Bagus Sekali!</strong> Kamu sudah menguasai sebagian besar konsep. Tingkatkan lagi ketelitian dalam membaca detail teks.";
+  else if (percentage >= 50) message = "💪 <strong>Cukup Baik.</strong> Terus berlatih! Fokus pada strategi skimming, scanning, dan inferensi untuk meningkatkan skor.";
+  else message = "📚 <strong>Perlu Latihan Lagi.</strong> Jangan menyerah! Pelajari kembali cara menemukan ide pokok, detail spesifik, dan makna tersirat dalam teks.";
+  
+  document.getElementById('resultMessage').innerHTML = `
+    <strong>Skor Kamu: ${score} / ${questions.length} (${percentage.toFixed(0)}%)</strong><br><br>
+    ${message}
+  `;
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  currentQuestion = 0;
+  score = 0;
+  document.getElementById('quizBody').style.display = 'block';
+  document.querySelector('.progress-container').style.display = 'block';
+  document.getElementById('resultScreen').style.display = 'none';
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Initialize
+renderQuestion();
+</script>
+</body>
+</html>
