@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz TKA Bahasa Inggris - Evaluasi & Apresiasi</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+  }
+  .container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+  }
+  .header h1 { font-size: 1.8em; margin-bottom: 8px; }
+  .header p { opacity: 0.9; font-size: 0.95em; }
+  .progress-container {
+    background: #f0f0f0;
+    height: 10px;
+    border-radius: 5px;
+    margin: 20px 30px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 30px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 120px;
+    background: #f8f9ff;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid #e8ebff;
+  }
+  .stat-box .label { font-size: 0.8em; color: #666; }
+  .stat-box .value { font-size: 1.4em; font-weight: bold; color: #667eea; }
+  .quiz-body { padding: 20px 30px 30px; }
+  .question-card {
+    background: #f8f9ff;
+    border-left: 5px solid #667eea;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  .question-number {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  .passage {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-style: italic;
+    color: #444;
+    border: 1px dashed #c8ceff;
+    line-height: 1.6;
+  }
+  .question-text {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #222;
+    line-height: 1.5;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    background: white;
+    border: 2px solid #e0e4ff;
+    padding: 14px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.98em;
+    line-height: 1.5;
+  }
+  .option:hover:not(.disabled) {
+    border-color: #667eea;
+    background: #f0f3ff;
+    transform: translateX(4px);
+  }
+  .option .letter {
+    background: #667eea;
+    color: white;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85em;
+    flex-shrink: 0;
+  }
+  .option.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+  }
+  .option.correct .letter { background: #28a745; }
+  .option.wrong {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+  }
+  .option.wrong .letter { background: #dc3545; }
+  .option.disabled { cursor: not-allowed; opacity: 0.85; }
+  .feedback {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 10px;
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback.correct {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border-left: 5px solid #28a745;
+  }
+  .feedback.wrong {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    border-left: 5px solid #dc3545;
+  }
+  .feedback-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+  }
+  .feedback.correct .feedback-title { color: #155724; }
+  .feedback.wrong .feedback-title { color: #721c24; }
+  .feedback .answer-key {
+    background: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-weight: 600;
+  }
+  .feedback .explanation {
+    line-height: 1.6;
+    color: #333;
+    font-size: 0.95em;
+  }
+  .next-btn {
+    display: block;
+    margin: 20px auto 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .next-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102,126,234,0.4);
+  }
+  .next-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .result-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 30px;
+  }
+  .result-screen h2 {
+    color: #667eea;
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+  .score-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: conic-gradient(#667eea 0deg, #e0e4ff 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 25px auto;
+    position: relative;
+    transition: background 1s ease;
+  }
+  .score-inner {
+    width: 150px;
+    height: 150px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-value { font-size: 2.5em; font-weight: bold; color: #667eea; }
+  .score-label { font-size: 0.9em; color: #666; }
+  .result-message {
+    font-size: 1.1em;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9ff;
+    border-radius: 10px;
+    color: #444;
+    line-height: 1.6;
+  }
+  .restart-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  .restart-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.4); }
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .header { padding: 20px; }
+    .header h1 { font-size: 1.4em; }
+    .quiz-body, .stats, .progress-container { padding-left: 18px; padding-right: 18px; margin-left: 0; margin-right: 0; }
+    .question-card { padding: 15px; }
+    .option { padding: 12px; font-size: 0.92em; }
+    .stat-box { min-width: 90px; padding: 10px; }
+    .stat-box .value { font-size: 1.2em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📘 Quiz TKA Bahasa Inggris</h1>
+    <p>Kompetensi 3: Evaluasi & Apresiasi</p>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="label">Soal</div>
+      <div class="value" id="currentQ">1/20</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">✅ Benar</div>
+      <div class="value" id="correctCount">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">❌ Salah</div>
+      <div class="value" id="wrongCount">0</div>
+    </div>
+  </div>
+
+  <div class="quiz-body" id="quizBody"></div>
+
+  <div class="result-screen" id="resultScreen">
+    <h2>🎉 Quiz Selesai!</h2>
+    <div class="score-circle" id="scoreCircle">
+      <div class="score-inner">
+        <div class="score-value" id="finalScore">0</div>
+        <div class="score-label">dari 20</div>
+      </div>
+    </div>
+    <div class="result-message" id="resultMessage"></div>
+    <button class="restart-btn" onclick="restartQuiz()">🔄 Ulangi Quiz</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    passage: "Last night, Luna rode her broom to the moon. She met a talking rabbit who served her tea made of stardust. Then, they danced among the clouds until sunrise.",
+    question: "Which element in the text shows that the story belongs to the fantasy genre?",
+    options: [
+      "Luna had tea with her friend.",
+      "Luna rode a broom to the moon and met a talking rabbit.",
+      "Luna enjoyed the sunrise.",
+      "Luna danced until sunrise.",
+      "Luna drank tea at night."
+    ],
+    answer: 1,
+    explanation: "Unsur fantasi ditandai dengan hal yang tidak mungkin terjadi di dunia nyata. Naik sapu terbang ke bulan dan bertemu kelinci yang bisa berbicara adalah ciri khas fantasi (magic & talking animal). Pilihan lain merupakan kejadian yang realistis."
+  },
+  {
+    passage: "The old fisherman woke up at 4 a.m., prepared his net, and sailed to the sea. After three hours, he caught five big fish and returned home before noon.",
+    question: "The events in the passage are realistic because …",
+    options: [
+      "they involve magic and supernatural powers.",
+      "they describe impossible actions of animals.",
+      "they describe activities that can happen in real life.",
+      "they take place in an imaginary kingdom.",
+      "they include flying objects and enchanted tools."
+    ],
+    answer: 2,
+    explanation: "Realitas berarti kejadian dapat terjadi di dunia nyata. Seorang nelayan yang bangun pagi, menebar jala, menangkap ikan, dan pulang sebelum siang adalah kegiatan yang sangat mungkin terjadi. Tidak ada unsur magis atau mustahil."
+  },
+  {
+    passage: "Rani walked to school carrying her heavy bag. On her way, she saw a dragon flying above the school roof and landing in the yard. Her friends waved at the dragon as if it were a normal pet.",
+    question: "Which part of the text contains a fantasy element?",
+    options: [
+      "Rani walked to school.",
+      "She carried a heavy bag.",
+      "She saw a dragon flying and landing in the yard.",
+      "Her friends waved at something.",
+      "Rani went to school in the morning."
+    ],
+    answer: 2,
+    explanation: "Dragon (naga) yang terbang dan mendarat adalah makhluk imajinatif yang tidak ada di dunia nyata. Bagian lain (berjalan ke sekolah, membawa tas, teman melambaikan tangan) adalah kejadian realistis. Jadi, bagian fantasi adalah ketika Rani melihat naga."
+  },
+  {
+    passage: "A cat cleaned the kitchen, a dog drove a car to the market, and a cow taught mathematics in a primary school. Everyone lived happily in the village of Animolia.",
+    question: "The text is best classified as a fantasy story because …",
+    options: [
+      "it describes daily routines of villagers.",
+      "it shows animals behaving like human beings.",
+      "it takes place in a real village in Indonesia.",
+      "it explains how to raise animals properly.",
+      "it reports a scientific experiment about animals."
+    ],
+    answer: 1,
+    explanation: "Hewan yang melakukan aktivitas manusia (membersihkan dapur, menyetir mobil, mengajar matematika) adalah ciri khas fantasi (talking/acting animals). Di dunia nyata, hewan tidak dapat melakukan pekerjaan manusia."
+  },
+  {
+    passage: "The school library has 5,200 books. It opens from 7 a.m. to 4 p.m. Many students say it is the most comfortable place to study in the whole city.",
+    question: "Which sentence in the passage is an opinion?",
+    options: [
+      "The school library has 5,200 books.",
+      "It opens from 7 a.m. to 4 p.m.",
+      "Many students say it is the most comfortable place to study in the whole city.",
+      "The library has many books.",
+      "The library opens every day."
+    ],
+    answer: 2,
+    explanation: "Opini adalah penilaian subjektif. Kata 'most comfortable' merupakan penilaian yang bisa berbeda antar orang. Sementara jumlah buku (5.200) dan jam buka adalah fakta yang dapat diverifikasi."
+  },
+  {
+    passage: "Mount Semeru is 3,676 meters above sea level. It is the highest mountain in Java. Many climbers believe it is the most beautiful mountain in Indonesia.",
+    question: "Which statement from the passage is a fact?",
+    options: [
+      "It is the most beautiful mountain in Indonesia.",
+      "Many climbers love Mount Semeru.",
+      "Mount Semeru is 3,676 meters above sea level.",
+      "Climbing Mount Semeru is the best experience.",
+      "The mountain is more interesting than others."
+    ],
+    answer: 2,
+    explanation: "Fakta adalah informasi yang dapat diverifikasi. Tinggi gunung 3.676 mdpl adalah data yang dapat diukur dan dibuktikan. Pilihan lain mengandung kata 'most beautiful', 'best', 'more interesting' yang merupakan opini/penilaian."
+  },
+  {
+    question: "Which of the following sentences expresses an opinion?",
+    options: [
+      "Water boils at 100°C at sea level.",
+      "Indonesia gained independence in 1945.",
+      "The new cafeteria menu is more delicious than the old one.",
+      "The Earth revolves around the Sun.",
+      "A week has seven days."
+    ],
+    answer: 2,
+    explanation: "Kalimat 'more delicious' adalah penilaian subjektif tentang rasa — setiap orang bisa punya pendapat berbeda. Pilihan lain adalah fakta ilmiah/historis yang dapat diverifikasi kebenarannya."
+  },
+  {
+    question: "Which of the following statements is a fact, NOT an opinion?",
+    options: [
+      "Reading novels is the best way to relax.",
+      "Jakarta is the capital city of Indonesia.",
+      "Online learning is more boring than face-to-face learning.",
+      "Football is the most exciting sport in the world.",
+      "Mathematics is the most difficult subject."
+    ],
+    answer: 1,
+    explanation: "Jakarta sebagai ibu kota Indonesia adalah fakta yang dapat diverifikasi melalui dokumen negara. Pilihan lain mengandung kata 'best', 'more boring', 'most exciting', 'most difficult' yang merupakan penilaian subjektif."
+  },
+  {
+    passage: "Claim: 'Eating breakfast helps students concentrate better in class.'",
+    question: "Which evidence STRONGLY supports the claim above?",
+    options: [
+      "I feel hungry if I skip breakfast.",
+      "My friend says breakfast is important.",
+      "A study involving 1,500 students showed that those who ate breakfast scored 15% higher on concentration tests than those who did not.",
+      "Everyone knows breakfast is the most important meal.",
+      "Breakfast is delicious and makes people happy."
+    ],
+    answer: 2,
+    explanation: "Bukti terkuat adalah yang berbasis penelitian dengan data spesifik (1.500 siswa, skor 15% lebih tinggi). Bukti ini relevan, dapat diverifikasi, dan cukup untuk mendukung klaim. Pilihan lain hanya opini pribadi atau klaim umum tanpa bukti."
+  },
+  {
+    passage: "Claim: 'Social media negatively affects teenagers' mental health.'",
+    question: "Which information provides the MOST VALID support for the claim?",
+    options: [
+      "Many teenagers enjoy using social media every day.",
+      "My cousin feels sad after using Instagram.",
+      "A 2023 research by the National Health Institute found a significant correlation between heavy social media use and increased anxiety symptoms among teenagers aged 13–18.",
+      "Social media is popular among young people.",
+      "Some people think social media is harmful."
+    ],
+    answer: 2,
+    explanation: "Validitas informasi ditentukan oleh sumber yang kredibel, data yang jelas, dan relevansi dengan klaim. Penelitian dari National Health Institute dengan subjek dan temuan spesifik adalah bukti paling valid. Pengalaman pribadi (my cousin) terlalu subjektif untuk klaim umum."
+  },
+  {
+    passage: "A teacher claims: 'Students who exercise regularly perform better academically.'",
+    question: "Which additional information would MOST strengthen the teacher's claim?",
+    options: [
+      "Many students like playing sports after school.",
+      "The school has a large sports field.",
+      "A two-year study showed that students who exercised at least three times a week had higher GPAs and better memory test results than those who rarely exercised.",
+      "Exercise makes students feel tired.",
+      "Some students prefer reading to exercising."
+    ],
+    answer: 2,
+    explanation: "Informasi terkuat adalah yang langsung menghubungkan exercise dengan academic performance melalui penelitian (GPA lebih tinggi, hasil tes memori lebih baik). Pilihan lain tidak secara langsung mendukung hubungan klaim dengan bukti."
+  },
+  {
+    question: "Which of the following sources is the MOST reliable for supporting a scientific claim about climate change?",
+    options: [
+      "A personal blog written by a high school student.",
+      "A social media post with many likes.",
+      "A report published by the Intergovernmental Panel on Climate Change (IPCC) based on global research data.",
+      "A conversation with a neighbor.",
+      "An advertisement from a car company."
+    ],
+    answer: 2,
+    explanation: "IPCC adalah lembaga internasional yang merilis laporan berbasis riset global oleh para ahli — sumber paling kredibel. Blog pribadi, media sosial, obrolan tetangga, dan iklan perusahaan memiliki bias atau tidak berbasis bukti ilmiah yang kuat."
+  },
+  {
+    passage: "Budi is a very kind boy. He always helps his classmates with their homework. Last week, when his friend forgot to bring lunch, Budi shared his own lunch with him. He also visited his sick neighbor and brought her some fruits.",
+    question: "Which part of the text BEST shows Budi's kindness?",
+    options: [
+      "Budi is a very kind boy.",
+      "He always helps his classmates with their homework.",
+      "When his friend forgot to bring lunch, Budi shared his own lunch with him.",
+      "Budi is a boy.",
+      "He visited his neighbor."
+    ],
+    answer: 2,
+    explanation: "Pilihan C menunjukkan tindakan konkret dan spesifik yang membuktikan kebaikan Budi: memberi makan kepada teman yang lupa membawa bekal. Ini bukti terkuat karena berupa aksi nyata yang mengorbankan sesuatu untuk membantu orang lain. Pilihan A hanya pernyataan umum, bukan bukti."
+  },
+  {
+    passage: "Sari is known as a brave girl. She often speaks up in class. Last month, she stopped a bully from teasing a younger student. She also joined a hiking trip to a steep mountain.",
+    question: "Which action MOST clearly demonstrates Sari's bravery?",
+    options: [
+      "She speaks up in class.",
+      "She is known as a brave girl.",
+      "She stopped a bully from teasing a younger student.",
+      "She joined a hiking trip.",
+      "She goes to school every day."
+    ],
+    answer: 2,
+    explanation: "Menghadapi bully yang mengganggu adik kelas membutuhkan keberanian nyata karena melibatkan risiko konfrontasi. Ini bukti paling spesifik dan kuat untuk sifat 'brave'. Berbicara di kelas dan hiking juga berani, tapi menghadapi bully lebih jelas menunjukkan keberanian moral."
+  },
+  {
+    passage: "The government plans to build a new highway through a protected forest. The minister says it will boost the economy. However, environmentalists warn that it will destroy the habitat of endangered species.",
+    question: "Which part of the text shows a CONCERN about the highway project?",
+    options: [
+      "The government plans to build a new highway.",
+      "The highway will go through a protected forest.",
+      "The minister says it will boost the economy.",
+      "Environmentalists warn that it will destroy the habitat of endangered species.",
+      "The government made a plan."
+    ],
+    answer: 3,
+    explanation: "Kata kunci 'warn' (memperingatkan) dan 'destroy the habitat of endangered species' menunjukkan kekhawatiran/kepedulian terhadap dampak negatif. Ini adalah bagian yang paling jelas mengekspresikan concern tentang proyek tersebut."
+  },
+  {
+    passage: "The charity program has provided free meals to 5,000 homeless people this year. Volunteers work every day with great enthusiasm. The director said, 'We are making a real difference in people's lives.'",
+    question: "What is the director's ATTITUDE toward the charity program?",
+    options: [
+      "Critical and doubtful.",
+      "Indifferent and neutral.",
+      "Proud and supportive.",
+      "Angry and disappointed.",
+      "Confused and uncertain."
+    ],
+    answer: 2,
+    explanation: "Ucapan 'We are making a real difference' menunjukkan sikap bangga dan mendukung program tersebut. Kata 'real difference' mengindikasikan keyakinan positif terhadap dampak program. Ini mencerminkan attitude yang proud and supportive."
+  },
+  {
+    passage: "The old house stood silently at the end of the street. Its broken windows looked like empty eyes, and the rusty gate creaked in the cold wind. No one dared to pass by after dark.",
+    question: "What impression does the text MOST LIKELY create for the readers?",
+    options: [
+      "Cheerful and exciting.",
+      "Romantic and warm.",
+      "Mysterious and scary.",
+      "Boring and ordinary.",
+      "Funny and entertaining."
+    ],
+    answer: 2,
+    explanation: "Kata-kata seperti 'silently', 'broken windows like empty eyes', 'rusty gate creaked', 'cold wind', dan 'no one dared to pass by' membangun suasana misterius dan menakutkan. Pilihan kata ini menciptakan kesan horror/mystery yang kuat."
+  },
+  {
+    passage: "The golden sun slowly disappeared behind the quiet hills. Soft waves danced gently on the calm sea, while a warm breeze carried the sweet scent of tropical flowers.",
+    question: "What is the effect of the language used in the passage?",
+    options: [
+      "It creates a tense and frightening atmosphere.",
+      "It creates a peaceful and beautiful atmosphere.",
+      "It makes readers feel angry and upset.",
+      "It shows a chaotic and noisy situation.",
+      "It describes a modern urban life."
+    ],
+    answer: 1,
+    explanation: "Kata-kata seperti 'golden sun', 'quiet hills', 'soft waves', 'danced gently', 'calm sea', 'warm breeze', 'sweet scent' semuanya berkontribusi menciptakan suasana yang damai dan indah. Bahasa puitis ini membangun impression of tranquility."
+  },
+  {
+    passage: "The new policy has caused many problems. Students are confused, teachers are overworked, and parents are disappointed. It is clear that the policy was poorly planned and should be revised immediately.",
+    question: "What is the writer's TONE in the passage?",
+    options: [
+      "Appreciative and enthusiastic.",
+      "Neutral and objective.",
+      "Critical and concerned.",
+      "Humorous and entertaining.",
+      "Confused and uncertain."
+    ],
+    answer: 2,
+    explanation: "Kata-kata seperti 'caused many problems', 'confused', 'overworked', 'disappointed', 'poorly planned', dan 'should be revised' menunjukkan sikap kritis terhadap kebijakan. Penulis menyoroti masalah dan mendesak perbaikan — ini adalah tone yang critical and concerned."
+  },
+  {
+    passage: "The museum displayed ancient artifacts from the Majapahit era. The gold jewelry was carefully preserved. Historians say the collection provides valuable insights into the kingdom's culture and trade.",
+    question: "Why does the writer most likely include the sentence 'Historians say the collection provides valuable insights'?",
+    options: [
+      "To show that the museum is boring.",
+      "To criticize the museum's collection.",
+      "To provide expert support that strengthens the value of the collection.",
+      "To entertain readers with a funny story.",
+      "To compare the museum with modern art galleries."
+    ],
+    answer: 2,
+    explanation: "Menyertakan pernyataan ahli (historians) bertujuan memberikan dukungan otoritatif terhadap nilai koleksi museum. Ini adalah teknik validitas — menggunakan sumber kredibel untuk memperkuat klaim bahwa koleksi tersebut berharga (valuable insights)."
+  }
+];
+
+let currentQuestion = 0;
+let correctAnswers = 0;
+let wrongAnswers = 0;
+let answered = false;
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const quizBody = document.getElementById('quizBody');
+  
+  let passageHTML = '';
+  if (q.passage) {
+    passageHTML = `<div class="passage">"${q.passage}"</div>`;
+  }
+  
+  let optionsHTML = '';
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  q.options.forEach((opt, idx) => {
+    optionsHTML += `
+      <div class="option" onclick="selectAnswer(${idx})" data-idx="${idx}">
+        <span class="letter">${letters[idx]}</span>
+        <span>${opt}</span>
+      </div>
+    `;
+  });
+  
+  quizBody.innerHTML = `
+    <div class="question-card">
+      <span class="question-number">Soal ${currentQuestion + 1} dari 20</span>
+      ${passageHTML}
+      <div class="question-text">${q.question}</div>
+      <div class="options">${optionsHTML}</div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>
+      ${currentQuestion === questions.length - 1 ? '🏁 Lihat Hasil' : '➡️ Soal Berikutnya'}
+    </button>
+  `;
+  
+  document.getElementById('currentQ').textContent = `${currentQuestion + 1}/20`;
+  document.getElementById('progressBar').style.width = `${((currentQuestion) / questions.length) * 100}%`;
+  answered = false;
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  
+  const q = questions[currentQuestion];
+  const options = document.querySelectorAll('.option');
+  const feedback = document.getElementById('feedback');
+  const nextBtn = document.getElementById('nextBtn');
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  
+  options.forEach(opt => opt.classList.add('disabled'));
+  
+  const isCorrect = idx === q.answer;
+  
+  if (isCorrect) {
+    options[idx].classList.add('correct');
+    correctAnswers++;
+    feedback.className = 'feedback correct';
+    feedback.innerHTML = `
+      <div class="feedback-title">✅ Benar! Hebat!</div>
+      <div class="answer-key">Kunci Jawaban: ${letters[q.answer]}. ${q.options[q.answer]}</div>
+      <div class="explanation"><strong>Pembahasan:</strong> ${q.explanation}</div>
+    `;
+  } else {
+    options[idx].classList.add('wrong');
+    options[q.answer].classList.add('correct');
+    wrongAnswers++;
+    feedback.className = 'feedback wrong';
+    feedback.innerHTML = `
+      <div class="feedback-title">❌ Kurang Tepat</div>
+      <div class="answer-key">Kunci Jawaban: ${letters[q.answer]}. ${q.options[q.answer]}</div>
+      <div class="explanation"><strong>Pembahasan:</strong> ${q.explanation}</div>
+    `;
+  }
+  
+  feedback.style.display = 'block';
+  nextBtn.disabled = false;
+  
+  document.getElementById('correctCount').textContent = correctAnswers;
+  document.getElementById('wrongCount').textContent = wrongAnswers;
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function showResult() {
+  document.getElementById('quizBody').style.display = 'none';
+  document.querySelector('.progress-container').style.display = 'none';
+  document.querySelector('.stats').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+  
+  const score = correctAnswers;
+  const percentage = (score / questions.length) * 100;
+  const degrees = (percentage / 100) * 360;
+  
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('scoreCircle').style.background = `conic-gradient(#667eea ${degrees}deg, #e0e4ff ${degrees}deg)`;
+  
+  let message = '';
+  if (percentage >= 90) message = "🌟 LUAR BIASA! Kamu menguasai kompetensi Evaluasi & Apresiasi dengan sangat baik! Pertahankan prestasimu!";
+  else if (percentage >= 75) message = "👏 BAGUS SEKALI! Pemahamanmu sudah sangat baik. Terus latih kemampuan analisis teksmu!";
+  else if (percentage >= 60) message = "💪 CUKUP BAIK! Kamu sudah memahami dasar-dasarnya. Perbanyak latihan untuk meningkatkan kemampuan evaluasimu!";
+  else if (percentage >= 40) message = "📚 PERLU LATIHAN LAGI. Baca kembali materi tentang fakta-opini, validitas bukti, dan tone penulis. Kamu pasti bisa!";
+  else message = "🌱 JANGAN MENYERAH! Evaluasi & Apresiasi butuh latihan. Pelajari kembali materi dan coba lagi. Semangat!";
+  
+  document.getElementById('resultMessage').innerHTML = `
+    <strong>Skor Kamu: ${score}/20 (${percentage.toFixed(0)}%)</strong><br><br>
+    ${message}
+  `;
+}
+
+function restartQuiz() {
+  currentQuestion = 0;
+  correctAnswers = 0;
+  wrongAnswers = 0;
+  document.getElementById('correctCount').textContent = '0';
+  document.getElementById('wrongCount').textContent = '0';
+  document.getElementById('quizBody').style.display = 'block';
+  document.querySelector('.progress-container').style.display = 'block';
+  document.querySelector('.stats').style.display = 'flex';
+  document.getElementById('resultScreen').style.display = 'none';
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKA English Quiz — Evaluation & Appreciation</title>
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --card: #ffffff;
+            --border: #dce2ec;
+            --text: #1f2937;
+            --muted: #64748b;
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --correct: #16a34a;
+            --correct-bg: #ecfdf5;
+            --incorrect: #dc2626;
+            --incorrect-bg: #fee2e2;
+            --shadow: 0 4px 14px rgba(0,0,0,0.06);
+            --radius: 14px;
+            --transition: 0.2s ease;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px 16px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 880px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+        .score-board {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(79,70,229,0.25);
+            position: sticky;
+            top: 12px;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+        }
+        .score-board span { font-size: 1.1rem; }
+        .passage {
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            font-style: italic;
+            color: #334155;
+            white-space: pre-line;
+            font-size: 0.95rem;
+        }
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 20px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow);
+            transition: box-shadow var(--transition), transform var(--transition);
+        }
+        .question-card:hover {
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        .question-number {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: #f8fafc;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all var(--transition);
+            color: var(--text);
+            font-family: inherit;
+            line-height: 1.4;
+            user-select: none;
+        }
+        .option-btn:hover:not(:disabled) {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+        .option-btn.correct {
+            background: var(--correct-bg);
+            border-color: var(--correct);
+            color: #14532d;
+            font-weight: 600;
+        }
+        .option-btn.incorrect {
+            background: var(--incorrect-bg);
+            border-color: var(--incorrect);
+            color: #7f1d1d;
+        }
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 16px 18px;
+            border-radius: 10px;
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .feedback.show { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .feedback-message {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+        .feedback-message.correct { color: var(--correct); }
+        .feedback-message.incorrect { color: var(--incorrect); }
+        .answer-key {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .explanation {
+            color: #374151;
+            font-size: 0.95rem;
+        }
+        .reset-btn {
+            display: block;
+            margin: 30px auto;
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background var(--transition), transform var(--transition);
+        }
+        .reset-btn:hover {
+            background: #1f2937;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 640px) {
+            body { padding: 12px 8px; }
+            h1 { font-size: 1.5rem; }
+            .question-card { padding: 16px 14px; }
+            .option-btn { padding: 11px 14px; font-size: 0.95rem; }
+            .score-board { flex-direction: column; gap: 4px; text-align: center; }
+            .score-board span { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 TKA English Quiz</h1>
+        <p class="subtitle">Evaluation & Appreciation — 20 Practice Questions</p>
+
+        <div class="score-board">
+            <span>Score: <span id="score">0</span> / <span id="total">20</span></span>
+            <span id="progress">Answered: 0</span>
+        </div>
+
+        <div id="quiz-container"></div>
+
+        <button class="reset-btn" id="resetBtn">🔄 Restart Quiz</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Which of the following events can happen in real life?",
+                options: [
+                    "A mouse deer tricked crocodiles by asking them to line up across a river.",
+                    "A scientist discovered a new species of butterfly in the rainforest.",
+                    "A tree gave a boy a magic seed.",
+                    "A witch cast a spell and turned a prince into a frog."
+                ],
+                correct: 1,
+                explanation: "Penemuan spesies baru oleh ilmuwan adalah peristiwa yang mungkin terjadi di dunia nyata. Pilihan lain mengandung unsur ajaib (hewan bisa berbicara, pohon memberi biji ajaib, penyihir merubah pangeran)."
+            },
+            {
+                question: "Which sentence is a FACT?",
+                options: [
+                    "I think this book is very interesting.",
+                    "The book has 250 pages.",
+                    "This book is better than the movie.",
+                    "You should read this book."
+                ],
+                correct: 1,
+                explanation: "Fakta adalah informasi yang dapat dibuktikan. Jumlah halaman buku (250 halaman) adalah fakta. Pilihan lain adalah pendapat atau saran."
+            },
+            {
+                question: "Which sentence is an OPINION?",
+                options: [
+                    "The library closes at 5 p.m.",
+                    "The library is the best place to study.",
+                    "The library has 50 tables.",
+                    "The library was built in 2010."
+                ],
+                correct: 1,
+                explanation: "Kalimat 'The library is the best place to study' mengandung kata 'best' yang bersifat subjektif, sehingga merupakan opini. Kalimat lain adalah fakta yang dapat diverifikasi."
+            },
+            {
+                question: "The text claims: \"Social media harms teen mental health.\" Which additional fact would BEST strengthen this claim?",
+                options: [
+                    "Many teenagers use social media every day.",
+                    "A 2023 study found that teens who spend 3+ hours on social media are 2x more likely to report anxiety.",
+                    "Instagram is one of the most popular platforms.",
+                    "Some teens do not have social media accounts."
+                ],
+                correct: 1,
+                explanation: "Data penelitian (study) yang menghubungkan durasi penggunaan media sosial dengan kecemasan memberikan bukti kuat. Pilihan lain hanya informasi umum atau tidak relevan."
+            },
+            {
+                question: "In a story, a girl saved a kitten from a burning house. Which part BEST shows her bravery?",
+                options: [
+                    "She is a student.",
+                    "She saved a kitten from a burning house.",
+                    "She likes reading books.",
+                    "She lives in Jakarta."
+                ],
+                correct: 1,
+                explanation: "Tindakan menyelamatkan anak kucing dari rumah terbakar adalah bukti keberanian yang paling kuat. Pilihan lain adalah detail yang tidak menunjukkan keberanian."
+            },
+            {
+                question: "A text describes a peaceful beach with soft sand and gentle waves. What is the most likely impression readers get?",
+                options: [
+                    "Calm and relaxed",
+                    "Terrified",
+                    "Confused",
+                    "Angry"
+                ],
+                correct: 0,
+                explanation: "Deskripsi pantai yang damai dengan pasir lembut dan ombak tenang menimbulkan kesan tenang dan santai. Pilihan lain tidak sesuai dengan suasana teks."
+            },
+            {
+                question: "Which statement can be proven TRUE?",
+                options: [
+                    "The moon orbits the Earth.",
+                    "Blue is the prettiest color.",
+                    "Math is the most difficult subject.",
+                    "Pizza is the best food."
+                ],
+                correct: 0,
+                explanation: "Fakta ilmiah 'Bulan mengelilingi Bumi' dapat dibuktikan. Pernyataan lain adalah opini subjektif."
+            },
+            {
+                question: "Which source would be MOST reliable to support the claim that exercise improves mental health?",
+                options: [
+                    "A personal blog",
+                    "A WHO (World Health Organization) report",
+                    "A social media post",
+                    "A rumor from a friend"
+                ],
+                correct: 1,
+                explanation: "Laporan dari WHO (organisasi kesehatan dunia) adalah sumber resmi dan dapat dipercaya. Blog pribadi, postingan media sosial, atau rumor kurang valid."
+            },
+            {
+                question: "A story about a lost child who finally finds his family after many years would likely make readers feel...",
+                options: [
+                    "Bored and uninterested",
+                    "Moved and happy",
+                    "Angry and frustrated",
+                    "Hungry and tired"
+                ],
+                correct: 1,
+                explanation: "Cerita tentang anak yang bertemu kembali dengan keluarganya biasanya menyentuh hati dan membahagiakan, bukan membosankan atau membuat marah."
+            },
+            {
+                question: "Which part of the text BEST shows that the main character is honest?",
+                options: [
+                    "He always tells the truth even when it is hard.",
+                    "He is tall and has short hair.",
+                    "He likes to eat pizza.",
+                    "He goes to school by bicycle."
+                ],
+                correct: 0,
+                explanation: "Kalimat 'Selalu berkata jujur meskipun sulit' secara langsung menunjukkan kejujuran. Pilihan lain adalah detail fisik atau kebiasaan yang tidak berkaitan."
+            },
+            {
+                question: "Choose the OPINION.",
+                options: [
+                    "The meeting starts at 9 a.m.",
+                    "The meeting is too long.",
+                    "The meeting has 10 participants.",
+                    "The meeting is held online."
+                ],
+                correct: 1,
+                explanation: "'The meeting is too long' adalah penilaian subjektif (terlalu lama). Pilihan lain adalah fakta yang dapat dibuktikan."
+            },
+            {
+                question: "Which event is FANTASY?",
+                options: [
+                    "A doctor treats a patient in the hospital.",
+                    "A farmer plants rice in the field.",
+                    "A dragon guards a treasure in a cave.",
+                    "A student studies in the library."
+                ],
+                correct: 2,
+                explanation: "Naga yang menjaga harta karun adalah makhluk fantasi. Pilihan lain adalah kegiatan normal yang bisa terjadi dalam kehidupan nyata."
+            },
+            {
+                question: "The phrase \"I believe that online learning is more effective\" is an example of...",
+                options: [
+                    "Fact",
+                    "Opinion",
+                    "Data",
+                    "Instruction"
+                ],
+                correct: 1,
+                explanation: "Ungkapan 'I believe' menunjukkan keyakinan pribadi sehingga kalimat tersebut adalah opini, bukan fakta."
+            },
+            {
+                question: "Which additional information would make an advertisement about a health product more trustworthy?",
+                options: [
+                    "A famous celebrity endorses it.",
+                    "Results from an independent laboratory test.",
+                    "The product has a bright and colorful package.",
+                    "The advertisement uses many exclamation marks."
+                ],
+                correct: 1,
+                explanation: "Hasil uji laboratorium independen adalah bukti ilmiah yang valid. Dukungan selebriti, kemasan menarik, atau tanda seru tidak menjamin kepercayaan."
+            },
+            {
+                question: "A text describes a diligent student who always does homework on time. Which sentence BEST supports this trait?",
+                options: [
+                    "He often submits homework late.",
+                    "He always completes his assignments before the deadline.",
+                    "He likes playing football.",
+                    "He has many friends."
+                ],
+                correct: 1,
+                explanation: "Kalimat 'Selalu menyelesaikan tugas sebelum tenggat waktu' menunjukkan sikap rajin. Pilihan lain tidak menggambarkan kerajinan."
+            },
+            {
+                question: "Which of the following statements is a FACT?",
+                options: [
+                    "Indonesia is a beautiful country.",
+                    "Indonesia has more than 17,000 islands.",
+                    "Indonesian food is the best in the world.",
+                    "Living in Indonesia is exciting."
+                ],
+                correct: 1,
+                explanation: "Jumlah pulau (>17.000) adalah data yang dapat diverifikasi, sehingga fakta. Pilihan lain adalah opini atau penilaian."
+            },
+            {
+                question: "A text about a haunted house with dark corridors and strange noises would most likely make readers feel...",
+                options: [
+                    "Scared or tense",
+                    "Happy and relaxed",
+                    "Bored",
+                    "Hungry"
+                ],
+                correct: 0,
+                explanation: "Deskripsi rumah berhantu dengan koridor gelap dan suara aneh menimbulkan ketakutan atau ketegangan."
+            },
+            {
+                question: "Which sentence is an OPINION?",
+                options: [
+                    "The Eiffel Tower is in Paris.",
+                    "Paris is the most romantic city in the world.",
+                    "The Eiffel Tower was completed in 1889.",
+                    "Paris is the capital of France."
+                ],
+                correct: 1,
+                explanation: "Kata 'most romantic' adalah penilaian subjektif, sehingga kalimat tersebut opini. Kalimat lain adalah fakta."
+            },
+            {
+                question: "Which part of the text best shows that the writer appreciates the natural beauty of Bali?",
+                options: [
+                    "Bali has many tourists.",
+                    "The island is famous for its traditional dances.",
+                    "The text describes Bali as a beautiful island with green rice fields and amazing beaches.",
+                    "Bali is located in Indonesia."
+                ],
+                correct: 2,
+                explanation: "Deskripsi yang menyebut 'beautiful island', 'green rice fields', dan 'amazing beaches' menunjukkan apresiasi penulis terhadap keindahan alam Bali."
+            },
+            {
+                question: "A text uses many harsh words and negative descriptions of a city. What is the writer's attitude toward the city?",
+                options: [
+                    "The writer likes the city.",
+                    "The writer dislikes the city.",
+                    "The writer is neutral.",
+                    "The writer is confused."
+                ],
+                correct: 1,
+                explanation: "Penggunaan kata-kata kasar dan deskripsi negatif menunjukkan bahwa penulis tidak menyukai kota tersebut."
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+        const scoreSpan = document.getElementById('score');
+        const progressSpan = document.getElementById('progress');
+        const resetBtn = document.getElementById('resetBtn');
+
+        let answeredCount = 0;
+        let correctCount = 0;
+
+        function renderQuiz() {
+            quizContainer.innerHTML = '';
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.dataset.answered = 'false';
+
+                const qNum = document.createElement('div');
+                qNum.className = 'question-number';
+                qNum.textContent = `Question ${index + 1} of 20`;
+
+                const qText = document.createElement('div');
+                qText.className = 'question-text';
+                qText.textContent = q.question;
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+
+                q.options.forEach((opt, optIndex) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+                    btn.addEventListener('click', function() {
+                        handleAnswer(card, q, optIndex);
+                    });
+                    optionsDiv.appendChild(btn);
+                });
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                feedback.id = `feedback-${index}`;
+
+                card.appendChild(qNum);
+                card.appendChild(qText);
+                card.appendChild(optionsDiv);
+                card.appendChild(feedback);
+                quizContainer.appendChild(card);
+            });
+            updateScore();
+        }
+
+        function handleAnswer(card, questionData, selectedIndex) {
+            if (card.dataset.answered === 'true') return;
+            card.dataset.answered = 'true';
+
+            const allBtns = card.querySelectorAll('.option-btn');
+            allBtns.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selectedIndex === questionData.correct;
+
+            allBtns.forEach((btn, idx) => {
+                if (idx === questionData.correct) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            const feedback = card.querySelector('.feedback');
+            feedback.classList.add('show');
+            const answerLetter = String.fromCharCode(65 + questionData.correct);
+            feedback.innerHTML = `
+                <div class="feedback-message ${isCorrect ? 'correct' : 'incorrect'}">
+                    ${isCorrect ? '✅ Correct!' : '❌ Incorrect.'}
+                </div>
+                <div class="answer-key">Answer Key: ${answerLetter}. ${questionData.options[questionData.correct]}</div>
+                <div class="explanation">📖 ${questionData.explanation}</div>
+            `;
+
+            answeredCount++;
+            if (isCorrect) correctCount++;
+            updateScore();
+        }
+
+        function updateScore() {
+            scoreSpan.textContent = correctCount;
+            progressSpan.textContent = `Answered: ${answeredCount}`;
+        }
+
+        function resetQuiz() {
+            answeredCount = 0;
+            correctCount = 0;
+            renderQuiz();
+        }
+
+        resetBtn.addEventListener('click', resetQuiz);
+
+        renderQuiz();
+    </script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis TKA: Evaluasi dan Apresiasi Teks</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --correct-bg: #dcfce7;
+            --correct-border: #22c55e;
+            --correct-text: #166534;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 15px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .passage-box {
+            background-color: #f1f5f9;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .passage-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .question-card {
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin: 10px 0;
+            padding: 14px 18px;
+            font-size: 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #e0e7ff;
+            border-color: var(--primary);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .btn-correct {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text);
+            font-weight: bold;
+        }
+
+        .btn-wrong {
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.95rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            background-color: var(--correct-bg);
+            border-left: 5px solid var(--correct-border);
+            color: var(--text-main);
+        }
+
+        .feedback-wrong {
+            background-color: var(--wrong-bg);
+            border-left: 5px solid var(--wrong-border);
+            color: var(--text-main);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Latihan Soal: Evaluasi & Apresiasi Teks</h1>
+    <p class="subtitle">Uji kemampuanmu membedakan fakta, opini, sikap penulis, dan validitas informasi!</p>
+
+    <!-- TEKS 1 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 1 (For questions 1 - 4)</div>
+        <p>E-learning platforms have grown significantly since 2020. Millions of students around the world now use computers to attend classes. According to a recent survey, 65% of universities offer online courses. I strongly believe that e-learning is the best educational method because it provides flexibility. Students should adapt to this technology to prepare for the future.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">1. Which of the following sentences from the text is a FACT?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ada kata \"best\" (terbaik). Ini adalah penilaian subjektif/opini.')">A. E-learning is the best educational method.</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Terdapat angka statistik \"65%\" yang bisa dibuktikan kebenarannya, menjadikannya sebuah fakta.')">B. 65% of universities offer online courses.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ada kata \"should\" (seharusnya), yang menandakan saran/opini penulis.')">C. Students should adapt to this technology.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Kalimat ini menggunakan kata \"I strongly believe\" yang jelas merupakan opini.')">D. I strongly believe that e-learning is great.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">2. Which of the following is an OPINION stated by the author?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini adalah fakta sejarah (sejak 2020).')">A. E-learning platforms have grown since 2020.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini adalah fakta yang bisa dibuktikan.')">B. Millions of students use computers.</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kata \"best\" (terbaik) merupakan kata sifat penilaian subjektif, menjadikannya sebuah opini penulis.')">C. E-learning is the best educational method.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini adalah data dari survei (fakta).')">D. According to a survey, universities offer online courses.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">3. What is the author's attitude (tone) towards e-learning?</div>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Penulis menggunakan kata pujian \"best\" dan memberi saran \"should adapt\". Ini menunjukkan sikap mendukung (supportive/positive).')">A. Supportive / Positive</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis tidak memberikan kritik atau memarahi e-learning.')">B. Critical / Negative</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis secara eksplisit berpihak dengan mengatakan \"I strongly believe\", jadi tidak netral.')">C. Neutral / Objective</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Tidak ada tanda-tanda ketakutan dalam teks.')">D. Afraid / Worried</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">4. "Students should adapt to this technology..." The word 'should' indicates that the sentence is a...</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Fakta tidak menggunakan kata \"should\".')">A. Fact</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini bukan data statistik.')">B. Statistical data</button>
+        <button class="option" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kata \"should\" (seharusnya) adalah penanda kuat bahwa penulis sedang memberikan saran (suggestion) atau opini pribadinya.')">C. Suggestion / Opinion</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Tidak ada bukti sejarah dalam kalimat tersebut.')">D. Historical evidence</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 2 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 2 (For questions 5 - 8)</div>
+        <p>Once, in a magical forest, a young boy named Leo got lost. Suddenly, a blue fox with silver wings flew down from a tree. "Do not be afraid, little human. I will guide you home," the fox spoke with a gentle human voice. The fox then gave Leo a glowing map that floated in the air. Leo was amazed and followed the map safely to his village.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">5. Based on reality and fantasy evaluation, this text is classified as...</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Report text berisi fakta ilmiah nyata.')">A. A report text because it gives facts about foxes.</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Rubah biru bersayap yang bisa bicara dan peta terbang adalah kejadian tidak logis di dunia nyata. Ini adalah ciri khas cerita fantasi (fiksi/narrative).')">B. A fantasy (narrative) text because the events cannot happen in real life.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Tidak ada argumen atau opini yang sedang dipertahankan penulis di sini.')">C. An analytical exposition because the author argues about magic.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks ini jelas-jelas fiksi.')">D. A factual recount of a real historical event.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">6. How did Leo feel when he saw the glowing map?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Dia tidak marah.')">A. Angry</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Dia merasa aman (safely), bukan bosan.')">B. Bored</button>
+        <button class="option" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Teks menyatakan dengan jelas \"Leo was amazed\" (Leo merasa takjub/kagum).')">C. Amazed</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Rubah menyuruhnya untuk tidak takut (\"Do not be afraid\"), dan Leo mengikutinya dengan aman.')">D. Terrified</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">7. Which of the following statements is a FACT inside the story\'s universe?</div>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Di dalam cerita tersebut, rubah bersayap biru adalah sebuah fakta yang dialami oleh tokoh.')">A. The fox had silver wings and a blue body.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini adalah opini (beautiful).')">B. The blue fox is the most beautiful animal.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini opini/pendapat dari pembaca, bukan kejadian di teks.')">C. Leo should not trust talking animals.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks tidak menyebutkan bahwa sihir itu berbahaya.')">D. Magic is very dangerous for humans.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">8. The author\'s main purpose in writing this text is most likely to...</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks ini bukan untuk memberi informasi ilmiah.')">A. inform readers about forest survival.</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Karena teks ini adalah dongeng fantasi (Narrative), tujuan utamanya selalu \"To entertain\" (untuk menghibur) pembaca.')">B. entertain the readers with a magical story.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Tidak ada ajakan atau paksaan di dalam teks.')">C. persuade people to catch blue foxes.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks fiksi tidak mendeskripsikan fakta fisik hewan secara nyata.')">D. describe the physical appearance of real foxes.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 3 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 3 (For questions 9 - 12)</div>
+        <p>(Paragraph 1) Plastic pollution is a terrible disaster for our oceans. Every year, about 8 million tons of plastic enter the sea. This plastic waste harms marine life, such as sea turtles and dolphins, who mistake it for food.</p>
+        <p>(Paragraph 2) Therefore, we must take immediate action. I believe the government should ban single-use plastics completely. If we do not act now, our beautiful oceans will become dead zones.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">9. What is the author's tone in the text above?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis tidak sedang bercanda atau bahagia.')">A. Cheerful and happy</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Penulis menggunakan kata \"terrible disaster\", \"harms\", dan \"dead zones\". Ini menunjukkan sikap khawatir (concerned) dan mengkritik/kritis terhadap polusi.')">B. Concerned and critical</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis menyatakan argumen dan opini pribadinya, sehingga tidak objektif/netral.')">C. Objective and neutral</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks ini serius, bukan untuk menghibur.')">D. Entertaining and humorous</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">10. Evaluate the validity of this statement: "All sea turtles will die tomorrow if we use plastic."</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks tidak pernah memberikan klaim seekstrem itu.')">A. It is VALID because the text says plastic kills turtles.</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kata \"All\" (semua) dan \"tomorrow\" (besok) adalah kata ekstrem yang tidak ada di teks. Klaim yang berlebihan selalu dianggap TIDAK VALID di soal ujian.')">B. It is INVALID (False) because it uses an extreme exaggeration not found in the text.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Tidak ada fakta yang menyebut \"semua penyu akan mati besok\".')">C. It is a FACT supported by paragraph 1.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Memiliki pesan moral tidak membuatnya menjadi informasi yang valid berdasarkan teks.')">D. It is VALID because it has a good moral message.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">11. Which paragraph contains the author's personal recommendation or opinion?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Paragraf 1 sebagian besar berisi fakta (8 juta ton plastik).')">A. Paragraph 1</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Di paragraf 2 terdapat kalimat \"I believe... should ban...\". Kata \"believe\" dan \"should\" adalah penanda opini dan saran.')">B. Paragraph 2</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Hanya Paragraf 2 yang berisi saran pribadi penulis.')">C. Both paragraphs 1 and 2</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Paragraf 2 jelas memuat rekomendasi penulis.')">D. Neither paragraph 1 nor 2</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">12. "Every year, about 8 million tons of plastic enter the sea." This sentence is an example of...</div>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Terdapat angka statistik (8 million tons) yang dapat diukur dan dibuktikan. Ini adalah sebuah FAKTA.')">A. A verifiable fact</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Tidak ada kata sifat penilaian (seperti good/bad) di kalimat tersebut.')">B. A subjective opinion</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini bukan saran, karena tidak ada kata \"should\" atau \"must\".')">C. A recommendation</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini murni teks realitas/ilmiah, bukan kisah fantasi.')">D. A fantasy element</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 4 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 4 (For questions 13 - 16)</div>
+        <p>(1) Fast food was first introduced in the early 20th century to serve busy workers. (2) Today, it is extremely popular. (3) However, fast food is the worst kind of food you can eat. (4) Studies show that consuming it regularly increases the risk of heart disease and obesity. (5) I think people must cook their own meals to stay healthy.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">13. Which sentence from the text is a pure OPINION?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini adalah fakta sejarah.')">A. Sentence 1</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kalimat 3 menggunakan kata \"worst\" (terburuk). Kata sifat yang hiperbolis/berlebihan seperti ini adalah opini penulis.')">B. Sentence 3</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Kalimat 4 didasarkan pada studi ilmiah, sehingga termasuk fakta.')">C. Sentence 4</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Kalimat 5 adalah opini, tapi opsi di sini yang paling tepat menggambarkan opini penilaian adalah kalimat 3. (Meski 5 juga opini, jika harus memilih satu yang murni penilaian, 3 adalah contoh yang ekstrim). Namun, karena pertanyaannya mencari *pure opinion*, opsi B tepat.')">D. Sentence 2</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">14. Evaluate the validity of this statement: "Eating fast food sometimes causes heart disease."</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks mengatakan risiko meningkat jika dikonsumsi SECARA RUTIN (regularly), bukan kadang-kadang (sometimes).')">A. VALID, because fast food always causes heart disease instantly.</button>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Teks tidak melarang 100%, hanya menyebut risikonya jika rutin dimakan.')">B. VALID, because fast food is completely poison.</button>
+        <button class="option" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Pernyataan \"sometimes\" tidak sesuai teks. Teks menyebutkan peningkatan risiko terjadi jika dikonsumsi SECARA RUTIN (regularly).')">C. INVALID, because the text states that the risk increases if consumed "regularly", not "sometimes".</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Alasan ini salah.')">D. INVALID, because studies never prove anything.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">15. What word in sentence 5 indicates that it is an opinion?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. \"People\" adalah kata benda biasa.')">A. People</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kata \"I think\" (Saya pikir) adalah sinyal paling jelas bahwa kalimat tersebut adalah sebuah opini/pendapat.')">B. I think</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. \"Meals\" adalah kata benda.')">C. Meals</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. \"Healthy\" memang kata sifat, tapi \"I think\" adalah penanda opininya.')">D. Healthy</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">16. The author\'s feeling toward cooking at home is...</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis tidak menolak memasak di rumah.')">A. Rejecting</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis tidak membenci masakan rumah.')">B. Hating</button>
+        <button class="option" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Penulis menyarankan (\"must cook their own meals\"), berarti penulis MENDUKUNG (Supporting) ide memasak di rumah.')">C. Supporting / Agreeing</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis tidak acuh (ignoring), ia justru menyarankannya.')">D. Ignoring</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- TEKS 5 -->
+    <div class="passage-box">
+        <div class="passage-title">Text 5 (For questions 17 - 20)</div>
+        <p>Smartwatches have become very popular lately. They can track your heart rate, count your steps, and even receive phone calls. However, traditional analog watches do not need to be charged every day. Furthermore, traditional watches look much more elegant and classy than smartwatches. In my view, classic watches are the ultimate fashion accessory that everyone should own.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">17. Which of the following statements can be evaluated as a FACT?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ada kata \"elegant\". Cantik/elegan itu relatif (opini).')">A. Traditional watches are very elegant.</button>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kemampuan smartwatch untuk menghitung detak jantung dan langkah adalah fitur teknis yang nyata dan bisa dibuktikan.')">B. Smartwatches can track heart rate and count steps.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ada kata \"should\" (seharusnya), ini adalah opini/saran.')">C. Everyone should own a classic watch.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. \"Ultimate fashion accessory\" adalah penilaian subjektif dari penulis.')">D. Classic watches are the ultimate fashion accessory.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">18. The word "elegant" in the text is used to...</div>
+        <button class="option-btn" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kata \"elegant\" (elegan/anggun) digunakan oleh penulis untuk mengekspresikan opini subjektifnya tentang keindahan jam tradisional.')">A. express the author\'s subjective opinion about appearance.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Keindahan bukan fakta ilmiah.')">B. state a scientific fact about traditional watches.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. \"Elegant\" tidak mendeskripsikan baterai.')">C. describe how the smartwatch battery works.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Ini tidak menunjukkan kemarahan penulis.')">D. show that the author is angry at modern technology.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">19. Based on the text, what is the author's preference?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis justru lebih suka jam tradisional di akhir teks.')">A. The author prefers smartwatches because of their features.</button>
+        <button class="option" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kalimat terakhir \"classic watches are the ultimate...\" dan pujian \"much more elegant\" membuktikan bahwa penulis lebih menyukai jam tangan tradisional (analog).')">B. The author prefers traditional analog watches for their elegance.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis tidak membenci keduanya, hanya lebih suka salah satu.')">C. The author hates both smartwatches and traditional watches.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Penulis tidak menyebutkan ponsel pintar.')">D. The author only likes smartphones.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">20. "Everyone should own a classic watch." Why is this statement considered an OPINION?</div>
+        <button class="option-btn" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Bukan ini alasannya.')">A. Because it is a verified historical fact.</button>
+        <button class="option" data-correct="true" onclick="checkAnswer(this, '✅ BENAR. Kalimat yang memaksakan kehendak, memberi saran, atau mengandung kata \"Should / Must\" adalah opini penulis, bukan kenyataan absolut yang berlaku untuk semua orang.')">B. Because it is a personal recommendation (using "should") and not a provable truth.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Tidak ada angka dalam kalimat tersebut.')">C. Because it contains numbers and statistics.</button>
+        <button class="option" data-correct="false" onclick="checkAnswer(this, '❌ SALAH. Bukan karena itu kutipan terkenal, tapi karena ada kata \"should\".')">D. Because it is a famous quote from a scientist.</button>
+        <div class="feedback"></div>
+    </div>
+
+</div>
+
+<script>
+    function checkAnswer(button, feedbackText) {
+        // Ambil elemen div pertanyaan (parent container)
+        const questionCard = button.closest('.question-card');
+        const allButtons = questionCard.querySelectorAll('.option-btn');
+        const feedbackDiv = questionCard.querySelector('.feedback');
+        
+        // Cek status benar/salah dari atribut data-correct
+        const isCorrect = button.getAttribute('data-correct') === 'true';
+
+        // Nonaktifkan semua tombol setelah diklik agar tidak bisa diganti-ganti
+        allButtons.forEach(btn => {
+            btn.disabled = true;
+            // Tampilkan jawaban yang benar (warna hijau) meskipun user salah jawab
+            if(btn.getAttribute('data-correct') === 'true' && !isCorrect) {
+                btn.classList.add('btn-correct');
+            }
+        });
+
+        // Warnai tombol yang diklik oleh user
+        if (isCorrect) {
+            button.classList.add('btn-correct');
+            feedbackDiv.classList.add('feedback-correct');
+            feedbackDiv.innerHTML = "<strong>HEBAT! JAWABAN TEPAT 🎯</strong><br><br><strong>Pembahasan:</strong><br>" + feedbackText.replace('✅ ', '');
+        } else {
+            button.classList.add('btn-wrong');
+            feedbackDiv.classList.add('feedback-wrong');
+            feedbackDiv.innerHTML = "<strong>YAH, KURANG TEPAT 💡</strong><br><br><strong>Pembahasan:</strong><br>" + feedbackText.replace('❌ ', '');
+        }
+
+        // Tampilkan kotak pembahasan dengan animasi
+        feedbackDiv.classList.add('show');
+    }
+</script>
+
+</body>
+</html>
