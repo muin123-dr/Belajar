@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz TKA Bahasa Inggris SMA - Grammar, Vocabulary & Reading</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #2d3748;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header h1 { font-size: 1.7em; margin-bottom: 8px; position: relative; }
+  .header p { opacity: 0.95; font-size: 0.95em; position: relative; }
+  .header .badge-row {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .header .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .progress-container {
+    background: #f0f0f0;
+    height: 10px;
+    border-radius: 5px;
+    margin: 20px 30px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 30px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 110px;
+    background: #f8f9ff;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid #e8ebff;
+  }
+  .stat-box .label { font-size: 0.78em; color: #666; }
+  .stat-box .value { font-size: 1.4em; font-weight: bold; color: #667eea; }
+  .quiz-body { padding: 20px 30px 30px; }
+  .question-card {
+    background: #f8f9ff;
+    border-left: 5px solid #667eea;
+    padding: 22px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .question-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .question-number {
+    background: #667eea;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: bold;
+  }
+  .topic-tag {
+    background: #764ba2;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+  .passage {
+    background: white;
+    padding: 16px 18px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    color: #333;
+    border: 1px dashed #c8ceff;
+    line-height: 1.7;
+    font-size: 0.95em;
+  }
+  .passage .hl {
+    background: #fff3cd;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .passage .hl-blue {
+    background: #d1ecf1;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .passage .hl-green {
+    background: #d4edda;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .question-text {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #1a202c;
+    line-height: 1.6;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    background: white;
+    border: 2px solid #e0e4ff;
+    padding: 14px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.95em;
+    line-height: 1.5;
+  }
+  .option:hover:not(.disabled) {
+    border-color: #667eea;
+    background: #f0f3ff;
+    transform: translateX(4px);
+  }
+  .option .letter {
+    background: #667eea;
+    color: white;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85em;
+    flex-shrink: 0;
+  }
+  .option.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+  }
+  .option.correct .letter { background: #28a745; }
+  .option.wrong {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+  }
+  .option.wrong .letter { background: #dc3545; }
+  .option.disabled { cursor: not-allowed; opacity: 0.85; }
+  .feedback {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 10px;
+    display: none;
+    animation: slideIn 0.4s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback.correct {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border-left: 5px solid #28a745;
+  }
+  .feedback.wrong {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    border-left: 5px solid #dc3545;
+  }
+  .feedback-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+  }
+  .feedback.correct .feedback-title { color: #155724; }
+  .feedback.wrong .feedback-title { color: #721c24; }
+  .feedback .answer-key {
+    background: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-weight: 600;
+    font-size: 0.95em;
+  }
+  .feedback .explanation {
+    line-height: 1.7;
+    color: #333;
+    font-size: 0.93em;
+  }
+  .feedback .explanation strong { color: #667eea; }
+  .feedback .explanation .rule {
+    background: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 10px 0;
+    border-left: 3px solid #667eea;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9em;
+  }
+  .next-btn {
+    display: block;
+    margin: 20px auto 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .next-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102,126,234,0.4);
+  }
+  .next-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .result-screen {
+    display: none;
+    text-align: center;
+    padding: 40px 30px;
+  }
+  .result-screen h2 {
+    color: #667eea;
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+  .score-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: conic-gradient(#667eea 0deg, #e0e4ff 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 25px auto;
+    transition: background 1s ease;
+  }
+  .score-inner {
+    width: 150px;
+    height: 150px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-value { font-size: 2.5em; font-weight: bold; color: #667eea; }
+  .score-label { font-size: 0.9em; color: #666; }
+  .breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .breakdown-item {
+    background: #f8f9ff;
+    padding: 12px 20px;
+    border-radius: 12px;
+    min-width: 120px;
+    border: 2px solid #e8ebff;
+  }
+  .breakdown-item .bi-label { font-size: 0.8em; color: #666; }
+  .breakdown-item .bi-value { font-size: 1.3em; font-weight: bold; color: #764ba2; }
+  .result-message {
+    font-size: 1.05em;
+    margin: 20px 0;
+    padding: 18px;
+    background: #f8f9ff;
+    border-radius: 12px;
+    color: #444;
+    line-height: 1.7;
+    text-align: left;
+  }
+  .restart-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  .restart-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.4); }
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .header { padding: 22px 16px; }
+    .header h1 { font-size: 1.3em; }
+    .header .badge { font-size: 0.7em; padding: 4px 10px; }
+    .quiz-body, .stats, .progress-container { padding-left: 18px; padding-right: 18px; }
+    .question-card { padding: 16px; }
+    .option { padding: 12px; font-size: 0.9em; }
+    .stat-box { min-width: 85px; padding: 10px; }
+    .stat-box .value { font-size: 1.15em; }
+    .question-text { font-size: 0.98em; }
+    .passage { font-size: 0.9em; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📘 Quiz TKA Bahasa Inggris SMA</h1>
+    <p>Grammar • Vocabulary • Reading Strategies</p>
+    <div class="badge-row">
+      <span class="badge">📗 Grammar</span>
+      <span class="badge">📘 Vocabulary</span>
+      <span class="badge">📙 Reading</span>
+      <span class="badge">🎯 20 Soal</span>
+    </div>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="label">Soal</div>
+      <div class="value" id="currentQ">1/20</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">✅ Benar</div>
+      <div class="value" id="correctCount">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">❌ Salah</div>
+      <div class="value" id="wrongCount">0</div>
+    </div>
+  </div>
+
+  <div class="quiz-body" id="quizBody"></div>
+
+  <div class="result-screen" id="resultScreen">
+    <h2>🎉 Quiz Selesai!</h2>
+    <div class="score-circle" id="scoreCircle">
+      <div class="score-inner">
+        <div class="score-value" id="finalScore">0</div>
+        <div class="score-label">dari 20</div>
+      </div>
+    </div>
+    <div class="breakdown">
+      <div class="breakdown-item">
+        <div class="bi-label">Grammar</div>
+        <div class="bi-value" id="scoreGrammar">0/8</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="bi-label">Vocabulary</div>
+        <div class="bi-value" id="scoreVocab">0/5</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="bi-label">Reading</div>
+        <div class="bi-value" id="scoreReading">0/7</div>
+      </div>
+    </div>
+    <div class="result-message" id="resultMessage"></div>
+    <button class="restart-btn" onclick="restartQuiz()">🔄 Ulangi Quiz</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // ============ GRAMMAR (8 soal) ============
+  {
+    topic: "Grammar • Simple Present",
+    passage: "Every morning, Rina ___ to school by bicycle. Her brothers ___ by car because their school is far from home.",
+    question: "Choose the correct verb forms to complete the text.",
+    options: [
+      "goes / goes",
+      "go / go",
+      "goes / go",
+      "go / goes",
+      "going / go"
+    ],
+    answer: 2,
+    category: "grammar",
+    explanation: "Simple Present: <strong>He/She/It → V1+s/es</strong>, <strong>I/You/We/They → V1</strong>. 'Rina' = she → <em>goes</em>. 'Her brothers' = they → <em>go</em>."
+  },
+  {
+    topic: "Grammar • Simple Past",
+    passage: "Last holiday, my family ___ (visit) Yogyakarta. We ___ (see) Borobudur Temple and ___ (buy) some batik as souvenirs.",
+    question: "Which set of verbs correctly completes the passage?",
+    options: [
+      "visit / see / buy",
+      "visited / saw / bought",
+      "visits / sees / buys",
+      "visiting / seeing / buying",
+      "visited / seen / bought"
+    ],
+    answer: 1,
+    category: "grammar",
+    explanation: "Kata penanda <strong>'Last holiday'</strong> menunjukkan Simple Past → gunakan <strong>V2</strong>. Irregular verbs: visit→visited, see→saw, buy→bought."
+  },
+  {
+    topic: "Grammar • Present Perfect",
+    passage: "Dina has lived in Bandung ___ 2015. She has studied at SMA Merdeka ___ eight years.",
+    question: "Choose the correct time expressions.",
+    options: [
+      "for / since",
+      "since / for",
+      "since / since",
+      "for / for",
+      "in / during"
+    ],
+    answer: 1,
+    category: "grammar",
+    explanation: "<strong>Since + titik waktu</strong> (since 2015, since Monday). <strong>For + durasi</strong> (for eight years, for two days). Kalimat 1 = titik waktu → since. Kalimat 2 = durasi → for."
+  },
+  {
+    topic: "Grammar • Passive Voice",
+    passage: "The new bridge in Surabaya was built by a Japanese company in 2022. It is used by thousands of people every day.",
+    question: "What is the active form of the first sentence?",
+    options: [
+      "A Japanese company builds the new bridge in Surabaya in 2022.",
+      "A Japanese company built the new bridge in Surabaya in 2022.",
+      "A Japanese company has built the new bridge in Surabaya.",
+      "The new bridge builds a Japanese company in 2022.",
+      "The new bridge was building by a Japanese company."
+    ],
+    answer: 1,
+    category: "grammar",
+    explanation: "Passive <em>'was built'</em> (Simple Past Passive) → Active: <strong>Subject + V2 + Object</strong>. 'was built by a Japanese company in 2022' → 'A Japanese company <strong>built</strong> the new bridge in 2022'."
+  },
+  {
+    topic: "Grammar • Modals",
+    passage: "Students <span class='hl'>should</span> reduce their screen time to improve their sleep quality. They <span class='hl'>must</span> also get enough exercise every day.",
+    question: "What do the modal verbs 'should' and 'must' indicate in the passage?",
+    options: [
+      "ability and permission",
+      "advice and strong obligation",
+      "possibility and past ability",
+      "prohibition and future plan",
+      "request and invitation"
+    ],
+    answer: 1,
+    category: "grammar",
+    explanation: "<strong>Should</strong> = saran/advice. <strong>Must</strong> = kewajiban kuat/strong obligation. Kedua modal ini sering muncul dalam teks argumentatif untuk menunjukkan sikap penulis."
+  },
+  {
+    topic: "Grammar • Conjunctions",
+    passage: "<span class='hl'>Although</span> the weather was very cold, the students continued their outdoor training. They were tired, <span class='hl'>so</span> they took a short break.",
+    question: "What relationships do the conjunctions 'although' and 'so' show?",
+    options: [
+      "cause and effect",
+      "contrast and result",
+      "time and condition",
+      "addition and example",
+      "purpose and reason"
+    ],
+    answer: 1,
+    category: "grammar",
+    explanation: "<strong>Although</strong> = kontras (meskipun). <strong>So</strong> = akibat/result (sehingga). Pahami hubungan logis antargagasan, bukan hanya arti kata."
+  },
+  {
+    topic: "Grammar • Complex Sentence",
+    passage: "The program will be cancelled <span class='hl'>if</span> the number of participants is less than twenty. The committee has prepared an alternative plan <span class='hl'>in case</span> this happens.",
+    question: "What kind of relationship does 'if' express in the first sentence?",
+    options: [
+      "time relationship",
+      "contrast relationship",
+      "condition relationship",
+      "cause relationship",
+      "purpose relationship"
+    ],
+    answer: 2,
+    category: "grammar",
+    explanation: "<strong>If</strong> menunjukkan hubungan <strong>syarat (condition)</strong>. Pola: If + Simple Present, ... will/can + V1. 'If the number is less than 20' = syarat program dibatalkan."
+  },
+  {
+    topic: "Grammar • Tenses in Context",
+    passage: "I <span class='hl'>have known</span> Aisyah since elementary school. We <span class='hl'>met</span> in grade 4, and we <span class='hl'>have been</span> best friends ever since.",
+    question: "Why is 'have known' used in the first sentence instead of 'knew'?",
+    options: [
+      "Because the action happened at a specific time in the past.",
+      "Because the situation started in the past and continues until now.",
+      "Because the action is happening right now.",
+      "Because it describes a future plan.",
+      "Because it is a passive form."
+    ],
+    answer: 1,
+    category: "grammar",
+    explanation: "<strong>Present Perfect</strong> digunakan untuk keadaan yang dimulai di masa lalu dan <strong>masih berlangsung sampai sekarang</strong>. 'have known ... since elementary school' = kenal sejak SD dan masih kenal sampai sekarang."
+  },
+
+  // ============ VOCABULARY (5 soal) ============
+  {
+    topic: "Vocabulary • Context Clues",
+    passage: "The new policy will <span class='hl'>decrease</span> the number of traffic accidents in the city. Officials hope this regulation helps reduce the death rate on the roads.",
+    question: "Based on the context, the word 'decrease' is closest in meaning to ...",
+    options: [
+      "increase",
+      "reduce",
+      "maintain",
+      "ignore",
+      "create"
+    ],
+    answer: 1,
+    category: "vocabulary",
+    explanation: "Konteks kalimat berikutnya: <em>'helps <strong>reduce</strong> the death rate'</em> — kata <strong>reduce</strong> menjadi petunjuk makna. <strong>Decrease = reduce</strong> (mengurangi). Ini contoh paraphrase dalam teks."
+  },
+  {
+    topic: "Vocabulary • Synonym",
+    passage: "The research provides <span class='hl'>essential</span> information about the effects of social media on teenagers' mental health.",
+    question: "The word 'essential' in the passage is closest in meaning to ...",
+    options: [
+      "unimportant",
+      "optional",
+      "important",
+      "difficult",
+      "expensive"
+    ],
+    answer: 2,
+    category: "vocabulary",
+    explanation: "<strong>Essential = important</strong> (penting/sangat diperlukan). Kosakata akademik ini sering muncul dalam teks penelitian. Sinonim lain: crucial, vital, necessary."
+  },
+  {
+    topic: "Vocabulary • Academic Word",
+    passage: "The scientist presented her <span class='hl'>conclusion</span> after analyzing the data from the experiment for six months.",
+    question: "What does the word 'conclusion' mean in this context?",
+    options: [
+      "the beginning of a research",
+      "the final decision or judgment based on evidence",
+      "the list of problems in the research",
+      "the tools used in the experiment",
+      "the people who helped in the research"
+    ],
+    answer: 1,
+    category: "vocabulary",
+    explanation: "<strong>Conclusion</strong> = kesimpulan/keputusan akhir berdasarkan bukti. Kata akademik ini muncul di akhir teks penelitian setelah analisis data. Ingat: <em>research → data → analysis → conclusion</em>."
+  },
+  {
+    topic: "Vocabulary • Paraphrase",
+    passage: "The government has announced that the new education program <span class='hl'>provides</span> many <span class='hl'>benefits</span> for students in rural areas.",
+    question: "Which sentence is the BEST paraphrase of the passage?",
+    options: [
+      "The government has stopped the education program for rural students.",
+      "The new education program offers several advantages for students in rural areas, according to the government.",
+      "Students in rural areas refuse to join the new education program.",
+      "The government is planning to create a new education program next year.",
+      "The new program is expensive for rural students."
+    ],
+    answer: 1,
+    category: "vocabulary",
+    explanation: "Paraphrase = menulis ulang dengan kata berbeda tapi makna sama. <strong>provides = offers</strong>, <strong>benefits = advantages</strong>. Pilihan B mempertahankan makna asli dengan sinonim yang tepat."
+  },
+  {
+    topic: "Vocabulary • Antonym",
+    passage: "The new manager is known for his <span class='hl'>efficient</span> work style. He completes tasks quickly and never wastes time.",
+    question: "What is the OPPOSITE of the word 'efficient'?",
+    options: [
+      "productive",
+      "effective",
+      "ineffective",
+      "organized",
+      "skillful"
+    ],
+    answer: 2,
+    category: "vocabulary",
+    explanation: "<strong>Efficient</strong> = efisien/mangkus. Lawan katanya = <strong>ineffective</strong> (tidak efektif) atau <em>inefficient</em>. Pilihan A, B, D, E justru bersinonim dengan efficient."
+  },
+
+  // ============ READING (7 soal) ============
+  {
+    topic: "Reading • Main Idea",
+    passage: "Social media has become an important part of teenagers' lives. It helps them stay connected with friends and access information quickly. However, excessive use can lead to problems such as anxiety, sleep disorders, and reduced face-to-face interaction. Therefore, teenagers need to use social media wisely and limit their daily screen time.",
+    question: "What is the MAIN IDEA of the passage?",
+    options: [
+      "Social media helps teenagers connect with friends.",
+      "Teenagers should stop using social media completely.",
+      "Social media has both benefits and drawbacks for teenagers, so it should be used wisely.",
+      "Sleep disorders are caused by social media.",
+      "All teenagers are addicted to social media."
+    ],
+    answer: 2,
+    category: "reading",
+    explanation: "Main idea harus <strong>mencakup keseluruhan teks</strong>. Teks membahas: manfaat (connected, access info) + dampak negatif (anxiety, sleep disorders) + saran (use wisely). Pilihan C merangkum semua aspek. Pilihan A, B, D terlalu sempit; E terlalu ekstrem."
+  },
+  {
+    topic: "Reading • Scanning Detail",
+    passage: "The school library was established in 1998 with only 500 books. By 2010, the collection had grown to 3,000 books. Today, the library has more than 8,000 books and 200 digital magazines. It opens from 7 a.m. to 4 p.m. on weekdays.",
+    question: "According to the text, how many books did the library have in 2010?",
+    options: [
+      "500 books",
+      "200 books",
+      "3,000 books",
+      "8,000 books",
+      "10,000 books"
+    ],
+    answer: 2,
+    category: "reading",
+    explanation: "Soal meminta <strong>informasi spesifik</strong> (scanning). Dalam teks: <em>'By <strong>2010</strong>, the collection had grown to <strong>3,000 books</strong>'</em>. Jawaban langsung tersedia di teks, tinggal cari kata kunci tahun."
+  },
+  {
+    topic: "Reading • Inference",
+    passage: "Budi put his heavy bag down, sank into the sofa, and closed his eyes. He let out a long sigh and did not move for several minutes.",
+    question: "What can be INFERRED about Budi?",
+    options: [
+      "He is angry at someone.",
+      "He is probably very tired.",
+      "He is bored with the sofa.",
+      "He is waiting for a phone call.",
+      "He is reading a book."
+    ],
+    answer: 1,
+    category: "reading",
+    explanation: "<strong>Inference = Evidence + Reasoning</strong>. Bukti: meletakkan tas berat, jatuh ke sofa, menutup mata, menghela napas panjang, tidak bergerak. Semua tindakan ini <strong>mengindikasikan kelelahan</strong>. Tidak ada bukti untuk emosi lain."
+  },
+  {
+    topic: "Reading • Summary",
+    passage: "Regular exercise offers many benefits for teenagers. First, it improves physical fitness and helps maintain a healthy weight. Second, it reduces stress and anxiety by releasing endorphins. Third, it improves sleep quality. Finally, teenagers who exercise regularly tend to perform better academically because they can concentrate more easily. In short, exercise is an essential part of a healthy teenage lifestyle.",
+    question: "What is the BEST SUMMARY of the passage?",
+    options: [
+      "Exercise helps teenagers lose weight.",
+      "Exercise releases endorphins that reduce stress.",
+      "Regular exercise provides physical, mental, and academic benefits for teenagers, making it essential for their healthy lifestyle.",
+      "Teenagers should sleep more to improve concentration.",
+      "Academic performance depends only on exercise."
+    ],
+    answer: 2,
+    category: "reading",
+    explanation: "Summary harus <strong>mewakili keseluruhan teks</strong>. Teks membahas 4 manfaat: fisik, mental, tidur, akademik + kesimpulan. Pilihan C merangkum semua. A & B hanya detail; D tidak relevan; E terlalu ekstrem ('only')."
+  },
+  {
+    topic: "Reading • Cause-Effect",
+    passage: "Heavy rain fell continuously for three days, causing the river to overflow. As a result, several villages near the river were flooded, and many families had to evacuate to safer places.",
+    question: "What was the EFFECT of the heavy rain?",
+    options: [
+      "The river became cleaner.",
+      "Several villages were flooded and families had to evacuate.",
+      "The rain stopped immediately.",
+      "People enjoyed the cool weather.",
+      "The river overflowed into the sea."
+    ],
+    answer: 1,
+    category: "reading",
+    explanation: "Kata penanda <strong>'As a result'</strong> menunjukkan akibat. Cause: heavy rain → river overflow. Effect: <strong>villages flooded, families evacuated</strong>. Cari conjunction sebab-akibat untuk menjawab soal tipe ini."
+  },
+  {
+    topic: "Reading • Fact vs Opinion",
+    passage: "The school has five science laboratories (1). The chemistry lab is the most modern facility in the building (2). It was built in 2015 with government funding (3). Students believe the labs make learning more interesting (4).",
+    question: "Which sentence is an OPINION?",
+    options: [
+      "Sentence (1)",
+      "Sentence (2)",
+      "Sentence (3)",
+      "Sentence (4)",
+      "Sentence (1) and (3)"
+    ],
+    answer: 3,
+    category: "reading",
+    explanation: "<strong>Opini = penilaian subjektif</strong>. Kalimat (4): <em>'Students <strong>believe</strong> ... make learning <strong>more interesting</strong>'</em> — berisi penilaian 'more interesting' yang subjektif. Kalimat (1), (2), (3) adalah fakta yang dapat diverifikasi (jumlah lab, tahun dibangun, sumber dana)."
+  },
+  {
+    topic: "Reading • Author's Purpose",
+    passage: "Many teenagers spend more than five hours a day on social media. Research shows that excessive screen time can lead to sleep problems, anxiety, and poor academic performance. Experts recommend that teenagers limit their daily social media use to no more than two hours and engage in offline activities such as sports, reading, or spending time with family.",
+    question: "What is the author's MAIN PURPOSE in writing the passage?",
+    options: [
+      "To entertain readers with a funny story about teenagers.",
+      "To describe the history of social media.",
+      "To persuade teenagers to reduce their social media use for their well-being.",
+      "To compare social media with television.",
+      "To report the number of social media users in Indonesia."
+    ],
+    answer: 2,
+    category: "reading",
+    explanation: "Penulis menyajikan <strong>masalah</strong> (excessive screen time → sleep problems, anxiety) + <strong>rekomendasi ahli</strong> (limit to 2 hours). Ini pola teks <strong>analytical exposition</strong> yang bertujuan <strong>mempersuade</strong> pembaca. Kata kunci: 'research shows', 'experts recommend'."
+  }
+];
+
+let currentQuestion = 0;
+let correctAnswers = 0;
+let wrongAnswers = 0;
+let answered = false;
+let categoryScores = { grammar: {correct: 0, total: 0}, vocabulary: {correct: 0, total: 0}, reading: {correct: 0, total: 0} };
+
+// Count totals
+questions.forEach(q => categoryScores[q.category].total++);
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const quizBody = document.getElementById('quizBody');
+  
+  let passageHTML = '';
+  if (q.passage) {
+    passageHTML = `<div class="passage">${q.passage}</div>`;
+  }
+  
+  let optionsHTML = '';
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  q.options.forEach((opt, idx) => {
+    optionsHTML += `
+      <div class="option" onclick="selectAnswer(${idx})" data-idx="${idx}">
+        <span class="letter">${letters[idx]}</span>
+        <span>${opt}</span>
+      </div>
+    `;
+  });
+  
+  quizBody.innerHTML = `
+    <div class="question-card">
+      <div class="question-meta">
+        <span class="question-number">Soal ${currentQuestion + 1} / 20</span>
+        <span class="topic-tag">${q.topic}</span>
+      </div>
+      ${passageHTML}
+      <div class="question-text">${q.question}</div>
+      <div class="options">${optionsHTML}</div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>
+      ${currentQuestion === questions.length - 1 ? '🏁 Lihat Hasil Akhir' : '➡️ Soal Berikutnya'}
+    </button>
+  `;
+  
+  document.getElementById('currentQ').textContent = `${currentQuestion + 1}/20`;
+  document.getElementById('progressBar').style.width = `${((currentQuestion) / questions.length) * 100}%`;
+  answered = false;
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  
+  const q = questions[currentQuestion];
+  const options = document.querySelectorAll('.option');
+  const feedback = document.getElementById('feedback');
+  const nextBtn = document.getElementById('nextBtn');
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  
+  options.forEach(opt => opt.classList.add('disabled'));
+  
+  const isCorrect = idx === q.answer;
+  
+  if (isCorrect) {
+    options[idx].classList.add('correct');
+    correctAnswers++;
+    categoryScores[q.category].correct++;
+    feedback.className = 'feedback correct';
+    feedback.innerHTML = `
+      <div class="feedback-title">✅ Benar! Hebat!</div>
+      <div class="answer-key">Kunci Jawaban: ${letters[q.answer]}. ${q.options[q.answer]}</div>
+      <div class="explanation"><strong>📖 Pembahasan:</strong> ${q.explanation}</div>
+    `;
+  } else {
+    options[idx].classList.add('wrong');
+    options[q.answer].classList.add('correct');
+    wrongAnswers++;
+    feedback.className = 'feedback wrong';
+    feedback.innerHTML = `
+      <div class="feedback-title">❌ Kurang Tepat</div>
+      <div class="answer-key">Kunci Jawaban: ${letters[q.answer]}. ${q.options[q.answer]}</div>
+      <div class="explanation"><strong>📖 Pembahasan:</strong> ${q.explanation}</div>
+    `;
+  }
+  
+  feedback.style.display = 'block';
+  nextBtn.disabled = false;
+  
+  document.getElementById('correctCount').textContent = correctAnswers;
+  document.getElementById('wrongCount').textContent = wrongAnswers;
+  
+  // Smooth scroll to feedback
+  setTimeout(() => {
+    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function showResult() {
+  document.getElementById('quizBody').style.display = 'none';
+  document.querySelector('.progress-container').style.display = 'none';
+  document.querySelector('.stats').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+  
+  const score = correctAnswers;
+  const percentage = (score / questions.length) * 100;
+  const degrees = (percentage / 100) * 360;
+  
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('scoreCircle').style.background = `conic-gradient(#667eea ${degrees}deg, #e0e4ff ${degrees}deg)`;
+  
+  document.getElementById('scoreGrammar').textContent = `${categoryScores.grammar.correct}/${categoryScores.grammar.total}`;
+  document.getElementById('scoreVocab').textContent = `${categoryScores.vocabulary.correct}/${categoryScores.vocabulary.total}`;
+  document.getElementById('scoreReading').textContent = `${categoryScores.reading.correct}/${categoryScores.reading.total}`;
+  
+  let message = '';
+  if (percentage >= 90) {
+    message = "🌟 <strong>LUAR BIASA!</strong> Kamu menguasai Grammar, Vocabulary, dan Reading Strategies dengan sangat baik! Pertahankan prestasimu dan terus berlatih dengan soal TKA level tinggi.";
+  } else if (percentage >= 75) {
+    message = "👏 <strong>BAGUS SEKALI!</strong> Pemahamanmu sudah sangat baik. Perkuat materi yang masih kurang dengan membaca kembali modul dan berlatih lebih banyak.";
+  } else if (percentage >= 60) {
+    message = "💪 <strong>CUKUP BAIK!</strong> Kamu sudah memahami dasar-dasarnya. Fokus perbaiki bagian yang masih lemah — apakah itu tenses, paraphrase, atau inferencing.";
+  } else if (percentage >= 40) {
+    message = "📚 <strong>PERLU LATIHAN LAGI.</strong> Baca kembali modul materi dengan teliti. Fokus pada: (1) rumus tenses, (2) paraphrase & synonym, (3) strategi reading (skimming, scanning, inferencing).";
+  } else {
+    message = "🌱 <strong>JANGAN MENYERAH!</strong> TKA Bahasa Inggris butuh pemahaman konsep, bukan hafalan. Pelajari kembali modul secara bertahap: Grammar → Vocabulary → Reading Strategy. Kamu pasti bisa!";
+  }
+  
+  // Analisis kelemahan
+  let weakAreas = [];
+  const grammarPct = (categoryScores.grammar.correct / categoryScores.grammar.total) * 100;
+  const vocabPct = (categoryScores.vocabulary.correct / categoryScores.vocabulary.total) * 100;
+  const readingPct = (categoryScores.reading.correct / categoryScores.reading.total) * 100;
+  
+  if (grammarPct < 60) weakAreas.push('📗 Grammar (tenses, passive, modals, conjunctions)');
+  if (vocabPct < 60) weakAreas.push('📘 Vocabulary (context clues, synonym, paraphrase)');
+  if (readingPct < 60) weakAreas.push('📙 Reading (main idea, inference, summary)');
+  
+  if (weakAreas.length > 0) {
+    message += `<br><br><strong>🎯 Area yang perlu diperkuat:</strong><br>• ${weakAreas.join('<br>• ')}`;
+  }
+  
+  document.getElementById('resultMessage').innerHTML = `
+    <strong>Skor Kamu: ${score}/20 (${percentage.toFixed(0)}%)</strong><br><br>
+    ${message}
+  `;
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  currentQuestion = 0;
+  correctAnswers = 0;
+  wrongAnswers = 0;
+  categoryScores = { grammar: {correct: 0, total: 8}, vocabulary: {correct: 0, total: 5}, reading: {correct: 0, total: 7} };
+  document.getElementById('correctCount').textContent = '0';
+  document.getElementById('wrongCount').textContent = '0';
+  document.getElementById('quizBody').style.display = 'block';
+  document.querySelector('.progress-container').style.display = 'block';
+  document.querySelector('.stats').style.display = 'flex';
+  document.getElementById('resultScreen').style.display = 'none';
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

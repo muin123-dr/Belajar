@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKA English Quiz — Grammar, Vocabulary & Reading Strategies</title>
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --card: #ffffff;
+            --border: #dce2ec;
+            --text: #1f2937;
+            --muted: #64748b;
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --correct: #16a34a;
+            --correct-bg: #ecfdf5;
+            --incorrect: #dc2626;
+            --incorrect-bg: #fee2e2;
+            --shadow: 0 4px 14px rgba(0,0,0,0.06);
+            --radius: 14px;
+            --transition: 0.2s ease;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px 16px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 880px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+        .score-board {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(79,70,229,0.25);
+            position: sticky;
+            top: 12px;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+        }
+        .score-board span { font-size: 1.1rem; }
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 20px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow);
+            transition: box-shadow var(--transition), transform var(--transition);
+        }
+        .question-card:hover {
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        .question-number {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: #f8fafc;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all var(--transition);
+            color: var(--text);
+            font-family: inherit;
+            line-height: 1.4;
+            user-select: none;
+        }
+        .option-btn:hover:not(:disabled) {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+        .option-btn.correct {
+            background: var(--correct-bg);
+            border-color: var(--correct);
+            color: #14532d;
+            font-weight: 600;
+        }
+        .option-btn.incorrect {
+            background: var(--incorrect-bg);
+            border-color: var(--incorrect);
+            color: #7f1d1d;
+        }
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .feedback {
+            margin-top: 14px;
+            padding: 16px 18px;
+            border-radius: 10px;
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .feedback.show { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .feedback-message {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+        .feedback-message.correct { color: var(--correct); }
+        .feedback-message.incorrect { color: var(--incorrect); }
+        .answer-key {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .explanation {
+            color: #374151;
+            font-size: 0.95rem;
+        }
+        .reset-btn {
+            display: block;
+            margin: 30px auto;
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background var(--transition), transform var(--transition);
+        }
+        .reset-btn:hover {
+            background: #1f2937;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 640px) {
+            body { padding: 12px 8px; }
+            h1 { font-size: 1.5rem; }
+            .question-card { padding: 16px 14px; }
+            .option-btn { padding: 11px 14px; font-size: 0.95rem; }
+            .score-board { flex-direction: column; gap: 4px; text-align: center; }
+            .score-board span { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 TKA English Quiz</h1>
+        <p class="subtitle">Grammar, Vocabulary & Reading Strategies — 20 Questions</p>
+
+        <div class="score-board">
+            <span>Score: <span id="score">0</span> / <span id="total">20</span></span>
+            <span id="progress">Answered: 0</span>
+        </div>
+
+        <div id="quiz-container"></div>
+
+        <button class="reset-btn" id="resetBtn">🔄 Restart Quiz</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "She ___ to school every day.",
+                options: ["go", "goes", "going", "gone"],
+                correct: 1,
+                explanation: "Simple present tense dengan subjek She (orang ketiga tunggal) menggunakan V1+s/es: 'goes'."
+            },
+            {
+                question: "They ___ a movie last night.",
+                options: ["watch", "watched", "watching", "watches"],
+                correct: 1,
+                explanation: "Simple past tense menggunakan V2. Kata 'last night' menunjukkan waktu lampau, jadi 'watched'."
+            },
+            {
+                question: "I have ___ my homework.",
+                options: ["finish", "finished", "finishing", "finishes"],
+                correct: 1,
+                explanation: "Present perfect tense: have/has + V3. Jadi 'finished'."
+            },
+            {
+                question: "The letter ___ yesterday.",
+                options: ["send", "sent", "was sent", "is sent"],
+                correct: 2,
+                explanation: "Passive voice simple past: was/were + V3. Subjek 'The letter' dipasifkan, jadi 'was sent'."
+            },
+            {
+                question: "You ___ study harder for the exam.",
+                options: ["can", "should", "may", "might"],
+                correct: 1,
+                explanation: "Memberi saran (advice) menggunakan 'should'."
+            },
+            {
+                question: "She ___ swim very well.",
+                options: ["can", "should", "must", "might"],
+                correct: 0,
+                explanation: "Menyatakan kemampuan (ability) menggunakan 'can'."
+            },
+            {
+                question: "He stayed home ___ he was sick.",
+                options: ["so", "because", "although", "while"],
+                correct: 1,
+                explanation: "Menunjukkan sebab/alasan: 'because'."
+            },
+            {
+                question: "___ it was raining, they played outside.",
+                options: ["Because", "So", "Although", "If"],
+                correct: 2,
+                explanation: "Menunjukkan kontras/konsesi: 'Although'."
+            },
+            {
+                question: "The word 'large' is closest in meaning to...",
+                options: ["big", "small", "fast", "slow"],
+                correct: 0,
+                explanation: "Sinonim 'large' adalah 'big' (besar)."
+            },
+            {
+                question: "The antonym of 'difficult' is...",
+                options: ["hard", "easy", "challenging", "complex"],
+                correct: 1,
+                explanation: "Lawan kata 'difficult' adalah 'easy' (mudah)."
+            },
+            {
+                question: "Which reading strategy is used to find specific information quickly?",
+                options: ["Skimming", "Scanning", "Predicting", "Summarizing"],
+                correct: 1,
+                explanation: "Scanning mencari informasi spesifik (nama, angka, tanggal) dengan cepat."
+            },
+            {
+                question: "Skimming is used to...",
+                options: [
+                    "find specific details",
+                    "get a general idea of the text",
+                    "understand every word",
+                    "translate the text"
+                ],
+                correct: 1,
+                explanation: "Skimming membaca cepat untuk memperoleh gambaran umum/ide utama."
+            },
+            {
+                question: "Dina put her bag down, sat on the sofa, and closed her eyes. She was probably...",
+                options: ["hungry", "tired", "angry", "happy"],
+                correct: 1,
+                explanation: "Kesimpulan (inference): tindakan duduk dan menutup mata menunjukkan kelelahan."
+            },
+            {
+                question: "Which sentence is an OPINION?",
+                options: [
+                    "The library has 5000 books.",
+                    "The library is the best place to study.",
+                    "The library closes at 5 p.m.",
+                    "The library is on Jalan Merdeka."
+                ],
+                correct: 1,
+                explanation: "Mengandung penilaian subjektif 'the best' → opini, bukan fakta."
+            },
+            {
+                question: "The project ___ completed.",
+                options: ["has", "have", "has been", "is"],
+                correct: 2,
+                explanation: "Passive voice present perfect: has/have been + V3. Subjek tunggal 'The project' → 'has been completed'."
+            },
+            {
+                question: "It was late, ___ we went home.",
+                options: ["so", "because", "although", "if"],
+                correct: 0,
+                explanation: "Menunjukkan akibat: 'so'."
+            },
+            {
+                question: "She ___ here since 2020.",
+                options: ["lived", "has lived", "lives", "is living"],
+                correct: 1,
+                explanation: "Present perfect tense dengan 'since' → 'has lived' (dimulai dulu dan masih berlanjut)."
+            },
+            {
+                question: "In the sentence 'Although he was tired, he continued working', the clause 'Although he was tired' is a...",
+                options: ["main clause", "dependent clause", "phrase", "compound sentence"],
+                correct: 1,
+                explanation: "Klausa yang diawali 'Although' tidak dapat berdiri sendiri → dependent clause."
+            },
+            {
+                question: "The word 'benefit' is closest in meaning to...",
+                options: ["advantage", "problem", "disadvantage", "cause"],
+                correct: 0,
+                explanation: "Sinonim 'benefit' adalah 'advantage' (keuntungan/manfaat)."
+            },
+            {
+                question: "Which source is most reliable for academic information?",
+                options: [
+                    "A personal blog",
+                    "A scientific journal",
+                    "A social media post",
+                    "A rumor from a friend"
+                ],
+                correct: 1,
+                explanation: "Jurnal ilmiah melalui proses review dan berbasis bukti, sehingga paling dapat dipercaya."
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+        const scoreSpan = document.getElementById('score');
+        const progressSpan = document.getElementById('progress');
+        const resetBtn = document.getElementById('resetBtn');
+
+        let answeredCount = 0;
+        let correctCount = 0;
+
+        function renderQuiz() {
+            quizContainer.innerHTML = '';
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.dataset.answered = 'false';
+
+                const qNum = document.createElement('div');
+                qNum.className = 'question-number';
+                qNum.textContent = `Question ${index + 1} of 20`;
+
+                const qText = document.createElement('div');
+                qText.className = 'question-text';
+                qText.textContent = q.question;
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+
+                q.options.forEach((opt, optIndex) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+                    btn.addEventListener('click', function() {
+                        handleAnswer(card, q, optIndex);
+                    });
+                    optionsDiv.appendChild(btn);
+                });
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                feedback.id = `feedback-${index}`;
+
+                card.appendChild(qNum);
+                card.appendChild(qText);
+                card.appendChild(optionsDiv);
+                card.appendChild(feedback);
+                quizContainer.appendChild(card);
+            });
+            updateScore();
+        }
+
+        function handleAnswer(card, questionData, selectedIndex) {
+            if (card.dataset.answered === 'true') return;
+            card.dataset.answered = 'true';
+
+            const allBtns = card.querySelectorAll('.option-btn');
+            allBtns.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selectedIndex === questionData.correct;
+
+            allBtns.forEach((btn, idx) => {
+                if (idx === questionData.correct) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            const feedback = card.querySelector('.feedback');
+            feedback.classList.add('show');
+            const answerLetter = String.fromCharCode(65 + questionData.correct);
+            feedback.innerHTML = `
+                <div class="feedback-message ${isCorrect ? 'correct' : 'incorrect'}">
+                    ${isCorrect ? '✅ Correct!' : '❌ Incorrect.'}
+                </div>
+                <div class="answer-key">Answer Key: ${answerLetter}. ${questionData.options[questionData.correct]}</div>
+                <div class="explanation">📖 ${questionData.explanation}</div>
+            `;
+
+            answeredCount++;
+            if (isCorrect) correctCount++;
+            updateScore();
+        }
+
+        function updateScore() {
+            scoreSpan.textContent = correctCount;
+            progressSpan.textContent = `Answered: ${answeredCount}`;
+        }
+
+        function resetQuiz() {
+            answeredCount = 0;
+            correctCount = 0;
+            renderQuiz();
+        }
+
+        resetBtn.addEventListener('click', resetQuiz);
+
+        renderQuiz();
+    </script>
+</body>
+</html>

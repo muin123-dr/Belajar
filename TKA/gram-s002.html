@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis TKA Bahasa Inggris SMA: Grammar, Vocab, Reading</title>
+    <style>
+        :root {
+            --bg-main: #f0fdf4;
+            --primary: #047857;
+            --primary-hover: #065f46;
+            --text-dark: #1f2937;
+            --text-light: #4b5563;
+            --card-bg: #ffffff;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px 15px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .passage-box {
+            background-color: #f3f4f6;
+            border-left: 5px solid var(--primary);
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.05rem;
+        }
+
+        .passage-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .question-card {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px dashed #e5e7eb;
+        }
+
+        .question-card:last-child {
+            border-bottom: none;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin: 10px 0;
+            padding: 12px 18px;
+            font-size: 1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-dark);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: var(--primary);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .btn-correct {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text);
+            font-weight: bold;
+        }
+
+        .btn-wrong {
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.95rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .feedback-correct {
+            background-color: var(--correct-bg);
+            border-left: 5px solid var(--correct-border);
+            color: var(--text-dark);
+        }
+
+        .feedback-wrong {
+            background-color: var(--wrong-bg);
+            border-left: 5px solid var(--wrong-border);
+            color: var(--text-dark);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Kuis TKA: Grammar, Vocabulary, & Reading Strategies</h1>
+    <p class="subtitle">Klik pada pilihan jawaban yang menurutmu paling tepat. Pembahasan akan langsung muncul!</p>
+
+    <!-- BAGIAN 1: READING STRATEGIES & GRAMMAR IN CONTEXT -->
+    <div class="passage-box">
+        <div class="passage-title">Text 1 (For questions 1 - 4)</div>
+        <p>The Komodo dragon is the largest living lizard in the world. They are found only on a few islands in Indonesia, including Komodo and Rinca. These giant reptiles can grow up to 3 meters long and weigh over 70 kilograms. Unfortunately, their population is decreasing because of habitat loss and illegal hunting. Therefore, the government has established the Komodo National Park to protect them.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">1. What is the main idea of the text? (Reading: Skimming)</div>
+        <button class="option-btn" data-correct="false" data-exp="Opsi ini terlalu sempit, hanya membahas ukuran tubuhnya (detail).">A. Komodo dragons can grow up to 3 meters long.</button>
+        <button class="option-btn" data-correct="true" data-exp="Ide pokok merangkum keseluruhan isi. Kalimat pertama menyatakan topik utama (Komodo adalah kadal terbesar), dan teks ini secara umum mendeskripsikan fakta tentang Komodo.">B. General information about the Komodo dragon.</button>
+        <button class="option-btn" data-correct="false" data-exp="Ini adalah akibat di akhir cerita, bukan ide pokok keseluruhan teks.">C. The establishment of Komodo National Park.</button>
+        <button class="option-btn" data-correct="false" data-exp="Tidak ada perbandingan dengan buaya di dalam teks.">D. The comparison between Komodo and crocodiles.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">2. Why is the population of Komodo dragons decreasing? (Grammar: Conjunction)</div>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! Di teks terdapat kalimat 'because of habitat loss and illegal hunting'. Pertanyaan 'Why' selalu dicari jawabannya di dekat kata 'because'.">A. Due to habitat loss and illegal hunting.</button>
+        <button class="option-btn" data-correct="false" data-exp="Salah. Ini bukan alasan penurunan populasinya.">B. Because they eat too much food.</button>
+        <button class="option-btn" data-correct="false" data-exp="Teks menyatakan mereka dilindungi di taman nasional, bukan dibunuh oleh pemerintah.">C. Because the government kills them.</button>
+        <button class="option-btn" data-correct="false" data-exp="Ukurannya yang besar bukan penyebab penurunan populasi.">D. Since they are too heavy and large.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">3. "Therefore, the government has established the Komodo National Park..." The word 'Therefore' shows... (Grammar: Conjunction)</div>
+        <button class="option-btn" data-correct="false" data-exp="'Therefore' tidak menunjukkan kontras. Kontras menggunakan kata 'Although' atau 'But'.">A. Contrast</button>
+        <button class="option-btn" data-correct="false" data-exp="Waktu menggunakan kata 'When' atau 'After'.">B. Time</button>
+        <button class="option-btn" data-correct="true" data-exp="Benar! 'Therefore' (Oleh karena itu) adalah Conjunction yang menunjukkan Efek/Akibat (Result/Effect) dari kalimat sebelumnya (habitat hilang, *maka/akibatnya* pemerintah membuat taman nasional).">C. Result / Effect</button>
+        <button class="option-btn" data-correct="false" data-exp="Syarat menggunakan kata 'If' atau 'Unless'.">D. Condition</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">4. The word 'decreasing' in the text has the closest meaning to... (Vocabulary: Synonym)</div>
+        <button class="option-btn" data-correct="false" data-exp="Increasing artinya meningkat (antonim dari decreasing).">A. Increasing</button>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! 'Decreasing' artinya menurun/berkurang. Sinonim yang paling tepat adalah 'declining' atau 'reducing'.">B. Declining</button>
+        <button class="option-btn" data-correct="false" data-exp="Developing artinya berkembang.">C. Developing</button>
+        <button class="option-btn" data-correct="false" data-exp="Improving artinya membaik/meningkat.">D. Improving</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- BAGIAN 2: VOCABULARY & GRAMMAR -->
+    <div class="passage-box">
+        <div class="passage-title">Standalone Questions (Grammar & Vocab)</div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">5. The bridge ________ by the local government in 2015. (Grammar: Passive Voice)</div>
+        <button class="option-btn" data-correct="false" data-exp="Ini adalah kalimat aktif (membangun). Jembatan tidak bisa membangun dirinya sendiri.">A. built</button>
+        <button class="option-btn" data-correct="false" data-exp="Ini adalah pasif, tetapi menggunakan Present Tense (is). Padahal kejadiannya tahun 2015 (masa lalu).">B. is built</button>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! Kalimat ini butuh bentuk Pasif (Jembatan DIBANGUN). Rumus pasif masa lalu: Was/Were + V3. Karena jembatannya tunggal dan kejadian di 2015, maka pakai 'was built'.">C. was built</button>
+        <button class="option-btn" data-correct="false" data-exp="Ini bentuk aktif (sedang membangun) di masa lalu.">D. was building</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">6. All applicants must ________ their curriculum vitae before Friday. (Vocabulary: Vocational)</div>
+        <button class="option-btn" data-correct="false" data-exp="Reject artinya menolak.">A. reject</button>
+        <button class="option-btn" data-correct="false" data-exp="Purchase artinya membeli.">B. purchase</button>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! 'Submit' artinya menyerahkan/mengumpulkan. Ini kosakata dunia kerja (vokasional) yang sangat sering keluar.">C. submit</button>
+        <button class="option-btn" data-correct="false" data-exp="Consume artinya mengonsumsi.">D. consume</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">7. ________ it was raining heavily, Andi still walked to school. (Grammar: Conjunction)</div>
+        <button class="option-btn" data-correct="false" data-exp="Because artinya karena. Jika dipakai, maknanya jadi aneh (Karena hujan lebat, Andi tetap jalan kaki).">A. Because</button>
+        <button class="option-btn" data-correct="false" data-exp="So artinya jadi.">B. So</button>
+        <button class="option-btn" data-correct="true" data-exp="Benar! 'Although' (Meskipun) digunakan untuk menunjukkan kontras. *Meskipun hujan lebat, Andi tetap jalan kaki.*">C. Although</button>
+        <button class="option-btn" data-correct="false" data-exp="If artinya jika.">D. If</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">8. If I have enough money next year, I ________ a new laptop. (Grammar: Complex Sentence / Conditional)</div>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! Ini adalah Conditional Type 1 (Syarat yang mungkin terjadi di masa depan). Rumusnya: If + Simple Present (have), Subject + Will + V1 (will buy).">A. will buy</button>
+        <button class="option-btn" data-correct="false" data-exp="Bought adalah V2 (Past tense).">B. bought</button>
+        <button class="option-btn" data-correct="false" data-exp="Would buy digunakan untuk Conditional Type 2 (khayalan saat ini).">C. would buy</button>
+        <button class="option-btn" data-correct="false" data-exp="Am buying adalah Present Continuous (sedang membeli).">D. am buying</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">9. Students ________ wear their uniform every Monday. It is a strict school rule. (Grammar: Modals)</div>
+        <button class="option-btn" data-correct="false" data-exp="'May' berarti boleh/mungkin (pilihan).">A. may</button>
+        <button class="option-btn" data-correct="true" data-exp="Benar! 'Must' digunakan untuk menyatakan kewajiban mutlak (obligation). Karena ini adalah 'strict school rule' (aturan ketat), maka mereka HARUS memakai seragam.">B. must</button>
+        <button class="option-btn" data-correct="false" data-exp="'Can' berarti bisa (kemampuan).">C. can</button>
+        <button class="option-btn" data-correct="false" data-exp="'Might' berarti mungkin.">D. might</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">10. I have lived in this city ________ 2010. (Grammar: Present Perfect)</div>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! Present Perfect (Have + V3) menggunakan kata 'Since' untuk menunjukkan titik awal waktu di masa lalu (sejak 2010).">A. since</button>
+        <button class="option-btn" data-correct="false" data-exp="'For' digunakan untuk durasi waktu (misal: for 10 years).">B. for</button>
+        <button class="option-btn" data-correct="false" data-exp="'In' biasanya digunakan untuk Simple Past (I lived here in 2010).">C. in</button>
+        <button class="option-btn" data-correct="false" data-exp="'Ago' digunakan untuk Simple Past (10 years ago).">D. ago</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- BAGIAN 3: READING STRATEGIES (EVALUATING & INFERENCING) -->
+    <div class="passage-box">
+        <div class="passage-title">Text 2 (For questions 11 - 15)</div>
+        <p>Many teenagers nowadays spend too much time on their smartphones. While smartphones are useful for communication and studying, using them excessively can cause problems. It can lead to bad posture, lack of sleep, and decreased concentration in school. Therefore, parents should limit their children's screen time to ensure they stay healthy and focused.</p>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">11. Which of the following is an OPINION based on the text? (Reading: Evaluating Fact vs Opinion)</div>
+        <button class="option-btn" data-correct="false" data-exp="Ini adalah klaim kausalitas yang didasarkan pada argumen teks, belum murni opini saran.">A. Using smartphones excessively can cause problems.</button>
+        <button class="option-btn" data-correct="false" data-exp="Ini adalah fakta/kenyataan yang terjadi.">B. Teenagers spend time on their smartphones.</button>
+        <button class="option" data-correct="true" data-exp="Tepat! Adanya kata 'should' (seharusnya) adalah penanda kuat bahwa kalimat ini adalah opini atau saran pribadi dari penulis.">C. Parents should limit their children's screen time.</button>
+        <button class="option" data-correct="false" data-exp="Ini adalah fakta tentang fungsi smartphone.">D. Smartphones are useful for communication.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">12. The word 'excessively' in the text can be replaced by... (Vocabulary: Paraphrase)</div>
+        <button class="option-btn" data-correct="false" data-exp="Rarely artinya jarang.">A. rarely</button>
+        <button class="option-btn" data-correct="true" data-exp="Benar! 'Excessively' artinya secara berlebihan (too much). Sinonim/paraphrase yang paling tepat adalah 'too much'.">B. too much</button>
+        <button class="option-btn" data-correct="false" data-exp="Carefully artinya dengan hati-hati.">C. carefully</button>
+        <button class="option-btn" data-correct="false" data-exp="Slowly artinya dengan lambat.">D. slowly</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">13. From the text, we can infer that... (Reading: Inferencing)</div>
+        <button class="option-btn" data-correct="false" data-exp="Teks menyebutkan smartphone juga berguna (useful), jadi tidak 'selalu buruk'. Kata 'always' adalah jebakan ekstrem.">A. Smartphones are always bad for teenagers.</button>
+        <button class="option-btn" data-correct="false" data-exp="Teks tidak menyarankan membuang HP.">B. Teenagers must throw away their smartphones.</button>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! Teks menyatakan bahwa jika digunakan berlebihan akan menyebabkan masalah tidur (lack of sleep) dan konsentrasi turun. Maka kesimpulannya, keseimbangan (balance) sangat diperlukan.">C. A balanced use of smartphones is necessary for teenagers.</button>
+        <button class="option-btn" data-correct="false" data-exp="Teks tidak menyuruh orang tua membeli lebih banyak HP.">D. Parents should buy more smartphones for studying.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">14. What is the BEST summary of the text? (Reading: Summarizing)</div>
+        <button class="option-btn" data-correct="false" data-exp="Terlalu sempit, hanya membahas 1 kalimat detail (lack of sleep).">A. Smartphones cause lack of sleep.</button>
+        <button class="option-btn" data-correct="true" data-exp="Sempurna! Ringkasan yang baik harus memuat keseluruhan Topik + Akibat + Saran Penulis (berlebihan itu bahaya, jadi orang tua harus membatasi).">B. Excessive smartphone use has negative impacts, so parents need to limit it.</button>
+        <button class="option-btn" data-correct="false" data-exp="Terlalu sempit, hanya membahas kalimat pembuka.">C. Smartphones are useful for studying and communication.</button>
+        <button class="option-btn" data-correct="false" data-exp="Ini opini ekstrem yang tidak sesuai dengan isi teks.">D. Parents are the only ones who can use smartphones.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">15. "It can lead to bad posture..." The word 'It' refers to... (Reading: Scanning/Reference)</div>
+        <button class="option-btn" data-correct="true" data-exp="Benar! Kata 'It' merujuk pada kata benda tunggal atau aktivitas di kalimat sebelumnya, yaitu 'using them excessively' (menggunakan secara berlebihan).">A. Using smartphones excessively</button>
+        <button class="option-btn" data-correct="false" data-exp="Kata 'teenagers' jamak (pakai they), bukan 'it'.">B. Teenagers</button>
+        <button class="option-btn" data-correct="false" data-exp="Kata 'smartphones' jamak (pakai they/them), bukan 'it'.">C. Smartphones</button>
+        <button class="option-btn" data-correct="false" data-exp="Communication bukan penyebab postur buruk.">D. Communication</button>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- BAGIAN 4: CAMPURAN -->
+    <div class="passage-box">
+        <div class="passage-title">Mix Practice (Grammar, Vocab, Reading)</div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">16. The researcher wants to ________ the data to find the cause of the disease. (Vocabulary: Academic)</div>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! 'Analyze' (menganalisis) adalah kosakata akademik dasar yang sering muncul berpasangan dengan 'data'.">A. analyze</button>
+        <button class="option-btn" data-correct="false" data-exp="Ignore artinya mengabaikan.">B. ignore</button>
+        <button class="option-btn" data-correct="false" data-exp="Destroy artinya menghancurkan.">C. destroy</button>
+        <button class="option-btn" data-correct="false" data-exp="Purchase artinya membeli.">D. purchase</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">17. Which of the following is a Compound Sentence? (Grammar: Sentence Types)</div>
+        <button class="option-btn" data-correct="false" data-exp="Ini Simple Sentence (1 gagasan).">A. She went to the library yesterday.</button>
+        <button class="option-btn" data-correct="false" data-exp="Ini Complex Sentence (karena pakai 'Because').">B. She stayed at home because it was raining.</button>
+        <button class="option-btn" data-correct="true" data-exp="Benar! Compound sentence menggunakan kata hubung FANBOYS (salah satunya 'but') untuk menggabungkan dua kalimat setara.">C. I wanted to buy a new phone, but I didn't have enough money.</button>
+        <button class="option-btn" data-correct="false" data-exp="Ini Complex Sentence (pakai 'If').">D. If you study hard, you will pass the exam.</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">18. To answer a question like "In what year was the company founded?", the BEST reading strategy is... (Reading Strategies)</div>
+        <button class="option-btn" data-correct="false" data-exp="Skimming digunakan untuk mencari Ide Pokok, bukan angka spesifik.">A. Skimming</button>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! Scanning digunakan untuk memindai informasi detail dan spesifik, seperti angka (tahun) atau nama, tanpa harus membaca seluruh teks.">B. Scanning</button>
+        <button class="option-btn" data-correct="false" data-exp="Predicting adalah menebak kejadian selanjutnya.">C. Predicting</button>
+        <button class="option-btn" data-correct="false" data-exp="Summarizing adalah meringkas seluruh teks.">D. Summarizing</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">19. "The doctor gave him some medicine. ________, he feels much better now." (Grammar: Conjunction)</div>
+        <button class="option-btn" data-correct="false" data-exp="However artinya namun (kontras).">A. However</button>
+        <button class="option-btn" data-correct="true" data-exp="Tepat! 'As a result' (Sebagai akibatnya) digunakan karena merasa baikan adalah AKIBAT dari minum obat.">B. As a result</button>
+        <button class="option-btn" data-correct="false" data-exp="Although artinya meskipun (kontras).">C. Although</button>
+        <button class="option-btn" data-correct="false" data-exp="Since artinya karena (sebab).">D. Since</button>
+        <div class="feedback"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">20. What is a common "Trap" (Jebakan) in evaluating TRUE/FALSE statements in TKA? (Reading: Evaluating)</div>
+        <button class="option-btn" data-correct="false" data-exp="Bukan jebakan. Kalimat pasif sering digunakan dalam teks asli.">A. Options that use passive voice.</button>
+        <button class="option-btn" data-correct="false" data-exp="Sinonim justru sering kali merupakan jawaban yang benar.">B. Options that use synonyms (paraphrase).</button>
+        <button class="option-btn" data-correct="true" data-exp="Benar! Pembuat soal sering mengecoh dengan memasukkan kata-kata ekstrem/mutlak seperti 'always', 'never', 'all', atau 'only' ke dalam pilihan ganda, yang biasanya membuat pernyataan itu menjadi SALAH.">C. Options containing extreme words like "always", "never", or "all".</button>
+        <button class="option-btn" data-correct="false" data-exp="Bukan jebakan, opsi yang pendek bisa saja benar atau salah.">D. Options that are very short.</button>
+        <div class="feedback"></div>
+    </div>
+
+</div>
+
+<script>
+    function checkAnswer(button) {
+        // Cari pembungkus question-card
+        const card = button.closest('.question-card');
+        const options = card.querySelectorAll('.option-btn');
+        const feedbackDiv = card.querySelector('.feedback');
+        
+        // Cek benar atau salah
+        const isCorrect = button.getAttribute('data-correct') === 'true';
+        const explanation = button.getAttribute('data-exp');
+
+        // Kunci semua tombol setelah satu kali klik
+        options.forEach(opt => {
+            opt.disabled = true;
+            // Highlight jawaban yang benar walau user salah pilih
+            if(opt.getAttribute('data-correct') === 'true' && !isCorrect) {
+                opt.classList.add('btn-correct');
+            }
+        });
+
+        // Berikan gaya dan pesan
+        if (isCorrect) {
+            button.classList.add('btn-correct');
+            feedbackDiv.classList.add('feedback-correct');
+            feedbackDiv.innerHTML = "<strong>✅ TEPAT SEKALI!</strong><br><br>" + explanation;
+        } else {
+            button.classList.add('btn-wrong');
+            feedbackDiv.classList.add('feedback-wrong');
+            feedbackDiv.innerHTML = "<strong>❌ KURANG TEPAT!</strong><br><br>" + explanation;
+        }
+
+        feedbackDiv.style.display = "block";
+    }
+
+    // Pasang event listener ke semua tombol opsi
+    document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            checkAnswer(this);
+        });
+    });
+</script>
+
+</body>
+</html>
