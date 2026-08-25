@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif Bahasa Arab - 30 Soal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --success: #15803d;
+            --success-bg: #f0fdf4;
+            --danger: #b91c1c;
+            --danger-bg: #fef2f2;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --border: #cbd5e1;
+            --radius: 14px;
+            --font-arabic: 'Amiri', serif;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px 12px;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: #fff;
+            padding: 24px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.15);
+        }
+
+        .quiz-header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+        }
+
+        .quiz-header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .q-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .arabic-text {
+            font-family: var(--font-arabic);
+            font-size: 1.4rem;
+            direction: rtl;
+            text-align: right;
+            line-height: 2.2;
+            background: #f1f5f9;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            border-right: 4px solid var(--primary-light);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #1e293b;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: #fff;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            text-align: right;
+            direction: rtl;
+            font-family: var(--font-arabic);
+            font-size: 1.25rem;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .opt-btn.latin {
+            direction: ltr;
+            text-align: left;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+        }
+
+        .opt-btn:hover:not(:disabled) {
+            border-color: var(--primary-light);
+            background: #eff6ff;
+        }
+
+        .opt-btn:disabled {
+            cursor: default;
+        }
+
+        .opt-btn.correct {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+            font-weight: bold;
+        }
+
+        .opt-btn.wrong {
+            background: var(--danger-bg) !important;
+            border-color: var(--danger) !important;
+            color: var(--danger) !important;
+        }
+
+        .feedback-box {
+            display: none;
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-box.correct {
+            background: var(--success-bg);
+            border: 1px solid #bbf7d0;
+            color: #14532d;
+        }
+
+        .feedback-box.wrong {
+            background: var(--danger-bg);
+            border: 1px solid #fecaca;
+            color: #7f1d1d;
+        }
+
+        .fb-status {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="quiz-header">
+        <h1>📝 Latihan Kuis Bahasa Arab (30 Soal)</h1>
+        <p>Soal Pembahasan Interaktif Standar Ujian & Asesmen</p>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+const quizData = [
+    {
+        passage: "أَسْتَيْقِظُ فِي الصَّبَاحِ وَأَتَنَاوَلُ الْفُطُورَ مَعَ أَسْرَتِي، بَعْدَ ذَلِكَ أَسْتَخْدِمُ هَاتِفِي لِقِرَاءَةِ الْأَخْبَارِ، ثُمَّ أَذْهَبُ إِلَى الْمَدْرَسَةِ وَأَدْرُسُ مَعَ أَصْدِقَائِي، بَعْدَ الدَّرَاسَةِ أُشَاهِدُ الْفِيدْيُوهَاتِ، فِي الْمَسَاءِ أَجْلِسُ مَعَ عَائِلَتِي، ثُمَّ أَنَامُ بِسَلَامٍ.",
+        question: "مَاذَا يَفْعَلُ الْكَاتِبُ فِي الْمَسَاءِ؟",
+        options: ["يُشَاهِدُ الْفِيدِيُوهَاتِ", "يَتَنَاوَلُ الْفُطُورَ مَعَ أَسْرَتِهِ", "يَجْلِسُ مَعَ عَائِلَتِهِ", "يَدْرُسُ مَعَ أَصْدِقَائِي", "يَسْتَخْدِمُ هَاتِفَهُ"],
+        ans: 2,
+        exp: "Dalam teks tertulis: 'فِي الْمَسَاءِ أَجْلِسُ مَعَ عَائِلَتِي' (Di malam hari saya duduk bersama keluarga saya). Maka jawaban yang tepat adalah يَجْلِسُ مَعَ عَائِلَتِهِ."
+    },
+    {
+        passage: "أُشَاهِدُ الْفِيدْيُوهَاتِ فِي الْمَسَاءِ.",
+        question: "مَا مَعْنَى كَلِمَةِ (أُشَاهِدُ) فِي الْجُمْلَةِ؟",
+        options: ["Saya membaca", "Saya menonton / menyaksikan", "Saya menulis", "Saya mendengarkan", "Saya bermain"],
+        isLatin: true,
+        ans: 1,
+        exp: "Kata 'أُشَاهِدُ' berasal dari kata kerja مشاهدة yang bermakna 'Saya menonton' atau 'Saya menyaksikan'."
+    },
+    {
+        passage: "الْمَسَاءِ / فِي / نُشَاهِدُ / الْعَائِلَةِ / مَعَ / التَّلْفَازَ",
+        question: "رَتِّبْ هَذِهِ الْكَلِمَاتِ لِتَكُونَ جُمْلَةً مُفِيدَةً!",
+        options: [
+            "نُشَاهِدُ التِّلْفَازَ مَعَ الْعَائِلَةِ فِي الْمَسَاءِ",
+            "فِي الْمَسَاءِ نُشَاهِدُ الْعَائِلَةَ مَعَ التِّلْفَازِ",
+            "التِّلْفَازَ نُشَاهِدُ مَعَ الْعَائِلَةِ فِي الْمَسَاءِ",
+            "نُشَاهِدُ الْعَائِلَةَ مَعَ التِّلْفَازِ فِي الْمَسَاءِ",
+            "التِّلْفَازُ فِي الْمَسَاءِ نُشَاهِدُ مَعَ الْعَائِلَةِ"
+        ],
+        ans: 0,
+        exp: "Susunan Jumlah Fi'liyah yang benar: Kata kerja (نُشَاهِدُ) + Objek (التِّلْفَازَ) + Keterangan (مَعَ الْعَائِلَةِ فِي الْمَسَاءِ)."
+    },
+    {
+        passage: "فَاطِمَةُ عَامِلَةٌ فِي مَطْعَمِ الْمَدْرَسَةِ. تَذْهَبُ كُلَّ يَوْمٍ صَبَاحًا مُبَكِّرًا. هِيَ عَامِلَةٌ مُجْتَهِدَةٌ.",
+        question: "أَيْنَ تَعْمَلُ فَاطِمَةُ؟",
+        options: ["فِي الْمَكْتَبَةِ", "فِي مَطْعَمِ الْمَدْرَسَةِ", "فِي الْمُسْتَشْفَى", "فِي السُّوقِ", "فِي الْبَيْتِ"],
+        ans: 1,
+        exp: "Dalam kalimat pertama teks dijelaskan: 'فَاطِمَةُ عَامِلَةٌ فِي مَطْعَمِ الْمَدْرَسَةِ' (Fatimah adalah pekerja di kantin/restoran sekolah)."
+    },
+    {
+        passage: "فَاطِمَةُ عَامِلَةٌ مُجْتَهِدَةٌ فِي عَمَلِهَا.",
+        question: "مَا ضِدُّ كَلِمَةِ (مُجْتَهِدَةٌ)؟",
+        options: ["مَاهِرَةٌ", "كَسْلَانَةٌ", "نَشِيطَةٌ", "صَالِحَةٌ", "قَوِيَّةٌ"],
+        ans: 1,
+        exp: "Lawan kata (ضِدّ) dari مُجْتَهِدَة (rajin/sungguh-sungguh) adalah كَسْلَانَة (malas)."
+    },
+    {
+        passage: "فَضْلِي: صَبَاحُ الْخَيْرِ، يَا أَحْمَدُ، اِسْمِي فَضْلِي. عُمْرِي أَرْبَعَةَ عَشَرَ سَنَةً. وَهَذَا صَدِيقِي خَالِدٌ، عُمْرُهُ خَمْسَةَ عَشَرَ سَنَةً.",
+        question: "كَمْ عُمْرُ فَضْلِي؟",
+        options: ["أَرْبَعَةَ عَشَرَ سَنَةً", "خَمْسَةَ عَشَرَ سَنَةً", "سِتَّةَ عَشَرَ سَنَةً", "سَبْعَةَ عَشَرَ سَنَةً", "ثَمَانِيَةَ عَشَرَ سَنَةً"],
+        ans: 0,
+        exp: "Fadli menyatakan umurnya: 'عُمْرِي أَرْبَعَةَ عَشَرَ سَنَةً' (Umurku 14 tahun). Pilihan 15 tahun adalah umur Khalid."
+    },
+    {
+        passage: "فَضْلِي: صَبَاحُ الْخَيْرِ يَا أَحْمَدُ، اِسْمِي فَضْلِي... وَهَذَا صَدِيقِي خَالِدٌ.",
+        question: "مَا الْفِكْرَةُ الرَّئِيسِيَّةُ فِي الْحِوَارِ؟",
+        options: [
+            "فَضْلِي يَذْهَبُ إِلَى مَدْرَسَةٍ جَدِيدَةٍ",
+            "فَضْلِي يُعَرِّفُ نَفْسَهُ وَصَدِيقَهُ",
+            "أَحْمَدُ يَسْأَلُ عَنْ عُمْرِ خَالِدٍ",
+            "خَالِدٌ يَنْتَقِلُ إِلَى جَاكَرْتَا",
+            "أَحْمَدُ يَزُورُ بَيْتَ فَضْلِي"
+        ],
+        ans: 1,
+        exp: "Gagasan utama percakapan adalah Fadli memperkenalkan dirinya dan temannya (فَضْلِي يُعَرِّفُ نَفْسَهُ وَصَدِيقَهُ)."
+    },
+    {
+        passage: "التَّلَامِيذُ يُنَظِّفُونَ حَدِيقَةَ الْمَدْرَسَةِ كُلَّ أَسْبُوعٍ.",
+        question: "مَا ضِدُّ كَلِمَةِ (يُنَظِّفُونَ)؟",
+        options: ["يَتَأَخَّرُونَ", "يَمْسَحُونَ", "يُعَلِّمُونَ", "يُوَسِّخُونَ", "يَكْسَلُونَ"],
+        ans: 3,
+        exp: "Kata يُنَظِّفُونَ berarti 'membersihkan'. Lawan katanya adalah يُوَسِّخُونَ yang berarti 'mengotori'."
+    },
+    {
+        passage: "سَلْمَى: مَاذَا تَفْعَلُ الْأَشْجَارُ؟\nنُور: الْأَشْجَارُ تُنَظِّفُ الْهَوَاءَ.",
+        question: "كَيْفَ تُسَاعِدُ الْأَشْجَارُ النَّاسَ؟",
+        options: ["تَمْنَعُ طَرِيقَ الْهَوَاءِ", "تُحَوِّلُ الْهَوَاءَ حَارًّا", "تَجْعَلُ الْهَوَاءَ نَظِيفًا", "تُبْعِدُ الْهَوَاءَ عَنِ النَّاسِ", "تُغَيِّرُ لَوْنَ الْهَوَاءِ"],
+        ans: 2,
+        exp: "Pohon membersihkan udara (تُنَظِّفُ الْهَوَاءَ), yang bermakna membuat udara menjadi bersih (تَجْعَلُ الْهَوَاءَ نَظِيفًا)."
+    },
+    {
+        passage: "(1) أَرْسُمُ الْحَيَوَانَاتِ فِي دَفْتَرِي.\n(2) أُحِبُّ الْهَوَايَاتِ الْمُخْتَلِفَةَ.\n(3) وَأَسْتَمِعُ إِلَى الْمُوسِيقَى كُلَّ يَوْمٍ.",
+        question: "رَتِّبِ الْجُمَلَ لِتُكَّوِّنَ فَقْرَةً مُتَنَاسِقَةً!",
+        options: ["(1) - (2) - (3)", "(2) - (1) - (3)", "(2) - (3) - (1)", "(3) - (2) - (1)", "(1) - (3) - (2)"],
+        isLatin: true,
+        ans: 1,
+        exp: "Urutan logis: Pernyataan umum (2: Saya suka hobi berbeda), lalu hobi 1 (1: Menggambar hewan), lalu hobi 2 (3: Mendengarkan musik)."
+    },
+    {
+        question: "عَائِشَةُ .... إِلَى الْمَكْتَبَةِ كُلَّ صَبَاحٍ.",
+        options: ["يَذْهَبُ", "تَذْهَبُ", "أَذْهَبُ", "نَذْهَبُ", "يَذْهَبُونَ"],
+        ans: 1,
+        exp: "Subjek Aisyah adalah muannats tunggal (هي), maka fi'il mudhori yang tepat diawali huruf Ta' (تَذْهَبُ)."
+    },
+    {
+        question: "هَذَا أَخِي، .... طَبِيبٌ فِي الْمُسْتَشْفَى.",
+        options: ["هِيَ", "أَنَا", "هُوَ", "أَنْتَ", "نَحْنُ"],
+        ans: 2,
+        exp: "Kata أَخِي (saudaraku) bersifat kata ganti orang ketiga laki-laki (Muzakkar), maka menggantikannya dengan هُوَ (Dia)."
+    },
+    {
+        question: "أَحْمَدُ يَلْعَبُ كُرَةَ الْقَدَمِ فِي ....",
+        options: ["الْمَلْعَبِ", "الْمَطْبَخِ", "الْحَمَّامِ", "الْمَكْتَبَةِ", "الْغُرْفَةِ"],
+        ans: 0,
+        exp: "Sepak bola (كُرَةَ الْقَدَمِ) dimainkan di lapangan (الْمَلْعَبِ)."
+    },
+    {
+        question: "يَا حَسَنُ! .... الْكِتَابَ عَلَى الطَّاوِلَةِ!",
+        options: ["اِقْرَإِ", "ضَعْ", "اُكْتُبْ", "اِشْرَبْ", "اِفْتَحْ"],
+        ans: 1,
+        exp: "Perintah meletakkan buku di atas meja menggunakan Fi'il Amar 'ضَعْ' (Letakkanlah!)."
+    },
+    {
+        passage: "إِلَى - أَحْمَدُ - السُّوقِ - ذَهَبَ - صَبَاحًا",
+        question: "رَتِّبِ الْكَلِمَاتِ لِتَكُونَ جُمْلَةً صَحِيحَةً!",
+        options: [
+            "ذَهَبَ أَحْمَدُ إِلَى السُّوقِ صَبَاحًا",
+            "أَحْمَدُ إِلَى السُّوقِ ذَهَبَ صَبَاحًا",
+            "إِلَى السُّوقِ ذَهَبَ صَبَاحًا أَحْمَدُ",
+            "صَبَاحًا السُّوقِ إِلَى ذَهَبَ أَحْمَدُ",
+            "ذَهَبَ السُّوقِ إِلَى أَحْمَدُ صَبَاحًا"
+        ],
+        ans: 0,
+        exp: "Susunan struktur: Fi'il (ذَهَبَ) + Fa'il (أَحْمَدُ) + Harf Jar/Majrur (إِلَى السُّوقِ) + Dhorof (صَبَاحًا)."
+    },
+    {
+        passage: "فِي يَوْمِ الْأَحَدِ، تَذْهَبُ أُسْرَةُ لُقْمَانَ إِلَى الشَّاطِئِ بِالسَّيَّارَةِ.",
+        question: "كَيْفَ تَذْهَبُ أُسْرَةُ لُقْمَانَ إِلَى الشَّاطِئِ؟",
+        options: ["بِالْحَافِلَةِ", "بِالسَّيَّارَةِ", "بِالْقِطَارِ", "بِالدَّرَّاجَةِ", "مَشْيًا عَلَى الْأَقْدَامِ"],
+        ans: 1,
+        exp: "Disebutkan dalam teks: Keluarga Luqman pergi menggunakan mobil (بِالسَّيَّارَةِ)."
+    },
+    {
+        question: "الْمُدَرِّسَةُ تَقِفُ .... الْفَصْلِ أَمَامَ الطُّلَّابِ.",
+        options: ["فِي", "عَلَى", "مِنْ", "إِلَى", "عَنْ"],
+        ans: 0,
+        exp: "Guru wanita berdiri di dalam (فِي) kelas."
+    },
+    {
+        question: "مَا مَعْنَى كَلِمَةِ (مَكْتَبَةٌ)؟",
+        options: ["Kantin", "Perpustakaan", "Laboratorium", "Kamar Mandi", "Lapangan"],
+        isLatin: true,
+        ans: 1,
+        exp: "Arti dari kata مَكْتَبَةٌ adalah Perpustakaan."
+    },
+    {
+        question: "يَأْكُلُ الطَّلَّابُ الْوَجَبَاتِ فِي .... فِي وَقْتِ الرَّاحَةِ.",
+        options: ["الْمَقْصَفِ", "الْمَسْجِدِ", "الْمَلْعَبِ", "الْمَكْتَبِ", "الْمَكْتَبَةِ"],
+        ans: 0,
+        exp: "Siswa makan jajanan/bekal pada waktu istirahat di kantin (الْمَقْصَفِ)."
+    },
+    {
+        passage: "أُنَظِّفُ - الصَّبَاحِ - أَسْنَانِي - فِي",
+        question: "رَتِّبِ الْكَلِمَاتِ لِتَكُونَ جُمْلَةً مُفِيدَةً!",
+        options: [
+            "أُنَظِّفُ أَسْنَانِي فِي الصَّبَاحِ",
+            "فِي أَسْنَانِي أُنَظِّفُ الصَّبَاحِ",
+            "الصَّبَاحِ فِي أُنَظِّفُ أَسْنَانِي",
+            "أَسْنَانِي أُنَظِّفُ فِي الصَّبَاحِ",
+            "فِي الصَّبَاحِ أَسْنَانِي أُنَظِّفُ"
+        ],
+        ans: 0,
+        exp: "Susunan benar: Saya menggosok (أُنَظِّفُ) gigiku (أَسْنَانِي) di pagi hari (فِي الصَّبَاحِ)."
+    },
+    {
+        question: "مَا هِيَ الْجُمْلَةُ الصَّحِيحَةُ؟",
+        options: [
+            "الطَّالِبُ يَكْتُبُونَ الدَّرْسَ",
+            "الطُّلَّابُ يَكْتُبُونَ الدَّرْسَ",
+            "الطُّلَّابُ تَكْتُبُ الدَّرْسَ",
+            "الطَّالِبَةُ يَكْتُبْنَ الدَّرْسَ",
+            "الطُّلَّابُ يَكْتُبُ الدَّرْسَ"
+        ],
+        ans: 1,
+        exp: "Subjek jamak muzakkar (الطُّلَّابُ) disesuaikan dengan fi'il jamak (يَكْتُبُونَ)."
+    },
+    {
+        passage: "يَسْكُنُ عُمَرُ فِي قَرْيَةٍ جَمِيلَةٍ. الْهَوَاءُ فِيهَا نَقِيٌّ.",
+        question: "كَيْفَ الْهَوَاءُ فِي قَرْيَةِ عُمَرَ؟",
+        options: ["حَارٌّ", "مُلَوَّثٌ", "نَقِيٌّ", "بَارِدٌ جِدًّا", "ظَالِمٌ"],
+        ans: 2,
+        exp: "Berdasarkan kalimat 'الْهَوَاءُ فِيهَا نَقِيٌّ', udara di desa Umar adalah bersih/segar (نَقِيٌّ)."
+    },
+    {
+        question: "هَذِهِ .... جَدِيدَةٌ. أَقْرَأُ فِيهَا الْقِصَصَ.",
+        options: ["كِتَابٌ", "مَجَلَّةٌ", "قَلَمٌ", "كُرْسِيٌّ", "بَابٌ"],
+        ans: 1,
+        exp: "Kata tunjuk هَذِهِ bersifat Muannats, maka membutuhkan kata benda Muannats yaitu مَجَلَّةٌ (Majalah)."
+    },
+    {
+        question: "مَا مَعْنَى الْعِبَارَةِ: (صَبَاحَ الْخَيْرِ)؟",
+        options: ["Selamat siang", "Selamat sore", "Selamat malam", "Selamat pagi", "Selamat datang"],
+        isLatin: true,
+        ans: 3,
+        exp: "Ungkapan صَبَاحَ الْخَيْرِ berarti 'Selamat Pagi'."
+    },
+    {
+        passage: "أَحْمَدُ - يَنَامُ - السَّاعَةِ - فِي - الْعَاشِرَةِ - لَيْلًا",
+        question: "رَتِّبِ الْكَلِمَاتِ لِتَكُونَ جُمْلَةً صَحِيحَةً!",
+        options: [
+            "يَنَامُ أَحْمَدُ فِي السَّاعَةِ الْعَاشِرَةِ لَيْلًا",
+            "فِي السَّاعَةِ يَنَامُ أَحْمَدُ الْعَاشِرَةِ لَيْلًا",
+            "أَحْمَدُ فِي لَيْلًا يَنَامُ السَّاعَةِ الْعَاشِرَةِ",
+            "الْعَاشِرَةِ يَنَامُ أَحْمَدُ فِي السَّاعَةِ لَيْلًا",
+            "يَنَامُ فِي السَّاعَةِ لَيْلًا أَحْمَدُ الْعَاشِرَةِ"
+        ],
+        ans: 0,
+        exp: "Susunan benar: Ahmad tidur (يَنَامُ أَحْمَدُ) pada jam 10 malam (فِي السَّاعَةِ الْعَاشِرَةِ لَيْلًا)."
+    },
+    {
+        question: "أَنَا .... الطَّعَامَ اللَّذِيذَ فِي الْمَطْعَمِ.",
+        options: ["يَأْكُلُ", "تَأْكُلُ", "آكُلُ", "نَأْكُلُ", "يَأْكُلُونَ"],
+        ans: 2,
+        exp: "Kata kerja untuk kata ganti أَنَا (Saya) diawali dengan hamzah yaitu آكُلُ (Saya makan)."
+    },
+    {
+        question: "الْمُسْلِمُونَ .... الصَّلَاةَ فِي الْمَسْجِدِ جَمَاعَةً.",
+        options: ["يُصَلِّي", "يُصَلُّونَ", "تُصَلِّي", "أُصَلِّي", "نُصَلِّي"],
+        ans: 1,
+        exp: "Subjek jamak (الْمُسْلِمُونَ) menggunakan fi'il mudhori jamak yaitu يُصَلُّونَ (mereka shalat)."
+    },
+    {
+        question: "مَا مَعْنَى كَلِمَةِ (حَافِلَةٌ)؟",
+        options: ["Mobil", "Sepeda Motor", "Bus", "Kereta Api", "Pesawat"],
+        isLatin: true,
+        ans: 2,
+        exp: "Kata حَافِلَةٌ berarti Bus."
+    },
+    {
+        question: "يَا مَرْيَمُ! .... الدَّرْسَ بِجِدٍّ!",
+        options: ["اُكْتُبْ", "اُكْتُبِي", "اُكْتُبُوا", "اَكْتُبُ", "يَكْتُبُ"],
+        ans: 1,
+        exp: "Kata perintah (Fi'il Amar) untuk perempuan tunggal (Maryam) ditambah Ya' Mukhathabah: اُكْتُبِي."
+    },
+    {
+        question: "نَحْنُ .... اللُّغَةَ الْعَرَبِيَّةَ فِي الْمَدْرَسَةِ.",
+        options: ["أَدْرُسُ", "تَدْرُسُ", "يَدْرُسُ", "نَدْرُسُ", "يَدْرُسُونَ"],
+        ans: 3,
+        exp: "Fi'il Mudhori untuk kata ganti نَحْنُ (Kami/Kita) diawali huruf Nun yaitu نَدْرُسُ (Kami belajar)."
+    }
+];
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    
+    quizData.forEach((q, i) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = `card-${i}`;
+
+        let passageHTML = q.passage ? `<div class="arabic-text">${q.passage}</div>` : '';
+
+        let optionsHTML = q.options.map((opt, optIdx) => `
+            <button class="opt-btn ${q.isLatin ? 'latin' : ''}" onclick="checkAnswer(${i}, ${optIdx})">
+                ${opt}
+            </button>
+        `).join('');
+
+        card.innerHTML = `
+            <span class="q-badge">Soal Nomor ${i + 1}</span>
+            ${passageHTML}
+            <div class="question-text">${q.question}</div>
+            <div class="options-list">${optionsHTML}</div>
+            <div class="feedback-box" id="fb-${i}">
+                <div class="fb-status" id="status-${i}"></div>
+                <div><b>Kunci & Pembahasan:</b> ${q.exp}</div>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+function checkAnswer(qIdx, selectedOpt) {
+    const q = quizData[qIdx];
+    const card = document.getElementById(`card-${qIdx}`);
+    const btns = card.querySelectorAll('.opt-btn');
+    const fb = document.getElementById(`fb-${qIdx}`);
+    const status = document.getElementById(`status-${qIdx}`);
+
+    btns.forEach(b => b.disabled = true);
+
+    if (selectedOpt === q.ans) {
+        btns[selectedOpt].classList.add('correct');
+        fb.className = 'feedback-box correct';
+        status.innerHTML = '✔ BENAR!';
+    } else {
+        btns[selectedOpt].classList.add('wrong');
+        btns[q.ans].classList.add('correct');
+        fb.className = 'feedback-box wrong';
+        status.innerHTML = '✖ SALAH!';
+    }
+
+    fb.style.display = 'block';
+}
+
+window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
