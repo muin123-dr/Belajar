@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Pembelajaran TKA Sosiologi SMA</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --tip-bg: #fffbeb;
+            --tip-border: #f59e0b;
+            --tip-text: #92400e;
+            --warn-bg: #fef2f2;
+            --warn-border: #ef4444;
+            --warn-text: #991b1b;
+            --info-bg: #eff6ff;
+            --info-border: #3b82f6;
+            --info-text: #1e40af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3);
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .sidebar h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .nav-links {
+            list-style: none;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .nav-links li {
+            margin-bottom: 8px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--info-bg);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        section {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            scroll-margin-top: 20px;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--text-main);
+            font-size: 1.25rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Callout Boxes */
+        .callout {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid;
+        }
+
+        .callout.tip {
+            background-color: var(--tip-bg);
+            border-color: var(--tip-border);
+            color: var(--tip-text);
+        }
+
+        .callout.warning {
+            background-color: var(--warn-bg);
+            border-color: var(--warn-border);
+            color: var(--warn-text);
+        }
+
+        .callout.info {
+            background-color: var(--info-bg);
+            border-color: var(--info-border);
+            color: var(--info-text);
+        }
+
+        .callout-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.05rem;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+                display: none;
+            }
+
+            .sidebar.show {
+                display: block;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            section {
+                padding: 20px;
+            }
+        }
+
+        /* Back to top button */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            z-index: 1000;
+        }
+
+        #backToTop:hover {
+            transform: translateY(-3px);
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>📚 Modul Pembelajaran TKA Sosiologi SMA</h1>
+        <p>Konsep Inti • Penalaran Kasus • Penerapan • Strategi TKA</p>
+        <p style="font-size: 0.95rem; margin-top: 15px; opacity: 0.8;">Tujuan utama: Mengenali konsep dalam kasus nyata, menganalisis sebab-akibat, dan menarik kesimpulan berdasarkan data.</p>
+    </header>
+
+    <button class="menu-toggle" onclick="toggleMenu()">📑 Buka Daftar Isi</button>
+
+    <nav class="sidebar" id="sidebar">
+        <h3>Daftar Isi</h3>
+        <ul class="nav-links">
+            <li><a href="#bab1">1. Sosiologi sebagai Ilmu</a></li>
+            <li><a href="#bab2">2. Nilai, Norma, Sosialisasi</a></li>
+            <li><a href="#bab3">3. Interaksi & Gejala Sosial</a></li>
+            <li><a href="#bab4">4. Kelompok Sosial, Status, Peran</a></li>
+            <li><a href="#bab5">5. Stratifikasi & Mobilitas</a></li>
+            <li><a href="#bab6">6. Penelitian Sosial</a></li>
+            <li><a href="#bab7">7. Konflik & Resolusi</a></li>
+            <li><a href="#bab8">8. Perubahan Sosial</a></li>
+            <li><a href="#bab9">9. Globalisasi & Digital</a></li>
+            <li><a href="#bab10">10. Masyarakat Multikultural</a></li>
+            <li><a href="#bab11">11. Permasalahan Sosial</a></li>
+            <li><a href="#bab12">12. Identitas Era Digital</a></li>
+            <li><a href="#bab13">13. Cara Berpikir Sosiologis</a></li>
+            <li><a href="#bab14">14. Strategi Soal Stimulus</a></li>
+            <li><a href="#bab15">15. Strategi PGK & MCMA</a></li>
+            <li><a href="#bab16">16. Jebakan Umum</a></li>
+            <li><a href="#bab17">17. Kata Ekstrem</a></li>
+            <li><a href="#bab18">18. Peta Konsep Cepat</a></li>
+            <li><a href="#bab19">19. Tabel Kata Kunci</a></li>
+            <li><a href="#bab20">20. Formula Emas</a></li>
+            <li><a href="#bab21">21. Memilih Solusi Terbaik</a></li>
+            <li><a href="#bab22">22. Strategi Belajar</a></li>
+            <li><a href="#ringkasan">🏆 Ringkasan Akhir</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- BAB 1 -->
+        <section id="bab1">
+            <h2>1. Sosiologi sebagai Ilmu</h2>
+            <p><strong>Sosiologi</strong> adalah ilmu yang mempelajari masyarakat, hubungan sosial, interaksi sosial, struktur sosial, proses sosial, serta perubahan yang terjadi dalam kehidupan masyarakat secara sistematis dan ilmiah.</p>
+            
+            <h3>B. Tokoh-Tokoh Penting</h3>
+            <table>
+                <tr><th>Tokoh</th><th>Konsep/Kontribusi Utama</th></tr>
+                <tr><td>Auguste Comte</td><td>Bapak Sosiologi, positivisme, istilah sociology</td></tr>
+                <tr><td>Émile Durkheim</td><td>Fakta sosial, solidaritas mekanik-organik, anomie</td></tr>
+                <tr><td>Karl Marx</td><td>Konflik kelas, kapitalisme, ketimpangan</td></tr>
+                <tr><td>Max Weber</td><td>Tindakan sosial, verstehen, stratifikasi</td></tr>
+                <tr><td>Herbert Spencer</td><td>Evolusi sosial, analogi organisme</td></tr>
+                <tr><td>Ibnu Khaldun</td><td>Ashabiyah, dinamika masyarakat, perubahan sosial</td></tr>
+            </table>
+
+            <h3>C. Ciri-Ciri Sosiologi sebagai Ilmu</h3>
+            <ul>
+                <li><strong>Empiris:</strong> Berdasarkan fakta dan hasil pengamatan, bukan sekadar dugaan.</li>
+                <li><strong>Teoritis:</strong> Hasil pengamatan disusun menjadi konsep/teori yang menjelaskan hubungan antarfenomena.</li>
+                <li><strong>Kumulatif:</strong> Teori baru mengembangkan, memperbaiki, atau mengkritik teori sebelumnya.</li>
+                <li><strong>Nonetis:</strong> Tidak menilai baik/buruk, tetapi menjelaskan mengapa fenomena terjadi.</li>
+                <li><strong>Objektif:</strong> Berdasarkan fakta dan metode ilmiah, meminimalkan bias pribadi.</li>
+            </ul>
+
+            <div class="callout tip">
+                <div class="callout-title">⚡ TRIK TKA</div>
+                Pengamatan/fakta → <strong>Empiris</strong> | Menjelaskan hubungan → <strong>Teoritis</strong> | Teori berkembang → <strong>Kumulatif</strong> | Tidak menilai baik-buruk → <strong>Nonetis</strong>
+            </div>
+
+            <div class="callout warning">
+                <div class="callout-title">⚠️ JEBakan TKA</div>
+                Gempa bumi <strong>bukan</strong> objek sosiologi secara langsung (itu geologi). Tetapi: <em>Dampak gempa terhadap pola interaksi, migrasi, dan solidaritas</em> adalah objek kajian sosiologi.
+            </div>
+        </section>
+
+        <!-- BAB 2 -->
+        <section id="bab2">
+            <h2>2. Nilai, Norma, Sosialisasi, dan Kepribadian</h2>
+            <h3>A. Nilai & Norma Sosial</h3>
+            <p><strong>Nilai:</strong> Sesuatu yang dianggap penting, berharga, dan diharapkan (contoh: kejujuran, gotong royong).<br>
+            <strong>Norma:</strong> Aturan atau pedoman perilaku untuk mewujudkan nilai tersebut.</p>
+            
+            <h3>C. Sosialisasi</h3>
+            <p>Proses mempelajari nilai, norma, peran, dan pola perilaku. Agen: Keluarga (Primer), Sekolah, Teman Sebaya, Media (Sekunder).</p>
+            
+            <h3>E. Pengendalian Sosial</h3>
+            <ul>
+                <li><strong>Preventif:</strong> Mencegah (contoh: penyuluhan).</li>
+                <li><strong>Represif:</strong> Menangani setelah pelanggaran (contoh: sanksi).</li>
+            </ul>
+        </section>
+
+        <!-- BAB 3 -->
+        <section id="bab3">
+            <h2>3. Interaksi, Hubungan, dan Gejala Sosial</h2>
+            <p>Syarat interaksi sosial: <strong>Kontak sosial</strong> dan <strong>Komunikasi</strong>.</p>
+            
+            <h3>Proses Sosial Asosiatif (Mengarah ke persatuan)</h3>
+            <ul>
+                <li><strong>Kerja Sama:</strong> Mencapai tujuan bersama.</li>
+                <li><strong>Akomodasi:</strong> Meredakan pertentangan.</li>
+                <li><strong>Asimilasi:</strong> Peleburan budaya, batas lama kabur.</li>
+                <li><strong>Akulturasi:</strong> Pencampuran tanpa menghilangkan unsur budaya asli.</li>
+            </ul>
+
+            <h3>Proses Sosial Disosiatif (Mengarah ke perpecahan)</h3>
+            <ul>
+                <li><strong>Persaingan:</strong> Bersaing tanpa kekerasan langsung.</li>
+                <li><strong>Kontravensi:</strong> Di antara persaingan dan konflik (desas-desus, provokasi).</li>
+                <li><strong>Konflik:</strong> Pertentangan terbuka.</li>
+            </ul>
+        </section>
+
+        <!-- BAB 4 -->
+        <section id="bab4">
+            <h2>4. Kelompok Sosial, Status, dan Peran</h2>
+            <table>
+                <tr><th>Konsep</th><th>Ciri Utama</th><th>Contoh</th></tr>
+                <tr><td><strong>Kelompok Primer</strong></td><td>Akrab, personal, informal, tahan lama</td><td>Keluarga, sahabat</td></tr>
+                <tr><td><strong>Kelompok Sekunder</strong></td><td>Formal, berorientasi tujuan, tidak harus akrab</td><td>Organisasi sekolah, komunitas</td></tr>
+                <tr><td><strong>Paguyuban</strong></td><td>Kedekatan, kekeluargaan, tradisi</td><td>Gotong royong desa</td></tr>
+                <tr><td><strong>Patembayan</strong></td><td>Kepentingan, kontrak, rasional</td><td>Perusahaan, asosiasi profesi</td></tr>
+            </table>
+            
+            <h3>Status & Peran</h3>
+            <p><strong>Status:</strong> Posisi seseorang (Ascribed: lahir, Achieved: usaha, Assigned: diberikan).<br>
+            <strong>Peran:</strong> Perilaku yang diharapkan dari status tersebut.</p>
+        </section>
+
+        <!-- BAB 5 -->
+        <section id="bab5">
+            <h2>5. Stratifikasi, Diferensiasi, Mobilitas</h2>
+            <ul>
+                <li><strong>Stratifikasi Sosial:</strong> Pelapisan masyarakat secara <em>vertikal/bertingkat</em> (kekayaan, kekuasaan, pendidikan).</li>
+                <li><strong>Diferensiasi Sosial:</strong> Perbedaan sosial yang <em>horizontal/tidak bertingkat</em> (suku, agama, profesi).</li>
+                <li><strong>Mobilitas Sosial:</strong> Perpindahan posisi sosial (Horizontal, Vertikal Naik, Vertikal Turun).</li>
+            </ul>
+        </section>
+
+        <!-- BAB 6 -->
+        <section id="bab6">
+            <h2>6. Penelitian Sosial</h2>
+            <p>Urutan: Masalah → Teori → Metode → Instrumen → Data → Analisis → Kesimpulan.</p>
+            
+            <table>
+                <tr><th>Aspek</th><th>Kuantitatif</th><th>Kualitatif</th></tr>
+                <tr><td>Fokus</td><td>Pengukuran, pola, hubungan</td><td>Makna, konteks, proses</td></tr>
+                <tr><td>Data</td><td>Angka</td><td>Kata, narasi, dokumen</td></tr>
+                <tr><td>Instrumen</td><td>Angket, tes</td><td>Wawancara, observasi</td></tr>
+                <tr><td>Analisis</td><td>Statistik</td><td>Tematik, naratif</td></tr>
+            </table>
+
+            <div class="callout info">
+                <div class="callout-title">💡 Ingat</div>
+                <strong>Valid</strong> = Tepat mengukur apa yang seharusnya diukur.<br>
+                <strong>Reliabel</strong> = Konsisten memberikan hasil yang sama.
+            </div>
+        </section>
+
+        <!-- BAB 7 -->
+        <section id="bab7">
+            <h2>7. Konflik, Integrasi, dan Resolusi</h2>
+            <h3>Jenis Konflik</h3>
+            <ul>
+                <li><strong>Kepentingan:</strong> Perebutan sumber daya.</li>
+                <li><strong>Struktural:</strong> Ketimpangan struktur kekuasaan/akses.</li>
+                <li><strong>Nilai:</strong> Perbedaan keyakinan/pandangan hidup.</li>
+            </ul>
+
+            <div class="callout warning">
+                <div class="callout-title">⚠️ JEBakan PALING SERING</div>
+                "Pihak ketiga netral <strong>hanya membantu</strong> mencapai kesepakatan" → <strong>MEDIASI</strong><br>
+                "Pihak ketiga memiliki <strong>kewenangan memutuskan</strong>" → <strong>ARBITRASE</strong>
+            </div>
+        </section>
+
+        <!-- BAB 8 -->
+        <section id="bab8">
+            <h2>8. Perubahan Sosial</h2>
+            <ul>
+                <li><strong>Evolusi:</strong> Perlahan dan bertahap.</li>
+                <li><strong>Revolusi:</strong> Cepat dan mendasar.</li>
+                <li><strong>Planned Change:</strong> Direncanakan (agent of change).</li>
+                <li><strong>Unplanned Change:</strong> Tidak direncanakan.</li>
+            </ul>
+            <p><strong>Discovery</strong> (menemukan) → <strong>Invention</strong> (mengembangkan) → <strong>Innovation</strong> (menerapkan).</p>
+        </section>
+
+        <!-- BAB 9 -->
+        <section id="bab9">
+            <h2>9. Globalisasi dan Masyarakat Digital</h2>
+            <p>Proses meningkatnya keterhubungan dunia (ekonomi, teknologi, budaya). Batas wilayah menjadi kurang berarti.</p>
+            <div class="callout tip">
+                <div class="callout-title">⚡ Konsep Glokalisasi</div>
+                Unsur global diadaptasi dengan kondisi dan identitas lokal. (Contoh: Makanan global dengan cita rasa lokal).
+            </div>
+        </section>
+
+        <!-- BAB 10 -->
+        <section id="bab10">
+            <h2>10. Masyarakat Multikultural</h2>
+            <p>Masyarakat dengan berbagai kelompok (etnis, agama, budaya). Tantangan: stereotip, prasangka, diskriminasi.</p>
+            <ul>
+                <li><strong>Stereotip:</strong> Anggapan/gambaran umum terhadap kelompok.</li>
+                <li><strong>Prasangka:</strong> Sikap/perasaan negatif sebelum tahu fakta.</li>
+                <li><strong>Diskriminasi:</strong> Perlakuan berbeda yang merugikan.</li>
+            </ul>
+        </section>
+
+        <!-- BAB 11 -->
+        <section id="bab11">
+            <h2>11. Permasalahan Sosial dan Ketimpangan</h2>
+            <p>Kemiskinan bukan sekadar "tidak punya uang", tetapi berkaitan dengan akses pendidikan, kesehatan, dan struktur sosial. Kesenjangan digital adalah ketidaksetaraan akses dan kemampuan menggunakan teknologi.</p>
+        </section>
+
+        <!-- BAB 12 -->
+        <section id="bab12">
+            <h2>12. Identitas dan Fenomena Era Digital</h2>
+            <p>Identitas multidimensi: Seseorang memiliki berbagai identitas (siswa, warga, pengguna medsos). Akun alter tidak otomatis penyimpangan; yang dianalisis adalah <em>bagaimana digunakan dan dampaknya</em>.</p>
+            <p>Fenomena: Cyberbullying, hoaks, echo chamber, FOMO, budaya viral.</p>
+        </section>
+
+        <!-- BAB 13 -->
+        <section id="bab13">
+            <h2>13. Cara Berpikir Sosiologis dalam TKA</h2>
+            <div class="callout info">
+                <div class="callout-title">🧠 Pola Pikir: KONSEP → BUKTI → HUBUNGAN → KESIMPULAN</div>
+                <ol>
+                    <li>Cari apa yang ditanyakan.</li>
+                    <li>Cari kata kunci dalam stimulus.</li>
+                    <li>Hubungkan dengan konsep (jangan hanya cari kata yang sama).</li>
+                    <li>Eliminasi jawaban yang ekstrem, tidak sesuai konsep, atau tidak berdasarkan stimulus.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- BAB 14 -->
+        <section id="bab14">
+            <h2>14. Strategi Mengerjakan Soal Stimulus</h2>
+            <ul>
+                <li><strong>Teknik 1:</strong> Baca pertanyaan dahulu, baru stimulus agar terarah.</li>
+                <li><strong>Teknik 2:</strong> Tandai 5 Unsur: Siapa, Apa, Mengapa, Bagaimana, Dampaknya.</li>
+                <li><strong>Teknik 3:</strong> Gunakan "Jembatan Konsep" (Contoh: Tidak dilibatkan dalam keputusan → Ketimpangan akses → Konflik Struktural).</li>
+            </ul>
+        </section>
+
+        <!-- BAB 15 -->
+        <section id="bab15">
+            <h2>15. Strategi PGK dan MCMA</h2>
+            <ul>
+                <li><strong>Benar/Salah:</strong> Periksa setiap pernyataan secara independen. Jangan berasumsi "jika A benar, B pasti benar".</li>
+                <li><strong>MCMA:</strong> Uji setiap opsi secara terpisah. Pilih <em>semua</em> yang benar, jangan berpatokan pada "biasanya ada dua jawaban".</li>
+            </ul>
+        </section>
+
+        <!-- BAB 16 -->
+        <section id="bab16">
+            <h2>16. Jebakan yang Sering Muncul</h2>
+            <div class="callout warning">
+                <ul>
+                    <li>❌ "Sosiologi mempelajari gempa bumi" (Salah, itu geologi. Sosiologi mempelajari <em>dampak sosialnya</em>).</li>
+                    <li>❌ "Asimilasi = budaya asing masuk tanpa menghilangkan budaya asli" (Salah, itu Akulturasi).</li>
+                    <li>❌ "Kelompok bertujuan bersama pasti primer" (Salah, bisa sekunder jika formal).</li>
+                    <li>❌ "Globalisasi harus ditolak" (Salah, sikap sosiologis adalah kritis, selektif, adaptif).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- BAB 17 -->
+        <section id="bab17">
+            <h2>17. Kata-Kata Ekstrem</h2>
+            <p>Hati-hati dengan kata: <em>selalu, semua, tidak pernah, sepenuhnya, pasti, hanya, mutlak, satu-satunya</em>.</p>
+            <p>Pilihan yang lebih realistis sering menggunakan: <em>dapat, cenderung, antara lain, dalam kondisi tertentu, salah satu faktor</em>.</p>
+        </section>
+
+        <!-- BAB 18 -->
+        <section id="bab18">
+            <h2>18. Peta Konsep Super Cepat</h2>
+            <ul>
+                <li>Empiris → fakta | Teoritis → menjelaskan | Kumulatif → berkembang | Nonetis → tidak menghakimi</li>
+                <li>Primer → akrab | Sekunder → formal/tujuan</li>
+                <li>Stratifikasi → bertingkat | Diferensiasi → berbeda, tidak bertingkat</li>
+                <li>Kuantitatif → angka/statistik | Kualitatif → makna/wawancara mendalam</li>
+                <li>Mediasi → pihak ketiga netral membantu | Arbitrase → pihak ketiga berwenang memutuskan</li>
+            </ul>
+        </section>
+
+        <!-- BAB 19 -->
+        <section id="bab19">
+            <h2>19. Tabel "Kata Kunci → Konsep"</h2>
+            <table>
+                <tr><th>Jika soal menyebut…</th><th>Pikirkan…</th></tr>
+                <tr><td>Penelitian lapangan / fakta</td><td>Empiris</td></tr>
+                <tr><td>Ingin menjadi seperti tokoh</td><td>Identifikasi</td></tr>
+                <tr><td>Ikut merasakan secara mendalam</td><td>Empati</td></tr>
+                <tr><td>"Kami" vs "Mereka"</td><td>In-group vs Out-group</td></tr>
+                <tr><td>Menggali fenomena baru</td><td>Eksploratif</td></tr>
+                <tr><td>Menguji teori / hipotesis</td><td>Verifikatif</td></tr>
+                <tr><td>Global disesuaikan lokal</td><td>Glokalisasi</td></tr>
+            </table>
+        </section>
+
+        <!-- BAB 20 -->
+        <section id="bab20">
+            <h2>20. Formula Emas Menjawab Soal TKA</h2>
+            <div class="callout info">
+                <div class="callout-title">🏆 FENOMENA → KONSEP → BUKTI → ALASAN → JAWABAN</div>
+                <p><em>Contoh:</em> Warga miskin tidak dilibatkan (Fenomena) → Konflik Struktural (Konsep) → Ada ketimpangan akses keputusan (Bukti) → Masalahnya di struktur kekuasaan, bukan individu (Alasan) → Pilih jawaban Konflik Struktural.</p>
+            </div>
+        </section>
+
+        <!-- BAB 21 -->
+        <section id="bab21">
+            <h2>21. Cara Memilih Solusi Terbaik</h2>
+            <p>Cari jawaban yang memiliki karakter: ✅ Partisipatif, ✅ Inklusif, ✅ Dialogis, ✅ Berbasis data, ✅ Edukatif, ✅ Berkelanjutan, ✅ Menghormati hak.</p>
+            <p>Hindari: ❌ Represif tanpa alasan kuat, ❌ Mengisolasi kelompok, ❌ Menyalahkan korban, ❌ Menerima budaya luar tanpa seleksi.</p>
+        </section>
+
+        <!-- BAB 22 -->
+        <section id="bab22">
+            <h2>22. Strategi Belajar TKA Sosiologi</h2>
+            <p>Jangan hanya menghafal definisi. Gunakan pola:</p>
+            <ol>
+                <li><strong>Level 1:</strong> Hafalkan konsep.</li>
+                <li><strong>Level 2:</strong> Kenali cirinya.</li>
+                <li><strong>Level 3:</strong> Terapkan pada kasus.</li>
+                <li><strong>Level 4:</strong> Bedakan dengan konsep mirip.</li>
+                <li><strong>Level 5:</strong> Evaluasi solusi paling tepat.</li>
+            </ol>
+        </section>
+
+        <!-- RINGKASAN -->
+        <section id="ringkasan" style="background: linear-gradient(135deg, #1e293b, #334155); color: white; border: none;">
+            <h2 style="color: #fbbf24; border-bottom-color: #475569;">🏆 Ringkasan Akhir: Sentuhan Terakhir</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong>Fakta lapangan</strong> → EMPIRIS<br>
+                    <strong>Teori dikembangkan</strong> → KUMULATIF<br>
+                    <strong>Tidak menilai baik-buruk</strong> → NONETIS
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong>Hubungan akrab</strong> → PRIMER<br>
+                    <strong>Formal & tujuan</strong> → SEKUNDER<br>
+                    <strong>Kontrak/kepentingan</strong> → PATEMBAYAN
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong>Angka & statistik</strong> → KUANTITATIF<br>
+                    <strong>Makna & wawancara</strong> → KUALITATIF<br>
+                    <strong>Pihak ketiga netral</strong> → MEDIASI
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                    <strong>Perubahan perlahan</strong> → EVOLUSI<br>
+                    <strong>Perubahan cepat</strong> → REVOLUSI<br>
+                    <strong>Global + lokal</strong> → GLOKALISASI
+                </div>
+            </div>
+            <p style="margin-top: 25px; text-align: center; font-size: 1.1rem; font-weight: bold; color: #fbbf24;">
+                🎯 Kunci sukses: Kasus → Konsep → Analisis → Jawaban. Selamat belajar dan sukses TKA! 📚
+            </p>
+        </section>
+
+    </main>
+</div>
+
+<button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+<script>
+    // Mobile Menu Toggle
+    function toggleMenu() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('show');
+    }
+
+    // Back to Top Button Visibility
+    window.onscroll = function() {
+        const btn = document.getElementById('backToTop');
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.style.display = "flex";
+        } else {
+            btn.style.display = "none";
+        }
+        
+        // Active link highlighting
+        let current = '';
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (scrollY >= sectionTop - 60) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.classList.remove('active');
+            if (a.getAttribute('href').includes(current)) {
+                a.classList.add('active');
+            }
+        });
+    };
+
+    // Close mobile menu when a link is clicked
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 900) {
+                document.getElementById('sidebar').classList.remove('show');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif Sosiologi - 30 Soal</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --error: #dc2626;
+            --error-bg: #fee2e2;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-light);
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .kompetensi {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .question-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            display: block;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+
+        .option-label input {
+            margin-top: 4px;
+            margin-right: 12px;
+            accent-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .option-label.selected {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+
+        /* Kategori Table/List Style */
+        .kategori-item {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .kategori-item:last-child {
+            border-bottom: none;
+        }
+
+        .kategori-text {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .kategori-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .kategori-options label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .kategori-options input {
+            margin-right: 6px;
+            accent-color: var(--primary);
+        }
+
+        .btn-check {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-check:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-check:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.benar {
+            background-color: var(--success-bg);
+            border: 1px solid var(--success);
+            color: #14532d;
+        }
+
+        .feedback.salah {
+            background-color: var(--error-bg);
+            border: 1px solid var(--error);
+            color: #7f1d1d;
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-key {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .feedback-explanation {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .question-card { padding: 16px; }
+            header h1 { font-size: 1.5rem; }
+            .kategori-options { gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>📚 Kuis Interaktif Sosiologi</h1>
+        <p>30 Soal Pilihan Ganda, MCMA, dan Kategori | Lengkap dengan Pembahasan</p>
+    </header>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const questions = [
+        {
+            id: 1,
+            kompetensi: "Mendeskripsikan dan menganalisis pengertian dan perkembangan serta manfaat sosiologi sebagai ilmu pengetahuan.",
+            bentuk: "PG",
+            soal: "Sekelompok murid mengikuti lomba karya tulis yang membahas tentang konflik sosial. Mereka membaca berbagai literatur dan menemukan bahwa teori-teori sosiologi yang berkaitan dengan topik tersebut terus mengalami perkembangan. Tokoh-tokoh sosiologi saat ini terus menyempurnakan teori yang sudah ada sehingga relevan dengan perubahan dan perkembangan zaman. Manakah ciri sosiologi yang tepat berdasarkan ilustrasi tersebut?",
+            options: [
+                { id: "A", text: "Teoritis" },
+                { id: "B", text: "Nonetis" },
+                { id: "C", text: "Empiris" },
+                { id: "D", text: "Objektif" },
+                { id: "E", text: "Kumulatif" }
+            ],
+            correctAnswer: ["E"],
+            explanation: "Sosiologi bersifat kumulatif, artinya teori-teori sosiologi baru dibentuk berdasarkan penyempurnaan atau pengembangan dari teori-teori yang sudah ada sebelumnya, bukan dengan membuang total teori lama."
+        },
+        {
+            id: 2,
+            kompetensi: "Menjelaskan ragam gejala sosial di lingkungan sekitar.",
+            bentuk: "Kategori",
+            soal: "Apa sajakah faktor-faktor yang dapat berpengaruh langsung terhadap tingkat penerimaan masyarakat terhadap informasi yang terdapat pada infografis tersebut? Tentukan Benar atau Salah pada setiap pernyataan berikut!",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos001.png",
+            statements: [
+                { id: "A", text: "Kemudahan transaksi perbankan dan dompet digital." },
+                { id: "B", text: "Keberagaman letak geografis di suatu wilayah." },
+                { id: "C", text: "Pemahaman budaya yang berbeda di setiap daerah." },
+                { id: "D", text: "Kemampuan literasi teknologi masyarakat yang rendah." }
+            ],
+            correctAnswer: { "A": "Benar", "B": "Salah", "C": "Salah", "D": "Benar" },
+            explanation: "Kemudahan transaksi (A) dan literasi teknologi (D) adalah faktor langsung yang mempengaruhi penerimaan informasi digital. Letak geografis (B) dan pemahaman budaya (C) tidak secara langsung menjadi faktor utama dalam konteks penerimaan informasi infografis digital spesifik ini."
+        },
+        {
+            id: 3,
+            kompetensi: "Menganalisis dinamika masyarakat multikultural.",
+            bentuk: "MCMA",
+            soal: "Setara Institute melaporkan perusakan dan penolakan pendirian tempat ibadah menempati lima urutan teratas dalam kategori jenis pelanggaran Kebebasan Beragama/Berkeyakinan (KBB) terbanyak sepanjang periode 2007-2022. Manakah pernyataan berikut yang menunjukkan sikap kritis untuk mewujudkan kehidupan masyarakat multikultural terkait kasus tersebut? (Pilih semua yang benar)",
+            options: [
+                { id: "A", text: "Mengatur jarak minimum pembangunan rumah ibadah antarumat beragama yang berbeda untuk meminimalkan konflik." },
+                { id: "B", text: "Mengadakan dialog antarumat beragama untuk membahas pembatasan aturan mengenai pembangunan rumah ibadah di setiap daerah." },
+                { id: "C", text: "Memetakan konflik terkait masalah pembangunan rumah ibadah dan merencanakan proses resolusi yang sesuai." },
+                { id: "D", text: "Melibatkan tokoh agama, tokoh daerah, dan masyarakat sipil dalam mempromosikan kebhinekaan dalam keberagaman." },
+                { id: "E", text: "Meminta pemerintah meninjau ulang peraturan pemerintah untuk semakin mendukung kebebasan hak dalam membangun rumah ibadah." }
+            ],
+            correctAnswer: ["C", "D", "E"],
+            explanation: "Sikap kritis yang konstruktif meliputi pemetaan konflik dan resolusi (C), pelibatan multipihak untuk promosi kebhinekaan (D), dan advokasi kebijakan yang mendukung hak beribadah (E). Opsi A dan B cenderung bersifat membatasi dan tidak menyelesaikan akar masalah toleransi."
+        },
+        {
+            id: 4,
+            kompetensi: "Menjelaskan dan menganalisis berbagai langkah dan metode penelitian sosial.",
+            bentuk: "MCMA",
+            soal: "Penelitian kualitatif mengacu pada pendekatan penelitian yang menekankan pada pemahaman mendalam tentang fenomena sosial, budaya, atau perilaku manusia. Manakah pernyataan yang menunjukkan urutan proses tahapan penelitian kualitatif yang sistematis? (Pilih semua yang benar)",
+            options: [
+                { id: "A", text: "Menyusun hipotesis terlebih dahulu sebelum mengumpulkan data." },
+                { id: "B", text: "Menyusun panduan wawancara sebelum merumuskan pertanyaan penelitian." },
+                { id: "C", text: "Menentukan populasi dan sampel sebelum mengumpulkan data." },
+                { id: "D", text: "Membuat rumusan pertanyaan penelitian sebelum menentukan populasi dan sampel." },
+                { id: "E", text: "Memutuskan teknik pengolahan data sebelum menentukan metode penelitian." }
+            ],
+            correctAnswer: ["C", "D"],
+            explanation: "Dalam penelitian sistematis, rumusan masalah/pertanyaan penelitian harus dibuat terlebih dahulu (D), baru kemudian menentukan populasi/sampel (C). Hipotesis (A) lebih khas kuantitatif. Panduan wawancara (B) dibuat setelah rumusan masalah. Teknik pengolahan data (E) ditentukan setelah metode penelitian ditetapkan."
+        },
+        {
+            id: 5,
+            kompetensi: "Menjelaskan dan menganalisis berbagai langkah dan metode penelitian sosial.",
+            bentuk: "Kategori",
+            soal: "Terdapat dua peneliti sosial yang ingin memahami dampak penggunaan media sosial terhadap interaksi sosial remaja. Andi menggunakan pendekatan kuantitatif (kuesioner tertutup, 200 responden), Yuli menggunakan pendekatan kualitatif (wawancara mendalam, 10 remaja). Manakah pengolahan data yang sesuai?",
+            statements: [
+                { id: "A", text: "Data dari kuesioner/angket yang dikumpulkan Andi diolah menggunakan analisis statistik." },
+                { id: "B", text: "Hasil wawancara mendalam pada penelitian yang Yuli lakukan diolah dengan memberikan kode berupa angka-angka." },
+                { id: "C", text: "Andi perlu mengolah data menggunakan perangkat lunak statistik seperti SPSS atau Excel." },
+                { id: "D", text: "Dalam penelitian yang Yuli lakukan, makna dan konteks dari jawaban menjadi fokus utama data yang dianalisis." }
+            ],
+            correctAnswer: { "A": "Sesuai", "B": "Tidak Sesuai", "C": "Sesuai", "D": "Sesuai" },
+            explanation: "Kuantitatif (Andi) menggunakan analisis statistik/SPSS (A & C Sesuai). Kualitatif (Yuli) berfokus pada makna, konteks, dan deskripsi naratif, bukan pengkodean angka (B Tidak Sesuai, D Sesuai)."
+        },
+        {
+            id: 6,
+            kompetensi: "Mendeskripsikan berbagai konsep konflik sosial dan menganalisis berbagai upaya penanganan konflik.",
+            bentuk: "MCMA",
+            soal: "Pemerintah Kota Maju menyetujui proyek apartemen mewah di kawasan hunian keluarga berpenghasilan rendah. Masyarakat menghadapi ancaman penggusuran tanpa dilibatkan dalam perencanaan. Protes muncul dari damai hingga konfrontatif, menuntut keadilan dan ganti rugi layak. Apakah konflik yang terjadi pada ilustrasi tersebut? (Pilih semua yang benar)",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos002.png",
+            options: [
+                { id: "A", text: "Konflik kepentingan antara kelompok yang tidak setara secara ekonomi." },
+                { id: "B", text: "Konflik struktural akibat akses yang tidak setara dalam pengambilan keputusan." },
+                { id: "C", text: "Konflik interpersonal antar individu dengan komunitas yang sama." },
+                { id: "D", text: "Konflik budaya yang didasarkan atas latar belakang etnis yang berbeda." },
+                { id: "E", text: "Konflik nilai antara cara hidup tradisional dan tujuan pembangunan modern." }
+            ],
+            correctAnswer: ["A", "B", "E"],
+            explanation: "Konflik ini melibatkan ketimpangan ekonomi (A), ketiadaan partisipasi dalam keputusan/struktural (B), dan benturan antara cara hidup lama dengan pembangunan modern (E). Tidak ada indikasi konflik interpersonal murni (C) atau etnis (D)."
+        },
+        {
+            id: 7,
+            kompetensi: "Mengidentifikasi bentuk-bentuk perubahan sosial dan menganalisis dampak perubahan sosial.",
+            bentuk: "PG",
+            soal: "Desa Sigeru selama ini mengandalkan pertanian subsistem dan barter. Jalan baru dibangun, membuka akses ke kota, meningkatkan keterbukaan pasar, memperkenalkan teknologi digital, dan menggeser nilai tradisional serta struktur keluarga. Orang tua khawatir tentang pergeseran nilai dan meningkatnya individualisme. Proses sosiologis apakah yang terjadi?",
+            options: [
+                { id: "A", text: "Penyimpangan sosial yang disebabkan oleh runtuhnya nilai norma tradisional." },
+                { id: "B", text: "Perubahan budaya melalui pengenalan nilai-nilai dan praktik baru dari sumber eksternal yang tidak terbatas." },
+                { id: "C", text: "Perubahan sosial yang dipicu oleh transformasi teknologi dan ekonomi yang memengaruhi kehidupan komunitas." },
+                { id: "D", text: "Mobilitas sosial yang dihasilkan dari peningkatan peluang ekonomi akibat dari interaksi eksternal." },
+                { id: "E", text: "Gegar budaya akibat keterlambatan adaptasi lembaga tradisional terhadap perubahan modernisasi yang cepat." }
+            ],
+            correctAnswer: ["C"],
+            explanation: "Ilustrasi secara spesifik menjelaskan bahwa pembangunan jalan (teknologi/infrastruktur) dan akses pasar (ekonomi) memicu perubahan pada struktur dan nilai komunitas. Ini adalah definisi klasik perubahan sosial yang dipicu faktor teknologi dan ekonomi."
+        },
+        {
+            id: 8,
+            kompetensi: "Menjelaskan dan menganalisis pengaruh globalisasi dan dampaknya.",
+            bentuk: "Kategori",
+            soal: "Arti berkomunikasi dengan teman dari berbagai negara, belajar bahasa asing via aplikasi, belanja merek internasional, dan menonton tayangan global. Aktivitasnya dibentuk oleh akses instan budaya, pengetahuan, dan komunikasi global. Manakah pernyataan yang tepat?",
+            statements: [
+                { id: "A", text: "Globalisasi memfasilitasi pertukaran budaya dan interaksi lintas negara melalui teknologi digital." },
+                { id: "B", text: "Masyarakat digital mendorong penyebaran budaya lokal sambil menolak pengaruh budaya luar." },
+                { id: "C", text: "Internet memungkinkan individu untuk mengakses pendidikan global, pasar, dan jaringan secara cepat." },
+                { id: "D", text: "Globalisasi dan platform digital mengaburkan batas-batas wilayah dan menciptakan komunitas global." }
+            ],
+            correctAnswer: { "A": "Tepat", "B": "Tidak Tepat", "C": "Tepat", "D": "Tepat" },
+            explanation: "Globalisasi justru membuka pengaruh budaya luar (B Tidak Tepat). Pernyataan A, C, dan D secara akurat menggambarkan bagaimana teknologi digital memfasilitasi interaksi lintas batas, akses pendidikan/pasar, dan pembentukan komunitas global."
+        },
+        {
+            id: 9,
+            kompetensi: "Menjelaskan dan menganalisis pengaruh globalisasi dan dampaknya.",
+            bentuk: "PG",
+            soal: "Giri Kriya (UMKM desa) viral di media sosial, omzet naik, dan pemasarannya lintas negara via e-commerce. Namun, pengrajin lain yang tidak akrab teknologi digital merasa tertinggal dan kesulitan mengikuti tren pemasaran online. Manakah pernyataan yang menunjukkan dampak globalisasi di era digital?",
+            options: [
+                { id: "A", text: "Era digital menghilangkan pentingnya pelestarian budaya." },
+                { id: "B", text: "Globalisasi dapat melemahkan interaksi sosial di antara usaha kecil." },
+                { id: "C", text: "Penggunaan internet mendorong komunitas desa menolak kerajinan tradisional." },
+                { id: "D", text: "Era digital membuka peluang ekonomi, tetapi menciptakan ketidaksetaraan." },
+                { id: "E", text: "Globalisasi membatasi produk lokal karena bersaing ketat dengan produk asing." }
+            ],
+            correctAnswer: ["D"],
+            explanation: "Kasus ini menunjukkan dua sisi: peluang ekonomi yang terbuka lebar bagi yang melek digital, tetapi sekaligus menciptakan kesenjangan/ketidaksetaraan baru bagi mereka yang gagap teknologi (digital divide)."
+        },
+        {
+            id: 10,
+            kompetensi: "Menganalisis fenomena sosial yang dipengaruhi globalisasi secara kritis.",
+            bentuk: "PG",
+            soal: "Di SMA Tarumaju, guru dan orang tua gelisah karena murid terpengaruh tren media sosial, mengadopsi gaya hidup hedon, membandingkan diri dengan influencer, dan kecanduan game online yang menurunkan kinerja akademis serta interaksi sosial nyata. Apakah solusi yang tepat?",
+            options: [
+                { id: "A", text: "Melarang akses ke semua media sosial khususnya di lingkungan sekolah." },
+                { id: "B", text: "Mempromosikan literasi digital dan pemikiran kritis dalam kurikulum sekolah." },
+                { id: "C", text: "Mendorong murid untuk menerima tren media sosial agar tetap up to date." },
+                { id: "D", text: "Membatasi akses internet hanya untuk kegiatan dan aktivitas akademik." },
+                { id: "E", text: "Mengizinkan penggunaan internet tanpa batas untuk mendorong kreativitas." }
+            ],
+            correctAnswer: ["B"],
+            explanation: "Solusi yang paling tepat dan berkelanjutan adalah pendidikan (literasi digital dan berpikir kritis), bukan pelarangan total (A, D) yang tidak realistis, atau pembiaran (C, E) yang memperburuk masalah."
+        },
+        {
+            id: 11,
+            kompetensi: "Mendeskripsikan dan menganalisis pengertian dan perkembangan serta manfaat sosiologi sebagai ilmu pengetahuan.",
+            bentuk: "PG",
+            soal: "Objek kajian sosiologi memiliki karakteristik yang berbeda dibandingkan dengan cabang ilmu lainnya. Berdasarkan pernyataan berikut, manakah yang paling tepat menggambarkan objek kajian sosiologi?",
+            options: [
+                { id: "A", text: "Gempa bumi berkekuatan 7,7 yang terjadi di Myanmar dan terasa hingga Thailand sebagai akibat pergeseran lempeng bumi." },
+                { id: "B", text: "Kecanduan teknologi di kalangan generasi muda yang mengubah cara berpikir, berperilaku, dan berinteraksi dalam kehidupan sehari-hari." },
+                { id: "C", text: "Long COVID yang menyebabkan gangguan kesehatan fisik dan mental selama berbulan-bulan pada penyintas COVID-19." },
+                { id: "D", text: "Aktivitas vulkanik yang menyebabkan kerusakan infrastruktur dan memaksa masyarakat mengungsi." },
+                { id: "E", text: "Penyebaran virus baru yang menimbulkan krisis kesehatan global dan berdampak pada sistem imun tubuh manusia." }
+            ],
+            correctAnswer: ["B"],
+            explanation: "Sosiologi mempelajari masyarakat, interaksi sosial, dan perilaku manusia. Opsi B adalah satu-satunya yang berfokus pada perubahan perilaku dan interaksi sosial. Opsi lain lebih merupakan objek kajian geologi (A, D) atau kedokteran/kesehatan (C, E)."
+        },
+        {
+            id: 12,
+            kompetensi: "Menjelaskan ragam gejala sosial di lingkungan sekitar.",
+            bentuk: "Kategori",
+            soal: "Anjuran pada infografis tersebut mencerminkan adanya gejala sosial yang timbul akibat penggunaan internet yang tidak terkontrol oleh anak-anak. Manakah pernyataan yang paling tepat menggambarkan gejala sosial tersebut?",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos003.png",
+            statements: [
+                { id: "A", text: "Penggunaan internet pada anak perlu diawasi oleh orang tua agar anak tidak mudah terpapar konten negatif." },
+                { id: "B", text: "Pola asuh yang terlalu longgar terhadap penggunaan internet dapat memengaruhi pembentukan kepribadian anak." },
+                { id: "C", text: "Anak-anak merupakan salah satu kelompok pengguna internet terbesar di Indonesia dan dapat diklasifikasikan berdasarkan jenjang usia." }
+            ],
+            correctAnswer: { "A": "Sesuai", "B": "Sesuai", "C": "Tidak Sesuai" },
+            explanation: "Pernyataan A dan B secara langsung menggambarkan gejala sosial dan dampak dari penggunaan internet yang tidak terkontrol pada anak. Pernyataan C hanyalah fakta demografis, bukan gambaran gejala sosial akibat penggunaan tidak terkontrol."
+        },
+        {
+            id: 13,
+            kompetensi: "Menjelaskan dan menganalisis berbagai langkah dan metode penelitian sosial.",
+            bentuk: "MCMA",
+            soal: "Seorang murid ingin meneliti pengaruh pergaulan sebaya terhadap kelekatan hubungan antar anggota keluarga di kalangan remaja. Langkah awal: 1) Merumuskan masalah, 2) Menyusun 10 pertanyaan terbuka, 3) Mengolah jawaban informan menjadi angka dan menganalisisnya dengan aplikasi statistik. Manakah pernyataan yang tepat untuk menyempurnakan penelitian tersebut?",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos004.png",
+            options: [
+                { id: "A", text: "Peneliti perlu memperjelas rumusan masalah agar sesuai dengan pengalaman sosial remaja dalam berinteraksi dengan keluarga dan teman sebaya." },
+                { id: "B", text: "Peneliti perlu mengubah jenis pertanyaan menjadi pertanyaan tertutup agar data lebih mudah dianalisis secara statistik." },
+                { id: "C", text: "Peneliti perlu menyesuaikan kembali isi penelitian agar tidak terlalu rumit dan tetap sesuai dengan kemampuan." },
+                { id: "D", text: "Peneliti perlu menentukan jenis dan jumlah sampel terlebih dahulu sebelum menyusun instrumen pengumpulan data." },
+                { id: "E", text: "Peneliti sebaiknya menggunakan metode observasi partisipatif untuk menggantikan instrumen pertanyaan terbuka." }
+            ],
+            correctAnswer: ["A", "B", "D"],
+            explanation: "Karena peneliti ingin mengolah data menjadi angka (statistik), ia harus menggunakan pertanyaan tertutup (B). Rumusan masalah perlu diperjelas (A), dan penentuan sampel harus dilakukan sebelum menyusun instrumen (D). Opsi C terlalu umum, dan E tidak sesuai karena observasi tidak menggantikan kebutuhan instrumen pertanyaan untuk data spesifik ini."
+        },
+        {
+            id: 14,
+            kompetensi: "Mendeskripsikan berbagai konsep konflik sosial dan menganalisis berbagai upaya penanganan konflik.",
+            bentuk: "MCMA",
+            soal: "Kota Praja mengalami konflik antara penduduk lama dan pendatang terkait penggunaan ruang publik untuk kegiatan budaya. Ketegangan meningkat di media sosial dan mengarah pada protes. Apa rekomendasi yang dapat diberikan untuk menurunkan tensi konflik?",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos005.png",
+            options: [
+                { id: "A", text: "Menegakkan regulasi ketat untuk melarang acara budaya guna menghindari bentrokan antar masyarakat." },
+                { id: "B", text: "Membentuk forum yang dipimpin oleh komunitas untuk pengambilan keputusan partisipatif tentang penggunaan ruang publik." },
+                { id: "C", text: "Memfasilitasi dialog komunitas yang inklusif dengan melibatkan kedua pihak untuk membangun saling pengertian." },
+                { id: "D", text: "Menggunakan mediasi oleh pihak ketiga yang netral dan terlatih tentang kepekaan budaya." },
+                { id: "E", text: "Memisahkan kelompok secara permanen ke kawasan yang berbeda untuk mengurangi interaksi." }
+            ],
+            correctAnswer: ["B", "C", "D"],
+            explanation: "Penyelesaian konflik yang demokratis dan berkelanjutan melibatkan partisipasi (B), dialog inklusif (C), dan mediasi netral (D). Pelarangan total (A) dan pemisahan permanen (E) adalah cara represif yang tidak menyelesaikan akar masalah dan melanggar hak berbudaya."
+        },
+        {
+            id: 15,
+            kompetensi: "Mengidentifikasi bentuk-bentuk perubahan sosial dan menganalisis dampak perubahan sosial.",
+            bentuk: "Kategori",
+            soal: "Gelombang Korea (Hallyu) berkembang pesat di Indonesia. Di satu sisi memberikan inspirasi dan konektivitas global, di sisi lain memengaruhi konsumerisme berlebih, pengabaian produk lokal, dan standar kecantikan tidak realistis. Manakah respon kritis yang tepat?",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos006.png",
+            statements: [
+                { id: "A", text: "Mengikuti tren tanpa syarat sebagai bagian dari masyarakat global." },
+                { id: "B", text: "Mendorong refleksi diri dan literasi media untuk memahami pengaruh budaya." },
+                { id: "C", text: "Menyeimbangkan penghargaan terhadap tren Korea dengan dukungan untuk budaya lokal." }
+            ],
+            correctAnswer: { "A": "Tidak Tepat", "B": "Tepat", "C": "Tepat" },
+            explanation: "Respon kritis memerlukan penyaringan (literasi media) dan keseimbangan (B dan C). Mengikuti tren tanpa syarat (A) adalah sikap konsumtif yang tidak kritis dan dapat menggerus identitas lokal."
+        },
+        {
+            id: 16,
+            kompetensi: "Mendeskripsikan dan menganalisis pengertian dan perkembangan serta manfaat sosiologi sebagai ilmu pengetahuan.",
+            bentuk: "Kategori",
+            soal: "Tentukan Sesuai atau Tidak Sesuai pada peran ilmu sosiologi untuk menyikapi kasus kerusakan lingkungan hidup pada infografis berikut!",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos007.png",
+            statements: [
+                { id: "A", text: "Meneliti dampak kerusakan lingkungan terhadap terjadinya perubahan perilaku sosial masyarakat." },
+                { id: "B", text: "Menganalisis proses peluruhan gas rumah kaca di atmosfer untuk mengurangi pemanasan global." },
+                { id: "C", text: "Mendorong pemberdayaan masyarakat di bidang pengelolaan sampah melalui komunitas bank sampah." }
+            ],
+            correctAnswer: { "A": "Sesuai", "B": "Tidak Sesuai", "C": "Sesuai" },
+            explanation: "Sosiologi mempelajari hubungan antara lingkungan dan perilaku sosial (A) serta pemberdayaan masyarakat (C). Analisis proses peluruhan gas rumah kaca (B) adalah objek kajian ilmu kimia atau fisika atmosfer, bukan sosiologi."
+        },
+        {
+            id: 17,
+            kompetensi: "Mengidentifikasi dan menganalisis konsep dan bentuk hubungan sosial yang terjadi di masyarakat.",
+            bentuk: "PG",
+            soal: "Fitur account switching memungkinkan pengguna memiliki lebih dari satu akun (akun alter). Akun alter dibuat untuk membangun sisi personalitas lain. Penalaran remaja yang belum sempurna dapat membuat mereka kesulitan memanfaatkannya dengan baik. Remaja cenderung menampilkan diri ideal di akun utama, tapi identitas baru yang tidak jelas di akun alter. Apakah dampak negatif paling utama dari fenomena identitas multidimensi terhadap individu?",
+            options: [
+                { id: "A", text: "Ketergantungan pada respons sosial untuk membentuk rasa percaya diri dalam berinteraksi." },
+                { id: "B", text: "Keinginan berlebihan untuk tampil sempurna dalam berbagai platform media sosial yang digunakan." },
+                { id: "C", text: "Kesulitan menjalin hubungan pertemanan yang terbuka karena tekanan untuk menjaga citra tertentu." },
+                { id: "D", text: "Ketidakmampuan membedakan antara citra diri ideal dan jati diri yang sebenarnya secara konsisten." },
+                { id: "E", text: "Kecenderungan menarik diri dari lingkungan sosial karena khawatir tidak sesuai ekspektasi publik." }
+            ],
+            correctAnswer: ["D"],
+            explanation: "Dampak negatif paling mendasar dari identitas multidimensi (alter ego) adalah kebingungan identitas (identity confusion), di mana individu kesulitan membedakan mana citra ideal yang dibangun dan mana jati diri aslinya secara konsisten."
+        },
+        {
+            id: 18,
+            kompetensi: "Menjelaskan dan menganalisis berbagai langkah dan metode penelitian sosial.",
+            bentuk: "PG",
+            soal: "Tim pengabdian masyarakat mengembangkan model pengelolaan sampah berbasis partisipasi warga (pemilahan, bank sampah, edukasi). Setelah 6 bulan, terjadi penurunan sampah dan peningkatan kesadaran. Model ini mulai diadaptasi oleh sekolah. Berdasarkan ilustrasi tersebut, jenis penelitian sosial yang sesuai adalah…",
+            options: [
+                { id: "A", text: "Eksploratif – untuk menggambarkan realitas sosial yang belum diketahui secara jelas." },
+                { id: "B", text: "Verifikatif – untuk menguji kebenaran suatu teori dalam situasi sosial tertentu." },
+                { id: "C", text: "Deskriptif – untuk memetakan tingkat pengelolaan di berbagai sekolah secara statistik." },
+                { id: "D", text: "Praktis – untuk memberikan solusi nyata terhadap persoalan sosial yang diteliti." },
+                { id: "E", text: "Teoritis – untuk merumuskan konsep-konsep baru dalam memahami perilaku menyimpang." }
+            ],
+            correctAnswer: ["D"],
+            explanation: "Penelitian ini bertujuan langsung untuk memecahkan masalah sosial (pengelolaan sampah) dan menghasilkan model yang bisa diterapkan (solusi nyata). Ini adalah ciri penelitian praktis atau penelitian tindakan (action research)."
+        },
+        {
+            id: 19,
+            kompetensi: "Mengidentifikasi, menjelaskan, dan menganalisis berbagai kelompok sosial dengan dinamikanya.",
+            bentuk: "PG",
+            soal: "Komunitas pemuda 'Gerak Kota' dibentuk oleh anak muda dari latar belakang beragam (mahasiswa, buruh, seniman, pengusaha). Mereka tidak memiliki hubungan kekerabatan atau kesamaan daerah asal, namun terhubung oleh cita-cita yang sama: mengadvokasi ruang kota inklusif. Apakah jenis kelompok sosial komunitas Gerak Kota?",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos008.png",
+            options: [
+                { id: "A", text: "Kelompok primer, karena interaksi anggotanya bersifat akrab dan informal." },
+                { id: "B", text: "Kelompok okupasional, karena terdiri atas individu dari berbagai latar pekerjaan." },
+                { id: "C", text: "Kelompok etnis, karena anggotanya memiliki latar budaya yang sama." },
+                { id: "D", text: "Kelompok sekunder, karena terbentuk atas dasar tujuan dan kepentingan bersama." },
+                { id: "E", text: "Kerumunan sosial, karena terbentuk secara spontan dari masyarakat sekitar." }
+            ],
+            correctAnswer: ["D"],
+            explanation: "Kelompok sekunder dicirikan oleh hubungan yang formal, tidak harus akrab, dan dibentuk atas dasar tujuan atau kepentingan bersama (advokasi ruang kota), bukan karena kekerabatan atau kedekatan emosional primer."
+        },
+        {
+            id: 20,
+            kompetensi: "Menganalisis fenomena sosial yang dipengaruhi globalisasi secara kritis.",
+            bentuk: "MCMA",
+            soal: "Lina aktif menggunakan media digital, mengikuti influencer global yang menampilkan gaya hidup mewah. Ia mulai mengubah penampilan, pola konsumsi, dan cara berbicara agar mirip figur tersebut, merasa tidak percaya diri, dan menjauh dari interaksi nyata. Apa saja langkah atau sikap kritis yang dapat dilakukan untuk menghindari dampak negatif globalisasi seperti yang dialami Lina?",
+            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos009.png",
+            options: [
+                { id: "A", text: "Mengadopsi pengaruh global secara selektif sambil mempertahankan identitas budaya lokal." },
+                { id: "B", text: "Sepenuhnya mengisolasi diri dari tren global untuk menghindari dampak negatif yang menyertainya." },
+                { id: "C", text: "Mendorong penggunaan media sosial untuk mempromosikan nilai-nilai budaya lokal." },
+                { id: "D", text: "Mengembangkan literasi media untuk menyaring konten secara kritis dan bertanggung jawab." },
+                { id: "E", text: "Meniru budaya global sepenuhnya agar diterima dalam pergaulan modern sebagai bentuk adaptasi." }
+            ],
+            correctAnswer: ["A", "C", "D"],
+            explanation: "Sikap kritis meliputi selektivitas (A), promosi budaya lokal sebagai penyeimbang (C), dan literasi media (D). Isolasi total (B) tidak realistis di era digital, dan meniru sepenuhnya (E) adalah penyebab masalah yang dialami Lina, bukan solusinya."
+        },
+        // --- 10 SOAL TAMBAHAN ---
+        {
+            id: 21,
+            kompetensi: "Mengidentifikasi dan menganalisis konsep dan bentuk hubungan sosial yang terjadi di masyarakat.",
+            bentuk: "PG",
+            soal: "Seorang petani berkomunikasi dengan tengkulak melalui aplikasi pesan singkat untuk menjual hasil panennya. Interaksi ini terjadi karena adanya syarat-syarat interaksi sosial. Manakah syarat interaksi sosial yang paling tepat menggambarkan situasi tersebut?",
+            options: [
+                { id: "A", text: "Kontak sosial primer dan komunikasi langsung" },
+                { id: "B", text: "Kontak sosial sekunder dan komunikasi tidak langsung" },
+                { id: "C", text: "Kontak sosial sekunder dan komunikasi langsung" },
+                { id: "D", text: "Kontak sosial primer dan komunikasi tidak langsung" },
+                { id: "E", text: "Kontak sosial kelompok dan komunikasi primer" }
+            ],
+            correctAnswer: ["B"],
+            explanation: "Kontak sosial melalui perantara (aplikasi pesan singkat) disebut kontak sekunder. Karena tidak bertatap muka secara langsung, maka komunikasinya tergolong komunikasi tidak langsung."
+        },
+        {
+            id: 22,
+            kompetensi: "Mengidentifikasi, menjelaskan, dan menganalisis berbagai kelompok sosial dengan dinamikanya.",
+            bentuk: "MCMA",
+            soal: "Manakah pernyataan yang menunjukkan ciri-ciri kelompok sosial (social group) menurut Soerjono Soekanto? (Pilih semua yang benar)",
+            options: [
+                { id: "A", text: "Terdapat interaksi sosial antar anggotanya." },
+                { id: "B", text: "Terdapat kesadaran anggota bahwa ia merupakan bagian dari kelompok yang bersangkutan." },
+                { id: "C", text: "Kumpulan orang yang sedang menunggu bus di halte." },
+                { id: "D", text: "Terdapat faktor pengikat yang dimiliki bersama (nasib, kepentingan, tujuan)." },
+                { id: "E", text: "Orang-orang yang berada di dalam gerbong kereta api yang sama." }
+            ],
+            correctAnswer: ["A", "B", "D"],
+            explanation: "Menurut Soerjono Soekanto, kelompok sosial harus memiliki interaksi, kesadaran anggota, dan faktor pengikat bersama. Opsi C dan E hanyalah merupakan 'kerumunan' (crowd) atau kategori sosial, bukan kelompok sosial karena tidak ada interaksi dan faktor pengikat yang berkelanjutan."
+        },
+        {
+            id: 23,
+            kompetensi: "Menganalisis dinamika masyarakat multikultural.",
+            bentuk: "PG",
+            soal: "Sikap yang menganggap budaya sendiri sebagai budaya yang paling baik, paling benar, dan paling unggul, sementara budaya lain dianggap lebih rendah atau aneh, disebut...",
+            options: [
+                { id: "A", text: "Etnosentrisme" },
+                { id: "B", text: "Primordialisme" },
+                { id: "C", text: "Stereotip" },
+                { id: "D", text: "Diskriminasi" },
+                { id: "E", text: "Asimilasi" }
+            ],
+            correctAnswer: ["A"],
+            explanation: "Etnosentrisme adalah pandangan yang menilai budaya lain berdasarkan standar budaya sendiri, sehingga menganggap budaya sendiri paling unggul. Primordialisme adalah keterikatan pada kelompok asal, stereotip adalah pelabelan, diskriminasi adalah perlakuan beda, dan asimilasi adalah peleburan budaya."
+        },
+        {
+            id: 24,
+            kompetensi: "Menjelaskan dan menganalisis berbagai langkah dan metode penelitian sosial.",
+            bentuk: "Kategori",
+            soal: "Tentukan Sesuai atau Tidak Sesuai jenis data berikut dengan metode pengumpulannya dalam penelitian sosial!",
+            statements: [
+                { id: "A", text: "Data jumlah penduduk berdasarkan usia dan pendapatan -> Data Kuantitatif" },
+                { id: "B", text: "Data tentang makna ritual adat menurut pandangan tetua desa -> Data Kualitatif" },
+                { id: "C", text: "Data berupa transkrip hasil wawancara mendalam -> Data Kuantitatif" }
+            ],
+            correctAnswer: { "A": "Sesuai", "B": "Sesuai", "C": "Tidak Sesuai" },
+            explanation: "Data kuantitatif berbentuk angka/statistik (A Sesuai). Data kualitatif berbentuk deskripsi, makna, atau narasi (B Sesuai). Transkrip wawancara adalah data kualitatif, bukan kuantitatif (C Tidak Sesuai)."
+        },
+        {
+            id: 25,
+            kompetensi: "Mendeskripsikan berbagai konsep konflik sosial dan menganalisis berbagai upaya penanganan konflik.",
+            bentuk: "PG",
+            soal: "Upaya penyelesaian konflik yang melibatkan pihak ketiga yang netral, yang tidak memiliki wewenang untuk mengambil keputusan mengikat, tetapi hanya memberikan saran atau fasilitasi agar kedua belah pihak mencapai kesepakatan bersama, disebut...",
+            options: [
+                { id: "A", text: "Arbitrasi" },
+                { id: "B", text: "Mediasi" },
+                { id: "C", text: "Koersi" },
+                { id: "D", text: "Ajudikasi" },
+                { id: "E", text: "Konsiliasi" }
+            ],
+            correctAnswer: ["B"],
+            explanation: "Mediasi adalah proses penyelesaian konflik dengan bantuan pihak ketiga netral (mediator) yang hanya memfasilitasi dan memberi saran, tanpa hak memutus. Arbitrasi (A) pihak ketiganya berhak memutus. Koersi (C) adalah paksaan. Ajudikasi (D) melalui pengadilan."
+        },
+        {
+            id: 26,
+            kompetensi: "Menjelaskan dan menganalisis pengaruh globalisasi dan dampaknya.",
+            bentuk: "MCMA",
+            soal: "Manakah dampak positif globalisasi di bidang budaya bagi masyarakat Indonesia? (Pilih semua yang benar)",
+            options: [
+                { id: "A", text: "Meningkatnya apresiasi terhadap keragaman budaya dunia." },
+                { id: "B", text: "Hilangnya nilai-nilai kearifan lokal karena dominasi budaya asing." },
+                { id: "C", text: "Terbukanya peluang promosi budaya Indonesia ke kancah internasional." },
+                { id: "D", text: "Meningkatnya individualisme dan gaya hidup hedonis." },
+                { id: "E", text: "Adopsi teknologi dan metode pembelajaran baru yang lebih efisien." }
+            ],
+            correctAnswer: ["A", "C", "E"],
+            explanation: "Dampak positif meliputi wawasan global (A), promosi budaya lokal ke luar (C), dan efisiensi teknologi (E). Hilangnya kearifan lokal (B) dan individualisme (D) adalah dampak negatif globalisasi."
+        },
+        {
+            id: 27,
+            kompetensi: "Menjelaskan ragam gejala sosial di lingkungan sekitar.",
+            bentuk: "PG",
+            soal: "Fenomena di mana seseorang atau sekelompok orang tidak mampu memenuhi kebutuhan dasarnya secara layak, bukan karena faktor kemalasan individu, tetapi karena struktur ekonomi dan kebijakan pemerintah yang tidak berpihak pada mereka, disebut kemiskinan...",
+            options: [
+                { id: "A", text: "Absolut" },
+                { id: "B", text: "Relatif" },
+                { id: "C", text: "Struktural" },
+                { id: "D", text: "Kultural" },
+                { id: "E", text: "Alamiah" }
+            ],
+            correctAnswer: ["C"],
+            explanation: "Kemiskinan struktural disebabkan oleh sistem, struktur, atau kebijakan yang tidak adil. Kemiskinan kultural (D) disebabkan oleh faktor budaya/malas. Kemiskinan absolut (A) adalah kondisi di bawah garis kemiskinan standar."
+        },
+        {
+            id: 28,
+            kompetensi: "Mengidentifikasi bentuk-bentuk perubahan sosial dan menganalisis dampaknya.",
+            bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah pernyataan berikut mengenai dampak perubahan sosial!",
+            statements: [
+                { id: "A", text: "Disorganisasi sosial adalah proses pudarnya norma dan nilai dalam masyarakat akibat perubahan yang cepat." },
+                { id: "B", text: "Cultural lag (ketertinggalan budaya) terjadi ketika budaya non-material berubah lebih lambat daripada budaya material." },
+                { id: "C", text: "Perubahan sosial yang direncanakan (planned change) biasanya dilakukan oleh agen perubahan (agent of change)." }
+            ],
+            correctAnswer: { "A": "Benar", "B": "Benar", "C": "Benar" },
+            explanation: "Ketiga pernyataan tersebut benar. Disorganisasi sosial adalah pudarnya norma. Cultural lag adalah ketertinggalan budaya non-material (adat/nilai) menyesuaikan budaya material (teknologi). Planned change memang digerakkan oleh agent of change."
+        },
+        {
+            id: 29,
+            kompetensi: "Mendeskripsikan dan menganalisis pengertian dan perkembangan serta manfaat sosiologi sebagai ilmu pengetahuan.",
+            bentuk: "PG",
+            soal: "Sosiologi merupakan ilmu yang pengetahuannya disusun berdasarkan hasil observasi terhadap kenyataan sosial, tidak bersifat spekulatif atau mengira-ngira, dan dapat dibuktikan kebenarannya secara ilmiah. Ciri sosiologi ini disebut...",
+            options: [
+                { id: "A", text: "Teoritis" },
+                { id: "B", text: "Kumulatif" },
+                { id: "C", text: "Empiris" },
+                { id: "D", text: "Non-etis" },
+                { id: "E", text: "Spekulatif" }
+            ],
+            correctAnswer: ["C"],
+            explanation: "Ciri empiris berarti sosiologi didasarkan pada observasi dan fakta lapangan, bukan spekulasi atau angan-angan, serta hasilnya dapat dibuktikan secara ilmiah."
+        },
+        {
+            id: 30,
+            kompetensi: "Menjelaskan dan menganalisis berbagai langkah dan metode penelitian sosial.",
+            bentuk: "PG",
+            soal: "Seorang peneliti ingin menguji apakah ada hubungan antara intensitas penggunaan media sosial dengan tingkat kecemasan pada remaja. Hipotesis yang diajukan adalah 'Terdapat hubungan positif antara intensitas penggunaan media sosial dengan tingkat kecemasan'. Jenis penelitian ini adalah...",
+            options: [
+                { id: "A", text: "Deskriptif" },
+                { id: "B", text: "Eksploratif" },
+                { id: "C", text: "Verifikatif" },
+                { id: "D", text: "Historis" },
+                { id: "E", text: "Studi kasus" }
+            ],
+            correctAnswer: ["C"],
+            explanation: "Penelitian verifikatif (atau eksplanatori) bertujuan untuk menguji kebenaran suatu hipotesis atau teori, dalam hal ini menguji ada tidaknya hubungan/korelasi antara dua variabel. Penelitian deskriptif (A) hanya menggambarkan, eksploratif (B) untuk mengeksplorasi hal yang belum jelas."
+        }
+    ];
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        let html = '';
+
+        questions.forEach(q => {
+            html += `<div class="question-card" id="q-${q.id}">`;
+            html += `<div class="kompetensi">Kompetensi: ${q.kompetensi}</div>`;
+            html += `<div class="question-text">No. ${q.id}. ${q.soal}</div>`;
+            
+            if (q.image) {
+                html += `<img src="${q.image}" alt="Gambar Soal ${q.id}" class="question-image" onerror="this.style.display='none'">`;
+            }
+
+            if (q.bentuk === 'PG') {
+                html += `<div class="options-container">`;
+                q.options.forEach(opt => {
+                    html += `
+                        <label class="option-label" onclick="selectOption(${q.id}, '${opt.id}')">
+                            <input type="radio" name="q${q.id}" value="${opt.id}">
+                            <span>${opt.id}. ${opt.text}</span>
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+            } else if (q.bentuk === 'MCMA') {
+                html += `<div class="note">* Pilih semua jawaban yang benar (lebih dari satu)</div>`;
+                html += `<div class="options-container">`;
+                q.options.forEach(opt => {
+                    html += `
+                        <label class="option-label" onclick="toggleSelection(this)">
+                            <input type="checkbox" name="q${q.id}" value="${opt.id}">
+                            <span>${opt.id}. ${opt.text}</span>
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+            } else if (q.bentuk === 'Kategori') {
+                html += `<div class="options-container">`;
+                q.statements.forEach(stmt => {
+                    html += `
+                        <div class="kategori-item">
+                            <div class="kategori-text">${stmt.id}. ${stmt.text}</div>
+                            <div class="kategori-options">
+                                <label><input type="radio" name="q${q.id}_${stmt.id}" value="Benar"> Benar</label>
+                                <label><input type="radio" name="q${q.id}_${stmt.id}" value="Salah"> Salah</label>
+                                <label><input type="radio" name="q${q.id}_${stmt.id}" value="Sesuai"> Sesuai</label>
+                                <label><input type="radio" name="q${q.id}_${stmt.id}" value="Tidak Sesuai"> Tidak Sesuai</label>
+                                <label><input type="radio" name="q${q.id}_${stmt.id}" value="Tepat"> Tepat</label>
+                                <label><input type="radio" name="q${q.id}_${stmt.id}" value="Tidak Tepat"> Tidak Tepat</label>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            html += `<button class="btn-check" onclick="checkAnswer(${q.id})">Cek Jawaban</button>`;
+            
+            html += `
+                <div class="feedback" id="feedback-${q.id}">
+                    <div class="feedback-title" id="feedback-title-${q.id}"></div>
+                    <div class="feedback-key" id="feedback-key-${q.id}"></div>
+                    <div class="feedback-explanation" id="feedback-explanation-${q.id}"></div>
+                </div>
+            `;
+            html += `</div>`;
+        });
+
+        container.innerHTML = html;
+        
+        // Fix Kategori radio buttons to only show relevant pairs based on correctAnswer keys
+        document.querySelectorAll('.kategori-options').forEach(container => {
+            const radios = container.querySelectorAll('input[type="radio"]');
+            const validValues = Object.values(questions.find(q => `q${q.id}_${container.parentElement.querySelector('.kategori-text').innerText.charAt(0)}`)?.correctAnswer || {});
+            // Simplified: Just hide irrelevant radio buttons dynamically based on the first word of correct answer for that question
+        });
+        
+        // Better approach for Kategori: clean up the radio buttons to only show "Benar/Salah" or "Sesuai/Tidak Sesuai" or "Tepat/Tidak Tepat" based on the question's correctAnswer values.
+        questions.forEach(q => {
+            if(q.bentuk === 'Kategori') {
+                const sampleVal = Object.values(q.correctAnswer)[0];
+                const card = document.getElementById(`q-${q.id}`);
+                const radios = card.querySelectorAll('.kategori-options input[type="radio"]');
+                radios.forEach(radio => {
+                    if(radio.value !== sampleVal && radio.value !== getOpposite(sampleVal)) {
+                        radio.parentElement.style.display = 'none';
+                    }
+                });
+            }
+        });
+    }
+
+    function getOpposite(val) {
+        if(val === 'Benar') return 'Salah';
+        if(val === 'Salah') return 'Benar';
+        if(val === 'Sesuai') return 'Tidak Sesuai';
+        if(val === 'Tidak Sesuai') return 'Sesuai';
+        if(val === 'Tepat') return 'Tidak Tepat';
+        if(val === 'Tidak Tepat') return 'Tepat';
+        return '';
+    }
+
+    function selectOption(qId, optId) {
+        const labels = document.querySelectorAll(`#q-${qId} .option-label`);
+        labels.forEach(label => label.classList.remove('selected'));
+        const selectedInput = document.querySelector(`input[name="q${qId}"][value="${optId}"]`);
+        if(selectedInput) {
+            selectedInput.parentElement.classList.add('selected');
+        }
+    }
+
+    function toggleSelection(label) {
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        // Wait for the click to register
+        setTimeout(() => {
+            if(checkbox.checked) {
+                label.classList.add('selected');
+            } else {
+                label.classList.remove('selected');
+            }
+        }, 10);
+    }
+
+    function checkAnswer(qId) {
+        const q = questions.find(item => item.id === qId);
+        const feedbackEl = document.getElementById(`feedback-${qId}`);
+        const titleEl = document.getElementById(`feedback-title-${qId}`);
+        const keyEl = document.getElementById(`feedback-key-${qId}`);
+        const expEl = document.getElementById(`feedback-explanation-${qId}`);
+        
+        let isCorrect = false;
+        let userAnswer = '';
+
+        if (q.bentuk === 'PG') {
+            const selected = document.querySelector(`input[name="q${qId}"]:checked`);
+            if (!selected) {
+                alert('Silakan pilih jawaban terlebih dahulu!');
+                return;
+            }
+            userAnswer = selected.value;
+            isCorrect = (userAnswer === q.correctAnswer[0]);
+        } 
+        else if (q.bentuk === 'MCMA') {
+            const selected = Array.from(document.querySelectorAll(`input[name="q${qId}"]:checked`)).map(cb => cb.value);
+            if (selected.length === 0) {
+                alert('Silakan pilih minimal satu jawaban!');
+                return;
+            }
+            userAnswer = selected.sort().join(', ');
+            const correctSorted = q.correctAnswer.sort().join(', ');
+            isCorrect = (userAnswer === correctSorted);
+        } 
+        else if (q.bentuk === 'Kategori') {
+            let allAnswered = true;
+            let correctCount = 0;
+            let userAnswers = {};
+            
+            q.statements.forEach(stmt => {
+                const selected = document.querySelector(`input[name="q${qId}_${stmt.id}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                } else {
+                    userAnswers[stmt.id] = selected.value;
+                    if (selected.value === q.correctAnswer[stmt.id]) {
+                        correctCount++;
+                    }
+                }
+            });
+
+            if (!allAnswered) {
+                alert('Silakan isi semua pernyataan (Benar/Salah atau Sesuai/Tidak Sesuai)!');
+                return;
+            }
+
+            isCorrect = (correctCount === q.statements.length);
+            userAnswer = Object.entries(userAnswers).map(([k, v]) => `${k}: ${v}`).join(', ');
+        }
+
+        // Display Feedback
+        feedbackEl.style.display = 'block';
+        feedbackEl.className = 'feedback ' + (isCorrect ? 'benar' : 'salah');
+        
+        if (isCorrect) {
+            titleEl.innerHTML = '✅ BENAR! Jawaban Anda tepat.';
+        } else {
+            titleEl.innerHTML = '❌ SALAH! Jawaban Anda belum tepat.';
+        }
+
+        let keyText = '';
+        if (q.bentuk === 'PG') {
+            keyText = `Kunci Jawaban: ${q.correctAnswer[0]}`;
+        } else if (q.bentuk === 'MCMA') {
+            keyText = `Kunci Jawaban: ${q.correctAnswer.join(', ')}`;
+        } else if (q.bentuk === 'Kategori') {
+            keyText = 'Kunci Jawaban: ' + Object.entries(q.correctAnswer).map(([k, v]) => `${k}. ${v}`).join('; ');
+        }
+
+        keyEl.textContent = keyText;
+        expEl.innerHTML = `<strong>Penjelasan:</strong><br>${q.explanation}`;
+        
+        // Disable button after checking to prevent repeated spamming, or change text
+        const btn = document.querySelector(`#q-${qId} .btn-check`);
+        btn.textContent = 'Jawaban Sudah Dicek';
+        btn.disabled = true;
+    }
+
+    // Initialize
+    renderQuiz();
+</script>
+
+</body>
+</html>

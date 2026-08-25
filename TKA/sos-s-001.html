@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Kuis TKA Sosiologi SMA — 30 Soal Latihan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF1EC;
+    --paper-line:#D9DED6;
+    --ink:#1B2A41;
+    --ink-soft:#4A5A6E;
+    --accent:#1E7F76;
+    --accent-dark:#155E58;
+    --gold:#C9A227;
+    --correct:#2F8F5B;
+    --correct-bg:#E7F5EC;
+    --incorrect:#C1443B;
+    --incorrect-bg:#FBEAE8;
+    --card:#FFFFFF;
+    --radius:18px;
+    --shadow: 0 1px 2px rgba(27,42,65,.04), 0 12px 28px -12px rgba(27,42,65,.18);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(27,42,65,.06) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Manrope',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding: clamp(14px, 4vw, 40px) 14px 60px;
+  }
+  .wrap{max-width:680px;margin:0 auto;}
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:22px;
+  }
+  .netmark{flex:0 0 auto;width:52px;height:52px;}
+  header h1{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:clamp(1.35rem, 4.4vw, 1.85rem);
+    line-height:1.12;
+    margin:0 0 4px;
+    letter-spacing:-.01em;
+  }
+  header p{
+    margin:0;
+    font-size:.85rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  header p .dot{color:var(--gold);}
+
+  /* ---------- Progress ---------- */
+  .progress-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+  }
+  .progress-track{
+    flex:1;
+    height:8px;
+    background:var(--paper-line);
+    border-radius:99px;
+    overflow:hidden;
+    position:relative;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--accent), var(--accent-dark));
+    border-radius:99px;
+    transition:width .45s cubic-bezier(.65,0,.35,1);
+  }
+  .progress-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.78rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .score-chip{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.78rem;
+    font-weight:600;
+    background:var(--ink);
+    color:var(--paper);
+    padding:5px 11px;
+    border-radius:99px;
+    white-space:nowrap;
+  }
+
+  /* ---------- Card (lembar soal) ---------- */
+  .sheet{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    position:relative;
+    padding:26px 24px 24px;
+    animation:riseIn .38s cubic-bezier(.2,.8,.2,1);
+  }
+  .sheet::before{
+    content:"";
+    position:absolute;
+    top:-6px;left:18px;right:18px;
+    height:6px;
+    background:repeating-linear-gradient(90deg, var(--paper-line) 0 10px, transparent 10px 18px);
+    border-radius:6px 6px 0 0;
+  }
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .tag-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.7rem;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--accent-dark);
+    background:#E4F1EF;
+    padding:5px 10px;
+    border-radius:7px;
+  }
+  .qnum{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+
+  .stimulus{
+    font-size:.98rem;
+    line-height:1.62;
+    color:var(--ink);
+    background:var(--paper);
+    border-left:3px solid var(--accent);
+    padding:13px 15px;
+    border-radius:0 10px 10px 0;
+    margin-bottom:16px;
+  }
+  .question{
+    font-size:1.06rem;
+    line-height:1.5;
+    font-weight:700;
+    margin:0 0 18px;
+  }
+
+  /* ---------- Options (bubble sheet) ---------- */
+  .options{display:flex; flex-direction:column; gap:10px;}
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    width:100%;
+    text-align:left;
+    background:var(--card);
+    border:1.5px solid var(--paper-line);
+    border-radius:12px;
+    padding:12px 14px;
+    font-family:'Manrope',sans-serif;
+    font-size:.94rem;
+    line-height:1.45;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .18s ease, background .18s ease, transform .12s ease;
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent); background:#F5FAF9;}
+  .opt:active:not(:disabled){transform:scale(.995);}
+  .opt:focus-visible{outline:2.5px solid var(--gold); outline-offset:2px;}
+  .opt:disabled{cursor:default;}
+  .bubble{
+    flex:0 0 auto;
+    width:26px;height:26px;
+    border-radius:50%;
+    border:1.8px solid var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    transition:all .18s ease;
+    margin-top:1px;
+  }
+  .opt-text{flex:1;padding-top:2px;}
+
+  .opt.is-correct{background:var(--correct-bg); border-color:var(--correct);}
+  .opt.is-correct .bubble{background:var(--correct); border-color:var(--correct); color:#fff;}
+  .opt.is-incorrect{background:var(--incorrect-bg); border-color:var(--incorrect);}
+  .opt.is-incorrect .bubble{background:var(--incorrect); border-color:var(--incorrect); color:#fff;}
+  .opt.is-muted{opacity:.55;}
+
+  /* ---------- Feedback ---------- */
+  .feedback{
+    margin-top:18px;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .4s ease;
+  }
+  .feedback.show{max-height:900px;}
+  .verdict{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:1.18rem;
+    padding:12px 16px;
+    border-radius:12px;
+    margin-bottom:2px;
+    animation:pop .32s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes pop{
+    0%{transform:scale(.9); opacity:0;}
+    100%{transform:scale(1); opacity:1;}
+  }
+  .verdict.benar{background:var(--correct-bg); color:var(--correct);}
+  .verdict.salah{background:var(--incorrect-bg); color:var(--incorrect);}
+  .verdict .icon{
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem; color:#fff; flex:0 0 auto;
+  }
+  .verdict.benar .icon{background:var(--correct);}
+  .verdict.salah .icon{background:var(--incorrect);}
+
+  .explain{
+    margin-top:12px;
+    background:var(--paper);
+    border-radius:12px;
+    padding:15px 16px;
+    font-size:.92rem;
+    line-height:1.6;
+  }
+  .explain .kunci{
+    font-weight:700;
+    color:var(--accent-dark);
+    margin-bottom:6px;
+    display:block;
+  }
+
+  /* ---------- Nav button ---------- */
+  .next-row{margin-top:20px; display:flex; justify-content:flex-end;}
+  .btn{
+    font-family:'Manrope',sans-serif;
+    font-weight:700;
+    font-size:.92rem;
+    border:none;
+    border-radius:99px;
+    padding:12px 22px;
+    cursor:pointer;
+    background:var(--ink);
+    color:var(--paper);
+    transition:background .18s ease, transform .12s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn:hover{background:var(--accent-dark);}
+  .btn:active{transform:scale(.97);}
+  .btn.ghost{
+    background:transparent;
+    border:1.5px solid var(--ink);
+    color:var(--ink);
+  }
+  .btn.ghost:hover{background:var(--ink); color:var(--paper);}
+
+  /* ---------- Start screen ---------- */
+  .start h2{
+    font-family:'Fraunces',serif;
+    font-size:1.3rem;
+    margin:0 0 10px;
+  }
+  .start p{font-size:.92rem; line-height:1.6; color:var(--ink-soft); margin:0 0 14px;}
+  .rules{list-style:none; margin:0 0 20px; padding:0; display:flex; flex-direction:column; gap:9px;}
+  .rules li{
+    display:flex; gap:10px; align-items:flex-start;
+    font-size:.88rem; color:var(--ink);
+  }
+  .rules li::before{
+    content:"›";
+    color:var(--accent);
+    font-weight:800;
+    font-size:1.1rem;
+    line-height:1;
+  }
+
+  /* ---------- Result screen ---------- */
+  .result-head{text-align:center; padding:6px 0 8px;}
+  .ring{
+    width:132px;height:132px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:conic-gradient(var(--accent) calc(var(--pct)*1%), var(--paper-line) 0);
+    position:relative;
+  }
+  .ring::before{
+    content:"";
+    position:absolute; inset:9px;
+    background:var(--card);
+    border-radius:50%;
+  }
+  .ring .num{
+    position:relative;
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:1.9rem;
+    color:var(--ink);
+  }
+  .result-head h2{
+    font-family:'Fraunces',serif;
+    font-size:1.4rem;
+    margin:4px 0 6px;
+  }
+  .result-head p{color:var(--ink-soft); font-size:.9rem; margin:0 0 20px;}
+  .review-item{
+    border-top:1px solid var(--paper-line);
+    padding:13px 0;
+    font-size:.88rem;
+  }
+  .review-item:first-child{border-top:none;}
+  .review-top{display:flex; gap:8px; align-items:flex-start; margin-bottom:5px;}
+  .review-top .mark{flex:0 0 auto; font-size:1rem; margin-top:1px;}
+  .review-top .qt{font-weight:700; line-height:1.4;}
+  .review-note{margin-left:24px; color:var(--ink-soft); line-height:1.5;}
+  .review-note b{color:var(--ink);}
+  .result-actions{display:flex; gap:10px; justify-content:center; margin-top:22px; flex-wrap:wrap;}
+
+  footer{
+    text-align:center;
+    margin-top:26px;
+    font-size:.76rem;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:480px){
+    .sheet{padding:20px 16px 18px;}
+    .verdict{font-size:1.02rem;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <svg class="netmark" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="14" cy="16" r="4.5" fill="#1E7F76"/>
+      <circle cx="46" cy="12" r="3.5" fill="#C9A227"/>
+      <circle cx="48" cy="42" r="5" fill="#1B2A41"/>
+      <circle cx="16" cy="46" r="3.5" fill="#1E7F76"/>
+      <circle cx="30" cy="30" r="4" fill="#1B2A41"/>
+      <line x1="14" y1="16" x2="30" y2="30" stroke="#1B2A41" stroke-width="1.4" stroke-opacity=".35"/>
+      <line x1="46" y1="12" x2="30" y2="30" stroke="#1B2A41" stroke-width="1.4" stroke-opacity=".35"/>
+      <line x1="48" y1="42" x2="30" y2="30" stroke="#1B2A41" stroke-width="1.4" stroke-opacity=".35"/>
+      <line x1="16" y1="46" x2="30" y2="30" stroke="#1B2A41" stroke-width="1.4" stroke-opacity=".35"/>
+      <line x1="14" y1="16" x2="16" y2="46" stroke="#1B2A41" stroke-width="1.4" stroke-opacity=".2"/>
+    </svg>
+    <div>
+      <h1>Kuis TKA Sosiologi SMA</h1>
+      <p>30 Soal Berbasis Kasus <span class="dot">•</span> Kunci Jawaban &amp; Pembahasan Langsung</p>
+    </div>
+  </header>
+
+  <div class="progress-row" id="progressRow" style="display:none;">
+    <span class="progress-label" id="qCounter">Soal 1/30</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="score-chip" id="scoreChip">Skor 0</span>
+  </div>
+
+  <div id="app"></div>
+
+  <footer>Dibuat dari Modul Pembelajaran TKA Sosiologi SMA — belajar lewat kasus, bukan hafalan.</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+{tag:"Sosiologi sebagai Ilmu", stimulus:"Seorang peneliti turun langsung ke sebuah desa untuk mengamati secara sistematis bagaimana pola interaksi warga berubah setelah dibangunnya jalan tol yang melintasi desa tersebut. Ia mencatat setiap perubahan yang benar-benar teramati di lapangan, bukan berdasarkan dugaan.",
+q:"Ciri sosiologi sebagai ilmu yang tampak dalam kegiatan peneliti tersebut adalah…",
+options:["Empiris","Nonetis","Kumulatif","Teoritis"], correct:0,
+explain:"<span class='kunci'>Kunci: A. Empiris.</span> Ciri empiris ditandai dasar fakta dan hasil pengamatan langsung di lapangan, bukan dugaan — persis seperti kegiatan peneliti yang mengamati dan mencatat langsung. <b>Teoritis</b> keliru karena itu tahap menyusun hasil pengamatan menjadi konsep, bukan sekadar mengamati. <b>Kumulatif</b> keliru karena tidak ada penyempurnaan teori sebelumnya. <b>Nonetis</b> keliru karena soal tidak menyinggung penilaian baik-buruk."},
+
+{tag:"Sosiologi sebagai Ilmu", stimulus:"Berdasarkan data observasi terhadap remaja pengguna media sosial, seorang sosiolog menyusun sebuah konsep bahwa intensitas penggunaan media sosial berkaitan dengan pembentukan identitas digital. Konsep ini kemudian dipakai untuk menjelaskan fenomena serupa di daerah lain.",
+q:"Ciri sosiologi yang ditunjukkan oleh kegiatan menyusun konsep dari hasil pengamatan tersebut adalah…",
+options:["Empiris","Teoritis","Nonetis","Objektif"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Teoritis.</span> Teoritis berarti hasil pengamatan (fakta) disusun menjadi konsep/teori yang mampu menjelaskan hubungan antarfenomena — persis seperti yang dilakukan sosiolog tersebut. <b>Empiris</b> sudah dilalui pada tahap observasi, sedangkan pertanyaan menyoroti tahap <i>penyusunan konsepnya</i>. <b>Objektif</b> berkaitan dengan bebas dari bias pribadi, bukan penyusunan teori. <b>Nonetis</b> berkaitan dengan tidak menilai baik-buruk, tidak relevan di sini."},
+
+{tag:"Sosiologi sebagai Ilmu", stimulus:"Teori mengenai kenakalan remaja yang dikemukakan pada tahun 1990-an kini disempurnakan oleh peneliti masa kini dengan menambahkan variabel pengaruh media sosial yang pada masa itu belum ada.",
+q:"Perkembangan teori tersebut menunjukkan ciri sosiologi sebagai ilmu yang bersifat…",
+options:["Nonetis","Objektif","Kumulatif","Empiris"], correct:2,
+explain:"<span class='kunci'>Kunci: C. Kumulatif.</span> Kumulatif berarti teori berkembang, disempurnakan, dan melanjutkan teori sebelumnya. Kata kunci “disempurnakan” dan “menambahkan variabel baru” langsung mengarah pada ciri ini. Pilihan lain tidak berkaitan dengan proses penyempurnaan teori lama menjadi teori baru."},
+
+{tag:"Sosiologi sebagai Ilmu", stimulus:"Seorang sosiolog meneliti tingginya angka pernikahan usia dini di suatu daerah. Alih-alih menilai perilaku tersebut baik atau buruk, ia berfokus menganalisis faktor ekonomi, pendidikan, dan budaya yang memengaruhinya.",
+q:"Sikap ilmiah sosiolog tersebut mencerminkan ciri sosiologi yang…",
+options:["Empiris","Teoritis","Kumulatif","Nonetis"], correct:3,
+explain:"<span class='kunci'>Kunci: D. Nonetis.</span> Nonetis berarti sosiologi tidak bertugas menilai suatu fenomena baik atau buruk, melainkan menjelaskan mengapa fenomena itu terjadi — sesuai sikap sosiolog yang tidak menghakimi, tetapi menganalisis faktor penyebabnya."},
+
+{tag:"Interaksi Sosial", stimulus:"Rina dan Sari tinggal di kota berbeda. Mereka rutin bertukar kabar dan saling memberi dukungan emosional lewat panggilan video setiap minggu, meskipun tidak pernah bertemu langsung.",
+q:"Hubungan Rina dan Sari tetap dapat dikategorikan sebagai interaksi sosial karena memenuhi syarat…",
+options:["Kontak sosial langsung dan sugesti","Kontak sosial tidak langsung dan komunikasi","Imitasi dan identifikasi","Akomodasi dan asimilasi"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Kontak sosial tidak langsung dan komunikasi.</span> Dua syarat mutlak interaksi sosial adalah kontak sosial (boleh langsung atau tidak langsung melalui media) dan komunikasi (pertukaran pesan/kabar). Panggilan video adalah bentuk kontak tidak langsung yang sah, disertai komunikasi berupa bertukar kabar dan dukungan emosional."},
+
+{tag:"Proses Sosial Asosiatif", stimulus:"Warga dari dua RT yang berbeda bergotong royong membersihkan sungai bersama untuk mencegah banjir yang kerap melanda wilayah mereka.",
+q:"Proses sosial yang terjadi antarwarga tersebut tergolong proses…",
+options:["Disosiatif, karena melibatkan dua kelompok berbeda","Asosiatif, karena mengarah pada kerja sama","Akomodasi, karena meredakan pertentangan","Kontravensi, karena ada persaingan antarwilayah"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Asosiatif.</span> Proses asosiatif mengarah pada kerja sama atau integrasi. Gotong royong dua RT adalah bentuk kerja sama nyata sehingga tergolong asosiatif — bukan disosiatif karena tidak ada pertentangan, dan bukan akomodasi karena tidak ada konflik yang sedang diredakan."},
+
+{tag:"Proses Sosial Disosiatif", stimulus:"Dua kelompok pedagang di pasar tradisional saling menyebarkan desas-desus yang merugikan reputasi lawan usahanya, meskipun belum terjadi bentrok fisik atau konflik terbuka di antara mereka.",
+q:"Proses sosial disosiatif yang digambarkan dalam kasus tersebut adalah…",
+options:["Persaingan","Konflik","Kontravensi","Akomodasi"], correct:2,
+explain:"<span class='kunci'>Kunci: C. Kontravensi.</span> Kontravensi adalah proses sosial di antara persaingan dan konflik, ditandai dengan penyebaran desas-desus, provokasi, penolakan, atau intimidasi sosial tanpa kekerasan terbuka — persis seperti kasus tersebut. Ini berbeda dari persaingan murni (tanpa desas-desus) maupun konflik (yang sudah terbuka)."},
+
+{tag:"Proses Sosial Asosiatif", stimulus:"Setelah bertahun-tahun hidup berdampingan, masyarakat pendatang dan penduduk asli di suatu wilayah pesisir akhirnya melebur menjadi satu kebudayaan baru yang sulit dibedakan asal-usulnya, karena batas budaya asal semakin kabur.",
+q:"Fenomena tersebut merupakan contoh proses…",
+options:["Akulturasi","Asimilasi","Akomodasi kompromi","Kontravensi budaya"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Asimilasi.</span> Asimilasi terjadi ketika perbedaan kebudayaan semakin berkurang sehingga terbentuk kebudayaan baru dan batas kebudayaan lama menjadi kabur — tepat seperti kasus tersebut. Akulturasi berbeda karena unsur budaya asli tetap dipertahankan, tidak melebur total."},
+
+{tag:"Proses Sosial Asosiatif", stimulus:"Sebuah komunitas adat menerima teknologi pertanian modern dari luar daerah, namun tetap mempertahankan upacara adat dan sistem gotong royong khas mereka dalam mengelola lahan.",
+q:"Proses yang terjadi pada komunitas adat tersebut disebut…",
+options:["Asimilasi","Akulturasi","Asosiasi struktural","Difusi tanpa seleksi"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Akulturasi.</span> Akulturasi terjadi ketika unsur budaya asing (teknologi modern) diterima tanpa menghilangkan unsur budaya asli (upacara adat, gotong royong tetap dijalankan). Jika unsur asli sampai hilang dan melebur, itu baru disebut asimilasi."},
+
+{tag:"Kelompok Sosial", stimulus:"Keluarga besar Pak Herman selalu berkumpul setiap akhir pekan, saling berbagi cerita secara terbuka, dan hubungan di antara mereka terjalin sangat akrab sejak kecil.",
+q:"Kelompok sosial yang digambarkan tersebut tergolong kelompok…",
+options:["Sekunder, karena memiliki tujuan bersama","Primer, karena hubungan bersifat dekat dan personal","Formal, karena ada struktur organisasi","Out-group, karena berbasis ikatan darah"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Primer.</span> Kelompok primer dicirikan hubungan yang dekat, personal, informal, dan relatif tahan lama — keluarga adalah contoh utamanya. Kelompok sekunder justru bersifat formal dan berorientasi tujuan, tidak sesuai gambaran keakraban dalam kasus ini."},
+
+{tag:"Kelompok Sosial", stimulus:"Anggota organisasi profesi guru se-kabupaten bertemu setiap tiga bulan sekali secara formal untuk membahas peningkatan kompetensi mengajar, meskipun banyak anggota yang tidak saling mengenal secara pribadi.",
+q:"Kelompok tersebut termasuk kelompok sekunder karena…",
+options:["Hubungan bersifat akrab dan emosional","Berorientasi pada tujuan dan bersifat formal","Terbentuk berdasarkan ikatan darah","Tidak memiliki struktur organisasi"], correct:1,
+explain:"<span class='kunci'>Kunci: B.</span> Kelompok sekunder memiliki hubungan yang lebih formal, berorientasi tujuan, dan tidak harus akrab — sesuai gambaran organisasi profesi guru yang bertemu secara formal demi tujuan bersama, bukan karena kedekatan personal."},
+
+{tag:"Kelompok Sosial", stimulus:"Sebuah perkumpulan warga di suatu kampung dibentuk atas dasar rasa kekeluargaan dan tradisi turun-temurun, bukan karena adanya kontrak kerja atau kepentingan ekonomi tertentu.",
+q:"Bentuk kelompok sosial tersebut dikenal sebagai…",
+options:["Patembayan","Paguyuban","Kelompok sekunder","Out-group"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Paguyuban (Gemeinschaft).</span> Paguyuban terbentuk atas dasar kedekatan, kekeluargaan, tradisi, dan ikatan emosional — tepat seperti perkumpulan warga tersebut. Patembayan sebaliknya terbentuk atas dasar kepentingan dan kontrak rasional."},
+
+{tag:"Kelompok Sosial", stimulus:"Sekumpulan pengusaha membentuk koperasi simpan pinjam yang keanggotaannya diatur melalui kontrak resmi, dengan tujuan utama memperoleh keuntungan ekonomi bersama.",
+q:"Bentuk kelompok tersebut termasuk…",
+options:["Paguyuban, karena berbasis kepercayaan","Patembayan, karena berbasis kepentingan dan kontrak","Kelompok primer, karena sering bertemu","In-group, karena sesama pengusaha"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Patembayan (Gesellschaft).</span> Patembayan didasarkan pada kepentingan, tujuan, kontrak, dan pertimbangan rasional — sesuai koperasi yang dibentuk secara resmi demi keuntungan ekonomi, bukan karena kedekatan emosional."},
+
+{tag:"Status &amp; Peran", stimulus:"Karena keberaniannya menyelamatkan korban banjir, seorang warga biasa dianugerahi gelar “Pahlawan Lingkungan” oleh pemerintah daerah.",
+q:"Jenis status sosial yang diperoleh warga tersebut adalah…",
+options:["Ascribed status, karena bawaan sejak lahir","Achieved status, karena hasil usaha akademis panjang","Assigned status, karena diberikan atas jasa/penghargaan","Status campuran tanpa kategori jelas"], correct:2,
+explain:"<span class='kunci'>Kunci: C. Assigned status.</span> Assigned status adalah status yang diberikan masyarakat atau pemerintah karena jasa atau penghargaan tertentu — persis seperti gelar yang dianugerahkan atas keberanian tersebut. Ini berbeda dari ascribed status (bawaan sejak lahir) dan achieved status (diraih melalui usaha panjang seperti pendidikan/profesi)."},
+
+{tag:"Stratifikasi &amp; Diferensiasi", stimulus:"Dalam masyarakat suatu kota, terdapat kelompok kelas atas yang menguasai sebagian besar aset ekonomi, kelas menengah yang bekerja sebagai profesional, dan kelas bawah dengan pendapatan terbatas.",
+q:"Fenomena pembagian masyarakat tersebut merupakan bentuk…",
+options:["Diferensiasi sosial","Stratifikasi sosial","Mobilitas sosial","Interaksi sosial"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Stratifikasi sosial.</span> Stratifikasi adalah pelapisan masyarakat ke dalam tingkatan berbeda berdasarkan kekayaan, kekuasaan, atau prestise — sesuai gambaran kelas atas, menengah, dan bawah yang bertingkat secara vertikal."},
+
+{tag:"Stratifikasi &amp; Diferensiasi", stimulus:"Di sebuah kota terdapat warga dari berbagai suku, agama, dan profesi yang hidup berdampingan tanpa ada satu kelompok yang secara struktural dianggap lebih tinggi daripada yang lain.",
+q:"Keberagaman tersebut merupakan bentuk…",
+options:["Stratifikasi sosial, karena ada perbedaan status","Diferensiasi sosial, karena perbedaan tanpa tingkatan vertikal","Mobilitas sosial horizontal","Stereotip sosial antarkelompok"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Diferensiasi sosial.</span> Diferensiasi adalah perbedaan sosial (suku, agama, profesi) yang tidak menunjukkan tingkatan secara vertikal — berbeda dengan stratifikasi yang bertingkat. Karena tidak ada kelompok yang “lebih tinggi”, ini jelas diferensiasi, bukan stratifikasi."},
+
+{tag:"Mobilitas Sosial", stimulus:"Setelah menyelesaikan pendidikan tinggi dan bekerja keras selama bertahun-tahun, seorang anak buruh tani kini menjabat sebagai manajer di sebuah perusahaan besar.",
+q:"Perubahan posisi sosial yang dialami tokoh tersebut merupakan bentuk mobilitas sosial…",
+options:["Horizontal","Vertikal turun","Vertikal naik","Lateral"], correct:2,
+explain:"<span class='kunci'>Kunci: C. Vertikal naik.</span> Mobilitas vertikal naik terjadi ketika status sosial seseorang meningkat, contohnya dari anak buruh tani menjadi manajer perusahaan — jelas menunjukkan peningkatan strata sosial, bukan sekadar berpindah posisi yang setara (horizontal)."},
+
+{tag:"Penelitian Sosial", stimulus:"Seorang peneliti menyebarkan angket kepada 500 siswa SMA di suatu kota untuk mengukur hubungan antara intensitas penggunaan gawai dengan tingkat prestasi belajar, lalu hasilnya diolah menggunakan uji statistik.",
+q:"Jenis penelitian yang digunakan peneliti tersebut adalah…",
+options:["Kualitatif, karena membahas prestasi belajar","Kuantitatif, karena menggunakan angka dan statistik","Deskriptif murni tanpa analisis hubungan","Etnografi mendalam"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Kuantitatif.</span> Ciri penelitian kuantitatif adalah data berupa angka, instrumen berupa angket, sampel besar (500 siswa), dan dianalisis menggunakan statistik — semuanya cocok dengan deskripsi kasus tersebut."},
+
+{tag:"Penelitian Sosial", stimulus:"Untuk memahami pengalaman mendalam korban perundungan di sekolah, seorang peneliti mewawancarai secara mendalam 8 orang siswa yang pernah mengalaminya dan menganalisis makna di balik pengalaman tersebut.",
+q:"Pendekatan penelitian yang digunakan peneliti tersebut adalah…",
+options:["Kuantitatif, karena ada angka jumlah siswa","Kualitatif, karena menekankan makna dan wawancara mendalam","Eksperimen laboratorium","Survei tertutup berskala besar"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Kualitatif.</span> Penelitian kualitatif menekankan pada makna, konteks, dan wawancara mendalam dengan sampel yang cenderung kecil (8 informan) — sesuai kasus tersebut. Jumlah 8 orang bukan penanda kuantitatif, karena fokus penelitiannya tetap pada pemaknaan pengalaman, bukan pengukuran angka."},
+
+{tag:"Penelitian Sosial", stimulus:"Sebuah kuesioner yang telah diujicobakan menunjukkan hasil pengukuran yang konsisten meskipun digunakan berulang kali pada kelompok responden yang sama pada waktu yang berbeda.",
+q:"Karakteristik instrumen penelitian tersebut menunjukkan bahwa instrumen tersebut bersifat…",
+options:["Valid, karena hasilnya sesuai teori","Reliabel, karena hasilnya konsisten","Objektif, karena tidak bias","Representatif, karena mewakili populasi"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Reliabel.</span> Reliabilitas mengukur apakah instrumen memberikan hasil yang konsisten dari waktu ke waktu — sesuai deskripsi kasus. Validitas berbeda karena mengukur ketepatan instrumen dalam mengukur apa yang seharusnya diukur, bukan konsistensi hasilnya."},
+
+{tag:"Konflik Sosial", stimulus:"Dua kelompok nelayan dari desa yang berbeda saling berebut wilayah tangkap ikan yang selama ini menjadi sumber utama penghasilan mereka.",
+q:"Jenis konflik yang terjadi antara dua kelompok nelayan tersebut adalah konflik…",
+options:["Struktural","Kepentingan","Nilai","Interpersonal"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Konflik kepentingan.</span> Konflik kepentingan terjadi karena perebutan kepentingan atau sumber daya — dalam kasus ini, wilayah tangkap ikan yang menjadi sumber penghasilan. Ini berbeda dari konflik struktural yang berkaitan dengan ketimpangan akses kekuasaan."},
+
+{tag:"Konflik Sosial", stimulus:"Warga sebuah desa tidak pernah dilibatkan dalam proses pengambilan keputusan terkait proyek pembangunan yang berdampak langsung pada kehidupan mereka, karena keputusan sepenuhnya berada di tangan segelintir elite desa.",
+q:"Konflik yang terjadi dalam kasus tersebut termasuk konflik…",
+options:["Kepentingan, karena berebut sumber daya","Struktural, karena berkaitan dengan ketimpangan akses kekuasaan","Nilai, karena perbedaan keyakinan","Antarkelompok murni tanpa sebab jelas"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Konflik struktural.</span> Konflik struktural berkaitan dengan ketimpangan struktur kekuasaan atau akses terhadap pengambilan keputusan — sesuai kasus warga yang tidak dilibatkan karena kekuasaan terpusat pada elite desa. Ini bukan sekadar perebutan sumber daya (konflik kepentingan), melainkan soal ketimpangan struktur itu sendiri."},
+
+{tag:"Resolusi Konflik", stimulus:"Untuk menyelesaikan perselisihan tanah antarwarga, tokoh masyarakat yang dihormati diundang untuk membantu kedua belah pihak berdialog dan mencapai kesepakatan, tanpa memiliki kewenangan untuk memutuskan siapa yang benar.",
+q:"Cara penyelesaian konflik tersebut disebut…",
+options:["Arbitrase","Mediasi","Konsiliasi paksa","Ajudikasi"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Mediasi.</span> Mediasi terjadi ketika pihak ketiga bersifat netral dan hanya membantu pihak yang berkonflik mencapai kesepakatan, tanpa memaksakan keputusan — persis seperti peran tokoh masyarakat dalam kasus tersebut."},
+
+{tag:"Resolusi Konflik", stimulus:"Sengketa antara perusahaan dan serikat pekerja akhirnya diselesaikan oleh lembaga arbitrase yang keputusannya bersifat mengikat dan wajib dipatuhi kedua belah pihak sesuai kesepakatan awal.",
+q:"Bentuk penyelesaian konflik tersebut dinamakan…",
+options:["Mediasi","Negosiasi","Arbitrase","Rekonsiliasi"], correct:2,
+explain:"<span class='kunci'>Kunci: C. Arbitrase.</span> Arbitrase terjadi ketika pihak ketiga memiliki kewenangan untuk memberikan keputusan yang mengikat dan wajib diterima — berbeda dari mediasi, di mana pihak ketiga hanya membantu tanpa memutuskan."},
+
+{tag:"Integrasi Sosial", stimulus:"Meskipun terdiri dari berbagai suku dan agama, masyarakat di suatu kawasan mampu hidup rukun karena adanya kesepakatan nilai bersama, sikap saling menghormati, dan kerja sama dalam berbagai kegiatan sosial.",
+q:"Kondisi tersebut menggambarkan keberhasilan proses…",
+options:["Asimilasi paksa","Integrasi sosial","Stratifikasi sosial","Mobilitas sosial"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Integrasi sosial.</span> Integrasi sosial adalah proses terbentuknya keteraturan dan kesatuan di antara kelompok yang berbeda, didukung oleh kesepakatan nilai, toleransi, kerja sama, dan saling menghormati — semuanya tergambar jelas dalam kasus tersebut."},
+
+{tag:"Perubahan Sosial", stimulus:"Dalam kurun waktu satu dekade, teknologi digital mengubah hampir seluruh aspek kehidupan masyarakat secara mendasar dan berlangsung sangat cepat, mulai dari cara berkomunikasi hingga cara bertransaksi.",
+q:"Perubahan sosial tersebut termasuk kategori…",
+options:["Evolusi, karena berlangsung bertahap","Revolusi, karena cepat dan mendasar","Planned change semata","Discovery"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Revolusi.</span> Revolusi adalah perubahan yang berlangsung relatif cepat dan membawa perubahan yang mendasar — sesuai deskripsi transformasi teknologi digital dalam waktu singkat namun berdampak menyeluruh. Evolusi justru berlangsung perlahan dan bertahap, tidak sesuai kasus ini."},
+
+{tag:"Globalisasi", stimulus:"Produk kopi kemasan dari merek internasional mengalami peningkatan penjualan yang pesat di berbagai negara karena kemudahan distribusi, promosi digital lintas negara, dan keterhubungan pasar dunia yang semakin erat.",
+q:"Fenomena tersebut merupakan dampak dari proses…",
+options:["Glokalisasi","Globalisasi","Stratifikasi ekonomi","Akulturasi budaya"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Globalisasi.</span> Globalisasi adalah proses meningkatnya keterhubungan masyarakat dunia dalam bidang ekonomi, teknologi, dan komunikasi, sehingga batas wilayah menjadi kurang berarti — sesuai gambaran distribusi dan pasar produk lintas negara tersebut."},
+
+{tag:"Globalisasi", stimulus:"Sebuah restoran cepat saji internasional memodifikasi menunya dengan menambahkan cita rasa rempah khas daerah agar sesuai selera masyarakat setempat, tanpa menghilangkan konsep global mereknya.",
+q:"Strategi tersebut mencerminkan konsep…",
+options:["Akulturasi paksa","Glokalisasi","Asimilasi budaya total","Diferensiasi produk semata"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Glokalisasi.</span> Glokalisasi terjadi ketika unsur global diadaptasi dengan kondisi dan identitas lokal — persis seperti produk global yang menyesuaikan cita rasa lokal tanpa kehilangan identitas globalnya."},
+
+{tag:"Masyarakat Multikultural", stimulus:"Di sebuah sekolah dengan siswa dari berbagai latar belakang etnis dan agama, pihak sekolah secara rutin mengadakan dialog lintas budaya dan kegiatan bersama untuk membangun sikap saling menghargai perbedaan.",
+q:"Upaya sekolah tersebut mencerminkan sikap yang tepat dalam menghadapi masyarakat…",
+options:["Homogen","Multikultural","Berstratifikasi tinggi","Patembayan"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Multikultural.</span> Masyarakat multikultural terdiri atas berbagai kelompok dengan perbedaan etnis, agama, dan budaya. Sikap yang tepat menghadapinya adalah toleransi, dialog, kesetaraan, dan menghargai perbedaan — persis seperti upaya sekolah dalam kasus tersebut."},
+
+{tag:"Multikultural: Stereotip, Prasangka, Diskriminasi", stimulus:"Sekelompok pekerja migran ditolak untuk disewakan tempat tinggal oleh pemilik kos hanya karena asumsi bahwa orang dari daerah asal mereka “pasti suka membuat keributan”, padahal pemilik kos belum pernah berinteraksi langsung dengan mereka.",
+q:"Tindakan penolakan yang dilakukan pemilik kos tersebut, yang berawal dari anggapan negatif tanpa bukti nyata, merupakan contoh…",
+options:["Stereotip semata, tanpa dampak nyata","Prasangka yang berujung pada tindakan diskriminasi","Integrasi sosial yang gagal","Konflik struktural antarkelompok"], correct:1,
+explain:"<span class='kunci'>Kunci: B. Prasangka yang berujung pada diskriminasi.</span> Anggapan umum “pasti suka membuat keributan” adalah <b>stereotip</b>; sikap menolak berdasarkan anggapan itu tanpa bukti adalah <b>prasangka</b>; dan tindakan nyata menolak menyewakan tempat tinggal adalah <b>diskriminasi</b>. Karena soal menegaskan adanya tindakan nyata yang merugikan (bukan sekadar anggapan di kepala), jawaban paling tepat adalah rangkaian prasangka yang berujung pada diskriminasi."}
+];
+
+let current = 0;
+let score = 0;
+let answered = new Array(QUESTIONS.length).fill(null);
+let started = false;
+
+const app = document.getElementById('app');
+const progressRow = document.getElementById('progressRow');
+const progressFill = document.getElementById('progressFill');
+const qCounter = document.getElementById('qCounter');
+const scoreChip = document.getElementById('scoreChip');
+
+function renderStart(){
+  progressRow.style.display = 'none';
+  app.innerHTML = `
+    <div class="sheet start">
+      <h2>Sebelum Mulai 📋</h2>
+      <p>Kuis ini berisi <b>30 soal berbasis kasus/stimulus</b> — gaya yang paling sering muncul di TKA Sosiologi SMA. Fokusnya bukan menghafal definisi, tapi mengenali konsep dari sebuah cerita atau fenomena.</p>
+      <ul class="rules">
+        <li>Baca stimulus dengan saksama sebelum memilih jawaban.</li>
+        <li>Klik salah satu bulatan jawaban — notifikasi BENAR/SALAH langsung muncul.</li>
+        <li>Kunci jawaban dan penjelasan lengkap akan tampil setelah kamu menjawab.</li>
+        <li>Skor dan progres kamu tercatat otomatis di bagian atas.</li>
+      </ul>
+      <div class="next-row" style="justify-content:flex-start;">
+        <button class="btn" onclick="startQuiz()">Mulai Kuis →</button>
+      </div>
+    </div>
+  `;
+}
+
+function startQuiz(){
+  started = true;
+  progressRow.style.display = 'flex';
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const item = QUESTIONS[current];
+  const state = answered[current];
+  qCounter.textContent = `Soal ${current+1}/${QUESTIONS.length}`;
+  progressFill.style.width = ((current)/QUESTIONS.length*100) + '%';
+  scoreChip.textContent = `Skor ${score}`;
+
+  const letters = ['A','B','C','D'];
+  const optsHtml = item.options.map((opt, i) => {
+    let cls = 'opt';
+    let disabledAttr = '';
+    if(state !== null){
+      disabledAttr = 'disabled';
+      if(i === item.correct) cls += ' is-correct';
+      else if(i === state.picked) cls += ' is-incorrect';
+      else cls += ' is-muted';
+    }
+    return `<button class="${cls}" ${disabledAttr} onclick="pickAnswer(${i})">
+        <span class="bubble">${letters[i]}</span>
+        <span class="opt-text">${opt}</span>
+      </button>`;
+  }).join('');
+
+  let feedbackHtml = '';
+  if(state !== null){
+    const isCorrect = state.picked === item.correct;
+    feedbackHtml = `
+      <div class="feedback show">
+        <div class="verdict ${isCorrect ? 'benar' : 'salah'}">
+          <span class="icon">${isCorrect ? '✓' : '✕'}</span>
+          ${isCorrect ? 'BENAR!' : 'SALAH!'}
+        </div>
+        <div class="explain">${item.explain}</div>
+      </div>
+    `;
+  }
+
+  const isLast = current === QUESTIONS.length - 1;
+  const nextBtnHtml = state !== null
+    ? `<div class="next-row"><button class="btn" onclick="goNext()">${isLast ? 'Lihat Hasil Akhir →' : 'Soal Berikutnya →'}</button></div>`
+    : '';
+
+  app.innerHTML = `
+    <div class="sheet">
+      <div class="tag-row">
+        <span class="tag">${item.tag}</span>
+        <span class="qnum">SOAL ${String(current+1).padStart(2,'0')} / ${QUESTIONS.length}</span>
+      </div>
+      <div class="stimulus">${item.stimulus}</div>
+      <div class="question">${item.q}</div>
+      <div class="options">${optsHtml}</div>
+      ${feedbackHtml}
+      ${nextBtnHtml}
+    </div>
+  `;
+}
+
+function pickAnswer(i){
+  if(answered[current] !== null) return;
+  const item = QUESTIONS[current];
+  const isCorrect = i === item.correct;
+  answered[current] = {picked: i};
+  if(isCorrect) score++;
+  renderQuestion();
+  scoreChip.textContent = `Skor ${score}`;
+  const sheet = document.querySelector('.sheet');
+  if(sheet){
+    setTimeout(()=>{
+      const fb = document.querySelector('.feedback');
+      if(fb) fb.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }, 80);
+  }
+}
+
+function goNext(){
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+    window.scrollTo({top:0, behavior:'smooth'});
+  } else {
+    renderResult();
+  }
+}
+
+function renderResult(){
+  progressFill.style.width = '100%';
+  qCounter.textContent = `Selesai — ${QUESTIONS.length}/${QUESTIONS.length}`;
+  scoreChip.textContent = `Skor ${score}`;
+
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+  let message = '';
+  if(pct >= 85) message = 'Luar biasa! Penalaran kasusmu sudah sangat matang untuk TKA. 🎯';
+  else if(pct >= 65) message = 'Bagus! Beberapa konsep masih perlu dikuatkan lagi. 💪';
+  else if(pct >= 40) message = 'Sudah paham dasarnya — perbanyak latihan soal berbasis kasus lagi. 📚';
+  else message = 'Jangan menyerah, ulangi modul dan kerjakan lagi kuisnya pelan-pelan. 🌱';
+
+  const reviewHtml = QUESTIONS.map((item, idx) => {
+    const state = answered[idx];
+    const isCorrect = state.picked === item.correct;
+    const letters = ['A','B','C','D'];
+    return `
+      <div class="review-item">
+        <div class="review-top">
+          <span class="mark">${isCorrect ? '✅' : '❌'}</span>
+          <span class="qt">${idx+1}. ${item.q}</span>
+        </div>
+        <div class="review-note">
+          Jawabanmu: <b>${letters[state.picked]}. ${item.options[state.picked]}</b>
+          ${isCorrect ? '' : `— Kunci: <b>${letters[item.correct]}. ${item.options[item.correct]}</b>`}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="sheet result-head">
+      <div class="ring" style="--pct:${pct}"><span class="num">${pct}%</span></div>
+      <h2>${score} dari ${QUESTIONS.length} Benar</h2>
+      <p>${message}</p>
+      <div class="result-actions">
+        <button class="btn" onclick="restartQuiz()">Ulangi Kuis</button>
+        <button class="btn ghost" onclick="toggleReview()">Lihat Pembahasan Lengkap</button>
+      </div>
+      <div id="reviewBox" style="display:none; text-align:left; margin-top:10px;">${reviewHtml}</div>
+    </div>
+  `;
+}
+
+function toggleReview(){
+  const box = document.getElementById('reviewBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function restartQuiz(){
+  current = 0;
+  score = 0;
+  answered = new Array(QUESTIONS.length).fill(null);
+  renderQuestion();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+renderStart();
+</script>
+</body>
+</html>

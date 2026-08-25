@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi TKA Sosiologi SMA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .correct-ans { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #166534 !important; }
+        .wrong-ans { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center py-10 px-4">
+
+    <div class="max-w-3xl w-full bg-white rounded-2xl shadow-xl overflow-hidden fade-in relative flex flex-col max-h-[90vh]">
+        
+        <!-- Header -->
+        <div class="bg-indigo-600 p-6 text-white shrink-0">
+            <h1 class="text-2xl font-bold mb-2">TKA Sosiologi SMA - Tryout Intensif</h1>
+            <div class="flex justify-between items-center text-sm font-medium text-indigo-100">
+                <span id="question-tracker">Soal 1 dari 30</span>
+                <span id="score-tracker">Skor: 0</span>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-indigo-900 rounded-full h-2 mt-4">
+                <div id="progress-bar" class="bg-green-400 h-2 rounded-full" style="width: 3.33%"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Body (Scrollable) -->
+        <div class="p-6 md:p-8 overflow-y-auto flex-grow" id="quiz-container">
+            <h2 id="question-text" class="text-lg text-gray-800 font-semibold mb-6 leading-relaxed text-justify">
+                <!-- Pertanyaan muncul di sini -->
+            </h2>
+
+            <div id="options-container" class="space-y-3">
+                <!-- Pilihan muncul di sini -->
+            </div>
+
+            <!-- Feedback & Explanation Box -->
+            <div id="feedback-box" class="hidden mt-6 p-5 rounded-xl border fade-in">
+                <div class="flex items-center mb-2" id="feedback-status">
+                    <!-- Status BENAR / SALAH -->
+                </div>
+                <h3 class="font-bold text-gray-800 mb-1">Kunci Jawaban: <span id="correct-key" class="text-indigo-600"></span></h3>
+                <p id="explanation-text" class="text-gray-600 text-sm leading-relaxed text-justify">
+                    <!-- Penjelasan -->
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 border-t p-5 shrink-0 flex justify-end">
+            <button id="next-btn" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors shadow-md">
+                Selanjutnya &rarr;
+            </button>
+            <button id="restart-btn" class="hidden bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-colors shadow-md">
+                Ulangi Kuis
+            </button>
+        </div>
+
+    </div>
+
+<script>
+const quizData = [
+    // --- ELEMEN 1: SOSIOLOGI SEBAGAI ILMU ---
+    {
+        q: "1. Seorang sosiolog meneliti fenomena tawuran antar-pelajar. Ia tidak menyalahkan pihak manapun atau menilai baik buruknya tindakan tersebut, melainkan fokus mencari penyebab mengapa tawuran bisa terjadi. Hal ini menunjukkan karakteristik sosiologi yang bersifat...",
+        o: ["Empiris", "Teoritis", "Kumulatif", "Non-etis", "Kategoris"],
+        a: 3,
+        e: "Sosiologi bersifat non-etis, artinya ilmu ini tidak mempersoalkan baik atau buruknya suatu fakta/fenomena sosial, melainkan menjelaskan fakta tersebut secara analitis."
+    },
+    {
+        q: "2. Karl Marx pernah merumuskan teori tentang kelas sosial. Di era modern, teori tersebut dikembangkan dan disempurnakan oleh Ralf Dahrendorf agar relevan dengan kondisi masyarakat industri. Karakteristik sosiologi berdasarkan ilustrasi tersebut adalah...",
+        o: ["Kumulatif", "Empiris", "Teoritis", "Sistematis", "Non-etis"],
+        a: 0,
+        e: "Kumulatif berarti teori sosiologi dibentuk berdasarkan teori yang sudah ada sebelumnya, kemudian diperbaiki, diperluas, dan disempurnakan."
+    },
+    {
+        q: "3. Pemerintah daerah berencana membangun bendungan, namun mendapat penolakan keras dari warga. Sosiolog dilibatkan untuk meneliti struktur budaya warga setempat sebelum proyek dilanjutkan. Peran sosiologi pada kasus ini adalah...",
+        o: ["Penelitian sosial", "Pembangunan material", "Perencanaan sosial", "Pemecahan masalah sosial", "Evaluasi kebijakan"],
+        a: 3,
+        e: "Sosiolog dilibatkan ketika masalah (penolakan) sudah terjadi agar proyek tidak memicu konflik lanjutan. Ini adalah peran pemecahan masalah sosial melalui analisis kondisi warga."
+    },
+    {
+        q: "4. Manakah di bawah ini yang merupakan objek kajian sosiologi?",
+        o: ["Mutasi virus COVID-19 di wilayah beriklim tropis.", "Proses vulkanisme Gunung Merapi yang berulang setiap 4 tahun.", "Penemuan vaksin baru untuk menyembuhkan penyakit endemik.", "Perubahan pola interaksi masyarakat akibat penerapan jaga jarak fisik.", "Pergeseran lempeng tektonik yang memicu gempa bumi di pesisir."],
+        a: 3,
+        e: "Objek kajian sosiologi adalah masyarakat dan interaksi sosial. Perubahan interaksi akibat suatu fenomena (seperti jaga jarak) adalah objek sosiologi, sedangkan mutasi virus atau lempeng bumi adalah ranah ilmu alam."
+    },
+    {
+        q: "5. Sosiologi mendasarkan kesimpulannya pada observasi terhadap kenyataan menggunakan akal sehat, bukan pada spekulasi atau dugaan semata. Hal ini menunjukkan sosiologi bersifat...",
+        o: ["Empiris", "Teoritis", "Kumulatif", "Non-etis", "Absolut"],
+        a: 0,
+        e: "Empiris artinya ilmu pengetahuan tersebut didasarkan pada observasi (pengamatan) terhadap kenyataan dan akal sehat, serta hasilnya tidak bersifat spekulatif."
+    },
+    {
+        q: "6. Seorang peneliti merangkum hasil pengamatannya tentang perilaku belanja online menjadi sebuah konsep hubungan sebab-akibat yang abstrak. Tindakan peneliti ini mencerminkan ciri sosiologi yaitu...",
+        o: ["Empiris", "Teoritis", "Kumulatif", "Non-etis", "Objektif"],
+        a: 1,
+        e: "Teoritis berarti ilmu sosiologi selalu berusaha menyusun abstraksi (kesimpulan logis/sebab-akibat) dari hasil pengamatan empiris."
+    },
+
+    // --- ELEMEN 2: HUBUNGAN & GEJALA SOSIAL ---
+    {
+        q: "7. Rina memiliki dua akun media sosial. Akun utamanya berisi tentang prestasi akademiknya, sedangkan 'akun alter' miliknya digunakan untuk mengkritik orang lain secara anonim. Dampak negatif dari identitas multidimensi ini bagi Rina adalah...",
+        o: ["Kecenderungan menarik diri dari pergaulan nyata karena malu.", "Ketidakmampuan membedakan citra ideal dengan jati diri sebenarnya.", "Mudah mendapatkan teman baru di dunia maya.", "Berkurangnya tingkat literasi digital secara drastis.", "Meningkatkan status sosial di kalangan teman sebayanya."],
+        a: 1,
+        e: "Penggunaan akun alter dapat menyebabkan krisis identitas, di mana individu kebingungan membedakan mana identitas asli dan mana citra palsu yang ia bangun di dunia maya."
+    },
+    {
+        q: "8. Dalam masyarakat multikultural, penolakan pembangunan rumah ibadah agama lain kerap terjadi. Langkah rasional dan kritis untuk mencegah hal tersebut adalah...",
+        o: ["Menyerahkan sepenuhnya kepada aparat kepolisian.", "Melarang pembangunan rumah ibadah baru untuk semua agama.", "Membuat klaster perumahan khusus berdasarkan agama masing-masing.", "Memfasilitasi dialog antarumat beragama dengan melibatkan tokoh masyarakat.", "Pemerintah pusat memaksakan pembangunan tanpa persetujuan warga lokal."],
+        a: 3,
+        e: "Dalam sosiologi, resolusi konflik multikultural yang paling efektif adalah melalui dialog inklusif (komunikasi) antar kelompok dengan mediasi tokoh masyarakat."
+    },
+    {
+        q: "9. Di era digital, banyak remaja yang mengalami cyberbullying. Gejala sosial ini menjadi masalah serius karena...",
+        o: ["Korban dapat mengalami trauma psikologis meskipun tidak bertemu pelaku secara fisik.", "Cyberbullying selalu berujung pada tindak kriminal fisik di dunia nyata.", "Hanya terjadi pada anak-anak dari keluarga broken home.", "Pelaku cyberbullying selalu orang yang dikenal oleh korban.", "Tidak ada payung hukum yang mengatur interaksi digital."],
+        a: 0,
+        e: "Cyberbullying adalah gejala sosial negatif digital di mana dampaknya sangat nyata (trauma psikologis) meskipun interaksinya virtual."
+    },
+    {
+        q: "10. Pandangan yang menganggap budaya sendiri lebih baik dibanding budaya lain dan sering kali menjadi pemicu konflik di masyarakat multikultural disebut...",
+        o: ["Xenosentrisme", "Chauvinisme", "Etnosentrisme", "Pluralisme", "Egosentrisme"],
+        a: 2,
+        e: "Etnosentrisme adalah sikap menilai kebudayaan lain menggunakan standar kebudayaannya sendiri dan menganggap budayanya paling unggul."
+    },
+    {
+        q: "11. Maraknya pinjaman online (pinjol) ilegal adalah gejala sosial baru di masyarakat. Faktor struktural yang paling memicu gejala ini adalah...",
+        o: ["Gaya hidup masyarakat yang mulai hemat.", "Meningkatnya kesadaran hukum masyarakat.", "Lemahnya literasi keuangan dan desakan kebutuhan ekonomi yang tinggi.", "Banyaknya lapangan pekerjaan di sektor formal.", "Masyarakat menolak kemajuan teknologi finansial."],
+        a: 2,
+        e: "Gejala sosial seperti pinjol ilegal marak karena faktor literasi keuangan yang rendah di tengah himpitan/kebutuhan ekonomi (faktor struktural masyarakat)."
+    },
+    {
+        q: "12. Seorang individu pindah dari desa ke kota metropolitan. Ia mengalami kebingungan karena nilai kesopanan di desa berbeda drastis dengan kehidupan kota yang individualis. Kondisi psikologis sosial ini disebut...",
+        o: ["Culture Lag", "Culture Shock", "Asimilasi", "Akulturasi", "Difusi"],
+        a: 1,
+        e: "Culture Shock (gegar budaya) adalah kondisi guncangan mental atau kebingungan yang dialami seseorang ketika berhadapan dengan lingkungan budaya baru yang jauh berbeda."
+    },
+
+    // --- ELEMEN 3: PENELITIAN SOSIAL ---
+    {
+        q: "13. Seorang peneliti ingin mengetahui *makna dan pengalaman* penyintas bencana alam saat menghadapi masa krisis. Ia mewawancarai 5 orang secara mendalam selama berjam-jam. Pendekatan penelitian yang digunakan adalah...",
+        o: ["Kuantitatif", "Kualitatif", "Eksperimen", "Survei", "Korelasional"],
+        a: 1,
+        e: "Penelitian kualitatif fokus pada pemahaman mendalam tentang makna, pengalaman, dan konteks fenomena dengan jumlah sampel kecil (melalui wawancara mendalam)."
+    },
+    {
+        q: "14. Budi menyebarkan angket kepada 500 siswa untuk mengetahui seberapa besar *pengaruh* durasi bermain game terhadap nilai rapor. Data yang dikumpulkan Budi akan diolah menggunakan...",
+        o: ["Analisis tematik", "Reduksi data", "Analisis statistik (angka)", "Kritik sumber", "Analisis wacana"],
+        a: 2,
+        e: "Penelitian untuk mencari 'pengaruh' dengan sampel besar (angket) adalah kuantitatif. Pengolahan datanya pasti menggunakan analisis statistik berupa angka-angka."
+    },
+    {
+        q: "15. Urutan yang paling tepat dalam melakukan penelitian sosial kualitatif sebelum mengumpulkan data adalah...",
+        o: ["Menentukan metode -> Merumuskan masalah -> Menulis kesimpulan", "Merumuskan masalah -> Membuat panduan wawancara -> Menentukan subjek penelitian", "Menyusun hipotesis -> Mengumpulkan data -> Merumuskan masalah", "Menentukan subjek penelitian -> Membuat instrumen tertutup -> Observasi", "Mengolah data statistik -> Menyusun pertanyaan -> Wawancara"],
+        a: 1,
+        e: "Langkah penelitian selalu diawali dari Merumuskan Masalah, lalu menyusun instrumen (panduan wawancara jika kualitatif), dan menentukan subjek/sampel, baru terjun ke lapangan."
+    },
+    {
+        q: "16. Penelitian yang bertujuan untuk memberikan solusi langsung atas permasalahan di masyarakat (misal: menciptakan sistem bank sampah terpadu di tingkat RT) tergolong dalam penelitian...",
+        o: ["Verifikatif", "Eksploratif", "Teoritis", "Praktis (Terapan)", "Historis"],
+        a: 3,
+        e: "Penelitian praktis/terapan bertujuan untuk langsung memecahkan masalah nyata dan memberikan solusi aplikatif di lapangan."
+    },
+    {
+        q: "17. Peneliti ingin meneliti korban PHK di sebuah pabrik. Ia hanya memilih buruh yang sudah bekerja lebih dari 5 tahun sebagai informan. Teknik pengambilan sampel ini disebut...",
+        o: ["Random sampling", "Stratified sampling", "Purposive sampling", "Snowball sampling", "Cluster sampling"],
+        a: 2,
+        e: "Purposive sampling adalah penentuan sampel dengan pertimbangan atau kriteria tertentu (contoh: 'harus bekerja lebih dari 5 tahun')."
+    },
+    {
+        q: "18. Syarat utama sebuah topik penelitian sosial yang baik agar penelitian bisa dijalankan hingga selesai adalah...",
+        o: ["Harus berskala nasional.", "Menarik minat peneliti dan datanya tersedia (dapat dijangkau).", "Harus menggunakan biaya yang mahal dan sponsor besar.", "Topiknya harus tentang konflik kekerasan.", "Diambil dari berita viral di media sosial tanpa literatur pendukung."],
+        a: 1,
+        e: "Topik yang baik harus *manageable* (datanya ada, bisa dijangkau oleh kemampuan peneliti) dan menarik minat agar peneliti memiliki motivasi menyelesaikannya."
+    },
+
+    // --- ELEMEN 4: KELOMPOK, KESETARAAN, & KONFLIK SOSIAL ---
+    {
+        q: "19. Komunitas 'Peduli Lingkungan' terdiri dari mahasiswa, dosen, buruh, dan pekerja seni yang tidak saling memiliki ikatan darah. Mereka berkumpul karena kesamaan tujuan advokasi. Kelompok sosial ini disebut...",
+        o: ["Kelompok Primer", "Kelompok Paguyuban (Gemeinschaft)", "Kelompok Sekunder / Patembayan", "Kelompok Informal", "Kerumunan"],
+        a: 2,
+        e: "Kelompok sekunder (patembayan/gesellschaft) adalah kelompok yang terbentuk atas dasar kesamaan kepentingan dan tujuan formal (advokasi), bukan ikatan batin/darah."
+    },
+    {
+        q: "20. Di perkotaan sering terjadi konflik penggusuran antara pemerintah daerah (beserta pemodal) dengan warga miskin di bantaran sungai. Warga merasa tidak pernah dilibatkan dalam perencanaan. Jenis konflik ini adalah...",
+        o: ["Konflik Antarpribadi", "Konflik Struktural", "Konflik Etnis", "Konflik Rasial", "Konflik Budaya"],
+        a: 1,
+        e: "Konflik struktural terjadi karena adanya ketimpangan kekuasaan, akses, dan kedudukan (kelas atas pembuat kebijakan vs kelas bawah yang tergusur)."
+    },
+    {
+        q: "21. Suatu konflik lahan antara dua desa akhirnya diselesaikan dengan cara membawa masalah tersebut ke pengadilan negeri. Bentuk penyelesaian konflik (akomodasi) ini disebut...",
+        o: ["Mediasi", "Konsiliasi", "Ajudikasi", "Arbitrase", "Kompromi"],
+        a: 2,
+        e: "Ajudikasi adalah penyelesaian perkara atau perselisihan (konflik) di pengadilan melalui jalur hukum negara."
+    },
+    {
+        q: "22. Dua kubu pendukung calon kepala desa bersitegang. Polisi dan tokoh agama turun tangan memberikan nasihat namun keputusan akhir tetap dikembalikan pada kedua pihak yang berkonflik. Peran polisi dan tokoh agama di sini adalah sebagai...",
+        o: ["Ajudikan", "Mediator", "Arbiter", "Provokator", "Fasilitator pasif"],
+        a: 1,
+        e: "Mediasi melibatkan pihak ketiga yang netral (mediator) yang hanya memberikan nasihat/saran, namun tidak punya wewenang mengambil keputusan mutlak."
+    },
+    {
+        q: "23. Syarat utama terbentuknya suatu kelompok sosial adalah...",
+        o: ["Adanya struktur organisasi yang berbadan hukum.", "Memiliki aturan tertulis yang sangat ketat.", "Adanya kesadaran setiap anggota bahwa mereka bagian dari kelompok tersebut.", "Harus terdiri dari lebih dari seratus orang.", "Tingkat pendidikan anggota harus seragam."],
+        a: 2,
+        e: "Syarat dasar kelompok sosial adalah adanya interaksi dan kesadaran dari para anggotanya bahwa mereka memiliki rasa keterikatan dalam kelompok tersebut."
+    },
+    {
+        q: "24. Ketimpangan akses pendidikan dan kesehatan antara wilayah Jawa dan wilayah pelosok Timur Indonesia menunjukkan adanya masalah sosial berupa...",
+        o: ["Kesetaraan sosial", "Mobilitas sosial", "Disorganisasi sosial", "Ketidaksetaraan/Ketimpangan sosial", "Dinamika kelompok"],
+        a: 3,
+        e: "Kondisi ini merupakan wujud ketimpangan (ketidaksetaraan) sosial secara struktural dalam hal distribusi fasilitas dasar antar wilayah."
+    },
+
+    // --- ELEMEN 5: PERUBAHAN SOSIAL & GLOBALISASI ---
+    {
+        q: "25. Pembangunan jalan tol yang menghubungkan desa terpencil ke pusat kota menyebabkan banyak remaja desa mulai meniru tren berpakaian ala Korea dan lebih individualis. Faktor pemicu perubahan sosial ini adalah...",
+        o: ["Ledakan penduduk desa", "Masuknya unsur budaya baru melalui keterbukaan infrastruktur fisik", "Pemberontakan pemuda desa", "Perubahan lingkungan alam", "Konflik antar generasi"],
+        a: 1,
+        e: "Jalan tol (infrastruktur fisik) membuka akses interaksi desa dengan dunia luar, memfasilitasi masuknya tren dan budaya baru."
+    },
+    {
+        q: "26. Saat ini masyarakat dapat dengan mudah membeli barang bermerek internasional dan menonton budaya pop asing via internet. Dampak negatif dari globalisasi ini bagi identitas bangsa adalah...",
+        o: ["Terciptanya inovasi teknologi dalam negeri.", "Meningkatnya rasa nasionalisme.", "Mengikisnya kecintaan terhadap produk dan budaya lokal (lunturnya identitas).", "Masyarakat menjadi lebih rasional.", "Tingkat buta huruf menurun drastis."],
+        a: 2,
+        e: "Dampak negatif hegemoni budaya asing adalah masyarakat mengabaikan produk lokal dan berujung pada memudarnya identitas kebudayaan asli."
+    },
+    {
+        q: "27. Konsep 'Glokalisasi' merupakan gabungan dari globalisasi dan lokalisasi. Contoh nyata dari glokalisasi adalah...",
+        o: ["Masyarakat menolak sepenuhnya musik dari luar negeri.", "Restoran cepat saji internasional menciptakan menu Nasi Uduk Ayam Kremes di Indonesia.", "Pemerintah memblokir semua platform media sosial asing.", "Remaja Indonesia meninggalkan budaya lokal dan meniru budaya Barat.", "Pertukaran pelajar antar negara Eropa."],
+        a: 1,
+        e: "Glokalisasi adalah produk atau layanan global yang disesuaikan dengan budaya/selera pasar lokal. (McDonald's jual menu ayam kremes)."
+    },
+    {
+        q: "28. Banyak orang tua mampu membelikan anaknya gawai (smartphone) canggih, namun mereka tidak mengajarkan anak cara menyaring informasi sehingga sang anak mudah percaya hoax. Fenomena ini disebut...",
+        o: ["Culture Shock (Gegar budaya)", "Culture Lag (Ketertinggalan budaya)", "Asimilasi Budaya", "Evolusi Budaya", "Kearifan Lokal"],
+        a: 1,
+        e: "Culture lag terjadi ketika pertumbuhan budaya material (teknologi smartphone) melaju lebih cepat dibanding budaya non-material (kedewasaan moral/literasi memilah info)."
+    },
+    {
+        q: "29. Lina sering membandingkan gaya hidupnya dengan influencer asing di Instagram. Ia menjadi merasa kurang beruntung, memaksakan diri membeli barang mewah, dan menjauh dari teman-temannya di kampus. Sikap kritis yang harus dilakukan Lina adalah...",
+        o: ["Mengubah total penampilannya agar diterima sebagai masyarakat global.", "Menghapus semua media sosial dan mengurung diri.", "Mengembangkan literasi media untuk menyaring konten secara rasional dan selektif.", "Mencari pinjaman online demi mengikuti tren influencer.", "Mempromosikan budaya lokal dengan membuat tren serupa."],
+        a: 2,
+        e: "Menghadapi tren globalisasi, kita tidak boleh kolot (isolasi) tapi juga tidak boleh meniru buta. Sikap terbaik adalah bersikap rasional, selektif dan memiliki literasi digital."
+    },
+    {
+        q: "30. Di era globalisasi, eksistensi pengrajin anyaman bambu di desa mulai terancam oleh barang impor dari plastik murah. Solusi pemberdayaan yang paling tepat sesuai pendekatan sosiologi adalah...",
+        o: ["Memberikan BLT (Bantuan Langsung Tunai) terus-menerus kepada pengrajin.", "Melarang peredaran barang impor plastik secara nasional.", "Membiarkan pengrajin bambu bangkrut karena seleksi alam.", "Melatih pengrajin dengan keterampilan digital marketing untuk menjual anyaman di e-commerce internasional.", "Memaksa anak muda desa menjadi pengrajin tanpa inovasi."],
+        a: 3,
+        e: "Sosiologi fokus pada pemberdayaan (empowerment). Melatih skill baru (digital marketing) membuat komunitas lokal bisa beradaptasi dan bersaing memanfaatkan globalisasi, bukan malah menjauhinya."
+    }
+];
+
+// Variables
+let currentQuestionIndex = 0;
+let score = 0;
+let answered = false;
+
+// DOM Elements
+const questionText = document.getElementById("question-text");
+const optionsContainer = document.getElementById("options-container");
+const feedbackBox = document.getElementById("feedback-box");
+const feedbackStatus = document.getElementById("feedback-status");
+const correctKey = document.getElementById("correct-key");
+const explanationText = document.getElementById("explanation-text");
+const nextBtn = document.getElementById("next-btn");
+const restartBtn = document.getElementById("restart-btn");
+const questionTracker = document.getElementById("question-tracker");
+const scoreTracker = document.getElementById("score-tracker");
+const progressBar = document.getElementById("progress-bar");
+
+function loadQuiz() {
+    answered = false;
+    feedbackBox.classList.add("hidden");
+    nextBtn.classList.add("hidden");
+    optionsContainer.innerHTML = "";
+
+    const currentQuiz = quizData[currentQuestionIndex];
+    questionText.innerHTML = currentQuiz.q;
+    
+    // Update trackers
+    questionTracker.innerText = `Soal ${currentQuestionIndex + 1} dari ${quizData.length}`;
+    progressBar.style.width = `${((currentQuestionIndex + 1) / quizData.length) * 100}%`;
+
+    // Render options
+    const letters = ['A', 'B', 'C', 'D', 'E'];
+    currentQuiz.o.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn w-full text-left bg-white border border-gray-200 text-gray-700 py-3 px-4 rounded-xl hover:bg-indigo-50 hover:border-indigo-200 focus:outline-none flex items-start";
+        
+        btn.innerHTML = `
+            <span class="font-bold mr-3 text-indigo-500 shrink-0">${letters[index]}.</span>
+            <span class="leading-relaxed">${opt}</span>
+        `;
+        
+        btn.onclick = () => selectOption(btn, index);
+        optionsContainer.appendChild(btn);
+    });
+}
+
+function selectOption(selectedBtn, selectedIndex) {
+    if (answered) return; // Prevent multiple clicks
+    answered = true;
+
+    const currentQuiz = quizData[currentQuestionIndex];
+    const isCorrect = selectedIndex === currentQuiz.a;
+    const allButtons = optionsContainer.children;
+    const letters = ['A', 'B', 'C', 'D', 'E'];
+
+    // Disable all buttons and show colors
+    for (let i = 0; i < allButtons.length; i++) {
+        allButtons[i].classList.add("disabled");
+        if (i === currentQuiz.a) {
+            allButtons[i].classList.add("correct-ans");
+        } else if (i === selectedIndex && !isCorrect) {
+            allButtons[i].classList.add("wrong-ans");
+        }
+    }
+
+    // Update Score
+    if (isCorrect) {
+        score++;
+        scoreTracker.innerText = `Skor: ${score}`;
+        feedbackStatus.innerHTML = `
+            <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="font-bold text-green-700 text-lg">BENAR!</span>`;
+        feedbackBox.className = "mt-6 p-5 rounded-xl border border-green-200 bg-green-50 fade-in block";
+    } else {
+        feedbackStatus.innerHTML = `
+            <svg class="w-6 h-6 text-red-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="font-bold text-red-700 text-lg">SALAH!</span>`;
+        feedbackBox.className = "mt-6 p-5 rounded-xl border border-red-200 bg-red-50 fade-in block";
+    }
+
+    // Show Key & Explanation
+    correctKey.innerText = `${letters[currentQuiz.a]}. ${currentQuiz.o[currentQuiz.a]}`;
+    explanationText.innerHTML = `<strong>Penjelasan:</strong> ${currentQuiz.e}`;
+    
+    // Auto-scroll to feedback
+    setTimeout(() => {
+        document.getElementById("quiz-container").scrollTop = document.getElementById("quiz-container").scrollHeight;
+    }, 100);
+
+    // Show Next Button
+    if (currentQuestionIndex < quizData.length - 1) {
+        nextBtn.classList.remove("hidden");
+    } else {
+        restartBtn.classList.remove("hidden");
+        feedbackBox.innerHTML += `<div class="mt-4 pt-4 border-t border-gray-300 text-center font-bold text-lg text-indigo-700">Skor Akhir Kamu: ${score} / ${quizData.length}</div>`;
+    }
+}
+
+nextBtn.addEventListener("click", () => {
+    currentQuestionIndex++;
+    loadQuiz();
+});
+
+restartBtn.addEventListener("click", () => {
+    currentQuestionIndex = 0;
+    score = 0;
+    scoreTracker.innerText = `Skor: 0`;
+    restartBtn.classList.add("hidden");
+    loadQuiz();
+});
+
+// Initialize first question
+loadQuiz();
+</script>
+</body>
+</html>

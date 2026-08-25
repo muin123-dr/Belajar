@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKA Sosiologi SMA - Quiz Interaktif 30 Soal</title>
+    <style>
+        :root {
+            --primary: #5b4bc4;
+            --primary-dark: #3a2f8f;
+            --primary-light: #e8e5f9;
+            --accent: #f39c12;
+            --accent-light: #fef3e2;
+            --success: #27ae60;
+            --success-light: #eafaf1;
+            --danger: #e74c3c;
+            --danger-light: #fdf2f2;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            --light-gray: #ecf0f1;
+            --white: #ffffff;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 820px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        /* Header */
+        .quiz-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, #6c5ce7 100%);
+            color: var(--white);
+            padding: 28px 32px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -20%;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .quiz-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quiz-title .icon {
+            font-size: 2rem;
+        }
+        .quiz-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 6px;
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
+        }
+
+        .progress-section {
+            margin-top: 18px;
+            position: relative;
+            z-index: 1;
+        }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            opacity: 0.95;
+        }
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar-fill {
+            background: var(--accent);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            width: 0%;
+            position: relative;
+        }
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Question Body */
+        .quiz-body {
+            padding: 28px 32px 20px;
+            min-height: 420px;
+        }
+
+        .question-number-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .question-type-badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: #b9770e;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            margin-left: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .question-context {
+            background: var(--light-gray);
+            border-left: 4px solid var(--primary);
+            padding: 16px 20px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.7;
+        }
+
+        /* Options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 18px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--white);
+            position: relative;
+            user-select: none;
+        }
+        .option-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateX(4px);
+        }
+        .option-item.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .option-item.correct {
+            border-color: var(--success);
+            background: var(--success-light);
+        }
+        .option-item.incorrect {
+            border-color: var(--danger);
+            background: var(--danger-light);
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-6px);
+            }
+            40% {
+                transform: translateX(6px);
+            }
+            60% {
+                transform: translateX(-4px);
+            }
+            80% {
+                transform: translateX(4px);
+            }
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+        .option-item.selected .option-letter,
+        .option-item.correct .option-letter {
+            background: var(--primary);
+            color: var(--white);
+        }
+        .option-item.incorrect .option-letter {
+            background: var(--danger);
+            color: var(--white);
+        }
+        .option-item.correct .option-letter {
+            background: var(--success);
+        }
+        .option-text {
+            font-size: 0.95rem;
+            color: #333;
+            line-height: 1.5;
+            padding-top: 3px;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            margin-top: 16px;
+            padding: 18px 20px;
+            border-radius: var(--radius-sm);
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+        .feedback-container.show {
+            display: block;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .feedback-correct {
+            background: var(--success-light);
+            border-left: 4px solid var(--success);
+        }
+        .feedback-incorrect {
+            background: var(--danger-light);
+            border-left: 4px solid var(--danger);
+        }
+        .feedback-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feedback-correct .feedback-title {
+            color: var(--success);
+        }
+        .feedback-incorrect .feedback-title {
+            color: var(--danger);
+        }
+        .feedback-explanation {
+            font-size: 0.9rem;
+            color: #444;
+            line-height: 1.7;
+        }
+        .feedback-key {
+            font-weight: 600;
+            margin-top: 6px;
+            font-size: 0.85rem;
+            color: #555;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius-xs);
+            display: inline-block;
+        }
+
+        /* PGK Kategori Table */
+        .pgk-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .pgk-table th {
+            background: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+        .pgk-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--light-gray);
+            background: var(--white);
+            vertical-align: middle;
+        }
+        .pgk-table tr:last-child td {
+            border-bottom: none;
+        }
+        .pgk-statement {
+            font-weight: 500;
+            color: #333;
+            line-height: 1.5;
+        }
+        .pgk-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .pgk-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px solid var(--light-gray);
+            background: var(--white);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: var(--transition);
+            color: #555;
+        }
+        .pgk-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+        .pgk-btn.selected-correct {
+            border-color: var(--success);
+            background: var(--success-light);
+            color: var(--success);
+        }
+        .pgk-btn.selected-incorrect {
+            border-color: var(--danger);
+            background: var(--danger-light);
+            color: var(--danger);
+            animation: shake 0.4s ease;
+        }
+        .pgk-btn.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        .pgk-row-feedback {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .pgk-row-feedback.correct-text {
+            color: var(--success);
+        }
+        .pgk-row-feedback.incorrect-text {
+            color: var(--danger);
+        }
+
+        /* MCMA Checkbox */
+        .mcma-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .mcma-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        .mcma-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .mcma-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .mcma-item.checked {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .mcma-item.correct-answer {
+            border-color: var(--success);
+            background: var(--success-light);
+        }
+        .mcma-item.wrong-answer {
+            border-color: var(--danger);
+            background: var(--danger-light);
+            animation: shake 0.4s ease;
+        }
+        .mcma-item.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 28px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(91, 75, 196, 0.35);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(91, 75, 196, 0.45);
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.35);
+        }
+        .btn-accent:hover {
+            background: #e08e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.45);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        .btn-nav {
+            padding: 10px 20px;
+            font-size: 0.85rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-buttons .spacer {
+            flex: 1;
+        }
+
+        /* Score Summary */
+        .score-summary {
+            text-align: center;
+            padding: 40px 30px;
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+        .score-summary.show {
+            display: block;
+        }
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            box-shadow: 0 10px 40px rgba(91, 75, 196, 0.4);
+        }
+        .score-circle span {
+            font-size: 0.85rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+        .score-details {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .score-breakdown {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .score-stat {
+            padding: 14px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            text-align: center;
+            min-width: 100px;
+        }
+        .score-stat.correct-stat {
+            background: var(--success-light);
+            color: var(--success);
+        }
+        .score-stat.incorrect-stat {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+        .score-stat.unanswered-stat {
+            background: var(--light-gray);
+            color: var(--gray);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+            .quiz-header {
+                padding: 20px 18px 16px;
+            }
+            .quiz-title {
+                font-size: 1.2rem;
+            }
+            .quiz-body {
+                padding: 20px 16px 16px;
+            }
+            .question-text {
+                font-size: 1rem;
+            }
+            .option-item {
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            .option-letter {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+            }
+            .option-text {
+                font-size: 0.88rem;
+            }
+            .pgk-table th,
+            .pgk-table td {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+            }
+            .pgk-btn {
+                padding: 4px 10px;
+                font-size: 0.72rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.82rem;
+            }
+            .nav-buttons {
+                gap: 8px;
+            }
+            .score-circle {
+                width: 110px;
+                height: 110px;
+                font-size: 2rem;
+            }
+            .score-breakdown {
+                gap: 8px;
+            }
+            .score-stat {
+                padding: 10px 14px;
+                min-width: 80px;
+                font-size: 0.85rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .quiz-header {
+                padding: 16px 12px 12px;
+            }
+            .quiz-body {
+                padding: 16px 12px 12px;
+            }
+            .question-text {
+                font-size: 0.92rem;
+            }
+            .option-text {
+                font-size: 0.82rem;
+            }
+            .btn-nav {
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+            .pgk-table {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quizContainer">
+        <!-- Header -->
+        <div class="quiz-header">
+            <div class="quiz-title">
+                <span class="icon">📚</span> TKA Sosiologi SMA
+            </div>
+            <div class="quiz-subtitle">Kuis Interaktif · 30 Soal · Irisan Kurikulum 2013 & Merdeka</div>
+            <div class="progress-section">
+                <div class="progress-info">
+                    <span id="progressText">Soal 1 dari 30</span>
+                    <span id="scoreText">Skor: 0</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="quiz-body" id="quizBody">
+            <!-- Questions rendered by JS -->
+        </div>
+
+        <!-- Score Summary -->
+        <div class="score-summary" id="scoreSummary">
+            <div class="score-circle" id="finalScore">0<span>dari 30</span></div>
+            <h2 style="margin-bottom:8px;color:var(--dark);">Hasil Akhir</h2>
+            <p class="score-details" id="scoreMessage">Kerjakan semua soal untuk melihat hasil!</p>
+            <div class="score-breakdown">
+                <div class="score-stat correct-stat" id="statCorrect">✅ Benar: 0</div>
+                <div class="score-stat incorrect-stat" id="statIncorrect">❌ Salah: 0</div>
+                <div class="score-stat unanswered-stat" id="statUnanswered">⏭️ Belum: 0</div>
+            </div>
+            <button class="btn btn-primary" onclick="restartQuiz()">🔄 Ulangi Kuis</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA SOAL ====================
+        const questions = [
+            // ===== BAB 1: SOSIOLOGI SEBAGAI ILMU (5 soal) =====
+            {
+                type: 'pg',
+                topic: 'Sosiologi sebagai Ilmu',
+                subtopic: 'Ciri-ciri sosiologi',
+                number: 1,
+                question: 'Sekelompok mahasiswa melakukan penelitian tentang fenomena flexing di media sosial. Mereka membaca berbagai jurnal dan menemukan bahwa teori-teori tentang perilaku konsumtif terus mengalami penyempurnaan dari masa ke masa. Para sosiolog kontemporer terus mengembangkan teori lama agar relevan dengan era digital saat ini. Manakah ciri sosiologi yang paling tepat berdasarkan ilustrasi tersebut?',
+                options: [
+                    'A. Teoritis - karena berusaha menyusun abstraksi dari hasil pengamatan',
+                    'B. Nonetis - karena tidak menilai baik buruknya perilaku flexing',
+                    'C. Empiris - karena berdasarkan observasi lapangan yang nyata',
+                    'D. Objektif - karena tidak dipengaruhi oleh subjektivitas peneliti',
+                    'E. Kumulatif - karena teori terus berkembang dan disempurnakan'
+                ],
+                correct: 4,
+                explanation: 'Ciri kumulatif berarti teori-teori sosiologi dibangun dari teori-teori yang sudah ada sebelumnya dan terus mengalami penyempurnaan. Ilustrasi soal menekankan bahwa "teori-teori terus mengalami penyempurnaan" dan "para sosiolog kontemporer terus mengembangkan teori lama" yang merupakan karakteristik dari ciri kumulatif.'
+            }, {
+                type: 'pg',
+                topic: 'Sosiologi sebagai Ilmu',
+                subtopic: 'Objek kajian sosiologi',
+                number: 2,
+                question: 'Perhatikan pernyataan berikut! Objek kajian sosiologi memiliki karakteristik yang berbeda dibandingkan dengan cabang ilmu lainnya. Berdasarkan pernyataan berikut, manakah yang PALING TEPAT menggambarkan objek kajian sosiologi?',
+                options: [
+                    'A. Gempa bumi berkekuatan 6,8 yang terjadi di Jawa Barat sebagai akibat pergeseran lempeng bumi',
+                    'B. Kecanduan media sosial di kalangan remaja yang mengubah pola interaksi dan komunikasi dalam keluarga',
+                    'C. Long COVID yang menyebabkan gangguan kesehatan fisik dan mental selama berbulan-bulan',
+                    'D. Aktivitas vulkanik yang menyebabkan kerusakan infrastruktur dan memaksa warga mengungsi',
+                    'E. Penyebaran virus baru yang menimbulkan krisis kesehatan global'
+                ],
+                correct: 1,
+                explanation: 'Objek kajian sosiologi selalu berkaitan dengan manusia, interaksi sosial, dan fenomena yang terjadi dalam masyarakat. Kecanduan media sosial yang mengubah pola interaksi dalam keluarga merupakan fenomena sosial karena melibatkan hubungan antar manusia. Pilihan lain (gempa, COVID, vulkanik, virus) adalah fenomena alam atau kesehatan, bukan kajian utama sosiologi.'
+            }, {
+                type: 'pgk',
+                topic: 'Sosiologi sebagai Ilmu',
+                subtopic: 'Peran sosiologi dalam kehidupan',
+                number: 3,
+                question: 'Perhatikan infografis berikut tentang kerusakan lingkungan hidup. Tentukan Sesuai atau Tidak Sesuai pada peran ilmu sosiologi untuk menyikapi kasus tersebut!',
+                pgkStatements: [
+                    'Meneliti dampak kerusakan lingkungan terhadap terjadinya perubahan perilaku sosial masyarakat.',
+                    'Menganalisis proses peluruhan gas rumah kaca di atmosfer untuk mengurangi pemanasan global.',
+                    'Mendorong pemberdayaan masyarakat di bidang pengelolaan sampah melalui komunitas bank sampah.'
+                ],
+                pgkCorrect: ['sesuai', 'tidak', 'sesuai'],
+                pgkExplanation: 'Peran sosiologi berkaitan dengan perilaku manusia dan masyarakat. Meneliti dampak sosial dari kerusakan lingkungan (A) dan pemberdayaan masyarakat (C) adalah kajian sosiologi. Menganalisis proses kimia gas rumah kaca (B) adalah kajian ilmu alam/kimia, bukan sosiologi.',
+                pgkKeys: ['Sesuai', 'Tidak Sesuai', 'Sesuai']
+            }, {
+                type: 'pg',
+                topic: 'Sosiologi sebagai Ilmu',
+                subtopic: 'Tokoh-tokoh sosiologi',
+                number: 4,
+                question: 'Seorang ilmuwan sosial mencetuskan istilah "sosiologi" dan meyakini bahwa masyarakat harus dipelajari menggunakan metode ilmiah yang sistematis, bukan spekulasi filosofis. Ia juga dikenal sebagai "Bapak Sosiologi". Siapakah tokoh yang dimaksud?',
+                options: [
+                    'A. Karl Marx',
+                    'B. Emile Durkheim',
+                    'C. Auguste Comte',
+                    'D. Max Weber',
+                    'E. Herbert Spencer'
+                ],
+                correct: 2,
+                explanation: 'Auguste Comte adalah tokoh yang pertama kali menciptakan istilah "sosiologi" pada tahun 1838. Ia dijuluki sebagai "Bapak Sosiologi" karena kontribusinya dalam meletakkan dasar-dasar ilmiah untuk mempelajari masyarakat. Karl Marx dikenal dengan teori konflik kelas, Durkheim dengan teori fakta sosial, Weber dengan teori tindakan sosial, dan Spencer dengan teori evolusi sosial.'
+            }, {
+                type: 'pg',
+                topic: 'Sosiologi sebagai Ilmu',
+                subtopic: 'Manfaat sosiologi',
+                number: 5,
+                question: 'Pemerintah Kota Bandung menghadapi masalah kemacetan yang semakin parah. Seorang sosiolog diminta untuk melakukan kajian tentang pola mobilitas warga, faktor-faktor sosial yang memengaruhi penggunaan kendaraan pribadi, dan dampak sosial dari kebijakan ganjil-genap. Hasil kajian ini kemudian digunakan sebagai dasar untuk merancang program transportasi publik yang lebih efektif. Manfaat sosiologi yang paling tepat berdasarkan ilustrasi tersebut adalah...',
+                options: [
+                    'A. Perencanaan sosial - membantu merancang program pembangunan yang tepat sasaran',
+                    'B. Penelitian murni - mengembangkan teori-teori baru tentang perilaku masyarakat',
+                    'C. Dokumentasi sejarah - mencatat perkembangan kebijakan transportasi dari masa ke masa',
+                    'D. Evaluasi program - menilai efektivitas kebijakan yang sudah berjalan',
+                    'E. Prediksi bencana - memprediksi kemungkinan terjadinya krisis transportasi'
+                ],
+                correct: 0,
+                explanation: 'Manfaat sosiologi dalam ilustrasi ini adalah perencanaan sosial (social planning). Sosiolog memberikan data dan analisis tentang pola mobilitas warga yang digunakan sebagai dasar untuk merancang program transportasi publik yang efektif. Ini merupakan fungsi sosiologi dalam membantu perencanaan pembangunan yang tepat sasaran berdasarkan pemahaman tentang perilaku masyarakat.'
+            },
+
+            // ===== BAB 2: HUBUNGAN DAN GEJALA SOSIAL (6 soal) =====
+            {
+                type: 'pg',
+                topic: 'Hubungan dan Gejala Sosial',
+                subtopic: 'Bentuk hubungan sosial',
+                number: 6,
+                question: 'Dua komunitas sepak bola di sebuah kota bersaing memperebutkan lapangan latihan yang sama. Persaingan ini berlangsung sehat dan masing-masing berusaha meningkatkan kualitas permainan. Namun, belakangan muncul ketegangan ketika salah satu komunitas menyebarkan isu negatif tentang komunitas lain di media sosial. Berdasarkan bentuk hubungan sosialnya, situasi ini dapat dikategorikan sebagai...',
+                options: [
+                    'A. Asosiatif - karena terjadi kerja sama dalam meningkatkan kualitas permainan',
+                    'B. Disosiatif - karena muncul persaingan dan kontravensi yang mengarah pada perpecahan',
+                    'C. Asosiatif - karena persaingan sehat justru memperkuat solidaritas internal',
+                    'D. Disosiatif - karena adanya akomodasi yang memaksa salah satu pihak mengalah',
+                    'E. Netral - karena persaingan adalah hal wajar dalam masyarakat'
+                ],
+                correct: 1,
+                explanation: 'Bentuk hubungan disosiatif meliputi persaingan (competition), kontravensi, dan konflik. Persaingan antarkomunitas yang awalnya sehat kemudian ditambah dengan penyebaran isu negatif (kontravensi) menunjukkan hubungan yang mengarah pada perpecahan. Ini merupakan ciri khas hubungan disosiatif. Kontravensi adalah bentuk hubungan yang berada di antara persaingan dan konflik, ditandai dengan perasaan tidak suka yang disembunyikan.'
+            }, {
+                type: 'mcma',
+                topic: 'Hubungan dan Gejala Sosial',
+                subtopic: 'Faktor yang mempengaruhi interaksi sosial',
+                number: 7,
+                question: 'Seorang remaja bernama Dimas sangat mengagumi salah satu influencer yang aktif mengkampanyekan gaya hidup sehat. Dimas mulai meniru cara berpakaian, pola makan, dan bahkan cara berbicara sang influencer tersebut. Ia juga merasa ikut sedih ketika idolanya mengalami masalah, seolah-olah masalah itu terjadi pada dirinya sendiri. Faktor-faktor yang memengaruhi interaksi sosial Dimas adalah...',
+                mcmaOptions: [
+                    'A. Sugesti - karena ia menerima pengaruh tanpa berpikir kritis',
+                    'B. Imitasi - karena ia meniru perilaku idolanya',
+                    'C. Simpati - karena ia ikut merasakan apa yang dialami idolanya',
+                    'D. Identifikasi - karena ia ingin menjadi sama dengan idolanya',
+                    'E. Motivasi - karena ia mendapat dorongan dari orang tua untuk hidup sehat'
+                ],
+                correct: [0, 1, 2, 3],
+                explanation: 'Dimas mengalami beberapa faktor interaksi sekaligus: (1) Sugesti - menerima pengaruh influencer tanpa berpikir kritis, (2) Imitasi - meniru cara berpakaian, pola makan, dan berbicara, (3) Simpati - ikut merasakan kesedihan idolanya, (4) Identifikasi - keinginan untuk menjadi sama dengan idolanya. Motivasi (E) tidak tepat karena tidak ada indikasi dorongan dari pihak lain, melainkan inisiatif dari dalam dirinya sendiri.'
+            }, {
+                type: 'pg',
+                topic: 'Hubungan dan Gejala Sosial',
+                subtopic: 'Ragam gejala sosial',
+                number: 8,
+                question: 'Di sebuah kota metropolitan, semakin banyak anak muda yang mengalami quarter life crisis - perasaan cemas dan bingung tentang arah hidup di usia 20-an. Fenomena ini dipicu oleh tekanan sosial untuk sukses di usia muda, perbandingan diri dengan orang lain di media sosial, dan ketidakpastian masa depan. Gejala sosial yang paling tepat untuk menggambarkan fenomena ini adalah...',
+                options: [
+                    'A. Gejala ekonomi - karena terkait dengan kesulitan mencari pekerjaan',
+                    'B. Gejala budaya - karena perubahan nilai tentang definisi kesuksesan',
+                    'C. Gejala psikologis-sosial - karena melibatkan kondisi mental yang dipengaruhi oleh tekanan sosial',
+                    'D. Gejala teknologi - karena dipicu oleh media sosial',
+                    'E. Gejala demografis - karena terjadi pada kelompok usia tertentu'
+                ],
+                correct: 2,
+                explanation: 'Quarter life crisis adalah gejala sosial yang bersifat psikologis-sosial karena melibatkan kondisi mental (kecemasan, kebingungan) yang dipengaruhi oleh faktor sosial seperti tekanan sosial, perbandingan di media sosial, dan ekspektasi masyarakat. Ini bukan semata-mata gejala ekonomi (meski terkait pekerjaan), bukan gejala budaya (meski berkaitan dengan nilai), dan bukan murni gejala teknologi (meski dipicu media sosial).'
+            }, {
+                type: 'pg',
+                topic: 'Hubungan dan Gejala Sosial',
+                subtopic: 'Lembaga sosial',
+                number: 9,
+                question: 'Lembaga X berfungsi untuk mengatur produksi, distribusi, dan konsumsi barang dan jasa dalam masyarakat. Lembaga ini juga berperan dalam menciptakan lapangan kerja, menentukan harga pasar, dan mengatur hubungan antara produsen dan konsumen. Berdasarkan fungsinya, lembaga sosial X adalah...',
+                options: [
+                    'A. Lembaga keluarga',
+                    'B. Lembaga pendidikan',
+                    'C. Lembaga ekonomi',
+                    'D. Lembaga politik',
+                    'E. Lembaga agama'
+                ],
+                correct: 2,
+                explanation: 'Lembaga ekonomi adalah lembaga sosial yang berfungsi mengatur kegiatan produksi, distribusi, dan konsumsi barang/jasa dalam masyarakat. Fungsinya mencakup penciptaan lapangan kerja, penentuan harga, dan pengaturan hubungan produsen-konsumen. Lembaga keluarga fokus pada sosialisasi primer, pendidikan pada transfer pengetahuan, politik pada kekuasaan, dan agama pada moral-spiritual.'
+            }, {
+                type: 'pgk',
+                topic: 'Hubungan dan Gejala Sosial',
+                subtopic: 'Gejala sosial dari penggunaan internet',
+                number: 10,
+                question: 'Anjuran tentang pengawasan orang tua terhadap penggunaan internet anak mencerminkan adanya gejala sosial yang timbul akibat penggunaan internet yang tidak terkontrol. Manakah dari pernyataan berikut yang paling tepat menggambarkan gejala sosial tersebut?',
+                pgkStatements: [
+                    'Penggunaan internet pada anak perlu diawasi oleh orang tua agar anak tidak mudah terpapar konten negatif.',
+                    'Pola asuh yang terlalu longgar terhadap penggunaan internet dapat memengaruhi pembentukan kepribadian anak.',
+                    'Anak-anak merupakan satu-satunya kelompok pengguna internet terbesar di Indonesia.'
+                ],
+                pgkCorrect: ['sesuai', 'sesuai', 'tidak'],
+                pgkExplanation: 'Pernyataan A dan B tepat menggambarkan gejala sosial terkait penggunaan internet pada anak, yaitu pentingnya pengawasan orang tua dan dampak pola asuh terhadap pembentukan kepribadian. Pernyataan C tidak tepat karena anak-anak bukan "satu-satunya" kelompok terbesar, dan pernyataan ini juga tidak menggambarkan gejala sosial melainkan data demografis.',
+                pgkKeys: ['Sesuai', 'Sesuai', 'Tidak Sesuai']
+            }, {
+                type: 'mcma',
+                topic: 'Hubungan dan Gejala Sosial',
+                subtopic: 'Masyarakat multikultural',
+                number: 11,
+                question: 'Setara Institute melaporkan perusakan dan penolakan pendirian tempat ibadah menempati lima urutan teratas pelanggaran Kebebasan Beragama/Berkeyakinan (KBB) sepanjang 2007-2022. Manakah pernyataan berikut yang menunjukkan sikap kritis untuk mewujudkan kehidupan masyarakat multikultural terkait kasus tersebut?',
+                mcmaOptions: [
+                    'A. Mengadakan dialog antarumat beragama untuk membahas pembatasan aturan pembangunan rumah ibadah',
+                    'B. Memetakan konflik terkait masalah pembangunan rumah ibadah dan merencanakan proses resolusi yang sesuai',
+                    'C. Melibatkan tokoh agama, tokoh daerah, dan masyarakat sipil dalam mempromosikan kebhinekaan',
+                    'D. Meminta pemerintah meninjau ulang peraturan untuk mendukung kebebasan hak dalam membangun rumah ibadah',
+                    'E. Mengatur jarak minimum pembangunan rumah ibadah antarumat beragama untuk meminimalkan konflik'
+                ],
+                correct: [1, 2, 3],
+                explanation: 'Sikap kritis dalam mewujudkan masyarakat multikultural meliputi: (B) memetakan konflik dan merencanakan resolusi, (C) melibatkan berbagai pihak untuk mempromosikan kebhinekaan, dan (D) meminta pemerintah meninjau ulang peraturan yang membatasi kebebasan beragama. Pilihan A (pembatasan) dan E (pengaturan jarak) justru berpotensi memperkuat diskriminasi, bukan mewujudkan kesetaraan.'
+            },
+
+            // ===== BAB 3: PENELITIAN SOSIAL (6 soal) =====
+            {
+                type: 'pg',
+                topic: 'Penelitian Sosial',
+                subtopic: 'Langkah penelitian kualitatif',
+                number: 12,
+                question: 'Penelitian kualitatif menekankan pada pemahaman mendalam tentang fenomena sosial. Berdasarkan ilustrasi tersebut, manakah pernyataan yang menunjukkan urutan proses tahapan penelitian kualitatif yang sistematis yang dilakukan peneliti?',
+                options: [
+                    'A. Menyusun hipotesis terlebih dahulu sebelum mengumpulkan data',
+                    'B. Menyusun panduan wawancara sebelum merumuskan pertanyaan penelitian',
+                    'C. Membuat rumusan pertanyaan penelitian sebelum menentukan populasi dan sampel',
+                    'D. Menentukan populasi dan sampel sebelum merumuskan masalah penelitian',
+                    'E. Memutuskan teknik pengolahan data sebelum menentukan metode penelitian'
+                ],
+                correct: 2,
+                explanation: 'Urutan penelitian kualitatif yang sistematis dimulai dari merumuskan masalah/pertanyaan penelitian, kemudian menentukan populasi dan sampel, lalu menyusun instrumen, mengumpulkan data, dan menganalisis. Pilihan C tepat karena rumusan pertanyaan penelitian harus dibuat sebelum menentukan populasi dan sampel. Penelitian kualitatif tidak selalu memerlukan hipotesis (A salah), panduan wawancara dibuat setelah rumusan masalah (B salah), rumusan masalah selalu di awal (D salah), dan metode penelitian harus ditentukan sebelum teknik pengolahan data (E salah).'
+            }, {
+                type: 'pgk',
+                topic: 'Penelitian Sosial',
+                subtopic: 'Pengolahan data kuantitatif vs kualitatif',
+                number: 13,
+                question: 'Terdapat dua peneliti sosial: Andi menerapkan pendekatan kuantitatif dengan menyebar kuesioner tertutup kepada 200 responden, sementara Yuli menerapkan pendekatan kualitatif dengan melakukan wawancara mendalam pada 10 remaja. Berdasarkan pernyataan tersebut, manakah pengolahan data yang sesuai?',
+                pgkStatements: [
+                    'Data dari kuesioner yang dikumpulkan Andi diolah menggunakan analisis statistik.',
+                    'Hasil wawancara mendalam pada penelitian Yuli diolah dengan memberikan kode berupa angka-angka.',
+                    'Andi perlu mengolah data menggunakan perangkat lunak statistik seperti SPSS atau Excel.',
+                    'Dalam penelitian Yuli, makna dan konteks dari jawaban menjadi fokus utama analisis.'
+                ],
+                pgkCorrect: ['sesuai', 'tidak', 'sesuai', 'sesuai'],
+                pgkExplanation: 'Penelitian kuantitatif (Andi) menggunakan data numerik yang diolah dengan analisis statistik, baik manual maupun menggunakan software seperti SPSS atau Excel (A dan C sesuai). Penelitian kualitatif (Yuli) fokus pada makna dan konteks jawaban, bukan angka (D sesuai). Pernyataan B tidak sesuai karena data kualitatif tidak dikodekan menjadi angka-angka, melainkan dianalisis secara tematik.',
+                pgkKeys: ['Sesuai', 'Tidak Sesuai', 'Sesuai', 'Sesuai']
+            }, {
+                type: 'mcma',
+                topic: 'Penelitian Sosial',
+                subtopic: 'Penyempurnaan langkah penelitian',
+                number: 14,
+                question: 'Seorang murid ingin melakukan penelitian tentang pengaruh pergaulan sebaya terhadap kelekatan hubungan antar anggota keluarga. Ia telah merancang langkah awal: merumuskan masalah, menyusun pertanyaan terbuka sebanyak sepuluh butir, dan mengolah jawaban menjadi angka untuk dianalisis statistik. Manakah pernyataan yang tepat untuk menyempurnakan penelitian tersebut?',
+                mcmaOptions: [
+                    'A. Peneliti perlu memperjelas rumusan masalah agar sesuai dengan pengalaman sosial remaja',
+                    'B. Peneliti perlu mengubah jenis pertanyaan menjadi pertanyaan tertutup agar data lebih mudah dianalisis',
+                    'C. Peneliti perlu menentukan jenis dan jumlah sampel terlebih dahulu sebelum menyusun instrumen',
+                    'D. Peneliti sebaiknya menggunakan metode observasi partisipatif untuk menggantikan instrumen pertanyaan',
+                    'E. Peneliti perlu menyesuaikan kembali isi penelitian agar tidak terlalu rumit'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'Penyempurnaan yang tepat: (A) memperjelas rumusan masalah, (B) mengubah ke pertanyaan tertutup agar sesuai dengan analisis statistik yang direncanakan, dan (C) menentukan sampel sebelum menyusun instrumen. Pilihan D kurang tepat karena observasi partisipatif tidak cocok untuk topik "pengaruh pergaulan" yang lebih baik digali melalui angket. Pilihan E bersifat subjektif dan tidak spesifik.'
+            }, {
+                type: 'pg',
+                topic: 'Penelitian Sosial',
+                subtopic: 'Jenis penelitian',
+                number: 15,
+                question: 'Sebuah tim pengabdian masyarakat dari perguruan tinggi mengembangkan model pengelolaan sampah berbasis partisipasi warga. Setelah diterapkan enam bulan, terjadi penurunan signifikan jumlah sampah dan peningkatan kesadaran warga. Model ini kemudian diadaptasi oleh beberapa sekolah. Berdasarkan ilustrasi tersebut, jenis penelitian sosial yang sesuai adalah...',
+                options: [
+                    'A. Eksploratif - untuk menggambarkan realitas sosial yang belum diketahui',
+                    'B. Verifikatif - untuk menguji kebenaran suatu teori',
+                    'C. Deskriptif - untuk memetakan tingkat pengelolaan secara statistik',
+                    'D. Praktis - untuk memberikan solusi nyata terhadap persoalan sosial',
+                    'E. Teoritis - untuk merumuskan konsep-konsep baru'
+                ],
+                correct: 3,
+                explanation: 'Penelitian praktis (applied research/action research) bertujuan untuk memberikan solusi nyata terhadap masalah sosial. Tim pengabdian masyarakat mengembangkan model yang langsung diterapkan dan memberikan dampak nyata (penurunan sampah, peningkatan kesadaran). Ini berbeda dengan penelitian eksploratif (menjelajahi fenomena baru), verifikatif (menguji teori), deskriptif (menggambarkan kondisi), atau teoritis (mengembangkan konsep).'
+            }, {
+                type: 'pg',
+                topic: 'Penelitian Sosial',
+                subtopic: 'Perbedaan kualitatif dan kuantitatif',
+                number: 16,
+                question: 'Seorang peneliti ingin memahami secara mendalam pengalaman hidup para pekerja migran Indonesia di luar negeri. Ia melakukan wawancara mendalam dengan 15 pekerja migran, mengamati kehidupan sehari-hari mereka, dan menganalisis cerita-cerita personal mereka. Berdasarkan pendekatan yang digunakan, karakteristik penelitian ini adalah...',
+                options: [
+                    'A. Menggunakan sampel besar untuk generalisasi hasil',
+                    'B. Menggunakan instrumen kuesioner tertutup',
+                    'C. Menganalisis data menggunakan statistik deskriptif',
+                    'D. Berfokus pada pemahaman makna dan pengalaman subjektif',
+                    'E. Menguji hipotesis yang telah dirumuskan sebelumnya'
+                ],
+                correct: 3,
+                explanation: 'Penelitian yang menggunakan wawancara mendalam, observasi, dan analisis cerita personal adalah penelitian kualitatif. Karakteristik utamanya adalah fokus pada pemahaman makna dan pengalaman subjektif partisipan, bukan pada generalisasi statistik. Penelitian ini tidak menggunakan sampel besar (A salah), tidak menggunakan kuesioner tertutup (B salah), tidak menganalisis dengan statistik (C salah), dan tidak selalu menguji hipotesis (E salah).'
+            }, {
+                type: 'pg',
+                topic: 'Penelitian Sosial',
+                subtopic: 'Teknik pengumpulan data',
+                number: 17,
+                question: 'Seorang peneliti sosial ingin mengumpulkan data tentang perilaku konsumtif remaja di pusat perbelanjaan. Ia memutuskan untuk ikut serta dalam kegiatan belanja bersama sekelompok remaja sambil mengamati perilaku mereka secara langsung tanpa diketahui bahwa mereka sedang diamati. Teknik pengumpulan data yang digunakan peneliti tersebut adalah...',
+                options: [
+                    'A. Wawancara terstruktur',
+                    'B. Kuesioner tertutup',
+                    'C. Observasi partisipan',
+                    'D. Studi dokumentasi',
+                    'E. Focus group discussion'
+                ],
+                correct: 2,
+                explanation: 'Observasi partisipan adalah teknik pengumpulan data di mana peneliti ikut serta dalam kegiatan subjek yang diteliti sambil mengamati perilaku mereka. Dalam kasus ini, peneliti ikut belanja bersama remaja dan mengamati perilaku mereka secara langsung. Wawancara (A) dan kuesioner (B) bersifat tanya jawab, studi dokumentasi (D) menggunakan dokumen, dan FGD (E) adalah diskusi kelompok terfokus.'
+            },
+
+            // ===== BAB 4: KELOMPOK SOSIAL, KESETARAAN, KONFLIK (7 soal) =====
+            {
+                type: 'pg',
+                topic: 'Kelompok Sosial, Kesetaraan, dan Konflik',
+                subtopic: 'Jenis kelompok sosial',
+                number: 18,
+                question: 'Di sebuah kota besar, terdapat komunitas pemuda bernama "Gerak Kota". Komunitas ini dibentuk oleh anak-anak muda dari berbagai latar belakang: mahasiswa, buruh, seniman jalanan, dan pengusaha muda. Mereka tidak memiliki hubungan kekerabatan atau kesamaan daerah asal, namun terhubung oleh cita-cita yang sama untuk mengadvokasi ruang kota yang inklusif. Berdasarkan karakteristik tersebut, jenis kelompok sosial komunitas Gerak Kota adalah...',
+                options: [
+                    'A. Kelompok primer - karena interaksi anggotanya bersifat akrab',
+                    'B. Kelompok okupasional - karena terdiri dari berbagai latar pekerjaan',
+                    'C. Kelompok etnis - karena anggotanya memiliki latar budaya yang sama',
+                    'D. Kelompok sekunder - karena terbentuk atas dasar tujuan dan kepentingan bersama',
+                    'E. Kerumunan sosial - karena terbentuk secara spontan'
+                ],
+                correct: 3,
+                explanation: 'Kelompok sekunder adalah kelompok yang terbentuk berdasarkan tujuan atau kepentingan bersama, di mana interaksi anggotanya bersifat formal dan tidak terlalu mendalam. Komunitas Gerak Kota dibentuk karena cita-cita yang sama (advokasi ruang kota inklusif), bukan karena ikatan kekerabatan atau kedekatan emosional. Ini berbeda dengan kelompok primer yang bersifat akrab (A), kelompok okupasional yang berbasis profesi (B), kelompok etnis yang berbasis budaya (C), atau kerumunan yang bersifat spontan (E).'
+            }, {
+                type: 'mcma',
+                topic: 'Kelompok Sosial, Kesetaraan, dan Konflik',
+                subtopic: 'Jenis konflik sosial',
+                number: 19,
+                question: 'Pemerintah Kota Maju menyetujui proyek pembangunan apartemen mewah di kawasan yang dihuni keluarga berpenghasilan rendah. Masyarakat menghadapi ancaman penggusuran dan merasa tidak dilibatkan dalam perencanaan. Protes muncul, mulai dari aksi damai hingga konfrontatif. Apakah jenis konflik yang terjadi pada ilustrasi tersebut?',
+                mcmaOptions: [
+                    'A. Konflik kepentingan antara kelompok yang tidak setara secara ekonomi',
+                    'B. Konflik struktural akibat akses yang tidak setara dalam pengambilan keputusan',
+                    'C. Konflik interpersonal antar individu dengan komunitas yang sama',
+                    'D. Konflik budaya yang didasarkan atas latar belakang etnis yang berbeda',
+                    'E. Konflik nilai antara cara hidup tradisional dan tujuan pembangunan modern'
+                ],
+                correct: [0, 1, 4],
+                explanation: 'Tiga jenis konflik yang tepat: (A) konflik kepentingan karena perebutan lahan antara kelompok ekonomi berbeda, (B) konflik struktural karena masyarakat tidak dilibatkan dalam pengambilan keputusan, dan (E) konflik nilai antara cara hidup tradisional warga dengan tujuan pembangunan modern. Konflik interpersonal (C) tidak tepat karena ini bukan antar individu, dan konflik budaya/etnis (D) tidak disebutkan dalam ilustrasi.'
+            }, {
+                type: 'mcma',
+                topic: 'Kelompok Sosial, Kesetaraan, dan Konflik',
+                subtopic: 'Penanganan konflik',
+                number: 20,
+                question: 'Kota Praja merupakan kota multikultural. Terjadi konflik antara penduduk lama dengan pendatang terkait penggunaan ruang publik. Ketegangan meningkat di media sosial dan mulai mengarah pada protes dan ancaman kekerasan. Pemerintah setempat berada di bawah tekanan untuk mengembalikan kedamaian. Apa rekomendasi yang tepat untuk menurunkan tensi konflik?',
+                mcmaOptions: [
+                    'A. Menegakkan regulasi ketat untuk melarang acara budaya guna menghindari bentrokan',
+                    'B. Membentuk forum yang dipimpin oleh komunitas untuk pengambilan keputusan partisipatif',
+                    'C. Memfasilitasi dialog komunitas yang inklusif dengan melibatkan kedua pihak',
+                    'D. Menggunakan mediasi oleh pihak ketiga yang netral dan terlatih tentang kepekaan budaya',
+                    'E. Memisahkan kelompok secara permanen ke kawasan yang berbeda'
+                ],
+                correct: [1, 2, 3],
+                explanation: 'Rekomendasi yang tepat untuk menurunkan tensi konflik: (B) membentuk forum partisipatif agar kedua pihak merasa dilibatkan, (C) memfasilitasi dialog inklusif untuk membangun saling pengertian, dan (D) menggunakan mediasi oleh pihak netral yang memahami kepekaan budaya. Pilihan A (melarang acara budaya) justru menambah ketidakpuasan, dan pilihan E (memisahkan kelompok) tidak menyelesaikan akar masalah.'
+            }, {
+                type: 'pg',
+                topic: 'Kelompok Sosial, Kesetaraan, dan Konflik',
+                subtopic: 'Faktor ketidaksetaraan sosial',
+                number: 21,
+                question: 'Di sebuah negara berkembang, anak-anak dari keluarga kaya memiliki akses ke sekolah internasional dengan fasilitas lengkap, sementara anak-anak dari keluarga miskin hanya dapat mengakses sekolah dengan fasilitas terbatas. Akibatnya, kesenjangan prestasi akademik antara kedua kelompok semakin lebar. Faktor utama yang menyebabkan ketidaksetaraan sosial dalam ilustrasi ini adalah...',
+                options: [
+                    'A. Perbedaan etnis dan budaya',
+                    'B. Ketidaksetaraan dalam akses pendidikan',
+                    'C. Diskriminasi gender yang sistematis',
+                    'D. Perbedaan agama dan keyakinan',
+                    'E. Ketidaksetaraan dalam akses kesehatan'
+                ],
+                correct: 1,
+                explanation: 'Faktor utama ketidaksetaraan dalam ilustrasi ini adalah perbedaan akses pendidikan. Anak-anak dari keluarga kaya dapat mengakses pendidikan berkualitas (sekolah internasional dengan fasilitas lengkap), sementara anak-anak dari keluarga miskin hanya mendapat pendidikan dengan fasilitas terbatas. Kesenjangan akses pendidikan ini menyebabkan kesenjangan prestasi yang semakin lebar, menciptakan siklus ketidaksetaraan yang berkelanjutan.'
+            }, {
+                type: 'pg',
+                topic: 'Kelompok Sosial, Kesetaraan, dan Konflik',
+                subtopic: 'Kelompok primer dan sekunder',
+                number: 22,
+                question: 'Perhatikan dua contoh berikut:\n\n1) Sebuah keluarga besar berkumpul setiap bulan untuk merayakan tradisi bersama. Interaksi berlangsung akrab, penuh kehangatan, dan saling mengenal secara mendalam.\n\n2) Sebuah organisasi profesi mengadakan rapat tahunan untuk membahas anggaran dan program kerja. Interaksi berlangsung formal dan terstruktur.\n\nBerdasarkan contoh tersebut, manakah perbedaan yang PALING TEPAT antara kedua kelompok?',
+                options: [
+                    'A. Kelompok 1 bersifat sementara, kelompok 2 bersifat permanen',
+                    'B. Kelompok 1 adalah paguyuban, kelompok 2 adalah patembayan',
+                    'C. Kelompok 1 adalah in-group, kelompok 2 adalah out-group',
+                    'D. Kelompok 1 bersifat formal, kelompok 2 bersifat informal',
+                    'E. Kelompok 1 adalah okupasional, kelompok 2 adalah primer'
+                ],
+                correct: 1,
+                explanation: 'Kelompok 1 (keluarga besar) adalah contoh paguyuban (gemeinschaft) yang ditandai dengan hubungan akrab, kekeluargaan, dan mendalam. Kelompok 2 (organisasi profesi) adalah contoh patembayan (gesellschaft) yang ditandai dengan hubungan formal, kontraktual, dan berdasarkan tujuan. Konsep ini diperkenalkan oleh Ferdinand Tönnies.'
+            }, {
+                type: 'pgk',
+                topic: 'Kelompok Sosial, Kesetaraan, dan Konflik',
+                subtopic: 'Dinamika kelompok sosial',
+                number: 23,
+                question: 'Sebuah komunitas relawan bencana memiliki struktur organisasi yang jelas dengan ketua, wakil, dan anggota. Setiap anggota memiliki peran yang berbeda-beda. Namun, saat terjadi bencana besar, mereka bekerja sama dengan sangat kompak dan saling mendukung. Tentukan Sesuai atau Tidak Sesuai pernyataan berikut terkait dinamika kelompok tersebut!',
+                pgkStatements: [
+                    'Pembagian peran dalam komunitas mencerminkan adanya diferensiasi dalam kelompok.',
+                    'Kekompakan saat bencana menunjukkan tingginya kohesi kelompok.',
+                    'Struktur organisasi yang jelas menunjukkan kelompok ini bersifat informal.'
+                ],
+                pgkCorrect: ['sesuai', 'sesuai', 'tidak'],
+                pgkExplanation: 'Pernyataan A sesuai karena pembagian peran (ketua, wakil, anggota) menunjukkan diferensiasi dalam kelompok. Pernyataan B sesuai karena kekompakan dan saling mendukung menunjukkan kohesi yang tinggi. Pernyataan C tidak sesuai karena struktur organisasi yang jelas justru menunjukkan kelompok bersifat formal, bukan informal.',
+                pgkKeys: ['Sesuai', 'Sesuai', 'Tidak Sesuai']
+            }, {
+                type: 'pg',
+                topic: 'Kelompok Sosial, Kesetaraan, dan Konflik',
+                subtopic: 'Upaya mewujudkan kesetaraan',
+                number: 24,
+                question: 'Untuk mengurangi kesenjangan gender di dunia kerja, sebuah perusahaan menerapkan kebijakan yang memberikan prioritas rekrutmen bagi kandidat perempuan untuk posisi manajemen selama lima tahun ke depan. Kebijakan ini bertujuan untuk meningkatkan representasi perempuan di tingkat pengambil keputusan. Upaya yang dilakukan perusahaan tersebut dikenal sebagai...',
+                options: [
+                    'A. Diskriminasi positif (affirmative action)',
+                    'B. Asimilasi budaya',
+                    'C. Integrasi sosial',
+                    'D. Mobilitas sosial',
+                    'E. Stratifikasi sosial'
+                ],
+                correct: 0,
+                explanation: 'Affirmative action (diskriminasi positif) adalah kebijakan yang memberikan perlakuan khusus kepada kelompok yang selama ini kurang terwakili atau terdiskriminasi untuk mencapai kesetaraan. Dalam kasus ini, prioritas rekrutmen bagi perempuan untuk posisi manajemen adalah upaya untuk mengatasi kesenjangan gender yang sudah berlangsung lama. Ini bukan asimilasi (B), integrasi (C), mobilitas (D), atau stratifikasi (E).'
+            },
+
+            // ===== BAB 5: PERUBAHAN SOSIAL DAN GLOBALISASI (6 soal) =====
+            {
+                type: 'pg',
+                topic: 'Perubahan Sosial dan Globalisasi',
+                subtopic: 'Bentuk perubahan sosial',
+                number: 25,
+                question: 'Desa Sigeru selama ini mengandalkan pertanian subsistem dan masih terdapat sistem barter. Dalam dua dekade terakhir, jalan baru telah dibangun yang membuka akses ke pusat kota. Koneksi ini meningkatkan keterbukaan pasar, memperkenalkan teknologi digital kepada kaum muda, dan mulai menggeser nilai-nilai tradisional. Proses sosiologis yang terjadi di desa tersebut adalah...',
+                options: [
+                    'A. Penyimpangan sosial akibat runtuhnya nilai norma tradisional',
+                    'B. Perubahan budaya melalui pengenalan nilai-nilai baru dari sumber eksternal',
+                    'C. Perubahan sosial yang dipicu oleh transformasi teknologi dan ekonomi',
+                    'D. Mobilitas sosial yang dihasilkan dari peningkatan peluang ekonomi',
+                    'E. Gegar budaya akibat keterlambatan adaptasi lembaga tradisional'
+                ],
+                correct: 2,
+                explanation: 'Desa Sigeru mengalami perubahan sosial yang dipicu oleh transformasi teknologi (jalan baru, teknologi digital) dan ekonomi (keterbukaan pasar). Perubahan ini secara bertahap menggeser nilai-nilai tradisional dan struktur keluarga. Ini adalah proses perubahan sosial yang menyeluruh, bukan sekadar penyimpangan (A), perubahan budaya saja (B), mobilitas sosial (D), atau gegar budaya (E).'
+            }, {
+                type: 'pgk',
+                topic: 'Perubahan Sosial dan Globalisasi',
+                subtopic: 'Globalisasi dan masyarakat digital',
+                number: 26,
+                question: 'Arti berkomunikasi dengan teman dari berbagai negara melalui media sosial, belajar bahasa Korea dan Jepang melalui aplikasi online, berbelanja merek internasional melalui e-commerce, dan bergabung dengan bootcamp virtual bersama peserta dari berbagai negara. Manakah pernyataan yang tepat menggambarkan konsep globalisasi dan masyarakat digital?',
+                pgkStatements: [
+                    'Globalisasi memfasilitasi pertukaran budaya dan interaksi lintas negara melalui teknologi digital.',
+                    'Masyarakat digital mendorong penyebaran budaya lokal sambil menolak pengaruh budaya luar.',
+                    'Internet memungkinkan individu untuk mengakses pendidikan global, pasar, dan jaringan secara cepat.',
+                    'Globalisasi dan platform digital mengaburkan batas-batas wilayah dan menciptakan komunitas global.'
+                ],
+                pgkCorrect: ['tepat', 'tidak', 'tepat', 'tepat'],
+                pgkExplanation: 'Pernyataan A, C, dan D tepat menggambarkan globalisasi dan masyarakat digital. Pernyataan B tidak tepat karena masyarakat digital tidak menolak pengaruh budaya luar, justru memfasilitasi pertukaran budaya global. Masyarakat digital memungkinkan individu untuk mengakses berbagai budaya secara terbuka.',
+                pgkKeys: ['Tepat', 'Tidak Tepat', 'Tepat', 'Tepat']
+            }, {
+                type: 'pg',
+                topic: 'Perubahan Sosial dan Globalisasi',
+                subtopic: 'Dampak globalisasi',
+                number: 27,
+                question: 'Giri Kriya merupakan UMKM kerajinan tangan di pelosok desa. Usaha tersebut viral di media sosial sehingga omzet naik signifikan. Pemilik memanfaatkan e-commerce untuk memasarkan produk lintas negara. Namun, beberapa pengrajin yang tidak akrab dengan teknologi digital merasa tertinggal dan kesulitan mengikuti tren pemasaran online. Berdasarkan kasus tersebut, dampak globalisasi di era digital adalah...',
+                options: [
+                    'A. Era digital menghilangkan pentingnya pelestarian budaya',
+                    'B. Globalisasi melemahkan interaksi sosial di antara usaha kecil',
+                    'C. Penggunaan internet mendorong komunitas desa menolak kerajinan tradisional',
+                    'D. Era digital membuka peluang ekonomi, tetapi menciptakan ketidaksetaraan',
+                    'E. Globalisasi membatasi produk lokal karena bersaing dengan produk asing'
+                ],
+                correct: 3,
+                explanation: 'Kasus Giri Kriya menunjukkan dua sisi globalisasi digital: (1) peluang ekonomi yang terbuka lebar melalui pemasaran lintas negara, dan (2) ketidaksetaraan yang muncul antara mereka yang melek teknologi dengan yang tidak. Beberapa pengrajin merasa tertinggal karena tidak akrab dengan teknologi digital. Ini mencerminkan kesenjangan digital (digital divide) sebagai dampak globalisasi.'
+            }, {
+                type: 'pg',
+                topic: 'Perubahan Sosial dan Globalisasi',
+                subtopic: 'Solusi masalah globalisasi',
+                number: 28,
+                question: 'Di SMA Tarumaju, banyak murid terpengaruh tren media sosial: mengadopsi gaya hidup hedon, membandingkan diri dengan influencer, dan kecanduan game online yang berakibat pada penurunan kinerja akademis. Apakah solusi yang PALING TEPAT untuk mengatasi permasalahan sosial tersebut?',
+                options: [
+                    'A. Melarang akses ke semua media sosial khususnya di lingkungan sekolah',
+                    'B. Mempromosikan literasi digital dan pemikiran kritis dalam kurikulum sekolah',
+                    'C. Mendorong murid untuk menerima tren media sosial agar tetap up to date',
+                    'D. Membatasi akses internet hanya untuk kegiatan akademik',
+                    'E. Mengizinkan penggunaan internet tanpa batas untuk mendorong kreativitas'
+                ],
+                correct: 1,
+                explanation: 'Solusi paling tepat adalah mempromosikan literasi digital dan pemikiran kritis. Alih-alih melarang (A, D) yang tidak mendidik dan sulit diterapkan, atau membiarkan tanpa batas (E) yang berbahaya, literasi digital membantu murid memahami dampak media sosial, berpikir kritis terhadap konten, dan menggunakan teknologi secara bijak. Ini adalah pendekatan yang berkelanjutan dan memberdayakan.'
+            }, {
+                type: 'mcma',
+                topic: 'Perubahan Sosial dan Globalisasi',
+                subtopic: 'Sikap kritis terhadap globalisasi',
+                number: 29,
+                question: 'Lina adalah mahasiswa yang aktif mengikuti influencer global. Ia mulai mengubah penampilan, pola konsumsi, dan merasa tidak percaya diri dengan kehidupannya sendiri. Teman-temannya khawatir karena Lina semakin menjauh dari interaksi nyata dan meniru budaya luar secara berlebihan. Apa saja langkah atau sikap kritis yang dapat dilakukan untuk menghindari dampak negatif globalisasi seperti yang dialami Lina?',
+                mcmaOptions: [
+                    'A. Mengadopsi pengaruh global secara selektif sambil mempertahankan identitas budaya lokal',
+                    'B. Sepenuhnya mengisolasi diri dari tren global untuk menghindari dampak negatif',
+                    'C. Mendorong penggunaan media sosial untuk mempromosikan nilai-nilai budaya lokal',
+                    'D. Mengembangkan literasi media untuk menyaring konten secara kritis dan bertanggung jawab',
+                    'E. Meniru budaya global sepenuhnya agar diterima dalam pergaulan modern'
+                ],
+                correct: [0, 2, 3],
+                explanation: 'Sikap kritis terhadap globalisasi meliputi: (A) selektif dalam mengadopsi pengaruh global sambil mempertahankan identitas lokal, (C) menggunakan media sosial untuk mempromosikan budaya lokal, dan (D) mengembangkan literasi media untuk menyaring konten secara kritis. Mengisolasi diri (B) tidak realistis dan kontraproduktif, sementara meniru budaya global sepenuhnya (E) justru memperparah masalah.'
+            }, {
+                type: 'pgk',
+                topic: 'Perubahan Sosial dan Globalisasi',
+                subtopic: 'Respon kritis terhadap perubahan sosial',
+                number: 30,
+                question: 'Gelombang Korea (Hallyu) berkembang pesat. Musik K-Pop, drama Korea, dan tren gaya hidup banyak digandrungi anak muda Indonesia. Di satu sisi budaya ini memberikan inspirasi baru, namun di sisi lain memengaruhi perilaku remaja: konsumerisme berlebih, pengabaian produk lokal, dan standar kecantikan yang tidak realistis. Manakah respon kritis yang tepat untuk menanggapi perubahan sosial tersebut?',
+                pgkStatements: [
+                    'Mengikuti tren tanpa syarat sebagai bagian dari masyarakat global.',
+                    'Mendorong refleksi diri dan literasi media untuk memahami pengaruh budaya.',
+                    'Menyeimbangkan penghargaan terhadap tren Korea dengan dukungan untuk budaya lokal.'
+                ],
+                pgkCorrect: ['tidak', 'tepat', 'tepat'],
+                pgkExplanation: 'Respon kritis yang tepat: (B) mendorong refleksi diri dan literasi media agar remaja mampu memahami dan menyaring pengaruh budaya secara bijak, dan (C) menyeimbangkan apresiasi terhadap budaya Korea dengan dukungan pada budaya lokal. Mengikuti tren tanpa syarat (A) bukan sikap kritis karena tidak ada proses evaluasi dan seleksi terhadap pengaruh budaya yang masuk.',
+                pgkKeys: ['Tidak Tepat', 'Tepat', 'Tepat']
+            }
+        ];
+
+        // ==================== STATE ====================
+        let currentQuestion = 0;
+        let score = 0;
+        let answers = {}; // { questionIndex: { answered: true, correct: true/false, selected: [...] } }
+        let quizCompleted = false;
+
+        // ==================== DOM ELEMENTS ====================
+        const quizBody = document.getElementById('quizBody');
+        const progressText = document.getElementById('progressText');
+        const scoreText = document.getElementById('scoreText');
+        const progressBar = document.getElementById('progressBar');
+        const scoreSummary = document.getElementById('scoreSummary');
+
+        // ==================== RENDER FUNCTIONS ====================
+        function renderQuestion() {
+            if (quizCompleted) return;
+            const q = questions[currentQuestion];
+            const isAnswered = answers[currentQuestion] !== undefined;
+
+            let html = '';
+            html += `<div class="question-number-badge">Soal ${currentQuestion + 1}</div>`;
+            html +=
+                `<div class="question-type-badge">${q.type === 'pg' ? 'Pilihan Ganda' : q.type === 'pgk' ? 'PGK Kategori' : 'PGK MCMA'}</div>`;
+            html += `<div class="question-text">${q.question}</div>`;
+
+            if (q.type === 'pg') {
+                html += `<div class="options-container" id="pgOptions">`;
+                q.options.forEach((opt, idx) => {
+                    let cls = 'option-item';
+                    if (isAnswered) {
+                        if (idx === q.correct) cls += ' correct';
+                        if (answers[currentQuestion].selected && answers[currentQuestion].selected[0] ===
+                            idx && idx !== q.correct) cls += ' incorrect';
+                        if (answers[currentQuestion].selected && answers[currentQuestion].selected[0] ===
+                            idx && idx === q.correct) cls += ' correct';
+                    }
+                    html += `<div class="${cls}" data-idx="${idx}" onclick="handlePGClick(${idx})" id="pgOpt_${idx}">
+                        <div class="option-letter">${String.fromCharCode(65 + idx)}</div>
+                        <div class="option-text">${opt}</div>
+                    </div>`;
+                });
+                html += `</div>`;
+            } else if (q.type === 'pgk') {
+                html += `<table class="pgk-table"><thead><tr><th style="width:55%;">Pernyataan</th><th>Pilihan</th></tr></thead><tbody>`;
+                q.pgkStatements.forEach((stmt, idx) => {
+                    const stmtKey = `pgk_${currentQuestion}_${idx}`;
+                    let rowFb = '';
+                    if (isAnswered && answers[currentQuestion].selected) {
+                        const sel = answers[currentQuestion].selected[idx];
+                        if (sel !== undefined) {
+                            const isCorrect = sel === q.pgkCorrect[idx];
+                            rowFb =
+                                `<div class="pgk-row-feedback ${isCorrect ? 'correct-text' : 'incorrect-text'}">${isCorrect ? '✓ Benar' : '✗ Salah — Kunci: ' + q.pgkKeys[idx]}</div>`;
+                        }
+                    }
+                    html += `<tr>
+                        <td class="pgk-statement">${stmt}</td>
+                        <td>
+                            <div class="pgk-options">
+                                <button class="pgk-btn ${isAnswered && answers[currentQuestion].selected && answers[currentQuestion].selected[idx] === 'sesuai' ? (answers[currentQuestion].selected[idx] === q.pgkCorrect[idx] ? 'selected-correct' : 'selected-incorrect') : ''} ${isAnswered ? 'disabled' : ''}" onclick="handlePGKClick(${idx}, 'sesuai')" id="pgk_${idx}_sesuai">Sesuai</button>
+                                <button class="pgk-btn ${isAnswered && answers[currentQuestion].selected && answers[currentQuestion].selected[idx] === 'tidak' ? (answers[currentQuestion].selected[idx] === q.pgkCorrect[idx] ? 'selected-correct' : 'selected-incorrect') : ''} ${isAnswered ? 'disabled' : ''}" onclick="handlePGKClick(${idx}, 'tidak')" id="pgk_${idx}_tidak">Tidak Sesuai</button>
+                            </div>
+                            ${rowFb}
+                        </td>
+                    </tr>`;
+                });
+                html += `</tbody></table>`;
+            } else if (q.type === 'mcma') {
+                html += `<div class="mcma-options" id="mcmaOptions">`;
+                q.mcmaOptions.forEach((opt, idx) => {
+                    let cls = 'mcma-item';
+                    let checked = '';
+                    if (isAnswered && answers[currentQuestion].selected) {
+                        if (answers[currentQuestion].selected.includes(idx)) {
+                            cls += ' checked';
+                            if (q.correct.includes(idx)) cls += ' correct-answer';
+                            else cls += ' wrong-answer';
+                        } else if (q.correct.includes(idx)) {
+                            cls += ' correct-answer';
+                        }
+                    }
+                    html += `<label class="${cls}" id="mcma_${idx}">
+                        <input type="checkbox" value="${idx}" ${checked} ${isAnswered ? 'disabled' : ''} onchange="handleMCMACheck(${idx}, this.checked)">
+                        <span>${opt}</span>
+                    </label>`;
+                });
+                html += `</div>`;
+                if (!isAnswered) {
+                    html += `<button class="btn btn-accent" onclick="handleMCMASubmit()">✓ Periksa Jawaban</button>`;
+                }
+            }
+
+            // Feedback if answered
+            if (isAnswered) {
+                const ans = answers[currentQuestion];
+                if (ans.correct) {
+                    html += `<div class="feedback-container feedback-correct show">
+                        <div class="feedback-title">✅ BENAR!</div>
+                        <div class="feedback-explanation">${q.explanation || 'Penjelasan untuk jawaban Anda.'}</div>
+                    </div>`;
+                } else {
+                    let keyStr = '';
+                    if (q.type === 'pg') {
+                        keyStr = `Kunci: ${q.options[q.correct]}`;
+                    } else if (q.type === 'pgk') {
+                        keyStr = `Kunci: ${q.pgkKeys.join(', ')}`;
+                    } else {
+                        const correctLabels = q.correct.map(i => String.fromCharCode(65 + i)).join(', ');
+                        keyStr = `Kunci: ${correctLabels}`;
+                    }
+                    html += `<div class="feedback-container feedback-incorrect show">
+                        <div class="feedback-title">❌ SALAH</div>
+                        <div class="feedback-explanation">${q.explanation || ''}</div>
+                        <div class="feedback-key">🔑 ${keyStr}</div>
+                    </div>`;
+                }
+            }
+
+            // Navigation
+            html += `<div class="nav-buttons">
+                <button class="btn btn-outline btn-nav" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>← Sebelumnya</button>
+                <span style="font-size:0.85rem;color:var(--gray);font-weight:600;">${currentQuestion + 1} / ${questions.length}</span>
+                ${currentQuestion < questions.length - 1 ? 
+                    `<button class="btn btn-primary btn-nav" onclick="nextQuestion()">Selanjutnya →</button>` : 
+                    `<button class="btn btn-accent btn-nav" onclick="finishQuiz()">🏁 Selesai</button>`}
+            </div>`;
+
+            quizBody.innerHTML = html;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = questions.length;
+            const answered = Object.keys(answers).length;
+            const pct = Math.round((answered / total) * 100);
+            progressBar.style.width = pct + '%';
+            progressText.textContent = `Soal ${currentQuestion + 1} dari ${total}`;
+            scoreText.textContent = `Skor: ${score} | Benar: ${answered} | Belum: ${total - answered}`;
+        }
+
+        // ==================== EVENT HANDLERS ====================
+        function handlePGClick(idx) {
+            if (answers[currentQuestion] !== undefined) return;
+            const q = questions[currentQuestion];
+            const isCorrect = idx === q.correct;
+            if (isCorrect) score++;
+            answers[currentQuestion] = { answered: true, correct: isCorrect, selected: [idx] };
+            renderQuestion();
+        }
+
+        function handlePGKClick(idx, value) {
+            if (answers[currentQuestion] !== undefined) return;
+            const q = questions[currentQuestion];
+            if (!answers[currentQuestion]) {
+                answers[currentQuestion] = { answered: false, correct: false, selected: [] };
+            }
+            if (!answers[currentQuestion].selected) answers[currentQuestion].selected = [];
+            // Record the selection for this row
+            while (answers[currentQuestion].selected.length < q.pgkStatements.length) {
+                answers[currentQuestion].selected.push(undefined);
+            }
+            answers[currentQuestion].selected[idx] = value;
+
+            // Check if all rows answered
+            const allAnswered = answers[currentQuestion].selected.every(s => s !== undefined);
+            if (allAnswered) {
+                // Evaluate
+                let allCorrect = true;
+                for (let i = 0; i < q.pgkStatements.length; i++) {
+                    if (answers[currentQuestion].selected[i] !== q.pgkCorrect[i]) {
+                        allCorrect = false;
+                        break;
+                    }
+                }
+                answers[currentQuestion].answered = true;
+                answers[currentQuestion].correct = allCorrect;
+                if (allCorrect) score++;
+                renderQuestion();
+            } else {
+                // Re-render to show current selections
+                renderQuestion();
+            }
+        }
+
+        function handleMCMACheck(idx, checked) {
+            if (answers[currentQuestion] !== undefined) return;
+            if (!answers[currentQuestion]) {
+                answers[currentQuestion] = { answered: false, correct: false, selected: [] };
+            }
+            if (!answers[currentQuestion].selected) answers[currentQuestion].selected = [];
+            if (checked) {
+                if (!answers[currentQuestion].selected.includes(idx)) {
+                    answers[currentQuestion].selected.push(idx);
+                }
+            } else {
+                answers[currentQuestion].selected = answers[currentQuestion].selected.filter(i => i !== idx);
+            }
+            // Update UI
+            const label = document.getElementById(`mcma_${idx}`);
+            if (label) {
+                if (checked) label.classList.add('checked');
+                else label.classList.remove('checked');
+            }
+        }
+
+        function handleMCMASubmit() {
+            if (answers[currentQuestion] !== undefined && answers[currentQuestion].answered) return;
+            const q = questions[currentQuestion];
+            const sel = (answers[currentQuestion] && answers[currentQuestion].selected) || [];
+            if (sel.length === 0) {
+                alert('⚠️ Pilih minimal satu jawaban terlebih dahulu!');
+                return;
+            }
+            // Check if selected match correct
+            const sortedSel = [...sel].sort();
+            const sortedCorrect = [...q.correct].sort();
+            const isCorrect = JSON.stringify(sortedSel) === JSON.stringify(sortedCorrect);
+            answers[currentQuestion] = { answered: true, correct: isCorrect, selected: sel };
+            if (isCorrect) score++;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function finishQuiz() {
+            if (!quizCompleted) {
+                quizCompleted = true;
+                showScoreSummary();
+            }
+        }
+
+        function showScoreSummary() {
+            const total = questions.length;
+            const answered = Object.keys(answers).length;
+            const correct = score;
+            const incorrect = answered - correct;
+            const unanswered = total - answered;
+
+            document.getElementById('finalScore').innerHTML = `${correct}<span>dari ${total}</span>`;
+
+            let message = '';
+            const pct = (correct / total) * 100;
+            if (pct >= 90) message = '🏆 LUAR BIASA! Anda menguasai materi Sosiologi dengan sangat baik!';
+            else if (pct >= 75) message = '🎉 HEBAT! Pemahaman Anda sangat baik!';
+            else if (pct >= 60) message = '👍 BAGUS! Anda sudah cukup menguasai materi.';
+            else if (pct >= 40) message = '📖 CUKUP. Perlu belajar lebih banyak lagi.';
+            else message = '💪 SEMANGAT! Terus belajar dan berlatih!';
+            document.getElementById('scoreMessage').textContent = message;
+
+            document.getElementById('statCorrect').textContent = `✅ Benar: ${correct}`;
+            document.getElementById('statIncorrect').textContent = `❌ Salah: ${incorrect}`;
+            document.getElementById('statUnanswered').textContent = `⏭️ Belum: ${unanswered}`;
+
+            scoreSummary.classList.add('show');
+            quizBody.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answers = {};
+            quizCompleted = false;
+            scoreSummary.classList.remove('show');
+            quizBody.style.display = 'block';
+            renderQuestion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==================== INIT ====================
+        renderQuestion();
+    </script>
+</body>
+</html>
