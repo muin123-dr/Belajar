@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Persiapan TKA Bahasa Arab SMA</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --correct-color: #27ae60;
+            --wrong-color: #e74c3c;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-title h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .header-title p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .arabic {
+            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade', Arial, sans-serif;
+            font-size: 1.6em;
+            direction: rtl;
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 15px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--secondary-color);
+            background-color: #e3f2fd;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda;
+            border-color: var(--correct-color);
+            color: #155724;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da;
+            border-color: var(--wrong-color);
+            color: #721c24;
+        }
+
+        .feedback-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-box h4 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        .feedback-box p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .correct-feedback {
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--correct-color);
+        }
+
+        .correct-feedback h4 {
+            color: var(--correct-color);
+        }
+
+        .wrong-feedback {
+            background-color: #ffebee;
+            border-left: 5px solid var(--wrong-color);
+        }
+
+        .wrong-feedback h4 {
+            color: var(--wrong-color);
+        }
+
+        .explanation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .question-card {
+                padding: 15px;
+            }
+            .arabic {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">
+        <h1>Modul Ujian: 30 Soal Persiapan TKA Bahasa Arab SMA</h1>
+        <p>Pilih salah satu jawaban. Pembahasan akan langsung muncul setelah kamu menjawab.</p>
+    </div>
+
+    <div class="quiz-container" id="quiz-area">
+        <!-- Soal akan di-generate oleh JavaScript di sini -->
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Makna kata <span class='arabic'>شَاهَدَ</span> dalam kalimat: <span class='arabic'>شَاهَدَ الطَّبِيبُ الْمَرِيضَ</span> adalah...",
+                options: ["Menonton", "Memeriksa / Mengamati", "Memukul", "Membantu"],
+                answer: 1,
+                explanation: "Bab 1 & 14 (Makna Kata Berdasarkan Konteks): Meskipun arti dasar 'شَاهَدَ' adalah menyaksikan/menonton, namun jika subjeknya dokter (الطَّبِيبُ) dan objeknya pasien (الْمَرِيضَ), maknanya berubah menjadi memeriksa atau mengamati."
+            },
+            {
+                question: "Apa sinonim (الْمُرَادِفَاتُ) dari kata <span class='arabic'>ذَهَبَ</span>?",
+                options: ["<span class='arabic'>مَضَى</span>", "<span class='arabic'>قَعَدَ</span>", "<span class='arabic'>بَدَأَ</span>", "<span class='arabic'>شَرَعَ</span>"],
+                answer: 0,
+                explanation: "Bab 1: Sinonim (persamaan kata) dari 'ذَهَبَ' (pergi) adalah 'مَضَى'."
+            },
+            {
+                question: "Lawan kata (الأَضْدَادُ) dari kata <span class='arabic'>كَثِيرٌ</span> (banyak) adalah...",
+                options: ["<span class='arabic'>قَبِيحٌ</span>", "<span class='arabic'>بَطِيءٌ</span>", "<span class='arabic'>قَلِيلٌ</span>", "<span class='arabic'>صَعْبٌ</span>"],
+                answer: 2,
+                explanation: "Bab 1: Antonim dari كَثِيرٌ (banyak) adalah قَلِيلٌ (sedikit)."
+            },
+            {
+                question: "Kata ganti terpisah (Dhamir) yang digunakan untuk 'dia (perempuan)' adalah...",
+                options: ["<span class='arabic'>هُوَ</span>", "<span class='arabic'>أَنَا</span>", "<span class='arabic'>أَنْتِ</span>", "<span class='arabic'>هِيَ</span>"],
+                answer: 3,
+                explanation: "Bab 2: Dhamir هِيَ (Hiya) digunakan untuk Dia (Perempuan)."
+            },
+            {
+                question: "Jika kamu ingin mengatakan 'bukunya (laki-laki)', dhamir muttashil yang benar adalah...",
+                options: ["<span class='arabic'>كِتَابِي</span>", "<span class='arabic'>كِتَابُهَا</span>", "<span class='arabic'>كِتَابُهُ</span>", "<span class='arabic'>كِتَابُكَ</span>"],
+                answer: 2,
+                explanation: "Bab 2: Dhamir yang melekat untuk 'dia laki-laki' adalah (-هُ). Jadi, كِتَابُهُ artinya bukunya (laki-laki)."
+            },
+            {
+                question: "Kalimat yang diawali dengan kata benda (Isim) dalam ilmu Nahwu disebut dengan...",
+                options: ["Jumlah Fi'liyyah", "Jumlah Ismiyyah", "Mubtada", "Fi'il Mudhari'"],
+                answer: 1,
+                explanation: "Bab 3: Kalimat yang diawali isim disebut Jumlah Ismiyyah. Pola dasarnya adalah Mubtada' + Khabar."
+            },
+            {
+                question: "Dalam kalimat <span class='arabic'>قَرَأَ الطَّالِبُ الْكِتَابَ</span>, kata <span class='arabic'>الْكِتَابَ</span> berkedudukan sebagai...",
+                options: ["Fi'il (Kata Kerja)", "Fa'il (Pelaku)", "Mubtada' (Subjek awal)", "Maf'ul Bih (Objek)"],
+                answer: 3,
+                explanation: "Bab 3: Untuk mencari Maf'ul Bih (objek), tanyakan 'Apa yang dikenai tindakan?'. Siswa membaca apa? Buku (الْكِتَابَ). Maka ia adalah Maf'ul Bih."
+            },
+            {
+                question: "Huruf Jar (Preposisi) yang tepat untuk melengkapi kalimat: <span class='arabic'>ذَهَبَ عَلِيٌّ ... الْمَدْرَسَةِ</span> (Ali pergi ke sekolah) adalah...",
+                options: ["<span class='arabic'>مِنْ</span>", "<span class='arabic'>إِلَى</span>", "<span class='arabic'>فِي</span>", "<span class='arabic'>عَنْ</span>"],
+                answer: 1,
+                explanation: "Bab 3: Pola yang perlu dikenali adalah إِلَى + tujuan. (إِلَى = ke)."
+            },
+            {
+                question: "Kata sambung (Huruf Athaf) yang berarti 'oleh karena itu' atau menunjukkan sebuah akibat adalah...",
+                options: ["<span class='arabic'>لَكِنْ</span>", "<span class='arabic'>لِأَنَّ</span>", "<span class='arabic'>لِذَلِكَ</span>", "<span class='arabic'>ثُمَّ</span>"],
+                answer: 2,
+                explanation: "Bab 9 & Bab 25: لِذَلِكَ berarti 'oleh karena itu', digunakan untuk menunjukkan akibat atau kesimpulan."
+            },
+            {
+                question: "Kata <span class='arabic'>يَذْهَبُ</span> (sedang/akan pergi) merupakan bentuk dari...",
+                options: ["Fi'il Madhi", "Fi'il Amr", "Fi'il Mudhari'", "Isim"],
+                answer: 2,
+                explanation: "Bab 4: Fi'il Mudhari' menunjukkan tindakan yang sedang/akan dilakukan. Cirinya diawali huruf أ — ن — ي — ت."
+            },
+            {
+                question: "Bentuk larangan (An-Nahyu) yang benar untuk mengatakan 'Jangan pergi!' (kepada laki-laki) adalah...",
+                options: ["<span class='arabic'>لَا يَذْهَبُ</span>", "<span class='arabic'>لَا تَذْهَبْ</span>", "<span class='arabic'>اِذْهَبْ</span>", "<span class='arabic'>مَا ذَهَبَ</span>"],
+                answer: 1,
+                explanation: "Bab 4: Pola larangan adalah لَا + Fi'il Mudhari' (akhiran sukun). لَا تَذْهَبْ artinya 'Jangan pergi!'."
+            },
+            {
+                question: "Kata tanya yang tepat untuk menanyakan waktu/kapan adalah...",
+                options: ["<span class='arabic'>أَيْنَ</span>", "<span class='arabic'>لِمَاذَا</span>", "<span class='arabic'>كَيْفَ</span>", "<span class='arabic'>مَتَى</span>"],
+                answer: 3,
+                explanation: "Bab 5: مَتَى digunakan untuk menanyakan 'kapan' atau waktu kejadian."
+            },
+            {
+                question: "Jika seseorang berkata kepadamu <span class='arabic'>شُكْرًا</span>, ungkapan balasan yang tepat adalah...",
+                options: ["<span class='arabic'>عَفْوًا</span>", "<span class='arabic'>نَعَمْ</span>", "<span class='arabic'>حَسَنًا</span>", "<span class='arabic'>فِكْرَةٌ جَيِّدَةٌ</span>"],
+                answer: 0,
+                explanation: "Bab 6: Ungkapan balasan untuk 'Terima kasih' (شُكْرًا) adalah 'Sama-sama' (عَفْوًا)."
+            },
+            {
+                question: "Teks: <span class='arabic'>ذَهَبَ أَحْمَدُ إِلَى الْمَدْرَسَةِ فِي السَّاعَةِ السَّابِعَةِ</span>. <br>Pertanyaan: <span class='arabic'>مَتَى ذَهَبَ أَحْمَدُ إِلَى الْمَدْرَسَةِ؟</span>",
+                options: ["<span class='arabic'>إِلَى الْمَدْرَسَةِ</span>", "<span class='arabic'>أَحْمَدُ</span>", "<span class='arabic'>فِي السَّاعَةِ السَّابِعَةِ</span>", "<span class='arabic'>ذَهَبَ</span>"],
+                answer: 2,
+                explanation: "Bab 7 (Pemahaman Literal): Kata tanya مَتَى (kapan) mencari keterangan waktu. Jawabannya tertulis langsung: فِي السَّاعَةِ السَّابِعَةِ (Pada jam tujuh)."
+            },
+            {
+                question: "Teks: <span class='arabic'>يَسْتَيْقِظُ عَلِيٌّ مُبَكِّرًا، وَيُرَاجِعُ دُرُوسَهُ كُلَّ يَوْمٍ، وَيَذْهَبُ إِلَى الْمَدْرَسَةِ فِي الْوَقْتِ الْمُنَاسِبِ.</span><br> Kesimpulan dari teks tersebut adalah Ali merupakan siswa yang...",
+                options: ["<span class='arabic'>كَسْلَانُ</span>", "<span class='arabic'>مُجْتَهِدٌ</span>", "<span class='arabic'>غَبِيٌّ</span>", "<span class='arabic'>مَرِيضٌ</span>"],
+                answer: 1,
+                explanation: "Bab 7 & 17 (Pemahaman Inferensial): Ali bangun pagi, mengulang pelajaran tiap hari, berangkat tepat waktu. Kesimpulannya, Ali adalah siswa yang rajin (مُجْتَهِدٌ)."
+            },
+            {
+                question: "Teks: <span class='arabic'>ذَهَبَ أَحْمَدُ إِلَى الْمَكْتَبَةِ. وَقَرَأَ فِيهَا كِتَابًا.</span><br> Kata ganti 'هَا' pada kata 'فِيهَا' merujuk kepada...",
+                options: ["<span class='arabic'>أَحْمَدُ</span>", "<span class='arabic'>كِتَابًا</span>", "<span class='arabic'>قَرَأَ</span>", "<span class='arabic'>الْمَكْتَبَةِ</span>"],
+                answer: 3,
+                explanation: "Bab 8: 'هَا' adalah kata ganti perempuan (mu'annats). Dari kalimat pertama, kata benda mu'annats (berakhiran ta marbuthah) tempat membaca buku adalah الْمَكْتَبَةِ (perpustakaan)."
+            },
+            {
+                question: "Susunlah kata acak berikut menjadi kalimat yang benar: <br><span class='arabic'>الْمَسَاءِ / فِي / نُشَاهِدُ / الْعَائِلَةِ / مَعَ / التَّلْفَازَ</span>",
+                options: [
+                    "<span class='arabic'>فِي نُشَاهِدُ التَّلْفَازَ مَعَ الْعَائِلَةِ الْمَسَاءِ</span>",
+                    "<span class='arabic'>نُشَاهِدُ التَّلْفَازَ مَعَ الْعَائِلَةِ فِي الْمَسَاءِ</span>",
+                    "<span class='arabic'>التَّلْفَازَ نُشَاهِدُ مَعَ الْعَائِلَةِ فِي الْمَسَاءِ</span>",
+                    "<span class='arabic'>مَعَ الْعَائِلَةِ فِي الْمَسَاءِ التَّلْفَازَ نُشَاهِدُ</span>"
+                ],
+                answer: 1,
+                explanation: "Bab 10: Susunan yang logis: Fi'il (نُشَاهِدُ) + Objek (التَّلْفَازَ) + Keterangan Penyerta (مَعَ الْعَائِلَةِ) + Keterangan Waktu (فِي الْمَسَاءِ). Kami menonton televisi bersama keluarga di malam hari."
+            },
+            {
+                question: "Jika dalam soal menyusun paragraf kamu menemukan kata <span class='arabic'>أَخِيرًا</span> (akhirnya/terakhir), di manakah biasanya posisi kalimat tersebut?",
+                options: ["Di awal paragraf", "Di urutan kedua", "Sebagai kalimat penutup/akhir", "Bisa di mana saja"],
+                answer: 2,
+                explanation: "Bab 11: Kata أَخِيرًا merupakan petunjuk urutan peristiwa untuk hal yang terjadi paling akhir (kalimat penutup)."
+            },
+            {
+                question: "Dalam sebuah gambar, terlihat sekelompok orang sedang makan di sebuah meja bundar yang besar. Kata tempat yang paling relevan dengan gambar tersebut adalah...",
+                options: ["<span class='arabic'>مَسْجِدٌ</span>", "<span class='arabic'>مَطْعَمٌ</span>", "<span class='arabic'>مَكْتَبَةٌ</span>", "<span class='arabic'>مَطَارٌ</span>"],
+                answer: 1,
+                explanation: "Bab 13 & Bab 1: مَطْعَمٌ berarti restoran (tempat makan). Masjid (tempat ibadah), maktabah (perpustakaan), mathar (bandara)."
+            },
+            {
+                question: "Kosakata profesi (pekerjaan) untuk 'insinyur' adalah...",
+                options: ["<span class='arabic'>مُهَنْدِسٌ</span>", "<span class='arabic'>شُرْطِيٌّ</span>", "<span class='arabic'>طَبِيبٌ</span>", "<span class='arabic'>فَلَّاحٌ</span>"],
+                answer: 0,
+                explanation: "Bab 1: مُهَنْدِسٌ = insinyur. (Polisi = شُرْطِيٌّ, Dokter = طَبِيبٌ, Petani = فَلَّاحٌ)."
+            },
+            {
+                question: "Ungkapan bahasa Arab <span class='arabic'>بَحَثَ عَنْ</span> memiliki arti...",
+                options: ["Berbicara dengan", "Pergi ke", "Mencari", "Bertanya tentang"],
+                answer: 2,
+                explanation: "Bab 14 (Memahami makna, bukan sekedar terjemahan): Frasa 'بَحَثَ عَنْ' adalah satu kesatuan ungkapan yang berarti 'mencari'."
+            },
+            {
+                question: "Kosakata transportasi udara (pesawat) dalam bahasa Arab adalah...",
+                options: ["<span class='arabic'>سَيَّارَةٌ</span>", "<span class='arabic'>طَائِرَةٌ</span>", "<span class='arabic'>قِطَارٌ</span>", "<span class='arabic'>حَافِلَةٌ</span>"],
+                answer: 1,
+                explanation: "Bab 15: طَائِرَةٌ (pesawat). (Mobil = سَيَّارَةٌ, Kereta = قِطَارٌ, Bus = حَافِلَةٌ)."
+            },
+            {
+                question: "Teks: Seseorang selalu membuang sampah sembarangan, kemudian lingkungan menjadi kotor dan berbau. Pesan (kesimpulan) yang tepat dari teks tersebut adalah...",
+                options: [
+                    "<span class='arabic'>يَجِبُ عَلَيْنَا الْمُحَافَظَةُ عَلَى نَظَافَةِ الْبِيئَةِ</span>",
+                    "<span class='arabic'>يَجِبُ عَلَيْنَا الذَّهَابُ إِلَى الْمُسْتَشْفَى</span>",
+                    "<span class='arabic'>لَا تَلْعَبْ فِي الْفَصْلِ</span>",
+                    "<span class='arabic'>الرِّيَاضَةُ مُفِيدَةٌ لِلصِّحَّةِ</span>"
+                ],
+                answer: 0,
+                explanation: "Bab 18: Pesan moral yang tepat untuk teks membuang sampah adalah 'Kita harus menjaga kebersihan lingkungan' (يَجِبُ عَلَيْنَا الْمُحَافَظَةُ عَلَى نَظَافَةِ الْبِيئَةِ)."
+            },
+            {
+                question: "Berdasarkan Strategi Membaca Cepat, jika soal menanyakan <span class='arabic'>أَيْنَ</span> (di mana), maka saat membaca teks kita harus memfokuskan pencarian pada informasi tentang...",
+                options: ["Waktu (Jam/Hari)", "Sebab-akibat", "Tempat", "Nama Orang"],
+                answer: 2,
+                explanation: "Bab 19 & 25: Kata tanya أَيْنَ (Di mana?) secara spesifik menanyakan informasi tentang Tempat."
+            },
+            {
+                question: "Antonim (lawan kata) dari kata sifat <span class='arabic'>جَمِيلٌ</span> (indah/bagus) adalah...",
+                options: ["<span class='arabic'>قَبِيحٌ</span>", "<span class='arabic'>جَدِيدٌ</span>", "<span class='arabic'>نَظِيفٌ</span>", "<span class='arabic'>سَرِيعٌ</span>"],
+                answer: 0,
+                explanation: "Bab 4 & 17: Lawan kata dari indah/bagus (جَمِيلٌ) adalah buruk/jelek (قَبِيحٌ)."
+            },
+            {
+                question: "Kata <span class='arabic'>نَادِرًا</span> yang sering digunakan sebagai petunjuk urutan/frekuensi aktivitas memiliki arti...",
+                options: ["Selalu", "Kadang-kadang", "Hari ini", "Jarang"],
+                answer: 3,
+                explanation: "Bab 1 (Kosakata Waktu/Frekuensi): نَادِرًا berarti jarang. (Selalu = دَائِمًا, Kadang-kadang = أَحْيَانًا)."
+            },
+            {
+                question: "Dalam urutan kejadian, setelah kata <span class='arabic'>أَوَّلًا</span> (pertama), biasanya diikuti oleh kata sambung...",
+                options: ["<span class='arabic'>قَبْلَ</span>", "<span class='arabic'>ثُمَّ</span>", "<span class='arabic'>لِأَنَّ</span>", "<span class='arabic'>هَلْ</span>"],
+                answer: 1,
+                explanation: "Bab 1 & Bab 11: Urutan kejadian standar adalah أَوَّلًا (pertama) -> ثُمَّ (kemudian) -> بَعْدَ ذَلِكَ (setelah itu) -> أَخِيرًا (akhirnya)."
+            },
+            {
+                question: "Manakah kalimat berikut yang menggunakan Fi'il Amr (Kata Kerja Perintah) dengan benar?",
+                options: [
+                    "<span class='arabic'>يَقْرَأُ الطَّالِبُ الْكِتَابَ</span>",
+                    "<span class='arabic'>قَرَأَ الطَّالِبُ الْكِتَابَ</span>",
+                    "<span class='arabic'>اِقْرَأْ هَذَا الْكِتَابَ!</span>",
+                    "<span class='arabic'>لَا تَقْرَأْ هَذَا الْكِتَابَ!</span>"
+                ],
+                answer: 2,
+                explanation: "Bab 4: Fi'il Amr adalah kata kerja perintah. اِقْرَأْ (Bacalah!) adalah bentuk yang tepat. (يَقْرَأُ = sedang membaca, قَرَأَ = telah membaca, لَا تَقْرَأْ = jangan membaca)."
+            },
+            {
+                question: "Jika kamu ingin meminta izin, ungkapan fungsional yang tepat adalah...",
+                options: ["<span class='arabic'>لَا تَفْعَلْ!</span>", "<span class='arabic'>هَلْ لِي أَنْ...؟</span>", "<span class='arabic'>مَا رَأْيُكَ؟</span>", "<span class='arabic'>فِكْرَةٌ جَيِّدَةٌ</span>"],
+                answer: 1,
+                explanation: "Bab 6 (Ungkapan Fungsional): 'هَلْ لِي أَنْ...؟' berarti 'Bolehkah saya...?'. Ini adalah ungkapan sopan untuk meminta izin."
+            },
+            {
+                question: "Rumus Cepat: Jika pada soal kamu menemukan kata ganti <span class='arabic'>هُوَ</span> dalam teks, apa langkah analismu?",
+                options: ["Mencari tokoh perempuan yang disebut sebelumnya", "Mencari kata benda jamak", "Mencari tokoh laki-laki tunggal yang disebut sebelumnya", "Mencari keterangan tempat"],
+                answer: 2,
+                explanation: "Bab 25 (Rumus Cepat): Dhamir 'هُوَ' adalah kata ganti tunggal laki-laki (dia laki-laki). Maka, carilah nama orang atau subjek laki-laki tunggal yang disebutkan pada kalimat sebelumnya."
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-area');
+
+        // Render semua pertanyaan
+        quizData.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            let optionsHTML = '';
+            q.options.forEach((opt, optIndex) => {
+                optionsHTML += `<button class="option-btn" onclick="checkAnswer(this, ${index}, ${optIndex})">${opt}</button>`;
+            });
+
+            card.innerHTML = `
+                <span class="question-number">Soal ${index + 1} dari ${quizData.length}</span>
+                <div class="question-text">${q.question}</div>
+                <div class="options-grid">
+                    ${optionsHTML}
+                </div>
+                <div class="feedback-box" id="feedback-${index}">
+                    <h4 id="feedback-title-${index}"></h4>
+                    <div id="feedback-key-${index}" style="font-weight:bold; margin-bottom: 5px;"></div>
+                    <p class="explanation">${q.explanation}</p>
+                </div>
+            `;
+            quizContainer.appendChild(card);
+        });
+
+        // Fungsi mengecek jawaban
+        function checkAnswer(button, questionIndex, selectedOptionIndex) {
+            const questionData = quizData[questionIndex];
+            const isCorrect = selectedOptionIndex === questionData.answer;
+            const card = button.closest('.question-card');
+            
+            // Disable all buttons in this card
+            const buttons = card.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                // Highlight the correct answer anyway
+                if(idx === questionData.answer) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            // Styling button clicked if wrong
+            if (!isCorrect) {
+                button.classList.add('wrong');
+            }
+
+            // Show feedback box
+            const feedbackBox = document.getElementById(`feedback-${questionIndex}`);
+            const feedbackTitle = document.getElementById(`feedback-title-${questionIndex}`);
+            const feedbackKey = document.getElementById(`feedback-key-${questionIndex}`);
+
+            if (isCorrect) {
+                feedbackBox.className = 'feedback-box show correct-feedback';
+                feedbackTitle.innerText = '✅ BENAR!';
+                feedbackKey.innerHTML = 'Kunci Jawaban: ' + questionData.options[questionData.answer];
+            } else {
+                feedbackBox.className = 'feedback-box show wrong-feedback';
+                feedbackTitle.innerText = '❌ SALAH!';
+                feedbackKey.innerHTML = 'Kunci Jawaban: ' + questionData.options[questionData.answer];
+            }
+        }
+    </script>
+</body>
+</html>

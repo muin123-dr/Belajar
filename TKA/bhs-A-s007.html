@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz TKA Bahasa Arab SMA - 30 Soal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;600;700&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    padding: 15px;
+    color: #1e293b;
+  }
+  .container {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
+    color: white;
+    padding: 25px 20px;
+    text-align: center;
+  }
+  header h1 { font-size: 1.6em; margin-bottom: 8px; }
+  header p { font-size: 0.95em; opacity: 0.9; }
+  
+  .score-bar {
+    background: #f8fafc;
+    padding: 15px;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .score-item { text-align: center; }
+  .score-item span { display: block; font-size: 0.75em; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+  .score-item .value { font-size: 1.3em; font-weight: 700; color: #0f4c75; }
+  .score-item.correct .value { color: #16a34a; }
+  .score-item.wrong .value { color: #dc2626; }
+
+  .quiz-content { padding: 20px; }
+  
+  .question-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+  }
+  .question-card.answered-correct { border-color: #16a34a; background: #f0fdf4; }
+  .question-card.answered-wrong { border-color: #dc2626; background: #fef2f2; }
+  
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .q-number {
+    background: #0f4c75;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+  .q-badge {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+
+  .arabic-text {
+    font-family: 'Amiri', serif;
+    font-size: 1.35em;
+    line-height: 1.8;
+    direction: rtl;
+    text-align: right;
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
+    border-right: 4px solid #3282b8;
+    margin: 12px 0;
+    color: #0f172a;
+  }
+  
+  .question-instruction {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 15px;
+    font-size: 1.05em;
+  }
+
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Amiri', serif;
+    font-size: 1.15em;
+    direction: rtl;
+    text-align: right;
+  }
+  .option:hover:not(.disabled) {
+    border-color: #3282b8;
+    background: #f0f9ff;
+  }
+  .option.selected {
+    border-color: #3282b8;
+    background: #e0f2fe;
+  }
+  .option.correct {
+    border-color: #16a34a;
+    background: #dcfce7;
+    color: #166534;
+  }
+  .option.wrong {
+    border-color: #dc2626;
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .option.disabled { cursor: not-allowed; opacity: 0.9; }
+
+  .option-marker {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8em;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .option.correct .option-marker { background: #16a34a; color: white; }
+  .option.wrong .option-marker { background: #dc2626; color: white; }
+  .option.selected .option-marker { background: #3282b8; color: white; }
+
+  .check-btn {
+    margin-top: 12px;
+    background: #3282b8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: none;
+    width: 100%;
+  }
+  .check-btn:hover { background: #0f4c75; }
+
+  .notification {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+    animation: slideDown 0.3s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .notification.correct { background: #dcfce7; color: #166534; border: 2px solid #16a34a; display: block; }
+  .notification.wrong { background: #fee2e2; color: #991b1b; border: 2px solid #dc2626; display: block; }
+  .notification.partial { background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; display: block; }
+
+  .explanation {
+    margin-top: 15px;
+    padding: 15px;
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    display: none;
+    line-height: 1.6;
+    font-size: 0.95em;
+  }
+  .explanation.show { display: block; animation: slideDown 0.4s ease; }
+  .explanation strong { color: #92400e; display: block; margin-bottom: 6px; font-family: 'Inter', sans-serif; }
+  .explanation .arabic-inline {
+    font-family: 'Amiri', serif;
+    direction: rtl;
+    display: inline-block;
+    color: #0f4c75;
+    font-weight: 700;
+  }
+
+  .image-placeholder {
+    background: #f1f5f9;
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    margin: 15px 0;
+    color: #64748b;
+    font-family: 'Amiri', serif;
+    font-size: 1.2em;
+    direction: rtl;
+  }
+
+  .reset-btn {
+    display: block;
+    margin: 30px auto;
+    background: linear-gradient(135deg, #0f4c75 0%, #3282b8 100%);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 15px rgba(15, 76, 117, 0.3);
+  }
+  .reset-btn:hover { transform: translateY(-2px); }
+
+  @media (max-width: 600px) {
+    .arabic-text { font-size: 1.15em; }
+    .option { font-size: 1.05em; padding: 10px 12px; }
+    header h1 { font-size: 1.3em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>📚 Quiz TKA Bahasa Arab SMA</h1>
+    <p>30 Soal Komprehensif: Qirā'ah, Mufradāt, Naḥwu, dan Sharf</p>
+  </header>
+
+  <div class="score-bar">
+    <div class="score-item"><span>Dijawab</span><div class="value" id="answered">0/30</div></div>
+    <div class="score-item correct"><span>Benar</span><div class="value" id="correct">0</div></div>
+    <div class="score-item wrong"><span>Salah</span><div class="value" id="wrong">0</div></div>
+    <div class="score-item"><span>Nilai</span><div class="value" id="score">0</div></div>
+  </div>
+
+  <div class="quiz-content" id="quizContent"></div>
+
+  <button class="reset-btn" onclick="resetQuiz()">🔄 Ulangi Quiz dari Awal</button>
+
+  <footer style="text-align: center; padding: 20px; color: #64748b; font-size: 0.85em;">
+    Modul Persiapan TKA Bahasa Arab SMA © 2026
+  </footer>
+</div>
+
+<script>
+const questions = [
+  {
+    id: 1,
+    text: "أَسْتَيْقِظُ فِي السَّاعَةِ الْخَامِسَةِ صَبَاحًا، ثُمَّ أُصَلِّي الْفَجْرَ، وَأَتَنَاوَلُ الْفُطُورَ مَعَ أُسْرَتِي. بَعْدَ ذَلِكَ، أَذْهَبُ إِلَى الْمَدْرَسَةِ لأَدْرُسَ مَعَ أَصْدِقَائِي.",
+    instruction: "مَاذَا يَفْعَلُ الْكَاتِبُ بَعْدَ صَلَاةِ الْفَجْرِ مُبَاشَرَةً؟",
+    options: ["يَذْهَبُ إِلَى الْمَدْرَسَةِ", "يَتَنَاوَلُ الْفُطُورَ مَعَ أُسْرَتِهِ", "يَنَامُ مُجَدَّدًا", "يَلْعَبُ مَعَ أَصْدِقَائِهِ"],
+    answer: [1],
+    multi: false,
+    explanation: "Dalam teks disebutkan: 'ثُمَّ أُصَلِّي الْفَجْرَ، وَأَتَنَاوَلُ الْفُطُورَ مَعَ أُسْرَتِي' (kemudian saya shalat Subuh, dan sarapan bersama keluarga saya). Jadi, kegiatan setelah shalat Subuh adalah sarapan."
+  },
+  {
+    id: 2,
+    text: "ذَهَبَ الطَّبِيبُ إِلَى الْمُسْتَشْفَى لِعِلَاجِ الْمَرْضَى.",
+    instruction: "مَا مَعْنَى كَلِمَةِ \"عِلَاجِ\" فِي الْجُمْلَةِ السَّابِقَةِ؟",
+    options: ["الْمَرَضُ", "الْمُعَالَجَةُ", "الدَّوَاءُ", "الطَّعَامُ"],
+    answer: [1],
+    multi: false,
+    explanation: "Kata 'عِلَاج' (ilāj) bermakna 'pengobatan' atau 'perawatan' (المعالجة). Dokter pergi ke rumah sakit untuk mengobati/mengobati pasien."
+  },
+  {
+    id: 3,
+    text: "رَتِّبْ هَذِهِ الْكَلِمَاتِ لِتَكُونَ جُمْلَةً مُفِيدَةً:<br>الْمَدْرَسَةِ / إِلَى / ذَهَبَ / الطَّالِبُ / صَبَاحًا",
+    instruction: "Pilihlah susunan yang paling benar!",
+    options: ["ذَهَبَ الطَّالِبُ إِلَى الْمَدْرَسَةِ صَبَاحًا", "صَبَاحًا ذَهَبَ إِلَى الْمَدْرَسَةِ الطَّالِبُ", "إِلَى الْمَدْرَسَةِ ذَهَبَ الطَّالِبُ صَبَاحًا", "الطَّالِبُ صَبَاحًا ذَهَبَ إِلَى الْمَدْرَسَةِ"],
+    answer: [0],
+    multi: false,
+    explanation: "Pola jumlah fi'liyyah yang benar adalah: Fi'il (ذَهَبَ) + Fa'il (الطَّالِبُ) + Jar wa Majrur (إِلَى الْمَدْرَسَةِ) + Zharaf (صَبَاحًا)."
+  },
+  {
+    id: 4,
+    text: "خَالِدٌ طَالِبٌ مُجْتَهِدٌ. هُوَ يُحِبُّ قِرَاءَةَ الْكُتُبِ وَيَلْعَبُ كُرَةَ الْقَدَمِ مَعَ أَصْدِقَائِهِ بَعْدَ الظُّهْرِ.",
+    instruction: "مَاذَا يُحِبُّ خَالِدٌ؟ (اختر إجابتين / Pilih 2 jawaban)",
+    options: ["قِرَاءَةَ الْكُتُبِ", "لَعِبَ كُرَةَ الْقَدَمِ", "النَّوْمَ طَوَالَ الْيَوْمِ", "أَكْلَ الْحَلْوَيَاتِ فَقَطْ"],
+    answer: [0, 1],
+    multi: true,
+    explanation: "Berdasarkan teks: 'يُحِبُّ قِرَاءَةَ الْكُتُبِ' (suka membaca buku) dan 'يَلْعَبُ كُرَةَ الْقَدَمِ' (bermain sepak bola). Pilihan 3 dan 4 tidak disebutkan dalam teks."
+  },
+  {
+    id: 5,
+    text: "أَحْمَدُ: كَمْ عُمْرُكَ يَا فَضْلِي؟<br>فَضْلِي: عُمْرِي أَرْبَعَةَ عَشَرَ سَنَةً. أَنَا طَالِبٌ فِي الْمَدْرَسَةِ الْمُتَوَسِّطَةِ.",
+    instruction: "كَمْ عُمْرُ فَضْلِي؟",
+    options: ["خَمْسَةَ عَشَرَ سَنَةً", "أَرْبَعَةَ عَشَرَ سَنَةً", "سِتَّ عَشْرَةَ سَنَةً", "ثَلَاثَ عَشْرَةَ سَنَةً"],
+    answer: [1],
+    multi: false,
+    explanation: "Fadli menjawab: 'عُمْرِي أَرْبَعَةَ عَشَرَ سَنَةً' yang berarti 'Umur saya 14 tahun'."
+  },
+  {
+    id: 6,
+    text: "سَلْمَى: صَبَاحُ الْخَيْرِ، يَا نُورُ. مَا اسْمُ هَذَا الْكِتَابِ؟<br>نُورٌ: صَبَاحُ النُّورِ. هَذَا كِتَابُ الْقِصَصِ الْعَرَبِيَّةِ. هَلْ تُحِبِّينَ قِرَاءَتَهُ؟<br>سَلْمَى: نَعَمْ، أَنَا أُحِبُّ الْقِصَصَ جِدًّا.",
+    instruction: "مَا الْفِكْرَةُ الرَّئِيسِيَّةُ فِي الْحِوَارِ؟",
+    options: ["سَلْمَى وَنُورُ تَذْهَبَانِ إِلَى الْمَكْتَبَةِ", "سَلْمَى وَنُورُ تَتَحَدَّثَانِ عَنْ كِتَابِ الْقِصَصِ", "نُورُ تَكْتُبُ قِصَّةً جَدِيدَةً", "سَلْمَى تَشْتَرِي كِتَابًا مِنَ السُّوقِ"],
+    answer: [1],
+    multi: false,
+    explanation: "Inti percakapan adalah Salma menanyakan nama buku, dan Nur menjawab bahwa itu adalah buku cerita Arab, lalu Salma menyatakan kesukaannya. Jadi, mereka sedang membicarakan buku cerita."
+  },
+  {
+    id: 7,
+    text: "التَّلَامِيذُ يُنَظِّفُونَ حَدِيقَةَ الْمَدْرَسَةِ كُلَّ أُسْبُوعٍ.",
+    instruction: "مَا ضِدُّ (أَنْتُونِيمُ) الْكَلِمَةِ الَّتِي تَحْتَهَا خَطٌّ (يُنَظِّفُونَ)؟",
+    options: ["يَغْسِلُونَ", "يُعَلِّمُونَ", "يُوَسِّخُونَ", "يَزْرَعُونَ"],
+    answer: [2],
+    multi: false,
+    explanation: "Kata 'يُنَظِّفُونَ' berarti 'mereka membersihkan'. Lawan kata (ضد) dari membersihkan adalah 'يُوَسِّخُونَ' (mereka mengotori)."
+  },
+  {
+    id: 8,
+    text: "نُوْرٌ: الْأَشْجَارُ مُفِيدَةٌ جِدًّا. هِيَ تُنَقِّي الْهَوَاءَ وَتُعْطِينَا الظِّلَّ فِي الصَّيْفِ.",
+    instruction: "كَيْفَ تُسَاعِدُ الْأَشْجَارُ النَّاسَ حَسَبَ النَّصِّ؟",
+    options: ["تَجْعَلُ الْهَوَاءَ حَارًّا", "تَمْنَعُ الْمَطَرَ", "تُنَقِّي الْهَوَاءَ وَتُعْطِي الظِّلَّ", "تَزِيدُ مِنْ تَلَوُّثِ الْبِيئَةِ"],
+    answer: [2],
+    multi: false,
+    explanation: "Teks menyatakan: 'تُنَقِّي الْهَوَاءَ' (membersihkan udara) dan 'تُعْطِينَا الظِّلَّ' (memberi kita naungan). Ini adalah manfaat pohon yang disebutkan."
+  },
+  {
+    id: 9,
+    text: "رَتِّبْ الْجُمَلَ الْآتِيَةَ لِتَكُونَ فَقْرَةً مُتَنَاسِقَةً:<br>(١) أَرْسُمُ الْحَيَوَانَاتِ فِي دَفْتَرِي.<br>(٢) أُحِبُّ الْهَوَايَاتِ الْمُخْتَلِفَةَ.<br>(٣) وَأَسْتَمِعُ إِلَى الْمُوسِيقَى كُلَّ يَوْمٍ.",
+    instruction: "Pilihlah urutan yang paling logis!",
+    options: ["(١) - (٢) - (٣)", "(٢) - (١) - (٣)", "(٣) - (٢) - (١)", "(٢) - (٣) - (١)"],
+    answer: [1],
+    multi: false,
+    explanation: "Urutan logis: (2) Pernyataan umum (Saya suka berbagai hobi), (1) Contoh hobi 1 (Saya menggambar hewan), (3) Contoh hobi 2 (Dan saya mendengarkan musik setiap hari)."
+  },
+  {
+    id: 10,
+    text: "<div class='image-placeholder'>[الصُّورَةُ: طُلَّابٌ يَجْلِسُونَ فِي الْفَصْلِ، وَالْمُعَلِّمُ يَقِفُ أَمَامَ السَّبُّورَةِ وَيَشْرَحُ الدَّرْسَ، وَالطُّلَّابُ يَكْتُبُونَ فِي دَفَاتِرِهِمْ]</div>",
+    instruction: "مَاذَا يَفْعَلُ الْأَشْخَاصُ فِي الصُّورَةِ؟ (اختر إجابتين / Pilih 2 jawaban)",
+    options: ["الْمُعَلِّمُ يَشْرَحُ الدَّرْسَ", "الطُّلَّابُ يَلْعَبُونَ كُرَةَ الْقَدَمِ", "الطُّلَّابُ يَكْتُبُونَ فِي دَفَاتِرِهِمْ", "الْمُعَلِّمُ يَنَامُ عَلَى الْمَكْتَبِ"],
+    answer: [0, 2],
+    multi: true,
+    explanation: "Berdasarkan deskripsi gambar: Guru berdiri di depan papan tulis menjelaskan pelajaran (الْمُعَلِّمُ يَشْرَحُ الدَّرْسَ), dan siswa menulis di buku mereka (الطُّلَّابُ يَكْتُبُونَ فِي دَفَاتِرِهِمْ)."
+  },
+  {
+    id: 11,
+    text: "الْفِعْلُ الْمَاضِي مِنَ الْفِعْلِ الْمُضَارِعِ \"يَكْتُبُ\" هُوَ ...",
+    instruction: "Pilihlah Fi'il Madhi yang tepat!",
+    options: ["اُكْتُبْ", "كَاتِبٌ", "كَتَبَ", "مَكْتَبٌ"],
+    answer: [2],
+    multi: false,
+    explanation: "Fi'il mudhari' 'يَكْتُبُ' (sedang menulis) berubah menjadi fi'il madhi 'كَتَبَ' (telah menulis)."
+  },
+  {
+    id: 12,
+    text: "...... طَالِبَةٌ مُجْتَهِدَةٌ فِي دِرَاسَتِهَا.",
+    instruction: "مَا الضَّمِيرُ (كَاتَا غَانْتِي) الْمُنَاسِبُ لِمَلْءِ الْفَرَاغِ؟",
+    options: ["هُوَ", "هِيَ", "هُمْ", "أَنْتَ"],
+    answer: [1],
+    multi: false,
+    explanation: "Kata 'طَالِبَةٌ' adalah isim mu'annats (perempuan) tunggal. Oleh karena itu, dhamir (kata ganti) yang tepat adalah 'هِيَ' (dia perempuan)."
+  },
+  {
+    id: 13,
+    text: "مَنْ يَعْمَلُ فِي الْمَطْعَمِ وَيُحَضِّرُ الطَّعَامَ لِلنَّاسِ؟",
+    instruction: "Pilihlah profesi yang tepat!",
+    options: ["الطَّبِيبُ", "الْمُهَنْدِسُ", "الطَّبَّاخُ", "الشُّرْطِيُّ"],
+    answer: [2],
+    explanation: "Orang yang bekerja di restoran dan menyiapkan makanan adalah 'الطَّبَّاخُ' (koki/juru masak). طبيب = dokter, مهندس = insinyur, شرطي = polisi."
+  },
+  {
+    id: 14,
+    text: "تَبْدَأُ الْحِصَّةُ الْأُولَى فِي الْمَدْرَسَةِ فِي السَّاعَةِ السَّابِعَةِ وَنِصْفٍ صَبَاحًا.",
+    instruction: "مَتَى تَبْدَأُ الْحِصَّةُ الْأُولَى؟",
+    options: ["السَّاعَةُ السَّادِسَةُ", "السَّاعَةُ السَّابِعَةُ إِلَّا رُبْعًا", "السَّاعَةُ السَّابِعَةُ وَنِصْفٌ", "السَّاعَةُ الثَّامِنَةُ"],
+    answer: [2],
+    multi: false,
+    explanation: "Teks menyebutkan 'السَّاعَةِ السَّابِعَةِ وَنِصْفٍ' yang berarti pukul 07.30 (tujuh setengah)."
+  },
+  {
+    id: 15,
+    text: "كَلِمَةُ: \"الْمَطَارُ\"",
+    instruction: "تَحَدِّدْ مَا إِذَا كَانَتِ الْعِبَارَاتُ التَّالِيَةُ صَحِيحَةً أَمْ خَطَأً:<br>1. الْمَطَارُ هُوَ مَكَانُ وُقُوفِ السَّيَّارَاتِ.<br>2. الْمَطَارُ هُوَ مَكَانُ إِقْلَاعِ وَهُبُوطِ الطَّائِرَاتِ.",
+    options: ["1: صَحِيح، 2: خَطَأ", "1: خَطَأ، 2: صَحِيح", "كِلَاهُمَا صَحِيح", "كِلَاهُمَا خَطَأ"],
+    answer: [1],
+    multi: false,
+    explanation: "Pernyataan 1 salah (tempat parkir mobil adalah 'مَوْقِفُ السَّيَّارَاتِ'). Pernyataan 2 benar, 'الْمَطَارُ' adalah bandara (tempat lepas landas dan mendaratnya pesawat)."
+  },
+  {
+    id: 16,
+    text: "مَا مُرَادِفُ (سِينُونِيمُ) كَلِمَةِ \"سَعِيدٌ\"؟",
+    instruction: "Pilihlah sinonim yang paling tepat!",
+    options: ["حَزِينٌ", "فَرْحَانٌ", "غَاضِبٌ", "مَرِيضٌ"],
+    answer: [1],
+    multi: false,
+    explanation: "Sinonim (مُرَادِف) dari 'سَعِيدٌ' (senang/bahagia) adalah 'فَرْحَانٌ' (gembira). 'حَزِينٌ' adalah antonimnya (sedih)."
+  },
+  {
+    id: 17,
+    text: "ذَهَبْتُ ...... الْمَكْتَبَةِ لِاسْتِعَارَةِ بَعْضِ الْكُتُبِ.",
+    instruction: "مَا حَرْفُ الْجَرِّ الْمُنَاسِبُ لِمَلْءِ الْفَرَاغِ؟",
+    options: ["مِنْ", "فِي", "عَلَى", "إِلَى"],
+    answer: [3],
+    multi: false,
+    explanation: "Untuk menunjukkan tujuan/arah 'ke', kita menggunakan huruf jar 'إِلَى'. Jadi: 'ذَهَبْتُ إِلَى الْمَكْتَبَةِ' (Saya pergi ke perpustakaan)."
+  },
+  {
+    id: 18,
+    text: "أَحْمَدُ لَا يَأْتِي إِلَى الْمَدْرَسَةِ الْيَوْمَ لِأَنَّهُ مَرِيضٌ.",
+    instruction: "لِمَاذَا غَابَ أَحْمَدُ عَنِ الْمَدْرَسَةِ؟",
+    options: ["لِأَنَّهُ فِي السَّفَرِ", "لِأَنَّهُ مَرِيضٌ", "لِأَنَّهُ يَلْعَبُ فِي الْبَيْتِ", "لِأَنَّ الْيَوْمَ عُطْلَةٌ"],
+    answer: [1],
+    multi: false,
+    explanation: "Kata 'لِأَنَّهُ' berarti 'karena dia'. Teks menyatakan 'لِأَنَّهُ مَرِيضٌ' (karena dia sakit)."
+  },
+  {
+    id: 19,
+    text: "مَا الْعِبَارَةُ الْمُنَاسِبَةُ لِطَلَبِ الرَّأْيِ (مِنْ فَضْلِكَ)؟",
+    instruction: "Pilihlah ungkapan untuk meminta pendapat!",
+    options: ["مَا رَأْيُكَ فِي هَذَا الْمَوْضُوعِ؟", "أَنَا أَتَّفِقُ مَعَكَ", "شُكْرًا جَزِيلًا", "مَعَ السَّلَامَةِ"],
+    answer: [0],
+    multi: false,
+    explanation: "'مَا رَأْيُكَ؟' berarti 'Apa pendapatmu?', yang merupakan ungkapan standar untuk meminta pendapat (طلب الرأي)."
+  },
+  {
+    id: 20,
+    text: "رَتِّبْ الْكَلِمَاتِ: فِي / الْحَدِيقَةِ / الْأَطْفَالُ / يَلْعَبُونَ",
+    instruction: "Pilihlah susunan jumlah ismiyyah yang benar!",
+    options: ["يَلْعَبُونَ الْأَطْفَالُ فِي الْحَدِيقَةِ", "الْأَطْفَالُ يَلْعَبُونَ فِي الْحَدِيقَةِ", "فِي الْحَدِيقَةِ يَلْعَبُونَ الْأَطْفَالُ", "الْحَدِيقَةُ يَلْعَبُونَ فِي الْأَطْفَالِ"],
+    answer: [1],
+    multi: false,
+    explanation: "Pola jumlah ismiyyah dimulai dengan Isim (Mubtada'): 'الْأَطْفَالُ' (Anak-anak), diikuti Fi'il (Khabar): 'يَلْعَبُونَ' (bermain), lalu keterangan tempat: 'فِي الْحَدِيقَةِ' (di taman)."
+  },
+  {
+    id: 21,
+    text: "الْمَدْرَسَةُ كَبِيرَةٌ وَجَمِيلَةٌ.",
+    instruction: "مَا الْخَبَرُ فِي هَذِهِ الْجُمْلَةِ الِاسْمِيَّةِ؟",
+    options: ["الْمَدْرَسَةُ", "كَبِيرَةٌ وَجَمِيلَةٌ", "الْمَدْرَسَةُ كَبِيرَةٌ", "جَمِيلَةٌ فَقَطْ"],
+    answer: [1],
+    multi: false,
+    explanation: "Dalam jumlah ismiyyah 'الْمَدْرَسَةُ كَبِيرَةٌ وَجَمِيلَةٌ', 'الْمَدْرَسَةُ' adalah Mubtada', dan 'كَبِيرَةٌ وَجَمِيلَةٌ' adalah Khabar (predikat) yang menjelaskan mubtada'."
+  },
+  {
+    id: 22,
+    text: "زَوْجَةُ الْأَبِ تُسَمَّى ...",
+    instruction: "Pilihlah kosakata keluarga yang tepat!",
+    options: ["الْأُخْتُ", "الْأُمُّ", "الْجَدَّةُ", "الْعَمَّةُ"],
+    answer: [1],
+    multi: false,
+    explanation: "Istri dari ayah disebut 'الْأُمُّ' (Ibu). الأخت = saudara perempuan, الجدة = nenek, العمة = bibi (saudara perempuan ayah)."
+  },
+  {
+    id: 23,
+    text: "لِلْمُحَافَظَةِ عَلَى نَظَافَةِ الْفَصْلِ، يَجِبُ عَلَيْنَا أَنْ ...",
+    instruction: "مَاذَا يَجِبُ أَنْ نَفْعَلَ؟ (اختر إجابتين / Pilih 2 jawaban)",
+    options: ["نَرْمِي الْقُذَارَةَ فِي سَلَّةِ الْمُهَمَلَاتِ", "نَكْتُبَ عَلَى الْجُدْرَانِ", "نُنَظِّفَ السَّبُّورَةَ بَعْدَ الِاسْتِخْدَامِ", "نَأْكُلَ دَاخِلَ الْفَصْلِ دَائِمًا"],
+    answer: [0, 2],
+    multi: true,
+    explanation: "Untuk menjaga kebersihan kelas, kita harus: 1. Membuang sampah di tempatnya (نَرْمِي الْقُذَارَةَ فِي سَلَّةِ الْمُهَمَلَاتِ), dan 2. Membersihkan papan tulis setelah digunakan (نُنَظِّفَ السَّبُّورَةَ)."
+  },
+  {
+    id: 24,
+    text: "مَا ضِدُّ (أَنْتُونِيمُ) كَلِمَةِ \"قَرِيبٌ\"؟",
+    instruction: "Pilihlah antonim yang tepat!",
+    options: ["بَعِيدٌ", "جَدِيدٌ", "سَهْلٌ", "طَوِيلٌ"],
+    answer: [0],
+    multi: false,
+    explanation: "Antonim (ضد) dari 'قَرِيبٌ' (dekat) adalah 'بَعِيدٌ' (jauh)."
+  },
+  {
+    id: 25,
+    text: "كَيْفَ تَطْلُبُ الْإِذْنَ لِلْخُرُوجِ مِنَ الْفَصْلِ مِنَ الْمُعَلِّمِ؟",
+    instruction: "Pilihlah ungkapan meminta izin yang paling sopan!",
+    options: ["اُخْرُجْ مِنَ الْفَصْلِ!", "هَلْ يُمْكِنُنِي الْخُرُوجُ يَا أُسْتَاذُ؟", "أَنَا أُرِيدُ الْخُرُوجَ الْآنَ", "لَا أُرِيدُ الْبَقَاءَ هُنَا"],
+    answer: [1],
+    multi: false,
+    explanation: "'هَلْ يُمْكِنُنِي الْخُرُوجُ يَا أُسْتَاذُ؟' (Bolehkah saya keluar, Pak Guru?) adalah ungkapan meminta izin (طلب الإذن) yang paling sopan dan tepat secara fungsional."
+  },
+  {
+    id: 26,
+    text: "مَا فِعْلُ الْأَمْرِ مِنَ الْفِعْلِ الْمُضَارِعِ \"يَجْلِسُ\"؟",
+    instruction: "Pilihlah Fi'il Amr yang benar!",
+    options: ["جَلَسَ", "اِجْلِسْ", "جَالِسٌ", "مَجْلِسٌ"],
+    answer: [1],
+    multi: false,
+    explanation: "Fi'il amr (kata perintah) dari 'يَجْلِسُ' (dia sedang duduk) adalah 'اِجْلِسْ' (duduklah!). 'جَلَسَ' adalah fi'il madhi."
+  },
+  {
+    id: 27,
+    text: "يَجِبُ أَنْ نَأْكُلَ الطَّعَامَ الصِّحِّيَّ مِثْلَ الْفَوَاكِهِ وَالْخُضْرَوَاتِ، وَنَشْرَبَ الْمَاءَ كَثِيرًا، وَنَتَجَنَّبَ الْأَكْلَ السَّرِيعَ.",
+    instruction: "مَا الْمَوْضُوعُ الرَّئِيسِيُّ (الْفِكْرَةُ الْأَسَاسِيَّةُ) لِهَذَا النَّصِّ؟",
+    options: ["أَنْوَاعُ الرِّيَاضَةِ", "الْغِذَاءُ الصِّحِّيُّ وَالْعَادَاتُ الْغِذَائِيَّةُ", "أَهَمِّيَّةُ النَّوْمِ", "أَنْوَاعُ الْفَوَاكِهِ فَقَطْ"],
+    answer: [1],
+    multi: false,
+    explanation: "Teks membahas tentang makan makanan sehat (buah, sayur), minum air, dan menghindari junk food. Ini secara keseluruhan merangkum topik 'الْغِذَاءُ الصِّحِّيُّ' (Makanan/Gizi Sehat)."
+  },
+  {
+    id: 28,
+    text: "<div class='image-placeholder'>[الصُّورَةُ: أُمٌّ تَقِفُ فِي الْمَطْبَخِ، وَهِيَ تُحَضِّرُ الْفُطُورَ لِأُسْرَتِهَا عَلَى الْمَائِدَةِ]</div>",
+    instruction: "مَاذَا تَفْعَلُ الْأُمُّ فِي الصُّورَةِ؟",
+    options: ["تَغْسِلُ الْمَلَابِسَ", "تُحَضِّرُ الْفُطُورَ", "تَقْرَأُ الصَّحِيفَةَ", "تَنَامُ فِي الْغُرْفَةِ"],
+    answer: [1],
+    multi: false,
+    explanation: "Deskripsi gambar menyatakan: 'أُمٌّ ... تُحَضِّرُ الْفُطُورَ' (seorang ibu ... menyiapkan sarapan). Maka jawabannya adalah تُحَضِّرُ الْفُطُورَ."
+  },
+  {
+    id: 29,
+    text: "رَتِّبْ الْجُمَلَ لِتَكُونَ فَقْرَةً:<br>(١) وَنَشْرَبُ الْحَلِيبَ أَيْضًا.<br>(٢) نَتَنَاوَلُ الْفُطُورَ كُلَّ صَبَاحٍ قَبْلَ الذَّهَابِ إِلَى الْمَدْرَسَةِ.<br>(٣) لِأَنَّهُ مُفِيدٌ جِدًّا لِلصِّحَّةِ وَالنُّمُوِّ.",
+    instruction: "Pilihlah urutan paragraf yang logis!",
+    options: ["(١) - (٢) - (٣)", "(٢) - (١) - (٣)", "(٣) - (١) - (٢)", "(٢) - (٣) - (١)"],
+    answer: [1],
+    multi: false,
+    explanation: "Urutan logis: (2) Pernyataan utama (Kami sarapan setiap pagi), (1) Tambahan (Dan kami juga minum susu), (3) Alasan (Karena sangat baik untuk kesehatan dan pertumbuhan)."
+  },
+  {
+    id: 30,
+    text: "اِحْتَفَلَ الْمُسْلِمُونَ بِعِيدِ الْفِطْرِ بَعْدَ صِيَامِ شَهْرِ رَمَضَانَ.",
+    instruction: "مَا مَعْنَى كَلِمَةِ \"اِحْتَفَلَ\" فِي هَذَا السِّيَاقِ؟",
+    options: ["حَزِنَ وَبَكَى", "فَرِحَ وَابْتَهَجَ", "صَامَ وَتَعَبَ", "سَافَرَ وَرَجَعَ"],
+    answer: [1],
+    multi: false,
+    explanation: "Kata 'اِحْتَفَلَ' (ihtafala) dalam konteks ini bermakna 'merayakan', yang sinonimnya adalah 'فَرِحَ وَابْتَهَجَ' (gembira dan bersuka ria)."
+  }
+];
+
+let correctCount = 0;
+let wrongCount = 0;
+let answeredCount = 0;
+let userSelections = {};
+
+function renderQuiz() {
+  const content = document.getElementById('quizContent');
+  content.innerHTML = '';
+  
+  questions.forEach((q, idx) => {
+    userSelections[idx] = [];
+    
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-card-${idx}`;
+    
+    let optionsHtml = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    q.options.forEach((opt, oIdx) => {
+      optionsHtml += `
+        <div class="option" id="opt-${idx}-${oIdx}" onclick="toggleOption(${idx}, ${oIdx}, ${q.multi})">
+          <span class="option-marker">${letters[oIdx]}</span>
+          <span>${opt}</span>
+        </div>
+      `;
+    });
+
+    const checkBtn = q.multi ? `<button class="check-btn" id="check-btn-${idx}" onclick="checkMultiAnswer(${idx})">Periksa Jawaban</button>` : '';
+
+    card.innerHTML = `
+      <div class="q-header">
+        <span class="q-number">Soal ${idx + 1}</span>
+        ${q.multi ? '<span class="q-badge">Pilih Lebih dari 1</span>' : ''}
+      </div>
+      <div class="arabic-text">${q.text}</div>
+      <div class="question-instruction">${q.instruction}</div>
+      <div class="options-grid">${optionsHtml}</div>
+      ${checkBtn}
+      <div class="notification" id="notif-${idx}"></div>
+      <div class="explanation" id="exp-${idx}">
+        <strong>💡 Pembahasan:</strong>
+        ${q.explanation}
+      </div>
+    `;
+    content.appendChild(card);
+  });
+}
+
+function toggleOption(qIdx, oIdx, isMulti) {
+  const card = document.getElementById(`q-card-${qIdx}`);
+  if (card.classList.contains('answered-correct') || card.classList.contains('answered-wrong')) return;
+
+  const optionEl = document.getElementById(`opt-${qIdx}-${oIdx}`);
+  
+  if (!isMulti) {
+    // Single choice: immediate check
+    const correct = questions[qIdx].answer[0];
+    const isCorrect = oIdx === correct;
+    
+    // Disable all options
+    questions[qIdx].options.forEach((_, i) => {
+      document.getElementById(`opt-${qIdx}-${i}`).classList.add('disabled');
+      if (i === correct) document.getElementById(`opt-${qIdx}-${i}`).classList.add('correct');
+    });
+    
+    if (!isCorrect) {
+      optionEl.classList.add('wrong');
+    }
+    
+    showResult(qIdx, isCorrect, isCorrect);
+  } else {
+    // Multi choice: toggle selection
+    if (userSelections[qIdx].includes(oIdx)) {
+      userSelections[qIdx] = userSelections[qIdx].filter(id => id !== oIdx);
+      optionEl.classList.remove('selected');
+    } else {
+      userSelections[qIdx].push(oIdx);
+      optionEl.classList.add('selected');
+    }
+    
+    // Show check button if at least one is selected
+    const btn = document.getElementById(`check-btn-${qIdx}`);
+    btn.style.display = userSelections[qIdx].length > 0 ? 'block' : 'none';
+  }
+}
+
+function checkMultiAnswer(qIdx) {
+  const q = questions[qIdx];
+  const selected = userSelections[qIdx].sort();
+  const correct = q.answer.sort();
+  
+  // Check if arrays are equal
+  const isFullyCorrect = JSON.stringify(selected) === JSON.stringify(correct);
+  const isPartiallyCorrect = selected.length > 0 && selected.every(val => correct.includes(val));
+  
+  // Disable all options and button
+  q.options.forEach((_, i) => {
+    const optEl = document.getElementById(`opt-${qIdx}-${i}`);
+    optEl.classList.add('disabled');
+    if (correct.includes(i)) {
+      optEl.classList.add('correct');
+    } else if (selected.includes(i) && !correct.includes(i)) {
+      optEl.classList.add('wrong');
+    }
+  });
+  
+  document.getElementById(`check-btn-${qIdx}`).style.display = 'none';
+  
+  if (isFullyCorrect) {
+    showResult(qIdx, true, true);
+  } else if (isPartiallyCorrect) {
+    showResult(qIdx, false, false, true);
+  } else {
+    showResult(qIdx, false, false);
+  }
+}
+
+function showResult(qIdx, isCorrect, fullyCorrect, isPartial = false) {
+  const card = document.getElementById(`q-card-${qIdx}`);
+  const notif = document.getElementById(`notif-${qIdx}`);
+  
+  answeredCount++;
+  
+  if (fullyCorrect) {
+    card.classList.add('answered-correct');
+    notif.className = 'notification correct';
+    notif.innerHTML = '✅ <b>BENAR!</b> Jawaban Anda tepat.';
+    correctCount++;
+  } else if (isPartial) {
+    card.classList.add('answered-wrong');
+    notif.className = 'notification partial';
+    notif.innerHTML = '⚠️ <b>SEBAGIAN BENAR.</b> Ada jawaban yang terlewat atau salah. Lihat pembahasan di bawah.';
+    wrongCount++;
+  } else {
+    card.classList.add('answered-wrong');
+    notif.className = 'notification wrong';
+    notif.innerHTML = '❌ <b>SALAH.</b> Jawaban yang benar ditandai dengan warna hijau.';
+    wrongCount++;
+  }
+  
+  document.getElementById(`exp-${qIdx}`).classList.add('show');
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById('answered').textContent = `${answeredCount}/30`;
+  document.getElementById('correct').textContent = correctCount;
+  document.getElementById('wrong').textContent = wrongCount;
+  const score = Math.round((correctCount / 30) * 100);
+  document.getElementById('score').textContent = score;
+}
+
+function resetQuiz() {
+  correctCount = 0;
+  wrongCount = 0;
+  answeredCount = 0;
+  userSelections = {};
+  updateScore();
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Initialize
+renderQuiz();
+</script>
+</body>
+</html>

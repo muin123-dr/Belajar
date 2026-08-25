@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul Persiapan TKA Bahasa Arab SMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #3b82f6;
+    --accent: #f59e0b;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --border: #e2e8f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* Arabic Text Styling */
+  .ar {
+    font-family: 'Amiri', serif;
+    font-size: 1.5em;
+    direction: rtl;
+    text-align: right;
+    line-height: 2;
+    color: #0f172a;
+  }
+  .ar-inline {
+    font-family: 'Amiri', serif;
+    font-size: 1.2em;
+    direction: rtl;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* Layout */
+  .container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 30px;
+  }
+
+  /* Sidebar Navigation */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+  }
+  .sidebar h3 {
+    font-size: 1.1em;
+    color: var(--primary);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+  .sidebar ul { list-style: none; }
+  .sidebar li { margin-bottom: 8px; }
+  .sidebar a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-size: 0.9em;
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .sidebar a:hover, .sidebar a.active {
+    background: #eff6ff;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    min-width: 0; /* Prevent flex item overflow */
+  }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+    color: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.2);
+  }
+  header h1 { font-size: 2em; margin-bottom: 10px; font-weight: 700; }
+  header p { font-size: 1.1em; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+
+  /* Sections & Cards */
+  section {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+    scroll-margin-top: 30px;
+  }
+  
+  h2 {
+    color: var(--primary);
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eff6ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .badge {
+    background: var(--primary);
+    color: white;
+    font-size: 0.6em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  h3 {
+    color: var(--text);
+    font-size: 1.2em;
+    margin: 25px 0 15px 0;
+    font-weight: 600;
+  }
+
+  /* Tables */
+  .table-wrapper {
+    overflow-x: auto;
+    margin: 15px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+  }
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: #f1f5f9;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover { background: #f8fafc; }
+  td.ar { font-size: 1.3em; text-align: right; }
+
+  /* Callout Boxes */
+  .callout {
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 5px solid;
+  }
+  .callout-prinsip {
+    background: #eff6ff;
+    border-color: var(--primary);
+  }
+  .callout-strategi {
+    background: #f0fdf4;
+    border-color: var(--success);
+  }
+  .callout-peringatan {
+    background: #fffbeb;
+    border-color: var(--accent);
+  }
+  .callout-jebakan {
+    background: #fef2f2;
+    border-color: var(--danger);
+  }
+  .callout h4 {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05em;
+  }
+  .callout-prinsip h4 { color: var(--primary); }
+  .callout-strategi h4 { color: var(--success); }
+  .callout-peringatan h4 { color: var(--warning); }
+  .callout-jebakan h4 { color: var(--danger); }
+
+  /* Lists */
+  ul.custom-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  ul.custom-list li {
+    padding: 8px 0 8px 25px;
+    position: relative;
+  }
+  ul.custom-list li::before {
+    content: "•";
+    color: var(--primary-light);
+    font-weight: bold;
+    font-size: 1.5em;
+    position: absolute;
+    left: 0;
+    top: 2px;
+  }
+
+  /* Priority Tags */
+  .priority {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .p1 { background: #fee2e2; color: #991b1b; }
+  .p2 { background: #ffedd5; color: #9a3412; }
+  .p3 { background: #fef3c7; color: #92400e; }
+
+  /* Mobile Menu Toggle */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5em;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-light);
+    font-size: 0.9em;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 900px) {
+    .container { flex-direction: column; padding: 15px; }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      z-index: 999;
+      transition: left 0.3s ease;
+      border-radius: 0;
+    }
+    .sidebar.open { left: 0; }
+    .menu-toggle { display: flex; align-items: center; justify-content: center; }
+    header h1 { font-size: 1.5em; }
+    section { padding: 20px; }
+    .ar { font-size: 1.3em; }
+  }
+  
+  /* Overlay for mobile sidebar */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 998;
+  }
+  .overlay.active { display: block; }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+<div class="overlay" onclick="toggleMenu()"></div>
+
+<div class="container">
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar" id="sidebar">
+    <h3>📚 Daftar Isi</h3>
+    <ul>
+      <li><a href="#intro">Gambaran Umum</a></li>
+      <li><a href="#bab1">BAB 1: Mufradāt</a></li>
+      <li><a href="#bab2">BAB 2: Dhamā’ir</a></li>
+      <li><a href="#bab3">BAB 3: Naḥwu Dasar</a></li>
+      <li><a href="#bab4">BAB 4: Ṣarf & Fi’il</a></li>
+      <li><a href="#bab5">BAB 5: Kalimat Tanya</a></li>
+      <li><a href="#bab6">BAB 6: Ungkapan Fungsional</a></li>
+      <li><a href="#bab7">BAB 7: Pemahaman Bacaan</a></li>
+      <li><a href="#bab8">BAB 8: Referensi Kata</a></li>
+      <li><a href="#bab9">BAB 9: Hubungan Logis</a></li>
+      <li><a href="#bab10">BAB 10: Menyusun Kata</a></li>
+      <li><a href="#bab11">BAB 11: Menyusun Paragraf</a></li>
+      <li><a href="#bab12">BAB 12: Pemahaman Dialog</a></li>
+      <li><a href="#bab13">BAB 13: Informasi Visual</a></li>
+      <li><a href="#bab14">BAB 14: Makna Konteks</a></li>
+      <li><a href="#bab15">BAB 15: Kosakata Tema</a></li>
+      <li><a href="#bab16">BAB 16: Angka & Informasi</a></li>
+      <li><a href="#bab17">BAB 17: Kata Sifat</a></li>
+      <li><a href="#bab18">BAB 18: Tujuan & Pesan</a></li>
+      <li><a href="#bab19">BAB 19: Strategi Baca Cepat</a></li>
+      <li><a href="#bab20">BAB 20: Strategi Menjawab</a></li>
+      <li><a href="#bab21">BAB 21: Jebakan Soal</a></li>
+      <li><a href="#bab22">BAB 22: Checklist Materi</a></li>
+      <li><a href="#bab23">BAB 23: Prioritas Belajar</a></li>
+      <li><a href="#bab24">BAB 24: Pola Belajar</a></li>
+      <li><a href="#bab25">BAB 25: Rumus Cepat</a></li>
+      <li><a href="#penutup">Penutup</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header id="intro">
+      <h1>MODUL PERSIAPAN TKA BAHASA ARAB SMA</h1>
+      <p>Materi Esensial, Strategi Memahami Teks, dan Kaidah yang Paling Dibutuhkan untuk menghadapi Tes Kemampuan Akademik.</p>
+    </header>
+
+    <section>
+      <h2>Gambaran Umum TKA Bahasa Arab</h2>
+      <p>TKA Bahasa Arab tidak semata-mata menguji kemampuan menghafal kosakata atau menghafal rumus Naḥwu-Ṣarf. Kemampuan yang lebih penting adalah:</p>
+      <ul class="custom-list">
+        <li>Memahami kosakata dalam konteks.</li>
+        <li>Memahami struktur kalimat.</li>
+        <li>Menemukan informasi tersurat & menyimpulkan informasi tersirat.</li>
+        <li>Memahami ide pokok dan hubungan antarkalimat.</li>
+        <li>Menyusun informasi secara logis.</li>
+        <li>Memahami fungsi ungkapan dalam dialog.</li>
+        <li>Menggunakan kaidah bahasa untuk memahami makna.</li>
+      </ul>
+      
+      <div class="callout callout-prinsip">
+        <h4>💡 Prinsip Utama</h4>
+        <p>Jangan hanya bertanya <i>“Apa arti kata ini?”</i> tetapi tanyakan <b>“Apa makna kata ini dalam kalimat tersebut?”</b></p>
+        <p style="margin-top:10px;"><b>Contoh:</b> <span class="ar ar-inline">شَاهَدَ الطَّالِبُ الْفِلْمَ</span><br>
+        Artinya: Siswa menonton film.<br>
+        Kata <span class="ar ar-inline">شَاهَدَ</span> dapat diterjemahkan “melihat”, “menyaksikan”, atau “menonton”, <b>tergantung konteks</b>.</p>
+      </div>
+    </section>
+
+    <section id="bab1">
+      <h2><span class="badge">BAB 1</span> MUFRADĀT (KOSAKATA)</h2>
+      
+      <h3>1. Kosakata Kehidupan Sehari-hari</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Kategori</th><th>Arab</th><th>Arti</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="5"><b>Sekolah</b></td><td class="ar">مَدْرَسَةٌ</td><td>Sekolah</td></tr>
+            <tr><td class="ar">فَصْلٌ</td><td>Kelas / Ruang</td></tr>
+            <tr><td class="ar">طَالِبٌ / طَالِبَةٌ</td><td>Siswa / Siswi</td></tr>
+            <tr><td class="ar">مُعَلِّمٌ / مُعَلِّمَةٌ</td><td>Guru (Lk) / Guru (Pr)</td></tr>
+            <tr><td class="ar">مَكْتَبَةٌ</td><td>Perpustakaan</td></tr>
+            
+            <tr><td rowspan="4"><b>Keluarga</b></td><td class="ar">أَبٌ / أُمٌّ</td><td>Ayah / Ibu</td></tr>
+            <tr><td class="ar">أَخٌ / أُخْتٌ</td><td>Saudara Lk / Saudara Pr</td></tr>
+            <tr><td class="ar">جَدٌّ / جَدَّةٌ</td><td>Kakek / Nenek</td></tr>
+            <tr><td class="ar">أُسْرَةٌ / عَائِلَةٌ</td><td>Keluarga</td></tr>
+
+            <tr><td rowspan="4"><b>Profesi</b></td><td class="ar">طَبِيبٌ</td><td>Dokter</td></tr>
+            <tr><td class="ar">مُهَنْدِسٌ</td><td>Insinyur</td></tr>
+            <tr><td class="ar">شُرْطِيٌّ</td><td>Polisi</td></tr>
+            <tr><td class="ar">فَلَّاحٌ</td><td>Petani</td></tr>
+
+            <tr><td rowspan="4"><b>Tempat Umum</b></td><td class="ar">مَسْجِدٌ</td><td>Masjid</td></tr>
+            <tr><td class="ar">مُسْتَشْفًى</td><td>Rumah Sakit</td></tr>
+            <tr><td class="ar">مَطَارٌ</td><td>Bandara</td></tr>
+            <tr><td class="ar">سُوقٌ</td><td>Pasar</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2. Kosakata Waktu</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Arab</th><th>Arti</th><th>Arab</th><th>Arti</th></tr></thead>
+          <tbody>
+            <tr><td class="ar">الْيَوْمَ</td><td>Hari ini</td><td class="ar">أَمْسِ</td><td>Kemarin</td></tr>
+            <tr><td class="ar">غَدًا</td><td>Besok</td><td class="ar">الآنَ</td><td>Sekarang</td></tr>
+            <tr><td class="ar">صَبَاحًا</td><td>Pagi</td><td class="ar">مَسَاءً</td><td>Sore/Malam</td></tr>
+            <tr><td class="ar">أَوَّلًا</td><td>Pertama</td><td class="ar">ثُمَّ</td><td>Kemudian</td></tr>
+            <tr><td class="ar">دَائِمًا</td><td>Selalu</td><td class="ar">نَادِرًا</td><td>Jarang</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout-peringatan">
+        <h4>⚠️ Petunjuk Penting</h4>
+        <p>Jika terdapat urutan: <span class="ar ar-inline">أَوَّلًا → ثُمَّ → بَعْدَ ذَلِكَ → أَخِيرًا</span>, maka biasanya terdapat soal tentang <b>urutan peristiwa</b>.</p>
+      </div>
+
+      <h3>3 & 4. Sinonim (الْمُرَادِفَاتُ) & Antonim (الأَضْدَادُ)</h3>
+      <p><b>Sinonim:</b> <span class="ar ar-inline">جَمِيلٌ = حَسَنٌ</span> (indah), <span class="ar ar-inline">سَرِيعٌ = عَاجِلٌ</span> (cepat), <span class="ar ar-inline">ذَهَبَ = مَضَى</span> (pergi).</p>
+      <p><b>Antonim:</b> <span class="ar ar-inline">كَبِيرٌ</span> (besar) ↔ <span class="ar ar-inline">صَغِيرٌ</span> (kecil), <span class="ar ar-inline">جَدِيدٌ</span> (baru) ↔ <span class="ar ar-inline">قَدِيمٌ</span> (lama), <span class="ar ar-inline">قَرِيبٌ</span> (dekat) ↔ <span class="ar ar-inline">بَعِيدٌ</span> (jauh).</p>
+    </section>
+
+    <section id="bab2">
+      <h2><span class="badge">BAB 2</span> DHAMĀ’IR (KATA GANTI)</h2>
+      <p>Kata ganti sangat penting untuk mengetahui siapa yang melakukan sesuatu.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Dhamir Terpisah</th><th>Arti</th><th>Contoh Dhamir Melekat</th><th>Arti</th></tr></thead>
+          <tbody>
+            <tr><td class="ar">أَنَا</td><td>Saya</td><td class="ar">كِتَابِي</td><td>Bukuku</td></tr>
+            <tr><td class="ar">أَنْتَ / أَنْتِ</td><td>Kamu (Lk/Pr)</td><td class="ar">كِتَابُكَ / كِتَابُكِ</td><td>Bukumu (Lk/Pr)</td></tr>
+            <tr><td class="ar">هُوَ / هِيَ</td><td>Dia (Lk/Pr)</td><td class="ar">كِتَابُهُ / كِتَابُهَا</td><td>Bukunya (Lk/Pr)</td></tr>
+            <tr><td class="ar">هُمْ / هُنَّ</td><td>Mereka (Lk/Pr)</td><td class="ar">كِتَابُهُمْ / كِتَابُهُنَّ</td><td>Buku mereka</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout-strategi">
+        <h4>🎯 Strategi Menemukan Rujukan</h4>
+        <p>Dalam teks: <span class="ar ar-inline">ذَهَبَ عَلِيٌّ إِلَى الْمَدْرَسَةِ. وَهُوَ يَدْرُسُ فِي الْفَصْلِ.</span><br>
+        Kata <span class="ar ar-inline">هُوَ</span> merujuk kepada <span class="ar ar-inline">عَلِيٌّ</span>. Kemampuan menemukan rujukan kata ganti sering dibutuhkan untuk memahami teks.</p>
+      </div>
+    </section>
+
+    <section id="bab3">
+      <h2><span class="badge">BAB 3</span> NAḤWU DASAR</h2>
+      
+      <h3>1. Jumlah Ismiyyah & Fi’liyyah</h3>
+      <ul class="custom-list">
+        <li><b>Jumlah Ismiyyah:</b> Diawali Isim. Pola: <span class="ar ar-inline">مُبْتَدَأٌ + خَبَرٌ</span>.<br>Contoh: <span class="ar ar-inline">الطَّالِبُ مُجْتَهِدٌ</span> (Siswa itu rajin).</li>
+        <li><b>Jumlah Fi’liyyah:</b> Diawali Fi’il. Pola: <span class="ar ar-inline">فِعْلٌ + فَاعِلٌ + مَفْعُولٌ بِهِ</span>.<br>Contoh: <span class="ar ar-inline">قَرَأَ الطَّالِبُ الْكِتَابَ</span> (Siswa membaca buku).</li>
+      </ul>
+
+      <h3>2. Ḥurūf Jar (Preposisi)</h3>
+      <p>Menyebabkan kata setelahnya berstatus <i>majrūr</i> (berharakat kasrah).</p>
+      <p><span class="ar ar-inline">فِي</span> (di) + tempat | <span class="ar ar-inline">إِلَى</span> (ke) + tujuan | <span class="ar ar-inline">مِنْ</span> (dari) + asal.</p>
+
+      <h3>3. Huruf ’Aṭaf (Kata Sambung)</h3>
+      <div class="table-wrapper">
+        <table>
+          <tr><td class="ar">وَ</td><td>Dan</td><td class="ar">فَ</td><td>Lalu / Maka</td></tr>
+          <tr><td class="ar">ثُمَّ</td><td>Kemudian</td><td class="ar">أَوْ</td><td>Atau</td></tr>
+          <tr><td class="ar">لَكِنْ</td><td>Tetapi</td><td class="ar">لِأَنَّ</td><td>Karena</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="bab4">
+      <h2><span class="badge">BAB 4</span> ṢARF DAN BENTUK KATA KERJA</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Jenis</th><th>Fungsi</th><th>Contoh</th><th>Arti</th></tr></thead>
+          <tbody>
+            <tr><td><b>Fi’il Māḍī</b></td><td>Lampau (telah terjadi)</td><td class="ar">ذَهَبَ</td><td>Telah pergi</td></tr>
+            <tr><td><b>Fi’il Muḍāri’</b></td><td>Sedang/Akan terjadi (diawali أ ن ي ت)</td><td class="ar">يَذْهَبُ</td><td>Sedang/akan pergi</td></tr>
+            <tr><td><b>Fi’il Amr</b></td><td>Perintah</td><td class="ar">اِذْهَبْ</td><td>Pergilah!</td></tr>
+            <tr><td><b>An-Nahyu</b></td><td>Larangan (لَا + Muḍāri’)</td><td class="ar">لَا تَذْهَبْ</td><td>Jangan pergi!</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout-peringatan">
+        <h4>⚠️ Kesesuaian Jenis dan Jumlah</h4>
+        <p>Kenali: <span class="ar ar-inline">مذكر</span> (laki-laki), <span class="ar ar-inline">مؤنث</span> (perempuan), <span class="ar ar-inline">مفرد</span> (tunggal), <span class="ar ar-inline">مثنى</span> (dua), <span class="ar ar-inline">جمع</span> (jamak).<br>
+        Contoh: <span class="ar ar-inline">طَالِبٌ مُجْتَهِدٌ</span> (Siswa Lk rajin) vs <span class="ar ar-inline">طَالِبَةٌ مُجْتَهِدَةٌ</span> (Siswi rajin).</p>
+      </div>
+    </section>
+
+    <section id="bab5">
+      <h2><span class="badge">BAB 5</span> KALIMAT TANYA</h2>
+      <div class="table-wrapper">
+        <table>
+          <tr><td class="ar">مَنْ</td><td>Siapa</td><td class="ar">مَا / مَاذَا</td><td>Apa</td></tr>
+          <tr><td class="ar">أَيْنَ</td><td>Di mana</td><td class="ar">مَتَى</td><td>Kapan</td></tr>
+          <tr><td class="ar">كَيْفَ</td><td>Bagaimana</td><td class="ar">لِمَاذَا</td><td>Mengapa</td></tr>
+          <tr><td class="ar">كَمْ</td><td>Berapa</td><td class="ar">هَلْ</td><td>Apakah</td></tr>
+        </table>
+      </div>
+      <div class="callout callout-strategi">
+        <h4>🎯 Strategi</h4>
+        <p>Kenali kata tanya terlebih dahulu. Jika soal bertanya <span class="ar ar-inline">أَيْنَ</span> (di mana), jangan mencari jawaban "siapa", tapi cari informasi <b>tempat</b>.</p>
+      </div>
+    </section>
+
+    <section id="bab7">
+      <h2><span class="badge">BAB 7</span> PEMAHAMAN BACAAN (QIRĀ’AH)</h2>
+      <p>Gunakan tiga tingkat pemahaman:</p>
+      <ol style="padding-left: 20px; line-height: 1.8;">
+        <li><b>Pemahaman Literal:</b> Informasi tertulis langsung di teks. Fokus cari: siapa, apa, kapan, di mana.</li>
+        <li><b>Pemahaman Inferensial:</b> Jawaban tidak tertulis langsung. Harus menggabungkan beberapa informasi untuk menyimpulkan (misal: dari kebiasaan bangun pagi dan belajar, disimpulkan tokoh itu <span class="ar ar-inline">مُجْتَهِدٌ</span> / rajin).</li>
+        <li><b>Menentukan Ide Pokok:</b> Baca kalimat pertama, perhatikan kata yang sering diulang, dan abaikan detail yang terlalu spesifik.</li>
+      </ol>
+    </section>
+
+    <section id="bab9">
+      <h2><span class="badge">BAB 9</span> HUBUNGAN LOGIS ANTAR INFORMASI</h2>
+      <div class="table-wrapper">
+        <table>
+          <tr><td><b>Sebab</b></td><td class="ar">لِأَنَّ</td><td>Karena</td></tr>
+          <tr><td><b>Akibat</b></td><td class="ar">لِذَلِكَ</td><td>Oleh karena itu</td></tr>
+          <tr><td><b>Pertentangan</b></td><td class="ar">لَكِنْ</td><td>Tetapi</td></tr>
+          <tr><td><b>Urutan</b></td><td class="ar">أَوَّلًا — ثُمَّ — بَعْدَ ذَلِكَ — أَخِيرًا</td><td>Pertama - Kemudian - Setelah itu - Terakhir</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="bab14">
+      <h2><span class="badge">BAB 14</span> MEMAHAMI MAKNA, BUKAN SEKADAR TERJEMAHAN</h2>
+      <div class="callout callout-prinsip">
+        <h4>💡 Pelajari kata dalam frasa, bukan kata tunggal</h4>
+        <ul class="custom-list">
+          <li><span class="ar ar-inline">رَغِبَ فِي</span> = Berminat/ingin terhadap (bukan "ingin di")</li>
+          <li><span class="ar ar-inline">بَحَثَ عَنْ</span> = Mencari</li>
+          <li><span class="ar ar-inline">تَحَدَّثَ مَعَ</span> = Berbicara dengan</li>
+          <li><span class="ar ar-inline">سَأَلَ عَنْ</span> = Bertanya tentang</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="bab21">
+      <h2><span class="badge">BAB 21</span> JEBAKAN SOAL YANG HARUS DIWASPADAI</h2>
+      <div class="callout callout-jebakan">
+        <h4>🚫 5 Jebakan Umum</h4>
+        <ol style="padding-left: 20px; line-height: 1.8;">
+          <li><b>Benar secara bahasa, salah menurut teks:</b> Harus ada bukti dari teks, jangan hanya karena terdengar benar.</li>
+          <li><b>Kata mirip, makna berbeda:</b> Jangan tertipu oleh bentuk kata yang mirip.</li>
+          <li><b>Informasi benar tapi tidak ditanyakan:</b> Jika ditanya <span class="ar ar-inline">أَيْنَ؟</span>, jangan pilih jawaban tentang waktu.</li>
+          <li><b>Salah memahami kata ganti:</b> Pastikan <span class="ar ar-inline">هُوَ</span> merujuk ke siapa, <span class="ar ar-inline">هَا</span> merujuk ke apa.</li>
+          <li><b>Salah memahami urutan:</b> Perhatikan baik-baik kata <span class="ar ar-inline">ثُمَّ</span> atau <span class="ar ar-inline">قَبْلَ</span>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="bab23">
+      <h2><span class="badge">BAB 23</span> PRIORITAS BELAJAR</h2>
+      <p>Tidak semua materi harus dipelajari dengan kedalaman yang sama.</p>
+      
+      <div style="margin-top: 15px;">
+        <span class="priority p1">PRIORITAS 1 — WAJIB KUAT</span>
+        <p>Kosakata umum, Makna kata berdasarkan konteks, Kata tanya, Kata ganti, Fi’il māḍī & muḍāri’, Jumlah ismiyyah & fi’liyyah, Huruf jar, Kata sambung, Informasi literal, Ide pokok, Inferensi.</p>
+      </div>
+      
+      <div style="margin-top: 15px;">
+        <span class="priority p2">PRIORITAS 2 — WAJIB DIKUASAI</span>
+        <p>Sinonim, Antonim, Fi’il amr, Larangan, Ungkapan dialog, Referensi kata ganti, Urutan peristiwa, Penyusunan kata/kalimat, Karakter tokoh.</p>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <span class="priority p3">PRIORITAS 3 — PENDALAMAN</span>
+        <p>Mufrad-mutsanna-jamak, Mudzakkar-mu’annats, Bentuk turunan kata, Pola perubahan fi’il, Analisis struktur kalimat kompleks.</p>
+      </div>
+    </section>
+
+    <section id="bab25">
+      <h2><span class="badge">BAB 25</span> RUMUS CEPAT TKA BAHASA ARAB</h2>
+      <div class="callout callout-strategi">
+        <ul class="custom-list">
+          <li>Jika ditanya <b>"siapa?"</b> → Cari: <span class="ar ar-inline">مَنْ</span></li>
+          <li>Jika ditanya <b>"di mana?"</b> → Cari: <span class="ar ar-inline">أَيْنَ</span></li>
+          <li>Jika ditanya <b>"kapan?"</b> → Cari: <span class="ar ar-inline">مَتَى</span></li>
+          <li>Jika ditanya <b>"mengapa?"</b> → Cari: <span class="ar ar-inline">لِمَاذَا</span> atau <span class="ar ar-inline">لِأَنَّ</span></li>
+          <li>Jika menemukan <span class="ar ar-inline">هُوَ</span> → Cari laki-laki yang disebut sebelumnya.</li>
+          <li>Jika menemukan <span class="ar ar-inline">ثُمَّ</span> → Cari urutan berikutnya.</li>
+          <li>Jika menemukan <span class="ar ar-inline">لَكِنْ</span> → Cari pertentangan.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="penutup">
+      <h2>PENUTUP</h2>
+      <p>TKA Bahasa Arab SMA pada dasarnya menuntut kemampuan untuk memahami bahasa dalam konteks. Gunakan tiga kemampuan utama:</p>
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+        <div style="flex: 1; min-width: 200px; background: #eff6ff; padding: 20px; border-radius: 10px; text-align: center;">
+          <h3 style="margin-top:0; color: var(--primary);">1. PAHAM KATA</h3>
+          <p>Mufradāt</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; background: #f0fdf4; padding: 20px; border-radius: 10px; text-align: center;">
+          <h3 style="margin-top:0; color: var(--success);">2. PAHAM STRUKTUR</h3>
+          <p>Naḥwu & Ṣarf</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; background: #fffbeb; padding: 20px; border-radius: 10px; text-align: center;">
+          <h3 style="margin-top:0; color: var(--warning);">3. PAHAM TEKS</h3>
+          <p>Qirā’ah</p>
+        </div>
+      </div>
+      <p style="margin-top: 25px; text-align: center; font-weight: 600; color: var(--primary);">
+        Target akhirnya bukan sekadar mampu menerjemahkan, tetapi mampu membaca, memahami, menalar, menyimpulkan, dan memilih jawaban yang paling tepat berdasarkan teks.
+      </p>
+    </section>
+
+    <footer>
+      <p>Modul Persiapan TKA Bahasa Arab SMA © 2026<br>Didesain untuk kemudahan belajar dan pemahaman maksimal.</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Mobile Menu Toggle
+  function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.querySelector('.overlay').classList.toggle('active');
+  }
+
+  // Close menu when clicking a link on mobile
+  document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 900) {
+        toggleMenu();
+      }
+    });
+  });
+
+  // Active link highlighting on scroll
+  const sections = document.querySelectorAll('section, header');
+  const navLinks = document.querySelectorAll('.sidebar a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (pageYOffset >= (sectionTop - 100)) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href').includes(current)) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

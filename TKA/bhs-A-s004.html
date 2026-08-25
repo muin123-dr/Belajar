@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Quiz 30 soal persiapan TKA Bahasa Arab SMA">
+<title>Kuis TKA Bahasa Arab SMA — 30 Soal</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --text:#172033; --muted:#667085;
+  --primary:#3157d5; --primary-soft:#eef2ff; --success:#16834b;
+  --success-soft:#eaf8f0; --danger:#c62828; --danger-soft:#fff0f0;
+  --border:#dfe4ec; --shadow:0 8px 28px rgba(20,30,55,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.65;
+}
+.container{width:min(100% - 28px, 920px);margin:auto}
+header{
+  background:linear-gradient(135deg,#253fa8,#5273df);color:white;
+  padding:32px 0 28px; box-shadow:var(--shadow)
+}
+header h1{margin:0 0 8px;font-size:clamp(1.55rem,4vw,2.35rem);line-height:1.2}
+header p{margin:0;opacity:.92}
+.progress-wrap{margin-top:20px;background:rgba(255,255,255,.2);height:10px;border-radius:99px;overflow:hidden}
+.progress{height:100%;width:0;background:white;transition:.3s}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.92rem}
+.badge{padding:5px 10px;border-radius:99px;background:rgba(255,255,255,.15)}
+main{padding:24px 0 50px}
+.question-card{
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:22px;margin:0 0 18px;box-shadow:var(--shadow)
+}
+.q-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.q-number{font-weight:800;color:var(--primary)}
+.q-type{font-size:.78rem;color:var(--muted);background:#f1f3f7;padding:4px 8px;border-radius:99px}
+.question{font-size:1.08rem;font-weight:700;margin:14px 0}
+.arabic{
+  direction:rtl;text-align:right;font-family:"Noto Naskh Arabic","Amiri","Scheherazade New",Tahoma,Arial,sans-serif;
+  font-size:1.3rem;line-height:2;margin:12px 0;padding:13px 15px;
+  background:#fafbff;border-right:4px solid var(--primary-soft);border-radius:10px
+}
+.options{display:grid;gap:10px;margin-top:14px}
+.option{
+  width:100%;text-align:left;background:#fff;border:1px solid var(--border);
+  padding:13px 14px;border-radius:12px;cursor:pointer;font-size:.98rem;
+  color:var(--text);transition:.15s
+}
+.option:hover:not(:disabled){border-color:var(--primary);background:var(--primary-soft)}
+.option:disabled{cursor:default}
+.option.correct{border-color:var(--success);background:var(--success-soft)}
+.option.wrong{border-color:var(--danger);background:var(--danger-soft)}
+.feedback{
+  display:none;margin-top:16px;border-radius:13px;padding:15px;
+  border-left:5px solid var(--primary)
+}
+.feedback.show{display:block}
+.feedback.correct{background:var(--success-soft);border-left-color:var(--success)}
+.feedback.wrong{background:var(--danger-soft);border-left-color:var(--danger)}
+.feedback-title{font-weight:900;margin-bottom:7px}
+.answer{font-weight:700;margin-bottom:7px}
+.explanation{color:#344054}
+.result{
+  display:none;background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:25px;box-shadow:var(--shadow);margin-top:22px
+}
+.result.show{display:block}
+.score{font-size:2.3rem;font-weight:900;color:var(--primary)}
+.result-message{font-weight:700;margin:5px 0 18px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+button.action{
+  border:0;border-radius:11px;padding:11px 16px;font-weight:700;cursor:pointer
+}
+.primary{background:var(--primary);color:white}.secondary{background:#eef0f4;color:var(--text)}
+.footer{text-align:center;color:var(--muted);padding:15px 0 35px;font-size:.9rem}
+@media(max-width:600px){
+  .container{width:min(100% - 18px,920px)}
+  header{padding:24px 0}
+  .question-card{padding:17px;border-radius:14px}
+  .arabic{font-size:1.16rem}
+  .question{font-size:1rem}
+  .option{padding:12px;font-size:.95rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>🇸🇦 Kuis TKA Bahasa Arab SMA</h1>
+    <p>30 soal untuk melatih Mufradāt, Naḥwu–Ṣarf, Qirā'ah, dialog, inferensi, dan reorganisasi teks.</p>
+    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+    <div class="stats">
+      <span class="badge" id="answered">0/30 dijawab</span>
+      <span class="badge" id="scoreTop">Skor: 0</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div id="quiz"></div>
+
+  <section class="result" id="result">
+    <div>HASIL AKHIR</div>
+    <div class="score" id="finalScore">0/30</div>
+    <div class="result-message" id="resultMessage"></div>
+    <div id="summary"></div>
+    <div class="actions">
+      <button class="action primary" onclick="resetQuiz()">Ulangi Kuis</button>
+      <button class="action secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Kembali ke Atas</button>
+    </div>
+  </section>
+</main>
+
+<div class="footer">Kuis latihan TKA Bahasa Arab SMA • Belajar dari kesalahan, bukan hanya mengejar skor.</div>
+
+<script>
+const questions = [
+{
+ type:"Mufradāt",
+ q:"Apa arti kata <b>مَدْرَسَةٌ</b>?",
+ opts:["Rumah sakit","Sekolah","Perpustakaan","Pasar"],
+ ans:1,
+ exp:"مَدْرَسَةٌ berarti <b>sekolah</b>. Kata ini termasuk kosakata dasar tema kehidupan sekolah."
+},
+{
+ type:"Antonim",
+ q:"Manakah antonim yang tepat untuk <b>نَظِيفٌ</b>?",
+ opts:["جَمِيلٌ","وَسِخٌ","كَبِيرٌ","قَرِيبٌ"],
+ ans:1,
+ exp:"نَظِيفٌ berarti bersih, sedangkan وَسِخٌ berarti kotor. Keduanya merupakan pasangan antonim."
+},
+{
+ type:"Sinonim",
+ q:"Kata yang paling dekat maknanya dengan <b>جَمِيلٌ</b> adalah ...",
+ opts:["حَسَنٌ","قَبِيحٌ","صَعْبٌ","بَعِيدٌ"],
+ ans:0,
+ exp:"جَمِيلٌ berarti indah/bagus. حَسَنٌ juga berarti bagus/baik, sehingga merupakan sinonim yang tepat dalam konteks umum."
+},
+{
+ type:"Konteks",
+ q:"Perhatikan kalimat berikut. Apa makna <b>شَاهَدَ</b> dalam kalimat tersebut?",
+ arab:"شَاهَدَ الطَّالِبُ الْفِلْمَ.",
+ opts:["Menulis","Menonton","Membeli","Membaca"],
+ ans:1,
+ exp:"Karena objeknya adalah الْفِلْمَ (film), شَاهَدَ bermakna <b>menonton/menyaksikan</b>. Makna kata ditentukan oleh konteks."
+},
+{
+ type:"Ḍamīr",
+ q:"Kata ganti yang berarti “dia laki-laki” adalah ...",
+ opts:["هِيَ","هُمْ","هُوَ","أَنْتَ"],
+ ans:2,
+ exp:"هُوَ berarti dia laki-laki. هِيَ berarti dia perempuan, هُمْ berarti mereka, dan أَنْتَ berarti kamu laki-laki."
+},
+{
+ type:"Ḍamīr",
+ q:"Perhatikan kalimat: <b>ذَهَبَ عَلِيٌّ إِلَى الْمَدْرَسَةِ. وَهُوَ يَدْرُسُ فِي الْفَصْلِ.</b> Kata <b>هُوَ</b> merujuk kepada ...",
+ opts:["الْمَدْرَسَةِ","الْفَصْلِ","عَلِيٌّ","يَدْرُسُ"],
+ ans:2,
+ exp:"هُوَ berarti 'dia laki-laki' dan merujuk kepada orang yang sudah disebut, yaitu عَلِيٌّ."
+},
+{
+ type:"Naḥwu",
+ q:"Pada kalimat <b>الطَّالِبُ مُجْتَهِدٌ</b>, kata <b>الطَّالِبُ</b> berfungsi sebagai ...",
+ opts:["Khabar","Maf'ūl bih","Mubtada'","Ḥarf jar"],
+ ans:2,
+ exp:"Kalimat diawali isim sehingga merupakan jumlah ismiyyah. الطَّالِبُ adalah pokok pembicaraan (mubtada'), sedangkan مُجْتَهِدٌ adalah khabar."
+},
+{
+ type:"Naḥwu",
+ q:"Pada kalimat <b>قَرَأَ الطَّالِبُ الْكِتَابَ</b>, kata <b>الطَّالِبُ</b> adalah ...",
+ opts:["Fā'il","Maf'ūl bih","Khabar","Ḥarf 'aṭaf"],
+ ans:0,
+ exp:"قَرَأَ adalah kata kerja, dan الطَّالِبُ adalah pelaku tindakan membaca. Pelaku dalam jumlah fi'liyyah disebut فَاعِلٌ."
+},
+{
+ type:"Naḥwu",
+ q:"Pada kalimat <b>قَرَأَ الطَّالِبُ الْكِتَابَ</b>, kata <b>الْكِتَابَ</b> berfungsi sebagai ...",
+ opts:["Mubtada'","Fā'il","Maf'ūl bih","Khabar"],
+ ans:2,
+ exp:"الْكِتَابَ adalah sesuatu yang dibaca, sehingga menjadi objek atau مَفْعُولٌ بِهِ."
+},
+{
+ type:"Ḥurūf Jar",
+ q:"Manakah pasangan yang benar?",
+ arab:"ذَهَبَ الطَّالِبُ ___ الْمَدْرَسَةِ.",
+ opts:["فِي","إِلَى","مِنْ","عَنْ"],
+ ans:1,
+ exp:"Untuk menunjukkan tujuan 'ke sekolah', digunakan إِلَى. Jadi: ذَهَبَ الطَّالِبُ إِلَى الْمَدْرَسَةِ."
+},
+{
+ type:"Ḥurūf Jar",
+ q:"Arti yang tepat dari <b>فِي الْفَصْلِ</b> adalah ...",
+ opts:["Dari kelas","Ke kelas","Di dalam kelas","Tentang kelas"],
+ ans:2,
+ exp:"فِي berarti 'di/dalam'. الْفَصْلِ berarti kelas. Jadi فِي الْفَصْلِ = di dalam kelas."
+},
+{
+ type:"Fi'il",
+ q:"Manakah yang merupakan fi'il māḍī?",
+ opts:["يَذْهَبُ","اِذْهَبْ","ذَهَبَ","يَكْتُبُ"],
+ ans:2,
+ exp:"ذَهَبَ adalah fi'il māḍī (kata kerja lampau) yang berarti 'telah/pernah pergi'. يَذْهَبُ dan يَكْتُبُ adalah muḍāri', sedangkan اِذْهَبْ adalah amr."
+},
+{
+ type:"Fi'il",
+ q:"Manakah yang merupakan fi'il muḍāri'?",
+ opts:["كَتَبَ","اُكْتُبْ","يَكْتُبُ","كِتَابٌ"],
+ ans:2,
+ exp:"يَكْتُبُ adalah fi'il muḍāri'. Salah satu cirinya adalah diawali huruf mudhāra'ah seperti أ، ن، ي، ت."
+},
+{
+ type:"Fi'il Amr",
+ q:"Apa arti <b>اِقْرَأْ!</b>?",
+ opts:["Dia membaca","Jangan membaca","Bacalah!","Telah membaca"],
+ ans:2,
+ exp:"اِقْرَأْ adalah fi'il amr, yaitu kata kerja perintah. Artinya 'Bacalah!'."
+},
+{
+ type:"Nahyu",
+ q:"Kalimat yang berarti “Jangan pergi!” adalah ...",
+ opts:["اِذْهَبْ","ذَهَبَ","لَا تَذْهَبْ","يَذْهَبُ"],
+ ans:2,
+ exp:"Larangan dibentuk dengan لَا + fi'il muḍāri'. لَا تَذْهَبْ berarti 'Jangan pergi!'."
+},
+{
+ type:"Kata Tanya",
+ q:"Apa arti kata tanya <b>أَيْنَ</b>?",
+ opts:["Siapa","Kapan","Di mana","Mengapa"],
+ ans:2,
+ exp:"أَيْنَ digunakan untuk menanyakan tempat atau lokasi: 'di mana?'."
+},
+{
+ type:"Kata Tanya",
+ q:"Pertanyaan <b>مَتَى ذَهَبَ عَلِيٌّ؟</b> menanyakan ...",
+ opts:["Tempat Ali pergi","Alasan Ali pergi","Kapan Ali pergi","Dengan siapa Ali pergi"],
+ ans:2,
+ exp:"مَتَى berarti 'kapan', sehingga pertanyaan tersebut menanyakan waktu Ali pergi."
+},
+{
+ type:"Literal",
+ q:"Bacalah teks berikut. Pada pukul berapa Ahmad pergi ke sekolah?",
+ arab:"ذَهَبَ أَحْمَدُ إِلَى الْمَدْرَسَةِ فِي السَّاعَةِ السَّابِعَةِ.",
+ opts:["Pukul lima","Pukul enam","Pukul tujuh","Pukul delapan"],
+ ans:2,
+ exp:"Informasi tertulis langsung dalam teks: فِي السَّاعَةِ السَّابِعَةِ = pada pukul tujuh."
+},
+{
+ type:"Literal",
+ q:"Bacalah teks. Dengan siapa Ali pergi ke pasar?",
+ arab:"ذَهَبَ عَلِيٌّ إِلَى السُّوقِ مَعَ أَبِيهِ صَبَاحًا.",
+ opts:["Dengan ibunya","Dengan ayahnya","Dengan gurunya","Sendirian"],
+ ans:1,
+ exp:"Frasa مَعَ أَبِيهِ berarti 'bersama ayahnya'. Ini adalah informasi literal yang tertulis langsung."
+},
+{
+ type:"Inferensi",
+ q:"Apa kesimpulan yang paling tepat dari teks berikut?",
+ arab:"يَسْتَيْقِظُ عَلِيٌّ مُبَكِّرًا، وَيُرَاجِعُ دُرُوسَهُ كُلَّ يَوْمٍ، وَيَذْهَبُ إِلَى الْمَدْرَسَةِ فِي الْوَقْتِ الْمُنَاسِبِ.",
+ opts:["Ali adalah siswa yang malas","Ali adalah siswa yang rajin dan disiplin","Ali tidak suka sekolah","Ali selalu terlambat"],
+ ans:1,
+ exp:"Teks menyebut Ali bangun pagi, belajar setiap hari, dan datang tepat waktu. Dari beberapa fakta itu dapat disimpulkan bahwa Ali rajin dan disiplin."
+},
+{
+ type:"Ide Pokok",
+ q:"Apa ide pokok teks berikut?",
+ arab:"يَسْتَيْقِظُ أَحْمَدُ صَبَاحًا. يَغْسِلُ وَجْهَهُ وَيَتَنَاوَلُ الْفَطُورَ، ثُمَّ يَذْهَبُ إِلَى الْمَدْرَسَةِ.",
+ opts:["Hobi Ahmad","Kehidupan pagi Ahmad","Pekerjaan ayah Ahmad","Perjalanan Ahmad ke luar kota"],
+ ans:1,
+ exp:"Semua kalimat menceritakan aktivitas Ahmad pada pagi hari. Jadi ide pokoknya adalah kehidupan/aktivitas pagi Ahmad."
+},
+{
+ type:"Hubungan Logis",
+ q:"Kata <b>لِأَنَّ</b> menunjukkan hubungan ...",
+ opts:["Pertentangan","Sebab/alasan","Urutan","Pilihan"],
+ ans:1,
+ exp:"لِأَنَّ berarti 'karena' dan digunakan untuk memperkenalkan sebab atau alasan."
+},
+{
+ type:"Hubungan Logis",
+ q:"Kata <b>لِذَلِكَ</b> biasanya menunjukkan ...",
+ opts:["Akibat/kesimpulan","Pertanyaan","Pilihan","Tempat"],
+ ans:0,
+ exp:"لِذَلِكَ berarti 'oleh karena itu'. Kata ini biasanya memperkenalkan akibat atau kesimpulan dari informasi sebelumnya."
+},
+{
+ type:"Reorganisasi",
+ q:"Susunan yang paling tepat adalah ...",
+ arab:"الْمَسَاءِ / فِي / نُشَاهِدُ / الْعَائِلَةِ / مَعَ / التَّلْفَازَ",
+ opts:[
+ "فِي الْمَسَاءِ نُشَاهِدُ مَعَ الْعَائِلَةِ التَّلْفَازَ.",
+ "نُشَاهِدُ التَّلْفَازَ مَعَ الْعَائِلَةِ فِي الْمَسَاءِ.",
+ "مَعَ نُشَاهِدُ الْمَسَاءِ التَّلْفَازَ فِي الْعَائِلَةِ.",
+ "التَّلْفَازَ الْعَائِلَةِ مَعَ فِي نُشَاهِدُ الْمَسَاءِ."
+ ],
+ ans:1,
+ exp:"Urutan yang paling logis adalah fi'il نُشَاهِدُ + objek التَّلْفَازَ + keterangan bersama مَعَ الْعَائِلَةِ + waktu فِي الْمَسَاءِ."
+},
+{
+ type:"Reorganisasi",
+ q:"Urutkan kalimat berikut agar menjadi paragraf yang logis.",
+ arab:"(1) ثُمَّ ذَهَبَ إِلَى الْمَدْرَسَةِ.<br>(2) اِسْتَيْقَظَ أَحْمَدُ مُبَكِّرًا.<br>(3) تَنَاوَلَ الْفَطُورَ.",
+ opts:["1 → 2 → 3","2 → 3 → 1","3 → 1 → 2","2 → 1 → 3"],
+ ans:1,
+ exp:"Urutan kegiatan yang logis: bangun pagi (2), sarapan (3), kemudian pergi ke sekolah (1). Kata ثُمَّ juga menandai urutan setelah kegiatan sebelumnya."
+},
+{
+ type:"Dialog",
+ q:"Apa yang sedang dilakukan Ali?",
+ arab:"أَحْمَدُ: مَاذَا تَفْعَلُ يَا عَلِيُّ؟<br>عَلِيٌّ: أَقْرَأُ كِتَابًا فِي الْمَكْتَبَةِ.",
+ opts:["Menulis surat","Membaca buku","Bermain sepak bola","Makan di restoran"],
+ ans:1,
+ exp:"Ali menjawab أَقْرَأُ كِتَابًا = 'Saya membaca sebuah buku'. Jadi jawabannya adalah membaca buku."
+},
+{
+ type:"Dialog",
+ q:"Apa fungsi ungkapan <b>فِكْرَةٌ جَيِّدَةٌ</b> dalam dialog?",
+ arab:"أَحْمَدُ: نَذْهَبُ إِلَى الْمَكْتَبَةِ بَعْدَ الدَّرْسِ.<br>عَلِيٌّ: فِكْرَةٌ جَيِّدَةٌ.",
+ opts:["Menolak usulan","Menyatakan persetujuan","Memberi larangan","Menanyakan waktu"],
+ ans:1,
+ exp:"فِكْرَةٌ جَيِّدَةٌ berarti 'Ide yang bagus'. Dalam dialog tersebut, ungkapan itu menunjukkan persetujuan terhadap usulan Ahmad."
+},
+{
+ type:"Karakter",
+ q:"Karakter yang paling tepat untuk tokoh berikut adalah ...",
+ arab:"يُسَاعِدُ مُحَمَّدٌ أَصْدِقَاءَهُ، وَيَشْتَرِي لَهُمْ الطَّعَامَ عِنْدَمَا يَحْتَاجُونَ.",
+ opts:["Pelupa","Dermawan/suka menolong","Pemalas","Pemarah"],
+ ans:1,
+ exp:"Muhammad membantu teman-temannya dan membelikan makanan ketika mereka membutuhkan. Ini menunjukkan sifat suka menolong dan dermawan."
+},
+{
+ type:"Pesan",
+ q:"Pesan yang paling tepat dari teks berikut adalah ...",
+ arab:"يَرْمِي بَعْضُ النَّاسِ النُّفَايَاتِ فِي الشَّارِعِ، فَيَصْبَحُ الشَّارِعُ وَسِخًا. يَجِبُ عَلَيْنَا أَنْ نَحْفَظَ نَظَافَةَ الْبِيئَةِ.",
+ opts:["Kita boleh membuang sampah di jalan","Kita harus menjaga kebersihan lingkungan","Jalan harus ditutup","Kita tidak perlu menjaga lingkungan"],
+ ans:1,
+ exp:"Kalimat terakhir secara jelas menyampaikan pesan: يَجِبُ عَلَيْنَا أَنْ نَحْفَظَ نَظَافَةَ الْبِيئَةِ = kita harus menjaga kebersihan lingkungan."
+},
+{
+ type:"Konteks",
+ q:"Apa arti <b>رَغِبَ فِي</b> dalam konteks umum?",
+ opts:["Mencari","Berminat/ingin terhadap","Berbicara dengan","Pergi ke"],
+ ans:1,
+ exp:"رَغِبَ فِي merupakan ungkapan yang perlu dipahami sebagai satu frasa. Maknanya dapat berupa 'berminat pada' atau 'ingin terhadap sesuatu', sesuai konteks."
+},
+{
+ type:"Pemahaman",
+ q:"Bacalah teks. Mengapa Fatimah tidak pergi bekerja?",
+ arab:"لَا تَذْهَبُ فَاطِمَةُ إِلَى الْعَمَلِ إِلَّا فِي أَيَّامِ الْعُطْلَةِ أَوْ عِنْدَ الْمَرَضِ.",
+ opts:["Karena sedang berlibur atau sakit","Karena tidak memiliki pekerjaan","Karena sekolah","Karena pindah rumah"],
+ ans:0,
+ exp:"Teks menyebut: إِلَّا فِي أَيَّامِ الْعُطْلَةِ أَوْ عِنْدَ الْمَرَضِ, yaitu kecuali pada hari libur atau ketika sakit. Jadi pilihan pertama paling sesuai dengan informasi teks."
+},
+{
+ type:"Campuran",
+ q:"Manakah kalimat yang paling tepat secara makna dan struktur?",
+ opts:[
+ "الطَّالِبُ يَقْرَأُ الْكِتَابَ.",
+ "الطَّالِبُ الْكِتَابَ يَقْرَأُ فِي.",
+ "يَقْرَأُ الْكِتَابُ الطَّالِبَ.",
+ "فِي الطَّالِبُ يَقْرَأُ الْكِتَابِ."
+ ],
+ ans:0,
+ exp:"الطَّالِبُ يَقْرَأُ الْكِتَابَ berarti 'Siswa membaca buku'. Struktur dan maknanya jelas. Pilihan lain memiliki susunan atau fungsi kata yang tidak tepat."
+}
+];
+
+let answered = 0, score = 0;
+const state = new Array(questions.length).fill(null);
+
+function render(){
+ const quiz = document.getElementById('quiz');
+ quiz.innerHTML = questions.map((item,i)=>`
+  <section class="question-card" id="q${i}">
+    <div class="q-head">
+      <span class="q-number">Soal ${i+1}</span>
+      <span class="q-type">${item.type}</span>
+    </div>
+    <div class="question">${item.q}</div>
+    ${item.arabic ? `<div class="arabic">${item.arabic}</div>` : ""}
+    <div class="options">
+      ${item.opts.map((opt,j)=>`<button class="option" id="q${i}o${j}" onclick="answer(${i},${j})">${String.fromCharCode(65+j)}. ${opt}</button>`).join("")}
+    </div>
+    <div class="feedback" id="fb${i}">
+      <div class="feedback-title" id="fbTitle${i}"></div>
+      <div class="answer" id="fbAnswer${i}"></div>
+      <div class="explanation">${item.exp}</div>
+    </div>
+  </section>
+ `).join("");
+}
+
+function answer(i,j){
+ if(state[i]!==null) return;
+ state[i]=j; answered++;
+ const item=questions[i];
+ const isCorrect=j===item.ans;
+ if(isCorrect) score++;
+ document.querySelectorAll(`#q${i} .option`).forEach((b,k)=>{
+   b.disabled=true;
+   if(k===item.ans) b.classList.add('correct');
+   if(k===j && !isCorrect) b.classList.add('wrong');
+ });
+ const fb=document.getElementById(`fb${i}`);
+ fb.classList.add('show',isCorrect?'correct':'wrong');
+ document.getElementById(`fbTitle${i}`).textContent=isCorrect?'✅ BENAR!':'❌ SALAH!';
+ document.getElementById(`fbAnswer${i}`).innerHTML=`Kunci jawaban: <b>${String.fromCharCode(65+item.ans)}. ${item.opts[item.ans]}</b>`;
+ update();
+ if(answered===questions.length){
+   document.getElementById('result').classList.add('show');
+   const pct=Math.round(score/questions.length*100);
+   document.getElementById('finalScore').textContent=`${score}/${questions.length} (${pct}%)`;
+   document.getElementById('resultMessage').textContent =
+     pct>=90 ? "Luar biasa! Penguasaan materi sangat baik." :
+     pct>=75 ? "Bagus! Tinggal perkuat beberapa materi yang masih keliru." :
+     pct>=60 ? "Cukup baik. Ulangi materi dan pelajari pembahasan soal yang salah." :
+     "Jangan menyerah. Gunakan pembahasan sebagai bahan belajar, lalu coba lagi.";
+   document.getElementById('summary').innerHTML=`Benar: <b>${score}</b> &nbsp; | &nbsp; Salah: <b>${questions.length-score}</b>`;
+   document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+ }
+}
+
+function update(){
+ document.getElementById('answered').textContent=`${answered}/${questions.length} dijawab`;
+ document.getElementById('scoreTop').textContent=`Skor: ${score}`;
+ document.getElementById('progress').style.width=(answered/questions.length*100)+'%';
+}
+
+function resetQuiz(){
+ answered=0; score=0; state.fill(null);
+ document.getElementById('result').classList.remove('show');
+ render(); update();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+render(); update();
+</script>
+</body>
+</html>

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Persiapan TKA Bahasa Arab SMA - Level 2</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .quiz-container {
+            background-color: #fff;
+            max-width: 750px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        p.subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            background-color: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            background-color: #27ae60;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+
+        .question-text {
+            font-family: 'Amiri', serif;
+            font-size: 26px;
+            direction: rtl;
+            line-height: 1.8;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: right;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-family: 'Amiri', serif;
+            font-size: 22px;
+            direction: rtl;
+            cursor: pointer;
+            text-align: right;
+            transition: all 0.2s ease;
+            color: #2c3e50;
+        }
+
+        .option-btn:hover {
+            background-color: #e2e6ea;
+            border-color: #dae0e5;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct-ans {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+        }
+
+        .option-btn.wrong-ans {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+
+        .feedback-box {
+            display: none;
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .feedback-box.benar {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .feedback-box.salah {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .feedback-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-family: 'Nunito', sans-serif;
+            text-align: left;
+        }
+
+        .explanation {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            font-family: 'Nunito', sans-serif;
+            text-align: left;
+            direction: ltr;
+        }
+
+        .btn-next {
+            display: none;
+            width: 100%;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .btn-next:hover {
+            background-color: #219150;
+        }
+
+        .result-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+
+        .btn-restart {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .btn-restart:hover {
+            background-color: #1a252f;
+        }
+
+        .instruction {
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #e74c3c;
+            text-align: left;
+            direction: ltr;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .quiz-container { padding: 20px; }
+            .question-text { font-size: 22px; }
+            .option-btn { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div id="quiz-screen">
+            <h1>Latihan TKA Bahasa Arab</h1>
+            <p class="subtitle">30 Soal Setara Ujian Asli</p>
+            
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+
+            <div class="question-header">
+                <span id="question-number">Soal 1 / 30</span>
+                <span id="score-display">Skor: 0</span>
+            </div>
+
+            <div id="instruction-text" class="instruction"></div>
+            <div id="question-content" class="question-text">
+                <!-- Question text -->
+            </div>
+
+            <div id="options-container" class="options">
+                <!-- Options -->
+            </div>
+
+            <div id="feedback-container" class="feedback-box">
+                <div id="feedback-title" class="feedback-title"></div>
+                <div id="feedback-explanation" class="explanation"></div>
+            </div>
+
+            <button id="btn-next" class="btn-next" onclick="nextQuestion()">Soal Selanjutnya</button>
+        </div>
+
+        <div id="result-screen" class="result-screen">
+            <h1>Alhamdulillah, Kuis Selesai!</h1>
+            <div id="final-score" class="result-score">0 / 30</div>
+            <p id="result-message" style="margin-bottom:30px;"></p>
+            <button class="btn-restart" onclick="restartQuiz()">Ulangi Latihan</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                instruction: "Pilihlah sinonim (persamaan kata) yang tepat!",
+                q: "مَا مُرَادِفُ كَلِمَةِ « سَعِيدٌ » ؟",
+                options: ["حَزِينٌ", "مَسْرُورٌ", "غَضْبَانُ", "كَسْلَانُ"],
+                answer: 1,
+                explanation: "Muradif (sinonim) dari سَعِيدٌ (bahagia/senang) adalah مَسْرُورٌ. Sedangkan حَزِينٌ artinya sedih."
+            },
+            {
+                instruction: "Pilihlah antonim (lawan kata) yang tepat!",
+                q: "مَا ضِدُّ كَلِمَةِ « قَرِيبٌ » ؟",
+                options: ["طَوِيلٌ", "قَصِيرٌ", "بَعِيدٌ", "صَغِيرٌ"],
+                answer: 2,
+                explanation: "Dhid / Antonim dari قَرِيبٌ (dekat) adalah بَعِيدٌ (jauh)."
+            },
+            {
+                instruction: "Bacalah teks dan jawab pertanyaannya!",
+                q: "أَحْمَدُ يَلْعَبُ كُرَةَ الْقَدَمِ فِي الْمَلْعَبِ مَعَ أَصْدِقَائِهِ مَسَاءً.<br>أَيْنَ يَلْعَبُ أَحْمَدُ كُرَةَ الْقَدَمِ؟",
+                options: ["مَعَ أَصْدِقَائِهِ", "فِي الْمَلْعَبِ", "مَسَاءً", "يَلْعَبُ"],
+                answer: 1,
+                explanation: "Kata tanya أَيْنَ (Di mana) menanyakan tempat. Jawabannya tertulis jelas di teks: فِي الْمَلْعَبِ (Di lapangan)."
+            },
+            {
+                instruction: "Susunlah kata-kata berikut menjadi kalimat yang sempurna!",
+                q: "رَتِّبْ هَذِهِ الْكَلِمَاتِ:<br> الْمَدْرَسَةِ / أَنَا / إِلَى / أَذْهَبُ",
+                options: [
+                    "إِلَى الْمَدْرَسَةِ أَذْهَبُ أَنَا",
+                    "أَنَا أَذْهَبُ إِلَى الْمَدْرَسَةِ",
+                    "أَذْهَبُ أَنَا الْمَدْرَسَةِ إِلَى",
+                    "أَنَا الْمَدْرَسَةِ أَذْهَبُ إِلَى"
+                ],
+                answer: 1,
+                explanation: "Susunan yang benar: Subjek (أَنَا) + Predikat/Fi'il (أَذْهَبُ) + Keterangan tempat (إِلَى الْمَدْرَسَةِ)."
+            },
+            {
+                instruction: "Lengkapi kalimat dengan kata ganti (dhamir) yang tepat!",
+                q: "فَاطِمَةُ طَالِبَةٌ مُجْتَهِدَةٌ، ... تَدْرُسُ كُلَّ يَوْمٍ.",
+                options: ["هُوَ", "هُمْ", "هِيَ", "أَنْتَ"],
+                answer: 2,
+                explanation: "Fatimah adalah subjek perempuan tunggal (Mu'annats Mufrod). Dhamir yang merujuk padanya adalah هِيَ (Dia perempuan)."
+            },
+            {
+                instruction: "Pilihlah makna frasa berdasarkan konteks kalimat!",
+                q: "مَا مَعْنَى « يَتَنَاوَلُ الفُطُورَ » فِي جُمْلَةِ (يَتَنَاوَلُ الطَّالِبُ الفُطُورَ قَبْلَ الذَّهَابِ إِلَى الْمَدْرَسَةِ)؟",
+                options: ["يَشْرَبُ الْمَاءَ", "يَأْكُلُ فِي الصَّبَاحِ", "يَنَامُ فِي اللَّيْلِ", "يَقْرَأُ الْكِتَابَ"],
+                answer: 1,
+                explanation: "Ungkapan يَتَنَاوَلُ الفُطُورَ berarti 'sarapan' atau يَأْكُلُ فِي الصَّبَاحِ (Makan di pagi hari)."
+            },
+            {
+                instruction: "Bacalah teks dan jawab pertanyaannya!",
+                q: "أَسْتَيْقِظُ مِنَ النَّوْمِ مُبَكِّرًا، ثُمَّ أُصَلِّي الصُّبْحَ فِي الْمَسْجِدِ.<br>مَاذَا يَفْعَلُ الْكَاتِبُ بَعْدَ الِاسْتِيقَاظِ مِنَ النَّوْمِ؟",
+                options: ["يُصَلِّي الصُّبْحَ", "يَنَامُ مُبَكِّرًا", "يَذْهَبُ إِلَى الْمَدْرَسَةِ", "يَقْرَأُ الْقُرْآنَ"],
+                answer: 0,
+                explanation: "Berdasarkan teks, setelah bangun tidur (... ثُمَّ), penulis melakukan aktivitas يُصَلِّي الصُّبْحَ (Shalat Subuh)."
+            },
+            {
+                instruction: "Pilihlah sinonim (persamaan kata) yang tepat!",
+                q: "مَا مُرَادِفُ كَلِمَةِ « يَعْمَلُ » ؟",
+                options: ["يَشْتَغِلُ", "يَلْعَبُ", "يَسْتَرِيحُ", "يَنَامُ"],
+                answer: 0,
+                explanation: "يَعْمَلُ artinya bekerja. Sinonimnya adalah يَشْتَغِلُ yang juga bermakna bekerja."
+            },
+            {
+                instruction: "Pilihlah antonim (lawan kata) yang tepat!",
+                q: "مَا ضِدُّ كَلِمَةِ « نَشِيطٌ » ؟",
+                options: ["مَاهِرٌ", "كَسْلَانُ", "ذَكِيٌّ", "قَوِيٌّ"],
+                answer: 1,
+                explanation: "نَشِيطٌ artinya rajin/giat. Antonimnya adalah كَسْلَانُ (Malas)."
+            },
+            {
+                instruction: "Lengkapi kalimat dengan kata tempat yang tepat!",
+                q: "يُعَالِجُ الطَّبِيبُ الْمَرْضَى فِي ...",
+                options: ["الْمَدْرَسَةِ", "السُّوقِ", "الْمُسْتَشْفَى", "الْمَكْتَبَةِ"],
+                answer: 2,
+                explanation: "Dokter mengobati pasien di الْمُسْتَشْفَى (Rumah Sakit)."
+            },
+            {
+                instruction: "Pilihlah antonim (lawan kata) yang tepat!",
+                q: "مَا ضِدُّ كَلِمَةِ « جَدِيدَةٌ » فِي جُمْلَةِ (سَيَّارَةٌ جَدِيدَةٌ)؟",
+                options: ["جَمِيلَةٌ", "قَدِيمَةٌ", "سَرِيعَةٌ", "نَظِيفَةٌ"],
+                answer: 1,
+                explanation: "Lawan kata dari جَدِيدَةٌ (Baru) adalah قَدِيمَةٌ (Lama/Kusam)."
+            },
+            {
+                instruction: "Susunlah kata-kata berikut menjadi kalimat yang sempurna!",
+                q: "رَتِّبْ هَذِهِ الْكَلِمَاتِ:<br> كِتَابًا / خَالِدٌ / الْمَكْتَبَةِ / فِي / يَقْرَأُ",
+                options: [
+                    "خَالِدٌ الْمَكْتَبَةِ فِي يَقْرَأُ كِتَابًا",
+                    "يَقْرَأُ كِتَابًا خَالِدٌ فِي الْمَكْتَبَةِ",
+                    "يَقْرَأُ خَالِدٌ كِتَابًا فِي الْمَكْتَبَةِ",
+                    "فِي كِتَابًا خَالِدٌ يَقْرَأُ الْمَكْتَبَةِ"
+                ],
+                answer: 2,
+                explanation: "Susunan Jumlah Fi'liyyah yang benar: Fi'il (يَقْرَأُ) + Fa'il (خَالِدٌ) + Maf'ul Bih (كِتَابًا) + Keterangan (فِي الْمَكْتَبَةِ)."
+            },
+            {
+                instruction: "Lengkapi kalimat dengan kata kerja yang tepat!",
+                q: "نَحْنُ ... إِلَى السُّوقِ يَوْمَ الْأَحَدِ.",
+                options: ["يَذْهَبُ", "تَذْهَبُ", "أَذْهَبُ", "نَذْهَبُ"],
+                answer: 3,
+                explanation: "Dhamir (نَحْنُ - Kami) membutuhkan Fi'il Mudhari' yang diawali dengan huruf Nun, yaitu نَذْهَبُ."
+            },
+            {
+                instruction: "Bacalah teks dan jawab pertanyaannya!",
+                q: "يَزْرَعُ الْفَلَّاحُ الرُّزَّ فِي الْمَزْرَعَةِ.<br>مَنْ يَزْرَعُ الرُّزَّ؟",
+                options: ["الرُّزَّ", "فِي الْمَزْرَعَةِ", "يَزْرَعُ", "الْفَلَّاحُ"],
+                answer: 3,
+                explanation: "Kata tanya مَنْ (Siapa) mencari subjek/pelaku. Pelaku dalam kalimat tersebut adalah الْفَلَّاحُ (Petani)."
+            },
+            {
+                instruction: "Pilihlah sinonim (persamaan kata) yang tepat!",
+                q: "مَا مُرَادِفُ كَلِمَةِ « جَمِيلٌ » ؟",
+                options: ["حَسَنٌ", "قَبِيحٌ", "طَوِيلٌ", "وَاسِعٌ"],
+                answer: 0,
+                explanation: "Muradif (sinonim) dari جَمِيلٌ (indah/bagus) adalah حَسَنٌ."
+            },
+            {
+                instruction: "Lengkapi kalimat dengan kata ganti (dhamir) yang tepat!",
+                q: "هَذَا أَخِي، ... طَبِيبٌ مَاهِرٌ.",
+                options: ["هِيَ", "هُوَ", "أَنَا", "نَحْنُ"],
+                answer: 1,
+                explanation: "أَخِي (Saudara laki-lakiku) adalah mudzakkar mufrod (tunggal laki-laki), sehingga kata ganti yang tepat adalah هُوَ (Dia laki-laki)."
+            },
+            {
+                instruction: "Pilihlah antonim (lawan kata) yang tepat!",
+                q: "مَا ضِدُّ كَلِمَةِ « غَالِيَةٌ » (Mahal)؟",
+                options: ["رَخِيصَةٌ", "كَثِيرَةٌ", "كَبِيرَةٌ", "جَدِيدَةٌ"],
+                answer: 0,
+                explanation: "Antonim dari غَالِيَةٌ (Mahal) adalah رَخِيصَةٌ (Murah)."
+            },
+            {
+                instruction: "Bacalah teks dan jawab pertanyaannya!",
+                q: "اَلطَّلَّابُ يَسْتَمِعُونَ إِلَى شَرْحِ الْمُعَلِّمِ بِاهْتِمَامٍ.<br>مَاذَا يَفْعَلُ الطَّلَّابُ؟",
+                options: ["يَكْتُبُونَ الدَّرْسَ", "يَلْعَبُونَ فِي الْفَصْلِ", "يَسْتَمِعُونَ إِلَى الْمُعَلِّمِ", "يَقْرَءُونَ الْكِتَابَ"],
+                answer: 2,
+                explanation: "Pertanyaan مَاذَا يَفْعَلُ (Apa yang dilakukan). Sesuai teks, para siswa يَسْتَمِعُونَ إِلَى الْمُعَلِّمِ (Mendengarkan guru)."
+            },
+            {
+                instruction: "Susunlah kata-kata berikut menjadi kalimat yang sempurna!",
+                q: "رَتِّبْ هَذِهِ الْكَلِمَاتِ:<br> اللُّغَةَ / نَتَعَلَّمُ / الْعَرَبِيَّةَ / الْفَصْلِ / فِي",
+                options: [
+                    "نَتَعَلَّمُ اللُّغَةَ الْعَرَبِيَّةَ فِي الْفَصْلِ",
+                    "اللُّغَةَ الْعَرَبِيَّةَ فِي نَتَعَلَّمُ الْفَصْلِ",
+                    "فِي الْفَصْلِ الْعَرَبِيَّةَ اللُّغَةَ نَتَعَلَّمُ",
+                    "نَتَعَلَّمُ الْفَصْلِ فِي اللُّغَةَ الْعَرَبِيَّةَ"
+                ],
+                answer: 0,
+                explanation: "Susunan yang benar: نَتَعَلَّمُ اللُّغَةَ الْعَرَبِيَّةَ فِي الْفَصْلِ (Kami belajar bahasa Arab di kelas)."
+            },
+            {
+                instruction: "Pilihlah sinonim (persamaan kata) yang tepat!",
+                q: "مَا مُرَادِفُ كَلِمَةِ « سَرِيعٌ » ؟",
+                options: ["عَاجِلٌ", "بَطِيءٌ", "قَصِيرٌ", "كَبِيرٌ"],
+                answer: 0,
+                explanation: "Sinonim dari سَرِيعٌ (Cepat) adalah عَاجِلٌ."
+            },
+            {
+                instruction: "Pilihlah antonim (lawan kata) yang tepat!",
+                q: "مَا ضِدُّ كَلِمَةِ « كَثِيرٌ » ؟",
+                options: ["طَوِيلٌ", "قَلِيلٌ", "وَاسِعٌ", "صَغِيرٌ"],
+                answer: 1,
+                explanation: "Lawan kata dari كَثِيرٌ (Banyak) adalah قَلِيلٌ (Sedikit)."
+            },
+            {
+                instruction: "Bacalah teks dan jawab pertanyaannya!",
+                q: "تَطْبُخُ أُمِّي الطَّعَامَ فِي الْمَطْبَخِ لِتَنَاوُلِ الْغَدَاءِ.<br>أَيْنَ تَطْبُخُ أُمِّي؟",
+                options: ["فِي الْمَكْتَبَةِ", "فِي الْمَطْبَخِ", "فِي السُّوقِ", "فِي الْمَلْعَبِ"],
+                answer: 1,
+                explanation: "Pertanyaan أَيْنَ menanyakan tempat. Ibu memasak فِي الْمَطْبَخِ (Di dapur)."
+            },
+            {
+                instruction: "Pahami inferensi (kesimpulan) dari kalimat berikut!",
+                q: "أُحِبُّ قِرَاءَةَ الْقِصَصِ وَمُشَاهَدَةَ التِّلْفَازِ فِي وَقْتِ الْفَرَاغِ.<br>مَا هِوَايَةُ الْكَاتِبِ؟",
+                options: ["الرِّيَاضَةُ وَالسِّبَاحَةُ", "الرَّسْمُ وَالْكِتَابَةُ", "الْقِرَاءَةُ وَالْمُشَاهَدَةُ", "الطَّبْخُ وَالتَّسَوُّقُ"],
+                answer: 2,
+                explanation: "Kata هِوَايَةُ berarti hobi. Hobi penulis disebutkan di teks yaitu الْقِرَاءَةُ (membaca) وَالْمُشَاهَدَةُ (dan menonton)."
+            },
+            {
+                instruction: "Susunlah kata-kata berikut menjadi kalimat yang sempurna!",
+                q: "رَتِّبْ هَذِهِ الْكَلِمَاتِ:<br> مُبَكِّرًا / النَّوْمِ / مِنَ / أَسْتَيْقِظُ",
+                options: [
+                    "مُبَكِّرًا النَّوْمِ مِنَ أَسْتَيْقِظُ",
+                    "أَسْتَيْقِظُ مُبَكِّرًا النَّوْمِ مِنَ",
+                    "مِنَ النَّوْمِ أَسْتَيْقِظُ مُبَكِّرًا",
+                    "أَسْتَيْقِظُ مِنَ النَّوْمِ مُبَكِّرًا"
+                ],
+                answer: 3,
+                explanation: "Susunan yang benar: أَسْتَيْقِظُ مِنَ النَّوْمِ مُبَكِّرًا (Saya bangun dari tidur pagi-pagi sekali)."
+            },
+            {
+                instruction: "Pilihlah sinonim (persamaan kata) yang tepat!",
+                q: "مَا مُرَادِفُ كَلِمَةِ « عَائِلَةٌ » ؟",
+                options: ["أُسْرَةٌ", "مَدْرَسَةٌ", "مَكْتَبَةٌ", "قَرْيَةٌ"],
+                answer: 0,
+                explanation: "Muradif dari عَائِلَةٌ (Keluarga) adalah أُسْرَةٌ."
+            },
+            {
+                instruction: "Pilihlah antonim (lawan kata) yang tepat!",
+                q: "مَا ضِدُّ كَلِمَةِ « أَمَامَ » ؟",
+                options: ["فَوْقَ", "تَحْتَ", "خَلْفَ", "بِجَانِبِ"],
+                answer: 2,
+                explanation: "Lawan kata أَمَامَ (Di depan) adalah خَلْفَ atau وَرَاءَ (Di belakang)."
+            },
+            {
+                instruction: "Lengkapi kalimat dengan kata tempat yang tepat!",
+                q: "يَذْهَبُ النَّاسُ إِلَى ... لِشِرَاءِ الْمَلَابِسِ وَالطَّعَامِ.",
+                options: ["الْمَسْجِدِ", "الْمُسْتَشْفَى", "الْمَدْرَسَةِ", "السُّوقِ"],
+                answer: 3,
+                explanation: "Orang-orang pergi untuk membeli baju dan makanan ke السُّوقِ (Pasar)."
+            },
+            {
+                instruction: "Bacalah teks dan jawab pertanyaannya!",
+                q: "عُمَرُ يَقْرَأُ الْقُرْآنَ بَعْدَ صَلَاةِ الْمَغْرِبِ فِي الْمَسْجِدِ.<br>مَتَى يَقْرَأُ عُمَرُ الْقُرْآنَ؟",
+                options: ["فِي الْمَسْجِدِ", "عُمَرُ", "بَعْدَ صَلَاةِ الْمَغْرِبِ", "يَقْرَأُ"],
+                answer: 2,
+                explanation: "Kata tanya مَتَى (Kapan) menanyakan waktu. Jawabannya adalah بَعْدَ صَلَاةِ الْمَغْرِبِ (Setelah shalat maghrib)."
+            },
+            {
+                instruction: "Susunlah kata-kata berikut menjadi kalimat yang sempurna!",
+                q: "رَتِّبْ هَذِهِ الْكَلِمَاتِ:<br> الرِّسَالَةَ / لِصَدِيقِهِ / أَحْمَدُ / يَكْتُبُ",
+                options: [
+                    "يَكْتُبُ أَحْمَدُ الرِّسَالَةَ لِصَدِيقِهِ",
+                    "أَحْمَدُ لِصَدِيقِهِ الرِّسَالَةَ يَكْتُبُ",
+                    "لِصَدِيقِهِ الرِّسَالَةَ يَكْتُبُ أَحْمَدُ",
+                    "الرِّسَالَةَ يَكْتُبُ لِصَدِيقِهِ أَحْمَدُ"
+                ],
+                answer: 0,
+                explanation: "Susunan Jumlah Fi'liyyah: Fi'il (يَكْتُبُ) + Fa'il (أَحْمَدُ) + Maf'ul bih (الرِّسَالَةَ) + Keterangan (لِصَدِيقِهِ)."
+            },
+            {
+                instruction: "Lengkapi larangan (An-Nahyu) berikut dengan tepat!",
+                q: "لَا ... فِي الْفَصْلِ يَا أَخِي!",
+                options: ["تَلْعَبُ", "تَلْعَبْ", "يَلْعَبُ", "يَلْعَبْ"],
+                answer: 1,
+                explanation: "Untuk larangan (Jangan), kita menggunakan لَا Nahiyah diikuti Fi'il Mudhari' berakhiran sukun (untuk 'kamu' tunggal), sehingga menjadi لَا تَلْعَبْ."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const instructionEl = document.getElementById("instruction-text");
+        const questionEl = document.getElementById("question-content");
+        const optionsEl = document.getElementById("options-container");
+        const qNumberEl = document.getElementById("question-number");
+        const scoreDisplayEl = document.getElementById("score-display");
+        const progressEl = document.getElementById("progress");
+        const feedbackContainer = document.getElementById("feedback-container");
+        const feedbackTitle = document.getElementById("feedback-title");
+        const feedbackExp = document.getElementById("feedback-explanation");
+        const btnNext = document.getElementById("btn-next");
+
+        function loadQuestion() {
+            answered = false;
+            const q = quizData[currentQuestion];
+            
+            qNumberEl.innerText = `Soal ${currentQuestion + 1} / ${quizData.length}`;
+            progressEl.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
+            
+            instructionEl.innerText = q.instruction;
+            questionEl.innerHTML = q.q;
+
+            optionsEl.innerHTML = "";
+            feedbackContainer.style.display = "none";
+            feedbackContainer.className = "feedback-box";
+            btnNext.style.display = "none";
+
+            q.options.forEach((optText, index) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerHTML = optText;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizData[currentQuestion];
+            const isCorrect = (selectedIndex === q.answer);
+            const allBtns = optionsEl.querySelectorAll('.option-btn');
+
+            allBtns.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.answer) {
+                    btn.classList.add('correct-ans');
+                }
+            });
+
+            if (isCorrect) {
+                score++;
+                scoreDisplayEl.innerText = `Skor: ${score}`;
+                feedbackTitle.innerText = "✅ BENAR!";
+                feedbackContainer.classList.add('benar');
+            } else {
+                btnElement.classList.add('wrong-ans');
+                feedbackTitle.innerText = "❌ SALAH!";
+                feedbackContainer.classList.add('salah');
+            }
+
+            feedbackExp.innerHTML = `<b>Jawaban Benar:</b> <span style="font-family:'Amiri', serif; font-size:20px; font-weight:bold;">${q.options[q.answer]}</span><br><br><b>Penjelasan:</b> ${q.explanation}`;
+            feedbackContainer.style.display = "block";
+            
+            btnNext.style.display = "block";
+            if(currentQuestion === quizData.length - 1){
+                btnNext.innerText = "Lihat Hasil";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function showResult() {
+            document.getElementById("quiz-screen").style.display = "none";
+            document.getElementById("result-screen").style.display = "block";
+            document.getElementById("final-score").innerText = `${score} / ${quizData.length}`;
+            
+            let percentage = (score / quizData.length) * 100;
+            let message = "";
+            if(percentage >= 80) message = "Mumtaz! Penguasaanmu terhadap kosakata dan kaidah sangat baik.";
+            else if (percentage >= 60) message = "Jayyid Jiddan! Tingkatkan lagi ketelitian saat membaca teks.";
+            else message = "Jangan menyerah! Banyak berlatih mufrodat dan susunan kalimat dasar.";
+            
+            document.getElementById("result-message").innerText = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            scoreDisplayEl.innerText = `Skor: 0`;
+            document.getElementById("quiz-screen").style.display = "block";
+            document.getElementById("result-screen").style.display = "none";
+            btnNext.innerText = "Soal Selanjutnya";
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
