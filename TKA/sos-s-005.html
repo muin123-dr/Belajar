@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis Interaktif TKA Sosiologi SMA (30 Soal)</title>
+    <title>Kuis Interaktif TKA Sosiologi SMA (Paket 2 - 30 Soal)</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
             --success: #16a34a;
             --success-bg: #dcfce7;
             --error: #dc2626;
@@ -36,10 +36,10 @@
             text-align: center;
             margin-bottom: 40px;
             padding: 30px 20px;
-            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
             color: white;
             border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.3);
         }
 
         header h1 { font-size: 1.8rem; margin-bottom: 10px; font-weight: 800; }
@@ -66,7 +66,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
-            background: #eff6ff;
+            background: #eef2ff;
             display: inline-block;
             padding: 4px 10px;
             border-radius: 6px;
@@ -100,9 +100,9 @@
             transition: all 0.2s;
         }
 
-        .option-label:hover { border-color: var(--primary); background-color: #eff6ff; }
+        .option-label:hover { border-color: var(--primary); background-color: #eef2ff; }
         .option-label input { margin-top: 4px; margin-right: 12px; accent-color: var(--primary); transform: scale(1.1); }
-        .option-label.selected { border-color: var(--primary); background-color: #eff6ff; }
+        .option-label.selected { border-color: var(--primary); background-color: #eef2ff; }
 
         .kategori-item {
             display: flex;
@@ -121,7 +121,7 @@
             padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; background: white;
             transition: all 0.2s;
         }
-        .kategori-options label:hover { background: #eff6ff; border-color: var(--primary); }
+        .kategori-options label:hover { background: #eef2ff; border-color: var(--primary); }
         .kategori-options input { margin-right: 6px; accent-color: var(--primary); }
 
         .btn-check {
@@ -157,7 +157,7 @@
         .feedback.salah { background-color: var(--error-bg); border-color: var(--error); color: #7f1d1d; }
 
         .feedback-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .feedback-key { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; background: rgba(255,255,255,0.6); padding: 8px; border-radius: 6px; }
+        .feedback-key { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; background: rgba(255,255,255,0.7); padding: 8px; border-radius: 6px; }
         .feedback-explanation { font-size: 0.95rem; line-height: 1.7; }
 
         .note { font-size: 0.85rem; color: var(--text-light); font-style: italic; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
@@ -177,14 +177,19 @@
             .kategori-options { gap: 10px; }
             .kategori-options label { padding: 8px 12px; }
         }
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 4px; background: #fbbf24; width: 0%; z-index: 1001; transition: width 0.3s;
+        }
     </style>
 </head>
 <body>
 
+<div class="progress-bar" id="progressBar"></div>
+
 <div class="container">
     <header>
-        <h1>📚 Kuis Interaktif TKA Sosiologi SMA</h1>
-        <p>30 Soal (PG, MCMA, Kategori) | Lengkap dengan Pembahasan Gamblang</p>
+        <h1>📚 Kuis TKA Sosiologi SMA (Paket 2)</h1>
+        <p>30 Soal Berbasis Stimulus | PG, MCMA, Kategori | Lengkap dengan Pembahasan</p>
     </header>
 
     <div id="quiz-container"></div>
@@ -194,388 +199,328 @@
 
 <script>
     const questions = [
-        // --- 20 SOAL DARI PROMPT ---
+        // --- SOSIOLOGI SEBAGAI ILMU ---
         {
             id: 1, kompetensi: "Sosiologi sebagai Ilmu", bentuk: "PG",
-            soal: "Sekelompok murid mengikuti lomba karya tulis yang membahas tentang konflik sosial. Mereka membaca berbagai literatur dan menemukan bahwa teori-teori sosiologi yang berkaitan dengan topik tersebut terus mengalami perkembangan. Tokoh-tokoh sosiologi saat ini terus menyempurnakan teori yang sudah ada sehingga relevan dengan perubahan dan perkembangan zaman. Manakah ciri sosiologi yang tepat berdasarkan ilustrasi tersebut?",
-            options: [{id:"A", text:"Teoritis"}, {id:"B", text:"Nonetis"}, {id:"C", text:"Empiris"}, {id:"D", text:"Objektif"}, {id:"E", text:"Kumulatif"}],
-            correctAnswer: ["E"],
-            explanation: "Sosiologi bersifat kumulatif, artinya teori-teori sosiologi baru dibentuk berdasarkan penyempurnaan, pengembangan, atau kritik terhadap teori-teori yang sudah ada sebelumnya, bukan dengan membuang total teori lama."
-        },
-        {
-            id: 2, kompetensi: "Gejala Sosial", bentuk: "Kategori",
-            soal: "Apa sajakah faktor-faktor yang dapat berpengaruh langsung terhadap tingkat penerimaan masyarakat terhadap informasi yang terdapat pada infografis tersebut? Tentukan Benar atau Salah pada setiap pernyataan berikut!",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos001.png",
-            statements: [
-                {id:"A", text:"Kemudahan transaksi perbankan dan dompet digital."},
-                {id:"B", text:"Keberagaman letak geografis di suatu wilayah."},
-                {id:"C", text:"Pemahaman budaya yang berbeda di setiap daerah."},
-                {id:"D", text:"Kemampuan literasi teknologi masyarakat yang rendah."}
-            ],
-            correctAnswer: {"A":"Benar", "B":"Salah", "C":"Salah", "D":"Benar"},
-            explanation: "Kemudahan transaksi (A) dan literasi teknologi (D) adalah faktor langsung yang mempengaruhi penerimaan informasi digital. Letak geografis (B) dan pemahaman budaya (C) tidak secara langsung menjadi faktor utama dalam konteks penerimaan informasi infografis digital spesifik ini."
-        },
-        {
-            id: 3, kompetensi: "Masyarakat Multikultural", bentuk: "MCMA",
-            soal: "Setara Institute melaporkan perusakan dan penolakan pendirian tempat ibadah menempati lima urutan teratas dalam kategori pelanggaran Kebebasan Beragama/Berkeyakinan (KBB) terbanyak sepanjang periode 2007-2022. Manakah pernyataan berikut yang menunjukkan sikap kritis untuk mewujudkan kehidupan masyarakat multikultural terkait kasus tersebut? (Pilih semua yang benar)",
-            options: [
-                {id:"A", text:"Mengatur jarak minimum pembangunan rumah ibadah antarumat beragama yang berbeda untuk meminimalkan konflik."},
-                {id:"B", text:"Mengadakan dialog antarumat beragama untuk membahas pembatasan aturan mengenai pembangunan rumah ibadah di setiap daerah."},
-                {id:"C", text:"Memetakan konflik terkait masalah pembangunan rumah ibadah dan merencanakan proses resolusi yang sesuai."},
-                {id:"D", text:"Melibatkan tokoh agama, tokoh daerah, dan masyarakat sipil dalam mempromosikan kebhinekaan dalam keberagaman."},
-                {id:"E", text:"Meminta pemerintah meninjau ulang peraturan pemerintah untuk semakin mendukung kebebasan hak dalam membangun rumah ibadah."}
-            ],
-            correctAnswer: ["C", "D", "E"],
-            explanation: "Sikap kritis yang konstruktif meliputi pemetaan konflik dan resolusi (C), pelibatan multipihak untuk promosi kebhinekaan (D), dan advokasi kebijakan yang mendukung hak beribadah (E). Opsi A dan B cenderung bersifat membatasi dan tidak menyelesaikan akar masalah toleransi."
-        },
-        {
-            id: 4, kompetensi: "Metode Penelitian Sosial", bentuk: "MCMA",
-            soal: "Penelitian kualitatif mengacu pada pendekatan penelitian yang menekankan pada pemahaman mendalam tentang fenomena sosial, budaya, atau perilaku manusia. Manakah pernyataan yang menunjukkan urutan proses tahapan penelitian kualitatif yang sistematis? (Pilih semua yang benar)",
-            options: [
-                {id:"A", text:"Menyusun hipotesis terlebih dahulu sebelum mengumpulkan data."},
-                {id:"B", text:"Menyusun panduan wawancara sebelum merumuskan pertanyaan penelitian."},
-                {id:"C", text:"Menentukan populasi dan sampel sebelum mengumpulkan data."},
-                {id:"D", text:"Membuat rumusan pertanyaan penelitian sebelum menentukan populasi dan sampel."},
-                {id:"E", text:"Memutuskan teknik pengolahan data sebelum menentukan metode penelitian."}
-            ],
-            correctAnswer: ["C", "D"],
-            explanation: "Dalam penelitian sistematis, rumusan masalah/pertanyaan penelitian harus dibuat terlebih dahulu (D), baru kemudian menentukan populasi/sampel (C). Hipotesis (A) lebih khas kuantitatif. Panduan wawancara (B) dibuat setelah rumusan masalah. Teknik pengolahan data (E) ditentukan setelah metode penelitian ditetapkan."
-        },
-        {
-            id: 5, kompetensi: "Metode Penelitian Sosial", bentuk: "Kategori",
-            soal: "Andi menggunakan pendekatan kuantitatif (kuesioner tertutup, 200 responden), Yuli menggunakan pendekatan kualitatif (wawancara mendalam, 10 remaja). Manakah pengolahan data yang sesuai?",
-            statements: [
-                {id:"A", text:"Data dari kuesioner/angket yang dikumpulkan Andi diolah menggunakan analisis statistik."},
-                {id:"B", text:"Hasil wawancara mendalam pada penelitian yang Yuli lakukan diolah dengan memberikan kode berupa angka-angka."},
-                {id:"C", text:"Andi perlu mengolah data menggunakan perangkat lunak statistik seperti SPSS atau Excel."},
-                {id:"D", text:"Dalam penelitian yang Yuli lakukan, makna dan konteks dari jawaban menjadi fokus utama data yang dianalisis."}
-            ],
-            correctAnswer: {"A":"Sesuai", "B":"Tidak Sesuai", "C":"Sesuai", "D":"Sesuai"},
-            explanation: "Kuantitatif (Andi) menggunakan analisis statistik/SPSS (A & C Sesuai). Kualitatif (Yuli) berfokus pada makna, konteks, dan deskripsi naratif, bukan pengkodean angka (B Tidak Sesuai, D Sesuai)."
-        },
-        {
-            id: 6, kompetensi: "Konflik Sosial", bentuk: "MCMA",
-            soal: "Pemerintah Kota Maju menyetujui proyek apartemen mewah di kawasan hunian keluarga berpenghasilan rendah. Masyarakat menghadapi ancaman penggusuran tanpa dilibatkan dalam perencanaan. Protes muncul dari damai hingga konfrontatif, menuntut keadilan dan ganti rugi layak. Apakah konflik yang terjadi pada ilustrasi tersebut? (Pilih semua yang benar)",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos002.png",
-            options: [
-                {id:"A", text:"Konflik kepentingan antara kelompok yang tidak setara secara ekonomi."},
-                {id:"B", text:"Konflik struktural akibat akses yang tidak setara dalam pengambilan keputusan."},
-                {id:"C", text:"Konflik interpersonal antar individu dengan komunitas yang sama."},
-                {id:"D", text:"Konflik budaya yang didasarkan atas latar belakang etnis yang berbeda."},
-                {id:"E", text:"Konflik nilai antara cara hidup tradisional dan tujuan pembangunan modern."}
-            ],
-            correctAnswer: ["A", "B", "E"],
-            explanation: "Konflik ini melibatkan ketimpangan ekonomi (A), ketiadaan partisipasi dalam keputusan/struktural (B), dan benturan antara cara hidup lama dengan pembangunan modern (E). Tidak ada indikasi konflik interpersonal murni (C) atau etnis (D)."
-        },
-        {
-            id: 7, kompetensi: "Perubahan Sosial", bentuk: "PG",
-            soal: "Desa Sigeru selama ini mengandalkan pertanian subsistem dan barter. Jalan baru dibangun, membuka akses ke kota, meningkatkan keterbukaan pasar, memperkenalkan teknologi digital, dan menggeser nilai tradisional serta struktur keluarga. Orang tua khawatir tentang pergeseran nilai dan meningkatnya individualisme. Proses sosiologis apakah yang terjadi?",
-            options: [
-                {id:"A", text:"Penyimpangan sosial yang disebabkan oleh runtuhnya nilai norma tradisional."},
-                {id:"B", text:"Perubahan budaya melalui pengenalan nilai-nilai dan praktik baru dari sumber eksternal yang tidak terbatas."},
-                {id:"C", text:"Perubahan sosial yang dipicu oleh transformasi teknologi dan ekonomi yang memengaruhi kehidupan komunitas."},
-                {id:"D", text:"Mobilitas sosial yang dihasilkan dari peningkatan peluang ekonomi akibat dari interaksi eksternal."},
-                {id:"E", text:"Gegar budaya akibat keterlambatan adaptasi lembaga tradisional terhadap perubahan modernisasi yang cepat."}
-            ],
-            correctAnswer: ["C"],
-            explanation: "Ilustrasi secara spesifik menjelaskan bahwa pembangunan jalan (teknologi/infrastruktur) dan akses pasar (ekonomi) memicu perubahan pada struktur dan nilai komunitas. Ini adalah definisi klasik perubahan sosial yang dipicu faktor teknologi dan ekonomi."
-        },
-        {
-            id: 8, kompetensi: "Globalisasi", bentuk: "Kategori",
-            soal: "Arti berkomunikasi dengan teman dari berbagai negara, belajar bahasa asing via aplikasi, belanja merek internasional, dan menonton tayangan global. Aktivitasnya dibentuk oleh akses instan budaya, pengetahuan, dan komunikasi global. Manakah pernyataan yang tepat?",
-            statements: [
-                {id:"A", text:"Globalisasi memfasilitasi pertukaran budaya dan interaksi lintas negara melalui teknologi digital."},
-                {id:"B", text:"Masyarakat digital mendorong penyebaran budaya lokal sambil menolak pengaruh budaya luar."},
-                {id:"C", text:"Internet memungkinkan individu untuk mengakses pendidikan global, pasar, dan jaringan secara cepat."},
-                {id:"D", text:"Globalisasi dan platform digital mengaburkan batas-batas wilayah dan menciptakan komunitas global."}
-            ],
-            correctAnswer: {"A":"Tepat", "B":"Tidak Tepat", "C":"Tepat", "D":"Tepat"},
-            explanation: "Globalisasi justru membuka pengaruh budaya luar (B Tidak Tepat). Pernyataan A, C, dan D secara akurat menggambarkan bagaimana teknologi digital memfasilitasi interaksi lintas batas, akses pendidikan/pasar, dan pembentukan komunitas global."
-        },
-        {
-            id: 9, kompetensi: "Globalisasi", bentuk: "PG",
-            soal: "Giri Kriya (UMKM desa) viral di media sosial, omzet naik, dan pemasarannya lintas negara via e-commerce. Namun, pengrajin lain yang tidak akrab teknologi digital merasa tertinggal dan kesulitan mengikuti tren pemasaran online. Manakah pernyataan yang menunjukkan dampak globalisasi di era digital?",
-            options: [
-                {id:"A", text:"Era digital menghilangkan pentingnya pelestarian budaya."},
-                {id:"B", text:"Globalisasi dapat melemahkan interaksi sosial di antara usaha kecil."},
-                {id:"C", text:"Penggunaan internet mendorong komunitas desa menolak kerajinan tradisional."},
-                {id:"D", text:"Era digital membuka peluang ekonomi, tetapi menciptakan ketidaksetaraan."},
-                {id:"E", text:"Globalisasi membatasi produk lokal karena bersaing ketat dengan produk asing."}
-            ],
+            soal: "Seorang peneliti sosiologi meneliti fenomena tawuran antar pelajar. Dalam laporannya, ia tidak menyebutkan bahwa pelaku tawuran adalah 'anak nakal' atau 'jahat', melainkan menganalisis faktor ketimpangan fasilitas pendidikan dan kurangnya ruang publik yang memicu perilaku tersebut. Ciri sosiologi yang ditunjukkan adalah...",
+            options: [{id:"A", text:"Empiris"}, {id:"B", text:"Teoritis"}, {id:"C", text:"Kumulatif"}, {id:"D", text:"Nonetis"}, {id:"E", text:"Objektif"}],
             correctAnswer: ["D"],
-            explanation: "Kasus ini menunjukkan dua sisi: peluang ekonomi yang terbuka lebar bagi yang melek digital, tetapi sekaligus menciptakan kesenjangan/ketidaksetaraan baru (digital divide) bagi mereka yang gagap teknologi."
+            explanation: "Nonetis berarti sosiologi tidak bertugas menentukan apakah suatu fenomena baik atau buruk (tidak menghakimi), tetapi menjelaskan mengapa fenomena tersebut terjadi berdasarkan fakta sosial."
         },
         {
-            id: 10, kompetensi: "Fenomena Sosial Globalisasi", bentuk: "PG",
-            soal: "Di SMA Tarumaju, guru dan orang tua gelisah karena murid terpengaruh tren media sosial, mengadopsi gaya hidup hedon, membandingkan diri dengan influencer, dan kecanduan game online yang menurunkan kinerja akademis serta interaksi sosial nyata. Apakah solusi yang tepat?",
-            options: [
-                {id:"A", text:"Melarang akses ke semua media sosial khususnya di lingkungan sekolah."},
-                {id:"B", text:"Mempromosikan literasi digital dan pemikiran kritis dalam kurikulum sekolah."},
-                {id:"C", text:"Mendorong murid untuk menerima tren media sosial agar tetap up to date."},
-                {id:"D", text:"Membatasi akses internet hanya untuk kegiatan dan aktivitas akademik."},
-                {id:"E", text:"Mengizinkan penggunaan internet tanpa batas untuk mendorong kreativitas."}
-            ],
-            correctAnswer: ["B"],
-            explanation: "Solusi yang paling tepat dan berkelanjutan adalah pendidikan (literasi digital dan berpikir kritis), bukan pelarangan total (A, D) yang tidak realistis, atau pembiaran (C, E) yang memperburuk masalah."
+            id: 2, kompetensi: "Sosiologi sebagai Ilmu", bentuk: "MCMA",
+            soal: "Perhatikan konsep-konsep berikut! 1) Fakta sosial, 2) Verstehen, 3) Anomie, 4) Konflik kelas, 5) Ashabiyah. Manakah konsep yang dikemukakan oleh Émile Durkheim? (Pilih semua yang benar)",
+            options: [{id:"1", text:"Fakta sosial"}, {id:"2", text:"Verstehen"}, {id:"3", text:"Anomie"}, {id:"4", text:"Konflik kelas"}, {id:"5", text:"Ashabiyah"}],
+            correctAnswer: ["1", "3"],
+            explanation: "Émile Durkheim dikenal dengan konsep Fakta sosial dan Anomie. Verstehen adalah Max Weber, Konflik kelas adalah Karl Marx, dan Ashabiyah adalah Ibnu Khaldun."
         },
         {
-            id: 11, kompetensi: "Sosiologi sebagai Ilmu", bentuk: "PG",
-            soal: "Objek kajian sosiologi memiliki karakteristik yang berbeda dibandingkan dengan cabang ilmu lainnya. Berdasarkan pernyataan berikut, manakah yang paling tepat menggambarkan objek kajian sosiologi?",
-            options: [
-                {id:"A", text:"Gempa bumi berkekuatan 7,7 yang terjadi di Myanmar dan terasa hingga Thailand sebagai akibat pergeseran lempeng bumi."},
-                {id:"B", text:"Kecanduan teknologi di kalangan generasi muda yang mengubah cara berpikir, berperilaku, dan berinteraksi dalam kehidupan sehari-hari."},
-                {id:"C", text:"Long COVID yang menyebabkan gangguan kesehatan fisik dan mental selama berbulan-bulan pada penyintas COVID-19."},
-                {id:"D", text:"Aktivitas vulkanik yang menyebabkan kerusakan infrastruktur dan memaksa masyarakat mengungsi."},
-                {id:"E", text:"Penyebaran virus baru yang menimbulkan krisis kesehatan global dan berdampak pada sistem imun tubuh manusia."}
-            ],
-            correctAnswer: ["B"],
-            explanation: "Sosiologi mempelajari masyarakat, interaksi sosial, dan perilaku manusia. Opsi B adalah satu-satunya yang berfokus pada perubahan perilaku dan interaksi sosial. Opsi lain lebih merupakan objek kajian geologi (A, D) atau kedokteran/kesehatan (C, E)."
-        },
-        {
-            id: 12, kompetensi: "Gejala Sosial", bentuk: "Kategori",
-            soal: "Anjuran pada infografis tersebut mencerminkan adanya gejala sosial yang timbul akibat penggunaan internet yang tidak terkontrol oleh anak-anak. Manakah pernyataan yang paling tepat menggambarkan gejala sosial tersebut?",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos003.png",
+            id: 3, kompetensi: "Objek Kajian Sosiologi", bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah pernyataan berikut mengenai objek kajian sosiologi!",
             statements: [
-                {id:"A", text:"Penggunaan internet pada anak perlu diawasi oleh orang tua agar anak tidak mudah terpapar konten negatif."},
-                {id:"B", text:"Pola asuh yang terlalu longgar terhadap penggunaan internet dapat memengaruhi pembentukan kepribadian anak."},
-                {id:"C", text:"Anak-anak merupakan salah satu kelompok pengguna internet terbesar di Indonesia dan dapat diklasifikasikan berdasarkan jenjang usia."}
+                {id:"A", text:"Proses pergeseran lempeng bumi yang menyebabkan gempa bumi merupakan objek kajian utama sosiologi."},
+                {id:"B", text:"Dampak gempa bumi terhadap pola migrasi, solidaritas, dan konflik bantuan merupakan objek kajian sosiologi."},
+                {id:"C", text:"Sosiologi berfokus pada dimensi sosial dari suatu fenomena, bukan proses alamiahnya."}
             ],
-            correctAnswer: {"A":"Sesuai", "B":"Sesuai", "C":"Tidak Sesuai"},
-            explanation: "Pernyataan A dan B secara langsung menggambarkan gejala sosial dan dampak dari penggunaan internet yang tidak terkontrol pada anak. Pernyataan C hanyalah fakta demografis, bukan gambaran gejala sosial akibat penggunaan tidak terkontrol."
-        },
-        {
-            id: 13, kompetensi: "Metode Penelitian Sosial", bentuk: "MCMA",
-            soal: "Seorang murid ingin meneliti pengaruh pergaulan sebaya terhadap kelekatan hubungan antar anggota keluarga di kalangan remaja. Langkah awal: 1) Merumuskan masalah, 2) Menyusun 10 pertanyaan terbuka, 3) Mengolah jawaban informan menjadi angka dan menganalisisnya dengan aplikasi statistik. Manakah pernyataan yang tepat untuk menyempurnakan penelitian tersebut?",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos004.png",
-            options: [
-                {id:"A", text:"Peneliti perlu memperjelas rumusan masalah agar sesuai dengan pengalaman sosial remaja dalam berinteraksi dengan keluarga dan teman sebaya."},
-                {id:"B", text:"Peneliti perlu mengubah jenis pertanyaan menjadi pertanyaan tertutup agar data lebih mudah dianalisis secara statistik."},
-                {id:"C", text:"Peneliti perlu menyesuaikan kembali isi penelitian agar tidak terlalu rumit dan tetap sesuai dengan kemampuan."},
-                {id:"D", text:"Peneliti perlu menentukan jenis dan jumlah sampel terlebih dahulu sebelum menyusun instrumen pengumpulan data."},
-                {id:"E", text:"Peneliti sebaiknya menggunakan metode observasi partisipatif untuk menggantikan instrumen pertanyaan terbuka."}
-            ],
-            correctAnswer: ["A", "B", "D"],
-            explanation: "Karena peneliti ingin mengolah data menjadi angka (statistik), ia harus menggunakan pertanyaan tertutup (B). Rumusan masalah perlu diperjelas (A), dan penentuan sampel harus dilakukan sebelum menyusun instrumen (D). Opsi C terlalu umum, dan E tidak sesuai karena observasi tidak menggantikan kebutuhan instrumen pertanyaan untuk data spesifik ini."
-        },
-        {
-            id: 14, kompetensi: "Konflik Sosial", bentuk: "MCMA",
-            soal: "Kota Praja mengalami konflik antara penduduk lama dan pendatang terkait penggunaan ruang publik untuk kegiatan budaya. Ketegangan meningkat di media sosial dan mengarah pada protes. Apa rekomendasi yang dapat diberikan untuk menurunkan tensi konflik?",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos005.png",
-            options: [
-                {id:"A", text:"Menegakkan regulasi ketat untuk melarang acara budaya guna menghindari bentrokan antar masyarakat."},
-                {id:"B", text:"Membentuk forum yang dipimpin oleh komunitas untuk pengambilan keputusan partisipatif tentang penggunaan ruang publik."},
-                {id:"C", text:"Memfasilitasi dialog komunitas yang inklusif dengan melibatkan kedua pihak untuk membangun saling pengertian."},
-                {id:"D", text:"Menggunakan mediasi oleh pihak ketiga yang netral dan terlatih tentang kepekaan budaya."},
-                {id:"E", text:"Memisahkan kelompok secara permanen ke kawasan yang berbeda untuk mengurangi interaksi."}
-            ],
-            correctAnswer: ["B", "C", "D"],
-            explanation: "Penyelesaian konflik yang demokratis dan berkelanjutan melibatkan partisipasi (B), dialog inklusif (C), dan mediasi netral (D). Pelarangan total (A) dan pemisahan permanen (E) adalah cara represif yang tidak menyelesaikan akar masalah dan melanggar hak berbudaya."
-        },
-        {
-            id: 15, kompetensi: "Perubahan Sosial", bentuk: "Kategori",
-            soal: "Gelombang Korea (Hallyu) berkembang pesat di Indonesia. Di satu sisi memberikan inspirasi dan konektivitas global, di sisi lain memengaruhi konsumerisme berlebih, pengabaian produk lokal, dan standar kecantikan tidak realistis. Manakah respon kritis yang tepat?",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos006.png",
-            statements: [
-                {id:"A", text:"Mengikuti tren tanpa syarat sebagai bagian dari masyarakat global."},
-                {id:"B", text:"Mendorong refleksi diri dan literasi media untuk memahami pengaruh budaya."},
-                {id:"C", text:"Menyeimbangkan penghargaan terhadap tren Korea dengan dukungan untuk budaya lokal."}
-            ],
-            correctAnswer: {"A":"Tidak Tepat", "B":"Tepat", "C":"Tepat"},
-            explanation: "Respon kritis memerlukan penyaringan (literasi media) dan keseimbangan (B dan C). Mengikuti tren tanpa syarat (A) adalah sikap konsumtif yang tidak kritis dan dapat menggerus identitas lokal."
-        },
-        {
-            id: 16, kompetensi: "Sosiologi sebagai Ilmu", bentuk: "Kategori",
-            soal: "Tentukan Sesuai atau Tidak Sesuai pada peran ilmu sosiologi untuk menyikapi kasus kerusakan lingkungan hidup pada infografis berikut!",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos007.png",
-            statements: [
-                {id:"A", text:"Meneliti dampak kerusakan lingkungan terhadap terjadinya perubahan perilaku sosial masyarakat."},
-                {id:"B", text:"Menganalisis proses peluruhan gas rumah kaca di atmosfer untuk mengurangi pemanasan global."},
-                {id:"C", text:"Mendorong pemberdayaan masyarakat di bidang pengelolaan sampah melalui komunitas bank sampah."}
-            ],
-            correctAnswer: {"A":"Sesuai", "B":"Tidak Sesuai", "C":"Sesuai"},
-            explanation: "Sosiologi mempelajari hubungan antara lingkungan dan perilaku sosial (A) serta pemberdayaan masyarakat (C). Analisis proses peluruhan gas rumah kaca (B) adalah objek kajian ilmu kimia atau fisika atmosfer, bukan sosiologi."
-        },
-        {
-            id: 17, kompetensi: "Hubungan Sosial", bentuk: "PG",
-            soal: "Fitur account switching memungkinkan pengguna memiliki lebih dari satu akun (akun alter). Akun alter dibuat untuk membangun sisi personalitas lain. Penalaran remaja yang belum sempurna dapat membuat mereka kesulitan memanfaatkannya dengan baik. Remaja cenderung menampilkan diri ideal di akun utama, tapi identitas baru yang tidak jelas di akun alter. Apakah dampak negatif paling utama dari fenomena identitas multidimensi terhadap individu?",
-            options: [
-                {id:"A", text:"Ketergantungan pada respons sosial untuk membentuk rasa percaya diri dalam berinteraksi."},
-                {id:"B", text:"Keinginan berlebihan untuk tampil sempurna dalam berbagai platform media sosial yang digunakan."},
-                {id:"C", text:"Kesulitan menjalin hubungan pertemanan yang terbuka karena tekanan untuk menjaga citra tertentu."},
-                {id:"D", text:"Ketidakmampuan membedakan antara citra diri ideal dan jati diri yang sebenarnya secara konsisten."},
-                {id:"E", text:"Kecenderungan menarik diri dari lingkungan sosial karena khawatir tidak sesuai ekspektasi publik."}
-            ],
-            correctAnswer: ["D"],
-            explanation: "Dampak negatif paling mendasar dari identitas multidimensi (alter ego) adalah kebingungan identitas (identity confusion), di mana individu kesulitan membedakan mana citra ideal yang dibangun dan mana jati diri aslinya secara konsisten."
-        },
-        {
-            id: 18, kompetensi: "Metode Penelitian Sosial", bentuk: "PG",
-            soal: "Tim pengabdian masyarakat mengembangkan model pengelolaan sampah berbasis partisipasi warga (pemilahan, bank sampah, edukasi). Setelah 6 bulan, terjadi penurunan sampah dan peningkatan kesadaran. Model ini mulai diadaptasi oleh sekolah. Berdasarkan ilustrasi tersebut, jenis penelitian sosial yang sesuai adalah…",
-            options: [
-                {id:"A", text:"Eksploratif – untuk menggambarkan realitas sosial yang belum diketahui secara jelas."},
-                {id:"B", text:"Verifikatif – untuk menguji kebenaran suatu teori dalam situasi sosial tertentu."},
-                {id:"C", text:"Deskriptif – untuk memetakan tingkat pengelolaan di berbagai sekolah secara statistik."},
-                {id:"D", text:"Praktis – untuk memberikan solusi nyata terhadap persoalan sosial yang diteliti."},
-                {id:"E", text:"Teoritis – untuk merumuskan konsep-konsep baru dalam memahami perilaku menyimpang."}
-            ],
-            correctAnswer: ["D"],
-            explanation: "Penelitian ini bertujuan langsung untuk memecahkan masalah sosial (pengelolaan sampah) dan menghasilkan model yang bisa diterapkan (solusi nyata). Ini adalah ciri penelitian praktis atau penelitian tindakan (action research)."
-        },
-        {
-            id: 19, kompetensi: "Kelompok Sosial", bentuk: "PG",
-            soal: "Komunitas pemuda 'Gerak Kota' dibentuk oleh anak muda dari latar belakang beragam (mahasiswa, buruh, seniman, pengusaha). Mereka tidak memiliki hubungan kekerabatan atau kesamaan daerah asal, namun terhubung oleh cita-cita yang sama: mengadvokasi ruang kota inklusif. Apakah jenis kelompok sosial komunitas Gerak Kota?",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos008.png",
-            options: [
-                {id:"A", text:"Kelompok primer, karena interaksi anggotanya bersifat akrab dan informal."},
-                {id:"B", text:"Kelompok okupasional, karena terdiri atas individu dari berbagai latar pekerjaan."},
-                {id:"C", text:"Kelompok etnis, karena anggotanya memiliki latar budaya yang sama."},
-                {id:"D", text:"Kelompok sekunder, karena terbentuk atas dasar tujuan dan kepentingan bersama."},
-                {id:"E", text:"Kerumunan sosial, karena terbentuk secara spontan dari masyarakat sekitar."}
-            ],
-            correctAnswer: ["D"],
-            explanation: "Kelompok sekunder dicirikan oleh hubungan yang formal, tidak harus akrab, dan dibentuk atas dasar tujuan atau kepentingan bersama (advokasi ruang kota), bukan karena kekerabatan atau kedekatan emosional primer."
-        },
-        {
-            id: 20, kompetensi: "Fenomena Sosial Globalisasi", bentuk: "MCMA",
-            soal: "Lina aktif menggunakan media digital, mengikuti influencer global yang menampilkan gaya hidup mewah. Ia mulai mengubah penampilan, pola konsumsi, dan cara berbicara agar mirip figur tersebut, merasa tidak percaya diri, dan menjauh dari interaksi nyata. Apa saja langkah atau sikap kritis yang dapat dilakukan untuk menghindari dampak negatif globalisasi seperti yang dialami Lina?",
-            image: "https://muin123-dr.github.io/Belajar/TKA/gbr/sos009.png",
-            options: [
-                {id:"A", text:"Mengadopsi pengaruh global secara selektif sambil mempertahankan identitas budaya lokal."},
-                {id:"B", text:"Sepenuhnya mengisolasi diri dari tren global untuk menghindari dampak negatif yang menyertainya."},
-                {id:"C", text:"Mendorong penggunaan media sosial untuk mempromosikan nilai-nilai budaya lokal."},
-                {id:"D", text:"Mengembangkan literasi media untuk menyaring konten secara kritis dan bertanggung jawab."},
-                {id:"E", text:"Meniru budaya global sepenuhnya agar diterima dalam pergaulan modern sebagai bentuk adaptasi."}
-            ],
-            correctAnswer: ["A", "C", "D"],
-            explanation: "Sikap kritis meliputi selektivitas (A), promosi budaya lokal sebagai penyeimbang (C), dan literasi media (D). Isolasi total (B) tidak realistis di era digital, dan meniru sepenuhnya (E) adalah penyebab masalah yang dialami Lina, bukan solusinya."
+            correctAnswer: {"A":"Salah", "B":"Benar", "C":"Benar"},
+            explanation: "Gempa bumi sebagai proses alam adalah objek geologi (A Salah). Namun, dampak sosialnya (migrasi, solidaritas) adalah objek sosiologi (B Benar). Prinsipnya, sosiologi fokus pada dimensi sosial (C Benar)."
         },
 
-        // --- 10 SOAL TAMBAHAN (SELEVEL TKA) ---
+        // --- NILAI, NORMA, SOSIALISASI ---
         {
-            id: 21, kompetensi: "Interaksi Sosial", bentuk: "PG",
-            soal: "Seorang petani berkomunikasi dengan tengkulak melalui aplikasi pesan singkat untuk menjual hasil panennya. Interaksi ini terjadi karena adanya syarat-syarat interaksi sosial. Manakah syarat interaksi sosial yang paling tepat menggambarkan situasi tersebut?",
-            options: [
-                {id:"A", text:"Kontak sosial primer dan komunikasi langsung"},
-                {id:"B", text:"Kontak sosial sekunder dan komunikasi tidak langsung"},
-                {id:"C", text:"Kontak sosial sekunder dan komunikasi langsung"},
-                {id:"D", text:"Kontak sosial primer dan komunikasi tidak langsung"},
-                {id:"E", text:"Kontak sosial kelompok dan komunikasi primer"}
-            ],
+            id: 4, kompetensi: "Nilai, Norma, dan Sosialisasi", bentuk: "PG",
+            soal: "Seorang anak kecil belajar untuk mengucapkan 'terima kasih' dan 'permisi' kepada orang yang lebih tua. Ia meniru perilaku ini setelah melihat orang tuanya selalu melakukannya setiap hari. Proses ini merupakan contoh dari...",
+            options: [{id:"A", text:"Sosialisasi sekunder di lingkungan sekolah"}, {id:"B", text:"Sosialisasi primer di lingkungan keluarga"}, {id:"C", text:"Pengendalian sosial represif"}, {id:"D", text:"Pembentukan status ascribed"}, {id:"E", text:"Akulturasi budaya"}],
             correctAnswer: ["B"],
-            explanation: "Kontak sosial melalui perantara (aplikasi pesan singkat) disebut kontak sekunder. Karena tidak bertatap muka secara langsung, maka komunikasinya tergolong komunikasi tidak langsung."
+            explanation: "Sosialisasi primer berlangsung terutama dalam keluarga pada masa awal kehidupan, di mana anak mempelajari norma-norma dasar seperti sopan santun melalui contoh (imitasi) dari orang tua."
         },
         {
-            id: 22, kompetensi: "Kelompok Sosial", bentuk: "MCMA",
-            soal: "Manakah pernyataan yang menunjukkan ciri-ciri kelompok sosial (social group) menurut Soerjono Soekanto? (Pilih semua yang benar)",
+            id: 5, kompetensi: "Pengendalian Sosial", bentuk: "MCMA",
+            soal: "Pemerintah daerah mengadakan penyuluhan tentang bahaya narkoba di sekolah-sekolah. Sementara itu, sekolah memberikan sanksi skorsing kepada siswa yang ketahuan merokok di lingkungan sekolah. Berdasarkan ilustrasi, manakah bentuk pengendalian sosial yang terjadi? (Pilih semua yang benar)",
             options: [
-                {id:"A", text:"Terdapat interaksi sosial antar anggotanya."},
-                {id:"B", text:"Terdapat kesadaran anggota bahwa ia merupakan bagian dari kelompok yang bersangkutan."},
-                {id:"C", text:"Kumpulan orang yang sedang menunggu bus di halte."},
-                {id:"D", text:"Terdapat faktor pengikat yang dimiliki bersama (nasib, kepentingan, tujuan)."},
-                {id:"E", text:"Orang-orang yang berada di dalam gerbong kereta api yang sama."}
+                {id:"A", text:"Penyuluhan narkoba merupakan pengendalian sosial preventif."},
+                {id:"B", text:"Sanksi skorsing merupakan pengendalian sosial preventif."},
+                {id:"C", text:"Sanksi skorsing merupakan pengendalian sosial represif."},
+                {id:"D", text:"Penyuluhan narkoba merupakan pengendalian sosial represif."},
+                {id:"E", text:"Kedua tindakan tersebut merupakan pengendalian sosial informal."}
             ],
-            correctAnswer: ["A", "B", "D"],
-            explanation: "Menurut Soerjono Soekanto, kelompok sosial harus memiliki interaksi, kesadaran anggota, dan faktor pengikat bersama. Opsi C dan E hanyalah merupakan 'kerumunan' (crowd) atau kategori sosial, bukan kelompok sosial karena tidak ada interaksi dan faktor pengikat yang berkelanjutan."
+            correctAnswer: ["A", "C"],
+            explanation: "Preventif bertujuan mencegah (penyuluhan), sedangkan represif bertujuan menangani setelah pelanggaran terjadi (sanksi skorsing). Sanksi sekolah bersifat formal, bukan informal."
         },
         {
-            id: 23, kompetensi: "Stratifikasi & Diferensiasi", bentuk: "PG",
-            soal: "Di sebuah perusahaan multinasional, terdapat karyawan dari berbagai suku bangsa (Jawa, Batak, Papua, Tionghoa) yang bekerja bersama dalam satu divisi dengan jabatan yang setara. Fenomena ini merupakan contoh dari...",
-            options: [
-                {id:"A", text:"Stratifikasi sosial vertikal"},
-                {id:"B", text:"Diferensiasi sosial horizontal"},
-                {id:"C", text:"Mobilitas sosial intragenerasi"},
-                {id:"D", text:"Asimilasi budaya total"},
-                {id:"E", text:"Konflik kepentingan struktural"}
-            ],
-            correctAnswer: ["B"],
-            explanation: "Perbedaan suku bangsa yang tidak menunjukkan tingkatan atau hierarki (jabatan setara) merupakan ciri khas diferensiasi sosial, yang bersifat horizontal. Stratifikasi bersifat vertikal/bertingkat."
-        },
-        {
-            id: 24, kompetensi: "Metode Penelitian Sosial", bentuk: "Kategori",
-            soal: "Tentukan Sesuai atau Tidak Sesuai jenis data berikut dengan metode pengumpulannya dalam penelitian sosial!",
+            id: 6, kompetensi: "Nilai dan Norma", bentuk: "Kategori",
+            soal: "Tentukan Sesuai atau Tidak Sesuai jenis norma berikut dengan ciri umumnya!",
             statements: [
-                {id:"A", text:"Data jumlah penduduk berdasarkan usia dan pendapatan -> Data Kuantitatif"},
-                {id:"B", text:"Data tentang makna ritual adat menurut pandangan tetua desa -> Data Kualitatif"},
-                {id:"C", text:"Data berupa transkrip hasil wawancara mendalam -> Data Kuantitatif"}
+                {id:"A", text:"Cara (usage): Pelanggaran mendapat reaksi atau celaan yang sangat ringan."},
+                {id:"B", text:"Tata kelakuan (mores): Norma yang berkaitan erat dengan sistem moral dan keyakinan masyarakat."},
+                {id:"C", text:"Hukum: Norma yang tidak tertulis dan sanksinya bersifat informal."}
             ],
             correctAnswer: {"A":"Sesuai", "B":"Sesuai", "C":"Tidak Sesuai"},
-            explanation: "Data kuantitatif berbentuk angka/statistik (A Sesuai). Data kualitatif berbentuk deskripsi, makna, atau narasi (B Sesuai). Transkrip wawancara adalah data kualitatif, bukan kuantitatif (C Tidak Sesuai)."
+            explanation: "Usage memiliki sanksi ringan (A Sesuai). Mores berkaitan dengan moral (B Sesuai). Hukum adalah norma yang tertulis dan memiliki sanksi formal, bukan informal (C Tidak Sesuai)."
+        },
+
+        // --- INTERAKSI SOSIAL ---
+        {
+            id: 7, kompetensi: "Interaksi Sosial", bentuk: "PG",
+            soal: "Dua orang remaja saling menyapa dan berjabat tangan saat bertemu di jalan. Tindakan ini dapat dikategorikan sebagai interaksi sosial karena telah memenuhi dua syarat utama interaksi sosial, yaitu...",
+            options: [{id:"A", text:"Kontak sosial dan komunikasi"}, {id:"B", text:"Simpati dan empati"}, {id:"C", text:"Imitasi dan sugesti"}, {id:"D", text:"Status dan peran"}, {id:"E", text:"Nilai dan norma"}],
+            correctAnswer: ["A"],
+            explanation: "Syarat mutlak terjadinya interaksi sosial adalah adanya kontak sosial (bertemu/berjabat tangan) dan komunikasi (saling menyapa/bermakna)."
         },
         {
-            id: 25, kompetensi: "Resolusi Konflik", bentuk: "PG",
-            soal: "Upaya penyelesaian konflik yang melibatkan pihak ketiga yang netral, yang tidak memiliki wewenang untuk mengambil keputusan mengikat, tetapi hanya memberikan saran atau fasilitasi agar kedua belah pihak mencapai kesepakatan bersama, disebut...",
+            id: 8, kompetensi: "Proses Sosial Asosiatif", bentuk: "MCMA",
+            soal: "Desa Adat X mulai menggunakan alat pertanian modern, namun tetap mempertahankan ritual panen tradisional sebagai bentuk rasa syukur. Fenomena ini menunjukkan proses sosial asosiatif. Manakah pernyataan yang tepat mengenai proses tersebut? (Pilih semua yang benar)",
             options: [
-                {id:"A", text:"Arbitrasi"},
-                {id:"B", text:"Mediasi"},
-                {id:"C", text:"Koersi"},
-                {id:"D", text:"Ajudikasi"},
-                {id:"E", text:"Konsiliasi"}
+                {id:"A", text:"Fenomena tersebut adalah contoh akulturasi."},
+                {id:"B", text:"Fenomena tersebut adalah contoh asimilasi total."},
+                {id:"C", text:"Unsur budaya baru diterima tanpa menghilangkan unsur budaya asli."},
+                {id:"D", text:"Batas-batas antara budaya lama dan baru menjadi sepenuhnya kabur."},
+                {id:"E", text:"Proses ini mengarah pada integrasi dan kerja sama sosial."}
             ],
-            correctAnswer: ["B"],
-            explanation: "Mediasi adalah proses penyelesaian konflik dengan bantuan pihak ketiga netral (mediator) yang hanya memfasilitasi dan memberi saran, tanpa hak memutus. Arbitrasi (A) pihak ketiganya berhak memutus. Koersi (C) adalah paksaan. Ajudikasi (D) melalui pengadilan."
+            correctAnswer: ["A", "C", "E"],
+            explanation: "Akulturasi adalah pencampuran budaya di mana unsur asli tetap ada (A & C Benar). Asimilasi (B & D) berarti peleburan total di mana batas budaya lama kabur, yang tidak terjadi di sini. Akulturasi adalah proses asosiatif (E Benar)."
         },
         {
-            id: 26, kompetensi: "Perubahan Sosial", bentuk: "MCMA",
-            soal: "Manakah pernyataan yang menunjukkan urutan proses penemuan baru (inovasi) yang benar dalam perubahan sosial? (Pilih semua yang benar)",
-            options: [
-                {id:"A", text:"Discovery: Penemuan unsur kebudayaan baru, baik berupa alat maupun gagasan."},
-                {id:"B", text:"Invention: Proses pengembangan dan penyempurnaan discovery menjadi bentuk yang dapat diterapkan."},
-                {id:"C", text:"Innovation: Penerapan atau penggunaan unsur baru tersebut secara luas dalam kehidupan masyarakat."},
-                {id:"D", text:"Invention selalu terjadi sebelum Discovery."},
-                {id:"E", text:"Innovation tidak memerlukan proses penerimaan masyarakat."}
-            ],
-            correctAnswer: ["A", "B", "C"],
-            explanation: "Urutan yang benar adalah Discovery (menemukan) -> Invention (mengembangkan/menyempurnakan) -> Innovation (menerapkan/mengadopsi secara luas). Opsi D salah karena Invention setelah Discovery. Opsi E salah karena innovation membutuhkan proses adopsi/penerimaan."
-        },
-        {
-            id: 27, kompetensi: "Globalisasi", bentuk: "PG",
-            soal: "Sebuah jaringan restoran cepat saji internasional membuka cabang di Indonesia. Untuk menarik minat konsumen lokal, mereka menyediakan menu nasi goreng dan rendang dengan kemasan yang tetap menggunakan logo dan standar pelayanan global mereka. Fenomena ini disebut...",
-            options: [
-                {id:"A", text:"Westernisasi"},
-                {id:"B", text:"Imperialisme budaya"},
-                {id:"C", text:"Glokalisasi"},
-                {id:"D", text:"Modernisasi total"},
-                {id:"E", text:"Asimilasi paksa"}
-            ],
-            correctAnswer: ["C"],
-            explanation: "Glokalisasi adalah proses di mana produk atau layanan global diadaptasi agar sesuai dengan selera, budaya, atau kondisi lokal (global + lokal). Ini berbeda dengan westernisasi atau imperialisme budaya yang memaksakan budaya asing secara total."
-        },
-        {
-            id: 28, kompetensi: "Masyarakat Multikultural", bentuk: "Kategori",
-            soal: "Tentukan Benar atau Salah pernyataan berikut mengenai sikap dalam masyarakat multikultural!",
+            id: 9, kompetensi: "Gejala Sosial", bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah pernyataan berikut mengenai gejala sosial!",
             statements: [
-                {id:"A", text:"Stereotip adalah pemberian label atau anggapan umum (seringkali negatif) terhadap suatu kelompok tanpa mengenal individunya secara pribadi."},
-                {id:"B", text:"Prasangka adalah tindakan atau perlakuan nyata yang merugikan kelompok tertentu."},
-                {id:"C", text:"Diskriminasi adalah realisasi atau tindakan nyata dari prasangka yang mengakibatkan ketidakadilan."}
+                {id:"A", text:"Kemiskinan struktural adalah gejala sosial yang disebabkan oleh sistem atau kebijakan yang tidak adil."},
+                {id:"B", text:"Bencana alam murni (seperti letusan gunung berapi) tanpa kaitan dengan manusia adalah gejala sosial."},
+                {id:"C", text:"Kecanduan media sosial yang mengganggu interaksi tatap muka merupakan gejala sosial di era digital."}
             ],
             correctAnswer: {"A":"Benar", "B":"Salah", "C":"Benar"},
-            explanation: "Stereotip adalah anggapan/label (A Benar). Prasangka adalah sikap/perasaan negatif, BUKAN tindakan nyata (B Salah). Diskriminasi adalah tindakan/perlakuan nyata yang merugikan (C Benar)."
+            explanation: "Kemiskinan struktural (A Benar) dan kecanduan medsos (C Benar) adalah gejala sosial karena melibatkan hubungan dan perilaku manusia. Bencana alam murni adalah gejala alam, bukan sosial (B Salah)."
         },
+
+        // --- KELOMPOK SOSIAL, STATUS, PERAN ---
         {
-            id: 29, kompetensi: "Permasalahan Sosial", bentuk: "PG",
-            soal: "Fenomena di mana seseorang atau sekelompok orang tidak mampu memenuhi kebutuhan dasarnya secara layak, bukan karena faktor kemalasan individu, tetapi karena struktur ekonomi dan kebijakan pemerintah yang tidak berpihak pada mereka, disebut kemiskinan...",
-            options: [
-                {id:"A", text:"Absolut"},
-                {id:"B", text:"Relatif"},
-                {id:"C", text:"Struktural"},
-                {id:"D", text:"Kultural"},
-                {id:"E", text:"Alamiah"}
-            ],
-            correctAnswer: ["C"],
-            explanation: "Kemiskinan struktural disebabkan oleh sistem, struktur, atau kebijakan yang tidak adil. Kemiskinan kultural (D) disebabkan oleh faktor budaya/malas. Kemiskinan absolut (A) adalah kondisi di bawah garis kemiskinan standar."
-        },
-        {
-            id: 30, kompetensi: "Masyarakat Digital", bentuk: "PG",
-            soal: "Dalam algoritma media sosial, pengguna cenderung hanya disajikan konten yang sesuai dengan minat, keyakinan, atau perilaku mereka sebelumnya. Hal ini menciptakan 'gelembung' informasi di mana pengguna jarang terpapar pada sudut pandang yang berbeda, sehingga memperkuat bias mereka sendiri. Fenomena ini dikenal sebagai...",
-            options: [
-                {id:"A", text:"Cyberbullying"},
-                {id:"B", text:"Echo chamber (Ruang Gema)"},
-                {id:"C", text:"Digital divide"},
-                {id:"D", text:"Hoaks"},
-                {id:"E", text:"FOMO (Fear of Missing Out)"}
-            ],
+            id: 10, kompetensi: "Kelompok Sosial", bentuk: "PG",
+            soal: "Ikatan Dokter Indonesia (IDI) memiliki struktur organisasi yang jelas, aturan keanggotaan formal, dan berorientasi pada tujuan profesionalisme medis. Berdasarkan karakteristiknya, IDI termasuk dalam kelompok sosial...",
+            options: [{id:"A", text:"Primer"}, {id:"B", text:"Sekunder"}, {id:"C", text:"Paguyuban"}, {id:"D", text:"Kerumunan"}, {id:"E", text:"Kategori sosial"}],
             correctAnswer: ["B"],
-            explanation: "Echo chamber (Ruang Gema) adalah situasi di mana seseorang hanya terpapar informasi yang memperkuat keyakinan mereka sendiri karena algoritma yang menyaring konten yang berlawanan. Digital divide adalah kesenjangan akses, FOMO adalah takut ketinggalan tren."
+            explanation: "Kelompok sekunder dicirikan oleh hubungan yang formal, berorientasi pada tujuan tertentu, dan tidak harus bersifat akrab atau personal, seperti organisasi profesi."
+        },
+        {
+            id: 11, kompetensi: "Paguyuban dan Patembayan", bentuk: "MCMA",
+            soal: "Manakah ciri-ciri yang membedakan Patembayan (Gesellschaft) dari Paguyuban (Gemeinschaft)? (Pilih semua yang benar)",
+            options: [
+                {id:"A", text:"Hubungan didasarkan pada ikatan batin yang kuat dan kekeluargaan."},
+                {id:"B", text:"Hubungan bersifat sementara dan berorientasi pada kepentingan atau tujuan."},
+                {id:"C", text:"Interaksi didasari oleh pertimbangan rasional dan kontrak."},
+                {id:"D", text:"Contoh utamanya adalah hubungan antar anggota keluarga besar di desa."},
+                {id:"E", text:"Contoh utamanya adalah hubungan antar karyawan dalam sebuah perusahaan."}
+            ],
+            correctAnswer: ["B", "C", "E"],
+            explanation: "Patembayan (Gesellschaft) bersifat formal, berorientasi kepentingan/tujuan, rasional, dan kontrak (B, C, E). Opsi A dan D adalah ciri Paguyuban (Gemeinschaft)."
+        },
+        {
+            id: 12, kompetensi: "Status dan Peran", bentuk: "Kategori",
+            soal: "Tentukan Sesuai atau Tidak Sesuai pasangan status sosial berikut dengan cara perolehannya!",
+            statements: [
+                {id:"A", text:"Seorang anak yang lahir dari keluarga bangsawan → Ascribed Status"},
+                {id:"B", text:"Seorang mahasiswa yang lulus dan menjadi dokter → Achieved Status"},
+                {id:"C", text:"Seorang pelajar yang ditunjuk menjadi ketua OSIS karena prestasinya → Assigned Status"}
+            ],
+            correctAnswer: {"A":"Sesuai", "B":"Sesuai", "C":"Tidak Sesuai"},
+            explanation: "Ascribed diperoleh sejak lahir (A Sesuai). Achieved diperoleh melalui usaha (B Sesuai). Ketua OSIS karena prestasi adalah Achieved Status, bukan Assigned (diberikan tanpa usaha khusus, misal: gelar kehormatan) (C Tidak Sesuai)."
+        },
+
+        // --- STRATIFIKASI, DIFERENSIASI, MOBILITAS ---
+        {
+            id: 13, kompetensi: "Stratifikasi dan Diferensiasi", bentuk: "PG",
+            soal: "Di sebuah pasar tradisional, terdapat pedagang dari suku Jawa, suku Batak, dan suku Tionghoa yang berjualan berdampingan. Mereka memiliki hak dan kewajiban yang sama sebagai pedagang, tanpa ada yang merasa lebih tinggi atau lebih rendah dari yang lain berdasarkan sukunya. Fenomena ini merupakan contoh...",
+            options: [{id:"A", text:"Stratifikasi sosial vertikal"}, {id:"B", text:"Diferensiasi sosial horizontal"}, {id:"C", text:"Mobilitas sosial vertikal naik"}, {id:"D", text:"Segregasi sosial"}, {id:"E", text:"Konflik horizontal"}],
+            correctAnswer: ["B"],
+            explanation: "Diferensiasi sosial adalah perbedaan sosial yang bersifat horizontal (tidak bertingkat). Perbedaan suku di sini tidak menunjukkan hierarki atau tingkatan status."
+        },
+        {
+            id: 14, kompetensi: "Mobilitas Sosial", bentuk: "MCMA",
+            soal: "Perhatikan peristiwa berikut! 1) Pak Budi dipromosikan dari staf menjadi manajer. 2) Ibu Ani pindah tugas dari sekolah di Jakarta ke sekolah di Bandung dengan jabatan yang sama. 3) Sebuah perusahaan bangkrut, sehingga pemiliknya harus bekerja sebagai karyawan di tempat lain. Manakah yang merupakan contoh mobilitas sosial? (Pilih semua yang benar)",
+            options: [
+                {id:"A", text:"Peristiwa 1 adalah mobilitas vertikal naik."},
+                {id:"B", text:"Peristiwa 2 adalah mobilitas horizontal."},
+                {id:"C", text:"Peristiwa 3 adalah mobilitas vertikal turun."},
+                {id:"D", text:"Peristiwa 2 adalah mobilitas vertikal turun."},
+                {id:"E", text:"Peristiwa 1 adalah mobilitas antargenerasi."}
+            ],
+            correctAnswer: ["A", "B", "C"],
+            explanation: "Promosi jabatan = vertikal naik (A). Pindah tempat dengan jabatan sama = horizontal (B). Bangkrut dan menjadi karyawan = vertikal turun (C). Peristiwa 1 adalah intragenerasi (dalam satu generasi), bukan antargenerasi (E Salah)."
+        },
+        {
+            id: 15, kompetensi: "Ketimpangan Sosial", bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah pernyataan berikut mengenai penyebab ketimpangan sosial!",
+            statements: [
+                {id:"A", text:"Akses terhadap pendidikan yang tidak merata dapat menjadi faktor penyebab ketimpangan sosial."},
+                {id:"B", text:"Perbedaan selera musik antara remaja dan orang tua merupakan bentuk ketimpangan sosial struktural."},
+                {id:"C", text:"Kebijakan publik yang tidak berpihak pada kelompok marginal dapat memperlebar ketimpangan."}
+            ],
+            correctAnswer: {"A":"Benar", "B":"Salah", "C":"Benar"},
+            explanation: "Akses pendidikan (A) dan kebijakan publik (C) adalah faktor struktural penyebab ketimpangan. Perbedaan selera musik (B) adalah perbedaan budaya/horizontal, bukan ketimpangan sosial."
+        },
+
+        // --- PENELITIAN SOSIAL ---
+        {
+            id: 16, kompetensi: "Metode Penelitian Sosial", bentuk: "PG",
+            soal: "Seorang peneliti ingin memahami secara mendalam bagaimana proses pemulihan trauma pada penyintas bencana alam. Ia tinggal di lokasi pengungsian selama dua bulan, mengamati aktivitas harian, dan melakukan wawancara tidak terstruktur dengan para penyintas. Pendekatan penelitian yang digunakan adalah...",
+            options: [{id:"A", text:"Kuantitatif eksperimental"}, {id:"B", text:"Kualitatif"}, {id:"C", text:"Survei kuantitatif"}, {id:"D", text:"Eksperimen laboratorium"}, {id:"E", text:"Analisis data sekunder"}],
+            correctAnswer: ["B"],
+            explanation: "Penelitian yang berfokus pada pemahaman mendalam (makna), menggunakan observasi partisipatif, dan wawancara tidak terstruktur merupakan ciri khas penelitian kualitatif."
+        },
+        {
+            id: 17, kompetensi: "Instrumen dan Data Penelitian", bentuk: "MCMA",
+            soal: "Manakah pasangan yang tepat antara jenis data, instrumen, dan metode analisisnya? (Pilih semua yang benar)",
+            options: [
+                {id:"A", text:"Data angka → Kuesioner tertutup → Analisis statistik"},
+                {id:"B", text:"Data narasi → Wawancara mendalam → Analisis tematik"},
+                {id:"C", text:"Data angka → Observasi partisipatif → Analisis statistik"},
+                {id:"D", text:"Data dokumen → Studi dokumentasi → Analisis isi/konten"},
+                {id:"E", text:"Data narasi → Kuesioner tertutup → Analisis statistik"}
+            ],
+            correctAnswer: ["A", "B", "D"],
+            explanation: "Angka cocok dengan kuesioner tertutup dan statistik (A). Narasi cocok dengan wawancara dan tematik (B). Dokumen cocok dengan studi dokumentasi (D). Observasi partisipatif biasanya menghasilkan data narasi (C Salah). Kuesioner tertutup menghasilkan data angka, bukan narasi (E Salah)."
+        },
+        {
+            id: 18, kompetensi: "Validitas dan Reliabilitas", bentuk: "Kategori",
+            soal: "Tentukan Sesuai atau Tidak Sesuai definisi berikut dengan konsep instrumen penelitian!",
+            statements: [
+                {id:"A", text:"Validitas: Kemampuan instrumen untuk memberikan hasil yang konsisten setiap kali digunakan."},
+                {id:"B", text:"Reliabilitas: Tingkat keajegan atau konsistensi hasil pengukuran instrumen."},
+                {id:"C", text:"Validitas: Tingkat ketepatan instrumen dalam mengukur apa yang seharusnya diukur."}
+            ],
+            correctAnswer: {"A":"Tidak Sesuai", "B":"Sesuai", "C":"Sesuai"},
+            explanation: "Validitas adalah ketepatan mengukur apa yang seharusnya diukur (C Sesuai, A Tidak Sesuai). Reliabilitas adalah konsistensi/keajegan hasil (B Sesuai)."
+        },
+
+        // --- KONFLIK DAN RESOLUSI ---
+        {
+            id: 19, kompetensi: "Resolusi Konflik", bentuk: "PG",
+            soal: "Dua kelompok masyarakat berselisih mengenai batas wilayah desa. Pemerintah daerah menunjuk seorang camat sebagai pihak ketiga. Camat tersebut memfasilitasi dialog, namun keputusan akhir tetap diserahkan sepenuhnya kepada kesepakatan kedua kelompok masyarakat tersebut, tanpa paksaan dari camat. Bentuk resolusi konflik ini adalah...",
+            options: [{id:"A", text:"Arbitrase"}, {id:"B", text:"Mediasi"}, {id:"C", text:"Koersi"}, {id:"D", text:"Ajudikasi"}, {id:"E", text:"Intimidasi"}],
+            correctAnswer: ["B"],
+            explanation: "Mediasi melibatkan pihak ketiga netral yang hanya membantu memfasilitasi dialog, tetapi tidak memiliki kewenangan untuk memaksakan atau mengambil keputusan akhir. Keputusan ada di tangan pihak yang berkonflik."
+        },
+        {
+            id: 20, kompetensi: "Jenis Konflik", bentuk: "MCMA",
+            soal: "Perhatikan kasus berikut: 'Masyarakat adat menolak pembangunan pabrik karena lahan tersebut adalah hutan larangan yang dianggap suci, sementara perusahaan berargumen bahwa pembangunan telah memiliki izin resmi dan akan membuka lapangan kerja.' Manakah jenis konflik yang terkandung dalam kasus ini? (Pilih semua yang benar)",
+            options: [
+                {id:"A", text:"Konflik nilai, karena adanya perbedaan keyakinan tentang kesucian lahan."},
+                {id:"B", text:"Konflik kepentingan, karena adanya perebutan pemanfaatan sumber daya lahan."},
+                {id:"C", text:"Konflik interpersonal, karena hanya melibatkan dua individu yang saling membenci."},
+                {id:"D", text:"Konflik antarkelompok, karena melibatkan masyarakat adat dan perusahaan."},
+                {id:"E", text:"Konflik vertikal murni tanpa adanya dimensi nilai."}
+            ],
+            correctAnswer: ["A", "B", "D"],
+            explanation: "Kasus ini melibatkan perbedaan keyakinan (nilai/A), perebutan pemanfaatan lahan (kepentingan/B), dan terjadi antara dua entitas kelompok (masyarakat adat vs perusahaan/D). Bukan interpersonal (C) dan memiliki dimensi nilai (E Salah)."
+        },
+        {
+            id: 21, kompetensi: "Integrasi Sosial", bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah faktor-faktor berikut yang dapat mendorong terjadinya integrasi sosial!",
+            statements: [
+                {id:"A", text:"Adanya toleransi antar kelompok yang berbeda."},
+                {id:"B", text:"Meningkatnya sikap eksklusivisme dan etnosentrisme."},
+                {id:"C", text:"Adanya kesempatan yang adil (equilibrium) dalam bidang ekonomi."}
+            ],
+            correctAnswer: {"A":"Benar", "B":"Salah", "C":"Benar"},
+            explanation: "Toleransi (A) dan kesempatan yang adil (C) adalah faktor pendorong integrasi. Eksklusivisme dan etnosentrisme (B) adalah faktor penghambat integrasi yang memicu disintegrasi."
+        },
+
+        // --- PERUBAHAN SOSIAL ---
+        {
+            id: 22, kompetensi: "Bentuk Perubahan Sosial", bentuk: "PG",
+            soal: "Reformasi tahun 1998 di Indonesia yang mengakibatkan runtuhnya orde baru, pergantian sistem pemerintahan, dan perubahan mendasar dalam struktur ketatanegaraan dalam waktu yang relatif singkat, merupakan contoh perubahan sosial yang bersifat...",
+            options: [{id:"A", text:"Evolusi"}, {id:"B", text:"Revolusi"}, {id:"C", text:"Progress"}, {id:"D", text:"Regression"}, {id:"E", text:"Planned change"}],
+            correctAnswer: ["B"],
+            explanation: "Revolusi adalah perubahan sosial yang berlangsung relatif cepat dan membawa perubahan mendasar pada sendi-sendi pokok kehidupan masyarakat atau struktur sosial."
+        },
+        {
+            id: 23, kompetensi: "Discovery, Invention, Innovation", bentuk: "MCMA",
+            soal: "Manakah urutan dan definisi yang tepat mengenai proses penemuan baru dalam perubahan sosial? (Pilih semua yang benar)",
+            options: [
+                {id:"A", text:"Discovery: Penemuan unsur kebudayaan baru, baik berupa alat maupun gagasan."},
+                {id:"B", text:"Invention: Penerapan unsur baru secara luas oleh masyarakat."},
+                {id:"C", text:"Innovation: Penerapan atau penerimaan unsur baru tersebut dalam kehidupan masyarakat."},
+                {id:"D", text:"Invention: Pengembangan dan penyempurnaan discovery menjadi bentuk yang dapat digunakan."},
+                {id:"E", text:"Discovery selalu terjadi setelah Innovation."}
+            ],
+            correctAnswer: ["A", "C", "D"],
+            explanation: "Urutannya adalah Discovery (menemukan/A) → Invention (mengembangkan/menyempurnakan/D) → Innovation (menerapkan/mengadopsi secara luas/C). Opsi B salah karena itu definisi Innovation. Opsi E salah karena urutannya terbalik."
+        },
+        {
+            id: 24, kompetensi: "Faktor Perubahan Sosial", bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah pernyataan berikut mengenai faktor perubahan sosial!",
+            statements: [
+                {id:"A", text:"Kontak dengan kebudayaan lain merupakan faktor pendorong perubahan sosial."},
+                {id:"B", text:"Adat atau kebiasaan yang sangat kuat (konservatif) merupakan faktor pendorong perubahan sosial."},
+                {id:"C", text:"Sikap terbuka terhadap hal-hal baru merupakan faktor pendorong perubahan sosial."}
+            ],
+            correctAnswer: {"A":"Benar", "B":"Salah", "C":"Benar"},
+            explanation: "Kontak budaya lain (A) dan sikap terbuka (C) adalah faktor pendorong. Adat yang sangat kuat/konservatif (B) adalah faktor penghambat perubahan sosial."
+        },
+
+        // --- GLOBALISASI DAN MASYARAKAT DIGITAL ---
+        {
+            id: 25, kompetensi: "Globalisasi dan Glokalisasi", bentuk: "PG",
+            soal: "Sebuah jaringan restoran cepat saji asal Amerika Serikat membuka cabang di Indonesia. Untuk menarik konsumen lokal, mereka menyajikan menu nasi goreng dan rendang dengan kemasan yang tetap menggunakan logo dan standar pelayanan global mereka. Fenomena ini paling tepat disebut...",
+            options: [{id:"A", text:"Westernisasi"}, {id:"B", text:"Imperialisme budaya"}, {id:"C", text:"Glokalisasi"}, {id:"D", text:"Modernisasi total"}, {id:"E", text:"Asimilasi paksa"}],
+            correctAnswer: ["C"],
+            explanation: "Glokalisasi adalah proses di mana produk atau layanan global diadaptasi agar sesuai dengan selera, budaya, atau kondisi lokal (global + lokal)."
+        },
+        {
+            id: 26, kompetensi: "Dampak Globalisasi", bentuk: "MCMA",
+            soal: "Manakah yang merupakan dampak negatif globalisasi di era digital yang perlu diwaspadai oleh masyarakat? (Pilih semua yang benar)",
+            options: [
+                {id:"A", text:"Meningkatnya konsumerisme dan gaya hidup hedonis."},
+                {id:"B", text:"Semakin mudahnya akses terhadap sumber ilmu pengetahuan global."},
+                {id:"C", text:"Meningkatnya kesenjangan digital (digital divide) antar kelompok masyarakat."},
+                {id:"D", text:"Lunturnya interaksi tatap muka dan solidaritas sosial di dunia nyata."},
+                {id:"E", text:"Terbukanya peluang pasar ekspor bagi UMKM lokal."}
+            ],
+            correctAnswer: ["A", "C", "D"],
+            explanation: "Konsumerisme/hedonisme (A), kesenjangan digital (C), dan lunturnya interaksi nyata (D) adalah dampak negatif. Akses ilmu (B) dan peluang ekspor (E) adalah dampak positif."
+        },
+        {
+            id: 27, kompetensi: "Fenomena Digital", bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah definisi fenomena digital berikut!",
+            statements: [
+                {id:"A", text:"Echo chamber: Kondisi di mana pengguna media sosial hanya terpapar informasi yang memperkuat keyakinan mereka sendiri."},
+                {id:"B", text:"FOMO (Fear of Missing Out): Perasaan cemas atau takut ketinggalan tren atau peristiwa yang dialami orang lain."},
+                {id:"C", text:"Cyberbullying: Kegiatan berbagi informasi yang bermanfaat secara positif di dunia maya."}
+            ],
+            correctAnswer: {"A":"Benar", "B":"Benar", "C":"Salah"},
+            explanation: "Definisi Echo chamber (A) dan FOMO (B) adalah benar. Cyberbullying adalah perundungan di dunia maya, bukan berbagi informasi positif (C Salah)."
+        },
+
+        // --- MULTIKULTURAL DAN PERMASALAHAN SOSIAL ---
+        {
+            id: 28, kompetensi: "Masyarakat Multikultural", bentuk: "PG",
+            soal: "Sebelum mengenal seorang teman baru dari suku tertentu secara pribadi, Andi sudah memiliki perasaan tidak suka dan curiga terhadap teman tersebut hanya karena mendengar desas-desus negatif tentang suku tersebut dari lingkungannya. Sikap yang ditunjukkan Andi adalah...",
+            options: [{id:"A", text:"Stereotip"}, {id:"B", text:"Prasangka"}, {id:"C", text:"Diskriminasi"}, {id:"D", text:"Etnosentrisme"}, {id:"E", text:"Empati"}],
+            correctAnswer: ["B"],
+            explanation: "Prasangka adalah sikap atau perasaan negatif terhadap seseorang/kelompok sebelum mengetahui fakta secara memadai. Stereotip adalah anggapan/labelnya, sedangkan diskriminasi adalah tindakan nyatanya."
+        },
+        {
+            id: 29, kompetensi: "Sikap Multikultural", bentuk: "MCMA",
+            soal: "Manakah sikap yang tepat dan konstruktif untuk membangun kehidupan masyarakat multikultural yang harmonis? (Pilih semua yang benar)",
+            options: [
+                {id:"A", text:"Mengembangkan sikap toleransi dan saling menghargai perbedaan."},
+                {id:"B", text:"Mengisolasi kelompok minoritas agar tidak terjadi gesekan dengan kelompok mayoritas."},
+                {id:"C", text:"Mendorong dialog lintas budaya untuk membangun saling pengertian."},
+                {id:"D", text:"Menegakkan aturan yang adil dan tidak diskriminatif bagi semua kelompok."},
+                {id:"E", text:"Memaksakan budaya mayoritas untuk diserap sepenuhnya oleh kelompok minoritas."}
+            ],
+            correctAnswer: ["A", "C", "D"],
+            explanation: "Toleransi (A), dialog (C), dan keadilan/non-diskriminasi (D) adalah sikap konstruktif. Mengisolasi (B) dan memaksakan budaya (E) adalah sikap yang melanggar hak dan memicu disintegrasi."
+        },
+        {
+            id: 30, kompetensi: "Permasalahan Sosial", bentuk: "Kategori",
+            soal: "Tentukan Benar atau Salah pernyataan berikut mengenai analisis masalah sosial!",
+            statements: [
+                {id:"A", text:"Kemiskinan tidak selalu disebabkan oleh kemalasan individu, tetapi dapat dipengaruhi oleh struktur ekonomi dan kebijakan yang tidak berpihak."},
+                {id:"B", text:"Masalah sosial hanya dapat diselesaikan oleh individu yang mengalaminya tanpa campur tangan lembaga sosial."},
+                {id:"C", text:"Pengangguran dapat menjadi masalah sosial karena berdampak pada meningkatnya kriminalitas dan ketimpangan."}
+            ],
+            correctAnswer: {"A":"Benar", "B":"Salah", "C":"Benar"},
+            explanation: "Kemiskinan memiliki dimensi struktural (A Benar). Masalah sosial membutuhkan penanganan bersama/lembaga, bukan hanya individu (B Salah). Pengangguran memiliki dampak sosial yang luas seperti kriminalitas (C Benar)."
         }
     ];
 
@@ -763,7 +708,16 @@
 
     window.onscroll = function() {
         const btn = document.getElementById('backToTop');
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        const progressBar = document.getElementById('progressBar');
+        
+        // Progress bar
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        progressBar.style.width = scrolled + "%";
+
+        // Back to top button
+        if (winScroll > 300) {
             btn.style.display = "flex";
         } else {
             btn.style.display = "none";
