@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 Quiz Evaluasi & Apresiasi - TKA Bahasa Indonesia Kelas 6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 10px;
+    color: #333;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+
+  .header {
+    text-align: center;
+    background: rgba(255,255,255,0.95);
+    border-radius: 24px;
+    padding: 25px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+    background-size: 200% 100%;
+    animation: rainbow 3s linear infinite;
+  }
+
+  @keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  .header h1 {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    color: #5b2c8e;
+    margin-bottom: 6px;
+    font-weight: 900;
+  }
+
+  .header p {
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    color: #777;
+    font-weight: 600;
+  }
+
+  .score-bar {
+    background: rgba(255,255,255,0.95);
+    border-radius: 16px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .score-item {
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .score-item .num {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-weight: 900;
+  }
+
+  .score-item .label {
+    font-size: clamp(0.65rem, 2vw, 0.8rem);
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .score-benar .num { color: #27ae60; }
+  .score-salah .num { color: #e74c3c; }
+  .score-total .num { color: #5b2c8e; }
+
+  .progress-container {
+    background: rgba(255,255,255,0.3);
+    border-radius: 20px;
+    height: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6bcb77, #ffd93d, #ff6b6b);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .question-card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 20px;
+    padding: 22px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    border-left: 6px solid #5b2c8e;
+  }
+
+  .question-card.bab11 { border-left-color: #27ae60; }
+  .question-card.bab12 { border-left-color: #2980b9; }
+  .question-card.bab13 { border-left-color: #e74c3c; }
+
+  .bab-tag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .bab11 .bab-tag { background: #27ae60; }
+  .bab12 .bab-tag { background: #2980b9; }
+  .bab13 .bab-tag { background: #e74c3c; }
+
+  .q-number {
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    font-weight: 900;
+    color: #5b2c8e;
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-size: clamp(0.9rem, 2.8vw, 1.05rem);
+    line-height: 1.7;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-weight: 600;
+  }
+
+  .q-text .cerita {
+    background: #f8f4ff;
+    border: 2px dashed #c9a0ff;
+    border-radius: 12px;
+    padding: 12px 15px;
+    margin: 10px 0;
+    font-style: italic;
+    color: #555;
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 2.5px solid #e0e0e0;
+    border-radius: 14px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+    font-weight: 600;
+    color: #444;
+    text-align: left;
+    font-family: inherit;
+    width: 100%;
+    line-height: 1.5;
+  }
+
+  .option-btn:hover:not(.disabled) {
+    border-color: #5b2c8e;
+    background: #f3edff;
+    transform: translateX(4px);
+  }
+
+  .option-btn .opt-letter {
+    background: #5b2c8e;
+    color: white;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .option-btn.correct {
+    border-color: #27ae60;
+    background: #e8f8f0;
+    color: #1a7a42;
+  }
+
+  .option-btn.correct .opt-letter {
+    background: #27ae60;
+  }
+
+  .option-btn.wrong {
+    border-color: #e74c3c;
+    background: #fde8e8;
+    color: #c0392b;
+  }
+
+  .option-btn.wrong .opt-letter {
+    background: #e74c3c;
+  }
+
+  .option-btn.disabled {
+    cursor: default;
+    opacity: 0.7;
+  }
+
+  .option-btn.correct.disabled, .option-btn.wrong.disabled {
+    opacity: 1;
+  }
+
+  .notification {
+    display: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    margin-top: 12px;
+    font-weight: 800;
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    text-align: center;
+    animation: popIn 0.4s ease;
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .notification.benar {
+    display: block;
+    background: linear-gradient(135deg, #d4efdf, #a9dfbf);
+    color: #1e8449;
+    border: 2px solid #27ae60;
+  }
+
+  .notification.salah {
+    display: block;
+    background: linear-gradient(135deg, #fadbd8, #f5b7b1);
+    color: #c0392b;
+    border: 2px solid #e74c3c;
+  }
+
+  .explanation {
+    display: none;
+    background: linear-gradient(135deg, #eaf2ff, #d6e6ff);
+    border: 2px solid #5dade2;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 10px;
+    font-size: clamp(0.82rem, 2.5vw, 0.93rem);
+    line-height: 1.7;
+    color: #2c3e50;
+    animation: slideDown 0.4s ease;
+  }
+
+  .explanation.show { display: block; }
+
+  @keyframes slideDown {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .explanation strong {
+    color: #2980b9;
+  }
+
+  .explanation .kunci {
+    display: inline-block;
+    background: #27ae60;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 30px 10px;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .reset-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 6px 20px rgba(238,90,36,0.4);
+    transition: transform 0.2s;
+  }
+
+  .reset-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .result-box {
+    display: none;
+    background: rgba(255,255,255,0.97);
+    border-radius: 24px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    margin-bottom: 20px;
+    animation: popIn 0.5s ease;
+  }
+
+  .result-box.show { display: block; }
+
+  .result-box h2 {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    color: #5b2c8e;
+    margin-bottom: 10px;
+  }
+
+  .result-box .big-score {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    margin: 10px 0;
+  }
+
+  .result-box .message {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: #666;
+    font-weight: 700;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 6px; }
+    .question-card { padding: 16px 14px; }
+    .option-btn { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>📚 Quiz Evaluasi & Apresiasi</h1>
+    <p>TKA Bahasa Indonesia — SD Kelas 6</p>
+    <p style="font-size:0.8rem; color:#aaa; margin-top:4px;">BAB 11 • BAB 12 • BAB 13 | 25 Soal</p>
+  </div>
+
+  <div class="score-bar">
+    <div class="score-item score-benar">
+      <div class="num" id="scoreBenar">0</div>
+      <div class="label">✅ Benar</div>
+    </div>
+    <div class="score-item score-salah">
+      <div class="num" id="scoreSalah">0</div>
+      <div class="label">❌ Salah</div>
+    </div>
+    <div class="score-item score-total">
+      <div class="num" id="scoreTotal">0/25</div>
+      <div class="label">📝 Dijawab</div>
+    </div>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="result-box" id="resultBox">
+    <h2>🏆 Hasil Quiz Kamu!</h2>
+    <div class="big-score" id="bigScore"></div>
+    <div class="message" id="resultMessage"></div>
+  </div>
+
+  <div id="quizContainer"></div>
+
+  <button class="reset-btn" onclick="resetQuiz()">🔄 Ulangi Quiz</button>
+
+  <div class="footer">
+    ✨ Semangat Belajar! Kamu Pasti Bisa! ✨<br>
+    Kompetensi Evaluasi & Apresiasi — TKA Bahasa Indonesia SD
+  </div>
+
+</div>
+
+<script>
+const quizData = [
+  // ===== BAB 11: RELEVANSI (Soal 1-8) =====
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Perhatikan cerita berikut!<div class="cerita">Andi lupa membawa bekal makan siang ke sekolah. Saat jam istirahat, perutnya berbunyi karena lapar. Teman sebangkunya, Dina, membagi rotinya untuk Andi.</div>Peristiwa dalam cerita tersebut dianggap relevan dengan kehidupan sehari-hari karena ....`,
+    opts: [
+      "Semua siswa selalu lupa membawa bekal setiap hari",
+      "Lupa membawa bekal dan berbagi makanan dengan teman merupakan hal yang dapat terjadi dalam kehidupan nyata",
+      "Sekolah tidak memperbolehkan siswa membawa bekal",
+      "Dina adalah satu-satunya siswa yang membawa roti"
+    ],
+    ans: 1,
+    exp: `Peristiwa lupa membawa bekal dan teman yang mau berbagi makanan sangat mungkin terjadi di kehidupan nyata. Tidak perlu terjadi setiap hari atau pada semua orang — yang penting peristiwa tersebut <strong>masuk akal dan bisa terjadi</strong>.`
+  },
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Perhatikan kalimat berikut!<div class="cerita">Saat musim kemarau, sungai di desa Melati meluap dan membanjiri sawah-sawah warga.</div>Apakah peristiwa tersebut relevan dengan pengetahuan sehari-hari?`,
+    opts: [
+      "Relevan, karena musim kemarau selalu menyebabkan banjir",
+      "Tidak relevan, karena musim kemarau biasanya menyebabkan kekeringan, bukan banjir",
+      "Relevan, karena sungai selalu meluap di musim apa pun",
+      "Tidak relevan, karena sawah tidak bisa terkena banjir"
+    ],
+    ans: 1,
+    exp: `Berdasarkan pengetahuan sehari-hari, <strong>musim kemarau</strong> identik dengan cuaca panas dan kering. Sungai meluap dan banjir biasanya terjadi di <strong>musim hujan</strong>. Jadi, peristiwa tersebut <strong>tidak relevan</strong> dengan pengetahuan umum.`
+  },
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Perhatikan cerita berikut!<div class="cerita">Maya belajar dengan tekun setiap malam selama satu bulan. Saat ujian, ia berhasil mendapat nilai terbaik di kelasnya.</div>Pengalaman pribadi yang paling relevan dengan cerita Maya adalah ....`,
+    opts: [
+      "Pernah mendapat hadiah ulang tahun dari orang tua",
+      "Pernah belajar rajin sebelum ujian dan mendapat nilai bagus",
+      "Pernah pergi berlibur ke pantai bersama keluarga",
+      "Pernah bermain sepak bola di lapangan sekolah"
+    ],
+    ans: 1,
+    exp: `Relevansi dengan pengalaman pribadi berarti <strong>kesamaan situasi</strong>. Cerita Maya tentang belajar tekun dan mendapat nilai bagus paling cocok dihubungkan dengan pengalaman <strong>belajar rajin dan mendapat nilai bagus</strong>.`
+  },
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Relevansi dalam sebuah teks berarti ....`,
+    opts: [
+      "Keindahan bahasa yang digunakan dalam teks",
+      "Jumlah tokoh yang ada dalam cerita",
+      "Hubungan atau kesesuaian antara peristiwa dalam teks dengan hal lain",
+      "Panjang atau pendeknya sebuah cerita"
+    ],
+    ans: 2,
+    exp: `<strong>Relevansi</strong> artinya hubungan atau kesesuaian antara satu hal dengan hal lainnya. Dalam konteks TKA, kita menilai apakah peristiwa dalam teks berhubungan atau sesuai dengan kehidupan nyata, pengalaman, atau pengetahuan kita.`
+  },
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Perhatikan cerita berikut!<div class="cerita">Fajar berlari mengelilingi lapangan selama 30 menit. Setelah selesai, ia merasa sangat haus dan langsung meminum air putih.</div>Peristiwa Fajar merasa haus setelah berlari sesuai dengan pengetahuan sehari-hari karena ....`,
+    opts: [
+      "Berlari membuat seseorang merasa mengantuk",
+      "Tubuh kehilangan cairan saat beraktivitas fisik sehingga membutuhkan air",
+      "Air putih hanya boleh diminum setelah berlari",
+      "Fajar tidak suka minum air sebelum berlari"
+    ],
+    ans: 1,
+    exp: `Berdasarkan pengetahuan sehari-hari, saat berolahraga atau beraktivitas fisik, <strong>tubuh mengeluarkan keringat dan kehilangan cairan</strong>. Oleh karena itu, tubuh membutuhkan air untuk mengganti cairan yang hilang. Peristiwa Fajar minum air setelah berlari sangat masuk akal.`
+  },
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Perhatikan pernyataan berikut!<div class="cerita">Ketika matahari bersinar sangat terik di siang hari, Pak Budi justru menyalakan lampu jalan di depan rumahnya agar terang.</div>Peristiwa tersebut ....`,
+    opts: [
+      "Sangat relevan karena lampu jalan selalu diperlukan",
+      "Kurang relevan karena siang hari yang terik sudah terang sehingga lampu jalan tidak diperlukan",
+      "Relevan karena Pak Budi suka lampu yang terang",
+      "Tidak bisa dinilai relevansinya"
+    ],
+    ans: 1,
+    exp: `Di siang hari yang terik, suasana sudah sangat terang oleh cahaya matahari. Menyalakan lampu jalan pada kondisi tersebut <strong>kurang relevan</strong> (tidak sesuai) dengan kebiasaan sehari-hari karena tidak diperlukan.`
+  },
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Saat menghubungkan peristiwa dalam teks dengan pengalaman pribadi, hal yang paling penting diperhatikan adalah ....`,
+    opts: [
+      "Pengalaman harus sama persis dengan cerita, termasuk nama tokoh",
+      "Pengalaman harus terjadi di tempat yang sama dengan cerita",
+      "Kesamaan situasi atau jenis pengalaman, bukan harus sama persis",
+      "Pengalaman harus lebih menarik daripada cerita"
+    ],
+    ans: 2,
+    exp: `Ketika menghubungkan cerita dengan pengalaman pribadi, yang penting adalah <strong>kesamaan situasi atau jenis pengalaman</strong>. Misalnya, jika tokoh kehilangan buku, kita bisa menghubungkan dengan pengalaman kehilangan barang apa pun yang kita sukai — tidak harus buku yang sama.`
+  },
+  {
+    bab: "BAB 11", babClass: "bab11",
+    q: `Perhatikan cerita berikut!<div class="cerita">Sinta sedang sakit demam. Ibunya menyuruh Sinta beristirahat di tempat tidur dan minum obat secara teratur.</div>Peristiwa tersebut relevan dengan kehidupan sehari-hari karena ....`,
+    opts: [
+      "Semua orang sakit demam setiap minggu",
+      "Beristirahat dan minum obat saat sakit merupakan hal yang lazim dilakukan",
+      "Ibu Sinta adalah seorang dokter",
+      "Sinta tidak pernah sakit sebelumnya"
+    ],
+    ans: 1,
+    exp: `Ketika seseorang sakit demam, <strong>beristirahat dan minum obat</strong> adalah tindakan yang sangat umum dan lazim dilakukan dalam kehidupan sehari-hari. Ini sesuai dengan pengetahuan kita tentang cara menjaga kesehatan.`
+  },
+
+  // ===== BAB 12: KESESUAIAN (Soal 9-17) =====
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Perhatikan cerita berikut!<div class="cerita">Malam hari, di tengah hutan yang gelap, Rara berjalan pulang sendirian sambil menyanyikan lagu gembira. Tiba-tiba, ia mendengar suara aneh dari semak-semak dan merasa sangat ketakutan.</div>Unsur cerita yang saling sesuai dalam kutipan tersebut adalah ....`,
+    opts: [
+      "Latar malam di hutan gelap sesuai dengan perasaan ketakutan Rara",
+      "Latar siang hari di sekolah sesuai dengan perasaan takut",
+      "Tokoh Rara tidak memiliki perasaan apa pun",
+      "Suara aneh dari semak-semak membuat Rara merasa gembira"
+    ],
+    ans: 0,
+    exp: `<strong>Latar</strong> (malam hari, hutan gelap) sangat sesuai dengan <strong>perasaan tokoh</strong> (ketakutan). Suasana gelap dan sepi di hutan memang wajar membuat seseorang merasa takut. Hubungan antarunsur cerita ini saling cocok dan masuk akal.`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Perhatikan informasi berikut!<div class="cerita">Informasi 1: Kucing adalah hewan karnivora yang memakan daging.<br>Informasi 2: Kucing hanya memakan rumput dan daun-daunan.</div>Hubungan kedua informasi tersebut adalah ....`,
+    opts: [
+      "Saling mendukung karena kucing suka makan",
+      "Saling bertentangan karena karnivora memakan daging, bukan hanya rumput",
+      "Tidak ada hubungannya sama sekali",
+      "Saling melengkapi karena kucing makan segalanya"
+    ],
+    ans: 1,
+    exp: `Informasi 1 menyatakan kucing adalah <strong>karnivora</strong> (pemakan daging), sedangkan Informasi 2 menyatakan kucing <strong>hanya memakan rumput</strong>. Kedua informasi ini <strong>saling bertentangan</strong> karena tidak mungkin keduanya benar secara bersamaan.`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Perhatikan teks dan ilustrasi berikut!<div class="cerita">Teks: "Para siswa kelas 6 sedang melakukan percobaan sains di laboratorium sekolah. Mereka menggunakan mikroskop untuk mengamati sel daun."</div>Ilustrasi yang paling sesuai dengan teks tersebut adalah ....`,
+    opts: [
+      "Gambar siswa sedang bermain basket di lapangan",
+      "Gambar siswa sedang memasak di dapur",
+      "Gambar siswa sedang mengamati sesuatu melalui mikroskop di ruangan laboratorium",
+      "Gambar siswa sedang membaca buku di perpustakaan"
+    ],
+    ans: 2,
+    exp: `Teks menjelaskan siswa melakukan <strong>percobaan sains di laboratorium</strong> menggunakan <strong>mikroskop</strong>. Ilustrasi yang sesuai harus menunjukkan kegiatan tersebut, yaitu siswa yang sedang mengamati sesuatu melalui mikroskop di laboratorium.`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Berikut yang termasuk unsur-unsur penting dalam teks fiksi adalah ....`,
+    opts: [
+      "Judul, daftar isi, dan indeks",
+      "Tokoh, latar, alur, dan amanat",
+      "Data, grafik, dan tabel",
+      "Rumus, hipotesis, dan kesimpulan"
+    ],
+    ans: 1,
+    exp: `Unsur-unsur penting dalam teks fiksi (cerita) meliputi: <strong>tokoh</strong> (pelaku), <strong>latar</strong> (tempat, waktu, suasana), <strong>alur</strong> (urutan kejadian), dan <strong>amanat</strong> (pesan moral). Pilihan lainnya lebih cocok untuk teks nonfiksi atau karya ilmiah.`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Perhatikan cerita berikut!<div class="cerita">Di sebuah desa yang damai, hiduplah seorang anak bernama Bima yang sangat pemalas. Suatu hari, desanya terkena banjir besar. Bima akhirnya sadar bahwa ia harus rajin membantu membersihkan selokan agar banjir tidak terjadi lagi.</div>Amanat yang sesuai dengan cerita tersebut adalah ....`,
+    opts: [
+      "Kita harus suka bermain air saat banjir",
+      "Kita harus rajin dan peduli terhadap lingkungan agar terhindar dari bencana",
+      "Banjir hanya terjadi di desa yang damai",
+      "Bima adalah anak yang paling rajin di desanya"
+    ],
+    ans: 1,
+    exp: `Amanat harus <strong>sesuai dengan peristiwa dan perubahan tokoh</strong> dalam cerita. Bima yang awalnya pemalas menjadi sadar untuk rajin membersihkan selokan. Amanatnya: <strong>kita harus rajin dan peduli lingkungan</strong> agar terhindar dari bencana seperti banjir.`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Perhatikan informasi berikut!<div class="cerita">Informasi 1: Sarapan pagi sangat penting untuk memberikan energi sebelum beraktivitas.<br>Informasi 2: Melewatkan sarapan dapat membuat tubuh lemas dan sulit berkonsentrasi.</div>Hubungan kedua informasi tersebut adalah ....`,
+    opts: [
+      "Saling bertentangan",
+      "Tidak ada hubungannya",
+      "Saling mendukung karena keduanya membahas pentingnya sarapan",
+      "Saling melemahkan"
+    ],
+    ans: 2,
+    exp: `Kedua informasi <strong>saling mendukung</strong>. Informasi 1 menyatakan sarapan penting untuk energi, dan Informasi 2 menjelaskan akibat jika tidak sarapan (lemas, sulit konsentrasi). Keduanya memperkuat pesan yang sama tentang <strong>pentingnya sarapan</strong>.`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Perhatikan teks dan ilustrasi berikut!<div class="cerita">Teks: "Seekor kelinci sedang melompat-lompat di padang rumput yang hijau sambil memakan wortel."</div>Ilustrasi yang TIDAK sesuai dengan teks tersebut adalah ....`,
+    opts: [
+      "Gambar kelinci di padang rumput hijau",
+      "Gambar kelinci sedang memakan wortel",
+      "Gambar kelinci sedang berenang di kolam renang",
+      "Gambar padang rumput yang hijau"
+    ],
+    ans: 2,
+    exp: `Teks menggambarkan kelinci yang <strong>melompat di padang rumput dan memakan wortel</strong>. Ilustrasi kelinci <strong>berenang di kolam renang</strong> tidak sesuai karena tidak ada informasi tentang kelinci berenang dalam teks. Perhatikan detail kegiatan tokoh!`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Perhatikan cerita berikut!<div class="cerita">Pagi hari yang cerah, Nisa berangkat ke sekolah dengan gembira. Di jalan, ia bertemu teman-temannya dan mereka berjalan bersama. Sesampainya di sekolah, bel masuk berbunyi dan mereka segera masuk ke kelas.</div>Apakah hubungan antarunsur dalam cerita tersebut sudah sesuai?`,
+    opts: [
+      "Tidak sesuai, karena pagi hari tidak mungkin cerah",
+      "Tidak sesuai, karena Nisa seharusnya sedih pergi ke sekolah",
+      "Sesuai, karena latar pagi hari, tokoh Nisa dan teman-temannya, serta alur berangkat ke sekolah saling berhubungan dengan logis",
+      "Sesuai, karena semua cerita pasti memiliki alur yang benar"
+    ],
+    ans: 2,
+    exp: `Semua unsur cerita <strong>saling sesuai dan logis</strong>: latar (pagi hari cerah), tokoh (Nisa dan teman-temannya), alur (berangkat → bertemu teman → sampai di sekolah → masuk kelas), semuanya berhubungan secara masuk akal dan berurutan.`
+  },
+  {
+    bab: "BAB 12", babClass: "bab12",
+    q: `Teks nonfiksi adalah teks yang berisi ....`,
+    opts: [
+      "Cerita khayalan tentang peri dan naga",
+      "Informasi berdasarkan fakta atau pengetahuan nyata",
+      "Puisi dan pantun yang indah",
+      "Dongeng sebelum tidur"
+    ],
+    ans: 1,
+    exp: `Teks nonfiksi berisi <strong>informasi berdasarkan fakta atau pengetahuan nyata</strong>. Contohnya: artikel tentang hewan, laporan pengamatan, teks tentang kesehatan, dan lain-lain. Berbeda dengan fiksi yang berisi cerita rekaan/khayalan.`
+  },
+
+  // ===== BAB 13: RESPONS EMOSIONAL (Soal 18-25) =====
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Perhatikan cerita berikut!<div class="cerita">Setelah menabung selama satu tahun dari uang jajannya, akhirnya Rani berhasil membeli sepeda impiannya. Ia memeluk sepedanya dengan mata berkaca-kaca.</div>Perasaan yang paling tepat setelah membaca cerita tersebut adalah ....`,
+    opts: [
+      "Takut dan cemas",
+      "Marah dan kecewa",
+      "Bahagia dan terharu",
+      "Bosan dan mengantuk"
+    ],
+    ans: 2,
+    exp: `Rani berhasil mencapai tujuannya (membeli sepeda impian) setelah berusaha keras menabung selama setahun. Kata "mata berkaca-kaca" menunjukkan emosi yang mendalam. Perasaan yang paling tepat adalah <strong>bahagia dan terharu</strong> atas perjuangan dan keberhasilannya.`
+  },
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Perhatikan cerita berikut!<div class="cerita">Budi melihat seorang nenek tua kesulitan menyeberang jalan yang ramai. Tanpa ragu, Budi menghampiri nenek itu dan menuntunnya menyeberang dengan hati-hati.</div>Respons emosional pembaca terhadap tindakan Budi adalah ....`,
+    opts: [
+      "Marah karena Budi mengganggu lalu lintas",
+      "Kagum dan terharu karena Budi menunjukkan kepedulian terhadap sesama",
+      "Takut karena jalanan sangat ramai",
+      "Bosan karena cerita terlalu pendek"
+    ],
+    ans: 1,
+    exp: `Tindakan Budi yang <strong>tanpa ragu membantu nenek</strong> menyeberang jalan menunjukkan kepedulian dan kebaikan hati. Respons emosional yang paling tepat adalah <strong>kagum dan terharu</strong> karena tindakan tersebut menyentuh hati.`
+  },
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Perhatikan akhir cerita berikut!<div class="cerita">Setelah berhari-hari tersesat di hutan, akhirnya Doni berhasil menemukan jalan pulang. Ia berlari memeluk ibunya yang sudah menangis mencarinya.</div>Perasaan yang paling dominan di akhir cerita tersebut adalah ....`,
+    opts: [
+      "Kecewa dan sedih",
+      "Marah dan kesal",
+      "Lega dan bahagia",
+      "Takut dan khawatir"
+    ],
+    ans: 2,
+    exp: `Kata kunci: <strong>"akhirnya berhasil menemukan jalan pulang"</strong> dan <strong>"memeluk ibunya"</strong>. Setelah mengalami situasi yang menegangkan (tersesat), masalah akhirnya terselesaikan. Perasaan yang paling dominan adalah <strong>lega dan bahagia</strong>.`
+  },
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Respons emosional terhadap sebuah cerita harus didasarkan pada ....`,
+    opts: [
+      "Perasaan pribadi pembaca yang tidak ada hubungannya dengan cerita",
+      "Bukti dan peristiwa yang terjadi dalam cerita",
+      "Jumlah halaman cerita",
+      "Gambar sampul buku cerita"
+    ],
+    ans: 1,
+    exp: `Respons emosional harus <strong>didasarkan pada bukti dalam cerita</strong>, seperti tindakan tokoh, peristiwa yang dialami, dan akhir cerita. Kita tidak boleh memilih perasaan yang tidak didukung oleh isi cerita. Misalnya, jika tokoh berhasil, perasaan yang tepat adalah bahagia, bukan takut.`
+  },
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Perhatikan cerita berikut!<div class="cerita">Lina sangat ingin mengikuti lomba menyanyi di sekolah. Ia sudah berlatih setiap hari selama dua bulan. Namun, pada hari lomba, Lina tiba-tiba sakit dan tidak bisa ikut. Ia hanya bisa menangis di tempat tidur.</div>Perasaan yang paling tepat setelah membaca cerita tersebut adalah ....`,
+    opts: [
+      "Bahagia dan bangga",
+      "Sedih dan kecewa",
+      "Lega dan tenang",
+      "Antusias dan bersemangat"
+    ],
+    ans: 1,
+    exp: `Lina sudah berusaha keras berlatih selama dua bulan, tetapi <strong>gagal mengikuti lomba karena sakit</strong>. Kata "menangis di tempat tidur" menunjukkan kesedihan mendalam. Perasaan yang paling tepat adalah <strong>sedih dan kecewa</strong> atas kegagalan yang tidak disengaja.`
+  },
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Perhatikan cerita berikut!<div class="cerita">Di malam yang gelap dan sunyi, Tono mendengar suara langkah kaki mendekat dari belakang. Ia menoleh, tetapi tidak ada siapa-siapa. Suara itu semakin dekat dan semakin keras.</div>Perasaan yang paling mungkin dirasakan pembaca saat membaca cerita tersebut adalah ....`,
+    opts: [
+      "Bahagia dan gembira",
+      "Bosan dan mengantuk",
+      "Takut dan tegang",
+      "Lega dan santai"
+    ],
+    ans: 2,
+    exp: `Kata-kata kunci: <strong>"malam gelap dan sunyi"</strong>, <strong>"suara langkah kaki"</strong>, <strong>"tidak ada siapa-siapa"</strong>, <strong>"semakin dekat dan keras"</strong>. Semua unsur ini membangun suasana yang mencekam. Perasaan yang paling tepat adalah <strong>takut dan tegang</strong>.`
+  },
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Perhatikan cerita berikut!<div class="cerita">Pak Guru mengumumkan bahwa seluruh siswa kelas 6 lulus ujian dengan nilai sangat memuaskan. Seluruh kelas bersorak gembira dan saling berpelukan.</div>Perasaan yang paling tepat berdasarkan akhir cerita tersebut adalah ....`,
+    opts: [
+      "Khawatir dan cemas",
+      "Sedih dan kecewa",
+      "Bahagia dan bangga",
+      "Takut dan tegang"
+    ],
+    ans: 2,
+    exp: `Kata kunci: <strong>"lulus ujian"</strong>, <strong>"nilai sangat memuaskan"</strong>, <strong>"bersorak gembira"</strong>, <strong>"saling berpelukan"</strong>. Semua menunjukkan keberhasilan dan kegembiraan. Perasaan yang paling tepat adalah <strong>bahagia dan bangga</strong>.`
+  },
+  {
+    bab: "BAB 13", babClass: "bab13",
+    q: `Perhatikan cerita berikut!<div class="cerita">Aldi menemukan dompet berisi uang yang cukup banyak di halaman sekolah. Meskipun tidak ada orang yang melihat, Aldi tetap menyerahkan dompet itu kepada guru piket. Ternyata, dompet itu milik seorang ibu yang sedang menangis mencarinya.</div>Respons emosional yang paling tepat terhadap tokoh Aldi adalah ....`,
+    opts: [
+      "Marah karena Aldi tidak mengambil uangnya",
+      "Kagum karena Aldi jujur dan bertanggung jawab meskipun tidak ada yang melihat",
+      "Takut karena dompet itu berisi uang banyak",
+      "Bosan karena cerita tentang dompet sudah biasa"
+    ],
+    ans: 1,
+    exp: `Aldi menunjukkan <strong>kejujuran luar biasa</strong> dengan menyerahkan dompet meskipun tidak ada yang melihat. Tindakan ini patut diteladani. Respons emosional yang paling tepat adalah <strong>kagum</strong> karena Aldi melakukan hal yang benar dan mulia.`
+  }
+];
+
+let scoreBenar = 0;
+let scoreSalah = 0;
+let answered = 0;
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+
+  quizData.forEach((item, idx) => {
+    const letters = ['A', 'B', 'C', 'D'];
+    let optsHTML = '';
+    item.opts.forEach((opt, oi) => {
+      optsHTML += `
+        <button class="option-btn" id="opt-${idx}-${oi}" onclick="selectAnswer(${idx}, ${oi})">
+          <span class="opt-letter">${letters[oi]}</span>
+          <span>${opt}</span>
+        </button>`;
+    });
+
+    const card = document.createElement('div');
+    card.className = `question-card ${item.babClass}`;
+    card.id = `qcard-${idx}`;
+    card.innerHTML = `
+      <span class="bab-tag">${item.bab}</span>
+      <div class="q-number">Soal ${idx + 1} dari 25</div>
+      <div class="q-text">${item.q}</div>
+      <div class="options">${optsHTML}</div>
+      <div class="notification" id="notif-${idx}"></div>
+      <div class="explanation" id="exp-${idx}">
+        <span class="kunci">🔑 Kunci: ${letters[item.ans]}</span><br>
+        ${item.exp}
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function selectAnswer(qIdx, optIdx) {
+  const item = quizData[qIdx];
+  const btns = document.querySelectorAll(`[id^="opt-${qIdx}-"]`);
+
+  // Prevent re-answering
+  if (btns[0].classList.contains('disabled')) return;
+
+  btns.forEach(b => b.classList.add('disabled'));
+
+  const notif = document.getElementById(`notif-${qIdx}`);
+  const exp = document.getElementById(`exp-${qIdx}`);
+
+  if (optIdx === item.ans) {
+    btns[optIdx].classList.add('correct');
+    notif.className = 'notification benar';
+    notif.textContent = '🎉 BENAR! Hebat sekali!';
+    scoreBenar++;
+  } else {
+    btns[optIdx].classList.add('wrong');
+    btns[item.ans].classList.add('correct');
+    notif.className = 'notification salah';
+    notif.textContent = '😔 SALAH! Yuk, baca penjelasannya!';
+    scoreSalah++;
+  }
+
+  answered++;
+  exp.classList.add('show');
+
+  document.getElementById('scoreBenar').textContent = scoreBenar;
+  document.getElementById('scoreSalah').textContent = scoreSalah;
+  document.getElementById('scoreTotal').textContent = `${answered}/25`;
+  document.getElementById('progressFill').style.width = `${(answered / 25) * 100}%`;
+
+  if (answered === 25) showResult();
+}
+
+function showResult() {
+  const box = document.getElementById('resultBox');
+  const pct = Math.round((scoreBenar / 25) * 100);
+  document.getElementById('bigScore').textContent = `${scoreBenar}/25`;
+  document.getElementById('bigScore').style.color = pct >= 80 ? '#27ae60' : pct >= 60 ? '#f39c12' : '#e74c3c';
+
+  let msg = '';
+  if (pct === 100) msg = '🌟 SEMPURNA! Kamu luar biasa hebat!';
+  else if (pct >= 80) msg = '🏆 Sangat Bagus! Kamu hampir sempurna!';
+  else if (pct >= 60) msg = '👍 Bagus! Terus belajar ya!';
+  else if (pct >= 40) msg = '💪 Lumayan! Ayo tingkatkan lagi!';
+  else msg = '📖 Jangan menyerah! Baca lagi materinya ya!';
+
+  document.getElementById('resultMessage').textContent = msg;
+  box.classList.add('show');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  scoreBenar = 0;
+  scoreSalah = 0;
+  answered = 0;
+  document.getElementById('scoreBenar').textContent = '0';
+  document.getElementById('scoreSalah').textContent = '0';
+  document.getElementById('scoreTotal').textContent = '0/25';
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('resultBox').classList.remove('show');
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+
+</body>
+</html>

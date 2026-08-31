@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis TKA Bahasa Indonesia SD - Pemahaman Inferensial</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f8ff;color:#25324a;line-height:1.6}
+.container{max-width:900px;margin:auto;padding:16px}
+.hero{background:linear-gradient(135deg,#4f7cff,#765cf5);color:#fff;padding:28px 22px;border-radius:24px;box-shadow:0 8px 25px #0001;margin-bottom:16px}
+.hero h1{margin:8px 0;font-size:clamp(25px,5vw,38px);line-height:1.15}
+.hero p{margin:0;font-size:15px}
+.badge{display:inline-block;padding:5px 11px;border-radius:20px;background:#ffffff2b;font-size:13px;font-weight:bold}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid #dfe6f2;border-radius:15px;text-align:center;padding:12px;box-shadow:0 5px 18px #0000000b}
+.stat b{display:block;font-size:21px;color:#4f7cff}
+.card{background:#fff;border:1px solid #dfe6f2;border-radius:19px;padding:20px;margin:16px 0;box-shadow:0 7px 22px #0000000b}
+.qtop{display:flex;gap:10px;align-items:flex-start}
+.num{background:#eef3ff;color:#4f7cff;min-width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:bold}
+.question{font-weight:bold;font-size:17px;padding-top:5px}
+.passage{background:#f7f9ff;border-left:5px solid #4f7cff;padding:13px 15px;border-radius:10px;margin:14px 0;font-size:15px;white-space:pre-line}
+.options{display:grid;gap:10px;margin-top:14px}
+.option{border:2px solid #dfe6f2;background:#fff;border-radius:13px;padding:12px 14px;text-align:left;font:inherit;color:#25324a;cursor:pointer;width:100%;transition:.15s}
+.option:hover:not(:disabled){border-color:#4f7cff;background:#eef3ff}
+.option:disabled{cursor:default}
+.option.correct{border-color:#159957;background:#eaf9f1}
+.option.wrong{border-color:#d64545;background:#fff0f0}
+.feedback{display:none;margin-top:14px;padding:14px 16px;border-radius:13px}
+.feedback.show{display:block}
+.good{background:#eaf9f1;border:1px solid #b8e5cc}
+.bad{background:#fff0f0;border:1px solid #f0c2c2}
+.feedback strong{display:block;font-size:18px}
+.answer{font-weight:bold;margin-top:5px}
+.result{text-align:center;background:#fff;border:1px solid #dfe6f2;border-radius:20px;padding:20px;box-shadow:0 7px 22px #0000000b;margin:16px 0}
+.score{font-size:42px;font-weight:900;color:#4f7cff}
+.bar{height:11px;background:#e7ecf5;border-radius:20px;overflow:hidden;margin:10px 0}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#4f7cff,#765cf5);transition:.3s}
+button.reset{border:0;background:#eef3ff;color:#3157c9;padding:11px 18px;border-radius:12px;font-weight:bold;cursor:pointer}
+footer{text-align:center;color:#6d788b;font-size:13px;padding:12px}
+@media(max-width:600px){.container{padding:10px}.hero{padding:22px 17px;border-radius:18px}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}.card{padding:15px;border-radius:16px}.question{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="hero">
+<span class="badge">🎯 TKA Bahasa Indonesia • SD Kelas 6</span>
+<h1>🧠 Kuis Pemahaman Inferensial</h1>
+<p>25 soal latihan. Pilih jawaban, lihat BENAR/SALAH, lalu pelajari pembahasannya!</p>
+</header>
+
+<div class="stats">
+<div class="stat"><b>25</b>Soal</div>
+<div class="stat"><b>🧩</b>HOTS & Inferensi</div>
+<div class="stat"><b>📱</b>Responsif</div>
+</div>
+
+<section class="result">
+<div>Skor sementara</div>
+<div class="score"><span id="score">0</span> / 25</div>
+<div class="bar"><div class="fill" id="fill"></div></div>
+<div id="status">Yuk mulai! Cari petunjuk dalam teks dan buat kesimpulan. 🚀</div>
+<br>
+<button class="reset" onclick="resetQuiz()">🔄 Ulangi Kuis</button>
+</section>
+
+<main id="quiz"></main>
+<footer>💡 Ingat: inferensi harus berdasarkan petunjuk yang ada dalam teks, bukan sekadar tebakan.</footer>
+</div>
+
+<script>
+const questions=[
+{p:"Setiap sore, Nisa menyiram tanaman di halaman. Ia juga membersihkan daun yang kering dan memberikan pupuk sesuai petunjuk. Beberapa minggu kemudian, tanaman di halaman tumbuh subur dan berbunga.",q:"Kesimpulan yang paling tepat adalah ...",o:["A. Nisa tidak menyukai tanaman.","B. Tanaman tumbuh subur karena dirawat dengan baik.","C. Semua tanaman pasti berbunga setiap minggu.","D. Nisa hanya menyiram tanaman sekali."],a:1,e:"Nisa rutin menyiram, membersihkan, dan memberi pupuk. Dari beberapa petunjuk itu dapat disimpulkan bahwa tanaman tumbuh subur karena dirawat dengan baik."},
+{p:"Pagi itu, Rafi memasukkan buku pelajaran ke dalam tas. Ia memeriksa jadwal di meja dan memastikan semua tugas sudah selesai. Setelah sarapan, Rafi segera berangkat ke sekolah.",q:"Apa yang dapat disimpulkan tentang Rafi?",o:["A. Rafi mempersiapkan keperluan sekolah dengan baik.","B. Rafi lupa membawa buku.","C. Rafi tidak memiliki tugas.","D. Rafi terlambat bangun."],a:0,e:"Rafi memasukkan buku, memeriksa jadwal, dan memastikan tugas selesai. Hal itu menunjukkan bahwa ia mempersiapkan keperluan sekolah dengan baik."},
+{p:"Langit mulai gelap. Angin bertiup kencang dan beberapa orang segera menutup jendela rumah. Tidak lama kemudian terdengar suara petir.",q:"Peristiwa yang paling mungkin terjadi adalah ...",o:["A. Cuaca akan atau sedang mengalami hujan.","B. Matahari semakin terik.","C. Musim kemarau semakin panjang.","D. Udara pasti menjadi sangat panas."],a:0,e:"Langit gelap, angin kencang, jendela ditutup, dan terdengar petir merupakan petunjuk kuat adanya hujan atau cuaca hujan."},
+{p:"Di kelas, Sinta melihat pensil temannya jatuh. Ia mengambil pensil itu dan menyerahkannya kepada pemiliknya. Sinta tidak menyimpan pensil tersebut meskipun tidak ada yang melihat.",q:"Sifat Sinta yang dapat disimpulkan adalah ...",o:["A. Sombong","B. Jujur","C. Pemalas","D. Ceroboh"],a:1,e:"Sinta mengembalikan barang milik orang lain meskipun tidak ada yang melihat. Tindakan itu menunjukkan kejujuran."},
+{p:"Doni awalnya takut mengikuti lomba membaca puisi. Gurunya mengajaknya berlatih setiap hari. Setelah beberapa kali berlatih, Doni berani tampil di depan banyak orang.",q:"Perubahan karakter Doni adalah ...",o:["A. Rajin menjadi malas","B. Berani menjadi takut","C. Takut menjadi berani","D. Peduli menjadi acuh"],a:2,e:"Pada awalnya Doni takut tampil. Setelah berlatih, ia berani tampil. Jadi, karakternya berubah dari takut menjadi berani."},
+{p:"Pagi hari, halaman sekolah masih sepi. Saat bel berbunyi, siswa mulai masuk ke kelas. Ketika waktu istirahat tiba, siswa keluar menuju halaman untuk bermain.",q:"Bagaimana perubahan latar tempat dalam cerita?",o:["A. Rumah → pasar → taman","B. Halaman → kelas → halaman","C. Kelas → rumah → halaman","D. Sekolah → rumah → pasar"],a:1,e:"Pada awalnya kegiatan terjadi di halaman, kemudian siswa masuk ke kelas, lalu saat istirahat kembali ke halaman."},
+{p:"Kakek menanam pohon mangga yang masih kecil. Ia menyiramnya setiap pagi. Setelah beberapa tahun, pohon tersebut menjadi besar dan menghasilkan banyak buah.",q:"Perubahan objek yang terjadi adalah ...",o:["A. Besar menjadi kecil","B. Berbuah menjadi tidak berbuah","C. Pohon kecil menjadi besar dan berbuah","D. Pohon menjadi layu karena disiram"],a:2,e:"Objeknya adalah pohon mangga. Awalnya kecil, kemudian menjadi besar dan menghasilkan buah."},
+{p:"Mila mendapat nilai kurang baik pada ulangan pertama. Ia kemudian membuat jadwal belajar dan rutin mengerjakan latihan. Pada ulangan berikutnya, nilainya meningkat.",q:"Apa kesimpulan yang paling tepat?",o:["A. Mila berhenti belajar.","B. Nilai Mila meningkat setelah ia belajar lebih teratur.","C. Semua nilai ulangan pasti meningkat.","D. Mila tidak pernah mengerjakan latihan."],a:1,e:"Teks menunjukkan perubahan kebiasaan Mila: membuat jadwal dan berlatih. Setelah itu nilainya meningkat."},
+{p:"Budi selalu datang sebelum bel masuk. Ia menyiapkan buku dan alat tulis sebelum pelajaran dimulai. Ketika guru memberi tugas, Budi segera mengerjakannya.",q:"Nilai yang paling kuat ditunjukkan Budi adalah ...",o:["A. Disiplin dan tanggung jawab","B. Kesombongan","C. Kemalasan","D. Ketidakpedulian"],a:0,e:"Datang sebelum bel menunjukkan disiplin, sedangkan segera mengerjakan tugas menunjukkan tanggung jawab."},
+{p:"Alya membawa bekal dari rumah. Saat melihat temannya lupa membawa makanan, Alya membagi sebagian bekalnya. Temannya mengucapkan terima kasih.",q:"Amanat yang dapat disimpulkan adalah ...",o:["A. Kita harus menyimpan semua makanan sendiri.","B. Kita sebaiknya berbagi dan membantu teman yang membutuhkan.","C. Kita tidak boleh membawa bekal.","D. Teman harus selalu memberi makanan."],a:1,e:"Alya berbagi ketika temannya membutuhkan. Perilaku tersebut mengajarkan pentingnya berbagi dan membantu orang lain."},
+{p:"Reno dikenal sebagai anak yang 'besar kepala'. Ia sering membanggakan dirinya sendiri dan merasa lebih hebat daripada teman-temannya.",q:"Makna ungkapan 'besar kepala' adalah ...",o:["A. Pandai","B. Sombong","C. Takut","D. Rajin"],a:1,e:"Dalam konteks kalimat, Reno suka membanggakan diri dan merasa lebih hebat. Jadi, 'besar kepala' berarti sombong."},
+{p:"Setelah berlatih selama berbulan-bulan, nama Sari mulai dikenal banyak orang. Ia sering diundang untuk tampil dalam berbagai acara.",q:"Makna ungkapan 'naik daun' yang paling sesuai untuk keadaan Sari adalah ...",o:["A. Menjadi semakin terkenal","B. Memanjat pohon","C. Menjadi semakin kecil","D. Menanam daun"],a:0,e:"Dalam konteks ini, Sari semakin dikenal dan sering tampil. 'Naik daun' berarti menjadi semakin terkenal."},
+{p:"Ayah tetap tenang ketika menghadapi masalah di tempat kerja. Ia mendengarkan semua pendapat sebelum mengambil keputusan.",q:"Makna 'kepala dingin' pada teks adalah ...",o:["A. Tidak memakai topi","B. Tenang dan tidak terburu-buru","C. Sedang sakit","D. Tidak memiliki pendapat"],a:1,e:"Ayah tetap tenang dan mendengarkan pendapat sebelum memutuskan sesuatu. Itulah makna 'kepala dingin'."},
+{p:"Tono membantu ibu membawa belanjaan. Ketika adiknya kesulitan mengerjakan tugas, Tono juga membantunya. Di sekolah, ia sering membantu teman yang membutuhkan.",q:"Ungkapan yang paling tepat untuk menggambarkan Tono adalah ...",o:["A. Panjang tangan","B. Ringan tangan","C. Besar kepala","D. Kambing hitam"],a:1,e:"Tono sering membantu orang lain. Ungkapan 'ringan tangan' dapat bermakna suka membantu."},
+{p:"Sebuah tabel menunjukkan jumlah buku yang dipinjam dari perpustakaan: Senin 20 buku, Selasa 30 buku, Rabu 40 buku, Kamis 50 buku.",q:"Kesimpulan yang tepat berdasarkan data tersebut adalah ...",o:["A. Jumlah peminjaman terus menurun.","B. Jumlah peminjaman meningkat setiap hari.","C. Tidak ada buku yang dipinjam.","D. Peminjaman terbanyak terjadi pada Senin."],a:1,e:"Data menunjukkan 20 → 30 → 40 → 50. Jadi, jumlah buku yang dipinjam meningkat setiap hari."},
+{p:"Perhatikan data berikut:\nKelas VI A: 24 siswa\nKelas VI B: 28 siswa\nKelas VI C: 26 siswa",q:"Kelas mana yang memiliki jumlah siswa paling banyak?",o:["A. VI A","B. VI B","C. VI C","D. Semua sama"],a:1,e:"Jumlah siswa VI B adalah 28, lebih banyak daripada VI A (24) dan VI C (26)."},
+{p:"Dalam sebuah gambar terlihat tiga tempat sampah dengan tulisan 'Organik', 'Anorganik', dan 'B3'. Di dekatnya terdapat daun, botol plastik, dan baterai bekas yang ditempatkan sesuai label.",q:"Kesimpulan yang paling tepat adalah ...",o:["A. Semua jenis sampah boleh dicampur.","B. Sampah dapat dipilah berdasarkan jenisnya.","C. Baterai termasuk sampah organik.","D. Daun termasuk sampah B3."],a:1,e:"Gambar menunjukkan sampah dikelompokkan ke tempat yang berbeda sesuai jenisnya. Jadi, sampah dapat dipilah berdasarkan jenis."},
+{p:"Sebuah grafik menunjukkan penggunaan air sebuah keluarga: Januari 120 liter, Februari 110 liter, Maret 100 liter, April 90 liter. Keluarga tersebut mulai memperbaiki keran yang bocor pada Februari.",q:"Kesimpulan yang paling sesuai adalah ...",o:["A. Penggunaan air meningkat setelah keran diperbaiki.","B. Penggunaan air menurun dari Januari sampai April.","C. Keran bocor membuat air semakin hemat.","D. Tidak ada perubahan penggunaan air."],a:1,e:"Angka penggunaan air turun 120 → 110 → 100 → 90 liter. Jadi, penggunaan air menurun dari Januari sampai April."},
+{p:"Teks: 'Menanam pohon di sekitar sekolah membuat lingkungan lebih teduh. Pohon juga dapat membantu menjaga kualitas udara.' Gambar di samping menunjukkan halaman sekolah yang dipenuhi pohon dan beberapa siswa belajar di bawah naungannya.",q:"Kesimpulan yang menghubungkan teks dan gambar adalah ...",o:["A. Pohon membuat halaman menjadi lebih panas.","B. Pohon dapat membuat lingkungan sekolah lebih teduh dan nyaman.","C. Siswa tidak boleh belajar di sekolah.","D. Semua pohon hanya dapat hidup di kelas."],a:1,e:"Teks menjelaskan manfaat pohon bagi keteduhan dan udara, sedangkan gambar memperlihatkan siswa berada di bawah naungan pohon. Keduanya mendukung kesimpulan bahwa lingkungan menjadi lebih teduh dan nyaman."},
+{p:"Bacalah paragraf berikut:\n'Olahraga teratur baik bagi tubuh. Dengan berolahraga, tubuh menjadi lebih aktif. Olahraga juga membantu menjaga kebugaran. Karena itu, kita perlu membiasakan diri bergerak setiap hari.'",q:"Ide pokok paragraf tersebut adalah ...",o:["A. Olahraga teratur baik bagi tubuh.","B. Tubuh harus selalu beristirahat.","C. Olahraga hanya dilakukan di sekolah.","D. Bergerak hanya dilakukan saat pagi."],a:0,e:"Kalimat pertama menjadi gagasan utama, sedangkan kalimat berikutnya menjelaskan manfaat olahraga."},
+{p:"Bacalah paragraf berikut:\n'Perpustakaan sekolah menyediakan banyak buku. Ada buku cerita, ensiklopedia, dan buku pengetahuan. Siswa dapat membaca buku-buku tersebut untuk menambah wawasan.'",q:"Manakah gagasan pendukung dalam paragraf?",o:["A. Perpustakaan menyediakan banyak buku.","B. Siswa tidak boleh membaca buku.","C. Ada buku cerita, ensiklopedia, dan buku pengetahuan.","D. Perpustakaan selalu kosong."],a:2,e:"Kalimat tentang jenis buku menjelaskan isi dari pernyataan bahwa perpustakaan menyediakan banyak buku. Jadi, itu merupakan gagasan pendukung."},
+{p:"Teks:\n'Kebun sekolah dahulu hanya memiliki sedikit tanaman. Para siswa kemudian menanam berbagai bibit dan merawatnya. Beberapa bulan kemudian, kebun menjadi lebih hijau dan banyak kupu-kupu datang.'",q:"Perubahan yang dapat disimpulkan dari teks adalah ...",o:["A. Kebun menjadi semakin gersang.","B. Kebun berubah dari sedikit tanaman menjadi lebih hijau dan memiliki lebih banyak tanaman.","C. Siswa berhenti merawat kebun.","D. Kupu-kupu membuat tanaman hilang."],a:1,e:"Awalnya tanaman di kebun sedikit. Setelah siswa menanam dan merawat bibit, kebun menjadi lebih hijau. Ini menunjukkan adanya perubahan positif pada kebun."},
+{p:"Dina kehilangan penghapus. Ia mencari di dalam tas, di bawah meja, dan di sekitar kelas. Setelah menemukan penghapus itu, Dina menyadari bahwa penghapus tersebut berada di saku tasnya.",q:"Apa yang dapat disimpulkan dari peristiwa tersebut?",o:["A. Dina tidak pernah membawa penghapus.","B. Dina sempat lupa tempat menyimpan penghapusnya.","C. Penghapus Dina dicuri.","D. Tas Dina tidak memiliki saku."],a:1,e:"Dina mencari di banyak tempat, tetapi akhirnya menemukan penghapus di saku tasnya. Jadi, ia hanya lupa tempat menyimpannya."},
+{p:"Ketika pertama kali pindah sekolah, Arman lebih banyak diam dan belum memiliki teman. Ia kemudian mengikuti kegiatan kelompok dan mulai sering berbicara dengan teman sekelas. Beberapa minggu kemudian, Arman sudah memiliki banyak teman.",q:"Kesimpulan yang tepat tentang perubahan Arman adalah ...",o:["A. Arman menjadi semakin pendiam.","B. Arman mulai mampu bergaul setelah mengikuti kegiatan bersama.","C. Arman tidak mau berteman.","D. Arman pindah sekolah lagi."],a:1,e:"Awalnya Arman pendiam dan belum memiliki teman. Setelah mengikuti kegiatan kelompok dan berkomunikasi, ia memiliki banyak teman. Ini menunjukkan kemampuan bergaulnya berkembang."},
+{p:"Sebuah tabel menunjukkan jumlah tanaman yang ditanam siswa: Kelompok A 15 tanaman, Kelompok B 20 tanaman, Kelompok C 18 tanaman. Setiap kelompok menanam bibit pada hari yang sama.",q:"Kesimpulan yang benar adalah ...",o:["A. Kelompok A menanam paling banyak.","B. Kelompok B menanam paling banyak.","C. Kelompok C menanam paling sedikit.","D. Semua kelompok menanam jumlah yang sama."],a:1,e:"Kelompok B menanam 20 tanaman, jumlah terbanyak dibanding A (15) dan C (18)."}
+];
+
+let score=0,answered=0;
+const quiz=document.getElementById("quiz");
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function render(){
+ quiz.innerHTML=questions.map((x,i)=>`
+ <section class="card" id="q${i}">
+   <div class="qtop"><div class="num">${i+1}</div><div class="question">${esc(x.q)}</div></div>
+   ${x.p?`<div class="passage">${esc(x.p)}</div>`:""}
+   <div class="options">${x.o.map((op,j)=>`<button class="option" onclick="answer(${i},${j},this)">${esc(op)}</button>`).join("")}</div>
+   <div class="feedback" id="f${i}"></div>
+ </section>`).join("");
+}
+function answer(i,j,btn){
+ const sec=document.getElementById("q"+i);
+ if(sec.dataset.done)return;
+ sec.dataset.done="1";answered++;
+ const x=questions[i], buttons=sec.querySelectorAll(".option");
+ buttons.forEach((b,k)=>{b.disabled=true;if(k===x.a)b.classList.add("correct")});
+ const fb=document.getElementById("f"+i);
+ if(j===x.a){
+   score++;btn.classList.add("correct");
+   fb.className="feedback good show";
+   fb.innerHTML=`<strong>🎉 BENAR!</strong><div class="answer">🔑 Kunci: ${esc(x.o[x.a])}</div><div>${esc(x.e)}</div>`;
+ }else{
+   btn.classList.add("wrong");
+   fb.className="feedback bad show";
+   fb.innerHTML=`<strong>😊 SALAH, tetap semangat!</strong><div class="answer">🔑 Kunci: ${esc(x.o[x.a])}</div><div>${esc(x.e)}</div>`;
+ }
+ update();
+}
+function update(){
+ document.getElementById("score").textContent=score;
+ document.getElementById("fill").style.width=(answered/questions.length*100)+"%";
+ document.getElementById("status").textContent=answered===25?finalText():`Sudah dikerjakan ${answered} dari 25 soal. Terus semangat! 💪`;
+}
+function finalText(){
+ let p=score/25;
+ if(p>=.9)return "🏆 Luar biasa! Kemampuan inferensimu sangat bagus!";
+ if(p>=.75)return "🌟 Bagus! Tinggal perkuat beberapa bagian lagi.";
+ if(p>=.6)return "👍 Cukup baik! Baca kembali pembahasan dan coba lagi.";
+ return "💪 Jangan menyerah! Pelajari pembahasan lalu ulangi kuis.";
+}
+function resetQuiz(){
+ score=0;answered=0;render();update();
+ document.getElementById("status").textContent="Yuk mulai! Cari petunjuk dalam teks dan buat kesimpulan. 🚀";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+render();
+</script>
+</body>
+</html>

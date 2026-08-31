@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis TKA Bahasa Indonesia SD - Evaluasi & Apresiasi</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-light: #a29bfe;
+            --secondary: #fd79a8;
+            --success: #00b894;
+            --success-bg: #e0f7f1;
+            --danger: #e17055;
+            --danger-bg: #fdf0ed;
+            --warning: #fdcb6e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Comic Sans MS', 'Arial Rounded MT Bold', system-ui, sans-serif;
+            background: linear-gradient(135deg, #dfe6e9 0%, #f8f9fa 30%, #e8e0f0 60%, #fce4ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .quiz-container {
+            max-width: 780px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .quiz-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 50%, #fd79a8 100%);
+            border-radius: var(--radius);
+            padding: 30px 25px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: float-bg 8s ease-in-out infinite;
+        }
+        @keyframes float-bg {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(10%, 10%);
+            }
+        }
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .quiz-header .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+        .header-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            animation: bounce-emoji 2s ease-in-out infinite;
+        }
+        @keyframes bounce-emoji {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 10px 18px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 120px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+        }
+        .stat-item .stat-icon {
+            font-size: 1.3rem;
+        }
+        .stat-item .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .progress-container {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6C5CE7, #a29bfe, #fd79a8);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        .question-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 30px 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            animation: fadeInUp 0.4s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 5px 14px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+        .question-tag {
+            display: inline-block;
+            background: #fdcb6e;
+            color: #2d3436;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            margin-left: 8px;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .reading-text {
+            background: #f8f9fa;
+            border-left: 5px solid var(--primary-light);
+            padding: 15px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.8;
+            position: relative;
+        }
+        .reading-text::before {
+            content: '📖';
+            position: absolute;
+            top: -12px;
+            left: -10px;
+            font-size: 1.5rem;
+            font-style: normal;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            border: 3px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.25s ease;
+            color: var(--text);
+            font-family: inherit;
+            width: 100%;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f8f0ff;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
+        }
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+        .option-btn .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: #f1f2f6;
+            color: var(--text);
+            transition: all 0.25s;
+        }
+        .option-btn:hover .option-letter {
+            background: var(--primary);
+            color: #fff;
+        }
+        .option-btn.selected-correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+            animation: pulse-green 0.5s ease;
+        }
+        .option-btn.selected-correct .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+        .option-btn.selected-wrong {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+            animation: shake 0.5s ease;
+        }
+        .option-btn.selected-wrong .option-letter {
+            background: var(--danger);
+            color: #fff;
+        }
+        .option-btn.reveal-correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+        .option-btn.reveal-correct .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-8px);
+            }
+            40% {
+                transform: translateX(8px);
+            }
+            60% {
+                transform: translateX(-5px);
+            }
+            80% {
+                transform: translateX(5px);
+            }
+        }
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 184, 148, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 0 20px rgba(0, 184, 148, 0);
+            }
+        }
+        .feedback {
+            margin-top: 18px;
+            padding: 18px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: none;
+            animation: fadeInUp 0.4s ease;
+            position: relative;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: var(--success-bg);
+            border: 3px solid var(--success);
+            color: #008f6b;
+        }
+        .feedback.wrong {
+            background: var(--danger-bg);
+            border: 3px solid var(--danger);
+            color: #c0392b;
+        }
+        .feedback .fb-icon {
+            font-size: 1.6rem;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .feedback .fb-text {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .answer-key {
+            margin-top: 15px;
+            padding: 20px 22px;
+            background: #fff8e1;
+            border: 3px dashed #fdcb6e;
+            border-radius: var(--radius-sm);
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+        .answer-key.show {
+            display: block;
+        }
+        .answer-key .ak-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #6d4c41;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .answer-key .ak-content {
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        .answer-key .ak-content strong {
+            color: var(--primary);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 14px 28px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            -webkit-tap-highlight-color: transparent;
+            letter-spacing: 0.3px;
+        }
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        .nav-btn.prev {
+            background: #f1f2f6;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .nav-btn.prev:hover {
+            background: #e9ecef;
+        }
+        .nav-btn.next {
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            border: 2px solid var(--primary);
+        }
+        .nav-btn.next:hover {
+            background: linear-gradient(135deg, #5a4bd1, #8b7ff0);
+        }
+        .nav-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .quiz-header h1 {
+                font-size: 1.3rem;
+            }
+            .quiz-header .subtitle {
+                font-size: 0.85rem;
+            }
+            .header-emoji {
+                font-size: 1.8rem;
+            }
+            .quiz-header {
+                padding: 20px 15px;
+            }
+            .question-card {
+                padding: 20px 15px;
+            }
+            .question-text {
+                font-size: 1.05rem;
+            }
+            .reading-text {
+                font-size: 0.88rem;
+                padding: 12px 15px;
+            }
+            .option-btn {
+                padding: 13px 15px;
+                font-size: 0.92rem;
+                gap: 10px;
+            }
+            .option-btn .option-letter {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                font-size: 0.95rem;
+            }
+            .nav-btn {
+                padding: 11px 20px;
+                font-size: 0.9rem;
+            }
+            .stats-bar {
+                gap: 8px;
+            }
+            .stat-item {
+                padding: 8px 12px;
+                font-size: 0.82rem;
+                min-width: 90px;
+            }
+            .stat-item .stat-value {
+                font-size: 1.1rem;
+            }
+            .feedback {
+                padding: 14px 16px;
+                font-size: 0.92rem;
+            }
+            .answer-key {
+                padding: 16px 18px;
+            }
+            .answer-key .ak-content {
+                font-size: 0.88rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .option-btn {
+                font-size: 0.85rem;
+                padding: 10px 12px;
+            }
+            .option-btn .option-letter {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                font-size: 0.85rem;
+            }
+            .question-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <span class="header-emoji">🌟📖💡</span>
+            <h1>Kuis TKA Bahasa Indonesia SD</h1>
+            <p class="subtitle">Evaluasi & Apresiasi • Bab 11-13</p>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item"><span class="stat-icon">📝</span><span>Soal: <span class="stat-value" id="current-q-num">1</span>/25</span></div>
+            <div class="stat-item"><span class="stat-icon">✅</span><span>Benar: <span class="stat-value" id="correct-count">0</span></span></div>
+            <div class="stat-item"><span class="stat-icon">❌</span><span>Salah: <span class="stat-value" id="wrong-count">0</span></span></div>
+            <div class="stat-item"><span class="stat-icon">⭐</span><span>Skor: <span class="stat-value" id="score-val">0</span></span></div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-label"><span>📊 Progres Belajarmu</span><span id="progress-pct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%;"></div></div>
+        </div>
+        <div class="question-card" id="question-card">
+            <span class="question-number" id="q-number">Soal No. 1</span>
+            <span class="question-tag" id="q-tag">🔗 Relevansi</span>
+            <div class="question-text" id="q-text"></div>
+            <div class="reading-text" id="q-reading" style="display:none;"></div>
+            <div class="options-container" id="options-container"></div>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-key" id="answer-key"></div>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn prev" id="btn-prev" disabled>⬅️ Sebelumnya</button>
+            <button class="nav-btn next" id="btn-next">Selanjutnya ➡️</button>
+        </div>
+    </div>
+    <script>
+        const questions = [{
+            tag: "🔗 Relevansi",
+            text: "Peristiwa mana yang relevan dengan kehidupan sehari-hari berdasarkan cerita tersebut?",
+            reading: "Tia menegur pemuda yang menyerobot antrean di kasir. \"Kita harus antre. Semua yang ada di sini juga ingin cepat dilayani.\"",
+            options: ["Bermain di taman setiap sore", "Menjaga ketertiban dengan menghormati antrean", "Membeli buku di toko",
+                "Berlari di koridor sekolah"
+            ],
+            correct: 1,
+            explanation: "Peristiwa Tia menegur pemuda yang menyerobot antrean mengajarkan kita untuk <strong>menjaga ketertiban dengan menghormati antrean</strong>. Ini relevan dengan kehidupan sehari-hari."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Contoh peristiwa yang sesuai dengan kejadian yang dialami Kenthus adalah...",
+            reading: "Kenthus sombong dan memaksakan diri mengembungkan tubuhnya hingga jatuh lemas. Akhirnya ia menyesal dan mengakui kesalahannya.",
+            options: ["Berlatih setiap hari agar kuat", "Tidak memaksakan diri melakukan hal berbahaya", "Selalu menantang teman",
+                "Membuktikan diri paling hebat"
+            ],
+            correct: 1,
+            explanation: "Kisah Kenthus mengajarkan kita untuk <strong>tidak memaksakan diri melakukan hal berbahaya</strong>. Ini pelajaran yang relevan dalam kehidupan sehari-hari."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Peristiwa dalam teks yang dapat ditemukan di kehidupan nyata adalah...",
+            reading: "Bakteri jahat suka memakan sisa gula. Mereka melepaskan asam yang membuat gigi kita berlubang.",
+            options: ["Gigi berlubang karena malas menyikat gigi", "Gigi menjadi putih karena makan permen",
+                "Bakteri membantu menguatkan gigi", "Sisa gula membuat gigi lebih sehat"
+            ],
+            correct: 0,
+            explanation: "Dalam kehidupan nyata, <strong>gigi bisa berlubang jika kita malas menyikat gigi</strong> dan sisa gula dibiarkan menempel. Ini sesuai dengan teks."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Pengalaman pribadi yang relevan dengan peristiwa Tia menegur pemuda adalah...",
+            reading: "Tia menegur pemuda yang menyerobot antrean dengan sopan.",
+            options: ["Menegur teman yang membuang sampah sembarangan", "Bermain bersama teman di lapangan",
+                "Membeli jajan di kantin", "Mengerjakan PR di rumah"
+            ],
+            correct: 0,
+            explanation: "<strong>Menegur teman yang membuang sampah sembarangan</strong> adalah pengalaman yang mirip dengan Tia menegur pemuda. Keduanya menunjukkan keberanian menegur kesalahan."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Peristiwa yang TIDAK relevan dengan kehidupan sehari-hari adalah...",
+            reading: "Kenthus mengembungkan tubuhnya hingga berlebihan dan jatuh lemas.",
+            options: ["Berolahraga secukupnya", "Memaksakan diri mengangkat beban terlalu berat",
+                "Belajar dengan tekun", "Menjaga kesehatan tubuh"
+            ],
+            correct: 1,
+            explanation: "<strong>Memaksakan diri mengangkat beban terlalu berat</strong> adalah peristiwa yang TIDAK relevan atau TIDAK boleh ditiru, karena bisa membahayakan diri seperti Kenthus."
+        }, {
+            tag: "🧩 Kesesuaian Unsur",
+            text: "Apakah unsur-unsur dalam cerita \"Kenthus yang Sombong\" sudah sesuai?",
+            reading: "Kenthus adalah katak sombong yang tinggal di kolam. Ia mencoba menandingi lembu dengan mengembungkan tubuh. Ia jatuh lemas dan akhirnya menyesal.",
+            options: ["Sudah sesuai, semua unsur saling mendukung", "Tidak sesuai, katak tidak bisa sombong",
+                "Tidak sesuai, kolam bukan tempat katak", "Sudah sesuai, tetapi tidak ada amanat"
+            ],
+            correct: 0,
+            explanation: "Semua unsur <strong>saling mendukung</strong>: tokoh katak tinggal di kolam (sesuai), alur berjalan wajar, dan amanat muncul dari cerita (jangan sombong)."
+        }, {
+            tag: "🧩 Kesesuaian Unsur",
+            text: "Apakah latar dalam cerita \"Antre, Dong!\" sesuai dengan isi cerita?",
+            reading: "Tia dan Devi berada di Toko Buku Gemar. Mereka mengantre di kasir untuk membayar buku.",
+            options: ["Tidak sesuai, karena tidak ada kasir di toko buku", "Sesuai, karena toko buku memang memiliki kasir untuk membayar",
+                "Tidak sesuai, karena seharusnya di perpustakaan", "Sesuai, tetapi tidak ada antrean di toko buku"
+            ],
+            correct: 1,
+            explanation: "Latar <strong>Toko Buku Gemar dengan kasir</strong> sangat sesuai karena di toko buku memang ada kasir untuk membayar dan pengunjung mengantre."
+        }, {
+            tag: "🧩 Kesesuaian Informasi",
+            text: "Apakah informasi dalam teks tersebut saling mendukung?",
+            reading: "Hewan folivora hanya makan daun. Mereka punya usus panjang agar makanan bisa diproses lebih lama. Tubuh mereka bekerja lambat.",
+            options: ["Ya, karena usus panjang membantu mencerna daun yang sulit dicerna", "Tidak, karena hewan pemakan daun seharusnya bergerak cepat",
+                "Ya, karena semua hewan punya usus panjang", "Tidak, karena tubuh folivora tidak bekerja lambat"
+            ],
+            correct: 0,
+            explanation: "Informasi <strong>usus panjang</strong> dan <strong>tubuh bekerja lambat</strong> saling mendukung karena daun sulit dicerna sehingga butuh waktu lama."
+        }, {
+            tag: "🧩 Kesesuaian Ilustrasi",
+            text: "Apakah ilustrasi tersebut sesuai dengan isi teks?",
+            reading: "Teks: Hewan folivora memiliki usus panjang untuk mencerna daun. Ilustrasi: Gambar panda sedang makan bambu.",
+            options: ["Tidak sesuai, karena panda bukan folivora", "Sesuai, karena panda adalah contoh hewan folivora",
+                "Tidak sesuai, karena panda makan daging", "Sesuai, karena semua hewan makan daun"
+            ],
+            correct: 1,
+            explanation: "Ilustrasi <strong>panda makan bambu</strong> sesuai karena panda adalah contoh hewan folivora (pemakan daun/tumbuhan)."
+        }, {
+            tag: "🧩 Kesesuaian Ilustrasi",
+            text: "Mengapa kata 'BEDA' pada judul infografis berwarna oranye?",
+            reading: "Infografis membandingkan air putih dan air mineral. Kata 'BEDA' ditulis besar dengan warna oranye mencolok.",
+            options: ["Menekankan pokok utama infografis", "Menyesuaikan warna kesukaan pembaca", "Agar terlihat murah",
+                "Karena warna oranye selalu dipakai"
+            ],
+            correct: 0,
+            explanation: "Warna oranye pada kata <strong>\"BEDA\"</strong> berfungsi untuk <strong>menekankan pokok utama</strong> infografis, yaitu perbedaan air putih dan air mineral."
+        }, {
+            tag: "😊 Respons Emosional",
+            text: "Bagaimana reaksi yang tepat saat membaca akhir cerita Kenthus?",
+            reading: "\"Aku baik-baik saja. Maafkan aku, Kak. Aku tidak mendengar kata-katamu,\" kata Kenthus sembari menunduk.",
+            options: ["Terharu karena Kenthus mau mengakui kesalahannya", "Bahagia karena Kenthus menang melawan lembu",
+                "Antusias karena Kenthus membuktikan kekuatannya", "Marah karena Kenthus dimarahi Koko"
+            ],
+            correct: 0,
+            explanation: "Kenthus <strong>mengakui kesalahan dan meminta maaf</strong>. Reaksi yang tepat adalah <strong>terharu</strong> karena ia mau bertanggung jawab."
+        }, {
+            tag: "😊 Respons Emosional",
+            text: "Apa respons emosional yang paling tepat setelah membaca akhir cerita \"Antre, Dong!\"?",
+            reading: "Pak Satpam menenangkan situasi. Pemuda itu harus tetap mengantre sesuai antrean. Semua orang lega.",
+            options: ["Sedih karena pemuda dihukum", "Bahagia karena masalah selesai dengan baik", "Marah karena Tia terlalu berani",
+                "Takut karena ada keributan"
+            ],
+            correct: 1,
+            explanation: "Akhir cerita menunjukkan <strong>masalah selesai dengan baik</strong> dan semua lega. Respons yang tepat adalah <strong>bahagia</strong>."
+        }, {
+            tag: "😊 Respons Emosional",
+            text: "Perasaan yang muncul saat membaca Kenthus jatuh lemas adalah...",
+            reading: "Kenthus mengembungkan tubuhnya. Perutnya membesar berlebihan. Tiba-tiba ia jatuh lemas. Perutnya terasa sakit.",
+            options: ["Kasihan", "Bahagia", "Antusias", "Bangga"],
+            correct: 0,
+            explanation: "Melihat Kenthus <strong>jatuh lemas dan kesakitan</strong> menimbulkan perasaan <strong>kasihan</strong> karena ia mengalami musibah akibat kesombongannya."
+        }, {
+            tag: "😊 Respons Emosional",
+            text: "Perasaan yang muncul saat membaca pemuda menyerobot antrean adalah...",
+            reading: "Tiba-tiba seorang pemuda berjalan ke antrean paling depan. Orang-orang yang sudah mengantre memprotes.",
+            options: ["Marah/kesal", "Terharu", "Bahagia", "Kagum"],
+            correct: 0,
+            explanation: "Pemuda yang <strong>menyerobot antrean</strong> menimbulkan perasaan <strong>marah atau kesal</strong> karena ia tidak menghargai orang lain."
+        }, {
+            tag: "😊 Respons Emosional",
+            text: "Reaksi emosional yang tepat terhadap peristiwa Tia menegur pemuda adalah...",
+            reading: "\"Iya, Kak, kita harus antre. Semua yang ada di sini juga ingin cepat dilayani,\" sahut Tia.",
+            options: ["Bangga", "Sedih", "Takut", "Malu"],
+            correct: 0,
+            explanation: "Tia menunjukkan <strong>keberanian dan ketegasan</strong> dalam menegur. Reaksi yang tepat adalah <strong>bangga</strong> terhadap sikap Tia."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Pernyataan yang SESUAI dengan peristiwa Tia menegur pemuda adalah...",
+            reading: "Tia menegur pemuda yang menyerobot antrean: \"Kita harus antre. Semua juga ingin cepat dilayani.\"",
+            options: ["Nina bertanggung jawab menjalankan tugas yang dipercayakan", "Jani tidak peduli dengan aturan",
+                "Rina membiarkan temannya berbuat salah", "Dodi selalu menyerobot antrean"
+            ],
+            correct: 0,
+            explanation: "Tia menunjukkan <strong>tanggung jawab menjaga ketertiban</strong>. Pernyataan yang sesuai adalah <strong>Nina bertanggung jawab menjalankan tugas</strong>."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Peristiwa yang SESUAI dengan pelajaran dari Kenthus adalah...",
+            reading: "Kenthus menyesal dan mengakui kesalahannya setelah jatuh lemas.",
+            options: ["Budi belajar dari kesalahannya dan meminta maaf", "Andi terus mengulangi kesalahan yang sama",
+                "Sari menyalahkan orang lain atas kesalahannya", "Dodi tidak mau mendengar nasihat"
+            ],
+            correct: 0,
+            explanation: "Kenthus <strong>belajar dari kesalahan dan meminta maaf</strong>. Perilaku yang sesuai adalah <strong>Budi belajar dari kesalahannya dan meminta maaf</strong>."
+        }, {
+            tag: "🧩 Kesesuaian Informasi",
+            text: "Apakah informasi berikut sesuai dengan teks tentang gigi?",
+            reading: "Bakteri jahat memakan sisa gula. Mereka melepaskan asam yang membuat gigi berlubang. Rajin menyikat gigi mencegahnya.",
+            options: ["Sesuai, karena menyikat gigi membersihkan sisa gula", "Tidak sesuai, karena bakteri tidak memakan gula",
+                "Tidak sesuai, karena asam menguatkan gigi", "Sesuai, tetapi tidak perlu menyikat gigi"
+            ],
+            correct: 0,
+            explanation: "Informasi <strong>rajin menyikat gigi mencegah gigi berlubang</strong> sesuai karena menyikat gigi membersihkan sisa gula yang menjadi makanan bakteri."
+        }, {
+            tag: "🧩 Kesesuaian Unsur",
+            text: "Apakah amanat dalam cerita \"Kenthus yang Sombong\" muncul dari cerita?",
+            reading: "Kenthus sombong, tidak mendengar nasihat Koko, dan akhirnya celaka. Ia menyesal dan meminta maaf.",
+            options: ["Ya, amanat 'jangan sombong' muncul dari kejadian yang dialami Kenthus", "Tidak, amanat tidak ada hubungannya dengan cerita",
+                "Tidak, karena Kenthus tidak menyesal", "Ya, tetapi amanatnya 'harus berani'"
+            ],
+            correct: 0,
+            explanation: "Amanat <strong>\"jangan sombong dan dengarkan nasihat\"</strong> muncul langsung dari kejadian yang dialami Kenthus. Jadi amanat <strong>muncul dari cerita</strong>."
+        }, {
+            tag: "😊 Respons Emosional",
+            text: "Bagaimana reaksi yang tepat saat membaca Kenthus meminta maaf kepada Koko?",
+            reading: "\"Maafkan aku, Kak. Aku tidak mendengar kata-katamu,\" kata Kenthus sembari menunduk.",
+            options: ["Terharu", "Marah", "Kecewa", "Bingung"],
+            correct: 0,
+            explanation: "Permintaan maaf Kenthus yang tulus menimbulkan perasaan <strong>terharu</strong>. Ini menunjukkan Kenthus telah berubah menjadi lebih baik."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Contoh perilaku yang TIDAK sesuai dengan pesan cerita \"Antre, Dong!\" adalah...",
+            reading: "Pemuda menyerobot antrean dan ditegur. Ia harus tetap mengantre sesuai aturan.",
+            options: ["Menyerobot antrean di kantin", "Mengantre dengan tertib", "Menghormati orang lain",
+                "Sabar menunggu giliran"
+            ],
+            correct: 0,
+            explanation: "<strong>Menyerobot antrean di kantin</strong> adalah perilaku yang TIDAK sesuai dengan pesan cerita, karena cerita mengajarkan kita untuk mengantre dengan tertib."
+        }, {
+            tag: "🧩 Kesesuaian Ilustrasi",
+            text: "Ilustrasi yang sesuai untuk teks tentang hewan folivora adalah...",
+            reading: "Hewan folivora hanya makan daun. Contohnya panda makan bambu dan koala makan daun eukaliptus.",
+            options: ["Gambar panda makan bambu", "Gambar singa makan daging", "Gambar beruang makan ikan",
+                "Gambar sapi makan rumput"
+            ],
+            correct: 0,
+            explanation: "<strong>Panda makan bambu</strong> adalah ilustrasi yang sesuai karena panda adalah contoh hewan folivora (pemakan daun/tumbuhan)."
+        }, {
+            tag: "😊 Respons Emosional",
+            text: "Perasaan yang muncul saat membaca semua orang lega di akhir cerita \"Antre, Dong!\" adalah...",
+            reading: "Pak Satpam menenangkan situasi. Pemuda itu harus tetap mengantre. Semua orang tersenyum lega.",
+            options: ["Bahagia", "Sedih", "Marah", "Takut"],
+            correct: 0,
+            explanation: "Suasana lega dan tersenyum di akhir cerita menimbulkan perasaan <strong>bahagia</strong> karena masalah telah selesai dengan baik."
+        }, {
+            tag: "🔗 Relevansi",
+            text: "Pelajaran dari cerita Kenthus yang bisa diterapkan di sekolah adalah...",
+            reading: "Kenthus tidak mau mendengar nasihat Koko. Akibatnya ia celaka. Akhirnya ia menyesal.",
+            options: ["Mendengarkan nasihat guru dan orang tua", "Selalu membantah nasihat", "Tidak perlu mendengar orang lain",
+                "Merasa paling pintar"
+            ],
+            correct: 0,
+            explanation: "Pelajaran dari Kenthus adalah <strong>pentingnya mendengarkan nasihat</strong>. Di sekolah, kita harus <strong>mendengarkan nasihat guru dan orang tua</strong>."
+        }, {
+            tag: "🧩 Kesesuaian Unsur",
+            text: "Apakah alur cerita \"Antre, Dong!\" berjalan dengan wajar?",
+            reading: "Tia dan Devi mengantre. Pemuda menyerobot. Tia menegur. Pak Satpam menenangkan. Pemuda harus mengantre.",
+            options: ["Ya, karena konflik muncul dan ada penyelesaian", "Tidak, karena tidak ada konflik",
+                "Tidak, karena tidak ada tokoh", "Ya, tetapi tidak ada akhir cerita"
+            ],
+            correct: 0,
+            explanation: "Alur cerita <strong>berjalan wajar</strong>: ada perkenalan (mengantre), konflik (menyerobot), klimaks (teguran), dan penyelesaian (Pak Satpam menenangkan)."
+        }];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let answered = false;
+        const totalQuestions = questions.length;
+
+        const qNumberEl = document.getElementById('q-number');
+        const qTagEl = document.getElementById('q-tag');
+        const qTextEl = document.getElementById('q-text');
+        const qReadingEl = document.getElementById('q-reading');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackEl = document.getElementById('feedback');
+        const answerKeyEl = document.getElementById('answer-key');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const currentQNumEl = document.getElementById('current-q-num');
+        const correctCountEl = document.getElementById('correct-count');
+        const wrongCountEl = document.getElementById('wrong-count');
+        const scoreValEl = document.getElementById('score-val');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPct = document.getElementById('progress-pct');
+        const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            answered = false;
+            qNumberEl.textContent = `Soal No. ${index + 1}`;
+            qTagEl.textContent = q.tag;
+            qTextEl.textContent = q.text;
+            if (q.reading && q.reading.trim() !== '') {
+                qReadingEl.style.display = 'block';
+                qReadingEl.textContent = q.reading;
+            } else {
+                qReadingEl.style.display = 'none';
+            }
+            optionsContainer.innerHTML = '';
+            feedbackEl.className = 'feedback';
+            feedbackEl.innerHTML = '';
+            answerKeyEl.className = 'answer-key';
+            answerKeyEl.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.setAttribute('data-opt-index', i);
+                btn.innerHTML = `<span class="option-letter">${optionLabels[i]}</span><span>${opt}</span>`;
+                btn.addEventListener('click', function() {
+                    if (answered) return;
+                    handleAnswer(i);
+                });
+                optionsContainer.appendChild(btn);
+            });
+            btnPrev.disabled = (index === 0);
+            if (index === totalQuestions - 1) {
+                btnNext.textContent = '🏁 Selesai';
+            } else {
+                btnNext.textContent = 'Selanjutnya ➡️';
+            }
+            updateStats();
+            updateProgress();
+        }
+
+        function handleAnswer(selectedIdx) {
+            const q = questions[currentQuestion];
+            answered = true;
+            const allBtns = document.querySelectorAll('.option-btn');
+            const isCorrect = selectedIdx === q.correct;
+            allBtns.forEach((ob, i) => {
+                ob.classList.add('disabled');
+                if (i === q.correct) ob.classList.add('reveal-correct');
+                if (i === selectedIdx && !isCorrect) ob.classList.add('selected-wrong');
+                if (i === selectedIdx && isCorrect) ob.classList.add('selected-correct');
+            });
+            feedbackEl.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+            feedbackEl.innerHTML = `<span class="fb-icon">${isCorrect ? '🎉' : '😅'}</span><span class="fb-text">${isCorrect ? 'BENAR! Hebat! ' : 'SALAH! Jangan menyerah! '}</span>`;
+            answerKeyEl.className = 'answer-key show';
+            answerKeyEl.innerHTML = `<div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div><div class="ak-content"><strong>Jawaban Benar:</strong> ${optionLabels[q.correct]}. ${q.options[q.correct]}<br><strong>Pembahasan:</strong> ${q.explanation}</div>`;
+            if (isCorrect) { correctAnswers++; } else { wrongAnswers++; }
+            updateStats();
+        }
+
+        function updateStats() {
+            currentQNumEl.textContent = currentQuestion + 1;
+            correctCountEl.textContent = correctAnswers;
+            wrongCountEl.textContent = wrongAnswers;
+            const total = correctAnswers + wrongAnswers;
+            const score = total > 0 ? Math.round((correctAnswers / total) * 100) : 0;
+            scoreValEl.textContent = score;
+        }
+
+        function updateProgress() {
+            const pct = Math.round((currentQuestion / totalQuestions) * 100);
+            progressFill.style.width = pct + '%';
+            progressPct.textContent = pct + '%';
+        }
+
+        function goToNext() {
+            if (currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResult();
+            }
+        }
+
+        function goToPrev() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function showResult() {
+            const total = correctAnswers + wrongAnswers;
+            const score = total > 0 ? Math.round((correctAnswers / total) * 100) : 0;
+            let emoji = '',
+                message = '';
+            if (score >= 90) { emoji = '🏆🌟🎉';
+                message = 'LUAR BIASA! Kamu hebat sekali!'; } else if (score >= 75) { emoji = '🌟👏';
+                message = 'BAGUS SEKALI! Terus tingkatkan!'; } else if (score >= 60) { emoji = '👍😊';
+                message = 'CUKUP BAIK! Rajin berlatih ya!'; } else if (score >= 40) { emoji = '💪📚';
+                message = 'TERUS SEMANGAT! Banyak berlatih ya!'; } else { emoji = '📚😊';
+                message = 'JANGAN MENYERAH! Yuk belajar lagi!'; }
+            qNumberEl.textContent = '📋 Hasil Kuis';
+            qTagEl.textContent = '🏁 Selesai';
+            qTextEl.innerHTML = `<div style="text-align:center;padding:20px 0;"><div style="font-size:4rem;margin-bottom:15px;">${emoji}</div><div style="font-size:1.5rem;font-weight:700;color:var(--primary);">${message}</div><div style="font-size:1.2rem;margin-top:15px;">Kamu menjawab <strong>${correctAnswers}</strong> benar dari <strong>${total}</strong> soal yang dijawab.</div><div style="font-size:1.4rem;margin-top:10px;font-weight:700;color:var(--success);">Skor: ${score}</div><div style="margin-top:20px;font-size:0.95rem;color:var(--text-light);">Dari total ${totalQuestions} soal, kamu sudah menjawab ${total} soal.</div></div>`;
+            qReadingEl.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            feedbackEl.className = 'feedback';
+            feedbackEl.innerHTML = '';
+            answerKeyEl.className = 'answer-key';
+            answerKeyEl.innerHTML = '';
+            btnNext.textContent = '🔄 Ulangi Kuis';
+            btnNext.disabled = false;
+            btnPrev.disabled = true;
+            btnNext.removeEventListener('click', goToNext);
+            btnNext.addEventListener('click', restartQuiz);
+            progressFill.style.width = '100%';
+            progressPct.textContent = '100%';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            answered = false;
+            btnNext.textContent = 'Selanjutnya ➡️';
+            btnNext.removeEventListener('click', restartQuiz);
+            btnNext.addEventListener('click', goToNext);
+            loadQuestion(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        btnPrev.addEventListener('click', goToPrev);
+        btnNext.addEventListener('click', goToNext);
+        loadQuestion(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis TKA Bahasa Indonesia SD - Pemahaman Tekstual</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-light: #a29bfe;
+            --secondary: #fd79a8;
+            --success: #00b894;
+            --success-bg: #e0f7f1;
+            --danger: #e17055;
+            --danger-bg: #fdf0ed;
+            --warning: #fdcb6e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Comic Sans MS', 'Arial Rounded MT Bold', system-ui, sans-serif;
+            background: linear-gradient(135deg, #dfe6e9 0%, #f8f9fa 30%, #e8e0f0 60%, #fce4ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .quiz-container {
+            max-width: 780px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .quiz-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 50%, #fd79a8 100%);
+            border-radius: var(--radius);
+            padding: 30px 25px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: float-bg 8s ease-in-out infinite;
+        }
+        @keyframes float-bg {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(10%, 10%);
+            }
+        }
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+        .quiz-header .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+        .header-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            animation: bounce-emoji 2s ease-in-out infinite;
+        }
+        @keyframes bounce-emoji {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 10px 18px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 120px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+        }
+        .stat-item .stat-icon {
+            font-size: 1.3rem;
+        }
+        .stat-item .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .progress-container {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 50px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6C5CE7, #a29bfe, #fd79a8);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        .question-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 30px 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            animation: fadeInUp 0.4s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 5px 14px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+        .question-tag {
+            display: inline-block;
+            background: #fdcb6e;
+            color: #2d3436;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            margin-left: 8px;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .reading-text {
+            background: #f8f9fa;
+            border-left: 5px solid var(--primary-light);
+            padding: 15px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 20px;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.8;
+            position: relative;
+        }
+        .reading-text::before {
+            content: '📖';
+            position: absolute;
+            top: -12px;
+            left: -10px;
+            font-size: 1.5rem;
+            font-style: normal;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            border: 3px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.25s ease;
+            color: var(--text);
+            font-family: inherit;
+            width: 100%;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f8f0ff;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
+        }
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+        .option-btn .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: #f1f2f6;
+            color: var(--text);
+            transition: all 0.25s;
+        }
+        .option-btn:hover .option-letter {
+            background: var(--primary);
+            color: #fff;
+        }
+        .option-btn.selected-correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+            animation: pulse-green 0.5s ease;
+        }
+        .option-btn.selected-correct .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+        .option-btn.selected-wrong {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+            animation: shake 0.5s ease;
+        }
+        .option-btn.selected-wrong .option-letter {
+            background: var(--danger);
+            color: #fff;
+        }
+        .option-btn.reveal-correct {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+        .option-btn.reveal-correct .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .option-btn.disabled-reveal {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-8px);
+            }
+            40% {
+                transform: translateX(8px);
+            }
+            60% {
+                transform: translateX(-5px);
+            }
+            80% {
+                transform: translateX(5px);
+            }
+        }
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 184, 148, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 0 20px rgba(0, 184, 148, 0);
+            }
+        }
+        .feedback {
+            margin-top: 18px;
+            padding: 18px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 1.05rem;
+            display: none;
+            animation: fadeInUp 0.4s ease;
+            position: relative;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: var(--success-bg);
+            border: 3px solid var(--success);
+            color: #008f6b;
+        }
+        .feedback.wrong {
+            background: var(--danger-bg);
+            border: 3px solid var(--danger);
+            color: #c0392b;
+        }
+        .feedback .fb-icon {
+            font-size: 1.6rem;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .feedback .fb-text {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .answer-key {
+            margin-top: 15px;
+            padding: 20px 22px;
+            background: #fff8e1;
+            border: 3px dashed #fdcb6e;
+            border-radius: var(--radius-sm);
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+        .answer-key.show {
+            display: block;
+        }
+        .answer-key .ak-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #6d4c41;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .answer-key .ak-content {
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        .answer-key .ak-content strong {
+            color: var(--primary);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 14px 28px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            -webkit-tap-highlight-color: transparent;
+            letter-spacing: 0.3px;
+        }
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        .nav-btn.prev {
+            background: #f1f2f6;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .nav-btn.prev:hover {
+            background: #e9ecef;
+        }
+        .nav-btn.next {
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            border: 2px solid var(--primary);
+        }
+        .nav-btn.next:hover {
+            background: linear-gradient(135deg, #5a4bd1, #8b7ff0);
+        }
+        .nav-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .score-display {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 15px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .score-display .score-num {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .quiz-header h1 {
+                font-size: 1.3rem;
+            }
+            .quiz-header .subtitle {
+                font-size: 0.85rem;
+            }
+            .header-emoji {
+                font-size: 1.8rem;
+            }
+            .quiz-header {
+                padding: 20px 15px;
+            }
+            .question-card {
+                padding: 20px 15px;
+            }
+            .question-text {
+                font-size: 1.05rem;
+            }
+            .reading-text {
+                font-size: 0.88rem;
+                padding: 12px 15px;
+            }
+            .option-btn {
+                padding: 13px 15px;
+                font-size: 0.92rem;
+                gap: 10px;
+            }
+            .option-btn .option-letter {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                font-size: 0.95rem;
+            }
+            .nav-btn {
+                padding: 11px 20px;
+                font-size: 0.9rem;
+            }
+            .stats-bar {
+                gap: 8px;
+            }
+            .stat-item {
+                padding: 8px 12px;
+                font-size: 0.82rem;
+                min-width: 90px;
+            }
+            .stat-item .stat-value {
+                font-size: 1.1rem;
+            }
+            .feedback {
+                padding: 14px 16px;
+                font-size: 0.92rem;
+            }
+            .answer-key {
+                padding: 16px 18px;
+            }
+            .answer-key .ak-content {
+                font-size: 0.88rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .option-btn {
+                font-size: 0.85rem;
+                padding: 10px 12px;
+            }
+            .option-btn .option-letter {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                font-size: 0.85rem;
+            }
+            .question-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <span class="header-emoji">📚✏️🌟</span>
+            <h1>Kuis TKA Bahasa Indonesia SD</h1>
+            <p class="subtitle">Kompetensi Pemahaman Tekstual • Bab 1-4</p>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-icon">📝</span>
+                <span>Soal: <span class="stat-value" id="current-q-num">1</span>/25</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">✅</span>
+                <span>Benar: <span class="stat-value" id="correct-count">0</span></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">❌</span>
+                <span>Salah: <span class="stat-value" id="wrong-count">0</span></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">⭐</span>
+                <span>Skor: <span class="stat-value" id="score-val">0</span></span>
+            </div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>📊 Progres Belajarmu</span>
+                <span id="progress-pct">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+        <div class="question-card" id="question-card">
+            <span class="question-number" id="q-number">Soal No. 1</span>
+            <span class="question-tag" id="q-tag">📖 Informasi Tersurat</span>
+            <div class="question-text" id="q-text"></div>
+            <div class="reading-text" id="q-reading" style="display:none;"></div>
+            <div class="options-container" id="options-container"></div>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-key" id="answer-key"></div>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn prev" id="btn-prev" disabled>⬅️ Sebelumnya</button>
+            <button class="nav-btn next" id="btn-next">Selanjutnya ➡️</button>
+        </div>
+    </div>
+    <script>
+        const questions = [{
+            tag: "📖 Informasi Tersurat",
+            text: "Kapan Kenthus melompat di padang rumput?",
+            reading: "Suatu pagi Kenthus melompat di padang rumput.",
+            options: ["Suatu siang", "Suatu pagi", "Suatu sore", "Suatu malam"],
+            correct: 1,
+            explanation: "Dalam teks tertulis jelas <strong>\"Suatu pagi\"</strong>, jadi jawabannya adalah <strong>\"Suatu pagi\"</strong>. Informasi ini disebut informasi tersurat karena tertulis langsung di dalam teks."
+        }, {
+            tag: "📖 Informasi Tersurat",
+            text: "Siapa yang sedang mencari buku pelajaran?",
+            reading: "Tia dan Devi sedang berada di Toko Buku Gemar. Mereka mencari buku pelajaran.",
+            options: ["Tia saja", "Devi saja", "Tia dan Devi", "Pak Satpam"],
+            correct: 2,
+            explanation: "Dalam teks tertulis <strong>\"Tia dan Devi sedang berada di Toko Buku Gemar. Mereka mencari buku pelajaran.\"</strong> Kata \"mereka\" mengacu pada Tia dan Devi."
+        }, {
+            tag: "📖 Informasi Tersurat",
+            text: "Di mana kolam itu berada?",
+            reading: "Di tengah padang rumput terdapat kolam. Kolam itu dihuni banyak katak.",
+            options: ["Di tengah hutan", "Di tengah padang rumput", "Di tepi sungai", "Di belakang rumah"],
+            correct: 1,
+            explanation: "Dalam teks tertulis jelas <strong>\"Di tengah padang rumput terdapat kolam\"</strong>. Jadi kolam berada di tengah padang rumput."
+        }, {
+            tag: "📚 Kosakata Khusus",
+            text: "Apa arti kata \"omnivora\" dalam teks tersebut?",
+            reading: "Hewan bisa dibagi menjadi tiga kelompok berdasarkan makanan mereka. Karnivora, hewan pemakan daging. Herbivora, hewan pemakan tumbuhan. Omnivora, hewan pemakan daging dan tumbuhan.",
+            options: ["Hewan pemakan daging", "Hewan pemakan tumbuhan", "Hewan pemakan daging dan tumbuhan", "Hewan pemakan daun"],
+            correct: 2,
+            explanation: "Dalam teks tertulis <strong>\"Omnivora, hewan pemakan daging dan tumbuhan\"</strong>. Kata \"omnivora\" adalah kosakata khusus di bidang hewan."
+        }, {
+            tag: "🎭 Makna Konotatif",
+            text: "Apa arti ungkapan \"diam seribu bahasa\"?",
+            reading: "\"Mereka diam seribu bahasa.\"",
+            options: ["Tidak berbicara seribu kata", "Menahan diri untuk tidak berkomentar", "Berbicara sangat banyak", "Tidak mengerti bahasa apa pun"],
+            correct: 1,
+            explanation: "Ungkapan <strong>\"diam seribu bahasa\"</strong> berarti <strong>menahan diri untuk tidak berkomentar</strong> atau tidak berbicara sama sekali. Ini adalah makna konotatif (kiasan)."
+        }, {
+            tag: "🔤 Kata Berimbuhan",
+            text: "Kata \"mengembungkan\" berasal dari kata dasar...",
+            reading: "Kenthus mengembungkan tubuhnya. Perutnya membesar secara berlebihan.",
+            options: ["Kembung", "Ngembung", "Gembung", "Embung"],
+            correct: 0,
+            explanation: "Kata <strong>\"mengembungkan\"</strong> = awalan <strong>\"me-\"</strong> + kata dasar <strong>\"kembung\"</strong> + akhiran <strong>\"-kan\"</strong>. Jadi kata dasarnya adalah <strong>\"kembung\"</strong>."
+        }, {
+            tag: "👀 Kata Konkret",
+            text: "Manakah yang termasuk kata konkret dalam kalimat tersebut?",
+            reading: "Di tengah padang rumput terdapat kolam. Kolam itu dihuni banyak katak.",
+            options: ["Tengah", "Kolam", "Banyak", "Dihuni"],
+            correct: 1,
+            explanation: "<strong>Kata konkret</strong> adalah kata yang mudah dibayangkan oleh pancaindra. <strong>\"Kolam\"</strong> bisa dilihat oleh mata, jadi termasuk kata konkret."
+        }, {
+            tag: "💬 Makna Kata dalam Konteks",
+            text: "Makna kata \"menegangkan\" dalam kalimat tersebut adalah...",
+            reading: "\"Hari-hari itu sangat menegangkan.\"",
+            options: ["Membuat orang terus waspada dalam bekerja", "Menyebabkan orang kehilangan fokus saat bekerja",
+                "Membuat suasana menjadi serius dan penuh ketakutan", "Menimbulkan rasa khawatir karena situasi yang genting"
+            ],
+            correct: 3,
+            explanation: "Dalam konteks kalimat ini, <strong>\"menegangkan\"</strong> berarti <strong>menimbulkan rasa khawatir karena situasi yang genting</strong>. Makna kata bisa berubah sesuai konteks kalimat."
+        }, {
+            tag: "🔍 Identifikasi Objek",
+            text: "Objek yang dibahas dalam teks tersebut adalah...",
+            reading: "Hewan ini memiliki usus yang panjang agar makanan bisa diproses lebih lama. Tubuhnya bekerja lebih lambat. Di dalam perutnya ada bakteri baik yang membantu mencerna daun.",
+            options: ["Hewan karnivora", "Hewan herbivora", "Hewan folivora", "Hewan omnivora"],
+            correct: 2,
+            explanation: "Ciri-ciri <strong>usus panjang, tubuh bekerja lambat, dan bakteri baik untuk mencerna daun</strong> adalah ciri khas <strong>hewan folivora</strong> (hewan pemakan daun)."
+        }, {
+            tag: "🔍 Identifikasi Objek",
+            text: "Objek yang dimaksud adalah...",
+            reading: "Benda ini sering digunakan dalam kerajinan. Benda ini bisa menempel di permukaan kulkas.",
+            options: ["Cat semprot", "Magnet", "Gunting", "Lem tembak"],
+            correct: 1,
+            explanation: "Benda yang bisa <strong>menempel di permukaan kulkas</strong> dan sering digunakan dalam kerajinan adalah <strong>magnet</strong>."
+        }, {
+            tag: "📝 Ikhtisar",
+            text: "Ikhtisar yang paling tepat untuk teks tersebut adalah...",
+            reading: "Hewan bisa dibagi menjadi tiga kelompok berdasarkan makanan mereka. Karnivora, hewan pemakan daging. Herbivora, hewan pemakan tumbuhan. Omnivora, hewan pemakan daging dan tumbuhan.",
+            options: ["Hewan terbagi menjadi tiga kelompok berdasarkan makanannya", "Karnivora adalah hewan pemakan daging",
+                "Singa adalah contoh hewan karnivora", "Hewan omnivora makan daging dan tumbuhan"
+            ],
+            correct: 0,
+            explanation: "Ikhtisar harus mencakup <strong>ide pokok keseluruhan teks</strong>. Ide pokok teks ini adalah pembagian hewan menjadi tiga kelompok berdasarkan makanan."
+        }, {
+            tag: "📊 Bagan",
+            text: "Bagan yang sesuai untuk teks tersebut adalah...",
+            reading: "Karnivora adalah hewan pemakan daging. Contohnya singa. Herbivora adalah hewan pemakan tumbuhan. Contohnya sapi. Omnivora adalah hewan pemakan daging dan tumbuhan. Contohnya beruang.",
+            options: ["Bagan dengan 3 cabang: Karnivora, Herbivora, Omnivora", "Bagan dengan 2 cabang: pemakan daging dan pemakan tumbuhan",
+                "Bagan dengan 4 cabang: Singa, Sapi, Beruang, Hewan", "Bagan dengan 1 cabang: Hewan"
+            ],
+            correct: 0,
+            explanation: "Teks membagi hewan menjadi <strong>3 kelompok utama</strong>: karnivora, herbivora, dan omnivora. Jadi bagan yang sesuai memiliki <strong>3 cabang</strong>."
+        }, {
+            tag: "📖 Informasi Tersurat",
+            text: "Mengapa gigi bisa berlubang?",
+            reading: "Bakteri jahat suka memakan sisa gula. Mereka melepaskan asam yang membuat gigi kita berlubang.",
+            options: ["Karena bakteri melepaskan asam", "Karena sisa makanan menempel", "Karena gigi tidak disikat",
+                "Karena gula terlalu manis"
+            ],
+            correct: 0,
+            explanation: "Dalam teks tertulis <strong>\"Mereka melepaskan asam yang membuat gigi kita berlubang\"</strong>. Jadi penyebabnya adalah <strong>bakteri melepaskan asam</strong>."
+        }, {
+            tag: "📖 Informasi Tersurat",
+            text: "Bagaimana cara hewan folivora mencerna daun?",
+            reading: "Agar bisa mencerna daun, tubuh hewan folivora punya cara khusus. Mereka punya usus yang panjang agar makanan bisa diproses lebih lama.",
+            options: ["Dengan mengunyah lebih lama", "Dengan usus yang panjang", "Dengan minum banyak air",
+                "Dengan berjemur di matahari"
+            ],
+            correct: 1,
+            explanation: "Dalam teks tertulis <strong>\"Mereka punya usus yang panjang agar makanan bisa diproses lebih lama\"</strong>. Jadi cara mencerna daun adalah dengan <strong>usus yang panjang</strong>."
+        }, {
+            tag: "📚 Kosakata Khusus",
+            text: "Kata \"folivora\" termasuk kosakata khusus dalam bidang...",
+            reading: "Dari kelompok herbivora, ada hewan yang hanya makan daun saja. Mereka disebut folivora.",
+            options: ["Kedokteran", "Luar angkasa", "Hewan", "Kerajinan"],
+            correct: 2,
+            explanation: "Kata <strong>\"folivora\"</strong> adalah istilah dalam bidang <strong>hewan</strong> yang berarti hewan pemakan daun."
+        }, {
+            tag: "📖 Makna Denotatif",
+            text: "Makna denotatif kata \"besar\" dalam kalimat tersebut adalah...",
+            reading: "Kenthus adalah anak katak yang paling besar dan kuat.",
+            options: ["Berkuasa", "Ukurannya melebihi normal", "Sangat penting", "Sudah dewasa"],
+            correct: 1,
+            explanation: "<strong>Makna denotatif</strong> adalah makna sebenarnya. Kata \"besar\" secara denotatif berarti <strong>ukurannya melebihi normal</strong>."
+        }, {
+            tag: "🔤 Kata Berimbuhan",
+            text: "Kata berimbuhan dalam kalimat tersebut adalah...",
+            reading: "Ayah menjelaskan cara membuat layang-layang.",
+            options: ["Ayah", "Menjelaskan", "Cara", "Layang-layang"],
+            correct: 1,
+            explanation: "<strong>\"Menjelaskan\"</strong> = awalan <strong>\"me-\"</strong> + kata dasar \"jelas\" + akhiran <strong>\"-kan\"</strong>. Kata ini adalah kata berimbuhan."
+        }, {
+            tag: "👀 Kata Konkret",
+            text: "Manakah kata konkret dalam kalimat tersebut?",
+            reading: "Senyum itu enggan lepas dari bibirmu. Uluran tanganmu menyambutku.",
+            options: ["Enggan", "Lepas", "Senyum", "Menyambut"],
+            correct: 2,
+            explanation: "<strong>\"Senyum\"</strong> bisa dilihat oleh mata, jadi termasuk <strong>kata konkret</strong>. Kata \"enggan\", \"lepas\", dan \"menyambut\" tidak bisa dilihat secara langsung."
+        }, {
+            tag: "🔍 Identifikasi Objek",
+            text: "Objek yang dimaksud adalah...",
+            reading: "Tempat ini memiliki kasir. Di sini kita bisa membeli buku. Kita harus mengantre untuk membayar.",
+            options: ["Perpustakaan", "Toko buku", "Sekolah", "Rumah"],
+            correct: 1,
+            explanation: "Ciri-ciri yang disebutkan: <strong>ada kasir, bisa membeli buku, harus mengantre</strong> menunjukkan bahwa tempat tersebut adalah <strong>toko buku</strong>."
+        }, {
+            tag: "📝 Ikhtisar",
+            text: "Ikhtisar yang tepat untuk cerita tersebut adalah...",
+            reading: "Kenthus merasa tidak terkalahkan. Suatu pagi ia bertemu anak lembu. Ia mencoba mengembungkan tubuhnya untuk menandingi lembu. Namun, ia jatuh lemas. Akhirnya ia mengakui kesalahannya.",
+            options: ["Kenthus sombong dan akhirnya mengakui kesalahannya", "Kenthus bertemu anak lembu di padang rumput",
+                "Kenthus jatuh lemas karena mengembungkan tubuh", "Kenthus adalah anak katak yang besar dan kuat"
+            ],
+            correct: 0,
+            explanation: "Ikhtisar harus mencakup <strong>keseluruhan cerita</strong>: Kenthus yang sombong, mencoba membuktikan kekuatan, jatuh lemas, dan akhirnya mengakui kesalahan."
+        }, {
+            tag: "📖 Informasi Tersurat",
+            text: "Apa yang dijelaskan Koko tentang anak lembu?",
+            reading: "Koko, kakak Kenthus, menjelaskan. \"Makhluk itu anak lembu. Anak lembu tidak jahat. Lembu tidak makan katak. Ia hanya makan rumput.\"",
+            options: ["Anak lembu itu sangat sombong", "Anak lembu tidak jahat", "Anak lembu suka mengejar katak",
+                "Anak lembu harus dihindari"
+            ],
+            correct: 1,
+            explanation: "Dalam teks Koko menjelaskan <strong>\"Anak lembu tidak jahat. Lembu tidak makan katak. Ia hanya makan rumput.\"</strong> Jadi jawaban yang benar adalah \"Anak lembu tidak jahat\"."
+        }, {
+            tag: "📖 Informasi Tersurat",
+            text: "Apa saja contoh hewan folivora berdasarkan informasi tersebut?",
+            reading: "Ada beberapa contoh hewan folivora yang hidup di alam. Misalnya, panda yang makan daun bambu. Ada juga koala yang makan daun eukaliptus.",
+            options: ["Sapi dan kambing", "Panda dan koala", "Singa dan beruang", "Katak dan lembu"],
+            correct: 1,
+            explanation: "Dalam teks tertulis <strong>\"panda yang makan daun bambu. Ada juga koala yang makan daun eukaliptus\"</strong>. Jadi contoh hewan folivora adalah <strong>panda dan koala</strong>."
+        }, {
+            tag: "💬 Makna Kata dalam Konteks",
+            text: "Makna kata \"manis\" dalam kalimat tersebut adalah...",
+            reading: "Kata terima kasih kuanggap lebih manis daripada kata maaf.",
+            options: ["Rasanya seperti gula", "Menyenangkan hati", "Berwarna cerah", "Wanginya harum"],
+            correct: 1,
+            explanation: "Dalam konteks kalimat ini, <strong>\"manis\"</strong> berarti <strong>menyenangkan hati</strong> atau lebih bermakna positif. Kata \"manis\" memiliki makna konotatif di sini."
+        }, {
+            tag: "🔍 Identifikasi Objek",
+            text: "Objek yang dimaksud berdasarkan ciri-ciri tersebut adalah...",
+            reading: "Makhluk ini memiliki ciri: melompat, hidup di kolam, suka mengembungkan tubuhnya.",
+            options: ["Ikan", "Katak", "Ular", "Burung"],
+            correct: 1,
+            explanation: "Ciri-ciri <strong>melompat, hidup di kolam, dan mengembungkan tubuh</strong> adalah ciri khas <strong>katak</strong>."
+        }, {
+            tag: "📊 Bagan",
+            text: "Bagan yang sesuai untuk informasi tersebut adalah...",
+            reading: "Hewan folivora memiliki beberapa ciri: usus panjang, tubuh bekerja lambat, dan ada bakteri baik di perut.",
+            options: ["Bagan dengan 3 cabang: usus panjang, tubuh lambat, bakteri baik", "Bagan dengan 2 cabang: hewan dan folivora",
+                "Bagan dengan 1 cabang: hewan folivora", "Bagan dengan 4 cabang: hewan, tumbuhan, bakteri, usus"
+            ],
+            correct: 0,
+            explanation: "Bagan yang sesuai harus menunjukkan <strong>3 ciri hewan folivora</strong>: usus panjang, tubuh bekerja lambat, dan bakteri baik di perut."
+        }];
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let answered = false;
+        let quizCompleted = false;
+        const totalQuestions = questions.length;
+        const qNumberEl = document.getElementById('q-number');
+        const qTagEl = document.getElementById('q-tag');
+        const qTextEl = document.getElementById('q-text');
+        const qReadingEl = document.getElementById('q-reading');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackEl = document.getElementById('feedback');
+        const answerKeyEl = document.getElementById('answer-key');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const currentQNumEl = document.getElementById('current-q-num');
+        const correctCountEl = document.getElementById('correct-count');
+        const wrongCountEl = document.getElementById('wrong-count');
+        const scoreValEl = document.getElementById('score-val');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPct = document.getElementById('progress-pct');
+        const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            answered = false;
+            quizCompleted = false;
+            qNumberEl.textContent = `Soal No. ${index + 1}`;
+            qTagEl.textContent = q.tag;
+            qTextEl.textContent = q.text;
+            if (q.reading && q.reading.trim() !== '') {
+                qReadingEl.style.display = 'block';
+                qReadingEl.textContent = q.reading;
+            } else {
+                qReadingEl.style.display = 'none';
+            }
+            optionsContainer.innerHTML = '';
+            feedbackEl.className = 'feedback';
+            feedbackEl.innerHTML = '';
+            answerKeyEl.className = 'answer-key';
+            answerKeyEl.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.setAttribute('data-opt-index', i);
+                btn.innerHTML = `
+                    <span class="option-letter">${optionLabels[i]}</span>
+                    <span>${opt}</span>
+                `;
+                btn.addEventListener('click', function() {
+                    if (answered) return;
+                    handleAnswer(i, btn);
+                });
+                optionsContainer.appendChild(btn);
+            });
+            btnPrev.disabled = (index === 0);
+            if (index === totalQuestions - 1) {
+                btnNext.textContent = '🏁 Selesai';
+            } else {
+                btnNext.textContent = 'Selanjutnya ➡️';
+            }
+            updateStats();
+            updateProgress();
+        }
+
+        function handleAnswer(selectedIdx, btn) {
+            const q = questions[currentQuestion];
+            answered = true;
+            const allOptionBtns = document.querySelectorAll('.option-btn');
+            const isCorrect = (selectedIdx === q.correct);
+            allOptionBtns.forEach(ob => {
+                ob.classList.add('disabled');
+                const idx = parseInt(ob.getAttribute('data-opt-index'));
+                if (idx === q.correct) {
+                    ob.classList.add('reveal-correct');
+                }
+                if (idx === selectedIdx && !isCorrect) {
+                    ob.classList.add('selected-wrong');
+                }
+                if (idx === selectedIdx && isCorrect) {
+                    ob.classList.add('selected-correct');
+                }
+            });
+            feedbackEl.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+            feedbackEl.innerHTML = `
+                <span class="fb-icon">${isCorrect ? '🎉' : '😅'}</span>
+                <span class="fb-text">${isCorrect ? 'BENAR! Hebat! ' : 'SALAH! Jangan menyerah! '}</span>
+            `;
+            answerKeyEl.className = 'answer-key show';
+            answerKeyEl.innerHTML = `
+                <div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div>
+                <div class="ak-content">
+                    <strong>Jawaban Benar:</strong> ${optionLabels[q.correct]}. ${q.options[q.correct]}<br>
+                    <strong>Pembahasan:</strong> ${q.explanation}
+                </div>
+            `;
+            if (isCorrect) {
+                correctAnswers++;
+            } else {
+                wrongAnswers++;
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            currentQNumEl.textContent = currentQuestion + 1;
+            correctCountEl.textContent = correctAnswers;
+            wrongCountEl.textContent = wrongAnswers;
+            const total = correctAnswers + wrongAnswers;
+            const score = total > 0 ? Math.round((correctAnswers / total) * 100) : 0;
+            scoreValEl.textContent = score;
+        }
+
+        function updateProgress() {
+            const pct = Math.round(((currentQuestion) / totalQuestions) * 100);
+            progressFill.style.width = pct + '%';
+            progressPct.textContent = pct + '%';
+        }
+
+        function goToNext() {
+            if (currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                quizCompleted = true;
+                showResult();
+            }
+        }
+
+        function goToPrev() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function showResult() {
+            const total = correctAnswers + wrongAnswers;
+            const score = total > 0 ? Math.round((correctAnswers / total) * 100) : 0;
+            const totalAnswered = correctAnswers + wrongAnswers;
+            let message = '';
+            let emoji = '';
+            if (score >= 90) { emoji = '🏆🌟🎉';
+                message = 'LUAR BIASA! Kamu hebat sekali!'; } else if (score >= 75) { emoji = '🌟👏';
+                message = 'BAGUS SEKALI! Terus tingkatkan!'; } else if (score >= 60) { emoji = '👍😊';
+                message = 'CUKUP BAIK! Rajin berlatih ya!'; } else if (score >= 40) { emoji = '💪📚';
+                message = 'TERUS SEMANGAT! Banyak berlatih ya!'; } else { emoji = '📚😊';
+                message = 'JANGAN MENYERAH! Yuk belajar lagi!'; }
+            qNumberEl.textContent = '📋 Hasil Kuis';
+            qTagEl.textContent = '🏁 Selesai';
+            qTextEl.innerHTML = `
+                <div style="text-align:center; padding:20px 0;">
+                    <div style="font-size:4rem; margin-bottom:15px;">${emoji}</div>
+                    <div style="font-size:1.5rem; font-weight:700; color:var(--primary);">${message}</div>
+                    <div style="font-size:1.2rem; margin-top:15px; color:var(--text);">Kamu menjawab <strong>${correctAnswers}</strong> benar dari <strong>${totalAnswered}</strong> soal yang dijawab.</div>
+                    <div style="font-size:1.4rem; margin-top:10px; font-weight:700; color:var(--success);">Skor: ${score}</div>
+                    <div style="margin-top:20px; font-size:0.95rem; color:var(--text-light);">Dari total ${totalQuestions} soal, kamu sudah menjawab ${totalAnswered} soal.</div>
+                </div>
+            `;
+            qReadingEl.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            feedbackEl.className = 'feedback';
+            feedbackEl.innerHTML = '';
+            answerKeyEl.className = 'answer-key';
+            answerKeyEl.innerHTML = '';
+            btnNext.textContent = '🔄 Ulangi Kuis';
+            btnNext.disabled = false;
+            btnPrev.disabled = true;
+            btnNext.removeEventListener('click', goToNext);
+            btnNext.addEventListener('click', function() { restartQuiz(); });
+            progressFill.style.width = '100%';
+            progressPct.textContent = '100%';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            wrongAnswers = 0;
+            answered = false;
+            quizCompleted = false;
+            btnNext.textContent = 'Selanjutnya ➡️';
+            btnNext.removeEventListener('click', restartQuiz);
+            btnNext.addEventListener('click', goToNext);
+            loadQuestion(0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        btnPrev.addEventListener('click', goToPrev);
+        btnNext.addEventListener('click', goToNext);
+        loadQuestion(0);
+    </script>
+</body>
+</html>

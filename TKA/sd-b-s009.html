@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Evaluasi & Apresiasi - Kelas 6 SD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fff3e0;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e67e22;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background: #fef9e7;
+            border: 2px solid #f8c471;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #e67e22;
+            color: white;
+            font-weight: 900;
+            padding: 5px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: #ffffff;
+            border: 2px solid #1abc9c;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #1abc9c;
+            color: white;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background: #27ae60 !important;
+            border-color: #27ae60 !important;
+            color: white !important;
+        }
+
+        .option-btn.wrong {
+            background: #e74c3c !important;
+            border-color: #e74c3c !important;
+            color: white !important;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .feedback.correct-bg {
+            background: #d4efdf;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.wrong-bg {
+            background: #fadbd8;
+            border: 2px solid #c0392b;
+        }
+
+        .status {
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .status.correct-text { color: #27ae60; }
+        .status.wrong-text { color: #c0392b; }
+
+        .explanation {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #2c3e50;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 24px; }
+            .question-text { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌟 Kuis TKA Bahasa Indonesia</h1>
+    <p class="subtitle">Materi: Evaluasi & Apresiasi Kelas 6 SD</p>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const questions = [
+        // Bab 11: Menilai Relevansi (1-8)
+        {
+            q: "Kegiatan menilai apakah cerita yang kita baca ada hubungannya atau memiliki kecocokan dengan kehidupan nyata disebut...",
+            options: ["Relevansi", "Imajinasi", "Deskripsi", "Apresiasi"],
+            answer: 0,
+            explanation: "Relevansi artinya kecocokan atau hubungan. Menilai relevansi berarti kita melihat apakah teks tersebut masuk akal terjadi di kehidupan kita."
+        },
+        {
+            q: "Teks: <em>Andi menemukan dompet jatuh di jalan. Ia melihat ada kartu identitas di dalamnya, lalu Andi pergi ke rumah pemiliknya untuk mengembalikan dompet tersebut.</em><br>Apakah peristiwa ini relevan dengan kehidupan sehari-hari?",
+            options: ["Tidak, karena dompet tidak bisa jatuh", "Ya, ini mencerminkan sikap jujur yang bisa kita temui di dunia nyata", "Tidak, karena Andi seharusnya mengambil uangnya", "Ya, tapi ini hanya terjadi di dunia dongeng"],
+            answer: 1,
+            explanation: "Peristiwa mengembalikan barang yang jatuh sangat relevan (sesuai) dengan nilai kejujuran di kehidupan kita sehari-hari."
+        },
+        {
+            q: "Peristiwa manakah di bawah ini yang <b>TIDAK relevan</b> (tidak mungkin terjadi) di dunia nyata?",
+            options: ["Seorang anak menangis karena sepedanya rusak", "Seekor kucing yang kelaparan mengeong meminta makan", "Sebuah sapu terbang membawa penyihir ke sekolah", "Petani memanen padi di sawah"],
+            answer: 2,
+            explanation: "Sapu yang bisa terbang dan penyihir adalah unsur fantasi/khayalan yang tidak relevan dengan kehidupan nyata."
+        },
+        {
+            q: "Saat membaca buku tentang 'Cara Menggosok Gigi yang Benar', kamu teringat pesan dokter gigi saat kamu periksa bulan lalu. Hal ini berarti kamu sedang...",
+            options: ["Menghubungkan teks dengan gambar", "Menghubungkan teks dengan pengalaman pribadi", "Menulis ulang teks tersebut", "Menilai tokoh cerita"],
+            answer: 1,
+            explanation: "Kamu teringat kejadian saat periksa gigi, itu berarti kamu mengaitkan isi teks dengan pengalaman yang pernah kamu alami sendiri."
+        },
+        {
+            q: "Teks: <em>Rani malas belajar dan selalu bermain ponsel. Namun saat ujian, ia tiba-tiba mendapatkan nilai 100 karena pensil ajaibnya bisa menjawab sendiri.</em><br>Mengapa teks ini dinilai tidak relevan dengan kenyataan?",
+            options: ["Karena Rani tidak punya ponsel", "Karena nilai ujian maksimal hanya 90", "Karena di dunia nyata tidak ada pensil ajaib yang bisa berpikir sendiri", "Karena Rani adalah anak rajin"],
+            answer: 2,
+            explanation: "Dalam kehidupan nyata, kita tidak bisa mendapat nilai bagus tanpa belajar hanya dengan mengandalkan benda ajaib."
+        },
+        {
+            q: "Kamu membaca berita tentang 'Bahaya Membuang Sampah di Sungai'. Pengetahuan apa yang paling relevan untuk dihubungkan dengan teks tersebut?",
+            options: ["Pengetahuan tentang jenis ikan di laut", "Pengetahuan tentang penyebab banjir", "Pengetahuan tentang cara membuat layang-layang", "Pengetahuan tentang tata surya"],
+            answer: 1,
+            explanation: "Membuang sampah di sungai adalah penyebab utama banjir. Jadi, pengetahuan tentang banjir sangat cocok dihubungkan dengan berita tersebut."
+        },
+        {
+            q: "Teks: <em>Setiap hari Minggu, Dito membantu ayahnya mencuci mobil di halaman rumah.</em><br>Nilai kehidupan apa yang relevan dengan cerita tersebut?",
+            options: ["Bakti kepada orang tua dan kebersihan", "Malas dan boros", "Suka marah-marah", "Keberanian melawan musuh"],
+            answer: 0,
+            explanation: "Membantu orang tua mencuci mobil adalah contoh nyata dari sikap berbakti dan menjaga kebersihan."
+        },
+        {
+            q: "Mengevaluasi kesesuaian cerita dengan kenyataan paling mudah dilakukan pada jenis buku...",
+            options: ["Dongeng fabel (hewan berbicara)", "Buku cerita fantasi", "Komik pahlawan super", "Buku biografi tokoh (kisah nyata)"],
+            answer: 3,
+            explanation: "Buku biografi berisi kisah nyata tokoh, sehingga peristiwanya paling relevan dan sesuai dengan kehidupan nyata dibandingkan dongeng atau fantasi."
+        },
+
+        // Bab 12: Kesesuaian Antarunsur dan Ilustrasi (9-17)
+        {
+            q: "Teks menyebutkan: <em>'Matahari bersinar sangat terik membuat keringat Bayu bercucuran.'</em> Namun, gambar ilustrasi di buku menunjukkan gambar bulan dan bintang. Apa kesimpulanmu?",
+            options: ["Gambar dan teks sudah sangat sesuai", "Gambar ilustrasi tidak sesuai dengan informasi di teks", "Gambar itu pasti menceritakan tokoh lain", "Teksnya yang salah ketik"],
+            answer: 1,
+            explanation: "Teks menceritakan cuaca panas siang hari (matahari terik), sedangkan gambar menunjukkan malam hari. Jadi, keduanya tidak sesuai."
+        },
+        {
+            q: "Di awal cerita, tokoh Budi digambarkan sebagai pahlawan pemberani yang mengalahkan harimau. Namun di akhir cerita, Budi menangis ketakutan saat melihat ulat bulu kecil. Hal ini menunjukkan ketidaksesuaian pada unsur...",
+            options: ["Latar tempat", "Alur cerita", "Amanat cerita", "Karakter/Sifat tokoh"],
+            answer: 3,
+            explanation: "Ada ketidaksesuaian antara sifat awal (pemberani lawan harimau) dengan sifat di akhir (takut ulat), ini disebut ketidaksesuaian karakter tokoh."
+        },
+        {
+            q: "Baca teks informasi berikut:<br><em>(1) Gajah adalah mamalia darat terbesar. (2) Gajah sangat suka makan daun, rumput, dan buah-buahan. (3) Sebagai hewan karnivora, gajah juga suka berburu kijang.</em><br>Kalimat mana yang tidak sesuai/bertentangan dengan fakta?",
+            options: ["Kalimat (1)", "Kalimat (2)", "Kalimat (3)", "Semua kalimat benar"],
+            answer: 2,
+            explanation: "Kalimat 3 salah dan bertentangan karena gajah adalah herbivora (pemakan tumbuhan seperti daun/rumput di kalimat 2), bukan karnivora."
+        },
+        {
+            q: "Jika sebuah teks berjudul 'Cara Membuat Layang-layang', ilustrasi (gambar) apa yang paling sesuai untuk melengkapi teks tersebut?",
+            options: ["Gambar panci dan kompor", "Gambar bambu, benang, lem, dan kertas", "Gambar sepeda balap", "Gambar pemandangan pantai"],
+            answer: 1,
+            explanation: "Ilustrasi harus sesuai dengan topik teks. Bahan membuat layang-layang adalah bambu, kertas, lem, dan benang."
+        },
+        {
+            q: "Paragraf 1: <em>Desa Makmur adalah desa yang bersih dan sejuk.</em><br>Paragraf 2: <em>Sayangnya, banyak sampah menumpuk dan udara sangat panas di Desa Makmur.</em><br>Penilaian yang tepat terhadap teks tersebut adalah...",
+            options: ["Teks tersebut sangat bagus", "Terdapat ketidaksesuaian/pertentangan informasi antarparagraf", "Teks tersebut menceritakan desa yang berbeda", "Teks tersebut menceritakan tokoh jahat"],
+            answer: 1,
+            explanation: "Paragraf 1 bilang 'bersih dan sejuk', tapi paragraf 2 bilang 'banyak sampah dan panas'. Ini adalah contoh informasi yang saling bertentangan."
+        },
+        {
+            q: "Teks: <em>Mereka mendaki gunung yang sangat tinggi dan curam. Tiba-tiba ombak besar datang menyapu tenda mereka.</em><br>Unsur latar apa yang tidak sesuai pada cerita tersebut?",
+            options: ["Latar waktu", "Tokoh utama", "Latar tempat", "Amanat"],
+            answer: 2,
+            explanation: "Mereka sedang mendaki 'gunung', sangat tidak logis jika tiba-tiba ada 'ombak besar' (yang seharusnya ada di pantai/laut)."
+        },
+        {
+            q: "Fungsi utama sebuah ilustrasi (gambar) di dalam teks cerita anak adalah untuk...",
+            options: ["Membuat buku menjadi lebih mahal", "Membantu memperjelas isi teks dan membuatnya lebih menarik", "Menghapus tulisan yang salah", "Menggantikan semua kata di buku"],
+            answer: 1,
+            explanation: "Ilustrasi berfungsi mendukung dan memperjelas teks agar pembaca (terutama anak-anak) lebih mudah memahami isi cerita secara visual."
+        },
+        {
+            q: "Teks: <em>Pangeran itu dikenal sangat pelit dan sombong. Suatu hari, ia melihat pengemis tua kelaparan. Tanpa berpikir panjang, pangeran memberikan seluruh harta kerajaannya kepada pengemis itu.</em><br>Apakah tindakan pangeran sesuai dengan karakternya?",
+            options: ["Ya, karena dia seorang pangeran", "Tidak, karakter pelit/sombong biasanya tidak akan rela memberikan hartanya begitu saja", "Ya, karena pengemis itu sakti", "Tidak, karena pengemis tidak butuh harta"],
+            answer: 1,
+            explanation: "Tindakan memberikan seluruh harta tidak sesuai dengan sifat 'pelit dan sombong' yang disebutkan di kalimat pertama."
+        },
+        {
+            q: "Dalam sebuah berita tertulis: '<em>Pertandingan sepak bola dibatalkan karena hujan badai. Namun, kedua tim tetap bermain di lapangan hijau hingga selesai.</em>' Apa komentarmu?",
+            options: ["Beritanya mengandung informasi yang tidak konsisten (bertentangan)", "Beritanya sangat jelas", "Pertandingan itu pasti seru", "Kedua tim sangat hebat"],
+            answer: 0,
+            explanation: "Jika pertandingan dibatalkan, maka tidak mungkin mereka tetap bermain di lapangan sampai selesai. Ini informasi yang tidak konsisten."
+        },
+
+        // Bab 13: Respons Emosional (18-25)
+        {
+            q: "Perasaan atau reaksi yang muncul dalam hati kita setelah membaca sebuah cerita disebut...",
+            options: ["Respons Emosional", "Ide Pokok", "Alur Mundur", "Resolusi"],
+            answer: 0,
+            explanation: "Respons emosional adalah reaksi perasaan kita, seperti ikut sedih, senang, atau marah saat membaca nasib para tokoh."
+        },
+        {
+            q: "Teks: <em>Setelah bertahun-tahun terpisah, adik kecil itu akhirnya bisa memeluk kembali ibu kandungnya. Mereka menangis bahagia.</em><br>Respons emosional apa yang biasanya muncul dari pembaca?",
+            options: ["Marah dan kesal", "Ketakutan", "Terharu dan ikut bahagia", "Bosan"],
+            answer: 2,
+            explanation: "Kejadian bertemunya kembali anggota keluarga setelah lama berpisah memunculkan perasaan terharu, lega, dan bahagia."
+        },
+        {
+            q: "Saat membaca cerita tentang Ibu Tiri yang tega menyuruh Bawang Putih bekerja dari pagi hingga malam tanpa diberi makan, perasaan apa yang mungkin timbul terhadap Bawang Putih?",
+            options: ["Rasa kasihan / empati", "Rasa benci", "Rasa lucu / tertawa", "Rasa bangga"],
+            answer: 0,
+            explanation: "Kita pasti merasa kasihan atau iba (empati) melihat tokoh baik yang disiksa atau diperlakukan tidak adil."
+        },
+        {
+            q: "Teks menceritakan adegan kejar-kejaran antara Detektif cilik dan seorang pencuri dompet di gang-gang sempit yang gelap. Suasana apa yang berusaha dibangun penulis agar dirasakan pembaca?",
+            options: ["Lucu dan santai", "Tegang dan mendebarkan", "Sedih dan menangis", "Romantis"],
+            answer: 1,
+            explanation: "Adegan aksi seperti kejar-kejaran dengan penjahat bertujuan untuk membuat pembaca merasa tegang dan mendebarkan (deg-degan)."
+        },
+        {
+            q: "Jika sebuah cerita dongeng diakhiri dengan <em>'Akhirnya, kancil dan semua hewan di hutan hidup rukun dan damai selamanya'</em>, pembaca akan merasa...",
+            options: ["Lega dan gembira (Happy Ending)", "Sangat kecewa (Sad Ending)", "Takut masuk hutan", "Marah pada kancil"],
+            answer: 0,
+            explanation: "Akhir cerita yang baik dan damai (happy ending) biasanya meninggalkan perasaan lega dan gembira pada pembacanya."
+        },
+        {
+            q: "Teks: <em>Walaupun tubuhnya cacat, Jono tidak pernah menyerah. Ia terus berlatih berenang setiap hari hingga akhirnya berhasil meraih medali emas di perlombaan.</em><br>Nilai emosional yang bisa kita ambil dari tokoh Jono adalah...",
+            options: ["Rasa malu", "Rasa sombong", "Rasa kagum dan semangat pantang menyerah", "Rasa takut pada air"],
+            answer: 2,
+            explanation: "Kita akan merasa kagum (inspiratif) melihat perjuangan luar biasa dari seseorang yang pantang menyerah meski punya kekurangan."
+        },
+        {
+            q: "Tokoh antagonis (jahat) sering kali membuat pembaca merasa jengkel atau marah. Hal ini menunjukkan bahwa...",
+            options: ["Penulis gagal membuat cerita", "Pembaca tidak suka membaca", "Penulis berhasil menggambarkan sifat jahat tokoh tersebut dengan baik", "Tokoh antagonis sebenarnya baik"],
+            answer: 2,
+            explanation: "Jika kita bisa kesal pada tokoh jahat, berarti respons emosional kita berjalan baik, dan si penulis sukses membuat karakter itu terasa hidup."
+        },
+        {
+            q: "Mengapa penting bagi kita untuk memiliki apresiasi (penilaian) setelah membaca karya sastra?",
+            options: ["Agar kita bisa menjual bukunya", "Agar kita dapat memahami makna terdalam, mengambil pesan moral, dan menghargai karya penulis", "Agar kita terlihat pintar di depan teman", "Agar buku cepat rusak"],
+            answer: 1,
+            explanation: "Apresiasi sastra membuat kita tidak hanya membaca huruf, tapi juga 'membaca' pesan kehidupan dan menghargai usaha penulis yang menciptakannya."
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        // Question text
+        const qText = `
+            <div class="question-number">Soal ${index + 1} / 25</div>
+            <div class="question-text">${q.q}</div>
+        `;
+
+        // Options
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options-container';
+
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.className = 'feedback';
+        feedbackDiv.id = `feedback-${index}`;
+
+        q.options.forEach((opt, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+            
+            btn.onclick = () => {
+                // Disable all buttons in this question
+                const allBtns = optionsDiv.querySelectorAll('.option-btn');
+                allBtns.forEach(b => b.disabled = true);
+
+                if (optIndex === q.answer) {
+                    btn.classList.add('correct');
+                    feedbackDiv.classList.add('correct-bg');
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.innerHTML = `
+                        <div class="status correct-text">🎉 HEBAT, BENAR!</div>
+                        <div class="explanation"><b>Kunci Jawaban:</b> ${q.options[q.answer]}<br><br>${q.explanation}</div>
+                    `;
+                } else {
+                    btn.classList.add('wrong');
+                    // Highlight correct answer
+                    allBtns[q.answer].classList.add('correct');
+                    
+                    feedbackDiv.classList.add('wrong-bg');
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.innerHTML = `
+                        <div class="status wrong-text">❌ BELUM TEPAT!</div>
+                        <div class="explanation"><b>Kunci Jawaban:</b> ${q.options[q.answer]}<br><br>${q.explanation}</div>
+                    `;
+                }
+            };
+            optionsDiv.appendChild(btn);
+        });
+
+        card.innerHTML = qText;
+        card.appendChild(optionsDiv);
+        card.appendChild(feedbackDiv);
+        
+        quizContainer.appendChild(card);
+    });
+</script>
+
+</body>
+</html>

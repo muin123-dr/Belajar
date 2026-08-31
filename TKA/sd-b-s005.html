@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Pemahaman Inferensial - Kelas 6 SD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #e8f8f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #9b59b6;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background: #f4ecf7;
+            border: 2px solid #d2b4de;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #af7ac5;
+            color: white;
+            font-weight: 900;
+            padding: 5px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: #ffffff;
+            border: 2px solid #5dade2;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #5dade2;
+            color: white;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background: #2ecc71 !important;
+            border-color: #2ecc71 !important;
+            color: white !important;
+        }
+
+        .option-btn.wrong {
+            background: #e74c3c !important;
+            border-color: #e74c3c !important;
+            color: white !important;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .feedback.correct-bg {
+            background: #d5f5e3;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.wrong-bg {
+            background: #fadbd8;
+            border: 2px solid #c0392b;
+        }
+
+        .status {
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .status.correct-text { color: #27ae60; }
+        .status.wrong-text { color: #c0392b; }
+
+        .explanation {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #2c3e50;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 24px; }
+            .question-text { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🕵️‍♂️ Kuis TKA Bahasa Indonesia</h1>
+    <p class="subtitle">Materi: Pemahaman Inferensial (Tersirat) Kelas 6 SD</p>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const questions = [
+        // Bab 5: Ide Pokok dan Gagasan Pendukung (1-5)
+        {
+            q: "Inti atau topik utama yang sedang dibahas dalam sebuah paragraf disebut dengan...",
+            options: ["Gagasan pendukung", "Ide pokok / Gagasan utama", "Amanat cerita", "Kesimpulan"],
+            answer: 1,
+            explanation: "Ide pokok adalah 'Bos' dari sebuah paragraf yang menjadi inti pembicaraan. Semua kalimat lain dibuat untuk menjelaskan ide pokok ini."
+        },
+        {
+            q: "Kalimat-kalimat yang berisi contoh, rincian, atau alasan untuk menjelaskan ide pokok dinamakan...",
+            options: ["Ide pokok", "Judul", "Gagasan pendukung", "Latar"],
+            answer: 2,
+            explanation: "Gagasan pendukung bertugas 'mendukung' dan menjelaskan lebih rinci tentang ide pokok."
+        },
+        {
+            q: "Teks: <em>Banyak manfaat yang didapatkan dari kebiasaan menabung. Kita bisa membeli barang impian dari uang tabungan. Selain itu, menabung melatih kita untuk hidup hemat dan tidak boros. Menabung juga bisa menjadi persiapan jika ada kebutuhan mendadak.</em><br>Ide pokok paragraf di atas terletak pada kalimat...",
+            options: ["Pertama (Manfaat menabung)", "Kedua (Membeli barang impian)", "Ketiga (Hidup hemat)", "Keempat (Kebutuhan mendadak)"],
+            answer: 0,
+            explanation: "Ide pokoknya ada di kalimat pertama, yaitu 'Manfaat kebiasaan menabung'. Kalimat selanjutnya adalah contoh-contoh (gagasan pendukung) dari manfaat tersebut."
+        },
+        {
+            q: "Paragraf yang ide pokoknya berada di awal paragraf disebut paragraf...",
+            options: ["Induktif", "Deduktif", "Campuran", "Narasi"],
+            answer: 1,
+            explanation: "Cara mengingatnya: DE-duktif = DE-pan (di awal paragraf). Kalau In-duktif ada di akhir."
+        },
+        {
+            q: "Teks: <em>Pohon bambu sangat bermanfaat bagi manusia. Batangnya bisa dijadikan bahan bangunan rumah. Tunasnya yang masih muda bisa dimasak menjadi sayur. Daunnya pun sering dipakai untuk membungkus makanan.</em><br>Manakah yang merupakan <b>gagasan pendukung</b> dari teks di atas?",
+            options: ["Pohon bambu sangat bermanfaat", "Manfaat pohon bambu", "Tunas bambu bisa dimasak menjadi sayur", "Pohon bambu berguna bagi manusia"],
+            answer: 2,
+            explanation: "Kalimat 'Tunas bambu bisa dimasak' adalah rincian/contoh (gagasan pendukung) dari kalimat utama 'Pohon bambu bermanfaat'."
+        },
+
+        // Bab 6: Amanat, Tokoh, Peristiwa, Nilai-nilai (6-10)
+        {
+            q: "Pesan moral atau nasihat kebaikan yang ingin disampaikan pengarang kepada pembaca disebut...",
+            options: ["Tokoh", "Latar", "Alur", "Amanat"],
+            answer: 3,
+            explanation: "Amanat adalah pesan atau nasihat tersembunyi yang bisa kita petik setelah membaca sebuah cerita."
+        },
+        {
+            q: "Tokoh utama yang memiliki sifat baik, jujur, dan suka menolong dalam cerita disebut tokoh...",
+            options: ["Antagonis", "Tritagonis", "Protagonis", "Figuran"],
+            answer: 2,
+            explanation: "Tokoh PRO-tagonis adalah tokoh yang PRO atau baik. Kebalikannya adalah ANTA-gonis (tokoh yang jahat/lawan)."
+        },
+        {
+            q: "Teks: <em>Semut menertawakan Kepompong karena tidak bisa bergerak bebas. Namun, suatu hari Semut terjebak di kubangan lumpur. Tiba-tiba seekor kupu-kupu cantik datang menolongnya. Kupu-kupu itu ternyata adalah Kepompong yang dulu diejeknya. Semut pun meminta maaf.</em><br>Amanat dari cerita tersebut adalah...",
+            options: ["Kita harus belajar terbang", "Jangan pernah mengejek dan meremehkan orang lain", "Semut adalah hewan yang kuat", "Lumpur itu sangat berbahaya"],
+            answer: 1,
+            explanation: "Cerita ini mengajarkan kita (amanat) agar tidak sombong dan tidak mengejek kekurangan orang lain."
+        },
+        {
+            q: "Dalam cerita rakyat 'Bawang Merah dan Bawang Putih', sifat Bawang Merah yang pemalas dan iri hati menunjukkan bahwa ia adalah tokoh...",
+            options: ["Protagonis", "Antagonis", "Pahlawan", "Penolong"],
+            answer: 1,
+            explanation: "Tokoh yang memiliki sifat buruk atau menjadi lawan dari tokoh baik disebut tokoh Antagonis."
+        },
+        {
+            q: "Warga Desa Sukamaju beramai-ramai membersihkan selokan agar tidak banjir saat musim hujan tiba. Nilai moral yang terdapat dalam peristiwa tersebut adalah...",
+            options: ["Gotong royong", "Kejujuran", "Kemandirian", "Keberanian"],
+            answer: 0,
+            explanation: "Kegiatan yang dilakukan 'beramai-ramai' dan bersama-sama untuk kepentingan bersama menunjukkan nilai gotong royong / kerja sama."
+        },
+
+        // Bab 7: Perubahan Objek, Karakter, Latar (11-15)
+        {
+            q: "Teks: <em>Dulu, Rara selalu membuang sampah sembarangan dan kamarnya sangat berantakan. Setelah ia terkena penyakit demam berdarah karena banyak nyamuk, kini ia rajin menyapu dan membuang sampah pada tempatnya.</em><br>Perubahan karakter Rara adalah...",
+            options: ["Dari malas menjadi sakit", "Dari jorok/malas menjadi rajin dan bersih", "Dari rajin menjadi pemalas", "Dari sehat menjadi sakit"],
+            answer: 1,
+            explanation: "Karakter (sifat) Rara berubah dari awalnya membuang sampah sembarangan (jorok) menjadi rajin menyapu."
+        },
+        {
+            q: "Teks: <em>Matahari bersinar sangat terik hingga membuat tanah retak-retak. Namun, tak lama kemudian awan hitam datang berkumpul, kilat menyambar, dan angin bertiup kencang.</em><br>Perubahan <b>latar (suasana)</b> pada teks di atas adalah...",
+            options: ["Dari pagi menjadi malam", "Dari hujan menjadi panas", "Dari panas terik menjadi mendung/mau badai", "Dari mendung menjadi terang"],
+            answer: 2,
+            explanation: "Suasana awalnya panas terik (matahari bersinar), lalu berubah drastis menjadi mendung gelap dan angin kencang (mau hujan badai)."
+        },
+        {
+            q: "Ibu memanaskan mentega di atas wajan. Mentega yang awalnya berbentuk balok kuning itu perlahan-lahan lumer dan mencair. Perubahan pada objek (mentega) adalah...",
+            options: ["Dari cair menjadi padat", "Dari padat menjadi cair (Mencair)", "Dari gas menjadi cair", "Dari padat menjadi gas"],
+            answer: 1,
+            explanation: "Mentega awalnya padat, saat dipanaskan wujudnya berubah menjadi cair."
+        },
+        {
+            q: "Apa yang biasanya menyebabkan tokoh utama dalam cerita mengalami <b>perubahan karakter</b> menjadi lebih baik?",
+            options: ["Karena ia tertidur", "Karena mendapat pengalaman berharga / kejadian penting", "Karena ia makan banyak", "Karena tidak ada hal yang terjadi"],
+            answer: 1,
+            explanation: "Dalam cerita, seorang tokoh biasanya berubah sifatnya setelah ia mengalami sebuah peristiwa penting atau mendapat teguran/pelajaran."
+        },
+        {
+            q: "Teks menyebutkan: <em>'Suasana pasar yang tadinya sangat sepi, kini berubah menjadi riuh rendah oleh suara pedagang dan pembeli.'</em><br>Hal ini menunjukkan perubahan...",
+            options: ["Latar tempat", "Latar suasana", "Tokoh utama", "Amanat"],
+            answer: 1,
+            explanation: "Kata 'sepi' berubah menjadi 'riuh' (ramai) adalah contoh perubahan latar suasana."
+        },
+
+        // Bab 8: Makna Ungkapan (16-20)
+        {
+            q: "Gabungan kata yang membentuk arti baru dan tidak bisa diartikan satu per satu disebut...",
+            options: ["Puisi", "Pantun", "Ungkapan / Idiom", "Dongeng"],
+            answer: 2,
+            explanation: "Ungkapan (idiom) adalah kata kiasan yang maknanya berbeda dari kata aslinya. Misalnya: 'buah hati' artinya anak."
+        },
+        {
+            q: "Rudi dijuluki <b>kutu buku</b> oleh teman-temannya karena selalu membawa buku ke mana-mana. Makna ungkapan kutu buku adalah...",
+            options: ["Orang yang rambutnya banyak kutu", "Orang yang suka makan buku", "Buku yang rusak karena serangga", "Orang yang sangat gemar membaca"],
+            answer: 3,
+            explanation: "Kutu buku adalah ungkapan untuk menyebut orang yang sangat rajin membaca."
+        },
+        {
+            q: "Ayah sangat bangga karena Dimas menjadi <b>bintang lapangan</b> di pertandingan sepak bola kemarin. Makna bintang lapangan adalah...",
+            options: ["Pemain yang paling hebat / menonjol", "Bintang yang jatuh ke lapangan", "Orang yang berjualan di lapangan", "Penonton pertandingan"],
+            answer: 0,
+            explanation: "Bintang lapangan artinya adalah pemain yang bermain paling bagus dan menjadi pusat perhatian."
+        },
+        {
+            q: "Paman Budi sangat disukai tetangga karena ia dikenal <b>ringan tangan</b>. Makna ungkapan ringan tangan pada kalimat tersebut adalah...",
+            options: ["Tangannya tidak berat", "Suka memukul", "Suka menolong / membantu", "Suka mencuri"],
+            answer: 2,
+            explanation: "Dalam konteks kalimat ini (Paman Budi disukai), 'ringan tangan' bermakna positif, yaitu suka menolong."
+        },
+        {
+            q: "Jangan menjadi anak yang <b>besar kepala</b> meskipun kamu juara kelas. Makna konotatif dari besar kepala adalah...",
+            options: ["Kepalanya membesar", "Sombong / angkuh", "Pintar sekali", "Suka memakai topi"],
+            answer: 1,
+            explanation: "Besar kepala adalah ungkapan yang artinya sombong atau membanggakan diri sendiri secara berlebihan."
+        },
+
+        // Bab 9 & 10: Inferensi, Visual, & Teks Informasi (21-25)
+        {
+            q: "Kemampuan menarik kesimpulan logis berdasarkan informasi atau petunjuk (seperti teks dan gambar) yang ada disebut...",
+            options: ["Deskripsi", "Narasi", "Inferensi", "Amanat"],
+            answer: 2,
+            explanation: "Inferensi artinya membuat kesimpulan dari informasi tersirat (tidak tertulis langsung) menggunakan logika kita."
+        },
+        {
+            q: "Ada gambar grafik jumlah hewan peliharaan siswa Kelas 6. Batang 'Kucing' ada di angka 15, 'Ikan' di angka 10, dan 'Burung' di angka 5. Kesimpulan yang tepat adalah...",
+            options: ["Burung adalah hewan yang paling banyak dipelihara", "Kucing adalah hewan yang paling banyak dipelihara siswa kelas 6", "Tidak ada yang memelihara ikan", "Semua siswa memelihara kucing"],
+            answer: 1,
+            explanation: "Karena batang kucing menunjukkan angka paling tinggi (15), maka kesimpulannya kucing paling banyak dipelihara."
+        },
+        {
+            q: "Teks yang berisi ilmu pengetahuan, fakta nyata, atau berita disebut dengan teks...",
+            options: ["Informasi (Nonfiksi)", "Fiksi", "Dongeng", "Legenda"],
+            answer: 0,
+            explanation: "Teks informasi (nonfiksi) dibuat berdasarkan fakta dan data nyata, bukan hasil khayalan seperti dongeng."
+        },
+        {
+            q: "Teks: <em>Hutan gundul menyebabkan air hujan tidak bisa diserap oleh tanah.</em> Gambar di sebelahnya menunjukkan lumpur tebal menutupi rumah-rumah warga. Kesimpulan dari teks dan gambar tersebut adalah...",
+            options: ["Warga sedang membangun rumah", "Hutan gundul menyebabkan bencana tanah longsor ke rumah warga", "Air hujan sangat jernih", "Banyak pohon tumbuh di atas rumah"],
+            answer: 1,
+            explanation: "Teks membahas hutan gundul tidak bisa menyerap air, dan gambar menunjukkan lumpur (longsor). Keduanya dihubungkan menjadi sebab-akibat bencana alam."
+        },
+        {
+            q: "Pada teks informasi tentang 'Gunung Meletus', kalimat yang menyebutkan tanggal kejadian dan jumlah korban jiwa berfungsi sebagai...",
+            options: ["Ide Pokok", "Judul Utama", "Ide Pendukung (Fakta penjelas)", "Amanat"],
+            answer: 2,
+            explanation: "Data rinci seperti tanggal, angka, dan jumlah korban adalah ide pendukung (deretan penjelas) untuk mendukung informasi utama."
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        // Question text
+        const qText = `
+            <div class="question-number">Soal ${index + 1} / 25</div>
+            <div class="question-text">${q.q}</div>
+        `;
+
+        // Options
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options-container';
+
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.className = 'feedback';
+        feedbackDiv.id = `feedback-${index}`;
+
+        q.options.forEach((opt, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+            
+            btn.onclick = () => {
+                // Disable all buttons in this question
+                const allBtns = optionsDiv.querySelectorAll('.option-btn');
+                allBtns.forEach(b => b.disabled = true);
+
+                if (optIndex === q.answer) {
+                    btn.classList.add('correct');
+                    feedbackDiv.classList.add('correct-bg');
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.innerHTML = `
+                        <div class="status correct-text">🎉 YAY, BENAR!</div>
+                        <div class="explanation"><b>Kunci Jawaban:</b> ${q.options[q.answer]}<br><br>${q.explanation}</div>
+                    `;
+                } else {
+                    btn.classList.add('wrong');
+                    // Highlight correct answer
+                    allBtns[q.answer].classList.add('correct');
+                    
+                    feedbackDiv.classList.add('wrong-bg');
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.innerHTML = `
+                        <div class="status wrong-text">❌ YAAH, SALAH!</div>
+                        <div class="explanation"><b>Kunci Jawaban:</b> ${q.options[q.answer]}<br><br>${q.explanation}</div>
+                    `;
+                }
+            };
+            optionsDiv.appendChild(btn);
+        });
+
+        card.innerHTML = qText;
+        card.appendChild(optionsDiv);
+        card.appendChild(feedbackDiv);
+        
+        quizContainer.appendChild(card);
+    });
+</script>
+
+</body>
+</html>
