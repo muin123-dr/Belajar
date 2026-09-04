@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uji Mandiri TKA SMA Bahasa Indonesia</title>
+    <style>
+        :root {
+            --primary: #6a1b9a;
+            --primary-dark: #4a148c;
+            --success: #2e7d32;
+            --success-bg: #e8f5e9;
+            --danger: #c62828;
+            --danger-bg: #ffebee;
+            --bg: #faf5ff;
+            --card: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --radius: 14px;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 6px 24px rgba(0, 0, 0, 0.12);
+            --font: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; padding: 16px; min-height: 100vh; }
+        .container { max-width: 950px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 28px 20px; border-radius: var(--radius); text-align: center; margin-bottom: 24px; box-shadow: var(--shadow-lg); }
+        .header h1 { font-size: clamp(1.5rem, 5vw, 2.2rem); font-weight: 700; letter-spacing: 0.5px; }
+        .header p { font-size: 1rem; opacity: 0.9; margin-top: 6px; }
+        .score-bar { display: flex; justify-content: space-between; align-items: center; background: var(--card); padding: 12px 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; font-weight: 600; flex-wrap: wrap; gap: 8px; }
+        .score-bar .score { color: var(--primary); font-size: 1.1rem; }
+        .score-bar .badge { font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; font-weight: 500; background: #f3e5f5; color: var(--primary); }
+        .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 18px; margin-bottom: 20px; border: 1px solid #f0e6f6; }
+        .card:hover { box-shadow: var(--shadow-lg); }
+        .question-number { display: inline-block; background: var(--primary); color: white; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 10px; }
+        .question-type { display: inline-block; font-size: 0.75rem; padding: 3px 10px; border-radius: 12px; font-weight: 500; background: #f5f5f5; color: var(--text-muted); margin-left: 6px; letter-spacing: 0.3px; }
+        .question-text { font-size: 1.05rem; font-weight: 600; margin: 10px 0 14px; line-height: 1.65; }
+        .text-excerpt { background: #f8fafc; border-left: 4px solid var(--primary); padding: 14px 16px; border-radius: 0 8px 8px 0; font-size: 0.92rem; margin-bottom: 16px; max-height: 300px; overflow-y: auto; white-space: pre-line; color: #37474f; line-height: 1.7; }
+        .text-excerpt strong { color: var(--primary-dark); }
+        .options { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+        .option { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s ease; background: #fafbfc; user-select: none; -webkit-tap-highlight-color: transparent; font-size: 0.95rem; line-height: 1.5; }
+        .option:hover { border-color: var(--primary); background: #fdf2ff; transform: translateY(-1px); }
+        .option.selected-correct { border-color: var(--success); background: var(--success-bg); box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15); }
+        .option.selected-wrong { border-color: var(--danger); background: var(--danger-bg); box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.12); }
+        .option.disabled { pointer-events: none; opacity: 0.7; }
+        .option-letter { display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; margin-top: 2px; }
+        .option.selected-correct .option-letter { background: var(--success); }
+        .option.selected-wrong .option-letter { background: var(--danger); }
+        .option-text { flex: 1; }
+        .kategori-table { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+        .kategori-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 14px; background: #faf5ff; border-radius: 10px; border: 1px solid #e8d5f5; transition: all 0.2s; }
+        .kategori-row .statement-text { flex: 1 1 100%; font-weight: 500; font-size: 0.92rem; margin-bottom: 4px; line-height: 1.5; }
+        .kategori-buttons { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; }
+        .kategori-btn { padding: 8px 18px; border: 2px solid var(--border); border-radius: 20px; cursor: pointer; background: white; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; -webkit-tap-highlight-color: transparent; user-select: none; min-width: 80px; text-align: center; letter-spacing: 0.3px; }
+        .kategori-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .kategori-btn.selected-correct { border-color: var(--success); background: var(--success-bg); color: var(--success); }
+        .kategori-btn.selected-wrong { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+        .kategori-btn.disabled { pointer-events: none; opacity: 0.55; }
+        .kategori-row.correct-row { border-color: var(--success); background: #f1f8e9; }
+        .kategori-row.wrong-row { border-color: var(--danger); background: #fff5f5; }
+        .answer-key { margin-top: 14px; padding: 14px 16px; border-radius: 10px; background: #f0f7ff; border: 1px solid #cce5ff; display: none; animation: fadeIn 0.3s ease; }
+        .answer-key.visible { display: block; }
+        .answer-key .key-label { font-weight: 700; color: var(--primary-dark); font-size: 0.9rem; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .answer-key .key-answer { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .answer-key .key-explanation { font-size: 0.88rem; color: #444; line-height: 1.65; }
+        .answer-key .icon-check { color: var(--success); font-weight: bold; }
+        .answer-key .icon-info { color: var(--primary); font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 0.95rem; z-index: 9999; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s; opacity: 0; pointer-events: none; letter-spacing: 0.3px; display: flex; align-items: center; gap: 8px; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.correct { background: var(--success); color: white; }
+        .toast.wrong { background: var(--danger); color: white; }
+        .toast.info { background: var(--primary); color: white; }
+        .options.mcma .option .option-letter { border-radius: 6px; background: #6c757d; }
+        .options.mcma .option.selected-correct .option-letter { background: var(--success); border-radius: 6px; }
+        .options.mcma .option.selected-wrong .option-letter { background: var(--danger); border-radius: 6px; }
+        @media (max-width: 600px) { body { padding: 8px; } .card { padding: 16px 14px; } .header { padding: 20px 14px; } .question-text { font-size: 0.98rem; } .option { padding: 10px 12px; font-size: 0.9rem; gap: 8px; } .option-letter { min-width: 24px; height: 24px; font-size: 0.7rem; } .kategori-btn { padding: 6px 14px; font-size: 0.8rem; min-width: 70px; } .toast { font-size: 0.85rem; padding: 10px 18px; top: 10px; } .text-excerpt { max-height: 200px; font-size: 0.85rem; padding: 10px 12px; } }
+        @media (min-width: 768px) { .kategori-row { flex-wrap: nowrap; align-items: center; } .kategori-row .statement-text { flex: 1; margin-bottom: 0; padding-right: 12px; } .kategori-buttons { width: auto; flex-shrink: 0; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Uji Mandiri TKA SMA</h1>
+            <p>Bahasa Indonesia &mdash; 25 Soal</p>
+        </div>
+        <div class="score-bar">
+            <span class="badge">💡 Klik jawaban untuk melihat kunci &amp; pembahasan</span>
+            <span class="score" id="scoreDisplay">Skor: 0 / 0</span>
+        </div>
+
+        <div id="quizContainer"></div>
+
+        <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:0.85rem;">
+            Uji Mandiri TKA SMA Bahasa Indonesia &mdash; Dibuat dengan ❤️
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const readingTexts = {
+            1: {
+                title: 'Pentingnya Literasi Digital bagi Generasi Muda',
+                content: 'Teknologi digital terus mengubah pola kehidupan masyarakat modern. Berbagai aktivitas kini berlangsung melalui perangkat digital terhubung. Komunikasi, pembelajaran, hingga transaksi dilakukan secara daring. Perubahan tersebut menghadirkan kemudahan sekaligus tantangan baru. Oleh karena itu, literasi digital menjadi kebutuhan penting. Literasi digital membantu masyarakat memahami informasi secara cermat. Selain itu, kemampuan tersebut mendukung terciptanya interaksi sosial yang bertanggung jawab.\n\nDi ruang digital, informasi tersebar sangat cepat setiap hari. Berita, opini, ataupun promosi hadir melalui beragam platform. Pengguna perlu menilai ketepatan informasi sebelum memercayainya. Mereka juga harus memverifikasi sumber informasi secara objektif. Jika langkah tersebut diabaikan, kesalahpahaman mudah terjadi. Bahkan, penyebaran disinformasi dapat memengaruhi keharmonisan sosial. Oleh sebab itu, kemampuan berpikir kritis harus dikembangkan. Dengan demikian, generasi muda mampu menyaring informasi secara bijaksana.\n\nSebaliknya, kemajuan teknologi tidak selalu membawa dampak negatif. Teknologi menyediakan akses luas terhadap pengetahuan dan layanan. Berbagai sumber belajar dapat dijangkau melalui jaringan internet. Generasi muda dapat meningkatkan kompetensi melalui media digital. Mereka juga dapat mengikuti pelatihan berbasis teknologi terkini. Kesempatan tersebut memperluas wawasan sekaligus meningkatkan produktivitas. Karena akses informasi makin terbuka, peluang pengembangan diri pun bertambah.\n\nLiterasi digital juga mendukung tumbuhnya inovasi dan kreativitas. Individu dapat mengembangkan gagasan menjadi karya bermanfaat. Berbagai aplikasi memungkinkan proses kolaborasi berlangsung lebih efektif. Kemampuan tersebut diperlukan dalam ekonomi digital yang kompetitif. Akibatnya, masyarakat lebih siap menghadapi perubahan global. Mereka mampu menciptakan solusi atas berbagai persoalan. Kreativitas bahkan menjadi "jembatan" menuju kemajuan berkelanjutan.\n\nPemanfaatan teknologi memerlukan tanggung jawab yang tinggi. Pengguna harus memahami etika komunikasi dan keamanan siber. Mereka perlu menjaga privasi serta melindungi data pribadi. Jika literasi digital terus ditingkatkan, risiko penyalahgunaan teknologi dapat dikurangi. Dengan demikian, generasi muda mampu memanfaatkan teknologi secara cerdas, produktif, dan bertanggung jawab.'
+            },
+            4: {
+                title: 'Mikroplastik di Atmosfer dan Kerusakan Lingkungan',
+                content: 'Mikroplastik merupakan partikel plastik berukuran sangat kecil. Partikel ini berasal dari limbah tekstil dan plastik sekali pakai. Selain itu, produk perawatan pribadi juga menghasilkan mikroplastik. Ukurannya yang sangat halus membuat partikel mudah menyebar. Bahkan, mikroplastik dapat lolos dari penyaringan air biasa.\n\nAwalnya, penelitian mikroplastik berfokus pada pencemaran laut. Namun, keberadaan partikel tersebut ternyata mencapai atmosfer Bumi. Para peneliti menemukan mikroplastik pada lapisan pembentuk awan. Temuan itu diperoleh melalui penelitian Universitas Waseda, Jepang. Profesor Hiroshi Okochi memimpin penelitian tersebut bersama timnya. Mereka mengambil sampel air awan dari beberapa wilayah pergunungan. Hasil penelitian menunjukkan sembilan jenis polimer ditemukan di atmosfer. Selain itu, partikel karet sintetis juga berhasil teridentifikasi.\n\nAkibat keberadaan mikroplastik, proses pembentukan awan mengalami perubahan. Partikel-partikel kecil itu menjadi inti pengembunan uap air. Oleh sebab itu, awan lebih mudah terbentuk di atmosfer. Akan tetapi, dampaknya tidak sepenuhnya menguntungkan bagi lingkungan. Plastik yang terurai melepaskan gas rumah kaca berbahaya. Gas tersebut memerangkap panas dan meningkatkan suhu global. Dengan demikian, perubahan iklim berlangsung makin cepat dan sulit dikendalikan.\n\nBahkan, laut melepaskan jutaan ton mikroplastik melalui percikan ombak. Partikel itu kemudian terbawa angin menuju lapisan udara tinggi. Setelah bercampur dengan awan, mikroplastik turun bersama air hujan. Fenomena tersebut dikenal sebagai "hujan plastik" oleh para ilmuwan. Akibatnya, tanah, sungai, dan rantai makanan mengalami pencemaran serius.\n\nJika pencemaran mikroplastik terus dibiarkan, kerusakan lingkungan akan semakin parah. Ekosistem alam dapat mengalami gangguan permanen yang memprihatinkan. Oleh karena itu, penggunaan plastik sekali pakai harus dikurangi mulai sekarang.'
+            },
+            8: {
+                title: 'Kutipan Cerpen "Raul"',
+                content: '"Mengenai keterlambatanmu...." Kak Fani menggantung kalimatnya, aku memandangnya. Apa yang tengah dipikirkan Kak Fani?\n\nSiang itu terasa begitu panas. AC di ruangan Kak Fani sudah dua hari ini rusak dan belum juga diperbaiki.\n\n"Mungkin kau terlalu capai, Raúl, sehingga kau sadari kau perlu banyak tidur pada malam hari. Mungkin hal inilah yang membuatmu kesiangan."\n\nAku mengeluh. Aku tidak capai, aku tidak lelah. Hanya saja, mungkin aku perlu sedikit istirahat. Pekerjaanku hadir selama 24 jam dalam satu hari. Tujuh hari dalam satu minggu. Aku perlu sedikit saja waktu untuk bisa bersantai.\n\n"Kinerjamu akhir-akhir ini mencemaskan kami semua, Raul."\n\nAku menunduk.\n\nKak Fani adalah wakil pimpinan redaksi.\n\n"Bagaimana suplemenmu? Tiga hari lagi mesti naik cetak."\n\nTiba-tiba saja aku merasa tertekan. Suplemenku empat halaman banyaknya, separuhnya saja belum selesai.\n\n"Akan kuusahakan selesai besok," janjiku, tak yakin.\n\n"Tapi Kakak tidak yakin, Raul."\n\nKembali aku menarik napas. Ketidakyakinan Kak Fani mungkin sama besar dengan ketidakyakinanku sendiri.\n\n"Ada apa, Raul? Kalau kau punya masalah, kau bisa bilang kepada Kakak, walau Kakak tidak bisa memberi solusi yang baik, setidaknya hatimu sudah merasa lapang dengan menceritakannya."\n\nAku tersenyum pahit. Tak satupun kukira yang bisa mengerti apa yang tengah kurasakan.\n\nPembicaraan kami berakhir setengah jam kemudian tanpa membawa hasil apa-apa bagi diriku sendiri. Aku merindukan sesuatu, entah apa. Tiba-tiba ada sesuatu yang kosong di sini. Di hati ini.\n\nKupandangi hilir mudik mobil dari jendelaku. Begitu bising. Klakson saling bersahutan, ditingkahi suara ribut pejalan kaki, lalu penjual es tong-tong, kacang goreng, es.\n\nBegitu banyak manusia di dunia ini. Aku menghela napas.'
+            },
+            11: {
+                title: 'Puisi "Perjurit Jaga Malam"',
+                content: 'PERJURIT JAGA MALAM\n\nWaktu jalan. Aku tidak tahu apa nasib waktu\nPemuda-pemuda yang lincah yang tua-tua keras, bermata tajam,\nMimpinya kemerdekaan bintang-bintangnya kepastian\nada di sisiku selama kau menjaga daerah yang mati ini.\nAku suka pada mereka yang berani hidup\nAku suka pada mereka yang masuk menemui malam\nMalam yang berwangi mimpi, berlucut debu\nWaktu jalan. Aku tidak tahu apa nasib waktu.\n\n1948'
+            },
+            13: {
+                title: 'Hambatan Pelaksanaan Pendidikan Inklusif di Indonesia',
+                content: 'Pendidikan inklusif bertujuan memberikan kesempatan belajar bagi semua. Setiap murid berhak memperoleh layanan pendidikan setara. Melalui sistem tersebut, keberagaman dianggap sebagai kekuatan sosial. Namun, pelaksanaannya masih menghadapi berbagai kendala serius. Banyak sekolah belum mampu menerapkan prinsip inklusivitas secara optimal. Akibatnya, pemerataan pendidikan belum sepenuhnya dapat diwujudkan.\n\nSalah satu hambatan utama ialah keterbatasan tenaga pendidik khusus. Banyak sekolah belum memiliki guru pendamping profesional. Selain itu, kompetensi sebagian guru masih tergolong rendah. Mereka sering mengalami kesulitan memahami kebutuhan murid. Jika kemampuan pedagogis belum memadai, pembelajaran menjadi kurang efektif. Oleh karena itu, pelatihan berkelanjutan bagi guru sangat diperlukan.\n\nSelain masalah sumber daya manusia, fasilitas sekolah masih terbatas. Sejumlah sekolah belum menyediakan sarana pembelajaran aksesibel. Misalnya, media Braille dan perangkat pendukung disabilitas. Kondisi tersebut menghambat partisipasi murid berkebutuhan khusus. Bahkan, lingkungan sekolah sering belum ramah disabilitas. Karena fasilitas belum memadai, proses belajar berlangsung kurang maksimal.\n\nSebaliknya, sebagian pihak menganggap regulasi pendidikan sudah memadai. Anggapan tersebut tidak sepenuhnya sesuai dengan kenyataan. Implementasi kebijakan masih menghadapi persoalan koordinasi kelembagaan. Dukungan pemerintah daerah juga sering belum optimal. Bahkan, pengawasan terhadap pelaksanaan program masih lemah. Akibatnya, kebijakan inklusif sering berjalan tanpa arah jelas.\n\nMasalah pendanaan turut memperbesar hambatan penyelenggaraan pendidikan inklusif. Banyak sekolah kesulitan menyediakan fasilitas dan pelatihan. Keterbatasan anggaran menyebabkan program pengembangan berjalan lambat. Karena dana tidak mencukupi, kebutuhan murid terabaikan. Situasi tersebut memperlebar kesenjangan layanan pendidikan.\n\nPendidikan inklusif tetap perlu diperkuat secara konsisten. Kolaborasi pemerintah, sekolah, dan masyarakat harus ditingkatkan. Jika dukungan tersebut berjalan berkesinambungan, kualitas layanan akan meningkat. Dengan demikian, pendidikan inklusif bukan sekadar kebijakan administratif, melainkan wujud keadilan sosial bagi seluruh murid.'
+            },
+            17: {
+                title: 'Sosok di Balik Layar Panggung',
+                content: 'Namanya Karsa. Seorang sutradara teater yang terkenal. Tubuhnya kurus kering, tetapi langkahnya tetap tegap. Matanya menyala tajam seperti bara yang abadi. Di balik panggung, ia berubah menjadi pengendali pertunjukan. Ia bukan sekadar pengarah adegan biasa. Ia komandan perang dalam dunia seni pertunjukan.\n\nDengan iringan orkestra lembut, Karsa mulai berbisik pelan. Suaranya lirih, tetapi mampu menembus perasaan terdalam. Setiap gerak jarinya menjadi instruksi yang penuh makna. Para aktor memahami isyarat halus tanpa banyak pertanyaan. Mereka bergerak seperti mesin yang sangat terlatih. Namun, kebebasan jiwa mereka tetap terasa hidup.\n\nPanggung kecil itu berubah menjadi medan pertarungan imajinasi. Lampu sorot tampak seperti pedang yang siap terhunus. Karsa menciptakan atmosfer magis melalui teknik mise-en-scène. Istilah teknis itu berasal dari bahasa Prancis. Maknanya mencakup seluruh unsur yang tampak di panggung. Properti, kostum, pencahayaan, hingga ekspresi wajah dikendalikan rapi. Bahkan, detail kecil memperoleh perhatian yang sangat serius.\n\nNamun, di balik ketegasan itu, hatinya menyimpan kegelisahan. Api kreativitas terus membakar ruang pikirannya setiap malam. Konflik batin selalu menghantui kesadarannya tanpa belas kasihan. Apakah seni membutuhkan penderitaan untuk mencapai keindahan sejati? Ataukah penderitaan hanyalah bayangan dari ambisi manusia? Pertanyaan eksistensial itu terus menggerogoti ketenangannya. Karena tekanan itulah, lahirlah karya-karya yang menggetarkan penonton.\n\nMaka, setiap malam pertunjukan, Karsa selalu merenung sendirian. Di belakang tenda gelap, ia menarik napas perlahan. Renungannya menghilang bersama udara malam yang dingin dan sunyi. Penonton tidak pernah benar-benar melihat sosok Karsa. Mereka hanya menyaksikan mahakarya yang memenuhi panggung. Bahkan, setelah tirai tertutup, ia masih bergumam pelan. Ia mengkritik blok adegan ketiga dengan penuh ketelitian. Lalu, senyum kecil muncul sesaat-cepat, tetapi membekas.'
+            },
+            21: {
+                title: 'Kutipan Novel Sitti Nurbaya',
+                content: 'Pada keesokan harinya, pukul lima pagi. Samsulbahri terperanjat bangun dari tidurnya, karena mendengar bunyi lonceng jam yang ada di rumahnya, lima kali memukul. Dengan segera diangkatnya kepalanya lalu menoleh ke celah-celah dinding biliknya, akan melihat, sudah adakah cahaya matahari yang masuk ke dalam rumahnya atau belum. Rupanya ia takut kesiangan. Akan tetapi, walaupun ia menoleh ke sana kemari dan mendengar hati-hati, kalau-kalau ada suara orang, tiadalah lain yang dilihatnya daripada sinar lampu biliknya sendiri. Sekaliannya masih sunyi; orang yang telah meninggalkan tempat tidurnya, belum ada. Hanya dari jauh kedengaran olehnya kokok ayam jantan bersahut-sahutan di segala pihak, sebagai orang bersorak berganti-ganti, karena berbesar hati menyambut kedatangan fajar. Dari sebelah timur, kedengaran bunyi puput kereta api di Stasiun Padang sekali-sekali, sebagai hendak memberi ingat kepada mereka yang hendak menumpang dan berangkat pagi-pagi. Dari sebelah barat kedengaran ombak yang memecah di tepi pantai, sebagai guruh pagi hari, yang menyatakan hari akan hujan sehingga kecil lah hati Samsu mendengar bunyi ini, takut kalau-kalau maksudnya, akan bermain-main ke Gunung Padang, tiada dapat disampaikannya. Dari surau yang dekat di sana, kedengaran orang bang, memberi ingat kepada sekalian yang hendak berbuat ibadat kepada Allah subhanahu wataala, bahwa subuh telah ada.\n\nOleh sebab nyata oleh Samsu, bahwa hari baru pukul lima pagi, direbahkannyalah kembali badannya ke atas tilamnya; bukannya hendak tidur pula, melainkan sekadar berbaring-baring, menunggu hari siang. Akan tetapi, ia gelisah, karena pikirannya telah digoda oleh kenang-kenangan akan pergi bersuka-sukaan itu. Sebentar-bentar berbaliklah ia ke kanan dan ke kiri, sebagai berduri tempat tidurnya. Akhirnya, karena tak dapat menahan hati, bangunlah ia dari tempat tidurnya, lalu dibukanya pintu biliknya perlahan-lahan, karena kuatir kalau-kalau ayahnya yang sedang tidur, terbangun pula.'
+            },
+            24: {
+                title: 'Kutipan Drama "Ayahku Pulang"',
+                content: 'Maimun: Lama menunggu aku?\nGunarto: Ah, aku juga baru kembali.\nIbu: Agak terlambat hari ini, Mun?\nMaimun: Kerja lembur, Bu. Tapi biarlah, buat perkawinan Mintarsih. Mana dia, Bu?\nIbu: Mengantarkan barang jahitan. Tapi makanan sudah sedia. Makanlah dahulu, mandinya nanti saja.\nMaimun: (duduk di meja makan) Mas Narto, ada kabar aneh. Tadi pagi aku berjumpa Pak Tirto. Katanya dia bertemu dengan seorang tua. Katanya agak serupa dengan ayah.\nGunarto: (tidak peduli, mulai makan).... Begitu....?\nMaimun: Waktu Pak Tirto belanja di pasar gudeg, ia tiba-tiba berhadapan dengan seorang tua, kira-kira berumur enam puluh tahun. Ia agak kaget juga, karena orang tua itu seperti sudah dikenalnya. Katanya agak serupa dengan Raden Saleh. Tapi orang tua itu menyingkir di tengah-tengah orang ramai.\nIbu: (teringat) Pak Tirto kawan ayahmu waktu kecil. Mereka sama-sama sekolah dahulu. Mereka sudah lama tak bertemu, sudah 20 tahun. Boleh jadi ia salah lihat.\nMaimun: Pak Tirto mengaku juga, boleh jadi ia salah lihat. Katanya 20 tahun. Memang masa yang lama dalam kehidupan manusia. Tetapi katanya pula ia kenal benar pada ayah, jadi …\nGunarto: Mana bisa ia ada di sini.\nIbu: (diam sejurus) Memang, aku kira ia sudah meninggal. Atau ke luar negeri. Sudah dua puluhan tahun ia pergi. Pada malam Lebaran seperti ini.'
+            }
+        };
+
+        const questions = [
+            { id: 1, type: 'pg', readingId: 1, question: 'Berdasarkan teks, manakah pernyataan yang menjadi ide pendukung untuk memperkuat pentingnya literasi digital bagi generasi muda?', options: [ { label: 'A', text: 'Pemanfaatan teknologi memerlukan pemahaman tentang etika komunikasi dan keamanan siber.' }, { label: 'B', text: 'Literasi digital membantu memahami informasi secara cermat dan berinteraksi secara bertanggung jawab.' }, { label: 'C', text: 'Teknologi digital telah mengubah pola kehidupan masyarakat modern dalam berbagai aktivitas sehari-hari.' }, { label: 'D', text: 'Kemajuan teknologi menyediakan akses luas terhadap pengetahuan dan layanan melalui jaringan internet.' }, { label: 'E', text: 'Informasi di ruang digital tersebar sangat cepat melalui berbagai platform, seperti berita, opini, dan promosi.' } ], key: 'A', explanation: 'Ide pendukung adalah kalimat yang memperkuat gagasan utama. Gagasan utama: pentingnya literasi digital. Opsi A menambahkan aspek penting lain (etika dan keamanan) sebagai alasan mengapa literasi digital diperlukan, sehingga menjadi pendukung yang tepat.' },
+            { id: 2, type: 'pg', readingId: 1, question: 'Apa makna kata produktivitas dalam teks tersebut?', options: [ { label: 'A', text: 'Kemampuan bekerja keras tanpa mengenal lelah demi target yang ditentukan.' }, { label: 'B', text: 'Kemampuan menghasilkan banyak karya dalam waktu yang cepat dan singkat.' }, { label: 'C', text: 'Kemampuan memanfaatkan waktu dan sumber daya untuk hasil yang optimal.' }, { label: 'D', text: 'Kemampuan menghasilkan sesuatu secara efisien dan efektif untuk mencapai target.' }, { label: 'E', text: 'Kemampuan menyelesaikan pekerjaan dengan cepat dengan berbagai macam cara.' } ], key: 'D', explanation: 'Produktivitas berarti kemampuan menghasilkan sesuatu secara efisien dan efektif. Dalam konteks teks, generasi muda dapat meningkatkan produktivitas melalui pelatihan berbasis teknologi, artinya menghasilkan karya dengan lebih baik dan tepat sasaran.' },
+            { id: 3, type: 'kategori_bs', readingId: 1, question: 'Dalam teks tersebut terdapat hubungan sebab akibat antarkalimat. Tentukan Benar atau Salah untuk setiap pernyataan berikut!', statements: [ 'Informasi tersebar sangat cepat di ruang digital sebab pengguna perlu menilai ketepatan informasi sebelum memercayainya.', 'Penyebaran disinformasi dapat memengaruhi keharmonisan sosial sehingga kemampuan berpikir kritis harus dikembangkan.', 'Generasi muda dapat mengikuti pelatihan berbasis teknologi sehingga kesempatan tersebut memperluas wawasan dan meningkatkan produktivitas.' ], keys: ['Salah', 'Benar', 'Benar'], explanation: 'Pernyataan 1: hubungan sebab akibat terbalik; seharusnya karena informasi cepat maka perlu menilai. Pernyataan 2: benar, sebab (disinformasi memengaruhi keharmonisan) akibat (harus berpikir kritis). Pernyataan 3: benar, sebab (pelatihan teknologi) akibat (memperluas wawasan dan produktivitas).' },
+            { id: 4, type: 'pg', readingId: 4, question: 'Berdasarkan gagasan pokok yang kamu temukan, kerangka tulisan teks eksplanasi tersebut adalah...', options: [ { label: 'A', text: 'Definisi mikroplastik → proses penemuan mikroplastik di atmosfer → dampak mikroplastik terhadap pembentukan awan dan perubahan iklim → proses terjadinya hujan plastik → solusi mengatasi pencemaran mikroplastik.' }, { label: 'B', text: 'Definisi mikroplastik + proses penemuan mikroplastik di atmosfer → proses terjadinya hujan plastik → dampak mikroplastik terhadap pembentukan awan dan perubahan iklim + solusi mengatasi pencemaran mikroplastik.' }, { label: 'C', text: 'Karakteristik mikroplastik → proses penemuan mikroplastik di atmosfer → dampak mikroplastik terhadap pembentukan awan dan perubahan iklim → proses terjadinya hujan plastik → solusi mengatasi pencemaran mikroplastik.' }, { label: 'D', text: 'Karakteristik mikroplastik → proses terjadinya hujan plastik → proses penemuan mikroplastik di atmosfer → dampak mikroplastik terhadap pembentukan awan dan perubahan iklim → solusi mengatasi pencemaran mikroplastik.' }, { label: 'E', text: 'Definisi mikroplastik → proses pembentukan mikroplastik dari plastik sekali pakai → penyebaran mikroplastik melalui air laut → penemuan mikroplastik di awan oleh para ilmuwan → solusi pengurangan penggunaan plastik sekali pakai.' } ], key: 'A', explanation: 'Urutan paragraf: 1 definisi dan karakteristik, 2 penemuan di atmosfer, 3 dampak pembentukan awan dan iklim, 4 hujan plastik, 5 solusi. Opsi A mengikuti urutan tersebut.' },
+            { id: 5, type: 'pg', readingId: 4, question: 'Manakah bagan alur informasi yang sesuai isi teks tersebut?', options: [ { label: 'A', text: 'Definisi Mikroplastik → Sumber Mikroplastik (limbah tekstil, plastik sekali pakai, produk perawatan pribadi) → Dampak di Laut → Penemuan di Atmosfer → Perubahan iklim' }, { label: 'B', text: 'Karakteristik Mikroplastik (ukuran kecil, mudah menyebar) → Penelitian Universitas Waseda (sampel air awan) → Hasil Temuan (9 polimer + karet sintetis) → Dampak (pembentukan awan dan pemanasan global) → Hujan Plastik' }, { label: 'C', text: 'Sumber Mikroplastik (limbah industri) → Proses di Laut (percikan ombak) → Perjalanan ke Atmosfer → Penelitian di Jepang → Dampak Kesehatan Manusia → Solusi Daur Ulang' }, { label: 'D', text: 'Definisi Mikroplastik → Mikroplastik di Laut → Penelitian Okochi → Temuan Polimer di Awan → Proses Hujan Plastik (laut atmosfer awan hujan) → Pencemaran Rantai Makanan → Larangan Plastik Global' }, { label: 'E', text: 'Mikroplastik di Laut → Degradasi Plastik → Emisi Gas Rumah Kaca → Pemanasan Global → Penelitian Universitas Waseda → Identifikasi Karet Sintetis → Solusi Pengurangan Plastik' } ], key: 'B', explanation: 'Alur B sesuai urutan teks: karakteristik mikroplastik, penelitian Waseda, hasil temuan, dampak, hujan plastik.' },
+            { id: 6, type: 'kategori_tt', readingId: 4, question: 'Cermati pilihan kata yang digunakan dalam teks tersebut. Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut berdasarkan penggunaan kata baku dan tidak baku sesuai konteks penggunaannya!', statements: [ 'Kata atmosfer tidak baku. Kata ini semestinya diperbaiki menjadi atmosfir agar maknanya sesuai dengan konteks kalimat, yaitu "lapisan udara yang menyelimuti bumi".', 'Kata semakin tidak baku. Kata ini semestinya diperbaiki menjadi makin agar maknanya sesuai dengan konteks kalimat, yaitu "menyatakan tingkat perbandingan yang bertambah".', 'Kata sistesis tidak baku. Kata ini semestinya diperbaiki menjadi sintetik agar maknanya sesuai dengan konteks kalimat, yaitu "sesuatu yang dibuat melalui proses tiruan atau buatan".' ], keys: ['Tidak Tepat', 'Tidak Tepat', 'Tidak Tepat'], explanation: 'Semua pernyataan salah: atmosfer sudah baku, semakin sudah baku, dan kata yang digunakan dalam teks adalah sintetis (bukan sistesis) yang sudah benar.' },
+            { id: 7, type: 'pg', readingId: 4, question: 'Mikroplastik di atmosfer menimbulkan beberapa dampak bagi lingkungan. Dari fenomena tersebut, apa penyebab utama sehingga terjadinya kerusakan lingkungan?', options: [ { label: 'A', text: 'Ukuran mikroplastik sangat halus sehingga mikroplastik dapat lolos dari penyaringan air biasa.' }, { label: 'B', text: 'Mikroplastik menjadi inti pengembunan uap air sehingga awan lebih mudah terbentuk di atmosfer.' }, { label: 'C', text: 'Pencemaran mikroplastik terus dibiarkan sehingga ekosistem alam mengalami gangguan permanen yang memprihatinkan.' }, { label: 'D', text: 'Laut melepaskan jutaan ton mikroplastik melalui percikan ombak sehingga partikel itu terbawa angin menuju lapisan udara tinggi.' }, { label: 'E', text: 'Plastik yang terurai melepaskan gas rumah kaca berbahaya sehingga gas tersebut memerangkap panas dan meningkatkan suhu global.' } ], key: 'E', explanation: 'Penyebab utama kerusakan lingkungan adalah pelepasan gas rumah kaca dari plastik yang terurai, yang mempercepat perubahan iklim. Ini efek paling serius dan disebutkan sebagai akibat langsung.' },
+            { id: 8, type: 'mcma', readingId: 8, question: 'Berdasarkan kutipan cerpen, manakah penggambaran tepat terkait karakter tokoh Kak Fani? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.', options: [ { label: 'A', text: 'Tokoh Kak Fani digambarkan sebagai atasan yang lembut dan tidak suka menekan karena ia hanya menduga-duga penyebab keterlambatan tokoh Raul tanpa memaksanya.' }, { label: 'B', text: 'Tokoh Kak Fani digambarkan sebagai atasan yang peduli dan berusaha memahami masalah bawahannya karena ia menawarkan tokoh Raul untuk menceritakan masalahnya.' }, { label: 'C', text: 'Tokoh Kak Fani digambarkan sebagai atasan yang tegas dan objektif karena ia menyampaikan ketidakyakinannya terhadap janji tokoh Raul secara terus terang.' }, { label: 'D', text: 'Tokoh Kak Fani digambarkan sebagai atasan yang kurang peka karena ia lebih dahulu menyalahkan kelelahan tokoh Raul tanpa mengetahui penyebab sebenarnya.' }, { label: 'E', text: 'Tokoh Kak Fani digambarkan sebagai atasan yang pesimistis dan mudah ragu karena ia mengaku tidak yakin dengan kemampuan bawahannya sendiri.' } ], key: ['B', 'C'], explanation: 'Kak Fani menunjukkan kepedulian (menawarkan bercerita) dan ketegasan/objektivitas (menyatakan ketidakyakinan). A tidak sepenuhnya karena ia tetap menyampaikan kekhawatiran, D salah karena ia tidak menyalahkan, E berlebihan.' },
+            { id: 9, type: 'pg', readingId: 8, question: 'Peristiwa utama yang digambarkan dalam kutipan cerpen tersebut adalah...', options: [ { label: 'A', text: 'Tokoh Raul mengeluhkan pekerjaannya yang berlangsung 24 jam sehari dan tujuh hari seminggu.' }, { label: 'B', text: 'Tokoh Kak Fani menawarkan tokoh Raul untuk menceritakan masalahnya agar hatinya merasa lapang.' }, { label: 'C', text: 'Tokoh Kak Fani menyatakan ketidakyakinannya terhadap janji tokoh Raul yang akan menyelesaikan suplemen besok.' }, { label: 'D', text: 'Tokoh Raul merasa tertekan karena suplemen empat halaman baru separuh yang selesai, sementara tenggat tinggal tiga hari.' }, { label: 'E', text: 'Tokoh Raul dipanggil tokoh Kak Fani untuk membahas keterlambatan dan tekanan pekerjaan, tetapi tokoh Raul memendam masalahnya.' } ], key: 'E', explanation: 'Peristiwa utama adalah pertemuan antara Raul dan Kak Fani membahas masalah keterlambatan dan pekerjaan, dengan Raul yang tidak terbuka tentang perasaannya. Ini mencakup seluruh inti cerita.' },
+            { id: 10, type: 'mcma', readingId: 8, question: 'Berdasarkan kutipan cerpen, manakah prediksi logis terhadap kejadian atau akhir cerita yang akan dialami tokoh Raul? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.', options: [ { label: 'A', text: 'Tokoh Raul akan segera menyelesaikan suplemennya tepat waktu karena tekanan dari tokoh Kak Fani makin kuat dan ia tidak mau mengecewakan atasan.' }, { label: 'B', text: 'Tokoh Raul akan makin tertekan dan mengalami penurunan kinerja karena ia terus memendam masalahnya tanpa mau menceritakan kepada siapapun.' }, { label: 'C', text: 'Tokoh Raul akan menceritakan seluruh masalahnya kepada tokoh Kak Fani setelah menyadari bahwa tawaran tokoh Kak Fani tulus dan bisa membantunya.' }, { label: 'D', text: 'Tokoh Raul akan mengalami krisis eksistensial atau kejenuhan batin yang mendalam karena ia merasakan kekosongan di hati meskipun dikelilingi banyak orang.' }, { label: 'E', text: 'Tokoh Raul akan terus bekerja dengan kondisi tertekan tanpa perubahan signifikan karena ia tidak mampu mengubah situasi ataupun membuka diri.' } ], key: ['B', 'D', 'E'], explanation: 'Raul digambarkan memendam masalah, merasa kosong, dan tidak yakin bisa menyelesaikan pekerjaan. Prediksi B, D, E paling logis. A tidak realistis karena ia tidak termotivasi, C tidak didukung teks.' },
+            { id: 11, type: 'pg', readingId: 11, question: 'Makna kata nasib dalam puisi tersebut adalah.....', options: [ { label: 'A', text: 'harapan yang akan datang' }, { label: 'B', text: 'perjalanan hidup yang panjang' }, { label: 'C', text: 'takdir atau ketentuan dari Tuhan' }, { label: 'D', text: 'masa depan yang masih belum pasti' }, { label: 'E', text: 'keberuntungan yang diterima seseorang' } ], key: 'D', explanation: 'Dalam konteks puisi "Waktu jalan. Aku tidak tahu apa nasib waktu", nasib diartikan sebagai masa depan yang belum pasti, sesuai dengan suasana ketidakpastian.' },
+            { id: 12, type: 'kategori_tt', readingId: 11, question: 'Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut terkait penggunaan latar dalam puisi!', statements: [ 'Penggunaan latar malam mampu membangkitkan rasa cemas yang dialami para pejuang yang tidak tahu nasib masa depannya.', 'Penggambaran "daerah yang mati" sebagai latar tempat melambangkan semangat juang yang membara meskipun dalam kondisi terdesak.', 'Perpaduan antara malam dan suasana gelisah mampu memperkuat tema puisi secara harmonis karena malam sering dikaitkan dengan ketidakpastian.' ], keys: ['Tepat', 'Tidak Tepat', 'Tepat'], explanation: 'Pernyataan 1 tepat; malam menimbulkan suasana mencekam dan cemas. Pernyataan 2 tidak tepat; "daerah yang mati" justru melambangkan kepasrahan atau keheningan, bukan semangat membara. Pernyataan 3 tepat; malam identik dengan ketidakpastian.' },
+            { id: 13, type: 'pg', readingId: 13, question: 'Hubungan makna yang paling tepat antara paragraf kedua terhadap paragraf pertama adalah...', options: [ { label: 'A', text: 'Paragraf kedua menjelaskan berbagai dampak negatif penerapan pendidikan inklusif yang dibahas di paragraf pertama.' }, { label: 'B', text: 'Paragraf kedua menjelaskan kendala-kendala penerapan pendidikan inklusif yang sudah dipaparkan di paragraf pertama.' }, { label: 'C', text: 'Paragraf kedua menjelaskan berbagai macam masalah dari penerapan pendidikan inklusif yang dibahas di paragraf pertama.' }, { label: 'D', text: 'Paragraf kedua menjelaskan tantangan dari salah satu kendala penerapan pendidikan inklusif yang disebutkan di paragraf pertama.' }, { label: 'E', text: 'Paragraf kedua menjelaskan penyebab spesifik salah satu kendala penerapan pendidikan inklusif yang disebutkan di paragraf pertama.' } ], key: 'E', explanation: 'Paragraf pertama menyebutkan "masih menghadapi berbagai kendala serius". Paragraf kedua mempersempit dengan membahas salah satu kendala: keterbatasan tenaga pendidik khusus. Jadi E tepat.' },
+            { id: 14, type: 'pg', readingId: 13, question: 'Berdasarkan isi teks, prediksi yang akan terjadi pada masa depan jika berbagai hambatan dalam pelaksanaan pendidikan inklusif tidak segera diatasi adalah...', options: [ { label: 'A', text: 'Sekolah akan makin bergantung pada inisiatif internal dalam memenuhi kebutuhan murid berkebutuhan khusus.' }, { label: 'B', text: 'Kesenjangan layanan pendidikan akan makin besar karena kebutuhan murid belum dapat terpenuhi secara optimal.' }, { label: 'C', text: 'Pelaksanaan pendidikan inklusif akan menunjukkan hasil beragam sesuai dengan kesiapan sumber daya di tiap sekolah.' }, { label: 'D', text: 'Kualitas layanan pendidikan inklusif akan sulit berkembang secara merata meskipun berbagai kebijakan telah ditetapkan.' }, { label: 'E', text: 'Pemerataan pendidikan akan berlangsung lebih lambat karena masih terdapat perbedaan kualitas layanan antarsekolah.' } ], key: 'B', explanation: 'Teks menyebutkan hambatan dana, fasilitas, SDM menyebabkan kebutuhan murid terabaikan. Prediksi paling tepat adalah kesenjangan layanan makin besar.' },
+            { id: 15, type: 'pg', readingId: 13, question: 'Makna kata optimal yang sesuai dengan teks tersebut adalah...', options: [ { label: 'A', text: 'Menerapkan prinsip inklusivitas dengan hasil terbaik sesuai kemampuan yang ada.' }, { label: 'B', text: 'Melakukan pemerataan pendidikan secara menyeluruh tanpa terkendala apa pun.' }, { label: 'C', text: 'Memberikan kesempatan belajar yang sama bagi semua murid tanpa terkecuali.' }, { label: 'D', text: 'Mengatasi berbagai kendala serius yang menghambat pelaksanaan pendidikan.' }, { label: 'E', text: 'Mencapai target pendidikan tanpa memerlukan bantuan dari pihak mana pun.' } ], key: 'A', explanation: 'Optimal berarti kondisi terbaik yang dapat dicapai. Dalam konteks teks, menerapkan prinsip inklusivitas secara optimal berarti dengan hasil terbaik sesuai kemampuan.' },
+            { id: 16, type: 'kategori_bs', readingId: 13, question: 'Tentukan Benar atau Salah untuk setiap pernyataan berikut terkait keakuratan setiap pernyataan dengan isi teks!', statements: [ 'Pendidikan inklusif bertujuan memberikan kesempatan belajar bagi semua murid secara setara.', 'Tenaga pendidik yang paham kebutuhan murid difabel sangat dibutuhkan dalam penerapan pembelajaran inklusif.', 'Meskipun masih terbatas, fasilitas pendukung pendidikan inklusif sudah tersedia di hampir semua sekolah.' ], keys: ['Benar', 'Benar', 'Salah'], explanation: 'Pernyataan 1 dan 2 sesuai teks. Pernyataan 3 salah karena teks menyebut banyak sekolah belum menyediakan sarana aksesibel.' },
+            { id: 17, type: 'pg', readingId: 17, question: 'Berdasarkan teks, tokoh Karsa digambarkan sebagai sosok yang', options: [ { label: 'A', text: 'tegas dan supel' }, { label: 'B', text: 'tegas dan kreatif' }, { label: 'C', text: 'kreatif dan supel' }, { label: 'D', text: 'tegas dan baik hati' }, { label: 'E', text: 'kreatif dan bijaksana' } ], key: 'B', explanation: 'Karsa digambarkan sebagai komandan yang tegas (gerak jarinya instruksi) dan kreatif (menciptakan atmosfer magis, detail kecil diperhatikan).' },
+            { id: 18, type: 'pg', readingId: 17, question: 'Manakah pernyataan yang sesuai dengan istilah mise-en-scène dalam teks tersebut?', options: [ { label: 'A', text: 'Seluruh unsur visual yang tampak di atas panggung.' }, { label: 'B', text: 'Rias wajah dan kostum yang dikenakan para pemain.' }, { label: 'C', text: 'Dialog antaraktor yang diucapkan selama pertunjukan.' }, { label: 'D', text: 'Pengaturan posisi dan pergerakan aktor di atas panggung.' }, { label: 'E', text: 'Tata suara dan musik yang mengiringi jalannya pertunjukan.' } ], key: 'A', explanation: 'Teks menyebut "Maknanya mencakup seluruh unsur yang tampak di panggung". Jadi A.' },
+            { id: 19, type: 'mcma', readingId: 17, question: 'Menurut penilaianmu, manakah pernyataan yang paling tepat mengenai penggunaan gaya bahasa dalam teks tersebut terhadap pembaca? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.', options: [ { label: 'A', text: 'Gaya bahasa repetisi pada kalimat "cepat, tetapi membekas" yang diulang dua kali justru melemahkan pesan karena terkesan berlebihan dan membosankan bagi pembaca.' }, { label: 'B', text: 'Gaya bahasa simile pada kalimat "Lampu sorot tampak seperti pedang yang siap terhunus" membuat pembaca membayangkan suasana panggung yang keras dan penuh ketegangan seperti medan perang.' }, { label: 'C', text: 'Gaya bahasa simile pada kalimat "Senyum kecil muncul sesaat-cepat, tetapi membekas, Seperti kilat: cepat, tetapi membekas" membantu pembaca memahami bahwa kesan dari senyum Karsa bersifat singkat tetapi mendalam.' }, { label: 'D', text: 'Gaya bahasa metafora pada kalimat "Lampu sorot tampak seperti pedang yang siap terhunus" kurang efektif karena pembaca akan bingung membayangkan lampu sorot sebagai pedang yang tidak mungkin muncul di panggung teater.' }, { label: 'E', text: 'Gaya bahasa antitesis pada kalimat "Mereka bergerak seperti mesin yang sangat terlatih. Namun, kebebasan jiwa mereka tetap terasa hidup" menimbulkan respons pembaca berupa rasa penasaran tentang cara aktor bisa menjadi patuh sekaligus merdeka.' } ], key: ['B', 'C', 'E'], explanation: 'Pernyataan B, C, E tepat menggambarkan efek gaya bahasa terhadap pembaca. A salah karena repetisi justru memperkuat kesan. D salah karena metafora justru efektif.' },
+            { id: 20, type: 'pg', readingId: 17, question: 'Penilaian paling tepat terhadap penggunaan konjungsi dalam teks tersebut adalah...', options: [ { label: 'A', text: 'Penggunaan konjungsi bahkan pada paragraf akhir dinilai kurang tepat karena konjungsi tersebut tidak biasa digunakan sebagai penutup cerita.' }, { label: 'B', text: 'Penggunaan konjungsi namun dan tetapi secara berulang dinilai kurang efektif karena membuat alur berpikir pembaca menjadi terputus-putus.' }, { label: 'C', text: 'Penggunaan konjungsi tetapi dan namun dinilai sangat membantu karena menunjukkan hubungan pertentangan yang dialami tokoh Karsa.' }, { label: 'D', text: 'Penggunaan konjungsi maka dan bahkan dinilai kurang sesuai karena kedua konjungsi tersebut untuk menyatakan sesuatu yang dilebih-lebihkan.' }, { label: 'E', text: 'Penggunaan konjungsi maka dan sehingga dinilai cukup tepat karena hubungan sebab akibat membantu pembaca memahami penyebab tindakan tokoh Karsa.' } ], key: 'C', explanation: 'Konjungsi tetapi dan namun sering muncul untuk menunjukkan kontras antara ketegasan dan kegelisahan Karsa. Itu sangat membantu pembaca memahami pertentangan batinnya.' },
+            { id: 21, type: 'pg', readingId: 21, question: 'Ide pokok kutipan novel tersebut adalah.', options: [ { label: 'A', text: 'Tokoh Samsulbahri mendengar berbagai bunyi dari alam sekitar seperti ombak dan suara azan subuh.' }, { label: 'B', text: 'Tokoh Samsulbahri takut ayahnya terbangun sehingga ia membuka pintu biliknya dengan perlahan-lahan.' }, { label: 'C', text: 'Tokoh Samsulbahri merasa gelisah dan tidak sabar menunggu waktu berangkat untuk pergi bersuka-sukaan.' }, { label: 'D', text: 'Tokoh Samsulbahri bangun pagi karena mendengar suara kokok ayam dan bunyi kereta api dari Stasiun Padang.' }, { label: 'E', text: 'Tokoh Samsulbahri terbangun pada pukul lima pagi lalu memutuskan untuk berbaring-baring santai di tempat tidurnya.' } ], key: 'C', explanation: 'Paragraf menunjukkan kegelisahan dan ketidaksabaran Samsu menunggu siang untuk pergi ke Gunung Padang. Ini ide pokok utama.' },
+            { id: 22, type: 'pg', readingId: 21, question: 'Latar suasana dalam kutipan novel tersebut adalah..', options: [ { label: 'A', text: 'hening' }, { label: 'B', text: 'sunyi' }, { label: 'C', text: 'resah' }, { label: 'D', text: 'damai' }, { label: 'E', text: 'tegang' } ], key: 'C', explanation: 'Tokoh merasa gelisah, tidak sabar, dan tidak bisa tidur. Suasana resah paling sesuai.' },
+            { id: 23, type: 'mcma', readingId: 21, question: 'Apa konflik yang dialami tokoh Samsulbahri? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.', options: [ { label: 'A', text: 'Konflik dengan ayahnya yang melarangnya pergi bersuka-sukaan ke Gunung Padang.' }, { label: 'B', text: 'Konflik batin antara rasa tidak sabar dengan kesadarannya untuk tetap bersikap sabar.' }, { label: 'C', text: 'Konflik dengan teman-temannya yang tidak kunjung datang menjemput untuk pergi bersama.' }, { label: 'D', text: 'Konflik antara keinginan untuk segera bangun dengan kekhawatiran membangunkan ayahnya.' }, { label: 'E', text: 'Konflik antara keinginan untuk segera berangkat dengan kenyataan bahwa hari masih pagi dan gelap.' } ], key: ['B', 'D', 'E'], explanation: 'Konflik utama adalah batin: tidak sabar vs sabar, takut membangunkan ayah, dan keinginan berangkat vs hari masih pagi. A tidak ada larangan, C tidak disebut.' },
+            { id: 24, type: 'mcma', readingId: 24, question: 'Berdasarkan kutipan drama, manakah pernyataan yang masih relevan dengan kehidupan sehari-hari? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.', options: [ { label: 'A', text: 'Mencari kebenaran atas kabar keluarga yang hilang adalah kewajiban moral yang tidak bisa ditawar.' }, { label: 'B', text: 'Bekerja lembur di tengah masalah keluarga menunjukkan kurangnya kepekaan terhadap situasi rumah.' }, { label: 'C', text: 'Menyediakan makanan untuk keluarga meskipun sedang bersedih mencerminkan ketangguhan seorang ibu.' }, { label: 'D', text: 'Merespons kabar penting dengan antusiasme berlebihan justru dapat menimbulkan kekecewaan yang lebih besar.' }, { label: 'E', text: 'Keyakinan bahwa seseorang yang sudah lama pergi tidak mungkin kembali adalah sikap realistis dalam kehidupan.' } ], key: ['A', 'C'], explanation: 'A dan C relevan dengan nilai kehidupan. B, D, E tidak selalu tepat atau berlebihan.' },
+            { id: 25, type: 'kategori_bs', readingId: 24, question: 'Berdasarkan kutipan drama, tentukan Benar atau Salah untuk setiap pernyataan terkait respons emosional pembaca berikut!', statements: [ 'Pembaca akan merasa ikut penasaran bersama tokoh Maimun tentang kebenaran kabar sosok mirip sang ayah yang dilihat oleh tokoh Pak Tirto.', 'Pembaca akan merasa jengkel terhadap sikap tokoh Gunarto yang acuh tak acuh ketika mendengar kabar kemungkinan ayahnya masih hidup.', 'Pembaca akan merasa lega ketika tokoh Ibu menyatakan keyakinannya bahwa suaminya sudah lama meninggal atau pergi ke luar negeri.' ], keys: ['Benar', 'Benar', 'Salah'], explanation: 'Pernyataan 1 dan 2 sesuai: pembaca penasaran dan jengkel. Pernyataan 3 salah: justru pembaca merasa sedih, bukan lega.' }
+        ];
+
+        let totalScore = 0;
+        let totalAnswered = 0;
+        let answeredQuestions = new Set();
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type === 'correct') toast.classList.add('correct', 'show');
+            else if (type === 'wrong') toast.classList.add('wrong', 'show');
+            else toast.classList.add('info', 'show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.className = 'toast', 300);
+            }, 2200);
+        }
+
+        function updateScore() {
+            document.getElementById('scoreDisplay').textContent = 'Skor: ' + totalScore + ' / ' + totalAnswered;
+        }
+
+        function showKey(questionId) {
+            const keyEl = document.getElementById('key-' + questionId);
+            if (keyEl) keyEl.classList.add('visible');
+        }
+
+        function markAnswered(questionId) {
+            if (!answeredQuestions.has(questionId)) {
+                answeredQuestions.add(questionId);
+                totalAnswered++;
+                updateScore();
+            }
+        }
+
+        function selectPG(qid, selectedOption) {
+            const card = document.getElementById('q' + qid);
+            const correctKey = card.dataset.key;
+            const options = document.querySelectorAll('#q' + qid + ' .option');
+            let isCorrect = selectedOption === correctKey;
+            options.forEach(opt => {
+                opt.classList.add('disabled');
+                const optLetter = opt.dataset.option;
+                if (optLetter === correctKey) opt.classList.add('selected-correct');
+                if (optLetter === selectedOption && !isCorrect) opt.classList.add('selected-wrong');
+            });
+            if (isCorrect) showToast('✅ Benar! Jawaban Anda tepat.', 'correct');
+            else showToast('❌ Salah! Kunci jawaban: ' + correctKey, 'wrong');
+            markAnswered(qid);
+            if (isCorrect) totalScore++;
+            updateScore();
+            showKey(qid);
+        }
+
+        function selectMCMA(qid, selectedOption) {
+            const card = document.getElementById('q' + qid);
+            let correctKeys = JSON.parse(card.dataset.key);
+            const optionEl = card.querySelector('.option[data-option="' + selectedOption + '"]');
+            const isKey = correctKeys.includes(selectedOption);
+            if (optionEl.classList.contains('selected-correct') || optionEl.classList.contains('selected-wrong')) return;
+            if (isKey) {
+                optionEl.classList.add('selected-correct');
+                showToast('✅ Benar! Pilihan ini adalah kunci jawaban.', 'correct');
+            } else {
+                optionEl.classList.add('selected-wrong');
+                showToast('❌ Salah! Pilihan ini bukan kunci jawaban.', 'wrong');
+            }
+            markAnswered(qid);
+            const allCorrectSelected = correctKeys.every(key => {
+                const opt = card.querySelector('.option[data-option="' + key + '"]');
+                return opt && opt.classList.contains('selected-correct');
+            });
+            if (allCorrectSelected) {
+                totalScore++;
+                updateScore();
+                showToast('🎉 Semua kunci jawaban ditemukan!', 'correct');
+            }
+            showKey(qid);
+        }
+
+        function selectKategori(qid, rowIndex, selectedValue) {
+            const card = document.getElementById('q' + qid);
+            let keys = JSON.parse(card.dataset.keys);
+            const rows = card.querySelectorAll('.kategori-row');
+            const targetRow = rows[rowIndex];
+            const buttons = targetRow.querySelectorAll('.kategori-btn');
+            if (targetRow.dataset.answered === 'true') return;
+            const correctValue = keys[rowIndex];
+            const isCorrect = selectedValue === correctValue;
+            buttons.forEach(btn => {
+                btn.classList.add('disabled');
+                if (btn.dataset.value === correctValue) btn.classList.add('selected-correct');
+                if (btn.dataset.value === selectedValue && !isCorrect) btn.classList.add('selected-wrong');
+            });
+            if (isCorrect) {
+                targetRow.classList.add('correct-row');
+                showToast('✅ Benar! Pernyataan ini tepat.', 'correct');
+            } else {
+                targetRow.classList.add('wrong-row');
+                showToast('❌ Salah! Kunci: ' + correctValue, 'wrong');
+            }
+            targetRow.dataset.answered = 'true';
+            markAnswered(qid);
+            const allCorrect = Array.from(rows).every((row, idx) => {
+                return row.dataset.answered === 'true' && keys[idx] === getSelectedValue(row);
+            });
+            if (allCorrect) {
+                totalScore++;
+                updateScore();
+                showToast('🎉 Semua pernyataan terjawab dengan benar!', 'correct');
+            }
+            showKey(qid);
+        }
+
+        function getSelectedValue(row) {
+            const selectedBtn = row.querySelector('.kategori-btn.selected-correct');
+            return selectedBtn ? selectedBtn.dataset.value : null;
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('quizContainer');
+            questions.forEach(q => {
+                let card = document.createElement('div');
+                card.className = 'card';
+                card.id = 'q' + q.id;
+                card.dataset.type = q.type;
+
+                let typeLabel = '';
+                if (q.type === 'pg') typeLabel = 'PG';
+                else if (q.type === 'mcma') typeLabel = 'PGK MCMA';
+                else if (q.type === 'kategori_bs') typeLabel = 'PGK Kategori (Benar/Salah)';
+                else if (q.type === 'kategori_tt') typeLabel = 'PGK Kategori (Tepat/Tidak Tepat)';
+
+                let html = '';
+                if (q.readingId && readingTexts[q.readingId]) {
+                    const rt = readingTexts[q.readingId];
+                    html += `<div class="text-excerpt"><strong>${rt.title}</strong><br>${rt.content}</div>`;
+                }
+                html += `<span class="question-number">Soal ${q.id}</span><span class="question-type">${typeLabel}</span>`;
+                html += `<p class="question-text">${q.question}</p>`;
+
+                if (q.type === 'pg') {
+                    html += `<div class="options">`;
+                    q.options.forEach(opt => {
+                        html += `<div class="option" data-option="${opt.label}" onclick="selectPG(${q.id},'${opt.label}')"><span class="option-letter">${opt.label}</span><span class="option-text">${opt.text}</span></div>`;
+                    });
+                    html += `</div>`;
+                    card.dataset.key = q.key;
+                } else if (q.type === 'mcma') {
+                    html += `<div class="options mcma">`;
+                    q.options.forEach(opt => {
+                        html += `<div class="option" data-option="${opt.label}" onclick="selectMCMA(${q.id},'${opt.label}')"><span class="option-letter">${opt.label}</span><span class="option-text">${opt.text}</span></div>`;
+                    });
+                    html += `</div>`;
+                    card.dataset.key = JSON.stringify(q.key);
+                } else {
+                    html += `<div class="kategori-table">`;
+                    q.statements.forEach((stmt, idx) => {
+                        html += `<div class="kategori-row" data-row="${idx}"><div class="statement-text">${stmt}</div><div class="kategori-buttons">`;
+                        if (q.type === 'kategori_bs') {
+                            html += `<button class="kategori-btn" data-value="Benar" onclick="selectKategori(${q.id},${idx},'Benar')">Benar</button>`;
+                            html += `<button class="kategori-btn" data-value="Salah" onclick="selectKategori(${q.id},${idx},'Salah')">Salah</button>`;
+                        } else {
+                            html += `<button class="kategori-btn" data-value="Tepat" onclick="selectKategori(${q.id},${idx},'Tepat')">Tepat</button>`;
+                            html += `<button class="kategori-btn" data-value="Tidak Tepat" onclick="selectKategori(${q.id},${idx},'Tidak Tepat')">Tidak Tepat</button>`;
+                        }
+                        html += `</div></div>`;
+                    });
+                    html += `</div>`;
+                    card.dataset.keys = JSON.stringify(q.keys);
+                }
+
+                html += `<div class="answer-key" id="key-${q.id}"><div class="key-label"><span class="icon-check">✔</span> Kunci Jawaban: ${formatKey(q)}</div><div class="key-answer">${formatAnswer(q)}</div><div class="key-explanation"><strong>Pembahasan & Trik:</strong> ${q.explanation}</div></div>`;
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+        }
+
+        function formatKey(q) {
+            if (q.type === 'pg') return q.key;
+            if (q.type === 'mcma') return q.key.join(', ');
+            if (q.type === 'kategori_bs' || q.type === 'kategori_tt') {
+                return q.keys.join(' • ');
+            }
+            return '';
+        }
+
+        function formatAnswer(q) {
+            if (q.type === 'pg') {
+                const opt = q.options.find(o => o.label === q.key);
+                return opt ? `${q.key}. ${opt.text}` : q.key;
+            }
+            if (q.type === 'mcma') {
+                return q.key.map(k => {
+                    const opt = q.options.find(o => o.label === k);
+                    return opt ? `${k}. ${opt.text}` : k;
+                }).join('<br>');
+            }
+            if (q.type === 'kategori_bs' || q.type === 'kategori_tt') {
+                return q.statements.map((s, i) => `${i+1}. ${s} → <strong>${q.keys[i]}</strong>`).join('<br>');
+            }
+            return '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuestions();
+            document.querySelectorAll('.answer-key').forEach(k => k.classList.remove('visible'));
+        });
+    </script>
+</body>
+</html>
