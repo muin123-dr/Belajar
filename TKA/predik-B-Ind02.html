@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Soal TKA Bahasa Indonesia - Bonus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fb;
+            color: #1a2a3a;
+            padding: 20px 16px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #1a4a6b 100%);
+            color: #fff;
+            padding: 28px 32px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(11, 43, 68, 0.15);
+        }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .header h1 small {
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 4px;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+        .score-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e4ecf5;
+        }
+        .score-bar .score {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0b2b44;
+        }
+        .score-bar .score span {
+            color: #2d7fc1;
+        }
+        .reset-btn {
+            background: #eef4fa;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a4a6b;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #ccdbe8;
+            font-size: 0.9rem;
+        }
+        .reset-btn:hover {
+            background: #d4e3f2;
+            border-color: #2d7fc1;
+        }
+        .soal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 20, 40, 0.04);
+            border: 1px solid #eef4fa;
+            transition: border 0.2s, background 0.2s;
+        }
+        .soal-card.correct {
+            border-left: 6px solid #1fa86b;
+            background: #f6fef9;
+        }
+        .soal-card.wrong {
+            border-left: 6px solid #d34a4a;
+            background: #fef7f7;
+        }
+        .soal-card .header-soal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .soal-card .nomor {
+            display: inline-block;
+            background: #2d7fc1;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 30px;
+            padding: 2px 14px;
+            letter-spacing: 0.03em;
+        }
+        .soal-card .tipe {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            background: #eef4fa;
+            color: #4a6a85;
+        }
+        .soal-card .tipe.pgk {
+            background: #fdebd0;
+            color: #8a4a0a;
+        }
+        .soal-card .tipe.pgk-kategori {
+            background: #d5f5e3;
+            color: #0b4a2a;
+        }
+        .soal-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+        .kutipan {
+            background: #f8faff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border-left: 4px solid #2d7fc1;
+            margin: 12px 0 16px 0;
+            color: #1a3a5a;
+            font-weight: 400;
+            font-size: 0.98rem;
+        }
+        .kutipan p {
+            margin-bottom: 6px;
+        }
+        .kutipan p:last-child {
+            margin-bottom: 0;
+        }
+        .kutipan .num {
+            font-weight: 600;
+            color: #0b2b44;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .options label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f8faff;
+            border-radius: 12px;
+            border: 1px solid #e4ecf5;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover:not(.disabled) {
+            background: #eef4fa;
+            border-color: #b0cade;
+        }
+        .options input[type="radio"],
+        .options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2d7fc1;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .options input[type="radio"]:disabled,
+        .options input[type="checkbox"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .options label.disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+        .options label.correct-answer {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .options label.wrong-answer {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .btn-cek {
+            background: #2d7fc1;
+            color: #fff;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(45, 127, 193, 0.25);
+            margin-top: 6px;
+        }
+        .btn-cek:hover:not(:disabled) {
+            background: #1f6aa8;
+            transform: scale(1.02);
+        }
+        .btn-cek:disabled {
+            background: #b0cade;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+        .feedback-box {
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        .feedback-box.show {
+            display: block;
+        }
+        .feedback-box.correct {
+            background: #e6f6ed;
+            border-color: #7fcfab;
+            color: #0b4a2a;
+        }
+        .feedback-box.wrong {
+            background: #fdeaea;
+            border-color: #f5b7b7;
+            color: #6b2a2a;
+        }
+        .feedback-box .explain {
+            margin-top: 6px;
+            font-weight: 500;
+            color: #1a3a5a;
+        }
+        .feedback-box .explain strong {
+            color: #0b2b44;
+        }
+
+        .table-pernyataan {
+            margin: 12px 0;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        .table-pernyataan td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e4ecf5;
+            vertical-align: middle;
+        }
+        .table-pernyataan .pernyataan-text {
+            padding-right: 16px;
+        }
+        .table-pernyataan .opsi-group {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .table-pernyataan .opsi-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .table-pernyataan .opsi-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2d7fc1;
+        }
+        .table-pernyataan .opsi-group input[type="radio"]:disabled {
+            accent-color: #8a9aa8;
+        }
+        .table-pernyataan .feedback-pernyataan {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: none;
+        }
+        .table-pernyataan .feedback-pernyataan.show {
+            display: block;
+        }
+        .table-pernyataan .feedback-pernyataan.benar {
+            background: #d4edda;
+            color: #0b4a2a;
+        }
+        .table-pernyataan .feedback-pernyataan.salah {
+            background: #f8d7da;
+            color: #6b2a2a;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6a8aa0;
+            font-size: 0.9rem;
+            border-top: 1px solid #e4ecf3;
+            padding-top: 20px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .header { padding: 20px; }
+            .header h1 { font-size: 1.5rem; }
+            .soal-card { padding: 16px; }
+            .score-bar { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
+            .table-pernyataan td { display: block; padding: 6px 8px; }
+            .table-pernyataan .opsi-group { justify-content: flex-start; }
+            .table-pernyataan .pernyataan-text { padding-bottom: 0; }
+        }
+        @media print {
+            body { background: #fff; padding: 0.2in; }
+            .soal-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .header { background: #0b2b44 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .reset-btn, .btn-cek { display: none; }
+            .feedback-box { border: 1px solid #ccc; }
+            .feedback-box.correct { background: #e6f6ed; }
+            .feedback-box.wrong { background: #fdeaea; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 Prediksi Soal TKA <small>Bahasa Indonesia — Bonus</small></h1>
+        <div class="badge">20 Soal · SMA/MA 2026-2027</div>
+    </div>
+
+    <div class="score-bar">
+        <div class="score">🎯 Skor: <span id="scoreDisplay">0</span> / <span id="totalSoal">20</span></div>
+        <button class="reset-btn" id="resetBtn">⟳ Mulai Ulang</button>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <div class="footer">
+        <strong>Selamat Belajar!</strong> — Untuk PG biasa, klik langsung pilihan. Untuk PGK dan Kategori, pilih lalu tekan "Cek Jawaban".
+    </div>
+</div>
+
+<script>
+// ============================================================
+//  DATA SOAL (20 Soal) — LENGKAP DENGAN KUTIPAN
+// ============================================================
+const questions = [{
+    id:1, tipe:'pg',
+    kutipan: `(1) Keberadaan hutan mangrove sangat penting bagi kelangsungan lingkungan dan makhluk hidup di sekitarnya. (2) Hutan mangrove adalah tumbuhan di area sepanjang garis pantai pesisir yang menahan terpaan pasang surut air laut secara terus-menerus. (3) Cara menanam mangrove mungkin sekilas terlihat mudah, tetapi nyatanya memerlukan perencanaan untuk mencapai hasil maksimal di lapangan. (4) Maraknya kerusakan hutan mangrove akibat alih fungsi lahan atau hancurnya ekosistem dampak dari limbah dan sampah yang bertebaran tentunya tidak bisa disepelekan. (5) Data yang diperoleh dari pemetaan tersebut akan mempermudah dalam menentukan pola tanam, jarak tanam, penempatan titik patok penanaman mangrove, serta pengelolaan penanaman benih pohon mangrove di lapangan nantinya. (6) Lokasi penanaman pohon mangrove dapat dilakukan dan dipilih berdasarkan tujuan yang ingin dicapai. (7) Sebelum dilaksanakan penanaman mangrove, haruslah terlebih dahulu dilakukan pemetaan lahan.`,
+    text: 'Susunan kalimat yang tepat agar membentuk paragraf yang padu dan logis adalah ...',
+    options: ['A. 1 - 2 - 4 - 3 - 7 - 6 - 5', 'B. 2 - 1 - 4 - 3 - 7 - 5 - 6', 'C. 1 - 2 - 3 - 4 - 6 - 7 - 5', 'D. 1 - 4 - 2 - 3 - 7 - 6 - 5', 'E. 2 - 4 - 1 - 3 - 6 - 5 - 7'],
+    correct:0,
+    explanation: '(1)-(2): Umum ke definisi. (2)-(4): Dari definisi langsung ke kerusakan. (4)-(3): Dari masalah ke solusi. (3)-(7): Penanaman butuh perencanaan → pemetaan. (7)-(6)-(5): Pemetaan → lokasi → data. Jawaban A.'
+},{
+    id:2, tipe:'pg',
+    kutipan: `(1) Escherichia coli (E. coli) adalah bakteri yang hidup di dalam usus manusia untuk menjaga kesehatan sistem pencernaan. (2) Bakteri ini umumnya tidak berbahaya. (3) Keberadaan bakteri E. coli di dalam tubuh manusia merupakan hal yang wajar karena bakteri ini turut berperan menjaga kesehatan saluran pencernaan. (4) Namun, ada jenis E. coli yang menghasilkan racun dan menyebabkan diare parah. (5) Sebagian besar diare disebabkan oleh bakteri jenis STEC. (6) Bakteri ini memproduksi racun yang dapat merusak lapisan usus kecil sehingga menyebabkan BAB berdarah. (7) Gejala infeksi E. coli dapat berbeda pada setiap orang. (8) Namun, infeksi ini sering kali ditandai dengan diare, yang umumnya muncul 3-4 hari setelah terpapar bakteri. (9) Diare yang tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak. (10) Muntah-muntah selama lebih dari 12 jam. (11) Muncul gejala dehidrasi, seperti menurunnya jumlah urine, sangat haus, atau pusing. (12) Tinja yang dikeluarkan bercampur dengan nanah atau darah (disentri). (13) Nah, Bila kondisi ini terjadi, Anda harus segera memeriksakan diri ke dokter.`,
+    text: 'Agar menjadi dua paragraf yang padu, teks di atas harus dimulai dari kalimat ...',
+    options: ['A. 1-2-3-4 dan 5-6-7-8-9-10-11-12-13', 'B. 1-2-3-4-5 dan 6-7-8-9-10-11-12-13', 'C. 1-2-3-4-5-6 dan 7-8-9-10-11-12-13', 'D. 1-2-3-4-5-6-7 dan 8-9-10-11-12-13', 'E. 1-2-3-4-5-6-7-8 dan 9-10-11-12-13'],
+    correct:3,
+    explanation: 'Kalimat 7–13 memuat informasi tentang gejala infeksi E. coli. Karena terdiri atas daftar gejala yang panjang, sebaiknya dipisahkan menjadi paragraf tersendiri agar lebih mudah dipahami. Jawaban D.'
+},{
+    id:3, tipe:'pg',
+    kutipan: `(1) Escherichia coli (E. coli) adalah bakteri yang hidup di dalam usus manusia untuk menjaga kesehatan sistem pencernaan. (2) Bakteri ini umumnya tidak berbahaya. (3) Keberadaan bakteri E. coli di dalam tubuh manusia merupakan hal yang wajar karena bakteri ini turut berperan menjaga kesehatan saluran pencernaan. (4) Namun, ada jenis E. coli yang menghasilkan racun dan menyebabkan diare parah. (5) Sebagian besar diare disebabkan oleh bakteri jenis STEC. (6) Bakteri ini memproduksi racun yang dapat merusak lapisan usus kecil sehingga menyebabkan BAB berdarah. (7) Gejala infeksi E. coli dapat berbeda pada setiap orang. (8) Namun, infeksi ini sering kali ditandai dengan diare, yang umumnya muncul 3-4 hari setelah terpapar bakteri. (9) Diare yang tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak. (10) Muntah-muntah selama lebih dari 12 jam. (11) Muncul gejala dehidrasi, seperti menurunnya jumlah urine, sangat haus, atau pusing. (12) Tinja yang dikeluarkan bercampur dengan nanah atau darah (disentri). (13) Nah, Bila kondisi ini terjadi, Anda harus segera memeriksakan diri ke dokter.`,
+    text: 'Kalimat manakah yang merupakan kalimat tidak efektif?',
+    options: ['A. Kalimat 3', 'B. Kalimat 8', 'C. Kalimat 9', 'D. Kalimat 12', 'E. Kalimat 13'],
+    correct:2,
+    explanation: 'Kalimat 9: "Diare yang tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak." tidak memiliki predikat yang jelas sehingga menjadi kalimat tidak efektif. Harus diperbaiki, misalnya menjadi: "Segera periksakan diri ke dokter jika diare tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak." Jawaban C.'
+},{
+    id:4, tipe:'pg',
+    kutipan: `(1) Escherichia coli (E. coli) adalah bakteri yang hidup di dalam usus manusia untuk menjaga kesehatan sistem pencernaan. (2) Bakteri ini umumnya tidak berbahaya. (3) Keberadaan bakteri E. coli di dalam tubuh manusia merupakan hal yang wajar karena bakteri ini turut berperan menjaga kesehatan saluran pencernaan. (4) Namun, ada jenis E. coli yang menghasilkan racun dan menyebabkan diare parah. (5) Sebagian besar diare disebabkan oleh bakteri jenis STEC. (6) Bakteri ini memproduksi racun yang dapat merusak lapisan usus kecil sehingga menyebabkan BAB berdarah. (7) Gejala infeksi E. coli dapat berbeda pada setiap orang. (8) Namun, infeksi ini sering kali ditandai dengan diare, yang umumnya muncul 3-4 hari setelah terpapar bakteri. (9) Diare yang tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak. (10) Muntah-muntah selama lebih dari 12 jam. (11) Muncul gejala dehidrasi, seperti menurunnya jumlah urine, sangat haus, atau pusing. (12) Tinja yang dikeluarkan bercampur dengan nanah atau darah (disentri). (13) Nah, Bila kondisi ini terjadi, Anda harus segera memeriksakan diri ke dokter.`,
+    text: 'Manakah padanan kata yang tidak tepat digunakan dalam teks?',
+    options: ['A. Memproduksi - kalimat (6)', 'B. Terpapar - Kalimat (8)', 'C. Menjaga - Kalimat (1)', 'D. Dikeluarkan - Kalimat (12)', 'E. Memeriksakan - Kalimat (13)'],
+    correct:0,
+    explanation: 'Kata "memproduksi" merupakan serapan dari bahasa Inggris "to produce". Dalam konteks ilmiah bahasa Indonesia, padanan yang lebih tepat adalah "menghasilkan". Jawaban A.'
+},{
+    id:5, tipe:'pg',
+    kutipan: `(1) Escherichia coli (E. coli) adalah bakteri yang hidup di dalam usus manusia untuk menjaga kesehatan sistem pencernaan. (2) Bakteri ini umumnya tidak berbahaya. (3) Keberadaan bakteri E. coli di dalam tubuh manusia merupakan hal yang wajar karena bakteri ini turut berperan menjaga kesehatan saluran pencernaan. (4) Namun, ada jenis E. coli yang menghasilkan racun dan menyebabkan diare parah. (5) Sebagian besar diare disebabkan oleh bakteri jenis STEC. (6) Bakteri ini memproduksi racun yang dapat merusak lapisan usus kecil sehingga menyebabkan BAB berdarah. (7) Gejala infeksi E. coli dapat berbeda pada setiap orang. (8) Namun, infeksi ini sering kali ditandai dengan diare, yang umumnya muncul 3-4 hari setelah terpapar bakteri. (9) Diare yang tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak. (10) Muntah-muntah selama lebih dari 12 jam. (11) Muncul gejala dehidrasi, seperti menurunnya jumlah urine, sangat haus, atau pusing. (12) Tinja yang dikeluarkan bercampur dengan nanah atau darah (disentri). (13) Nah, Bila kondisi ini terjadi, Anda harus segera memeriksakan diri ke dokter.`,
+    text: 'Tanda koma yang salah terdapat pada kalimat ...',
+    options: ['A. Kalimat (4)', 'B. Kalimat (5)', 'C. Kalimat (6)', 'D. Kalimat (7)', 'E. Kalimat (8)'],
+    correct:4,
+    explanation: 'Kalimat (8): "Namun, infeksi ini sering kali ditandai dengan diare, yang umumnya muncul 3-4 hari setelah terpapar bakteri." Tanda koma setelah kata "diare" tidak diperlukan karena klausa "yang umumnya muncul..." adalah anak kalimat yang membatasi dan tidak boleh dipisahkan dengan koma. Jawaban E.'
+},{
+    id:6, tipe:'pg',
+    kutipan: `(1) Escherichia coli (E. coli) adalah bakteri yang hidup di dalam usus manusia untuk menjaga kesehatan sistem pencernaan. (2) Bakteri ini umumnya tidak berbahaya. (3) Keberadaan bakteri E. coli di dalam tubuh manusia merupakan hal yang wajar karena bakteri ini turut berperan menjaga kesehatan saluran pencernaan. (4) Namun, ada jenis E. coli yang menghasilkan racun dan menyebabkan diare parah. (5) Sebagian besar diare disebabkan oleh bakteri jenis STEC. (6) Bakteri ini memproduksi racun yang dapat merusak lapisan usus kecil sehingga menyebabkan BAB berdarah. (7) Gejala infeksi E. coli dapat berbeda pada setiap orang. (8) Namun, infeksi ini sering kali ditandai dengan diare, yang umumnya muncul 3-4 hari setelah terpapar bakteri. (9) Diare yang tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak. (10) Muntah-muntah selama lebih dari 12 jam. (11) Muncul gejala dehidrasi, seperti menurunnya jumlah urine, sangat haus, atau pusing. (12) Tinja yang dikeluarkan bercampur dengan nanah atau darah (disentri). (13) Nah, Bila kondisi ini terjadi, Anda harus segera memeriksakan diri ke dokter.`,
+    text: 'Apa makna dari kalimat "Sebagian besar diare disebabkan oleh bakteri jenis STEC." jika dilihat dalam konteks keseluruhan paragraf?',
+    options: ['A. Semua jenis diare disebabkan oleh E. coli', 'B. STEC adalah jenis bakteri paling berbahaya', 'C. Tidak semua E. coli berbahaya, tapi STEC adalah pengecualian', 'D. Diare tidak selalu disebabkan oleh bakteri', 'E. Semua bakteri menghasilkan racun'],
+    correct:2,
+    explanation: 'Paragraf menjelaskan bahwa sebagian besar E. coli tidak berbahaya, tapi kemudian menjelaskan bahwa ada jenis khusus (STEC) yang menghasilkan racun. Maka, STEC adalah jenis pengecualian yang dapat menyebabkan diare parah. Jawaban C.'
+},{
+    id:7, tipe:'pg',
+    kutipan: `(1) Escherichia coli (E. coli) adalah bakteri yang hidup di dalam usus manusia untuk menjaga kesehatan sistem pencernaan. (2) Bakteri ini umumnya tidak berbahaya. (3) Keberadaan bakteri E. coli di dalam tubuh manusia merupakan hal yang wajar karena bakteri ini turut berperan menjaga kesehatan saluran pencernaan. (4) Namun, ada jenis E. coli yang menghasilkan racun dan menyebabkan diare parah. (5) Sebagian besar diare disebabkan oleh bakteri jenis STEC. (6) Bakteri ini memproduksi racun yang dapat merusak lapisan usus kecil sehingga menyebabkan BAB berdarah. (7) Gejala infeksi E. coli dapat berbeda pada setiap orang. (8) Namun, infeksi ini sering kali ditandai dengan diare, yang umumnya muncul 3-4 hari setelah terpapar bakteri. (9) Diare yang tidak membaik setelah 4 hari pada orang dewasa atau selama 2 hari pada anak-anak. (10) Muntah-muntah selama lebih dari 12 jam. (11) Muncul gejala dehidrasi, seperti menurunnya jumlah urine, sangat haus, atau pusing. (12) Tinja yang dikeluarkan bercampur dengan nanah atau darah (disentri). (13) Nah, Bila kondisi ini terjadi, Anda harus segera memeriksakan diri ke dokter.`,
+    text: 'Manakah kalimat yang penggunaan tanda bacanya tidak tepat?',
+    options: ['A. Kalimat 3', 'B. Kalimat 8', 'C. Kalimat 12', 'D. Kalimat 13', 'E. Kalimat 5'],
+    correct:3,
+    explanation: 'Kalimat 13: "Nah, Bila kondisi ini terjadi..." Kesalahan terletak pada huruf kapital "Bila" setelah tanda koma. Seharusnya ditulis "Nah, bila kondisi ini terjadi..." karena "bila" adalah lanjutan kalimat, bukan awal kalimat baru. Jawaban D.'
+},{
+    id:8, tipe:'pgk',
+    kutipan: `Pagi itu Pelabuhan Samudra Arunika dipenuhi suara mesin kapal, tumpukan peti logistik, dan para nelayan yang bersiap melaut. Di tengah keramaian itu, sebuah kapal tua bernama "Bintang Laut" tampak paling mencolok. Kapal tersebut telah menghubungkan pulau-pulau kecil di kawasan Arunika selama hampir tiga puluh tahun. Banyak warga menganggapnya sebagai simbol kehidupan pesisir yang sederhana sekaligus penuh harapan. Namun dalam dua tahun terakhir, kondisi kapal semakin memprihatinkan. Mesin utamanya sering mati mendadak, dek kayu mulai lapuk, dan lambung kapal beberapa kali mengalami kebocoran kecil. Para pedagang mengeluhkan keterlambatan pengiriman barang yang memengaruhi pendapatan mereka. Meski demikian, kapal tetap beroperasi karena belum ada kapal pengganti. Bagi warga, keberadaan kapal ini sangat penting untuk memenuhi kebutuhan pokok, mengirim hasil panen, dan menjaga hubungan antar wilayah. Pemerintah daerah sebenarnya telah mengusulkan pengadaan armada baru, tetapi pengesahan anggaran tertunda karena perdebatan internal. Sementara itu, para nelayan, pedagang, dan warga hanya bisa berharap agar Bintang Laut tetap bertahan sembari menunggu kehadiran kapal baru yang lebih aman.`,
+    text: 'Berdasarkan teks tersebut, ide pokok yang tepat adalah ... (Pilih lebih dari satu)',
+    options: [
+        'A. Kapal Bintang Laut menjadi tumpuan warga meski kondisinya memburuk.',
+        'B. Pemerintah daerah mempercepat pengadaan armada baru demi keselamatan warga.',
+        'C. Kerusakan kapal mengganggu perdagangan dan aktivitas ekonomi.',
+        'D. Jalur pelayaran antar-pulau tidak lagi penting bagi warga pesisir.',
+        'E. Kapal Bintang Laut memiliki nilai emosional bagi masyarakat.'
+    ],
+    correct:[0,4],
+    explanation: 'A (benar) — Ini adalah ide pokok yang paling komprehensif. Teks membahas kondisi kapal yang buruk tetapi sekaligus menekankan bahwa kapal ini sangat penting dan menjadi tumpuan hidup warga. E (benar) — Teks menyebut kapal sebagai "simbol kehidupan pesisir". B (salah) — Teks menyatakan pengesahan anggaran tertunda, jadi tidak mempercepat. C (benar) — Ini poin penting pendukung, bukan ide pokok utama. D (salah) — Bertentangan dengan isi teks. Jawaban A dan E.'
+},{
+    id:9, tipe:'pgk',
+    kutipan: `Dalam beberapa bulan terakhir, banyak lembaga publik mulai mengampanyekan gerakan "Kurangi Sampah Plastik". Namun, sejumlah materi kampanye yang beredar di media sosial justru dinilai kurang efektif karena menggunakan pilihan kata yang berlebihan atau ambigu. Misalnya, dalam salah satu poster tertulis: "Mari kita menginisiasi gerakan pengurangan sampah plastik demi keberlangsungan ekosistem yang terstimulasi oleh tindakan masyarakat yang progresif". Kalimat tersebut dianggap terlalu rumit dan tidak komunikatif, sehingga pesan inti sulit dipahami masyarakat umum. Selain itu, dalam sebuah video kampanye terdapat narasi: "Buanglah sampah pada tempatnya agar tidak menciptakan bahaya yang memakan korban manusia yang tidak berhati-hati." Struktur kalimat tersebut membingungkan karena frasa "yang tidak berhati-hati" dapat merujuk pada "bahaya" ataupun "manusia". Kondisi ini menunjukkan pentingnya memperhatikan kejelasan struktur kalimat, kesesuaian diksi, dan efektivitas bahasa saat menyampaikan pesan publik.`,
+    text: 'Pernyataan yang tepat mengenai penggunaan bahasa pada teks tersebut adalah ... (Pilih lebih dari satu)',
+    options: [
+        'A. Kalimat pada poster terlalu kompleks sehingga pesan utamanya tidak tersampaikan dengan jelas.',
+        'B. Ambiguitas pada video kampanye muncul karena penggunaan istilah teknis yang berlebihan.',
+        'C. Kesalahan diksi tidak berpengaruh terhadap kejelasan pesan kampanye publik.',
+        'D. Pesan publik akan lebih efektif jika menggunakan bahasa yang sederhana dan komunikatif.',
+        'E. Kalimat rumit pada poster justru membuat pesan kampanye lebih persuasif.'
+    ],
+    correct:[0,3],
+    explanation: 'A (benar) — Sesuai dengan kalimat di teks: "Kalimat tersebut dianggap terlalu rumit... sehingga pesan inti sulit dipahami". D (benar) — Tersirat dari kritik teks terhadap kalimat rumit dan ambigu. B (salah) — Ambiguitas disebabkan struktur kalimat, bukan istilah teknis. C (salah) — Bertentangan dengan teks. E (salah) — Bertentangan dengan teks. Jawaban A dan D.'
+},{
+    id:10, tipe:'pgk',
+    kutipan: `Raga adalah siswa yang dikenal suka menolong siapa pun yang membutuhkan. Setiap pagi, ia datang lebih awal ke sekolah untuk membantu penjaga sekolah menyusun bangku di aula. Suatu sore, ketika perjalanan pulang, ia melihat kepulan asap tipis dari gudang kecil dekat lapangan bola. Tanpa menunggu orang dewasa datang, Raga segera mengambil ember berisi air dan mencoba memadamkan api kecil yang mulai menjalar pada tumpukan kardus. Setelah api padam, beberapa warga datang menghampiri dan memuji keberaniannya. Namun, Raga justru terlihat ketakutan setelah mengetahui bahwa penyebab kebakaran masih belum jelas. Ia kemudian melaporkan kejadian tersebut kepada ketua RT agar dilakukan pemeriksaan lebih lanjut.`,
+    text: 'Manakah pernyataan berikut yang tepat menilai isi teks? (Pilih lebih dari satu)',
+    options: [
+        'A. Bagian yang menunjukkan Raga datang lebih awal ke sekolah menggambarkan bahwa ia rajin dan suka membantu.',
+        'B. Tindakan Raga memadamkan api sendirian menunjukkan bahwa ia berani dan peduli terhadap orang lain.',
+        'C. Reaksi Raga yang ketakutan setelah kejadian menunjukkan bahwa ia tidak bertanggung jawab.',
+        'D. Latar tempat di gudang dekat lapangan bola memperkuat kesan suasana yang aman dan terkendali.',
+        'E. Peristiwa kepulan asap mempengaruhi pengembangan karakter Raga sebagai sosok yang bertanggung jawab.'
+    ],
+    correct:[0,1,4],
+    explanation: 'A (benar) — Datang lebih awal ke sekolah menunjukkan rajin dan suka membantu. B (benar) — Memadamkan api sendirian menunjukkan berani dan peduli. E (benar) — Setelah kejadian dia melaporkan (tanggung jawab). C (salah) — Reaksi ketakutan tidak berarti tidak bertanggung jawab. D (salah) — Ada kebakaran, bukan suasana aman. Jawaban A, B, E.'
+},{
+    id:11, tipe:'pg',
+    kutipan: `Di SMK Mandala Jaya, sebuah aturan baru diterapkan: semua siswa wajib mengenakan seragam lengkap setiap hari, termasuk topi dan dasi. Aturan ini dibuat karena banyak siswa yang sebelumnya berpenampilan tidak rapi. Namun, beberapa siswa mengeluhkan aturan tersebut karena merasa topi dan dasi tidak nyaman digunakan saat cuaca panas. Guru-guru mendukung aturan baru ini demi meningkatkan kedisiplinan. Sebaliknya, sebagian orang tua menilai bahwa aturan itu terlalu ketat dan tidak mempertimbangkan kenyamanan siswa. Pihak kesiswaan berencana mendiskusikan ulang aturan tersebut dalam rapat bersama komite sekolah.`,
+    text: 'Konflik yang muncul dalam teks adalah ... (Pilih lebih dari satu)',
+    options: [
+        'A. Konflik antara siswa dan guru mengenai kewajiban memakai seragam lengkap.',
+        'B. Konflik antara guru dan kepala sekolah mengenai efektivitas aturan baru.',
+        'C. Konflik antara orang tua dan pihak sekolah mengenai kenyamanan siswa.',
+        'D. Konflik antara sekolah dan komite sekolah mengenai bentuk seragam yang dipilih.',
+        'E. Konflik antara siswa dan penjaga sekolah mengenai penggunaan topi.'
+    ],
+    correct:[0,2],
+    explanation: 'A (benar) — Terdapat pertentangan antara siswa (tidak nyaman) dengan guru (mendukung aturan). C (benar) — Orang tua menilai aturan terlalu ketat, pihak sekolah (guru) mendukung. B (salah) — Tidak ada informasi konflik guru-kepala sekolah. D (salah) — Tidak ada konflik tentang bentuk seragam. E (salah) — Tidak ada informasi tentang penjaga sekolah. Jawaban A dan C.'
+},{
+    id:12, tipe:'pgk',
+    kutipan: `Dalam sebuah pentas seni sekolah, tiga pertunjukan ditampilkan. Pertama, sebuah puisi berjudul "Ruang Tanpa Pintu" dibacakan dengan suara lirih dan tempo lambat. Puisi tersebut menggambarkan rasa kehilangan seseorang yang ditinggal sahabatnya. Penonton tampak diam, beberapa terlihat memejamkan mata seakan merasakan kesedihan itu. Kedua, sebuah cerpen berjudul "Jejak di Atas Tanah Basah" dibacakan oleh narator. Cerita ini menampilkan perjalanan seorang anak yang mencari ayahnya yang hilang saat banjir bandang. Suasana tegang dan gelisah tampak dari raut wajah penonton. Ketiga, drama komedi singkat berjudul "Tiga Kursi Kosong" membuat seluruh penonton tertawa karena dialog lucu dan tingkah kocak para pemain.`,
+    text: 'Pernyataan yang tepat mengenai respons emosional penonton adalah ... (Pilih lebih dari satu)',
+    options: [
+        'A. Puisi menimbulkan rasa haru dan kesedihan pada penonton.',
+        'B. Cerpen menciptakan suasana gembira karena alurnya penuh kejutan lucu.',
+        'C. Drama komedi membuat penonton merasa tegang dan cemas.',
+        'D. Penonton merasakan kesedihan saat puisi dibacakan dan ketegangan saat cerpen dipresentasikan.',
+        'E. Cerpen membangkitkan kemarahan penonton karena pesan moralnya tidak jelas.'
+    ],
+    correct:[0,3],
+    explanation: 'A (benar) — Teks menyebutkan: "Penonton tampak diam, beberapa terlihat memejamkan mata seakan merasakan kesedihan itu." D (benar) — Merangkum dua respons: kesedihan dari puisi dan ketegangan dari cerpen. B (salah) — Cerpen justru tegang dan gelisah. C (salah) — Drama komedi membuat penonton tertawa. E (salah) — Tidak ada indikasi kemarahan. Jawaban A dan D.'
+},{
+    id:13, tipe:'pgk',
+    kutipan: `"Langit yang Pulang" — Di bawah cahaya jingga, aku melihat langit kembali ke tempat ia pernah singgah—di sela ranting dan ingatan. Ada desir angin yang membawa kabar tentang perjalanan panjang yang tak sempat kuceritakan. Dan ketika malam tiba, aku belajar untuk tidak lagi mengejar, karena beberapa hal hanya bisa kita biarkan kembali dengan sendirinya.`,
+    text: 'Apa respons emosional yang kemungkinan dirasakan pembaca? (Pilih lebih dari satu)',
+    options: [
+        'A. Merasa damai karena puisi menggambarkan pelepasan dan ketenangan batin.',
+        'B. Merasa marah karena puisi menunjukkan pertengkaran tokoh yang memuncak.',
+        'C. Merasa bingung karena puisi berisi konflik rumit yang tidak selesai.',
+        'D. Merasa tenang sekaligus merenung tentang kehidupan dan hal-hal yang perlu dilepaskan.',
+        'E. Merasa jenuh karena puisi terlalu panjang dan tanpa makna mendalam.'
+    ],
+    correct:[0,3],
+    explanation: 'A (benar) — Puisi menekankan penerimaan: "belajar untuk tidak lagi mengejar" dan "beberapa hal hanya bisa kita biarkan kembali". D (benar) — Mencakup aspek ketenangan ("Di bawah cahaya jingga") dan perenungan filosofis tentang melepaskan. B (salah) — Tidak ada unsur kemarahan. C (salah) — Puisi justru menunjukkan penyelesaian. E (salah) — Puisi pendek dan padat makna. Jawaban A dan D.'
+},{
+    id:14, tipe:'pgk-kategori',
+    kutipan: `"Di halaman sekolah, Fajar menatap papan pengumuman yang baru dipasang. Terdapat daftar siswa yang mengikuti lomba sains tingkat provinsi. Ia melihat namanya tercantum di daftar itu, membuat jantungnya berdebar. Rasa bangga bercampur cemas, karena lomba akan digelar keesokan hari dan ia harus mempersiapkan semua eksperimennya dengan sempurna."`,
+    text: 'Perhatikan tabel berikut! Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan.',
+    pernyataan: [
+        'Peristiwa utama adalah Fajar melihat namanya tercantum dalam daftar lomba.',
+        'Kutipan menunjukkan bahwa Fajar akan menyerah dan tidak mengikuti lomba.',
+        'Prediksi logis adalah Fajar akan mempersiapkan diri dengan matang untuk lomba keesokan hari.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Fokus cerita adalah saat Fajar mendapati namanya ada pada daftar peserta lomba.',
+        'Tidak ada indikasi menyerah; ia justru merasa bangga dan cemas serta ingin mempersiapkan diri.',
+        'Disebutkan ia harus mempersiapkan eksperimen dengan sempurna sehingga logis bahwa ia akan berlatih.'
+    ]
+},{
+    id:15, tipe:'pgk-kategori',
+    kutipan: `"Di ruang kelas, Rani duduk termenung sambil menatap buku catatan yang belum selesai. Teman-temannya telah memulai diskusi kelompok. Angin dari jendela membawa suara mereka, membuat Rani tersadar bahwa ia tertinggal. Ia mengingat pesan gurunya: 'Belajar yang konsisten lebih penting daripada menunda pekerjaan.' Kata-kata itu memotivasi Rani untuk segera membuka bukunya dan mengikuti diskusi kelompok dengan antusias."`,
+    text: 'Perhatikan tabel berikut! Tentukan pernyataan yang Tepat atau Tidak Tepat!',
+    pernyataan: [
+        'Kutipan relevan dengan kehidupan sehari-hari karena banyak siswa menunda pekerjaan dan kemudian termotivasi untuk belajar.',
+        'Kutipan tidak memiliki relevansi karena menggambarkan kebiasaan yang tidak mungkin terjadi.',
+        'Nilai yang tersirat adalah dorongan dari orang lain dapat membangkitkan semangat belajar seseorang.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Situasi seperti menunda tugas dan kemudian termotivasi untuk belajar sangat umum terjadi.',
+        'Kisah ini realistis dan menggambarkan perilaku siswa pada umumnya.',
+        'Pesan guru memotivasi Rani untuk kembali semangat belajar.'
+    ]
+},{
+    id:16, tipe:'pgk-kategori',
+    kutipan: `"Di laboratorium sains sekolah, Fina mengamati percobaan kimia yang sedang berlangsung. Setiap tabung reaksi di atas meja memiliki larutan berwarna berbeda. Ia menulis catatan dengan teliti tentang perubahan warna, timbulnya uap, dan gelembung kecil yang muncul di permukaan larutan. Sambil mencatat, Fina memperhatikan suhu larutan dengan termometer dan memastikan semua alat laboratorium digunakan sesuai prosedur keselamatan. Guru mendekat, mengingatkan bahwa kesalahan sekecil apa pun bisa memengaruhi hasil percobaan. Fina menatap tabung reaksi terakhir dengan cermat, mencoba memprediksi reaksi kimia berikutnya berdasarkan data yang ia kumpulkan. Ia menyadari bahwa keberhasilan eksperimen bukan hanya tentang menunggu hasil, tetapi juga tentang mengamati, mencatat, dan menganalisis setiap detail dengan seksama. Ketika percobaan selesai, Fina membandingkan catatannya dengan teori yang dipelajari di kelas. Ia menemukan beberapa perbedaan, lalu berdiskusi dengan guru tentang kemungkinan penyebabnya. Pengalaman itu membuatnya semakin memahami pentingnya ketelitian dan kerja ilmiah yang sistematis."`,
+    text: 'Perhatikan tabel berikut! Tentukan Setuju atau Tidak Setuju untuk setiap pernyataan.',
+    pernyataan: [
+        'Catatan Fina tentang perubahan warna dan uap menunjukkan pengamatan ilmiah yang teliti.',
+        'Kesalahan sekecil apa pun tidak relevan dalam percobaan karena hasil tetap sama.',
+        'Guru yang membimbing menekankan pentingnya prosedur, mendukung pengembangan keterampilan eksperimen Fina.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Ia mencatat detail reaksi kimia seperti warna, uap, dan gelembung—ciri observasi teliti.',
+        'Guru menegaskan bahwa kesalahan kecil dapat memengaruhi hasil eksperimen.',
+        'Guru mengingatkan prosedur keselamatan dan ketelitian, membantu perkembangan kemampuan Fina.'
+    ]
+},{
+    id:17, tipe:'pgk-kategori',
+    kutipan: `"Di taman kota, Dimas duduk di bangku sambil membaca buku tentang astronomi. Suara burung berkicau dan angin sepoi-sepoi membawa aroma bunga-bunga yang mekar di sekitarnya. Orang-orang berlari-lari kecil di jalur jogging, anak-anak bermain layang-layang, dan beberapa lansia terlihat duduk sambil tersenyum melihat aktivitas tersebut. Namun, matanya sering menoleh ke langit ketika awan gelap perlahan menutupi matahari. Dimas menyadari hujan mungkin akan segera turun, sehingga ia bersiap untuk menyelesaikan bacaannya lebih cepat. Ia menandai halaman terakhir buku yang dibaca dan menyiapkan payung di sampingnya. Meskipun begitu, ketenangan taman tetap terasa, dan ia menikmati suasana sambil tetap waspada terhadap cuaca."`,
+    text: 'Perhatikan tabel berikut! Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan.',
+    pernyataan: [
+        'Deskripsi burung berkicau dan angin sepoi-sepoi menggambarkan suasana pagi yang damai.',
+        'Perhatian Dimas pada awan gelap menunjukkan kesiapannya menghadapi kemungkinan hujan.',
+        'Suasana tenang di taman menunjukkan bahwa Dimas sedang berada di ruang kelas yang ramai.'
+    ],
+    jawaban: [true, true, false],
+    alasan: [
+        'Elemen tersebut umum menggambarkan ketenangan suasana, dan cocok dengan kondisi taman yang damai.',
+        'Ia menoleh ke langit dan menyiapkan payung sebagai bentuk kewaspadaan.',
+        'Kutipan menyebut jelas bahwa ia berada di taman kota, bukan ruang kelas.'
+    ]
+},{
+    id:18, tipe:'pgk-kategori',
+    kutipan: `"Raina berlari tergesa-gesa di koridor sekolah karena ia terlambat menghadiri pelajaran seni. Tangannya menggenggam map berisi proposal lomba inovasi sekolah yang harus dikumpulkan hari itu juga. Saat menunggu lift, seorang pria paruh baya menghampirinya dan berkata dengan ramah, 'Nak, mapmu hampir terjatuh. Hati-hati ya.' Raina tersenyum sopan dan mengucapkan terima kasih. Ia menyesuaikan langkahnya sambil memperhatikan lantai yang licin akibat hujan sebelumnya. Sesampainya di kelas, ia meletakkan map di meja guru dan menarik napas lega. Perhatian orang asing tadi membuatnya sadar bahwa kebaikan kecil bisa membantu orang lain menghadapi kesulitan sehari-hari."`,
+    text: 'Perhatikan tabel berikut! Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan.',
+    pernyataan: [
+        'Pilihan kata "Nak" pada dialog pria paruh baya sesuai konteks karena menunjukkan keakraban sekaligus perbedaan usia.',
+        'Peristiwa terlambat membuat Raina santai dan berjalan lambat.',
+        'Ungkapan "mapmu hampir terjatuh" tepat secara situasi karena mencerminkan kepedulian dan konteks percakapan spontan.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Kata "Nak" umum digunakan orang dewasa kepada yang lebih muda secara sopan.',
+        'Raina justru berlari tergesa-gesa karena terlambat.',
+        'Ucapan itu wajar muncul ketika seseorang melihat barang orang lain hampir jatuh.'
+    ]
+},{
+    id:19, tipe:'pgk-kategori',
+    kutipan: `"Di perpustakaan sekolah, Anisa duduk sambil memeriksa hasil ulangan matematika yang baru diterimanya. Nilainya belum memuaskan, membuat hatinya terasa berat. Ia menatap catatan-catatan yang sudah dibuat sebelumnya, mencoba menemukan kesalahan yang menyebabkan nilainya rendah. Tiba-tiba, ia teringat kata-kata guru: 'Belajar itu proses, setiap kesalahan adalah pelajaran.' Anisa menarik napas panjang, menenangkan diri, dan mulai menyusun strategi belajar agar hasil berikutnya lebih baik. Ia membuat jadwal belajar, menandai bagian materi yang perlu diulang, dan menyiapkan catatan tambahan untuk latihan soal. Suasana perpustakaan yang tenang, suara halaman buku yang dibalik, serta sinar matahari yang menembus jendela membuatnya merasa lebih fokus. Ia merasa bahwa kegagalan hari ini hanyalah bagian dari proses menuju kesuksesan, dan semangat barunya mulai tumbuh perlahan."`,
+    text: 'Perhatikan tabel berikut! Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan.',
+    pernyataan: [
+        'Respons emosional Anisa adalah campuran kecewa dan semangat baru untuk memperbaiki belajar.',
+        'Anisa merasa marah kepada teman-temannya karena nilai ulangan buruk.',
+        'Tarikan napas panjang menunjukkan usaha Anisa menenangkan diri dan fokus kembali.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Ia kecewa dengan nilai, lalu termotivasi setelah mengingat pesan guru.',
+        'Tidak ada bagian yang menyebut ia marah kepada teman.',
+        'Kalimat menggambarkan ia menenangkan diri sebelum mulai menyusun strategi belajar.'
+    ]
+},{
+    id:20, tipe:'pgk-kategori',
+    kutipan: `"Di balik jendela pagi, cahaya perlahan tumbuh, Menembus tirai tipis yang masih basah oleh embun. Seorang gadis kecil menatap langit yang pucat, Mengingat mimpi-mimpi yang semalam hilang sebelum sempat digenggam. Ia menarik napas lirih, antara sedih dan berharap, Mencoba merangkai kembali keberanian yang retak. Di halaman sekolah nanti, ia akan melangkah pelan, Membawa doa sederhana agar hari ini lebih ramah padanya."`,
+    text: 'Perhatikan tabel berikut! Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan.',
+    pernyataan: [
+        'Gadis kecil dalam puisi mengalami perasaan campuran antara sedih dan harapan.',
+        'Puisi menggambarkan suasana malam yang gelap dan menegangkan.',
+        'Tarikan napas lirih menunjukkan gadis itu sedang berusaha menguatkan diri.'
+    ],
+    jawaban: [true, false, true],
+    alasan: [
+        'Teks menyebut "antara sedih dan berharap", menunjukkan perasaan campuran tersebut.',
+        'Puisi menggambarkan pagi ("Di balik jendela pagi"), suasananya lembut, bukan gelap/tegang.',
+        'Bagian "mencoba merangkai kembali keberanian yang retak" menggambarkan usaha menguatkan diri.'
+    ]
+}];
+
+// ============================================================
+//  RENDER & LOGIC
+// ============================================================
+const container = document.getElementById('quizContainer');
+const scoreSpan = document.getElementById('scoreDisplay');
+const totalSpan = document.getElementById('totalSoal');
+totalSpan.textContent = questions.length;
+
+let answered = {};
+let selectedAnswers = {};
+let pernyataanAnswers = {};
+
+function render() {
+    let html = '';
+    let correctCount = 0;
+
+    questions.forEach((q, idx) => {
+        const isAnswered = answered[idx] || false;
+        const isCorrect = isAnswered && checkAnswer(idx);
+        if (isAnswered && isCorrect) correctCount++;
+
+        let cardClass = 'soal-card';
+        if (isAnswered) {
+            cardClass += isCorrect ? ' correct' : ' wrong';
+        }
+
+        const tipeLabel = q.tipe === 'pg' ? 'PG Biasa' :
+                          (q.tipe === 'pgk' ? 'PGK (Pilih >1)' : 'PGK Kategori');
+        let tipeClass = 'tipe';
+        if (q.tipe === 'pgk') tipeClass += ' pgk';
+        else if (q.tipe === 'pgk-kategori') tipeClass += ' pgk-kategori';
+
+        html += `<div class="${cardClass}" id="soal-${idx}">`;
+        html += `<div class="header-soal">
+                    <span class="nomor">Soal ${idx+1}</span>
+                    <span class="${tipeClass}">${tipeLabel}</span>
+                </div>`;
+
+        if (q.kutipan) {
+            html += `<div class="kutipan">${q.kutipan.replace(/\n/g, '<br>')}</div>`;
+        }
+
+        html += `<div class="soal-text">${q.text}</div>`;
+
+        if (q.tipe === 'pg') {
+            html += renderPG(idx, q);
+        } else if (q.tipe === 'pgk') {
+            html += renderPGK(idx, q);
+        } else if (q.tipe === 'pgk-kategori') {
+            html += renderPGKKategori(idx, q);
+        }
+
+        let feedbackClass = 'feedback-box';
+        let feedbackHtml = '';
+        if (isAnswered) {
+            feedbackClass += ' show';
+            feedbackClass += isCorrect ? ' correct' : ' wrong';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Jawaban Benar!' : 'Jawaban Salah';
+            const correctText = getCorrectText(q);
+            feedbackHtml = `
+                <div class="${feedbackClass}">
+                    <strong>${icon} ${status}</strong>
+                    <div class="explain">💡 ${q.explanation}</div>
+                    <div style="margin-top:4px;font-size:0.9rem;">Kunci Jawaban: <strong>${correctText}</strong></div>
+                </div>
+            `;
+        } else {
+            feedbackHtml = `<div class="feedback-box"></div>`;
+        }
+        html += feedbackHtml;
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+    scoreSpan.textContent = correctCount;
+    attachEvents();
+}
+
+function renderPG(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (optIdx === q.correct) labelClass += ' correct-answer';
+            if (optIdx === selected && optIdx !== q.correct) labelClass += ' wrong-answer';
+            if (optIdx === selected) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="radio" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    return html;
+}
+
+function renderPGK(idx, q) {
+    let html = `<div class="options">`;
+    q.options.forEach((opt, optIdx) => {
+        const isAnswered = answered[idx] || false;
+        const selected = selectedAnswers[idx] || [];
+        let labelClass = '';
+        let disabled = '';
+        let checked = '';
+        if (isAnswered) {
+            disabled = 'disabled';
+            if (q.correct.includes(optIdx)) labelClass += ' correct-answer';
+            if (selected.includes(optIdx) && !q.correct.includes(optIdx)) labelClass += ' wrong-answer';
+            if (selected.includes(optIdx)) checked = 'checked';
+        }
+        html += `
+            <label class="${labelClass} ${disabled}">
+                <input type="checkbox" name="q${idx}" value="${optIdx}" ${checked} ${disabled}>
+                <span>${opt}</span>
+            </label>
+        `;
+    });
+    html += `</div>`;
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+    return html;
+}
+
+function renderPGKKategori(idx, q) {
+    let html = `<table class="table-pernyataan">`;
+    const isAnswered = answered[idx] || false;
+    const answers = pernyataanAnswers[idx] || [];
+
+    q.pernyataan.forEach((pernyataanText, pIdx) => {
+        const val = answers[pIdx];
+        const isCorrect = isAnswered && (val === q.jawaban[pIdx]);
+
+        html += `<tr>`;
+        html += `<td class="pernyataan-text">${pernyataanText}</td>`;
+        html += `<td>`;
+        html += `<div class="opsi-group">`;
+
+        const options = q.tipe === 'pgk-kategori' ?
+            [{ label: 'Setuju', value: true }, { label: 'Tidak Setuju', value: false }] :
+            [{ label: 'Sesuai', value: true }, { label: 'Tidak Sesuai', value: false }];
+
+        options.forEach(opt => {
+            const checked = (isAnswered && val === opt.value) ? 'checked' : '';
+            const disabled = isAnswered ? 'disabled' : '';
+            let labelClass = '';
+            if (isAnswered) {
+                if (opt.value === q.jawaban[pIdx]) labelClass += ' correct-answer';
+                if (val === opt.value && opt.value !== q.jawaban[pIdx]) labelClass += ' wrong-answer';
+            }
+            html += `
+                <label class="${labelClass} ${disabled}" style="display:inline-flex; align-items:center; gap:4px; padding:2px 8px; background:transparent; border:none; cursor:${isAnswered?'default':'pointer'}; font-weight:${(isAnswered && opt.value === q.jawaban[pIdx])?'600':'normal'};">
+                    <input type="radio" name="pernyataan_${idx}_${pIdx}" value="${opt.value}" ${checked} ${disabled}>
+                    ${opt.label}
+                </label>
+            `;
+        });
+
+        html += `</div>`;
+
+        if (isAnswered) {
+            const fbClass = isCorrect ? 'benar' : 'salah';
+            const icon = isCorrect ? '✅' : '❌';
+            const status = isCorrect ? 'Benar' : 'Salah';
+            html += `
+                <div class="feedback-pernyataan show ${fbClass}">
+                    ${icon} ${status} — ${q.alasan[pIdx]}
+                </div>
+            `;
+        }
+
+        html += `</td>`;
+        html += `</tr>`;
+    });
+
+    html += `</table>`;
+
+    if (!answered[idx]) {
+        html += `<button class="btn-cek" id="cek-${idx}">🔍 Cek Jawaban</button>`;
+    }
+
+    return html;
+}
+
+function getCorrectText(q) {
+    if (q.tipe === 'pg') {
+        return q.options[q.correct];
+    } else if (q.tipe === 'pgk') {
+        return q.correct.map(i => q.options[i]).join('; ');
+    } else if (q.tipe === 'pgk-kategori') {
+        return q.pernyataan.map((p, i) => {
+            const label = q.jawaban[i] ? 'Setuju/Sesuai' : 'Tidak Setuju/Tidak Sesuai';
+            return `(${i+1}) ${label}`;
+        }).join('; ');
+    }
+    return '';
+}
+
+function checkAnswer(idx) {
+    const q = questions[idx];
+    if (q.tipe === 'pg') {
+        return selectedAnswers[idx] === q.correct;
+    } else if (q.tipe === 'pgk') {
+        const sel = selectedAnswers[idx] || [];
+        const sortedSel = [...sel].sort();
+        const sortedCorr = [...q.correct].sort();
+        return JSON.stringify(sortedSel) === JSON.stringify(sortedCorr);
+    } else if (q.tipe === 'pgk-kategori') {
+        const ans = pernyataanAnswers[idx] || [];
+        return ans.every((v, i) => v === q.jawaban[i]);
+    }
+    return false;
+}
+
+function attachEvents() {
+    document.querySelectorAll('.soal-card input[type="radio"]:not([name^="pernyataan_"])').forEach(input => {
+        input.addEventListener('change', function() {
+            const name = this.name;
+            const idx = parseInt(name.replace('q', ''));
+            if (answered[idx]) return;
+            selectedAnswers[idx] = parseInt(this.value);
+            answered[idx] = true;
+            render();
+            document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+
+    document.querySelectorAll('.btn-cek').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idx = parseInt(this.id.replace('cek-', ''));
+            const q = questions[idx];
+
+            if (q.tipe === 'pgk') {
+                const checkboxes = document.querySelectorAll(`#soal-${idx} input[type="checkbox"]`);
+                const selected = [];
+                checkboxes.forEach(cb => {
+                    if (cb.checked) selected.push(parseInt(cb.value));
+                });
+                if (selected.length === 0) {
+                    alert('Pilih minimal satu pilihan!');
+                    return;
+                }
+                selectedAnswers[idx] = selected;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (q.tipe === 'pgk-kategori') {
+                const allAnswered = q.pernyataan.every((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    let checked = false;
+                    radios.forEach(r => { if (r.checked) checked = true; });
+                    return checked;
+                });
+                if (!allAnswered) {
+                    alert('Jawab semua pernyataan terlebih dahulu!');
+                    return;
+                }
+                const answers = [];
+                q.pernyataan.forEach((_, pIdx) => {
+                    const radios = document.querySelectorAll(`input[name="pernyataan_${idx}_${pIdx}"]`);
+                    radios.forEach(r => {
+                        if (r.checked) {
+                            answers[pIdx] = (r.value === 'true');
+                        }
+                    });
+                });
+                pernyataanAnswers[idx] = answers;
+                answered[idx] = true;
+                render();
+                document.getElementById(`soal-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+}
+
+function resetQuiz() {
+    answered = {};
+    selectedAnswers = {};
+    pernyataanAnswers = {};
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+render();
+</script>
+</body>
+</html>
