@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediksi 1 – Bahasa Indonesia (dengan teks bacaan)</title>
+    <style>
+        /* ── reset & base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f4f7fc;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 940px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 30px 32px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #0f172a;
+            border-left: 6px solid #3b82f6;
+            padding-left: 18px;
+            margin-bottom: 6px;
+        }
+        .subhead {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 28px;
+            padding-left: 24px;
+            border-bottom: 1px solid #e9edf2;
+            padding-bottom: 14px;
+        }
+        .subhead span {
+            display: inline-block;
+            margin-right: 24px;
+        }
+        .progress-wrap {
+            background: #e9edf2;
+            border-radius: 40px;
+            height: 8px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 40px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #475569;
+            text-align: right;
+            margin-top: -18px;
+            margin-bottom: 22px;
+        }
+
+        .soal {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+        .soal.aktif {
+            display: block;
+        }
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .soal-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .soal-nomor {
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 40px;
+            padding: 2px 16px;
+            line-height: 30px;
+            white-space: nowrap;
+        }
+        .soal-tipe {
+            background: #e9edf2;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 30px;
+            padding: 2px 14px;
+            line-height: 28px;
+        }
+        .soal-teks {
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+        .bacaan {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 18px;
+            border-radius: 12px;
+            margin: 10px 0 16px 0;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #1e293b;
+            max-height: 320px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+        }
+        .bacaan strong {
+            color: #0f172a;
+        }
+
+        .opsi {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0 16px;
+        }
+        .opsi label {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-radius: 14px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .opsi label:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .opsi input[type="radio"],
+        .opsi input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            accent-color: #3b82f6;
+            cursor: pointer;
+        }
+        .opsi label.benar {
+            border-color: #22c55e;
+            background: #f0fdf4;
+        }
+        .opsi label.salah {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        .opsi label.tidak-dipilih {
+            opacity: 0.5;
+        }
+        .opsi label.disabled {
+            cursor: default;
+        }
+        .opsi label.disabled:hover {
+            border-color: transparent;
+            background: #f8fafc;
+        }
+        .opsi label .huruf {
+            font-weight: 700;
+            color: #64748b;
+            min-width: 22px;
+        }
+
+        .tabel-container {
+            overflow-x: auto;
+            margin: 12px 0 16px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+        }
+        .tabel-container table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 300px;
+        }
+        .tabel-container th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: #1e293b;
+            border-bottom: 2px solid #d1d9e6;
+        }
+        .tabel-container td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #e9edf2;
+            vertical-align: middle;
+        }
+        .tabel-container tr:last-child td {
+            border-bottom: none;
+        }
+        .tabel-container .pernyataan {
+            font-weight: 500;
+        }
+        .tabel-container .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+        .tabel-container .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .tabel-container .radio-group input[type="radio"] {
+            accent-color: #3b82f6;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .tombol-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            border-top: 1px solid #e9edf2;
+            padding-top: 24px;
+        }
+        .tombol-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .btn {
+            background: #e9edf2;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background: #d1d9e6;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        .btn-success {
+            background: #22c55e;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #cbd5e1;
+        }
+        .btn-outline:hover {
+            border-color: #94a3b8;
+            background: #f1f5f9;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .jawaban-box {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 14px 0 6px;
+            border-left: 5px solid #3b82f6;
+            display: none;
+        }
+        .jawaban-box.muncul {
+            display: block;
+            animation: fadeUp 0.3s ease;
+        }
+        .jawaban-box .j-kunci {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 16px;
+        }
+        .jawaban-box .j-kunci span {
+            background: #dbeafe;
+            padding: 2px 14px;
+            border-radius: 30px;
+            color: #1d4ed8;
+        }
+        .jawaban-box .j-penjelasan {
+            margin-top: 10px;
+            color: #1e293b;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        .jawaban-box .j-penjelasan strong {
+            color: #0f172a;
+        }
+
+        .btn-nav {
+            background: transparent;
+            border: 1px solid #d1d9e6;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            color: #1e293b;
+        }
+        .btn-nav:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .btn-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 18px 14px; }
+            h1 { font-size: 20px; padding-left: 12px; }
+            .subhead { font-size: 13px; padding-left: 12px; }
+            .subhead span { display: block; margin-right: 0; }
+            .soal-teks { font-size: 15px; }
+            .bacaan { font-size: 14px; padding: 12px 14px; max-height: 220px; }
+            .opsi label { font-size: 14px; padding: 10px 14px; }
+            .tombol-wrap { flex-direction: column; align-items: stretch; }
+            .tombol-group { justify-content: center; }
+            .btn { padding: 8px 16px; font-size: 13px; justify-content: center; }
+            .tabel-container table { font-size: 13px; }
+            .tabel-container th, .tabel-container td { padding: 8px 10px; }
+            .tabel-container .radio-group { gap: 12px; flex-wrap: wrap; }
+            .jawaban-box { padding: 14px 16px; }
+            .soal-nomor { font-size: 13px; padding: 0 12px; line-height: 26px; }
+            .soal-tipe { font-size: 12px; padding: 0 10px; line-height: 24px; }
+        }
+        @media (max-width: 400px) {
+            .container { padding: 12px 8px; }
+            .opsi label { font-size: 13px; padding: 8px 10px; gap: 8px; }
+            .tabel-container .radio-group label { font-size: 12px; }
+        }
+        .mt-8 { margin-top: 8px; }
+        .text-sm { font-size: 14px; color: #64748b; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📘 Prediksi 1 – Bahasa Indonesia</h1>
+    <div class="subhead">
+        <span>📝 25 butir soal</span>
+        <span>⏱ 60 menit</span>
+        <span>📌 Pilih jawaban, lalu tekan <strong>"Periksa"</strong></span>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-text" id="progressText">0 / 25 terjawab</div>
+    <div id="soalContainer"></div>
+    <div class="tombol-wrap">
+        <div class="tombol-group">
+            <button class="btn-nav" id="prevBtn" disabled>◀ Sebelum</button>
+            <button class="btn-nav" id="nextBtn">Selanjutnya ▶</button>
+        </div>
+        <div class="tombol-group">
+            <button class="btn btn-primary" id="periksaBtn">✅ Periksa Jawaban</button>
+            <button class="btn btn-outline" id="resetBtn">↺ Reset</button>
+        </div>
+    </div>
+    <div class="text-sm text-center" style="margin-top:18px;color:#94a3b8;">
+        Klik "Periksa" untuk melihat kunci jawaban &amp; penjelasan
+    </div>
+</div>
+
+<script>
+    // ─────────────────────────────────────────────
+    //  DATA SOAL dengan teks bacaan (bacaan)
+    // ─────────────────────────────────────────────
+    const soalData = [];
+
+    // --- BACAAN untuk soal 1-3 ---
+    const bacaan1 = `Modernisasi Bus Lokal Harus Berjalan Beriringan dengan Keselamatan
+
+Transportasi umum memiliki peran penting dalam mendukung mobilitas masyarakat. Dalam beberapa tahun terakhir, industri bus di Indonesia mengalami perkembangan yang cukup pesat. Banyak perusahaan otobus dan karoseri mulai melakukan modernisasi armada dengan menghadirkan bus yang lebih nyaman, berteknologi maju, serta memiliki tampilan menarik. Modernisasi tersebut menunjukkan bahwa industri transportasi terus berupaya meningkatkan kualitas pelayanan kepada masyarakat. Akan tetapi, perkembangan itu tidak boleh hanya berorientasi pada aspek estetika dan persaingan pasar, tetapi juga harus disertai peningkatan standar keselamatan.
+
+Kementerian Perhubungan menegaskan bahwa keselamatan penumpang harus menjadi prioritas utama dalam proses modernisasi bus lokal. Setiap kendaraan wajib memenuhi persyaratan teknis dan kelayakan jalan sebelum dioperasikan. Selain itu, perusahaan transportasi perlu memastikan bahwa sistem keamanan kendaraan berfungsi dengan baik, mulai dari struktur bodi, sabuk pengaman, hingga prosedur pemeriksaan rutin. Dengan demikian, modernisasi tidak hanya menghasilkan kendaraan yang nyaman digunakan, tetapi juga mampu memberikan perlindungan maksimal bagi penumpang.
+
+Di sisi lain, penerapan standar keselamatan masih menghadapi berbagai tantangan. Sebagian perusahaan dinilai lebih menonjolkan desain interior ataupun fasilitas hiburan dibandingkan penguatan aspek keamanan. Padahal, tingginya angka kecelakaan lalu lintas menunjukkan bahwa keselamatan harus menjadi perhatian utama dalam industri transportasi darat. Oleh sebab itu, pemerintah, perusahaan karoseri, dan operator bus perlu bekerja sama untuk membangun budaya keselamatan yang lebih kuat. Kesadaran tersebut penting agar masyarakat memperoleh layanan transportasi yang aman, nyaman, dan berkualitas.
+
+Dengan demikian, modernisasi bus lokal merupakan langkah positif dalam meningkatkan kualitas transportasi umum di Indonesia. Namun, modernisasi harus berjalan beriringan dengan penerapan standar keselamatan yang ketat. Dengan demikian, masyarakat memperoleh layanan transportasi yang tidak hanya modern, tetapi juga aman dan terpercaya.
+
+Sumber: Muhammad Fathan Radityasani dan Agung Kurniawan, Kompas.com, 2026`;
+
+    soalData.push({
+        id: 1, tipe: 'Pilihan Ganda', bacaan: bacaan1,
+        teks: 'Apa gagasan yang paling ditekankan dalam teks tersebut?',
+        opsi: [
+            'A. Pentingnya hiburan dalam kendaraan umum.',
+            'B. Kebebasan perusahaan menentukan desain bus.',
+            'C. Persaingan ekonomi dalam industri transportasi.',
+            'D. Tanggung jawab terhadap keselamatan penumpang.',
+            'E. Pentingnya faktor estetika dalam peningkatan pelayanan.'
+        ],
+        jawaban: [3],
+        penjelasan: 'Gagasan utama teks adalah bahwa modernisasi bus harus diiringi dengan peningkatan standar keselamatan. Penulis menekankan tanggung jawab terhadap keselamatan penumpang sebagai prioritas utama, bukan sekadar estetika atau persaingan pasar.'
+    });
+
+    soalData.push({
+        id: 2, tipe: 'Pilihan Ganda', bacaan: bacaan1,
+        teks: 'Kata serapan yang digunakan secara tepat sesuai maknanya dalam teks tersebut adalah ...',
+        opsi: [
+            'A. Kata "modern" bermakna teknologi dari luar negeri.',
+            'B. Kata "bodi" bermakna mesin utama penggerak kendaraan.',
+            'C. Kata "karoseri" bermakna perusahaan perakit bodi kendaraan.',
+            'D. Kata "estetika" bermakna aturan keselamatan dalam berkendara.',
+            'E. Kata "operator" bermakna penumpang kendaraan umum.'
+        ],
+        jawaban: [2],
+        penjelasan: 'Karoseri adalah istilah yang merujuk pada perusahaan atau bengkel yang merakit dan membuat bodi kendaraan. Makna ini tepat digunakan dalam konteks industri bus. Opsi lain keliru: modern ≠ teknologi luar negeri, bodi ≠ mesin, estetika ≠ aturan keselamatan, operator ≠ penumpang.'
+    });
+
+    soalData.push({
+        id: 3, tipe: 'Pilihan Ganda', bacaan: bacaan1,
+        teks: 'Hubungan sebab akibat yang terdapat pada paragraf ketiga adalah ...',
+        opsi: [
+            'A. Tingginya angka kecelakaan menyebabkan perusahaan mengurangi fasilitas hiburan.',
+            'B. Perusahaan lebih mengutamakan desain sehingga aspek keselamatan kurang diperhatikan.',
+            'C. Penguatan aspek keamanan menyebabkan desain interior bus menjadi sederhana.',
+            'D. Tingginya angka kecelakaan terjadi karena masyarakat lebih menyukai bus modern.',
+            'E. Fasilitas hiburan dalam bus mengurangi risiko terjadinya kecelakaan.'
+        ],
+        jawaban: [1],
+        penjelasan: 'Pada paragraf ketiga dijelaskan bahwa perusahaan lebih menonjolkan desain dan fasilitas hiburan dibandingkan aspek keamanan. Akibatnya (sebab-akibat), keselamatan kurang diperhatikan, yang tercermin dari tingginya angka kecelakaan.'
+    });
+
+    // --- BACAAN untuk soal 4-7 ---
+    const bacaan2 = `Kopi Hitam Diprediksi Menjadi Tren pada 2026
+
+Berdasarkan laporan dari industri kopi melalui laman nibble.id, kopi hitam tanpa gula diprediksi menjadi tren minuman utama pada 2026. Tren ini muncul sebagai akibat dari meningkatnya kesadaran masyarakat terhadap gaya hidup sehat. Padahal, selama beberapa tahun terakhir, kopi susu mendominasi menu berbagai kedai kopi di Indonesia. Akan tetapi, dominasi tersebut mulai menunjukkan tanda-tanda kejenuhan di kalangan konsumen.
+
+Fenomena pergeseran ini tidak terjadi secara tiba-tiba. Sebab, ada beberapa faktor yang saling berkaitan. Pertama, tren kopi susu mulai terasa membosankan karena variasinya cenderung monoton. Kedua, kesadaran terhadap bahaya konsumsi gula berlebih makin menguat. Lantaran hal itu, banyak orang beralih ke kopi hitam tanpa tambahan gula atau susu. Ketiga, perubahan gaya hidup masyarakat urban mendorong kembalinya kebiasaan minum kopi secara tradisional. Di Indonesia, menyuguhkan kopi hitam untuk tamu merupakan lambang keramahan tuan rumah. Oleh karena itu, pilihan terhadap kopi hitam sebenarnya tidak sepenuhnya baru. Kebiasaan ini justru menggembalikan kedekatan dengan akar budaya bangsa.
+
+Faktor pendukung tren kopi hitam lainnya adalah ketersediaan produk. Produk kopi hitam bubuk kini makin mudah dijumpai. Mulai dari produk bermerek dagang terkenal sampai produk lokal di pasar tradisional, semuanya masih bertahan puluhan tahun. Artinya, akses masyarakat terhadap kopi hitam sangat luas dan murah. Hal ini berbeda dengan kopi susu yang memerlukan bahan tambahan seperti susu dan gula.
+
+Dengan adanya perubahan gaya hidup serta upaya mengembalikan tradisi minum kopi, kopi hitam dinilai sebagai pilihan yang lebih sederhana dan autentik. Pilihan ini juga sesuai dengan kesadaran masyarakat terhadap pola konsumsi sehat. Dengan demikian, para pengamat industri kopi memprediksi kopi hitam akan menjadi tren utama pada 2026.
+
+Sumber: Aldy Riantito, RRI, 2026`;
+
+    soalData.push({
+        id: 4, tipe: 'Pilihan Ganda', bacaan: bacaan2,
+        teks: 'Kerangka tulisan yang tepat berdasarkan teks tersebut adalah ...',
+        opsi: [
+            'A. 1) prediksi tren, 2) produk mudah dijumpai, 3) sederhana & autentik, 4) kopi susu membosankan.',
+            'B. 1) kopi susu membosankan, 2) prediksi tren, 3) tradisi suguhan, 4) pola sehat.',
+            'C. 1) prediksi tren, 2) faktor pergeseran (kopi susu membosankan, kesadaran gula, tradisi), 3) ketersediaan produk, 4) simpulan.',
+            'D. 1) ketersediaan produk, 2) sederhana & autentik, 3) kopi susu monoton, 4) prediksi tren.',
+            'E. 1) tradisi suguhan, 2) prediksi tren, 3) produk mudah dijumpai, 4) lebih sederhana.'
+        ],
+        jawaban: [2],
+        penjelasan: 'Kerangka C paling tepat karena mengikuti alur teks: (1) prediksi awal, (2) faktor-faktor penyebab pergeseran (kopi susu membosankan, kesadaran gula, tradisi), (3) faktor pendukung (ketersediaan produk), dan (4) simpulan bahwa kopi hitam menjadi tren.'
+    });
+
+    soalData.push({
+        id: 5, tipe: 'Pilihan Ganda', bacaan: bacaan2,
+        teks: 'Apa isi teks tersebut?',
+        opsi: [
+            'A. Cara menyeduh kopi hitam yang autentik dan sederhana.',
+            'B. Sejarah panjang industri kopi hitam di Indonesia.',
+            'C. Perbandingan harga antara kopi hitam dan kopi susu.',
+            'D. Panduan memilih produk kopi hitam bubuk yang berkualitas.',
+            'E. Faktor penyebab kopi hitam diprediksi menjadi tren tahun 2026 serta interpretasinya.'
+        ],
+        jawaban: [4],
+        penjelasan: 'Teks membahas prediksi bahwa kopi hitam menjadi tren pada 2026, serta memaparkan faktor-faktor penyebabnya (kejenuhan kopi susu, kesadaran kesehatan, tradisi, ketersediaan produk) dan interpretasi terhadap fenomena tersebut.'
+    });
+
+    // soal 6 tabel
+    soalData.push({
+        id: 6, tipe: 'Tabel', bacaan: bacaan2,
+        teks: 'Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan berikut:',
+        tabel: {
+            header: ['Pernyataan', 'Sesuai', 'Tidak Sesuai'],
+            rows: [
+                { pernyataan: 'Paragraf pertama termasuk struktur pernyataan umum karena memuat gambaran awal mengenai fenomena tren kopi hitam pada 2026.',
+                    benar: 0 },
+                { pernyataan: 'Paragraf kedua termasuk struktur interpretasi karena berisi penjelasan faktor penyebab meningkatnya minat terhadap kopi hitam.',
+                    benar: 0 },
+                { pernyataan: 'Paragraf terakhir termasuk struktur interpretasi karena memuat simpulan mengenai penyebab kopi hitam diprediksi menjadi tren pada 2026.',
+                    benar: 0 }
+            ]
+        },
+        jawaban: [0, 0, 0],
+        penjelasan: 'Paragraf pertama memang merupakan pernyataan umum (gambaran awal). Paragraf kedua berisi interpretasi/penjelasan faktor penyebab. Paragraf terakhir merupakan interpretasi/simpulan. Ketiga pernyataan tersebut SESUAI dengan struktur teks.'
+    });
+
+    soalData.push({
+        id: 7, tipe: 'Tabel', bacaan: bacaan2,
+        teks: 'Tentukan Benar atau Salah untuk setiap pernyataan mengenai hubungan makna antarparagraf berikut:',
+        tabel: {
+            header: ['Pernyataan', 'Benar', 'Salah'],
+            rows: [
+                { pernyataan: 'Paragraf ke-2 menjelaskan faktor-faktor penyebab meningkatnya minat terhadap kopi hitam yang terdapat pada paragraf ke-1.',
+                    benar: 0 },
+                { pernyataan: 'Paragraf ke-3 menjelaskan dampak negatif konsumsi kopi hitam yang terdapat pada paragraf ke-2.',
+                    benar: 1 },
+                { pernyataan: 'Paragraf ke-4 merupakan simpulan fenomena tren kopi hitam yang terdapat pada paragraf ke-3.',
+                    benar: 0 }
+            ]
+        },
+        jawaban: [0, 1, 0],
+        penjelasan: 'Pernyataan 1 BENAR: paragraf 2 menjelaskan faktor penyebab. Pernyataan 2 SALAH: paragraf 3 membahas ketersediaan produk, bukan dampak negatif. Pernyataan 3 BENAR: paragraf 4 merupakan simpulan dari fenomena yang dijelaskan.'
+    });
+
+    // --- BACAAN untuk soal 8-10 (novel) ---
+    const bacaan8 = `Perwakilan sepuluh band berjajar di panggung. Terkecuali Rapijali dan Kalajingga, band lainnya diwakili satu personel saja.
+
+Dari meja juri, Pedro bersuara. "Tugas kami sama sekali nggak gampang. Kami tahu kalian telah mengusahakan yang terbaik. Tapi, cuma ada lima tempat di Semifinal. Lima dari kalian harus berhenti sampai di sini."
+
+Ilustrasi musik mencekam berkumandang. Shah sengaja menunggu beberapa saat sebelum gantian berbicara. "Bagi yang nama band-nya dipanggil, tolong maju selangkah."
+
+Nurina, yang biasanya berseri-seri, kini berubah serius. "Indosianis," panggilnya.
+Seorang laki-laki berkacamat, yang usianya tampak paling dewasa dibanding peserta lain di panggung, maju selangkah.
+
+"Kalajingga," panggil Shah.
+Tiga vokalis Kalajingga sama-sama melangkah ke depan.
+
+"Dracore." Nurina memanggil.
+Perempuan berambut pendek dicat ungu maju sambil menahan senyum. Berdiri bersama Kalajingga merupakan pertanda baik.
+
+"Dagadu." Pedro memanggil.
+Perwakilan Dagadu, seorang pria gempa berkejeja pantai warna-warni, melangkah mantap.
+
+Dengan dipanggilnya Dagadu dan Kalajingga, Ping seratus persen yakin mereka di baris depan adalah yang lolos ke Semifinal. Jikalau Rapijali tertinggal di belakang, perjalanan mereka usai sudah.
+
+Ilustrasi musik mencekam itu terus diputar seiring gerak kamera menyoroti mereka yang tersisa di baris belakang secara bergantian. Begitu melihat kamera mendekat, Ping lekas-lekas menunjukkan kepala.
+
+Entah Pedro mengambil jeda waktu kepanjangan atau waktu berjalan lebih lambat, tetapi nama band terakhir rasanya tak kunjung disebut. Ping mengangkat matanya. Tatapannya beradu dengan Pedro.
+
+"Rapijali."
+Lutut Ping rasanya ingin roboh. Untung saja Rakai tahu-tahu menggamt tangannya, mengajaknya maju selangkah.
+
+Sumber: Dee Lestari, Rapijali, Yogyakarta, Bentang Pustaka, 2021`;
+
+    soalData.push({
+        id: 8, tipe: 'Pilihan Ganda', bacaan: bacaan8,
+        teks: 'Apa situasi yang dihadapi tokoh Ping dalam cerita tersebut?',
+        opsi: [
+            'A. Tokoh Ping marah kepada tokoh Pedro karena pengumuman hasil lomba terlalu lama.',
+            'B. Tokoh Ping merasa malu karena kamera terus menyorot wajahnya di atas panggung.',
+            'C. Tokoh Ping berusaha meyakinkan juri agar memilih band Rapijali menjadi pemenang.',
+            'D. Tokoh Ping mengalami ketegangan saat menunggu pengumuman band yang lolos ke semifinal.',
+            'E. Tokoh Ping merasa kecewa karena band Rapijali gagal tampil di hadapan juri.'
+        ],
+        jawaban: [3],
+        penjelasan: 'Ping mengalami ketegangan yang sangat besar saat menunggu nama Rapijali dipanggil. Hal ini terlihat dari deskripsi "Lutut Ping rasanya ingin roboh" dan kekhawatirannya jika Rapijali tidak lolos.'
+    });
+
+    soalData.push({
+        id: 9, tipe: 'Multiple', bacaan: bacaan8,
+        teks: 'Manakah peristiwa pendukung yang terdapat dalam kutipan novel tersebut? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Tokoh Pedro langsung mengumumkan pemenang tanpa memberikan jeda waktu.',
+            'B. Tokoh Ping meninggalkan panggung sebelum pengumuman selesai dibacakan.',
+            'C. Seluruh anggota band yang hadir dipastikan lolos ke babak semifinal.',
+            'D. Rapijali menjadi band terakhir yang dipanggil untuk maju selangkah.',
+            'E. Para juri hanya memilih lima band untuk maju ke babak semifinal.'
+        ],
+        jawaban: [3, 4],
+        penjelasan: 'Dua peristiwa pendukung yang benar: (D) Rapijali dipanggil sebagai band terakhir, dan (E) juri hanya memilih 5 band dari 10 untuk semifinal. Opsi A salah karena Pedro memberi jeda. B salah karena Ping tetap di panggung. C salah karena tidak semua lolos.'
+    });
+
+    soalData.push({
+        id: 10, tipe: 'Multiple', bacaan: bacaan8,
+        teks: 'Berdasarkan kutipan novel tersebut, manakah kelanjutan cerita yang paling relevan? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Band Kalajingga memutuskan mengundurkan diri dari kompetisi musik tersebut.',
+            'B. Band Rapijali berhasil lolos ke babak semifinal setelah namanya dipanggil juri.',
+            'C. Tokoh Ping meninggalkan panggung karena kecewa terhadap keputusan para juri.',
+            'D. Tokoh Ping merasa lega dan bahagia karena perjuangan band-nya belum berakhir.',
+            'E. Tokoh Pedro membatalkan hasil seleksi karena terjadi kesalahan pengumuman.'
+        ],
+        jawaban: [1, 3],
+        penjelasan: 'Kelanjutan yang relevan: (B) Rapijali lolos ke semifinal karena namanya dipanggil, dan (D) Ping merasa lega karena perjuangan band-nya berlanjut. Opsi A, C, dan E tidak didukung oleh teks (tidak ada indikasi pengunduran diri, kekecewaan, atau pembatalan).'
+    });
+
+    // --- BACAAN untuk soal 11-12 (drama) ---
+    const bacaan11 = `Bu Mijah diam sejenak sepertinya memikirkan sesuatu tentang suaminya yang pelit dan selalu menyalahkan dirinya itu.
+
+Bu Mijah : Heee... Kamu... Kamu... Kamu! (sambil menunjukkan penonton) Apa salah kalau aku ini memanjakan anakku sendiri?! La wong bapaknya sugih uang, banyak uang.
+Penonton 2 : Ya, tidak salah, Lik. Asal sampen tidak kebablasan saja.
+Bu Mijah : Maksud kamu kebablasan itu apa?
+Penonton 2 : Lik Mijah harus bisa membatasi dan mengontrol agar anakmu yang semata bagong itu tidak keblinger.
+Bu Mijah : Keblinger bagaimana? Anak saya, Gimo, kalau di rumah nurut pada saya. Sopan, santun, tidak seperti anak tetangga sebelah itu.
+Penonton 1 : Itu kalau di rumah, Yu. Ada Yu Mijah yang bisa mengawasi. Lah, kalau di luar? Yu Mijah tidak bisa mengontrol. Ya, rusak tenan, Yu.
+
+Pak Dimpil datang sambil mengomel juga dan bernada menyalahkan istrinya. Bu Mijah semakin sewot.
+Pak Dimpil : Wis, to. Sudah saya bilang berkali-kali, jangan terus-terusan dimanjakan. Kamu nggak patuh. Malah marah-marah melulu. Ya, rasakan sendiri kalau kamu dicemoeh mereka.
+Bu Mijah : Pakne, sampen itu apa tidak malu to kalau anakmu lebih rendah dibanding anak tetangga? Kok, masalah uang untuk anak saja pelit. Tiap hari cari uang itu untuk apa?
+Koor Penonton : Tapi, ya jangan keterlanjuran, Liik!
+Pak Dimpil : Nah, nah. Kamu dengar, kan, apa kata mereka?
+
+Sumber: SA Supatmi, "Terlena" dalam Kumpulan Naskah Drama Terlena: Perahli Piala Adhikara Provinsi Jawa Timur, Tangerang Selatan, Indocamp, 2023`;
+
+    soalData.push({
+        id: 11, tipe: 'Pilihan Ganda', bacaan: bacaan11,
+        teks: 'Manakah pernyataan yang tepat mengenai penggunaan kata serapan daerah dalam teks?',
+        opsi: [
+            'A. Kata "nurut" dalam dialog drama termasuk serapan bahasa Jawa.',
+            'B. Penggunaan kata "kebablasan" kurang tepat karena bermakna terlalu kencang.',
+            'C. Penggunaan kata "keblinger" keliru karena tidak sesuai dengan konteks.',
+            'D. Penggunaan kata "sampean" kurang tepat, seharusnya "Anda".',
+            'E. Penggunaan kata "sugih" tepat karena menggambarkan orang yang memiliki banyak uang.'
+        ],
+        jawaban: [4],
+        penjelasan: 'Kata "sugih" dalam bahasa Jawa memang berarti "kaya" atau memiliki banyak uang, sehingga penggunaannya dalam konteks "bapaknya sugih uang" tepat. Opsi A salah karena "nurut" bukan serapan, melainkan kata daerah. B, C, D juga keliru.'
+    });
+
+    soalData.push({
+        id: 12, tipe: 'Tabel', bacaan: bacaan11,
+        teks: 'Tentukan Sesuai atau Tidak Sesuai untuk setiap penilaian karakter tokoh dalam drama tersebut!',
+        tabel: {
+            header: ['Penilaian', 'Sesuai', 'Tidak Sesuai'],
+            rows: [
+                { pernyataan: 'Tokoh Bu Mijah digambarkan sebagai seorang ibu yang kewalahan mengontrol perilaku anaknya.',
+                    benar: 0 },
+                { pernyataan: 'Tokoh Pak Dimpil menunjukkan dukungan terhadap cara tokoh Bu Mijah mendidik anak mereka.',
+                    benar: 1 },
+                { pernyataan: 'Tokoh Penonton 1 dan Penonton 2 menunjukkan sikap bermusuhan kepada tokoh Bu Mijah dan Pak Dimpil.',
+                    benar: 1 }
+            ]
+        },
+        jawaban: [0, 1, 1],
+        penjelasan: 'Bu Mijah digambarkan kewalahan (SESUAI) karena ia memanjakan anak dan mendapat kritik. Pak Dimpil justru menyalahkan Bu Mijah, bukan mendukung (TIDAK SESUAI). Penonton memberi nasihat, bukan bermusuhan (TIDAK SESUAI).'
+    });
+
+    // --- BACAAN untuk soal 13-16 ---
+    const bacaan13 = `Harga Tanah Mahal Membuat Rumah Subsidi di DIY Sulit Terjangkau
+
+Program rumah subsidi melalui skema Kredit Pemilikan Rumah (KPR) Fasilitas Likuiditas Pembiayaan Perumahan (FLPP) seharusnya menjadi solusi bagi Masyarakat Berpenghasilan Rendah (MBR) untuk memperoleh hunian layak. Akan tetapi, pelaksanaan program tersebut di Daerah Istimewa Yogyakarta (DIY) masih menghadapi hambatan besar. Tingginya harga tanah di wilayah tersebut menyebabkan pembangunan rumah subsidi masih sulit dilakukan.
+
+Harga tanah di DIY yang terus meningkat membuat pengembangan kesulitan membangun rumah subsidi sesuai ketentuan pemerintah. Harga rumah subsidi di Pulau Jawa masih dibatasi sekitar Rp166 juta per unit, sedangkan harga tanah di DIY rata-rata telah melampaui Rp500.000,- per meter persegi. Kondisi tersebut menyebabkan banyak pengembangan tidak mampu menekan biaya pembangunan. Akibatnya, pembangunan rumah subsidi lebih banyak dilakukan di daerah seperti Gunungkidul dan Kulonprogo yang harga tanahnya masih relatif murah.
+
+Selain mahalnya harga tanah, keterbatasan lahan perkotaan juga memperburuk keadaan. Pengembangan kawasan perbukitan tidak dapat dilakukan secara bebas karena harus mempertimbangkan dampak lingkungan. Hal tersebut membuktikan bahwa penyediaan rumah subsidi di DIY tidak hanya persoalan pembiayaan, tetapi juga berkaitan dengan ketersediaan lahan yang layak.
+
+Pemerintah tidak dapat hanya mengandalkan pembangunan rumah tapak di atas lahan swasta. Pengembangan hunian vertikal di atas tanah milik negara perlu diprioritaskan karena dinilai lebih realistik untuk wilayah perkotaan dengan harga tanah tinggi. Selain itu, kerja sama antara pemerintah dan pengembang juga harus diperkuat agar program rumah subsidi tetap berjalan secara berkelanjutan. Pemerintah perlu menerapkan kebijakan yang lebih inovatif agar masyarakat berpenghasilan rendah tetap memiliki kesempatan memperoleh hunian yang layak, murah, dan terjangkau.
+
+Sumber: Maya Herawati, Harian Jogja, 2026`;
+
+    soalData.push({
+        id: 13, tipe: 'Multiple', bacaan: bacaan13,
+        teks: 'Manakah hubungan makna antarparagraf yang tepat dalam teks tersebut? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Paragraf pertama menyampaikan gagasan umum bahwa program rumah subsidi di DIY menghadapi hambatan karena tingginya harga tanah. Paragraf kedua menjelaskan secara lebih rinci penyebab dan dampaknya.',
+            'B. Paragraf kedua dan ketiga memiliki hubungan pertentangan. Paragraf ketiga menolak pernyataan mengenai mahalnya harga tanah pada paragraf kedua.',
+            'C. Paragraf ketiga dan keempat memiliki hubungan pengembangan gagasan. Paragraf keempat memaparkan solusi atas masalah yang dijelaskan pada paragraf ketiga.',
+            'D. Paragraf pertama dan ketiga memiliki hubungan perincian. Paragraf ketiga menjelaskan jenis-jenis rumah subsidi di DIY.',
+            'E. Paragraf kedua dan keempat memiliki hubungan perbandingan. Kedua paragraf membandingkan harga rumah di perkotaan dan perdesaan.'
+        ],
+        jawaban: [0, 2],
+        penjelasan: 'Hubungan yang tepat: (A) paragraf 1 umum → paragraf 2 rincian penyebab/dampak. (C) paragraf 3 masalah → paragraf 4 solusi (pengembangan gagasan). B, D, E tidak sesuai dengan isi teks.'
+    });
+
+    soalData.push({
+        id: 14, tipe: 'Multiple', bacaan: bacaan13,
+        teks: 'Apakah yang terjadi jika harga rumah tidak terjangkau oleh masyarakat? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Harga tanah di wilayah perkotaan akan menurun secara otomatis.',
+            'B. Pengembangan akan lebih mudah membangun rumah subsidi di wilayah perkotaan.',
+            'C. Masyarakat berpenghasilan rendah akan makin kesulitan memperoleh hunian layak.',
+            'D. Pembangunan rumah subsidi di daerah dengan harga tanah murah akan makin berkurang.',
+            'E. Pemerintah perlu mencari solusi lain, seperti pengembangan hunian vertikal di lahan negara.'
+        ],
+        jawaban: [2, 4],
+        penjelasan: 'Akibat yang logis: (C) masyarakat berpenghasilan rendah makin sulit mendapat hunian, dan (E) pemerintah perlu solusi alternatif seperti hunian vertikal. A dan B bertentangan dengan logika teks. D tidak disebutkan sebagai akibat.'
+    });
+
+    soalData.push({
+        id: 15, tipe: 'Pilihan Ganda', bacaan: bacaan13,
+        teks: 'Kata serapan asing yang digunakan sesuai maknanya dalam teks tersebut adalah ...',
+        opsi: [
+            'A. Kata "subsidi" bermakna bantuan biaya dari pemerintah untuk masyarakat.',
+            'B. Kata "vertikal" bermakna wilayah pinggiran kota yang padat penduduk.',
+            'C. Kata "properti" bermakna bahan bangunan untuk mendirikan rumah.',
+            'D. Kata "kredit" bermakna kewajiban membayar pajak kepada negara.',
+            'E. Kata "program" bermakna kumpulan peraturan lalu lintas.'
+        ],
+        jawaban: [0],
+        penjelasan: '"Subsidi" berarti bantuan biaya dari pemerintah, sesuai konteks program rumah subsidi. Vertikal ≠ pinggiran kota, properti ≠ bahan bangunan, kredit ≠ pajak, program ≠ peraturan lalu lintas.'
+    });
+
+    soalData.push({
+        id: 16, tipe: 'Tabel', bacaan: bacaan13,
+        teks: 'Tentukan informasi-informasi berikut Akurat atau Tidak Akurat berdasarkan isi teks!',
+        tabel: {
+            header: ['Informasi', 'Akurat', 'Tidak Akurat'],
+            rows: [
+                { pernyataan: 'Harga tanah di DIY yang tinggi menyebabkan pembangunan rumah subsidi makin sulit dilakukan.',
+                    benar: 0 },
+                { pernyataan: 'Pengembangan hunian vertikal di atas tanah milik negara dianggap lebih realistis untuk wilayah perkotaan.',
+                    benar: 0 },
+                { pernyataan: 'Pemerintah hanya mengadakan pembangunan rumah tapak di atas lahan swasta sebagai solusi rumah subsidi.',
+                    benar: 1 }
+            ]
+        },
+        jawaban: [0, 0, 1],
+        penjelasan: 'Dua pernyataan pertama AKURAT sesuai teks. Pernyataan ketiga TIDAK AKURAT karena pemerintah tidak hanya mengandalkan rumah tapak, tetapi juga mendorong hunian vertikal dan kerja sama dengan pengembang.'
+    });
+
+    // --- BACAAN untuk soal 17-20 (piramida) ---
+    const bacaan17 = `Piramida Maya yang Menyimpan Banyak Rahasia
+
+Piramida Maya terdiri dari tiga buah lulus: Maya, Maya dan Maya. Maya merupakan anak-anak pertama yang hidup di lahan raya. Maya memiliki kemampuan untuk mempelajari sesuatu yang baru. Maya juga memiliki kemampuan untuk mengembangkan diri sendiri. Maya juga memiliki kemampuan untuk membantu orang-orang lain dalam kehidupan sehari-hari.
+
+Selain itu, Maya juga memiliki kemampuan untuk menghargai dan menghormati orang-orang lain. Maya juga memiliki kemampuan untuk membantu orang-orang lain dalam kehidupan sehari-hari.
+
+1) Bagian dalam piramida menyimpan lorong sempit yang gelap dan lembap.
+2) Di dalam piramida terdapat piramida kecil yang tersembunyi rapi.
+3) Struktur itu tampak berlapis seperti boneka matryoshka dari Rusia.
+4) Pada akhirnya, banyak piramida Maya memiliki susunan bertingkat dan berlapis.
+5) Keunikan tersebut membuat piramida Maya berbeda dari piramida Mesir kuno yang terkenal di dunia.
+
+Selain itu, Maya juga memiliki kemampuan untuk membantu orang-orang lain dalam kehidupan sehari-hari.
+
+1) Piramida Maya juga menyimpan banyak peninggalan sejarah penting peradaban kuno.
+2) Tangga piramida Copán dipenuhi ribuan ukiran hieroglif buatan suku Maya.
+3) Ukiran tersebut merupakan saksi bisu sejarah para penguasa Copán pada masa lampau.
+4) Selain itu, fragmen kalender Maya tertua ditemukan di wilayah Guatemala.
+5) Penemuan tersebut membuat peneliti memahami sistem tulisan masyarakat Maya kuno.
+6) Hingga sekarang, piramida Maya masih menarik perhatian peneliti dan wisatawan dari berbagai negara.
+
+Sumber: Wisnuwibara, Kompas.com, 2025`;
+
+    soalData.push({
+        id: 17, tipe: 'Pilihan Ganda', bacaan: bacaan17,
+        teks: 'Manakah frasa bermakna kiasan yang terdapat dalam teks tersebut?',
+        opsi: [
+            'A. Frasa "lorong sempit" bermakna jalan kehidupan masyarakat suku Maya.',
+            'B. Frasa "batu besar" bermakna piramida memiliki kekuatan gaib tersembunyi.',
+            'C. Frasa "artefak berharga" bermakna benda yang memiliki nilai penting dan tinggi.',
+            'D. Frasa "ritual keagamaan" bermakna pertunjukan hiburan masyarakat masa lalu.',
+            'E. Frasa "berdiri megah" bermakna piramida memiliki ukuran besar dan tampak mengagumkan.'
+        ],
+        jawaban: [4],
+        penjelasan: '"Berdiri megah" adalah frasa kiasan (konotatif) yang menggambarkan piramida sebagai bangunan yang besar, kokoh, dan mengagumkan. Opsi lain merupakan makna denotatif atau makna yang tidak tepat.'
+    });
+
+    soalData.push({
+        id: 18, tipe: 'Pilihan Ganda', bacaan: bacaan17,
+        teks: 'Gagasan utama paragraf ketiga pada teks tersebut adalah ...',
+        opsi: [
+            'A. Peneliti menggunakan artefak untuk membandingkan peradaban Maya dan Mesir.',
+            'B. Suku Maya membangun piramida baru di atas bangunan lama sehingga menghasilkan struktur berlapis-lapis.',
+            'C. Piramida Maya memiliki banyak tangga bertingkat untuk kegiatan keagamaan.',
+            'D. Ruangan di dalam piramida menyimpan berbagai artefak berharga kehidupan bangsawan.',
+            'E. Singgasana berbentuk jaguar merupakan artefak paling penting yang pernah ditemukan.'
+        ],
+        jawaban: [1],
+        penjelasan: 'Paragraf ketiga menjelaskan struktur piramida Maya yang berlapis-lapis seperti boneka matryoshka, karena suku Maya membangun piramida baru di atas bangunan lama. Ini adalah gagasan utama paragraf tersebut.'
+    });
+
+    soalData.push({
+        id: 19, tipe: 'Pilihan Ganda', bacaan: bacaan17,
+        teks: 'Mengapa penggunaan konjungsi "padahal" pada kalimat keempat paragraf kedua tidak tepat?',
+        opsi: [
+            'A. "padahal" menyatakan tujuan, sedangkan paragraf hanya deskripsi objek.',
+            'B. "padahal" menyatakan pilihan, sedangkan paragraf menjelaskan satu topik.',
+            'C. "padahal" menyatakan urutan peristiwa, sedangkan paragraf tidak menjelaskan urutan.',
+            'D. "padahal" menyatakan penambahan informasi, sedangkan paragraf berisi perbandingan.',
+            'E. "padahal" menyatakan pertentangan, sedangkan kalimat sebelumnya dan sesudahnya saling mendukung.'
+        ],
+        jawaban: [4],
+        penjelasan: 'Konjungsi "padahal" digunakan untuk menyatakan pertentangan. Dalam paragraf tersebut, kalimat-kalimatnya saling mendukung (koheren), bukan bertentangan, sehingga penggunaan "padahal" tidak tepat.'
+    });
+
+    soalData.push({
+        id: 20, tipe: 'Pilihan Ganda', bacaan: bacaan17,
+        teks: 'Manakah pernyataan yang tepat terkait penggunaan istilah dalam teks?',
+        opsi: [
+            'A. Istilah "artefak" pada kalimat kedua paragraf ketiga tepat, merujuk pada benda peninggalan bersejarah.',
+            'B. Istilah "peradaban kuno" pada paragraf keempat kurang tepat karena teks lebih fokus pada bangunan.',
+            'C. Istilah "fragment" seharusnya diganti "pecahan batu" karena sesuai objek yang ditemukan.',
+            'D. Istilah "bilah obsidian" kurang sesuai karena paragraf fokus pada ritual keagamaan.',
+            'E. Istilah "hieroglif" kurang tepat karena ukiran pada tangga Copán tidak dijelaskan sebagai sistem tulisan.'
+        ],
+        jawaban: [0],
+        penjelasan: 'Penggunaan "artefak" tepat karena merujuk pada benda-benda peninggalan bersejarah yang ditemukan di piramida Maya. Opsi lain tidak tepat karena istilah-istilah tersebut digunakan dengan benar dalam konteksnya.'
+    });
+
+    // --- BACAAN untuk soal 21-23 (cerpen) ---
+    const bacaan21 = `Ariini kembali menelusuri jejak Mamak dalam catatan daftar belanja. Dia ambil sebuah buku bermotif floral dari laci meja tulis itu. Terpampang pada sampul buku itu tahun 2014–2018, tahun-tahun pemberontakannya. Mulai dari pemilihan kampus hingga kecintaan Ariini pada alam. Mamak menginginkan Ariini berkampus di USU saja, tapi Ariini bersikeras mempelajari Filsafat di Yogyakarta.
+
+"Cukup abang-abangmu saja yang kuliah di luar Sumatra," tutur Mamak waktu itu. "Mengapa abang-abang bisa, aku tidak bisa?"
+"Karena kau perempuan!"
+"Oh, jadi hanya karena aku perempuan maka tidak bisa sebehas abang-abang?"
+"Terserah kau! Tidak akan kubayar uang sekolahmu kalau kau bersikeras mengambil UGM!"
+
+Ariini memandang perkataan Mamak itu sebagai keputusan final. Dia belajar keras demi mendapat beasiswa penuh dan mengisi lowongan sebagai pengajar privat ketika dia duduk di semester tiga. Tiada selembar pun uang Mamak yang menyentuh nadi-nadi kehidupannya selama berada di Yogyakarta.
+
+Pertengkaran fatalnya saat dia memutuskan bergabung dalam kelompok pencinta alam. "Itu cuma cocok untuk laki-laki, Rini!"
+"Mamak selalu begitu! Selalu berbicara tentang laki-laki dan perempuan!"
+
+Semenjak itu Ariini membangun dinding. Mamak pun mendiamkan. Mamak dan dia hanya berbicara ala kadarnya sewaktu perhelatan akbar, misalnya pesta pernikahan abang-abangnya. Ariini baru merobohkan dinding itu ketika dia mengetahui Mamak sakit parah.
+
+Ariini, boruku, kalau kau tahu sejenakal saja isi hati Mamak, Nak.
+
+Ariini membaca satu demi satu belanja-belanja Mamak sepanjang 2014 hingga 2018 itu. Lembar-lembar pertama, seperti biasa, daftar kebutuhan pokok ditambah kebutuhan butik dan biaya wisuda abang keduanya. Namun, ketika dia membuka halaman lebih jauh, Ariini menemukan entri-entri tak terduga.
+
+Di samping bahan kebutuhan pokok, Mamak menambahkan: sepatu kuliah untuk Ariini melalui Boni, lima setel baju kuliah Ariini melalui Boni, minyak param untuk Ariini melalui Boni, uang saku untuk Ariini melalui Boni...
+
+Sumber: Fri Yanti, Kompas.id, 2026`;
+
+    soalData.push({
+        id: 21, tipe: 'Pilihan Ganda', bacaan: bacaan21,
+        teks: 'Apakah penyebab sikap tokoh Ariini bersitegang dengan ibunya?',
+        opsi: [
+            'A. Tokoh Ariini tidak setuju dengan pandangan ibunya yang membedakan laki-laki dan perempuan.',
+            'B. Tokoh Ariini kecewa karena ibunya tidak pernah membiayai kebutuhan kuliahnya.',
+            'C. Tokoh Ariini marah karena ibunya melarang dirinya menghadiri pesta pernikahan.',
+            'D. Tokoh Ariini merasa ibunya tidak peduli terhadap cita-citanya menjadi pengajar privat.',
+            'E. Tokoh Ariini merasa ibunya lebih menyayangi abang-abangnya dibandingkan dirinya.'
+        ],
+        jawaban: [0],
+        penjelasan: 'Ariini bersitegang dengan ibunya karena ibunya memiliki pandangan yang membedakan peran laki-laki dan perempuan. Hal ini terlihat dari dialog: "Karena kau perempuan!" dan "Mamak selalu berbicara tentang laki-laki dan perempuan!"'
+    });
+
+    soalData.push({
+        id: 22, tipe: 'Pilihan Ganda', bacaan: bacaan21,
+        teks: 'Manakah pernyataan yang tepat mengenai frasa konotatif dalam kutipan cerpen?',
+        opsi: [
+            'A. Frasa "keputusan final" menunjukkan keputusan yang ditulis pada lembar terakhir.',
+            'B. Frasa "perhelatan akbar" menunjukkan acara yang diadakan di gedung sangat besar.',
+            'C. Frasa "selembar uang" menunjukkan uang milik Ariini yang jumlahnya sangat sedikit.',
+            'D. Frasa "membangun dinding" menunjukkan sikap Ariini yang mulai menjaga jarak dengan ibunya.',
+            'E. Frasa "merobohkan dinding" menunjukkan perbuatan Ariini menghancurkan pembatas rumah.'
+        ],
+        jawaban: [3],
+        penjelasan: '"Membangun dinding" adalah frasa konotatif yang bermakna Ariini mulai menjaga jarak emosional dan berkomunikasi secara terbatas dengan ibunya. Bukan makna harfiah (literal).'
+    });
+
+    soalData.push({
+        id: 23, tipe: 'Pilihan Ganda', bacaan: bacaan21,
+        teks: 'Apakah nilai yang tecermin dari hubungan antartokoh dalam kutipan cerpen?',
+        opsi: [
+            'A. Perdebatan dalam keluarga menunjukkan kurangnya kasih sayang dan kepedulian.',
+            'B. Keberanian dalam memperjuangkan cita-cita akan mendatangkan rasa hormat dari orang lain.',
+            'C. Keharmonisan harus tetap dijaga meskipun ada perbedaan pendapat antaranggota keluarga.',
+            'D. Ketegasan orang tua menentukan keberhasilan masa depan anak-anak mereka kelak.',
+            'E. Kemandirian perlu diperjuangkan agar mendapat sebuah pengakuan dari keluarga.'
+        ],
+        jawaban: [1],
+        penjelasan: 'Nilai yang tecermin adalah keberanian Ariini memperjuangkan cita-citanya (kuliah Filsafat di Yogyakarta dan bergabung dengan pencinta alam) meskipun ditentang ibunya. Pada akhirnya, ibunya tetap memperhatikan dan menyayanginya melalui catatan belanja.'
+    });
+
+    // --- BACAAN untuk soal 24-25 (puisi) ---
+    const bacaan24 = `DOA ORANG SIBUK YANG 24 JAM SEHARI BERKANTOR DI PONSELNYA
+
+Tuhan, ponsel saya
+rusak dibanting gempa.
+Nomor kontak saya hilang semua.
+Satu-satunya yang tersisa
+ialah nomorMu.
+
+Tuhan berkata:
+Dan itulah satu-satunya nomor
+yang tak pernah kausapa.
+
+(2018)
+
+Sumber: Joko Pinurbo, "Doa Orang Sibuk yang 24 Jam Sehari Berkantor di Ponselnya" dalam Perjumpaan Khong Guan: Kumpulan Puisi, Jakarta, Gramedia Pustaka Utama, 2020`;
+
+    soalData.push({
+        id: 24, tipe: 'Multiple', bacaan: bacaan24,
+        teks: 'Manakah relevansi paling sesuai antara sikap tokoh dalam puisi dengan realitas kehidupan sehari-hari? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Banyak orang lebih sering menggunakan ponsel daripada meluangkan waktu untuk beribadah.',
+            'B. Modernisasi membuat manusia melupakan hubungan spiritual karena kesibukan pekerjaan.',
+            'C. Sebagian orang baru mengingat Tuhan ketika sedang mengalami musibah atau kesulitan.',
+            'D. Kerusakan ponsel akibat bencana selalu menyebabkan seseorang kehilangan keimanan.',
+            'E. Kehilangan nomor kontak di ponsel membuat manusia tidak dapat berkomunikasi lagi.'
+        ],
+        jawaban: [0, 1, 2],
+        penjelasan: 'Tiga relevansi yang paling sesuai: (A) orang lebih sering pakai ponsel daripada ibadah, (B) modernisasi dan kesibukan membuat manusia lupa hubungan spiritual, dan (C) orang baru ingat Tuhan saat musibah terjadi. D dan E terlalu ekstrem dan tidak relevan dengan pesan puisi.'
+    });
+
+    soalData.push({
+        id: 25, tipe: 'Tabel', bacaan: bacaan24,
+        teks: 'Tentukan Mungkin atau Tidak Mungkin terkait respons pembaca terhadap pesan dalam puisi!',
+        tabel: {
+            header: ['Respons', 'Mungkin', 'Tidak Mungkin'],
+            rows: [
+                { pernyataan: 'Pembaca merasa tersindir karena terlalu sibuk menggunakan ponsel dibandingkan beribadah.',
+                    benar: 0 },
+                { pernyataan: 'Pembaca merasa bangga karena tokoh dalam puisi selalu mengingat Tuhan setiap waktu.',
+                    benar: 1 },
+                { pernyataan: 'Pembaca merasa tersentuh setelah menyadari pentingnya menjaga hubungan spiritual.',
+                    benar: 0 }
+            ]
+        },
+        jawaban: [0, 1, 0],
+        penjelasan: 'Respons "tersindir" dan "tersentuh" MUNGKIN karena puisi mengkritik kesibukan dengan ponsel dan mengajak menjaga hubungan spiritual. Respons "bangga" TIDAK MUNGKIN karena tokoh justru digambarkan lalai dalam beribadah (nomor Tuhan tak pernah disapa).'
+    });
+
+    // ─────────────────────────────────────────────
+    //  RENDER ENGINE (dengan tampilan bacaan)
+    // ─────────────────────────────────────────────
+
+    let jawabanPengguna = {};
+    let sudahDiperiksa = {};
+    let currentIndex = 0;
+
+    const container = document.getElementById('soalContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const periksaBtn = document.getElementById('periksaBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function renderSoal(index) {
+        const soal = soalData[index];
+        if (!soal) return;
+
+        let html = `<div class="soal aktif" id="soal-${soal.id}">`;
+        html += `<div class="soal-header">
+                    <span class="soal-nomor">Soal ${soal.id}</span>
+                    <span class="soal-tipe">${soal.tipe}</span>
+                </div>`;
+
+        // Tampilkan bacaan jika ada
+        if (soal.bacaan) {
+            html += `<div class="bacaan">${soal.bacaan.replace(/\n/g, '<br>')}</div>`;
+        }
+
+        html += `<div class="soal-teks">${soal.teks}</div>`;
+
+        if (soal.tipe === 'Pilihan Ganda' || soal.tipe === 'Multiple') {
+            const isMultiple = soal.tipe === 'Multiple';
+            const inputType = isMultiple ? 'checkbox' : 'radio';
+            const nameAttr = `q${soal.id}`;
+            html += `<div class="opsi">`;
+            soal.opsi.forEach((op, idx) => {
+                const checked = (jawabanPengguna[soal.id] || []).includes(idx) ? 'checked' : '';
+                const disabled = sudahDiperiksa[soal.id] ? 'disabled' : '';
+                const kelasTambahan = sudahDiperiksa[soal.id] ? getKelasOpsi(soal, idx) : '';
+                html += `<label class="${kelasTambahan} ${sudahDiperiksa[soal.id] ? 'disabled' : ''}">
+                            <input type="${inputType}" name="${nameAttr}" value="${idx}" ${checked} ${disabled}>
+                            <span>${op}</span>
+                        </label>`;
+            });
+            html += `</div>`;
+        } else if (soal.tipe === 'Tabel') {
+            html += `<div class="tabel-container"><table>`;
+            html += `<thead><tr><th>${soal.tabel.header[0]}</th>`;
+            for (let i = 1; i < soal.tabel.header.length; i++) {
+                html += `<th style="text-align:center;min-width:80px;">${soal.tabel.header[i]}</th>`;
+            }
+            html += `</tr></thead><tbody>`;
+            const rows = soal.tabel.rows;
+            rows.forEach((row, rowIdx) => {
+                html += `<tr><td class="pernyataan">${row.pernyataan}</td>`;
+                const cols = soal.tabel.header.length - 1;
+                for (let c = 0; c < cols; c++) {
+                    const isChecked = (jawabanPengguna[soal.id] || [])[rowIdx] === c;
+                    const disabled = sudahDiperiksa[soal.id] ? 'disabled' : '';
+                    html += `<td style="text-align:center;">
+                                <label style="cursor:${sudahDiperiksa[soal.id]?'default':'pointer'};">
+                                    <input type="radio" name="tbl_${soal.id}_${rowIdx}" value="${c}" 
+                                           ${isChecked?'checked':''} ${disabled}
+                                           style="accent-color:#3b82f6;width:16px;height:16px;">
+                                </label>
+                            </td>`;
+                }
+                html += `</tr>`;
+            });
+            html += `</tbody></table></div>`;
+        }
+
+        // jawaban box
+        const showJawaban = sudahDiperiksa[soal.id] || false;
+        html += `<div class="jawaban-box ${showJawaban ? 'muncul' : ''}" id="jawabanBox-${soal.id}">`;
+        html += `<div class="j-kunci">🔑 Kunci Jawaban: <span>${formatJawaban(soal)}</span></div>`;
+        html += `<div class="j-penjelasan">${soal.penjelasan || '—'}</div>`;
+        html += `</div>`;
+
+        html += `</div>`;
+        container.innerHTML = html;
+
+        // event listener untuk radio/checkbox
+        if (soal.tipe === 'Pilihan Ganda' || soal.tipe === 'Multiple') {
+            const inputs = container.querySelectorAll(`input[name="q${soal.id}"]`);
+            inputs.forEach(inp => {
+                inp.addEventListener('change', function() {
+                    if (sudahDiperiksa[soal.id]) return;
+                    const key = soal.id;
+                    if (soal.tipe === 'Multiple') {
+                        const checked = [...container.querySelectorAll(`input[name="q${key}"]:checked`)].map(
+                            el => parseInt(el.value));
+                        jawabanPengguna[key] = checked;
+                    } else {
+                        const val = parseInt(this.value);
+                        jawabanPengguna[key] = [val];
+                    }
+                    updateProgress();
+                });
+            });
+        } else if (soal.tipe === 'Tabel') {
+            const radios = container.querySelectorAll('input[type="radio"]');
+            radios.forEach(r => {
+                r.addEventListener('change', function() {
+                    if (sudahDiperiksa[soal.id]) return;
+                    const key = soal.id;
+                    const name = this.name;
+                    const rowIdx = parseInt(name.split('_')[2]);
+                    const val = parseInt(this.value);
+                    if (!jawabanPengguna[key]) jawabanPengguna[key] = [];
+                    jawabanPengguna[key][rowIdx] = val;
+                    updateProgress();
+                });
+            });
+        }
+
+        if (sudahDiperiksa[soal.id]) {
+            container.querySelectorAll('input').forEach(el => el.disabled = true);
+            container.querySelectorAll('.opsi label').forEach((label, idx) => {
+                const kelas = getKelasOpsi(soal, idx);
+                if (kelas) label.classList.add(kelas);
+            });
+        }
+
+        updateProgress();
+        updateNavButtons(index);
+    }
+
+    function getKelasOpsi(soal, idx) {
+        if (!sudahDiperiksa[soal.id]) return '';
+        const benar = soal.jawaban || [];
+        const user = jawabanPengguna[soal.id] || [];
+        const isBenar = benar.includes(idx);
+        const isDipilih = user.includes(idx);
+        if (isBenar) return 'benar';
+        if (isDipilih && !isBenar) return 'salah';
+        return 'tidak-dipilih';
+    }
+
+    function formatJawaban(soal) {
+        if (soal.tipe === 'Pilihan Ganda') {
+            const idx = soal.jawaban[0];
+            return soal.opsi[idx] ? soal.opsi[idx].substring(0, 3) : '—';
+        } else if (soal.tipe === 'Multiple') {
+            return soal.jawaban.map(i => soal.opsi[i] ? soal.opsi[i].substring(0, 3) : '').join(', ');
+        } else if (soal.tipe === 'Tabel') {
+            const header = soal.tabel.header.slice(1);
+            return soal.jawaban.map(v => header[v] || '—').join(' | ');
+        }
+        return '—';
+    }
+
+    function updateProgress() {
+        let terjawab = 0;
+        soalData.forEach(s => {
+            const user = jawabanPengguna[s.id] || [];
+            if (s.tipe === 'Tabel') {
+                const totalRow = s.tabel.rows.length;
+                let filled = 0;
+                for (let i = 0; i < totalRow; i++) {
+                    if (user[i] !== undefined && user[i] !== null && user[i] !== '') filled++;
+                }
+                if (filled === totalRow) terjawab++;
+            } else {
+                if (user.length > 0) terjawab++;
+            }
+        });
+        const total = soalData.length;
+        const pct = Math.round((terjawab / total) * 100);
+        progressBar.style.width = pct + '%';
+        progressText.textContent = `${terjawab} / ${total} terjawab`;
+    }
+
+    function updateNavButtons(index) {
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === soalData.length - 1;
+    }
+
+    function goTo(index) {
+        if (index < 0 || index >= soalData.length) return;
+        currentIndex = index;
+        renderSoal(index);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+    periksaBtn.addEventListener('click', function() {
+        const soal = soalData[currentIndex];
+        if (!soal) return;
+        const user = jawabanPengguna[soal.id] || [];
+        if (soal.tipe === 'Tabel') {
+            const totalRow = soal.tabel.rows.length;
+            let filled = 0;
+            for (let i = 0; i < totalRow; i++) {
+                if (user[i] !== undefined && user[i] !== null && user[i] !== '') filled++;
+            }
+            if (filled < totalRow) {
+                alert('Silakan isi semua pilihan pada tabel terlebih dahulu.');
+                return;
+            }
+        } else {
+            if (user.length === 0) {
+                alert('Silakan pilih jawaban terlebih dahulu.');
+                return;
+            }
+        }
+        sudahDiperiksa[soal.id] = true;
+        renderSoal(currentIndex);
+        const box = document.getElementById(`jawabanBox-${soal.id}`);
+        if (box) box.classList.add('muncul');
+        updateProgress();
+    });
+
+    resetBtn.addEventListener('click', function() {
+        if (!confirm('Reset semua jawaban untuk soal ini?')) return;
+        const soal = soalData[currentIndex];
+        delete jawabanPengguna[soal.id];
+        delete sudahDiperiksa[soal.id];
+        renderSoal(currentIndex);
+        updateProgress();
+    });
+
+    renderSoal(0);
+    updateProgress();
+</script>
+</body>
+</html>

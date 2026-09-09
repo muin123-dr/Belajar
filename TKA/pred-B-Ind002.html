@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediksi 3 – Bahasa Indonesia (25 Soal)</title>
+    <style>
+        /* --- reset & base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f4f7fc;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 20px;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 28px;
+            padding: 30px 32px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #0f172a;
+            border-left: 6px solid #3b82f6;
+            padding-left: 18px;
+            margin-bottom: 6px;
+        }
+        .subhead {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 28px;
+            padding-left: 24px;
+            border-bottom: 1px solid #e9edf2;
+            padding-bottom: 14px;
+        }
+        .subhead span {
+            display: inline-block;
+            margin-right: 24px;
+        }
+        .progress-wrap {
+            background: #e9edf2;
+            border-radius: 40px;
+            height: 8px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 40px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #475569;
+            text-align: right;
+            margin-top: -18px;
+            margin-bottom: 22px;
+        }
+
+        .soal {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+        .soal.aktif {
+            display: block;
+        }
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(18px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .soal-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .soal-nomor {
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 40px;
+            padding: 2px 16px;
+            line-height: 30px;
+            white-space: nowrap;
+        }
+        .soal-tipe {
+            background: #e9edf2;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 30px;
+            padding: 2px 14px;
+            line-height: 28px;
+        }
+        .soal-teks {
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+        .bacaan {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 18px;
+            border-radius: 12px;
+            margin: 10px 0 16px 0;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #1e293b;
+            max-height: 320px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+        }
+        .opsi {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0 16px;
+        }
+        .opsi label {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-radius: 14px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .opsi label:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .opsi input[type="radio"], .opsi input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            accent-color: #3b82f6;
+            cursor: pointer;
+        }
+        .opsi label.benar {
+            border-color: #22c55e;
+            background: #f0fdf4;
+        }
+        .opsi label.salah {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        .opsi label.tidak-dipilih { opacity: 0.5; }
+        .opsi label.disabled { cursor: default; }
+        .opsi label.disabled:hover { border-color: transparent; background: #f8fafc; }
+
+        .tabel-container {
+            overflow-x: auto;
+            margin: 12px 0 16px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+        }
+        .tabel-container table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 300px;
+        }
+        .tabel-container th {
+            background: #f1f5f9;
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: #1e293b;
+            border-bottom: 2px solid #d1d9e6;
+        }
+        .tabel-container td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #e9edf2;
+            vertical-align: middle;
+        }
+        .tabel-container tr:last-child td { border-bottom: none; }
+        .tabel-container .pernyataan { font-weight: 500; }
+        .tabel-container .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+        .tabel-container .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .tabel-container .radio-group input[type="radio"] {
+            accent-color: #3b82f6;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .tombol-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            border-top: 1px solid #e9edf2;
+            padding-top: 24px;
+        }
+        .tombol-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .btn {
+            background: #e9edf2;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+        .btn:hover { background: #d1d9e6; }
+        .btn-primary { background: #3b82f6; color: #fff; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-outline { background: transparent; border: 2px solid #cbd5e1; }
+        .btn-outline:hover { border-color: #94a3b8; background: #f1f5f9; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .jawaban-box {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 14px 0 6px;
+            border-left: 5px solid #3b82f6;
+            display: none;
+        }
+        .jawaban-box.muncul { display: block; animation: fadeUp 0.3s ease; }
+        .jawaban-box .j-kunci {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 16px;
+        }
+        .jawaban-box .j-kunci span {
+            background: #dbeafe;
+            padding: 2px 14px;
+            border-radius: 30px;
+            color: #1d4ed8;
+        }
+        .jawaban-box .j-penjelasan {
+            margin-top: 10px;
+            color: #1e293b;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .btn-nav {
+            background: transparent;
+            border: 1px solid #d1d9e6;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            color: #1e293b;
+        }
+        .btn-nav:hover { background: #f1f5f9; border-color: #94a3b8; }
+        .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        @media (max-width: 640px) {
+            .container { padding: 18px 14px; }
+            h1 { font-size: 20px; padding-left: 12px; }
+            .subhead { font-size: 13px; padding-left: 12px; }
+            .subhead span { display: block; margin-right: 0; }
+            .soal-teks { font-size: 15px; }
+            .bacaan { font-size: 14px; padding: 12px 14px; max-height: 220px; }
+            .opsi label { font-size: 14px; padding: 10px 14px; }
+            .tombol-wrap { flex-direction: column; align-items: stretch; }
+            .tombol-group { justify-content: center; }
+            .btn { padding: 8px 16px; font-size: 13px; justify-content: center; }
+            .tabel-container table { font-size: 13px; }
+            .tabel-container th, .tabel-container td { padding: 8px 10px; }
+            .jawaban-box { padding: 14px 16px; }
+            .soal-nomor { font-size: 13px; padding: 0 12px; line-height: 26px; }
+            .soal-tipe { font-size: 12px; padding: 0 10px; line-height: 24px; }
+        }
+        .text-sm { font-size: 14px; color: #64748b; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📘 Prediksi 3 – Bahasa Indonesia</h1>
+    <div class="subhead">
+        <span>📝 25 butir soal</span>
+        <span>⏱ 60 menit</span>
+        <span>📌 Pilih jawaban, lalu tekan <strong>"Periksa"</strong></span>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-text" id="progressText">0 / 25 terjawab</div>
+    <div id="soalContainer"></div>
+    <div class="tombol-wrap">
+        <div class="tombol-group">
+            <button class="btn-nav" id="prevBtn" disabled>◀ Sebelum</button>
+            <button class="btn-nav" id="nextBtn">Selanjutnya ▶</button>
+        </div>
+        <div class="tombol-group">
+            <button class="btn btn-primary" id="periksaBtn">✅ Periksa</button>
+            <button class="btn btn-outline" id="resetBtn">↺ Reset</button>
+        </div>
+    </div>
+    <div class="text-sm text-center" style="margin-top:18px;color:#94a3b8;">
+        Klik "Periksa" untuk melihat kunci &amp; penjelasan
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    //  DATA SOAL (Prediksi 3) — 25 butir
+    // ============================================================
+
+    const soalData = [];
+
+    // --- BACAAN 1 (Ali Wardhana) untuk soal 1-3 ---
+    const baca1 = `Ali Wardhana, Penyelamat Ekonomi Indonesia
+
+Indonesia pernah mengalami peristiwa hiperinflasi pada masa kepemimpinan Presiden Ir. Sukarno. Keadaan tersebut mengakibatkan hancurnya daya beli masyarakat. Indonesia terbitut utang hingga US$2,4 miliar. Perencanaan finansial yang buruk membuat Indonesia menghadapi defisit APBN dan neraca perdagangan. Keadaan diperparah dengan kebijakan pencetakan uang yang menyebabkan peredaran uang di publik meningkat. Sosok yang menyelamatkan keadaan ekonomi saat itu adalah Ali Wardhana. Ali Wardhana diangkat sebagai bendahara negara pada masa pemerintahan Presiden Suharto. Dengan upaya yang efektif, ia menghentikan segala pengeluaran negara yang dirasa tidak mendesak.
+
+Ali Wardhana merupakan lulusan Fakultas Ekonomi Universitas Indonesia. Ia melanjutkan studi di University of California, Berkeley, Amerika Serikat, hingga memperoleh gelar doktor pada 1962. Dengan latar belakang tersebut, Ali Wardhana dikenal sebagai ekonom yang mumpuni. Ia pun dipercaya untuk mengatasi masalah defisit ekonomi Indonesia. Ali Wardhana bekerja sama dengan kelompok negara Barat melalui Official Development Aid (ODA) untuk memperoleh pinjaman yang sangat lunak. ODA juga memberi bantuan tenaga ahli yang sangat dibutuhkan Indonesia saat itu.
+
+Ali Wardhana pun melakukan restrukturisasi terhadap berbagai utang yang jatuh tempo. Bersama Widjojo Nitisastro, ia melakukan negosiasi utang dengan Paris Club. Negosiasi tersebut menghasilkan putusan penundaan pembayaran utang hingga empat dasawarsa tanpa bunga. Selain itu, ia berkoordinasi dengan Bank Indonesia untuk menghentikan pencetakan uang. Berkat kebijakan tersebut, tingkat inflasi berhasil ditekan hingga sekitar 10 persen pada 1969.
+
+Kemampuan Ali Wardhana dalam bidang ekonomi membuatnya dipercaya sebagai Menteri Keuangan selama 15 tahun (1968–1983). Setelah itu, ia diangkat menjadi Menteri Koordinator Ekonomi, Industri, dan Pengawasan Pembangunan (1983–1988). Setelah turun dari kementerian, ia menjadi tempat konsultasi para ekonomi junior. Karena keikhianannya inilah, ia menjadi panutan bagi banyak menteri keuangan setelahnya. Keahlian dan kontribusinya dalam perekonomian Indonesia menjadi faktor utama Ali Wardhana dihormati. Ia dikenal sebagai salah satu tokoh ekonomi yang berpengaruh di Indonesia.
+
+Sumber: Pieter Rafael Johansz, Good News From Indonesia, 2026`;
+
+    soalData.push({
+        id: 1, tipe: 'Pilihan Ganda', bacaan: baca1,
+        teks: 'Berdasarkan teks, simpulan paling tepat mengenai faktor keberhasilan Ali Wardhana dalam menurunkan tingkat inflasi di Indonesia adalah . . .',
+        opsi: [
+            'A. Keputusan sigap untuk melakukan restrukturisasi utang dan melakukan koordinasi kebijakan bersama Bank Indonesia.',
+            'B. Kemampuan negosiasi untuk mendapatkan bantuan pinjaman uang yang lunak dan menata ulang perekonomian.',
+            'C. Keberanian Ali Wardhana untuk menghapus semua utang luar negeri dan memanggil bantuan tenaga ahli.',
+            'D. Keputusan untuk menerima bantuan tenaga ahli untuk menghentikan peredaran uang baru di masyarakat.',
+            'E. Kebijakan yang fokus untuk menghentikan pencetakan uang dan membayar semua utang luar negeri.'
+        ],
+        jawaban: [0],
+        penjelasan: 'Keberhasilan Ali Wardhana menekan inflasi didukung oleh dua langkah utama: (1) restrukturisasi utang melalui negosiasi dengan Paris Club yang menghasilkan penundaan pembayaran tanpa bunga, dan (2) koordinasi dengan Bank Indonesia untuk menghentikan pencetakan uang. Kedua kebijakan ini secara langsung menekan laju inflasi hingga sekitar 10% pada 1969. Opsi lain tidak mencakup kedua faktor tersebut secara utuh.'
+    });
+
+    soalData.push({
+        id: 2, tipe: 'Pilihan Ganda', bacaan: baca1,
+        teks: 'Pernyataan yang tepat mengenai penggunaan kata serapan bahasa daerah dalam teks tersebut adalah . . .',
+        opsi: [
+            'A. bendahara, berasal dari bahasa Jawa yang bermakna pejabat pengelola keuangan negara',
+            'B. kelihaiannya, berasal dari bahasa Minangkabau untuk mendeskripsikan kepandaian Ali Wardhana',
+            'C. keuangan, diserap dari bahasa Sunda yang berarti alat pembayaran sah yang digunakan masyarakat',
+            'D. mumpuni, yang diserap dari bahasa Jawa menggambarkan kapabilitas Ali Wardhana sebagai ekonomi',
+            'E. panutan, diambil dari bahasa Jawa untuk menunjukkan sosok Ali Wardhana yang manut atau patuh aturan'
+        ],
+        jawaban: [3],
+        penjelasan: 'Kata "mumpuni" berasal dari bahasa Jawa yang berarti "cakap, mampu, atau berkemampuan". Dalam teks, kata ini digunakan untuk menggambarkan kapabilitas Ali Wardhana sebagai ekonom. Opsi A salah karena "bendahara" berasal dari bahasa Arab/Sanskerta, bukan Jawa. Opsi B dan C keliru asal-usulnya. Opsi E salah karena "panutan" berarti teladan, bukan "manut" (patuh).'
+    });
+
+    soalData.push({
+        id: 3, tipe: 'Tabel', bacaan: baca1,
+        teks: 'Tentukan setiap pernyataan berikut Benar atau Salah berdasarkan hubungan antarkalimat dalam teks!',
+        tabel: {
+            header: ['Pernyataan', 'Benar', 'Salah'],
+            rows: [
+                { pernyataan: 'Kalimat kedua paragraf pertama menjelaskan sebab dari terjadinya hiperinflasi di Indonesia.', benar: 1 },
+                { pernyataan: 'Kalimat terakhir paragraf ketiga menunjukkan hasil atau akibat dari kebijakan ekonomi yang dilakukan Ali Wardhana.', benar: 0 },
+                { pernyataan: 'Kalimat terakhir paragraf keempat memperkuat gagasan utama tentang pengaruh Ali Wardhana dalam bidang ekonomi Indonesia.', benar: 0 }
+            ]
+        },
+        jawaban: [1, 0, 0],
+        penjelasan: 'Pernyataan 1 SALAH: Kalimat kedua paragraf pertama ("Keadaan tersebut mengakibatkan hancurnya daya beli masyarakat") menjelaskan AKIBAT dari hiperinflasi, bukan sebab. Pernyataan 2 BENAR: Kalimat terakhir paragraf ketiga ("Berkat kebijakan tersebut, tingkat inflasi berhasil ditekan...") merupakan hasil dari kebijakan Ali Wardhana. Pernyataan 3 BENAR: Kalimat terakhir paragraf keempat ("Ia dikenal sebagai salah satu tokoh ekonomi yang berpengaruh") memperkuat gagasan utama tentang pengaruhnya.'
+    });
+
+    // --- BACAAN 2 (Podcast) untuk soal 4-6 ---
+    const baca2 = `Popularitas Podcast pada Era Digital
+
+Pada era digital yang serbacepat ini, cara konsumsi informasi terus berkembang. Salah satu fenomena yang paling menonjol adalah perkembangan podcast. Podcast muncul sebagai bentuk evolusi media siaran konvensional. Kini, podcast telah menjadi media yang memiliki potensi komersial yang besar. Podcast berkembang karena menawarkan cara baru untuk mendapatkan cerita dan informasi.
+
+Faktor utama penyebab podcast menjadi populer dalam beberapa tahun terakhir adalah fleksibilitas. Kemudahan akses internet memungkinkan podcast untuk didengarkan kapan dan di mana saja. Kondisi ini disebabkan oleh efisiensi transmisi data audio yang lebih ringan dibanding video. Kemudahan lainnya adalah pendengar dapat memegang kendali penuh atas informasi yang ingin dikonsumsi. Kondisi ini berbeda dengan radio konvensional yang terikat jadwal.
+
+Podcast berkembang menjadi media populer karena banyaknya manfaat yang dirasakan pendengar. Podcast menyajikan berbagai macam konten: Pendengar dapat menggunakan podcast, baik sebagai media hiburan maupun edukasi. Selain itu, popularitas podcast berdampak pada terbentuknya ruang komunitas baru. Komunitas tersebut terbentuk dari para pendengar yang memiliki kesamaan minat. Di sisi lain, proses mendengarkan audio yang dilakukan pendengar meningkatkan kemampuan mekanis. Media audio menuntut pendengar podcast melatih kemampuan mendengarkan dan memahami informasi yang didengarkan.
+
+Podcast menyajikan cara yang unik dan menarik untuk berbagi cerita, menyampaikan informasi, dan membangun komunitas. Dengan kenyamanan, variasi konten, dan sifatnya yang intim, podcast kemungkinan akan menjadi bagian penting dari lanskap media pada tahun-tahun mendatang. Baik bagi seorang pendengar yang ingin belajar hal-hal baru atau membuat konten yang ingin berbagi informasi.
+
+Kemudahan akses secara umum membuat fenomena meluasnya podcast terjadi. Fenomena ini diperkirakan akan terus terjadi seiring perkembangan teknologi. Kecanggihan teknologi akan membuat penyebaran podcast terus berekspansi secara global. Dengan demikian, popularitas podcast mendalami pergeseran cara masyarakat dalam mengonsumsi media.
+
+Sumber: Denny tebe, Media Indonesia, 2025`;
+
+    soalData.push({
+        id: 4, tipe: 'Pilihan Ganda', bacaan: baca2,
+        teks: 'Rangkaian informasi paling tepat yang menunjukkan bagian-bagian penting teks eksplanasi tersebut adalah . . .',
+        opsi: [
+            'A. Podcast sebagai media penyebaran informasi.',
+            'B. Kemunculan podcast sebagai media hiburan.',
+            'C. Perubahan media komunikasi masyarakat.',
+            'D. Perkembangan media siaran.',
+            'E. Perkembangan podcast sebagai media digital, faktor penyebab popularitas, dampak terhadap komunitas, dan proyeksi masa depan.'
+        ],
+        jawaban: [4],
+        penjelasan: 'Teks eksplanasi memiliki struktur: pernyataan umum (fenomena podcast), deretan penjelas (faktor fleksibilitas, manfaat, komunitas), dan interpretasi (proyeksi masa depan). Opsi E mencakup semua bagian penting tersebut. Opsi lain hanya menyebutkan satu aspek saja.'
+    });
+
+    soalData.push({
+        id: 5, tipe: 'Pilihan Ganda', bacaan: baca2,
+        teks: 'Bacalah kalimat ketiga pada paragraf terakhir. Penggunaan istilah berekspansi dinilai tepat karena . . .',
+        opsi: [
+            'A. Istilah tersebut menggambarkan tambahan fungsi podcast terhadap masyarakat luas, yakni sebagai sarana hiburan dan edukasi.',
+            'B. Istilah tersebut menggambarkan perubahan bentuk penyajian podcast yang menyesuaikan perkembangan teknologi.',
+            'C. Istilah tersebut menunjukkan penggunaan jaringan internet untuk mempercepat distribusi podcast di seluruh dunia.',
+            'D. Istilah tersebut menunjukkan perluasan jangkauan penggunaan podcast hingga menyentuh masyarakat luas.',
+            'E. Istilah tersebut menjelaskan peningkatan kualitas audio podcast sebagai akibat kemajuan teknologi.'
+        ],
+        jawaban: [3],
+        penjelasan: 'Kata "berekspansi" bermakna meluas atau menjangkau lebih luas. Dalam konteks kalimat, maksudnya adalah penyebaran podcast akan meluas secara global, menjangkau lebih banyak pendengar. Opsi D paling tepat karena menggambarkan perluasan jangkauan. Opsi lain tidak sesuai dengan makna ekspansi.'
+    });
+
+    soalData.push({
+        id: 6, tipe: 'Multiple', bacaan: baca2,
+        teks: 'Manakah pernyataan yang menunjukkan hubungan pertentangan berdasarkan isi teks? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Podcast berkembang karena kemajuan teknologi, sedangkan media tradisional menurun karena masih mengandalkan sistem lama.',
+            'B. Podcast mampu membentuk komunitas baru, sedangkan media konvensional hanya dinikmati secara pribadi.',
+            'C. Podcast memberikan kebebasan memilih informasi, sedangkan radio konvensional terikat jadwal siaran.',
+            'D. Podcast dapat digunakan sebagai media hiburan, sedangkan radio hanya menyampaikan informasi edukatif.',
+            'E. Podcast menawarkan fleksibilitas, sedangkan media konvensional memiliki keterbatasan akses.'
+        ],
+        jawaban: [2, 4],
+        penjelasan: 'Teks secara eksplisit menyatakan pertentangan antara podcast dan radio: podcast memberi kebebasan memilih (tidak terikat jadwal) sedangkan radio terikat jadwal (opsi C). Juga disebutkan bahwa podcast dapat diakses kapan saja, sementara media konvensional memiliki keterbatasan akses (opsi E). Opsi A tidak didukung teks (media tradisional tidak disebut menurun), B dan D tidak disebutkan sebagai pertentangan.'
+    });
+
+    // --- BACAAN 3 (Cerpen Pak Pos) untuk soal 7-9 ---
+    const baca3 = `Lain lagi suatu waktu, ketika Saiman melintas di depan sebuah rumah, seorang perempuan muda yang lain memberhentikan sepedanya. Dengan kaget Saiman mengerem dan berhenti persis di depan perempuan itu.
+
+"Adakah surat untuk saya?" tanya perempuan muda itu.
+
+"Surat?" tanya Salmah, sambil turun dari sepedanya untuk memeriksa surat bawaannya.
+
+"Berwarna merah muda," kata perempuan itu. Dengan cermat, Saiman memeriksa semua surat berwarna merah muda yang ada di tasnya.
+
+"Wah, tidak ada, Neng, barangkali amplopnya berwarna lain."
+
+"Tidak kok, Pak, coba diteliti dulu, soalnya dalam surat terakhir saya, saya minta agar dia membalasnya dengan amplop berwarna merah muda," ujar perempuan itu.
+
+Lima kali Saiman membolak-balik tumpukan surat beramplop merah muda, namun hasilnya tetap sama. "Wah, barangkali besok baru sampai. Sabar ya, Neng, kalau ada, pasti saya antar," ujar Saiman mendinginkan. Begitulah, Saiman memang punya jawaban yang memuaskan kepada perempuan-peempuan muda yang tengah menantikan kabar dari seseorang nun jauh di sana.
+
+Tapi agaknya tidak untuk sekarang. Sejak meluasnya teknologi, pemuda-pemudi di kecamatan kami seolah melupakan Saiman. Tak ada lagi perempuan muda dengan wajah penuh harapan yang muncul di kantor pos untuk menitipkan surat beramplop merah muda. Begitu juga, tak ada lagi, orang yang nyaris kehilangan kesabaran penantian, menghentikan sepeda Saiman di tengah jalan.
+
+Saiman menjauh loker dan keranjang yang sudah melompong. Empat bulan sudah kantor itu tak beroperasi. Selama itu pula Pak Idris telah meyakinkan kepada pegawai-pegawai di sana bahwa, lebih baik bagi pegawai-pegawai itu pindah dan mencari pekerjaan baru. Termasuk kepada Saiman.
+
+Di depan sebuah meja, Saiman tertegun melihat bantalan dan stempel cap kantor pos yang sudah dipak rapi dalam sebuah kardus mi instan. Dahulu, si Karto, teman sejawatnya selalu berada di bangku ini. Dengan semangat, Karto menghantamkan lalu stempel ke amplop surat-surat yang siap dikirim. Pekerjaan itu dilakukan Karto dari pagi hingga siang hari.
+
+Sumber: Hujan Tarigan, "Pak Pos" dalam Si Murai dan Orang Gila, Kepustakaan Populer Gramedia, 2010`;
+
+    soalData.push({
+        id: 7, tipe: 'Pilihan Ganda', bacaan: baca3,
+        teks: 'Pernyataan yang paling tepat untuk menggambarkan inti rangkaian kejadian yang dialami tokoh Saiman dalam kutipan cerpen tersebut adalah . . .',
+        opsi: [
+            'A. Tokoh Saiman menyaksikan perubahan fungsi kantor pos setelah terjadi peralihan teknologi komunikasi yang digunakan oleh masyarakat.',
+            'B. Tokoh Saiman menghadapi berakhirnya aktivitas kantor pos dan masa bekerjanya akibat perubahan cara berkomunikasi masyarakat.',
+            'C. Tokoh Saiman menyadari bahwa semua pegawai kantor pos harus mengikuti saran pimpinan untuk mencari pekerjaan lain.',
+            'D. Tokoh Saiman mengenang masa-masa sibuk melayani jasa surat-menyurat ketika masih ramai didatangi masyarakat.',
+            'E. Tokoh Saiman melihat berkurangnya aktivitas surat-menyurat sehingga perlengkapan kantor tidak lagi digunakan.'
+        ],
+        jawaban: [1],
+        penjelasan: 'Inti cerita adalah Saiman, seorang pak pos, menghadapi kenyataan bahwa kantor pos tutup dan pekerjaannya berakhir karena masyarakat beralih ke teknologi komunikasi modern. Opsi B mencakup kedua aspek: berakhirnya aktivitas kantor pos dan perubahan cara berkomunikasi. Opsi A hanya menyebut perubahan fungsi, C hanya saran pimpinan, D hanya kenangan, E hanya perlengkapan – semuanya kurang utuh.'
+    });
+
+    soalData.push({
+        id: 8, tipe: 'Multiple', bacaan: baca3,
+        teks: 'Berdasarkan kutipan cerita, apa konflik batin yang dialami tokoh Saiman? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Tokoh Saiman dilanda kebimbangan atas masa depannya setelah kantor pos berhenti beroperasi.',
+            'B. Tokoh Saiman merasa kehilangan peran yang selama ini membuat dirinya dibutuhkan masyarakat.',
+            'C. Tokoh Saiman mengalami pergulatan batin untuk menerima perubahan yang membuat pekerjaannya tidak relevan.',
+            'D. Tokoh Saiman merasa kecewa karena rekan-rekan kerjanya tidak lagi menunjukkan semangat bekerja seperti dulu.',
+            'E. Tokoh Saiman menyesali berkurangnya kesempatan bertemu dengan orang-orang yang dahulu sering menggunakan jasa kantor pos.'
+        ],
+        jawaban: [0, 1, 2],
+        penjelasan: 'Konflik batin Saiman tercermin dari: (A) kebimbangan atas masa depan karena kantor pos tutup; (B) kehilangan peran sebagai pak pos yang dibutuhkan; (C) pergulatan menerima perubahan yang membuat pekerjaannya tidak relevan. Opsi D tidak disebutkan (rekan kerja tidak digambarkan kecewa), dan E tidak menjadi fokus konflik batin utama.'
+    });
+
+    soalData.push({
+        id: 9, tipe: 'Multiple', bacaan: baca3,
+        teks: 'Apa kemungkinan yang terjadi jika tokoh Saiman tidak mengikuti saran tokoh Pak Idris? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Tokoh Saiman diminta membantu membersihkan barang-barang perlengkapan kantor pos.',
+            'B. Tokoh Saiman berada di lingkungan kerja yang aktivitasnya makin berkurang dari waktu ke waktu.',
+            'C. Tokoh Saiman akan menghadapi ketidakpastian karena kantor pos sudah lama tidak beroperasi.',
+            'D. Tokoh Saiman dapat menunggu jumlah layanan meningkat dan kembali menjalankan tugasnya.',
+            'E. Tokoh Saiman berpotensi mengalami kesulitan ekonomi dari penghasilan yang diperolehnya.'
+        ],
+        jawaban: [1, 2, 4],
+        penjelasan: 'Jika Saiman tidak mengikuti saran Pak Idris (untuk pindah mencari pekerjaan baru), maka ia akan tetap di kantor pos yang sudah tidak beroperasi (B), menghadapi ketidakpastian karena tidak ada aktivitas (C), dan berpotensi kesulitan ekonomi karena tidak ada penghasilan (E). Opsi A adalah tindakan yang mungkin dilakukan, tetapi bukan konsekuensi dari tidak mengikuti saran. Opsi D tidak realistis karena layanan surat sudah ditinggalkan.'
+    });
+
+    // --- BACAAN 4 (Novel Pak Barkah) untuk soal 10-11 ---
+    const baca4 = `Pada saat itu Pak Barkah telah mengetahui Pambudi tinggal di kota yang sama, Yogyakarta, karena pemuda itu sendiri telah dua kali mengunjungi Pak Barkah. Menurut pendapat pemimpin Redaksi Kalawarta itu, Pambudi tidak terlalu banyak berbeda dengan Pendi Toba. Anak dari Tanggir itu kemauannya keras. Pengetahuan umumnya baik. Kejujurannya sangat tampak. Dan satu hal lain yang tak dapat dipungkiri oleh Pak Barkah, Pambudi menyimpan semacam obligasi moral pada harian Kalawarta. Jadi Pambudi sangat patut mengisi lowongan yang ditinggalkan oleh si Pendi itu. Masalahnya, apakah Pambudi suka bergabung dengan keluarga Kalawarta atau tidak. Begitulah pikiran Pak Barkah pada akhirnya.
+
+"Dik Pambudi," kata Pak Barkah pada suatu malam di rumahnya. "Aku menghendaki hubungan yang lebih hidup di antara kita berdua. Bagaimana kalau kau kuminta menggantikan Pendi Toba?"
+
+"Pak, saya tidak yakin pada kemampuan saya sendiri dalam bidang jurnalistik. Apakah mungkin seorang pelayan toko tiba-tiba berubah menjadi jurnalis? Kedua, sebentar lagi bila lulus saya harus kuliah."
+
+"Oh, aku melihat pintu perundingan telah terbuka. Dik Pambudi, sungguh benar kata-katamu tadi. Tidak gampang menjadi seorang wartawan dadakan. Tetapi jangan kaulupakan, bahwa yang membuka pintu bagimu adalah aku sendiri, pemimpin Redaksi Kalawarta. Jadi soalnya tinggal padamu, mau atau tidak menerima tawaranku itu. Percayalah, aku telah memikirkan sejauh mungkin sebelum memutuskan tawaran itu padamu. Tugasmu yang pertama nanti adalah meneruskan pekerjaan yang telah dimulai Pendi Toba. Kau tidak akan bekerja dari nol. Data yang telah berhasil dikumpulkan oleh Pendi Toba sudah lengkap dan berbobot pula. Nanti kau dapat membacanya sendiri. Dan aku sama sekali tidak ingin menghalangimu masuk ke perguruan tinggi. Malah aku akan membantu sebuah bisnis-bisnis. Kuberitahu sekarang, biar bagaimana pun jeleknya, aku ini seorang sarjana publisistik. Selain memimpin Kalawarta, aku juga mengajar di universitas yang ingin kaumasuk. Seandainya nilai ujianmu bukan yang terburuk, percayalah, tahun pelajaran mendatang kau sudah menjadi mahasiswa. Paham?"
+
+Sumber: Ahmad Tohari, Di Kaki Bukit Cibalok, Gramedia Pustaka Utama, 2014`;
+
+    soalData.push({
+        id: 10, tipe: 'Pilihan Ganda', bacaan: baca4,
+        teks: 'Dalam kutipan novel tersebut terdapat kata-kata serapan dari bahasa asing, seperti obligasi, jurnalistik, redaksi, universitas, dan publisistik. Pernyataan yang tepat mengenai penggunaan kata serapan dalam teks adalah . . .',
+        opsi: [
+            'A. Kata jurnalistik merupakan kata serapan dari bahasa Arab yang bermakna kegiatan tulis-menulis secara umum.',
+            'B. Kata publisistik merupakan kata serapan dari bahasa Latin yang bermakna ilmu teknik cetak-mencetak secara modern.',
+            'C. Kata obligasi merupakan kata serapan dari bahasa Latin, obligatio, yang bermakna kewajiban atau ikatan batin.',
+            'D. Kata redaksi merupakan kata serapan dari bahasa Belanda, redactie, yang bermakna bagian percetakan dan distribusi surat kabar.',
+            'E. Kata universitas merupakan kata serapan dari bahasa Belanda, universiteit, yang bermakna lembaga pendidikan tinggi.'
+        ],
+        jawaban: [2],
+        penjelasan: 'Kata "obligasi" berasal dari bahasa Latin "obligatio" yang berarti kewajiban atau ikatan. Dalam teks, "obligasi moral" merujuk pada ikatan batin Pambudi terhadap harian Kalawarta. Opsi A salah (jurnalistik bukan dari Arab), B salah (publisistik bukan tentang percetakan), D salah (redaksi adalah bagian editorial, bukan percetakan/distribusi), E salah (universitas digunakan dalam konteks kuliah, bukan mengembangkan harian).'
+    });
+
+    soalData.push({
+        id: 11, tipe: 'Tabel', bacaan: baca4,
+        teks: 'Tokoh dalam cerita digambarkan memiliki karakter yang berbeda-beda. Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan tentang karakter tokoh berikut:',
+        tabel: {
+            header: ['Pernyataan', 'Tepat', 'Tidak Tepat'],
+            rows: [
+                { pernyataan: 'Tokoh Pak Barkah digambarkan sebagai pemimpin yang otoriter, terbukti dari caranya menyampaikan tawaran dengan memaksa kepada tokoh Pambudi.', benar: 1 },
+                { pernyataan: 'Tokoh Pambudi digambarkan memiliki karakter yang kuat dan jujur, sebagaimana ditunjukkan melalui narasi yang menyebut kemauannya keras, pengetahuan umumnya baik, dan kejujuran yang sangat tampak.', benar: 0 },
+                { pernyataan: 'Tokoh Pak Barkah digambarkan sebagai sosok yang strategis dan persuasif, tercermin dari cara ia merespons keberatan tokoh Pambudi dengan menawarkan solusi yang konkret.', benar: 0 }
+            ]
+        },
+        jawaban: [1, 0, 0],
+        penjelasan: 'Pernyataan 1 TIDAK TEPAT: Pak Barkah tidak memaksa, ia menawarkan dan meyakinkan dengan argumen. Pernyataan 2 TEPAT: Narasi menyebutkan kemauan keras, pengetahuan baik, dan kejujuran Pambudi. Pernyataan 3 TEPAT: Pak Barkah merespons keberatan Pambudi dengan solusi (data siap, bantuan kuliah) sehingga ia strategis dan persuasif.'
+    });
+
+    // --- BACAAN 5 (Laut) untuk soal 12-15 ---
+    const baca5 = `Laut Menentukan Masa Depan Manusia
+
+Laut harus dijaga karena laut berperan penting bagi kelangsungan hidup manusia. Kerusakan laut secara langsung berdampak negatif bagi banyak aspek kehidupan. Asupan makanan terancam, sumber mata pencarian terguncang, dan kemampuan bumi menyerap karbon melemah. Menyelamatkan laut adalah cara untuk menyelamatkan masa depan umat manusia.
+
+Menurut Staf Khusus Menko Perekonomian Bidang Pangan, 54 persen lebih kebutuhan protein kita dipenuhi sektor perikanan. Fakta menunjukkan bahwa laut menyediakan lebih dari separuh asupan protein hewani bagi masyarakat Indonesia. Artinya, keberlangsungan hidup jutaan orang sangat bergantung pada ekosistem laut yang sehat. Namun, stabilitas laut terancam karena adanya pihak yang memandang laut hanya sebagai sumber eksploitasi. Keadaan tersebut diperparah dengan adanya polusi dan perubahan iklim. Jika eksploitasi terus dilakukan secara berlebihan dan regulasi tidak diperlukan, ekosistem laut terancam. Krisis pangan bisa terjadi secara masif dan mata pencarian jutaan nelayan terganggu. Laut seharusnya menjadi pilar pertumbuhan ekonomi yang inklusif. Oleh karena itu, laut harus dikelola secara bijak melalui sektor ekonomi biru.
+
+Secara ekologis, kesehatan laut menentukan kesehatan iklim. Maka dari itu, melindungi laut berarti juga melindungi kestabilan iklim. Jika laut rusak, komunitas pesisir dan perempuan menjadi kelompok yang paling terdampak. Oleh karena itu, diperlukan komitmen global seperti target 30x30. Target tersebut ialah melindungi 30 persen wilayah laut dunia pada tahun 2030. Target ini sulit tercapai jika ketimpangan pengelolaan dan lemahnya penegakan hukum masih terjadi. Nasib manusia memang tidak sepenuhnya ditentukan oleh laut. Akan tetapi, tanpa laut yang sehat, masa depan manusia akan sangat suram. Jadi, kolaborasi lintas sektor antara pemerintah, masyarakat lokal, swasta, dan internasional harus diperkuat.
+
+Sumber: Ichwan Susanto, Kompas.id, 2025`;
+
+    soalData.push({
+        id: 12, tipe: 'Pilihan Ganda', bacaan: baca5,
+        teks: 'Perhatikan paragraf kedua dan paragraf ketiga dalam teks tersebut. Hubungan makna antarparagraf yang paling tepat adalah . . .',
+        opsi: [
+            'A. Paragraf ketiga membantah pernyataan tentang penentuan masa depan Indonesia berdasarkan kelangsungan ekosistem laut.',
+            'B. Paragraf ketiga menyajikan bukti tentang pentingnya menjaga laut untuk memenuhi kebutuhan protein hewani masyarakat Indonesia.',
+            'C. Paragraf ketiga menjelaskan penyebab terjadinya krisis pangan yang dipaparkan dalam paragraf kedua sebagai akibat rusaknya ekosistem laut.',
+            'D. Paragraf ketiga memaparkan solusi dan penegasan bahwa sektor ekonomi biru merupakan solusi untuk mengatasi masalah yang diprediksi pada paragraf kedua.',
+            'E. Paragraf ketiga memperluas pembahasan pada paragraf kedua dengan menjelaskan dampak kerusakan laut terhadap kestabilan iklim dan kelompok sosial yang rentan.'
+        ],
+        jawaban: [4],
+        penjelasan: 'Paragraf kedua membahas peran laut sebagai sumber protein dan ancaman eksploitasi. Paragraf ketiga memperluas dengan membahas dampak ekologis (iklim) dan sosial (komunitas pesisir, perempuan) serta pentingnya kolaborasi. Jadi hubungannya adalah perluasan pembahasan, bukan pembantahan, bukti, penjelasan penyebab, atau solusi spesifik (ekonomi biru disebut di paragraf 2).'
+    });
+
+    soalData.push({
+        id: 13, tipe: 'Pilihan Ganda', bacaan: baca5,
+        teks: 'Berdasarkan teks, kejadian yang paling mungkin terjadi apabila kolaborasi lintas sektor dalam pengelolaan laut hanya dilakukan sebagian pihak adalah . . .',
+        opsi: [
+            'A. Target perlindungan laut dunia lebih mudah tercapai karena pengambilan keputusan dapat dilakukan secara lebih sederhana dan terbatas.',
+            'B. Krisis pangan masif dapat direkam karena kelompok masyarakat lokal mampu mengambil alih peran penegakan hukum di wilayah pesisir.',
+            'C. Program pengembangan ekonomi melalui sektor ekonomi biru berjalan efektif karena mengandalkan pasokan dari masyarakat.',
+            'D. Upaya perlindungan laut berjalan kurang optimal sehingga kerusakan ekosistem tetap terjadi dan mengancam kehidupan manusia.',
+            'E. Ketergantungan masyarakat terhadap sumber daya laut berkurang karena pihak yang bersangkutan telah mengatasi kekurangan.'
+        ],
+        jawaban: [3],
+        penjelasan: 'Jika kolaborasi hanya dilakukan sebagian pihak, maka upaya perlindungan laut tidak akan optimal. Hal ini akan menyebabkan kerusakan ekosistem terus berlanjut dan mengancam kehidupan manusia. Opsi D adalah konsekuensi logis dari kurangnya kolaborasi. Opsi lain bertentangan dengan logika atau tidak didukung teks.'
+    });
+
+    soalData.push({
+        id: 14, tipe: 'Pilihan Ganda', bacaan: baca5,
+        teks: 'Dalam teks tersebut digunakan sejumlah kata serapan dari bahasa asing. Manakah pernyataan tentang penggunaan kata serapan asing yang tidak sesuai teks?',
+        opsi: [
+            'A. Kata protein berasal dari bahasa Belanda, proteine. Kata ini digunakan secara tepat untuk menggambarkan asupan nutrisi yang didapatkan dari sektor ekonomi biru.',
+            'B. Kata polusi berasal dari bahasa Inggris, pollution. Kata ini digunakan secara tepat untuk menjelaskan faktor utama pemicu kehancuran mata pencaharian nelayan di wilayah pesisir.',
+            'C. Kata inklusif berasal dari bahasa Inggris, inclusive. Kata ini digunakan secara tepat untuk menegaskan bahwa pertumbuhan ekonomi biru harus dapat dirasakan seluruh lapisan masyarakat secara adil.',
+            'D. Kata ekologis berasal dari bahasa Inggris, ecological. Kata ini digunakan secara tepat untuk menjelaskan argumen mengenai hubungan timbal balik antara kesehatan laut dan stabilitas iklim global.',
+            'E. Kata kolaborasi berasal dari bahasa Belanda, collaborative. Kata ini digunakan secara tepat untuk merujuk pada kerja sama yang wajib diperkuat oleh seluruh sektor demi menyelamatkan masa depan laut.'
+        ],
+        jawaban: [4],
+        penjelasan: 'Pernyataan E tidak sesuai karena "kolaborasi" berasal dari bahasa Latin "collaborare" melalui bahasa Inggris "collaboration", bukan dari bahasa Belanda "collaborative" (yang merupakan bentuk adjektiva). Meskipun makna "kerja sama" tepat, asal-usul yang disebutkan keliru. Opsi lain benar baik asal-usul maupun makna.'
+    });
+
+    soalData.push({
+        id: 15, tipe: 'Tabel', bacaan: baca5,
+        teks: 'Berdasarkan teks, tentukan Sesuai atau Tidak Sesuai untuk setiap simpulan berikut:',
+        tabel: {
+            header: ['Simpulan', 'Sesuai', 'Tidak Sesuai'],
+            rows: [
+                { pernyataan: 'Sektor perikanan merupakan sektor yang berkontribusi terhadap ketahanan pangan nasional Indonesia saat ini.', benar: 0 },
+                { pernyataan: 'Perubahan iklim dan polusi hanya memengaruhi kondisi ekosistem laut dan tidak berdampak pada mata pencarian masyarakat nelayan.', benar: 1 },
+                { pernyataan: 'Kolaborasi antara pemerintah, masyarakat, swasta, dan pihak internasional diperlukan karena tantangan perlindungan laut bersifat lintas sektor.', benar: 0 }
+            ]
+        },
+        jawaban: [0, 1, 0],
+        penjelasan: 'Simpulan 1 SESUAI: teks menyebut 54% protein dari perikanan, sehingga berkontribusi pada ketahanan pangan. Simpulan 2 TIDAK SESUAI: teks menyebut eksploitasi, polusi, dan iklim mengancam mata pencarian nelayan. Simpulan 3 SESUAI: teks menekankan perlunya kolaborasi lintas sektor karena tantangan yang kompleks.'
+    });
+
+    // --- BACAAN 6 (Istano) untuk soal 16-20 ---
+    const baca6 = `Istano Basa Pagaruyung, Ikon Sejarah dan Arsitektur Minangkabau
+
+Di Sumatra Barat, terdapat tiga daerah yang dianggap sebagai pusat persebaran kebudayaan Minangkabau. Pada masa lampau, daerah tersebut dijuluki luhak nan tigo. Daerah tersebut adalah Kabupaten Agam, Lima Puluh Kota, dan Tanah Datar. Di sana berdiri pemerintahan konfederasi yang disebut sebagai Kerajaan Pagaruyung. Salah satu peninggalan sejarah yang masih tersisa dari Kerajaan Pagaruyung adalah sebuah istana. Istana tersebut terletak di Nagari Pagaruyung, Kecamatan Tanjung Emas, Batusangkar, Kabupaten Tanah Datar. Istana tersebut bernama resmi Istano Basa Pagaruyung yang berarti 'istana besar Kerajaan Pagaruyung'.
+
+Istano Basa Pagaruyung mengabadikan kemegahan arsitektur dari pusat pemerintahan kerajaan. Istano Basa Pagaruyung juga menjadi kediaman Raja Alam. Istana yang berdiri saat ini merupakan replika. Bangunan yang asli telah dibakar oleh Belanda pada 1804. Bangunan istana berbentuk rumah panggung besar dengan atap khas arsitektur tradisional Minangkabau. Istana ini memiliki tiga tingkat dengan 72 tonggak yang menjadi penyangga utamanya. Terdapat 11 gongon atau pucuk atap yang menghias bagian atas bangunan ini. Seluruh dinding bangunan ini dihiasi ornamen ukiran berwarna-warni. Total ada sekitar 58 jenis motif yang digunakan.
+
+Di dalam istana kerajaan, tiap-tiap tingkat dalam bangunan memiliki fungsi yang berbeda-beda. Tingkat paling bawah merupakan tempat aktivitas utama pemerintahan. Tingkat kedua merupakan ruang aktivitas bagi para putri raja yang belum menikah. Ruangan paling atas menjadi tempat raja dan permaisurinya bersantai sambil melihat kondisi sekitar istana. Ruangan ini disebut anjung peranginan, posisinya terletak di bawah atap gongjong di tengah bangunan. Di ruangan ini terdapat sejumlah koleksi senjata pusaka asli kerajaan yang masih tersisa. Bangunan asli istana ini awalnya berlokasi di Bukit Batu Patah. Setelah insiden 1804, istana ini didirikan kembali. Namun, pada 1966, istana ini terbakar habis kembali. Istana kemudian dibangun kembali dengan memperhatikan arsitektur aslinya di lokasi yang baru.
+
+Sumber: Elsa Dwi Lestari, Indonesia Kaya, 2026`;
+
+    soalData.push({
+        id: 16, tipe: 'Pilihan Ganda', bacaan: baca6,
+        teks: 'Berdasarkan teks, informasi yang paling mendukung pernyataan bahwa Istano Basa Pagaruyung merupakan peninggalan penting Kerajaan Pagaruyung adalah . . .',
+        opsi: [
+            'A. Istana menjadi bangunan yang dirujuk oleh para sejarawan dalam mengkaji peradaban lama Minangkabau.',
+            'B. Istana telah berulang kali dibangun sedemikian rupa supaya mirip dengan bangunan asli yang berbentuk rumah panggung besar.',
+            'C. Istana terletak di wilayah yang secara historis menjadi pusat konfederasi dan mempresentasikan kemegahan arsitektur kerajaan.',
+            'D. Istana difungsikan sebagai kediaman Raja Alam dan merupakan satu-satunya peninggalan fisik Kerajaan Pagaruyung yang masih tersisa.',
+            'E. Istana dikenal luas sebagai objek wisata sejarah unggulan di Sumatra Barat yang menarik perhatian wisatawan domestik dan mancanegara.'
+        ],
+        jawaban: [2],
+        penjelasan: 'Pernyataan C paling mendukung karena teks menyebut bahwa istana terletak di Nagari Pagaruyung, yang merupakan pusat konfederasi Kerajaan Pagaruyung, dan istana mengabadikan kemegahan arsitektur kerajaan. Opsi D salah karena istana saat ini adalah replika, bukan satu-satunya peninggalan. Opsi A dan E tidak disebutkan dalam teks. Opsi B hanya menyebut replika tanpa kaitannya dengan pentingnya peninggalan.'
+    });
+
+    soalData.push({
+        id: 17, tipe: 'Pilihan Ganda', bacaan: baca6,
+        teks: 'Perhatikan kalimat pertama paragraf kedua teks tersebut. Makna kata "mengabadikan" pada kalimat tersebut adalah . . .',
+        opsi: [
+            'A. Melestarikan dan menjaga arsitektur kerajaan sebagai warisan budaya yang hidup dalam lintas generasi.',
+            'B. Membangun kembali istana yang hancur agar wujudnya tidak hilang dari ingatan masyarakat setempat.',
+            'C. Mendokumentasikan seluruh detail arsitektur bangunan melalui foto dan catatan untuk keperluan penelitian sejarah.',
+            'D. Membuat arsitektur istana menjadi bukti fisik yang tercatat dalam dokumen resmi sejarah kebudayaan nasional Indonesia.',
+            'E. Menunjukkan keindahan arsitektur tradisional Minangkabau kepada masyarakat luas sebagai bagian dari promosi budaya.'
+        ],
+        jawaban: [0],
+        penjelasan: 'Kata "mengabadikan" dalam konteks ini berarti melestarikan atau menjaga agar kemegahan arsitektur tetap dikenang dan diwariskan lintas generasi. Opsi A paling tepat karena mencakup aspek pelestarian budaya. Opsi B hanya membangun kembali, C dokumentasi, D pencatatan resmi, E promosi – semuanya kurang tepat karena tidak mencerminkan makna "mengabadikan" sebagai upaya menjaga warisan tetap hidup.'
+    });
+
+    soalData.push({
+        id: 18, tipe: 'Tabel', bacaan: baca6,
+        teks: 'Perhatikan kalimat bercetak tebal dalam teks. Tentukan Benar atau Salah untuk setiap pernyataan tentang keefektifan kalimat tersebut!',
+        tabel: {
+            header: ['Pernyataan', 'Benar', 'Salah'],
+            rows: [
+                { pernyataan: 'Kalimat tersebut sudah efektif karena menyatakan dengan jelas bahwa setiap tingkat bangunan memiliki fungsi yang tidak sama.', benar: 0 },
+                { pernyataan: 'Penggunaan frasa "di dalam istana kerajaan" dan "dalam bangunan" menunjukkan pengulangan informasi yang membuat kalimat kurang efektif.', benar: 1 },
+                { pernyataan: 'Kalimat tersebut tidak efektif karena menggunakan kosakata yang membuat ambigui, kata "berbeda-beda" seharusnya diganti kata "khusus".', benar: 1 }
+            ]
+        },
+        jawaban: [0, 1, 1],
+        penjelasan: 'Kalimat "Di dalam istana kerajaan, tiap-tiap tingkat dalam bangunan memiliki fungsi yang berbeda-beda." sudah efektif dan jelas (Pernyataan 1 BENAR). Frasa "di dalam istana kerajaan" dan "dalam bangunan" tidak mubazir karena merujuk pada dua hal berbeda (istana sebagai kompleks, bangunan sebagai struktur fisik) – Pernyataan 2 SALAH. Kata "berbeda-beda" jelas maknanya, tidak ambigu – Pernyataan 3 SALAH.'
+    });
+
+    soalData.push({
+        id: 19, tipe: 'Pilihan Ganda', bacaan: baca6,
+        teks: 'Pada kalimat terakhir paragraf pertama terdapat kata bernama. Bagaimana penggunaan imbuhan pada kata tersebut?',
+        opsi: [
+            'A. Penggunaan imbuhan ber- pada kata bernama tidak tepat karena dalam teks deskripsi seharusnya digunakan imbuhan ter-.',
+            'B. Penggunaan imbuhan ber- pada kata bernama tepat karena membentuk verba intransitif yang menyatakan keadaan memiliki nama.',
+            'C. Penggunaan imbuhan ber- pada kata bernama tepat karena imbuhan tersebut membentuk verba aktif transitif.',
+            'D. Penggunaan imbuhan ber- pada kata bernama tidak tepat karena seharusnya digunakan imbuhan di-kan.',
+            'E. Penggunaan imbuhan ber- pada kata bernama tepat karena imbuhan tersebut berfungsi menyatakan makna kausatif.'
+        ],
+        jawaban: [1],
+        penjelasan: 'Kata "bernama" dibentuk dari imbuhan ber- + nama, yang berfungsi sebagai verba intransitif yang menyatakan "memiliki nama". Dalam kalimat "Istana tersebut bernama resmi Istano Basa Pagaruyung", penggunaan ini tepat. Opsi B adalah penjelasan yang benar. Opsi A, C, D, E keliru karena menjelaskan fungsi imbuhan yang tidak sesuai.'
+    });
+
+    // --- SOAL TAMBAHAN 20 (dari teks Istano) ---
+    soalData.push({
+        id: 20, tipe: 'Pilihan Ganda', bacaan: baca6,
+        teks: 'Berdasarkan teks, fungsi tingkat kedua Istano Basa Pagaruyung adalah . . .',
+        opsi: [
+            'A. Tempat aktivitas utama pemerintahan kerajaan.',
+            'B. Ruang aktivitas bagi para putri raja yang belum menikah.',
+            'C. Tempat raja dan permaisuri bersantai sambil melihat kondisi sekitar.',
+            'D. Ruang penyimpanan koleksi senjata pusaka kerajaan.',
+            'E. Tempat pertemuan para penghulu dan pemuka adat.'
+        ],
+        jawaban: [1],
+        penjelasan: 'Teks menyebutkan bahwa "Tingkat kedua merupakan ruang aktivitas bagi para putri raja yang belum menikah." Opsi A adalah fungsi tingkat pertama, C dan D adalah fungsi tingkat atas, E tidak disebutkan dalam teks.'
+    });
+
+    // --- BACAAN 7 (Novel Jatisaba) untuk soal 21-23 ---
+    const baca7 = `Bus berguncang-guncang. Tampaknya semakin dekat dengan kampungku. Jalan yang berlubang dan bergelombang menjadi identitas kedua kampungku.
+
+Ingatanku terdampir pada jalan di depan rumah dulu. Jalan yang membelah kampungku itu sebenarnya dipersiapkan menjadi jalan provinsi. Tetapi, tidak ada satu pun kendaraan antarprovinsi yang melewatinya. Hanya bus-bus antardaerah yang mau menggunakan, itu pun sebelum jam 12 siang. Sasaran mereka adalah sedikit anak-anak yang bersekolah di kota, termasuk aku, dan orang-orang yang akan belanja ke pasar.
+
+Setiap tahun, jalan itu dihaluskan. Tetapi, tidak pernah berhasil. Jalan itu tetap menyiksa dengan kerikil-kerikil segitiganya yang tajam. Hampir semua orang di kampungku yakin, sampai kapan pun jalan ini tidak akan pernah halus.
+
+Konon, jalan ini dibangun di atas kuburan leluhur. Demi memenuhi syarat lebar jalan, mereka harus mengurussebagian kuburan. Kala itu, kampungku menjadi seperti kampungzombi dengan bau anyir dan busuk yang tidak tertahankan. Sebagian mayat sudah bersatu dengan tanah, sebagian lagi tinggal tulang-belulang, dan beberapa di antaranya tengah membusuk. Ada yang satu matanya sudah hilang dimakan belantung, ada yang tubuhnya gosong atau berubah posisi, dan banyak lagi cerita yang mungkin tercipta di khayalan orang-orang saja. Waktu itu aku masih kecil. Aku hanya merasakan kenegrian dari cerita ibuku. Oleh karena pemindahan kuburan yang semuanya, arwah-arwah dari mayat itu marah dan mengutuk jalan di kampung halamanku.
+
+Suara bayi menangis membangunkan semua orang di bus. Bangun dari tidur, bangun dari lamunan, bangun dari rencana, dan bangun-bangun yang lain. Bus yang lama hening jadi riuh lagi. Aku memandang lanskap di luar jendela. Aku tak berani memandang lelaki Douglas itu. Aku perhatikan semua yang ada di luarku.
+
+Sumber: Ramayda Akmal, Jatisaba, Grasindo, 2017`;
+
+    soalData.push({
+        id: 21, tipe: 'Pilihan Ganda', bacaan: baca7,
+        teks: 'Simpulan yang paling tepat mengenai konflik yang tergambar dalam paragraf ketiga adalah . . .',
+        opsi: [
+            'A. Konflik terjadi antara keinginan pemerintah provinsi menjadikan jalan sebagai jalur antarkota dan penolakan masyarakat kampung yang tidak menghendaki kampungnya dilewati kendaraan besar.',
+            'B. Konflik terjadi antara upaya pembangunan yang terus diulang setiap tahun dan keyakinan masyarakat bahwa jalan tidak akan pernah mulus akibat mitos penggusuran kuburan.',
+            'C. Konflik terjadi antara kepentingan pembangunan infrastruktur modern yang mengorbankan situs leluhur dan kewajiban masyarakat menjaga warisan budaya.',
+            'D. Konflik terjadi antara generasi tua yang mempertahankan kepercayaan pada kutukan dan generasi muda yang menuntut perbaikan jalan karena alasan logis.',
+            'E. Konflik terjadi antara kondisi jalan kampung yang rusak parah dan kebutuhan warga akan akses transportasi yang layak.'
+        ],
+        jawaban: [1],
+        penjelasan: 'Paragraf ketiga menyatakan bahwa jalan dihaluskan setiap tahun namun tidak pernah berhasil, dan masyarakat meyakini kutukan akibat penggusuran kuburan. Konflik utamanya adalah antara upaya perbaikan (pembangunan) dan keyakinan mistis yang menghambat keberhasilan. Opsi B paling tepat. Opsi lain tidak sesuai dengan isi paragraf ketiga.'
+    });
+
+    soalData.push({
+        id: 22, tipe: 'Multiple', bacaan: baca7,
+        teks: 'Manakah peristiwa dalam kutikan cerita yang memiliki keterkaitan dengan kehidupan masyarakat sehari-hari? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Peristiwa penggusuran kuburan leluhur demi memenuhi syarat lebar jalan mencerminkan fenomena nyata konflik antara kepentingan pembangunan infrastruktur dan penghormatan terhadap situs leluhur.',
+            'B. Peristiwa tidak adanya kendaraan antarprovinsi yang melewati jalan kampung mencerminkan fenomena penolakan masyarakat perdesaan terhadap layanan transportasi publik yang merusak jalan kampung.',
+            'C. Peristiwa jalan kampung yang dihaluskan setiap tahun, tetapi tidak pernah mulus mencerminkan fenomena nyata pembangunan infrastruktur di daerah terpencil yang kerap terhambat oleh berbagai penyebab.',
+            'D. Peristiwa yang menunjukkan hanya sedikit anak-anak bersekolah di kota mencerminkan fenomena nyata ketimpangan akses pendidikan di daerah terpencil disebabkan oleh jarak dan keterbatasan transportasi.',
+            'E. Peristiwa masyarakat kampung yang meyakini jalan tersebut dikutuk oleh arwah leluhur mencerminkan fenomena nyata bahwa kepercayaan mistis selalu menjadi satu-satunya penjelasan yang diterima masyarakat perdesaan ketika menghadapi kegagalan pembangunan.'
+        ],
+        jawaban: [0, 2, 3],
+        penjelasan: 'Peristiwa A (konflik pembangunan vs situs leluhur) relevan dengan kehidupan nyata. C (hambatan pembangunan di daerah terpencil) juga relevan. D (ketimpangan akses pendidikan) relevan. B salah karena tidak ada penolakan masyarakat, melainkan karena jalan rusak. E terlalu absolut ("selalu menjadi satu-satunya") dan tidak sesuai dengan realitas bahwa ada berbagai faktor penyebab.'
+    });
+
+    soalData.push({
+        id: 23, tipe: 'Multiple', bacaan: baca7,
+        teks: 'Berdasarkan kutikan novel, manakah simpulan yang tepat mengenai peristiwa yang dialami tokoh? (Jawaban benar lebih dari satu)',
+        opsi: [
+            'A. Tokoh menyimpulkan bahwa kegagalan perbaikan jalan kampungnya disebabkan semata-mata oleh kutukan arwah leluhur yang marah akibat penggusuran kuburan.',
+            'B. Tokoh sedang dalam perjalanan menuju kampung halamannya dan kondisi jalan yang berguncang memicu lamunan panjang tentang sejarah pembangunan jalan kampungnya.',
+            'C. Tokoh memutuskan untuk tidak kembali lagi ke kampung halamannya karena kenangan tentang penggusuran kuburan leluhur dan kondisi jalan yang buruk telah menimbulkan trauma mendalam sejak masa kecilnya.',
+            'D. Tokoh mengalami nostalgia saat menggunakan bus antardaerah ketika masih bersekolah di kota, peristiwa menunjukkan bahwa sejak kecil tokoh telah terbiasa menempuh perjalanan jauh dengan sarana transportasi yang terbatas.',
+            'E. Tokoh mengalami peralihan antara dua kondisi psikologis secara tiba-tiba, yaitu dari keadaan hanyut dalam lamunan tentang kampung halaman menuju keadaan sadar sepenuhnya ketika suara tangisan bayi memecah keheningan di dalam bus.'
+        ],
+        jawaban: [1, 3, 4],
+        penjelasan: 'Simpulan B benar: tokoh sedang dalam perjalanan dan jalan berguncang memicu lamunan. D benar: tokoh mengingat masa sekolah dengan bus antardaerah. E benar: tokoh hanyut dalam lamunan lalu tersadar oleh tangisan bayi. A salah karena tokoh tidak menyimpulkan semata-mata kutukan, ia hanya menceritakan kepercayaan masyarakat. C salah karena tidak ada indikasi trauma mendalam atau keputusan tidak kembali.'
+    });
+
+    // --- BACAAN 8 (Puisi) untuk soal 24-25 ---
+    const baca8 = `Tiba di Pelabuhan
+Karya: Theresia Rumthe
+
+rambutnya kelabu kabut
+matanya kulit bawang
+di bawah bulan yang nyalang
+telapak tangan benderang dalam katup.
+tak lagi meminta panjang usia
+melainkan lekas pulang.
+benderik hijau daun seng
+satu tanggal gugur dan kalender
+usia berlayar dengan kapal usang
+tiba di pelabuhan.
+tak ada seorang pun menjemput
+hanya semilir angin.
+
+Sumber: Theresia Rumthe, Kadang Rumah Tak Memberimu Pulang, Gramedia Pustaka Utama, 2023`;
+
+    soalData.push({
+        id: 24, tipe: 'Pilihan Ganda', bacaan: baca8,
+        teks: 'Perhatikan larik pada baris kedua puisi. Apa makna kiasan yang terkandung dalam larik tersebut?',
+        opsi: [
+            'A. Memiliki mata yang redup dan kehilangan cahaya sebagai gambaran bahwa ia putus asa dan semangatnya makin memudar.',
+            'B. Memiliki pandangan yang tajam dan penuh kewaspadaan dalam menghadapi setiap persoalan yang datang silih berganti.',
+            'C. Memiliki tatapan yang sayu dan berkaca-kaca sebagai gambaran bahwa ia selalu menangis karena kesedihan dalam hidupnya.',
+            'D. Memiliki mata yang tipis dan hampir tembus pandang sebagai gambaran bahwa usianya sudah sangat tua dan penglihatannya melemah.',
+            'E. Memiliki pandangan yang kosong dan tidak fokus sebagai gambaran bahwa ia sudah kehilangan tujuan hidup yang selama ini dipegang.'
+        ],
+        jawaban: [3],
+        penjelasan: 'Frasa "matanya kulit bawang" menggunakan kiasan untuk menggambarkan mata yang tipis, layu, dan tembus pandang seperti kulit bawang. Ini melambangkan usia tua dan melemahnya penglihatan. Opsi D paling tepat. Opsi lain menambahkan makna emosional (putus asa, menangis, kehilangan tujuan) yang tidak secara langsung terkandung dalam kiasan "kulit bawang".'
+    });
+
+    soalData.push({
+        id: 25, tipe: 'Tabel', bacaan: baca8,
+        teks: 'Berikut beberapa pernyataan terkait respons emosional pembaca terhadap isi puisi "Tiba di Pelabuhan". Tentukan Tepat atau Tidak Tepat untuk setiap pernyataan berikut:',
+        tabel: {
+            header: ['Pernyataan', 'Tepat', 'Tidak Tepat'],
+            rows: [
+                { pernyataan: 'Pembaca merasakan kesedihan yang dalam ketika membaca dua larik terakhir karena larik tersebut menggambarkan kesunyian seseorang saat menghadapi ajal.', benar: 0 },
+                { pernyataan: 'Pembaca merasakan kegelisahan saat membaca larik "satu tanggal gugur dan kalender" karena larik tersebut menggambarkan waktu yang terus berkurang dan tidak dapat ditahan oleh siapa pun.', benar: 0 },
+                { pernyataan: 'Pembaca merasakan ketidakberdayaan saat membaca larik keempat karena larik tersebut menggambarkan tokoh yang pasrah dan tidak dapat menahan datangnya kematian.', benar: 1 }
+            ]
+        },
+        jawaban: [0, 0, 1],
+        penjelasan: 'Pernyataan 1 TEPAT: dua larik terakhir ("tak ada seorang pun menjemput, hanya semilir angin") menggambarkan kesunyian di akhir hayat, menimbulkan kesedihan. Pernyataan 2 TEPAT: larik "satu tanggal gugur dan kalender" mengingatkan pada waktu yang terus berlalu dan kematian, menimbulkan kegelisahan. Pernyataan 3 TIDAK TEPAT: larik keempat ("telapak tangan benderang dalam katup") menggambarkan tangan yang berdoa atau menunggu, bukan ketidakberdayaan atau pasrah terhadap kematian.'
+    });
+
+    // ============================================================
+    //  RENDER ENGINE
+    // ============================================================
+
+    let jawabanPengguna = {};
+    let sudahDiperiksa = {};
+    let currentIndex = 0;
+
+    const container = document.getElementById('soalContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const periksaBtn = document.getElementById('periksaBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function renderSoal(index) {
+        const soal = soalData[index];
+        if (!soal) return;
+
+        let html = `<div class="soal aktif" id="soal-${soal.id}">`;
+        html += `<div class="soal-header">
+                    <span class="soal-nomor">Soal ${soal.id}</span>
+                    <span class="soal-tipe">${soal.tipe}</span>
+                </div>`;
+        if (soal.bacaan) {
+            html += `<div class="bacaan">${soal.bacaan.replace(/\n/g, '<br>')}</div>`;
+        }
+        html += `<div class="soal-teks">${soal.teks}</div>`;
+
+        if (soal.tipe === 'Pilihan Ganda' || soal.tipe === 'Multiple') {
+            const isMultiple = soal.tipe === 'Multiple';
+            const inputType = isMultiple ? 'checkbox' : 'radio';
+            const nameAttr = `q${soal.id}`;
+            html += `<div class="opsi">`;
+            soal.opsi.forEach((op, idx) => {
+                const checked = (jawabanPengguna[soal.id] || []).includes(idx) ? 'checked' : '';
+                const disabled = sudahDiperiksa[soal.id] ? 'disabled' : '';
+                const kelasTambahan = sudahDiperiksa[soal.id] ? getKelasOpsi(soal, idx) : '';
+                html += `<label class="${kelasTambahan} ${sudahDiperiksa[soal.id] ? 'disabled' : ''}">
+                            <input type="${inputType}" name="${nameAttr}" value="${idx}" ${checked} ${disabled}>
+                            <span>${op}</span>
+                        </label>`;
+            });
+            html += `</div>`;
+        } else if (soal.tipe === 'Tabel') {
+            html += `<div class="tabel-container"><table>`;
+            html += `<thead><tr><th>${soal.tabel.header[0]}</th>`;
+            for (let i = 1; i < soal.tabel.header.length; i++) {
+                html += `<th style="text-align:center;min-width:80px;">${soal.tabel.header[i]}</th>`;
+            }
+            html += `</tr></thead><tbody>`;
+            const rows = soal.tabel.rows;
+            rows.forEach((row, rowIdx) => {
+                html += `<tr><td class="pernyataan">${row.pernyataan}</td>`;
+                const cols = soal.tabel.header.length - 1;
+                for (let c = 0; c < cols; c++) {
+                    const isChecked = (jawabanPengguna[soal.id] || [])[rowIdx] === c;
+                    const disabled = sudahDiperiksa[soal.id] ? 'disabled' : '';
+                    html += `<td style="text-align:center;">
+                                <label style="cursor:${sudahDiperiksa[soal.id]?'default':'pointer'};">
+                                    <input type="radio" name="tbl_${soal.id}_${rowIdx}" value="${c}" 
+                                           ${isChecked?'checked':''} ${disabled}
+                                           style="accent-color:#3b82f6;width:16px;height:16px;">
+                                </label>
+                            </td>`;
+                }
+                html += `</tr>`;
+            });
+            html += `</tbody></table></div>`;
+        }
+
+        const showJawaban = sudahDiperiksa[soal.id] || false;
+        html += `<div class="jawaban-box ${showJawaban ? 'muncul' : ''}" id="jawabanBox-${soal.id}">`;
+        html += `<div class="j-kunci">🔑 Kunci Jawaban: <span>${formatJawaban(soal)}</span></div>`;
+        html += `<div class="j-penjelasan">${soal.penjelasan || '—'}</div>`;
+        html += `</div>`;
+        html += `</div>`;
+        container.innerHTML = html;
+
+        // Event listeners
+        if (soal.tipe === 'Pilihan Ganda' || soal.tipe === 'Multiple') {
+            const inputs = container.querySelectorAll(`input[name="q${soal.id}"]`);
+            inputs.forEach(inp => {
+                inp.addEventListener('change', function() {
+                    if (sudahDiperiksa[soal.id]) return;
+                    const key = soal.id;
+                    if (soal.tipe === 'Multiple') {
+                        const checked = [...container.querySelectorAll(`input[name="q${key}"]:checked`)].map(
+                            el => parseInt(el.value));
+                        jawabanPengguna[key] = checked;
+                    } else {
+                        const val = parseInt(this.value);
+                        jawabanPengguna[key] = [val];
+                    }
+                    updateProgress();
+                });
+            });
+        } else if (soal.tipe === 'Tabel') {
+            const radios = container.querySelectorAll('input[type="radio"]');
+            radios.forEach(r => {
+                r.addEventListener('change', function() {
+                    if (sudahDiperiksa[soal.id]) return;
+                    const key = soal.id;
+                    const name = this.name;
+                    const rowIdx = parseInt(name.split('_')[2]);
+                    const val = parseInt(this.value);
+                    if (!jawabanPengguna[key]) jawabanPengguna[key] = [];
+                    jawabanPengguna[key][rowIdx] = val;
+                    updateProgress();
+                });
+            });
+        }
+
+        if (sudahDiperiksa[soal.id]) {
+            container.querySelectorAll('input').forEach(el => el.disabled = true);
+            container.querySelectorAll('.opsi label').forEach((label, idx) => {
+                const kelas = getKelasOpsi(soal, idx);
+                if (kelas) label.classList.add(kelas);
+            });
+        }
+
+        updateProgress();
+        updateNavButtons(index);
+    }
+
+    function getKelasOpsi(soal, idx) {
+        if (!sudahDiperiksa[soal.id]) return '';
+        const benar = soal.jawaban || [];
+        const user = jawabanPengguna[soal.id] || [];
+        const isBenar = benar.includes(idx);
+        const isDipilih = user.includes(idx);
+        if (isBenar) return 'benar';
+        if (isDipilih && !isBenar) return 'salah';
+        return 'tidak-dipilih';
+    }
+
+    function formatJawaban(soal) {
+        if (soal.tipe === 'Pilihan Ganda') {
+            const idx = soal.jawaban[0];
+            return soal.opsi[idx] ? soal.opsi[idx].substring(0, 3) : '—';
+        } else if (soal.tipe === 'Multiple') {
+            return soal.jawaban.map(i => soal.opsi[i] ? soal.opsi[i].substring(0, 3) : '').join(', ');
+        } else if (soal.tipe === 'Tabel') {
+            const header = soal.tabel.header.slice(1);
+            return soal.jawaban.map(v => header[v] || '—').join(' | ');
+        }
+        return '—';
+    }
+
+    function updateProgress() {
+        let terjawab = 0;
+        soalData.forEach(s => {
+            const user = jawabanPengguna[s.id] || [];
+            if (s.tipe === 'Tabel') {
+                const totalRow = s.tabel.rows.length;
+                let filled = 0;
+                for (let i = 0; i < totalRow; i++) {
+                    if (user[i] !== undefined && user[i] !== null && user[i] !== '') filled++;
+                }
+                if (filled === totalRow) terjawab++;
+            } else {
+                if (user.length > 0) terjawab++;
+            }
+        });
+        const total = soalData.length; // 25
+        const pct = Math.round((terjawab / total) * 100);
+        progressBar.style.width = pct + '%';
+        progressText.textContent = `${terjawab} / ${total} terjawab`;
+    }
+
+    function updateNavButtons(index) {
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === soalData.length - 1;
+    }
+
+    function goTo(index) {
+        if (index < 0 || index >= soalData.length) return;
+        currentIndex = index;
+        renderSoal(index);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+    periksaBtn.addEventListener('click', function() {
+        const soal = soalData[currentIndex];
+        if (!soal) return;
+        const user = jawabanPengguna[soal.id] || [];
+        if (soal.tipe === 'Tabel') {
+            const totalRow = soal.tabel.rows.length;
+            let filled = 0;
+            for (let i = 0; i < totalRow; i++) {
+                if (user[i] !== undefined && user[i] !== null && user[i] !== '') filled++;
+            }
+            if (filled < totalRow) {
+                alert('Silakan isi semua pilihan pada tabel terlebih dahulu.');
+                return;
+            }
+        } else {
+            if (user.length === 0) {
+                alert('Silakan pilih jawaban terlebih dahulu.');
+                return;
+            }
+        }
+        sudahDiperiksa[soal.id] = true;
+        renderSoal(currentIndex);
+        const box = document.getElementById(`jawabanBox-${soal.id}`);
+        if (box) box.classList.add('muncul');
+        updateProgress();
+    });
+
+    resetBtn.addEventListener('click', function() {
+        if (!confirm('Reset semua jawaban untuk soal ini?')) return;
+        const soal = soalData[currentIndex];
+        delete jawabanPengguna[soal.id];
+        delete sudahDiperiksa[soal.id];
+        renderSoal(currentIndex);
+        updateProgress();
+    });
+
+    renderSoal(0);
+    updateProgress();
+</script>
+</body>
+</html>
