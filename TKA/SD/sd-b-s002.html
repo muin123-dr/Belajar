@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis TKA Bahasa Indonesia - Kelas 6 SD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .question-card {
+            background: #fdf6e3;
+            border: 2px solid #ffe082;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #ff9f43;
+            color: white;
+            font-weight: 900;
+            padding: 5px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: #ffffff;
+            border: 2px solid #48dbfb;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #48dbfb;
+            color: white;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background: #1dd1a1 !important;
+            border-color: #1dd1a1 !important;
+            color: white !important;
+        }
+
+        .option-btn.wrong {
+            background: #ff6b6b !important;
+            border-color: #ff6b6b !important;
+            color: white !important;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .feedback.correct-bg {
+            background: #d4efdf;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.wrong-bg {
+            background: #fadbd8;
+            border: 2px solid #e74c3c;
+        }
+
+        .status {
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .status.correct-text { color: #27ae60; }
+        .status.wrong-text { color: #e74c3c; }
+
+        .explanation {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #2c3e50;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 24px; }
+            .question-text { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚀 Kuis TKA Bahasa Indonesia</h1>
+    <p class="subtitle">Materi: Pemahaman Tekstual Kelas 6 SD</p>
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const questions = [
+        // Bab 1: Informasi Tersurat (1-6)
+        {
+            q: "Bacalah teks berikut!<br><em>'Budi pergi ke perpustakaan pada hari Sabtu untuk meminjam buku cerita.'</em><br>Kapan Budi pergi ke perpustakaan?",
+            options: ["Hari Minggu", "Hari Sabtu", "Untuk meminjam buku", "Ke perpustakaan"],
+            answer: 1,
+            explanation: "Jawaban tersurat (tertulis jelas) pada teks adalah 'hari Sabtu' untuk menunjukkan kapan peristiwa itu terjadi."
+        },
+        {
+            q: "Teks: <em>'Tanah longsor terjadi karena hujan deras yang mengguyur desa sejak malam.'</em><br>Mengapa tanah longsor terjadi?",
+            options: ["Karena ada desa", "Karena malam hari", "Karena hujan deras", "Karena tanahnya kering"],
+            answer: 2,
+            explanation: "Kata tanya 'Mengapa' menanyakan sebab. Pada teks tertulis jelas sebabnya adalah 'hujan deras'."
+        },
+        {
+            q: "Kata tanya yang tepat untuk mengetahui <b>tokoh</b> di dalam sebuah cerita fiksi adalah...",
+            options: ["Bagaimana", "Kapan", "Di mana", "Siapa"],
+            answer: 3,
+            explanation: "Kata tanya 'Siapa' (Who) selalu digunakan untuk menanyakan orang, tokoh, atau pelaku dalam cerita."
+        },
+        {
+            q: "Informasi dalam teks nonfiksi (seperti artikel berita) selalu berisi tentang...",
+            options: ["Khayalan", "Fakta dan kenyataan", "Dongeng hewan", "Mitos"],
+            answer: 1,
+            explanation: "Teks nonfiksi adalah karangan yang dibuat berdasarkan kenyataan, fakta, atau hal yang benar-benar terjadi dalam kehidupan sehari-hari."
+        },
+        {
+            q: "Teks: <em>'Sinta membaca buku ensiklopedia di taman belakang rumah.'</em><br>Informasi 'di taman belakang rumah' menjawab pertanyaan...",
+            options: ["Siapa?", "Kapan?", "Di mana?", "Apa?"],
+            answer: 2,
+            explanation: "Taman belakang rumah adalah sebuah tempat. Kata tanya untuk menanyakan tempat adalah 'Di mana'."
+        },
+        {
+            q: "Manakah rumusan yang sering kita gunakan untuk menemukan informasi penting dalam teks?",
+            options: ["ADiKSiMBa (Apa, Di mana, Kapan, Siapa, Mengapa, Bagaimana)", "Do Re Mi Fa Sol", "Kiri Kanan Atas Bawah", "Membaca dengan cepat saja"],
+            answer: 0,
+            explanation: "Rumus ADiKSiMBa (5W1H) sangat ampuh untuk menggali semua informasi penting dalam sebuah teks bacaan."
+        },
+
+        // Bab 2: Kosakata (7-13)
+        {
+            q: "Kata <b>khusus</b> dari kata umum 'Hewan Peliharaan' adalah...",
+            options: ["Tumbuhan", "Kandang", "Kucing", "Makanan"],
+            answer: 2,
+            explanation: "Kata umum mencakup hal yang luas (Hewan peliharaan). Kucing adalah salah satu jenis (kata khusus) dari hewan peliharaan."
+        },
+        {
+            q: "Pak Tono membawa <b>buah tangan</b> dari Bandung. Makna konotatif (kiasan) dari 'buah tangan' adalah...",
+            options: ["Buah yang berbentuk tangan", "Tangan yang memegang buah", "Oleh-oleh", "Minuman manis"],
+            answer: 2,
+            explanation: "'Buah tangan' adalah ungkapan/kiasan (makna konotatif) yang memiliki arti oleh-oleh."
+        },
+        {
+            q: "Kata dasar dari kata berimbuhan <em>'membaca'</em> adalah...",
+            options: ["Membac", "Baca", "Aca", "Bacan"],
+            answer: 1,
+            explanation: "Kata 'membaca' berasal dari awalan 'me-' + kata dasar 'baca'."
+        },
+        {
+            q: "Berikut ini yang merupakan contoh <b>kata konkret</b> (bisa dilihat/disentuh) adalah...",
+            options: ["Kasih sayang", "Kepintaran", "Meja belajar", "Kebahagiaan"],
+            answer: 2,
+            explanation: "Kata konkret adalah kata yang bendanya nyata, bisa dipegang, dilihat, atau dirasakan panca indra. Meja belajar bisa dilihat dan disentuh."
+        },
+        {
+            q: "Teks: <em>'Bisa ular kobra itu sangat mematikan.'</em><br>Makna kata 'bisa' pada kalimat di atas adalah...",
+            options: ["Mampu", "Sanggup", "Racun", "Boleh"],
+            answer: 2,
+            explanation: "Dalam konteks kalimat tersebut, kata 'bisa' berarti racun. Bukan bermakna 'mampu' atau 'dapat'."
+        },
+        {
+            q: "Dika selalu <b>cuci tangan</b> setiap kali ada masalah di kelompoknya. Makna konotatif 'cuci tangan' adalah...",
+            options: ["Membersihkan tangan dengan sabun", "Tidak mau bertanggung jawab", "Rajin menjaga kebersihan", "Mencari makan"],
+            answer: 1,
+            explanation: "Sebagai kiasan, 'cuci tangan' berarti tidak mau ikut campur atau tidak mau bertanggung jawab atas suatu masalah."
+        },
+        {
+            q: "Kata <b>umum</b> dari Mawar, Melati, Anggrek, dan Tulip adalah...",
+            options: ["Pohon", "Daun", "Bunga", "Rumput"],
+            answer: 2,
+            explanation: "Mawar, Melati, Anggrek, dan Tulip adalah nama-nama (kata khusus) yang masuk ke dalam kelompok Bunga (kata umum)."
+        },
+
+        // Bab 3: Identifikasi Objek (14-19)
+        {
+            q: "Benda ini berbentuk tabung kecil, berisi tinta, dan digunakan anak sekolah untuk menulis di buku. Benda apakah ini?",
+            options: ["Penghapus", "Penggaris", "Pulpen", "Rautan"],
+            answer: 2,
+            explanation: "Kata kunci 'berisi tinta' dan 'untuk menulis' sangat jelas menggambarkan sebuah pulpen."
+        },
+        {
+            q: "Tempat ini memiliki banyak sekali rak. Orang datang ke sini untuk membaca dan meminjam buku. Tempat apakah ini?",
+            options: ["Pasar", "Rumah Sakit", "Perpustakaan", "Terminal"],
+            answer: 2,
+            explanation: "Rak buku dan kegiatan membaca/meminjam buku adalah ciri utama perpustakaan."
+        },
+        {
+            q: "Hewan ini memiliki belalai yang panjang, telinga yang lebar, dan tubuh yang sangat besar. Hewan apakah ini?",
+            options: ["Jerapah", "Gajah", "Harimau", "Kuda Nil"],
+            answer: 1,
+            explanation: "Belalai panjang dan telinga lebar adalah ciri fisik (kosakata yang menggambarkan objek) dari seekor gajah."
+        },
+        {
+            q: "Kendaraan ini beroda empat, menggunakan bensin, dan dikemudikan oleh seorang sopir. Objek ini adalah...",
+            options: ["Sepeda motor", "Becak", "Mobil", "Kereta api"],
+            answer: 2,
+            explanation: "Roda empat dan dikemudikan sopir adalah deskripsi dari objek mobil."
+        },
+        {
+            q: "Kosakata <em>'segar, berwarna hijau, dipetik di pegunungan, dan diseduh dengan air panas'</em> biasanya menggambarkan objek...",
+            options: ["Kopi", "Teh", "Susu", "Jus Jeruk"],
+            answer: 1,
+            explanation: "Teh berwarna hijau (daun teh), dipetik di kebun teh pegunungan, dan penyajiannya diseduh air panas."
+        },
+        {
+            q: "Benda ini sering dipakai di kepala saat siang hari untuk melindungi dari panas terik matahari. Objek tersebut adalah...",
+            options: ["Sepatu", "Topi", "Kacamata", "Jam tangan"],
+            answer: 1,
+            explanation: "Benda yang dipakai di kepala dan melindungi dari panas matahari adalah topi."
+        },
+
+        // Bab 4: Ikhtisar/Bagan (20-25)
+        {
+            q: "Inti sari dari sebuah teks bacaan yang ditulis secara lebih singkat dinamakan...",
+            options: ["Ikhtisar (Ringkasan)", "Karangan", "Puisi", "Pantun"],
+            answer: 0,
+            explanation: "Ikhtisar atau ringkasan adalah bentuk singkat dari sebuah teks tanpa menghilangkan inti atau informasi utamanya."
+        },
+        {
+            q: "Apa langkah pertama yang harus dilakukan saat membuat ikhtisar?",
+            options: ["Langsung menulis", "Menghafal teks", "Membaca seluruh teks dengan teliti", "Menggambar bagan"],
+            answer: 2,
+            explanation: "Kamu tidak bisa meringkas kalau tidak tahu isi teksnya. Jadi, langkah pertama adalah membaca seluruh teks dengan teliti."
+        },
+        {
+            q: "Penyajian informasi menggunakan kotak-kotak dan garis panah agar mudah diingat disebut...",
+            options: ["Paragraf", "Bagan / Peta Pikiran", "Buku harian", "Kamus"],
+            answer: 1,
+            explanation: "Bagan atau peta pikiran (mind map) adalah cara visual (gambar) menyusun informasi dengan kotak dan garis cabang."
+        },
+        {
+            q: "Perhatikan bagan berikut:<br><b>Ulat &rarr; Kepompong &rarr; Kupu-kupu</b><br>Bagan tersebut menunjukkan informasi tentang proses...",
+            options: ["Metamorfosis kupu-kupu", "Cara membuat baju", "Jenis-jenis serangga", "Makanan hewan"],
+            answer: 0,
+            explanation: "Bagan urutan tersebut menunjukkan proses perubahan bentuk (metamorfosis) dari ulat menjadi kupu-kupu."
+        },
+        {
+            q: "Tujuan utama menyajikan teks yang panjang menjadi bentuk bagan/diagram adalah agar...",
+            options: ["Teks terlihat lebih panjang", "Informasi lebih mudah dan cepat dipahami", "Teks menjadi lebih sulit dibaca", "Buku menjadi lebih tebal"],
+            answer: 1,
+            explanation: "Bagan meringkas teks yang panjang menjadi visual yang singkat, sehingga kita lebih mudah dan cepat memahaminya saat belajar."
+        },
+        {
+            q: "Untuk membuat ikhtisar dari beberapa paragraf, kita harus mencari <b>ide pokok</b>. Biasanya ide pokok terdapat pada...",
+            options: ["Hanya di huruf pertama", "Judul saja", "Awal atau akhir paragraf", "Tanda titik"],
+            answer: 2,
+            explanation: "Ide pokok (gagasan utama) dalam sebuah paragraf sering kali terletak pada awal kalimat (deduktif) atau di akhir kalimat (induktif)."
+        }
+    ];
+
+    const quizContainer = document.getElementById('quiz-container');
+
+    questions.forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        // Question text
+        const qText = `
+            <div class="question-number">Soal ${index + 1} / 25</div>
+            <div class="question-text">${q.q}</div>
+        `;
+
+        // Options
+        const optionsDiv = document.createElement('div');
+        optionsDiv.className = 'options-container';
+
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.className = 'feedback';
+        feedbackDiv.id = `feedback-${index}`;
+
+        q.options.forEach((opt, optIndex) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `${String.fromCharCode(65 + optIndex)}. ${opt}`;
+            
+            btn.onclick = () => {
+                // Disable all buttons in this question
+                const allBtns = optionsDiv.querySelectorAll('.option-btn');
+                allBtns.forEach(b => b.disabled = true);
+
+                if (optIndex === q.answer) {
+                    btn.classList.add('correct');
+                    feedbackDiv.classList.add('correct-bg');
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.innerHTML = `
+                        <div class="status correct-text">🎉 BENAR!</div>
+                        <div class="explanation"><b>Kunci Jawaban:</b> ${q.options[q.answer]}<br><br>${q.explanation}</div>
+                    `;
+                } else {
+                    btn.classList.add('wrong');
+                    // Highlight correct answer
+                    allBtns[q.answer].classList.add('correct');
+                    
+                    feedbackDiv.classList.add('wrong-bg');
+                    feedbackDiv.style.display = 'block';
+                    feedbackDiv.innerHTML = `
+                        <div class="status wrong-text">❌ SALAH!</div>
+                        <div class="explanation"><b>Kunci Jawaban:</b> ${q.options[q.answer]}<br><br>${q.explanation}</div>
+                    `;
+                }
+            };
+            optionsDiv.appendChild(btn);
+        });
+
+        card.innerHTML = qText;
+        card.appendChild(optionsDiv);
+        card.appendChild(feedbackDiv);
+        
+        quizContainer.appendChild(card);
+    });
+</script>
+
+</body>
+</html>
