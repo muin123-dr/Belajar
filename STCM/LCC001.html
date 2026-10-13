@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#2b5fd9">
+<title>Cerdas Cermat STCM 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ DASAR ============ */
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  min-height:100vh;
+  font-family:'Fredoka','Baloo 2','Segoe UI',system-ui,sans-serif;
+  background:linear-gradient(160deg,#3b1e6e 0%,#2b5fd9 45%,#12b3c8 100%);
+  background-attachment:fixed;
+  color:#1f2937;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+button,a{user-select:none;-webkit-user-select:none;}
+::selection{background:#facc15;color:#1e293b;}
+
+/* ============ ORNAMEN LATAR ============ */
+.ornaments{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.orn{position:absolute;bottom:-90px;animation:floatUp linear infinite;}
+.orn.circle{border-radius:50%;}
+.orn.star{clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.orn.tri{clip-path:polygon(50% 0%,100% 100%,0% 100%);}
+.orn.square{border-radius:22%;}
+@keyframes floatUp{
+  0%{transform:translateY(0) rotate(0deg);}
+  100%{transform:translateY(-125vh) rotate(400deg);}
+}
+
+/* ============ HALAMAN ============ */
+#app{position:relative;z-index:2;}
+.page{
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;
+  gap:14px;padding:22px 16px 46px;
+  position:relative;z-index:2;
+}
+.page.center{justify-content:center;}
+
+/* ============ HEADER ============ */
+.header{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;z-index:3;}
+.logo{
+  width:clamp(84px,23vw,150px);height:auto;display:block;
+  filter:drop-shadow(0 10px 22px rgba(0,0,0,.38));
+  animation:bob 3.2s ease-in-out infinite;
+}
+.logo.small{width:clamp(46px,6vh,74px);}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+.title{
+  margin:0;font-size:clamp(22px,5.6vw,46px);font-weight:700;color:#fff;
+  text-align:center;letter-spacing:.5px;line-height:1.15;
+  text-shadow:0 3px 0 rgba(0,0,0,.18),0 10px 26px rgba(0,0,0,.4);
+}
+.title.small{font-size:clamp(14px,2.2vh,26px);text-shadow:0 2px 0 rgba(0,0,0,.2);}
+.hint{
+  color:rgba(255,255,255,.92);font-size:clamp(12px,3.2vw,15px);
+  text-align:center;max-width:440px;margin:8px 0 0;line-height:1.5;
+  text-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+
+/* ============ TOMBOL ============ */
+.menu{display:flex;flex-direction:column;gap:16px;width:min(420px,92vw);margin-top:16px;}
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:18px 24px;border:none;border-radius:20px;
+  font-family:inherit;font-size:clamp(18px,4.6vw,22px);font-weight:600;
+  color:#fff;cursor:pointer;text-decoration:none;text-align:center;
+  box-shadow:0 7px 0 rgba(0,0,0,.22),0 16px 28px rgba(0,0,0,.28);
+  transition:transform .12s ease,box-shadow .12s ease,filter .2s;
+  position:relative;overflow:hidden;
+}
+.btn::after{
+  content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+  transform:skewX(-20deg);animation:shine 3.6s ease-in-out infinite;
+}
+@keyframes shine{0%,70%{left:-70%;}100%{left:130%;}}
+.btn:hover{filter:brightness(1.08);}
+.btn:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.22),0 6px 14px rgba(0,0,0,.25);}
+.btn-p1{background:linear-gradient(180deg,#4facfe,#1d6fe0);}
+.btn-p2{background:linear-gradient(180deg,#ffd166,#f0910b);}
+.btn-juri{background:linear-gradient(180deg,#ff7b7b,#d92d2d);}
+.btn-siap{background:linear-gradient(180deg,#4ade80,#16a34a);width:100%;margin-top:20px;}
+.btn-start{background:linear-gradient(180deg,#a855f7,#6d28d9);padding:20px 48px;font-size:clamp(19px,3vw,26px);margin-top:6px;}
+
+/* ============ KARTU ============ */
+.card{
+  position:relative;z-index:3;width:min(660px,94vw);
+  background:rgba(255,255,255,.97);
+  border-radius:28px;padding:clamp(20px,3.4vw,34px);
+  box-shadow:0 26px 60px rgba(0,0,0,.38);
+  border:4px solid rgba(255,255,255,.65);
+  animation:popIn .38s cubic-bezier(.2,1.4,.5,1);
+}
+@keyframes popIn{from{transform:scale(.93);opacity:0;}to{transform:scale(1);opacity:1;}}
+.card{text-align:center;}
+
+.badge{
+  display:inline-block;padding:9px 22px;border-radius:999px;color:#fff;
+  font-weight:600;font-size:clamp(15px,3.6vw,19px);margin-bottom:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
+.badge.p1{background:linear-gradient(180deg,#4facfe,#1d6fe0);}
+.badge.p2{background:linear-gradient(180deg,#ffd166,#f0910b);}
+
+/* ============ INPUT ============ */
+.field{display:flex;flex-direction:column;gap:9px;text-align:left;}
+.field label{font-size:clamp(16px,3.8vw,20px);font-weight:600;color:#334155;}
+.input{
+  width:100%;padding:15px 18px;font-size:clamp(17px,4.2vw,20px);
+  font-family:inherit;color:#0f172a;background:#f8fafc;
+  border:3px solid #cbd5e1;border-radius:16px;outline:none;transition:.2s;
+}
+.input:focus{border-color:#2563eb;background:#fff;box-shadow:0 0 0 5px rgba(37,99,235,.18);}
+.input.shake{animation:shake .45s;border-color:#ef4444;background:#fef2f2;}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}20%{transform:translateX(-9px);}
+  40%{transform:translateX(9px);}60%{transform:translateX(-6px);}80%{transform:translateX(6px);}
+}
+
+/* ============ MENUNGGU ============ */
+.waiting{display:flex;flex-direction:column;align-items:center;gap:16px;padding:12px 0;}
+.spinner{
+  width:74px;height:74px;border-radius:50%;
+  border:8px solid #e2e8f0;border-top-color:#2563eb;border-right-color:#22c55e;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ============ KUIS ============ */
+.quiz-card{width:min(780px,96vw);}
+.quiz-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.pill{
+  background:#eef2ff;color:#3730a3;padding:9px 18px;border-radius:999px;
+  font-weight:600;font-size:clamp(13px,3.2vw,17px);white-space:nowrap;
+}
+.score-pill{background:#fff7ed;color:#c2410c;}
+.progress{height:14px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-bottom:18px;}
+.progress-fill{
+  height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,#34d399,#3b82f6);
+  transition:width .45s cubic-bezier(.3,1,.4,1);
+}
+.question{
+  font-size:clamp(34px,10.5vw,66px);font-weight:700;color:#0f172a;
+  text-align:center;padding:14px 6px 24px;letter-spacing:2px;line-height:1.1;
+}
+.question .qm{color:#2563eb;}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.opt{
+  padding:18px 8px;font-size:clamp(24px,7.5vw,38px);font-weight:700;
+  font-family:inherit;color:#1e293b;background:#fff;cursor:pointer;
+  border:4px solid #cbd5e1;border-radius:20px;
+  box-shadow:0 5px 0 #cbd5e1;
+  transition:transform .12s,background .2s,border-color .2s,box-shadow .2s;
+}
+.opt:hover{background:#f1f5f9;}
+.opt:active{transform:translateY(4px);box-shadow:0 1px 0 #cbd5e1;}
+.opt.correct{background:#dcfce7;border-color:#22c55e;color:#15803d;box-shadow:0 5px 0 #22c55e;animation:pulseOk .55s;}
+.opt.wrong{background:#fee2e2;border-color:#ef4444;color:#b91c1c;box-shadow:0 5px 0 #ef4444;animation:shake .45s;}
+@keyframes pulseOk{0%{transform:scale(1);}45%{transform:scale(1.09);}100%{transform:scale(1);}}
+.feedback{min-height:32px;text-align:center;font-size:clamp(16px,4.2vw,22px);font-weight:600;margin-top:16px;}
+.feedback.good{color:#16a34a;}
+.feedback.bad{color:#dc2626;}
+
+/* ============ HALAMAN JURI (PERSIAPAN) ============ */
+.ready-row{
+  display:flex;gap:16px;width:min(920px,96vw);flex-wrap:wrap;
+  justify-content:center;position:relative;z-index:3;margin-top:8px;
+}
+.ready-box{
+  flex:1 1 270px;min-width:230px;border-radius:26px;padding:28px 18px;
+  text-align:center;color:#fff;font-weight:700;letter-spacing:1px;
+  font-size:clamp(17px,2.6vw,27px);line-height:1.35;
+  border:4px solid rgba(255,255,255,.55);
+  box-shadow:0 16px 34px rgba(0,0,0,.32);
+  transition:background .45s,transform .3s;
+}
+.ready-box.prep{background:linear-gradient(180deg,#ef4444,#b91c1c);animation:blink 1.7s ease-in-out infinite;}
+.ready-box.siap{background:linear-gradient(180deg,#22c55e,#15803d);animation:none;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.72;}}
+.ready-name{
+  display:block;font-size:clamp(13px,1.9vw,17px);font-weight:500;
+  opacity:.96;margin-top:9px;letter-spacing:.3px;
+}
+.btn-reset-text{
+  margin-top:18px;background:transparent;border:2px dashed rgba(255,255,255,.6);
+  color:#fff;font-family:inherit;font-size:14px;padding:9px 20px;
+  border-radius:999px;cursor:pointer;opacity:.85;
+}
+.btn-reset-text:hover{opacity:1;background:rgba(255,255,255,.12);}
+
+/* ============ ARENA JURI ============ */
+.arena{position:fixed;inset:0;display:flex;flex-direction:column;z-index:5;}
+.arena-head{
+  display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.5vw,22px);
+  padding:8px 60px 8px 16px;position:relative;
+  background:linear-gradient(180deg,#1e1b4b,#312e81);
+  box-shadow:0 6px 26px rgba(0,0,0,.45);z-index:6;flex:0 0 auto;
+}
+.arena-body{flex:1;display:flex;min-height:0;}
+.panel{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(8px,2vh,26px);position:relative;overflow:hidden;padding:10px;
+}
+.panel-1{background:linear-gradient(180deg,#d3dae3,#94a3b8);}
+.panel-2{background:linear-gradient(180deg,#fde047,#facc15);}
+.panel-tag{
+  font-size:clamp(11px,1.7vh,17px);font-weight:600;letter-spacing:2px;
+  color:rgba(15,23,42,.55);background:rgba(255,255,255,.55);
+  padding:5px 16px;border-radius:999px;
+}
+.score-circle{
+  width:clamp(110px,27vh,270px);aspect-ratio:1;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 28%,#ffffff,#dbe3ec);
+  border:clamp(6px,1.1vh,13px) solid #fff;
+  font-size:clamp(42px,12vh,120px);font-weight:700;color:#1e293b;
+  box-shadow:0 18px 44px rgba(0,0,0,.35),inset 0 -10px 22px rgba(0,0,0,.09);
+  position:relative;line-height:1;
+}
+.score-circle::after{
+  content:'';position:absolute;inset:-15px;border-radius:50%;
+  border:4px dashed rgba(255,255,255,.8);animation:spin 14s linear infinite;
+}
+.score-circle.bump{animation:bump .55s cubic-bezier(.2,1.6,.4,1);}
+@keyframes bump{0%{transform:scale(1);}40%{transform:scale(1.15);}100%{transform:scale(1);}}
+.panel-name{
+  font-size:clamp(17px,3.6vh,36px);font-weight:700;color:#0f172a;
+  background:rgba(255,255,255,.88);padding:10px 28px;border-radius:999px;
+  box-shadow:0 8px 22px rgba(0,0,0,.18);max-width:92%;text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.btn-reset{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border-radius:50%;cursor:pointer;
+  border:2px solid rgba(255,255,255,.5);background:rgba(255,255,255,.14);
+  color:#fff;font-size:22px;line-height:1;font-family:inherit;
+  transition:.2s;
+}
+.btn-reset:hover{background:rgba(255,255,255,.3);transform:translateY(-50%) rotate(-180deg);}
+
+/* ============ OVERLAY JUARA ============ */
+.winner-overlay{
+  position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px;padding:20px;text-align:center;
+  background:radial-gradient(circle at 50% 38%,rgba(255,205,40,.98),rgba(176,74,7,.98));
+  animation:fadeIn .4s ease;
+}
+.winner-overlay.lose-overlay{
+  background:radial-gradient(circle at 50% 38%,rgba(59,130,246,.98),rgba(23,45,110,.98));
+}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.trophy{
+  font-size:clamp(64px,16vh,150px);line-height:1;
+  animation:trophyPop 1s cubic-bezier(.2,1.6,.4,1),floaty 2.4s ease-in-out infinite 1s;
+  filter:drop-shadow(0 14px 26px rgba(0,0,0,.35));
+}
+@keyframes trophyPop{0%{transform:scale(0) rotate(-45deg);}70%{transform:scale(1.28) rotate(9deg);}100%{transform:scale(1) rotate(0);}}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+.winner-title{
+  font-size:clamp(28px,8vh,80px);font-weight:700;color:#fff;letter-spacing:6px;
+  text-shadow:0 5px 0 rgba(0,0,0,.25),0 14px 34px rgba(0,0,0,.45);
+  animation:popIn .6s .3s both;line-height:1.1;
+}
+.winner-name{
+  font-size:clamp(34px,11vh,112px);font-weight:700;color:#fff700;letter-spacing:2px;
+  text-shadow:0 6px 0 #b45309,0 16px 36px rgba(0,0,0,.5);
+  animation:popIn .6s .55s both;line-height:1.1;word-break:break-word;max-width:94vw;
+}
+.winner-sub{
+  font-size:clamp(14px,2.8vh,26px);font-weight:500;color:#fff;opacity:.96;
+  animation:popIn .6s .8s both;line-height:1.4;
+}
+.lose-text{
+  font-size:clamp(26px,7vh,64px);font-weight:700;color:#fff;letter-spacing:1px;
+  text-shadow:0 6px 0 rgba(0,0,0,.28),0 14px 32px rgba(0,0,0,.45);
+  animation:popIn .6s .55s both;line-height:1.15;max-width:94vw;
+}
+
+/* ============ CONFETTI ============ */
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:90;}
+.confetti i{position:absolute;top:-40px;border-radius:3px;animation:fall linear infinite;}
+@keyframes fall{
+  0%{transform:translateY(-40px) rotate(0deg);}
+  100%{transform:translateY(112vh) rotate(760deg);}
+}
+
+/* ============ MODAL ============ */
+.modal-back{
+  position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(15,23,42,.72);backdrop-filter:blur(4px);
+  animation:fadeIn .25s ease;
+}
+.modal{
+  width:100%;max-width:430px;background:#fff;border-radius:28px;
+  padding:32px 26px;text-align:center;
+  box-shadow:0 34px 80px rgba(0,0,0,.5);
+  animation:popIn .38s cubic-bezier(.2,1.5,.5,1);
+}
+.modal .big{font-size:60px;line-height:1;margin-bottom:10px;animation:floaty 1.8s ease-in-out infinite;}
+.modal h2{
+  font-size:clamp(20px,5.2vw,27px);color:#1e293b;margin:0 0 10px;
+  line-height:1.35;font-weight:700;
+}
+.modal p{color:#64748b;margin:0 0 22px;font-size:clamp(14px,3.6vw,16px);}
+.modal .btn{margin-top:0;}
+
+@media (max-width:360px){
+  .options{gap:10px;}
+  .opt{padding:15px 6px;}
+}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+/* =====================================================
+   KONSTANTA & UTILITAS
+   ===================================================== */
+const LOGO = 'https://muin123-dr.github.io/Belajar/LOGOstcm.png';
+const KEY  = 'cerdas_cermat_stcm_2026_v1';
+const MAX_SOAL_BABAK = 30;
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+/* =====================================================
+   STATE (localStorage + BroadcastChannel)
+   ===================================================== */
+const CH = ('BroadcastChannel' in window) ? new BroadcastChannel('ccstcm2026') : null;
+
+function defaultState(){
+  return {
+    p1:{ name:'', ready:false, score:0, idx:0 },
+    p2:{ name:'', ready:false, score:0, idx:0 },
+    started:false,
+    seed1:0,
+    seed2:0,
+    winner:null,
+    winnerName:''
+  };
+}
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){
+      const obj = JSON.parse(raw);
+      const base = defaultState();
+      base.p1 = Object.assign(base.p1, obj.p1 || {});
+      base.p2 = Object.assign(base.p2, obj.p2 || {});
+      base.started    = !!obj.started;
+      base.seed1      = obj.seed1 || 0;
+      base.seed2      = obj.seed2 || 0;
+      base.winner     = obj.winner || null;
+      base.winnerName = obj.winnerName || '';
+      return base;
+    }
+  }catch(e){}
+  return defaultState();
+}
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  if(CH) CH.postMessage({type:'sync'});
+}
+
+let state = load();
+
+/* =====================================================
+   ROUTER
+   ===================================================== */
+let page = 'home';
+let lastSig = '__init__';
+
+const PAGES = ['home','p1','p2','juri'];
+
+function go(){
+  const h = (location.hash || '#home').replace('#','');
+  page = PAGES.includes(h) ? h : 'home';
+  refresh(true);
+}
+
+window.addEventListener('hashchange', go);
+window.addEventListener('storage', e => { if(e.key === KEY) refresh(false); });
+if(CH) CH.onmessage = () => refresh(false);
+
+/* =====================================================
+   REFRESH / RENDER
+   ===================================================== */
+function computeSig(){
+  if(page === 'home') return 'home';
+  if(page === 'juri'){
+    return 'juri|' + (state.p1.ready?1:0) + (state.p2.ready?1:0) +
+           '|' + (state.started?1:0) + '|' + (state.winner || '-');
+  }
+  const p = state[page];
+  return page + '|' + (p.ready?1:0) + '|' + (state.started?1:0) + '|' + (state.winner || '-');
+}
+
+function refresh(force){
+  state = load();
+  const sig = computeSig();
+  if(force || sig !== lastSig){
+    lastSig = sig;
+    fullRender();
+  }else{
+    softUpdate();
+  }
+}
+
+function mutate(fn){
+  state = load();
+  fn(state);
+  save();
+  refresh(false);
+}
+
+function fullRender(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  document.querySelectorAll('.modal-back').forEach(m => m.remove());
+
+  if(page === 'home')      renderHome(app);
+  else if(page === 'p1' || page === 'p2') renderPeserta(app, page);
+  else                     renderJuri(app);
+
+  lastSig = computeSig();
+}
+
+/* =====================================================
+   KOMPONEN UMUM
+   ===================================================== */
+function headerHtml(small){
+  return `<div class="header">
+    <img class="logo ${small?'small':''}" src="${LOGO}" alt="Logo STCM">
+    <h1 class="title ${small?'small':''}">Cerdas Cermat STCM 2026</h1>
+  </div>`;
+}
+
+/* =====================================================
+   HALAMAN BERANDA
+   ===================================================== */
+function renderHome(app){
+  app.innerHTML = `
+    <div class="page center">
+      ${headerHtml()}
+      <div class="menu">
+        <a class="btn btn-p1" href="#p1">Peserta ke-1</a>
+        <a class="btn btn-p2" href="#p2">Peserta ke-2</a>
+        <a class="btn btn-juri" href="#juri">Juri</a>
+      </div>
+      <p class="hint">Peserta ke-1 &amp; ke-2 membuka lewat HP &nbsp;•&nbsp; Juri lewat Laptop / Tablet besar</p>
+    </div>`;
+}
+
+/* =====================================================
+   HALAMAN PESERTA
+   ===================================================== */
+function renderPeserta(app, who){
+  const p = state[who];
+  const label = who === 'p1' ? 'Peserta ke-1' : 'Peserta ke-2';
+
+  /* ---- SUDAH ADA JUARA ---- */
+  if(state.winner){
+    app.innerHTML = resultHtml(who);
+    makeConfetti(document.querySelector('.confetti'));
+    return;
+  }
+
+  /* ---- LOMBA BERJALAN -> SOAL ---- */
+  if(state.started){
+    app.innerHTML = `
+      <div class="page">
+        ${headerHtml()}
+        <div class="card quiz-card">
+          <div class="quiz-top">
+            <div class="pill" id="qLabel">Soal 1</div>
+            <div class="pill score-pill">Skor: <b id="qScore">${p.score}</b></div>
+          </div>
+          <div class="progress"><div class="progress-fill" id="qProg"></div></div>
+          <div class="question" id="qText">…</div>
+          <div class="options" id="qOpts"></div>
+          <div class="feedback" id="qFeed"></div>
+        </div>
+        <p class="hint">${label} &nbsp;•&nbsp; Jawab dengan teliti ya! ✨</p>
+      </div>`;
+    buildQuiz(who);
+    return;
+  }
+
+  /* ---- SUDAH SIAP, MENUNGGU JURI ---- */
+  if(p.ready){
+    app.innerHTML = `
+      <div class="page center">
+        ${headerHtml()}
+        <div class="card">
+          <div class="waiting">
+            <div class="spinner"></div>
+            <div style="font-size:clamp(17px,4.6vw,22px);font-weight:600;color:#1e293b">
+              Menunggu Juri memulai lomba…
+            </div>
+            <div style="font-size:clamp(20px,5.4vw,28px);font-weight:700;color:#2563eb">
+              ${esc(p.name)}
+            </div>
+            <div style="color:#64748b;font-size:clamp(13px,3.5vw,16px)">
+              Tetap tenang &amp; fokus. Kamu pasti bisa! ✨
+            </div>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  /* ---- FORM NAMA ---- */
+  app.innerHTML = `
+    <div class="page center">
+      ${headerHtml()}
+      <div class="card">
+        <div class="badge ${who}">${label}</div>
+        <div class="field">
+          <label for="namaInput">Nama:</label>
+          <input id="namaInput" class="input" type="text" maxlength="24"
+                 placeholder="Tulis namamu di sini…" autocomplete="off">
+        </div>
+        <button id="btnSiap" class="btn btn-siap">Aku Siap!</button>
+      </div>
+    </div>`;
+
+  const inp = document.getElementById('namaInput');
+  const btn = document.getElementById('btnSiap');
+
+  btn.onclick = () => {
+    const nama = inp.value.trim();
+    if(!nama){
+      inp.classList.add('shake');
+      setTimeout(() => inp.classList.remove('shake'), 500);
+      inp.focus();
+      return;
+    }
+    showBismillahModal(nama, who);
+  };
+  inp.addEventListener('keydown', e => { if(e.key === 'Enter') btn.click(); });
+}
+
+function showBismillahModal(nama, who){
+  const back = document.createElement('div');
+  back.className = 'modal-back';
+  back.innerHTML = `
+    <div class="modal">
+      <div class="big">✨</div>
+      <h2>Baca Bismillah,<br>Lomba akan segera dimulai!</h2>
+      <p>Semangat, <b>${esc(nama)}</b>! 🌟</p>
+      <button class="btn btn-siap" id="okModal">Aamiin, Siap!</button>
+    </div>`;
+  document.body.appendChild(back);
+  back.querySelector('#okModal').onclick = () => {
+    back.remove();
+    mutate(s => {
+      s[who].name = nama;
+      s[who].ready = true;
+    });
+  };
+}
+
+/* =====================================================
+   HASIL AKHIR PESERTA
+   ===================================================== */
+function resultHtml(who){
+  const menang = state.winner === who;
+  if(menang){
+    const nama = state[who].name || state.winnerName || 'Peserta';
+    return `
+      <div class="winner-overlay">
+        <div class="confetti"></div>
+        <div class="trophy">🏆</div>
+        <div class="winner-title">SELAMAT!</div>
+        <div class="winner-name">${esc(nama)}</div>
+        <div class="winner-sub">KAMU JUARA CERDAS CERMAT STCM 2026 🎉</div>
+      </div>`;
+  }
+  return `
+    <div class="winner-overlay lose-overlay">
+      <div class="trophy">🌟</div>
+      <div class="winner-title">TETAP SEMANGAT!</div>
+      <div class="lose-text">Maaf kamu belum juara</div>
+      <div class="winner-sub">
+        Juara: <b>${esc(state.winnerName || '-')}</b><br>
+        Kamu sudah berusaha dengan hebat! 💙
+      </div>
+    </div>`;
+}
+
+/* =====================================================
+   GENERATOR SOAL
+   ===================================================== */
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function makeQuestion(rnd){
+  // a + b = hasil antara 1 s/d 50
+  const a = 1 + Math.floor(rnd() * 49);          // 1..49
+  const b = 1 + Math.floor(rnd() * (50 - a));    // 1..(50-a)
+  const ans = a + b;
+
+  const set = new Set([ans]);
+  let guard = 0;
+  while(set.size < 4 && guard++ < 300){
+    const delta = Math.floor(rnd() * 11) - 5;    // -5..+5
+    if(delta === 0) continue;
+    const cand = ans + delta;
+    if(cand < 1 || cand > 60) continue;
+    set.add(cand);
+  }
+  let extra = 60;
+  while(set.size < 4){ set.add(extra++); }
+
+  const arr = Array.from(set);
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(rnd() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return { a, b, ans, options: arr };
+}
+
+let qCache = [], qCacheKey = null;
+function getQ(i, who){
+  const seed = who === 'p1' ? state.seed1 : state.seed2;
+  const key = who + ':' + seed;
+  if(qCacheKey !== key){ qCacheKey = key; qCache = []; }
+  while(qCache.length <= i){
+    const k = qCache.length;
+    const rnd = mulberry32((seed + k * 2654435761) >>> 0);
+    qCache.push(makeQuestion(rnd));
+  }
+  return qCache[i];
+}
+
+/* =====================================================
+   KUIS PESERTA
+   ===================================================== */
+function buildQuiz(who){
+  let idx = state[who].idx || 0;
+  let locked = false;
+
+  const elQ = document.getElementById('qText');
+  const elO = document.getElementById('qOpts');
+  const elL = document.getElementById('qLabel');
+  const elP = document.getElementById('qProg');
+  const elF = document.getElementById('qFeed');
+
+  function show(){
+    const q = getQ(idx, who);
+    elL.textContent = 'Soal ' + (idx + 1);
+    elP.style.width = (((idx % MAX_SOAL_BABAK) + 1) / MAX_SOAL_BABAK * 100) + '%';
+    elQ.innerHTML = `${q.a} + ${q.b} = <span class="qm">?</span>`;
+    elO.innerHTML = '';
+    q.options.forEach(v => {
+      const b = document.createElement('button');
+      b.className = 'opt';
+      b.type = 'button';
+      b.textContent = v;
+      b.onclick = () => choose(v, b, q);
+      elO.appendChild(b);
+    });
+    elF.textContent = '';
+    elF.className = 'feedback';
+  }
+
+  function choose(val, btn, q){
+    if(locked) return;
+    locked = true;
+
+    const benar = (val === q.ans);
+    if(benar){
+      btn.classList.add('correct');
+      elF.textContent = '✅ Benar! +5 poin';
+      elF.className = 'feedback good';
+    }else{
+      btn.classList.add('wrong');
+      elF.textContent = '❌ Belum tepat. Jawaban: ' + q.ans;
+      elF.className = 'feedback bad';
+      Array.from(elO.children).forEach(b => {
+        if(Number(b.textContent) === q.ans) b.classList.add('correct');
+      });
+    }
+
+    mutate(s => {
+      if(benar) s[who].score = Math.min(100, s[who].score + 5);
+      s[who].idx = idx + 1;
+      if(s[who].score >= 100 && !s.winner){
+        s.winner = who;
+        s.winnerName = s[who].name || (who === 'p1' ? 'Peserta ke-1' : 'Peserta ke-2');
+      }
+    });
+
+    setTimeout(() => {
+      if(state.winner) return;      // halaman sudah berganti ke layar juara
+      idx++;
+      locked = false;
+      show();
+    }, 1100);
+  }
+
+  show();
+}
+
+/* =====================================================
+   HALAMAN JURI
+   ===================================================== */
+function renderJuri(app){
+  if(state.started){
+    app.innerHTML = `
+      <div class="arena">
+        <div class="arena-head">
+          <img class="logo small" src="${LOGO}" alt="Logo STCM">
+          <h1 class="title small">Cerdas Cermat STCM 2026</h1>
+          <button class="btn-reset" id="btnReset" title="Ulangi lomba">↻</button>
+        </div>
+        <div class="arena-body">
+          <div class="panel panel-1">
+            <div class="score-circle" id="c1"><span id="s1">${state.p1.score}</span></div>
+            <div class="panel-name" id="n1">${esc(state.p1.name || 'Peserta ke-1')}</div>
+            <div class="panel-tag">PESERTA KE-1</div>
+          </div>
+          <div class="panel panel-2">
+            <div class="score-circle" id="c2"><span id="s2">${state.p2.score}</span></div>
+            <div class="panel-name" id="n2">${esc(state.p2.name || 'Peserta ke-2')}</div>
+            <div class="panel-tag">PESERTA KE-2</div>
+          </div>
+        </div>
+      </div>
+      ${state.winner ? `
+        <div class="winner-overlay">
+          <div class="confetti"></div>
+          <div class="trophy">🏆</div>
+          <div class="winner-title">JUARANYA</div>
+          <div class="winner-name">${esc(state.winnerName)}</div>
+          <div class="winner-sub">Skor 100 &nbsp;•&nbsp; Cerdas Cermat STCM 2026</div>
+        </div>` : ''}`;
+
+    document.getElementById('btnReset').onclick = resetRace;
+    if(state.winner) makeConfetti(document.querySelector('.confetti'));
+    return;
+  }
+
+  /* ---- PERSIAPAN ---- */
+  const b1 = state.p1.ready ? 'siap' : 'prep';
+  const b2 = state.p2.ready ? 'siap' : 'prep';
+
+  app.innerHTML = `
+    <div class="page center">
+      ${headerHtml()}
+      <div class="ready-row">
+        <div class="ready-box ${b1}">
+          Peserta ke-1 ${state.p1.ready ? 'SIAP' : 'PERSIAPAN'}
+          <span class="ready-name">${state.p1.ready ? esc(state.p1.name) : 'Belum siap'}</span>
+        </div>
+        <div class="ready-box ${b2}">
+          Peserta ke-2 ${state.p2.ready ? 'SIAP' : 'PERSIAPAN'}
+          <span class="ready-name">${state.p2.ready ? esc(state.p2.name) : 'Belum siap'}</span>
+        </div>
+      </div>
+      <button class="btn btn-start" id="btnStart">🚀 Mulai Lomba</button>
+      <p class="hint">Tombol bisa ditekan kapan saja. Pastikan kedua peserta sudah <b>SIAP</b>.</p>
+      <button class="btn-reset-text" id="btnReset2">Ulangi / Reset Lomba</button>
+    </div>`;
+
+  document.getElementById('btnStart').onclick = startRace;
+  document.getElementById('btnReset2').onclick = resetRace;
+}
+
+function startRace(){
+  state = load();
+  const belum = [];
+  if(!state.p1.ready) belum.push('Peserta ke-1');
+  if(!state.p2.ready) belum.push('Peserta ke-2');
+  if(belum.length && !confirm(belum.join(' & ') + ' belum menekan tombol "Aku Siap".\nTetap mulai lomba?')) return;
+
+  mutate(s => {
+    s.started = true;
+    s.seed1 = Math.floor(Math.random() * 1000000000) + 1;
+    s.seed2 = Math.floor(Math.random() * 1000000000) + 7;
+    s.p1.score = 0; s.p1.idx = 0;
+    s.p2.score = 0; s.p2.idx = 0;
+    s.winner = null;
+    s.winnerName = '';
+  });
+  qCache = []; qCacheKey = null;
+}
+
+function resetRace(){
+  if(!confirm('Yakin ingin mengulang lomba?\nSemua nama, skor, dan status akan dihapus.')) return;
+  qCache = []; qCacheKey = null;
+  mutate(s => {
+    s.p1 = { name:'', ready:false, score:0, idx:0 };
+    s.p2 = { name:'', ready:false, score:0, idx:0 };
+    s.started = false;
+    s.seed1 = 0; s.seed2 = 0;
+    s.winner = null; s.winnerName = '';
+  });
+}
+
+/* =====================================================
+   SOFT UPDATE (tanpa render ulang total)
+   ===================================================== */
+function softUpdate(){
+  if(page === 'juri' && state.started){
+    [['p1','1'],['p2','2']].forEach(([w, n]) => {
+      const sEl = document.getElementById('s' + n);
+      const cEl = document.getElementById('c' + n);
+      const nEl = document.getElementById('n' + n);
+      if(sEl && sEl.textContent != state[w].score){
+        sEl.textContent = state[w].score;
+        if(cEl){
+          cEl.classList.remove('bump');
+          void cEl.offsetWidth;
+          cEl.classList.add('bump');
+        }
+      }
+      if(nEl) nEl.textContent = state[w].name || ('Peserta ke-' + n);
+    });
+  }
+
+  if((page === 'p1' || page === 'p2') && state.started && !state.winner){
+    const el = document.getElementById('qScore');
+    if(el) el.textContent = state[page].score;
+  }
+}
+
+/* =====================================================
+   CONFETTI
+   ===================================================== */
+function makeConfetti(container){
+  if(!container) return;
+  container.innerHTML = '';
+  const colors = ['#FFD93D','#FF6B6B','#4ECDC4','#A78BFA','#FF9F1C','#6EE7B7','#F472B6','#60A5FA','#ffffff'];
+  for(let i = 0; i < 95; i++){
+    const c = document.createElement('i');
+    c.style.left = (Math.random() * 100) + '%';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDuration = (2.4 + Math.random() * 3.6) + 's';
+    c.style.animationDelay = (-Math.random() * 5) + 's';
+    c.style.width = (6 + Math.random() * 10) + 'px';
+    c.style.height = (10 + Math.random() * 16) + 'px';
+    if(Math.random() < 0.3) c.style.borderRadius = '50%';
+    container.appendChild(c);
+  }
+}
+
+/* =====================================================
+   ORNAMEN LATAR (tanpa gambar makhluk hidup)
+   ===================================================== */
+function makeOrnaments(){
+  const layer = document.createElement('div');
+  layer.className = 'ornaments';
+  const shapes = ['star','circle','tri','square'];
+  const colors = ['#FFD93D','#FF6B6B','#4ECDC4','#A78BFA','#FF9F1C','#6EE7B7','#F472B6','#93C5FD'];
+  for(let i = 0; i < 20; i++){
+    const d = document.createElement('div');
+    d.className = 'orn ' + shapes[Math.floor(Math.random() * shapes.length)];
+    const size = 12 + Math.random() * 36;
+    d.style.width = size + 'px';
+    d.style.height = size + 'px';
+    d.style.left = (Math.random() * 100) + '%';
+    d.style.background = colors[Math.floor(Math.random() * colors.length)];
+    d.style.animationDuration = (11 + Math.random() * 15) + 's';
+    d.style.animationDelay = (-Math.random() * 22) + 's';
+    d.style.opacity = (0.18 + Math.random() * 0.35).toFixed(2);
+    layer.appendChild(d);
+  }
+  document.body.appendChild(layer);
+}
+
+/* =====================================================
+   MULAI
+   ===================================================== */
+makeOrnaments();
+go();
+
+/* Sinkronisasi ringan antar-tab */
+setInterval(() => { if(document.visibilityState === 'visible') refresh(false); }, 1500);
+</script>
+</body>
+</html>
