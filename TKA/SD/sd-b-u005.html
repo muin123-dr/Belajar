@@ -220,6 +220,200 @@
         }
         .btn-retry:hover { background: #d32f2f; }
 
+        /* ==================== ANIMASI JUARA (OVERLAY) ==================== */
+        .champion-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, rgba(63, 81, 181, 0.97) 0%, rgba(15, 10, 50, 0.99) 70%);
+            z-index: 9990;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            overflow: hidden;
+        }
+        .champion-overlay.show { opacity: 1; }
+        .champion-overlay.hide { opacity: 0; }
+        .champion-rays {
+            position: absolute;
+            width: 200vmax;
+            height: 200vmax;
+            border-radius: 50%;
+            background: repeating-conic-gradient(from 0deg,
+                rgba(255, 255, 255, 0.15) 0deg 7deg,
+                transparent 7deg 15deg);
+            animation: spin-rays 14s linear infinite;
+        }
+        @keyframes spin-rays { to { transform: rotate(360deg); } }
+        .champion-glow {
+            position: absolute;
+            width: 70vmin;
+            height: 70vmin;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 202, 40, 0.55) 0%, transparent 65%);
+            animation: glow-pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+        .champion-trophy {
+            font-size: 7rem;
+            line-height: 1;
+            z-index: 2;
+            filter: drop-shadow(0 0 28px rgba(255, 202, 40, 0.95));
+            animation: trophy-pop 0.9s cubic-bezier(0.2, 1.6, 0.4, 1) both,
+                       trophy-float 2s ease-in-out 0.9s infinite;
+        }
+        @keyframes trophy-pop {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            70% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        @keyframes trophy-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-16px) scale(1.06); }
+        }
+        .champion-text {
+            margin-top: 14px;
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #ffca28;
+            text-shadow: 0 0 22px rgba(255, 202, 40, 0.9), 0 5px 0 rgba(0, 0, 0, 0.25);
+            z-index: 2;
+            text-align: center;
+            animation: text-pop 0.7s 0.45s both;
+        }
+        @keyframes text-pop {
+            from { transform: scale(0.2); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .champion-sub {
+            margin-top: 10px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+            padding: 0 24px;
+            z-index: 2;
+            animation: fadeIn 0.6s 1s both;
+        }
+        .champion-stars {
+            margin-top: 16px;
+            font-size: 1.8rem;
+            z-index: 2;
+            letter-spacing: 8px;
+            animation: fadeIn 0.6s 1.2s both;
+        }
+
+        /* ==================== HALAMAN HADIAH ==================== */
+        .prize-screen {
+            margin-top: 22px;
+            padding: 26px 18px 22px;
+            border-radius: 20px;
+            background: linear-gradient(160deg, #ffffff 0%, #f3e5f5 45%, #fff8e1 100%);
+            border: 3px solid #ffca28;
+            box-shadow: 0 14px 40px rgba(63, 81, 181, 0.22);
+            animation: prize-in 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes prize-in {
+            0% { transform: scale(0.75) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .prize-screen::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -60%;
+            width: 220%;
+            height: 220%;
+            background: conic-gradient(from 0deg, transparent 0deg 12deg, rgba(255, 202, 40, 0.16) 12deg 18deg);
+            animation: spin-rays 20s linear infinite;
+            pointer-events: none;
+        }
+        .prize-logo {
+            width: 132px;
+            height: 132px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            animation: bounce 2.2s ease-in-out infinite alternate;
+            filter: drop-shadow(0 10px 22px rgba(63, 81, 181, 0.35));
+        }
+        .prize-title {
+            position: relative;
+            z-index: 1;
+            margin: 12px 0 6px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+            color: #333;
+            text-transform: uppercase;
+        }
+        .prize-title .prize-highlight {
+            display: inline-block;
+            font-size: 2.4rem;
+            background: linear-gradient(90deg, #3f51b5, #9c27b0, #ff9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+            animation: bounce 1.8s ease-in-out infinite alternate;
+        }
+        .prize-note {
+            position: relative;
+            z-index: 1;
+            font-size: 0.9rem;
+            color: #5c6bc0;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .claim-btn {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            padding: 17px 42px;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #fff;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45);
+            margin-top: 18px;
+            animation: pulse-claim 1.7s ease-in-out infinite;
+        }
+        @keyframes pulse-claim {
+            0%, 100% { transform: scale(1); box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45); }
+            50% { transform: scale(1.06); box-shadow: 0 16px 36px rgba(37, 211, 102, 0.65); }
+        }
+        .claim-btn:hover {
+            background: linear-gradient(135deg, #2ee06f, #17a085);
+        }
+        .claim-btn:active { transform: scale(0.97); }
+        .retry-secondary {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin: 14px auto 0;
+            padding: 12px 26px;
+            font-size: 0.9rem;
+            background: #f1f2f6;
+            color: #333;
+            border: 2px solid #cfd8dc;
+            box-shadow: none;
+        }
+        .retry-secondary:hover { background: #e9ecef; box-shadow: none; }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -233,6 +427,13 @@
             h1 { font-size: 24px; }
             .question-text { font-size: 16px; }
             .kategori-table th, .kategori-table td { padding: 8px; font-size: 14px; }
+            .champion-trophy { font-size: 5rem; }
+            .champion-text { font-size: 1.5rem; letter-spacing: 2px; }
+            .champion-sub { font-size: 0.88rem; }
+            .prize-title { font-size: 1rem; }
+            .prize-title .prize-highlight { font-size: 1.9rem; }
+            .prize-logo { width: 108px; height: 108px; }
+            .claim-btn { padding: 15px 30px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -240,8 +441,8 @@
 
 <div class="container">
     <div id="quiz-header">
-        <h1>🌟 Latihan TKA Bahasa Indonesia (Paket 2) 🌟</h1>
-        <p class="subtitle">Persiapan Juara Kelas 6 SD</p>
+        <h1>🌟 Uji Kemampuan TKA Bahasa Indonesia ke-5 🌟</h1>
+        <p class="subtitle">Persiapan Juara TKA SD</p>
     </div>
     <div id="quiz-container"></div>
     
@@ -251,9 +452,8 @@
         <div class="score-circle" id="final-score">100</div>
         <p id="score-message" style="font-size: 18px; font-weight: bold; color: #555;"></p>
         
-        <a id="btn-wa" class="btn-wa" href="#" target="_blank" style="display: none;">
-            Klaim HADIAH 5.000! 🎁
-        </a>
+        <div id="prize-container"></div>
+
         <button id="btn-retry" class="btn-retry" style="display: none;" onclick="location.reload()">
             🔄 ULANGI TES
         </button>
@@ -261,6 +461,14 @@
 </div>
 
 <script>
+    // ==================== KONFIGURASI HADIAH ====================
+    const HADIAH = {
+        logo: 'https://muin123-dr.github.io/Belajar/LOGOstcm.png',
+        nominal: '5.000',
+        waNumber: '6289518938956',
+        waText: '⭐ ALHAMDULILLAH ⭐ \nSaya dapat hadiah 5.000\n\n    - ⭐ -'
+    };
+
     const textFabel = `<b>Penyesalan Ciko si Tupai</b><br>Kiki si semut selalu ramah dan suka berbagi makanan dengan serangga lain. Sebaliknya, Ciko si tupai sangat sombong. Ia sering mengejek Kiki. "Hahaha, tubuhmu kecil sekali, Kiki! Angin bertiup sedikit saja kau pasti terbang!" ejek Ciko sambil memakan kacangnya.<br>Suatu sore, terdengar suara minta tolong dari pinggir hutan. Ternyata, Ciko terjebak di dalam jaring perangkap pemburu! Ia meronta-ronta namun jaring itu terlalu kuat.<br>Mendengar teriakan itu, Kiki segera memanggil kawan-kawan semutnya. Ratusan semut merayap ke jaring dan mulai menggigiti tali jaring itu dengan rahang mereka yang tajam. Lama-kelamaan, jaring itu putus dan Ciko berhasil bebas.<br>"Terima kasih, Kiki. Maafkan aku karena sering mengejekmu. Ternyata tubuh kecilmu menyimpan kekuatan dan hati yang besar," ucap Ciko dengan wajah tertunduk malu.`;
 
     const textInfo = `<b>Manfaat Tidur Siang bagi Anak SD</b><br>Banyak orang mengira tidur siang hanya dibutuhkan oleh bayi atau balita. Padahal, anak usia Sekolah Dasar (SD) juga sangat dianjurkan untuk tidur siang. <br>Durasi tidur siang yang paling baik adalah sekitar 20 hingga 30 menit saja. Jika terlalu lama, anak justru bisa terbangun dengan kepala pusing dan kesulitan tidur di malam hari.<br>Tidur siang memiliki banyak manfaat yang luar biasa. Pertama, tidur siang dapat memulihkan energi setelah lelah belajar di sekolah. Kedua, tidur siang terbukti dapat meningkatkan daya ingat dan konsentrasi. Saat kita tidur, otak merapikan informasi baru yang kita pelajari. Selain itu, anak yang cukup istirahat tubuhnya tidak akan mudah terserang penyakit.`;
@@ -674,20 +882,77 @@
         if (score === 100) {
             document.getElementById('score-message').innerText = "LUAR BIASA! Kamu dapat nilai Sempurna!";
             document.getElementById('champion-icon').style.display = 'block';
-            
-            // Show WA Button
-            const waBtn = document.getElementById('btn-wa');
-            waBtn.style.display = 'inline-block';
-            const waText = encodeURIComponent("Alhamdulillah aku berhasil dapat 100 & Mendapatkan HADIAH 5.000!");
-            // General WA send link so user can pick contact
-            waBtn.href = `https://wa.me/?text=${waText}`;
+            document.getElementById('btn-retry').style.display = 'none';
+
+            // Tampilkan animasi juara dulu, baru halaman hadiah
+            showChampionAnimation(function() {
+                renderPrizeScreen();
+            });
 
             // Trigger Confetti
             fireConfetti();
         } else {
             document.getElementById('score-message').innerText = "Tetap semangat! Yuk coba lagi supaya dapat 100!";
+            document.getElementById('champion-icon').style.display = 'none';
             document.getElementById('btn-retry').style.display = 'inline-block';
         }
+    }
+
+    // ==================== ANIMASI JUARA ====================
+    function showChampionAnimation(onFinish) {
+        const overlay = document.createElement('div');
+        overlay.className = 'champion-overlay';
+        overlay.innerHTML = `
+            <div class="champion-rays"></div>
+            <div class="champion-glow"></div>
+            <div class="champion-trophy">🏆</div>
+            <div class="champion-text">JUARA!</div>
+            <div class="champion-sub">Kamu menjawab SEMUA soal dengan BENAR!<br>Skor Sempurna: 100</div>
+            <div class="champion-stars">⭐ ⭐ ⭐</div>
+        `;
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+
+        requestAnimationFrame(() => overlay.classList.add('show'));
+
+        setTimeout(() => {
+            overlay.classList.add('hide');
+            setTimeout(() => {
+                overlay.remove();
+                document.body.style.overflow = '';
+                if (typeof onFinish === 'function') onFinish();
+            }, 500);
+        }, 3600);
+    }
+
+    // ==================== HALAMAN HADIAH ====================
+    function renderPrizeScreen() {
+        const prizeContainer = document.getElementById('prize-container');
+        if (prizeContainer.querySelector('.prize-screen')) return; // sudah ada
+
+        const prize = document.createElement('div');
+        prize.className = 'prize-screen';
+        prize.innerHTML = `
+            <img class="prize-logo" src="${HADIAH.logo}" alt="Logo">
+            <div class="prize-title">
+                ALHAMDULILLAH<br>
+                KAMU DAPAT HADIAH<br>
+                <span class="prize-highlight">${HADIAH.nominal}</span>
+            </div>
+            <p class="prize-note">🎁 Selamat! Kamu menjawab semua soal dengan benar!</p>
+            <button class="claim-btn" id="claim-btn">🎁 Klaim Hadiah</button>
+            <button class="btn-retry retry-secondary" id="retry-btn-100" onclick="location.reload()">🔄 Ulangi Tes</button>
+        `;
+        prizeContainer.appendChild(prize);
+
+        // Tombol klaim hadiah -> WhatsApp nomor tujuan
+        prize.querySelector('#claim-btn').addEventListener('click', function() {
+            const url = `https://wa.me/${HADIAH.waNumber}?text=${encodeURIComponent(HADIAH.waText)}`;
+            window.open(url, '_blank');
+        });
+
+        // Scroll ke halaman hadiah
+        setTimeout(() => prize.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
     }
 
     function fireConfetti() {
@@ -700,14 +965,14 @@
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#ff9800', '#4caf50', '#00bcd4']
+                colors: ['#ff9800', '#4caf50', '#00bcd4', '#3f51b5', '#9c27b0']
             });
             confetti({
                 particleCount: 5,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#ff9800', '#4caf50', '#00bcd4']
+                colors: ['#ff9800', '#4caf50', '#00bcd4', '#3f51b5', '#9c27b0']
             });
 
             if (Date.now() < end) {

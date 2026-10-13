@@ -218,6 +218,7 @@
             max-height: 200px;
             overflow-y: auto;
             position: relative;
+            white-space: pre-line;
         }
         .reading-text::before {
             content: '📖';
@@ -546,6 +547,209 @@
                 opacity: 0;
             }
         }
+
+        /* ==================== ANIMASI JUARA ==================== */
+        .champion-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, rgba(108, 92, 231, 0.96) 0%, rgba(24, 12, 60, 0.98) 70%);
+            z-index: 9990;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            overflow: hidden;
+        }
+        .champion-overlay.show { opacity: 1; }
+        .champion-overlay.hide { opacity: 0; }
+        .champion-rays {
+            position: absolute;
+            width: 200vmax;
+            height: 200vmax;
+            border-radius: 50%;
+            background: repeating-conic-gradient(from 0deg,
+                rgba(255, 255, 255, 0.16) 0deg 7deg,
+                transparent 7deg 15deg);
+            animation: spin-rays 14s linear infinite;
+        }
+        @keyframes spin-rays {
+            to { transform: rotate(360deg); }
+        }
+        .champion-glow {
+            position: absolute;
+            width: 70vmin;
+            height: 70vmin;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(253, 203, 110, 0.55) 0%, transparent 65%);
+            animation: glow-pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+        .champion-trophy {
+            font-size: 7rem;
+            line-height: 1;
+            z-index: 2;
+            filter: drop-shadow(0 0 28px rgba(253, 203, 110, 0.95));
+            animation: trophy-pop 0.9s cubic-bezier(0.2, 1.6, 0.4, 1) both,
+                       trophy-float 2s ease-in-out 0.9s infinite;
+        }
+        @keyframes trophy-pop {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            70% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        @keyframes trophy-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-16px) scale(1.06); }
+        }
+        .champion-text {
+            margin-top: 14px;
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #fdcb6e;
+            text-shadow: 0 0 22px rgba(253, 203, 110, 0.9), 0 5px 0 rgba(0, 0, 0, 0.25);
+            z-index: 2;
+            text-align: center;
+            animation: text-pop 0.7s 0.45s both;
+        }
+        @keyframes text-pop {
+            from { transform: scale(0.2); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .champion-sub {
+            margin-top: 10px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            padding: 0 24px;
+            z-index: 2;
+            animation: fadeInUp 0.6s 1s both;
+        }
+        .champion-stars {
+            margin-top: 16px;
+            font-size: 1.8rem;
+            z-index: 2;
+            letter-spacing: 8px;
+            animation: fadeInUp 0.6s 1.2s both;
+        }
+
+        /* ==================== HALAMAN HADIAH ==================== */
+        .prize-screen {
+            margin-top: 22px;
+            padding: 26px 18px 22px;
+            border-radius: var(--radius);
+            background: linear-gradient(160deg, #ffffff 0%, #fdf6ff 45%, #fff8e1 100%);
+            border: 3px solid #fdcb6e;
+            box-shadow: 0 14px 40px rgba(108, 92, 231, 0.22);
+            animation: prize-in 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes prize-in {
+            0% { transform: scale(0.75) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .prize-screen::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -60%;
+            width: 220%;
+            height: 220%;
+            background: conic-gradient(from 0deg, transparent 0deg 12deg, rgba(253, 203, 110, 0.16) 12deg 18deg);
+            animation: spin-rays 20s linear infinite;
+            pointer-events: none;
+        }
+        .prize-logo {
+            width: 132px;
+            height: 132px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            animation: bounce-emoji 2.2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 22px rgba(108, 92, 231, 0.35));
+        }
+        .prize-title {
+            position: relative;
+            z-index: 1;
+            margin: 12px 0 6px;
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+            color: #2d3436;
+            text-transform: uppercase;
+        }
+        .prize-title .prize-highlight {
+            display: inline-block;
+            font-size: 2.4rem;
+            background: linear-gradient(90deg, #6C5CE7, #fd79a8, #e17055);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+            animation: bounce-emoji 1.8s ease-in-out infinite;
+        }
+        .prize-note {
+            position: relative;
+            z-index: 1;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .claim-btn {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            padding: 17px 42px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #fff;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45);
+            margin-top: 18px;
+            animation: pulse-claim 1.7s ease-in-out infinite;
+        }
+        @keyframes pulse-claim {
+            0%, 100% { transform: scale(1); box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45); }
+            50% { transform: scale(1.06); box-shadow: 0 16px 36px rgba(37, 211, 102, 0.65); }
+        }
+        .claim-btn:hover {
+            background: linear-gradient(135deg, #2ee06f, #17a085);
+        }
+        .claim-btn:active {
+            transform: scale(0.97);
+        }
+        .retry-secondary {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin: 14px auto 0;
+            padding: 12px 26px;
+            font-size: 0.9rem;
+            background: #f1f2f6;
+            color: var(--text);
+            border: 2px solid var(--border);
+            box-shadow: none;
+        }
+        .retry-secondary:hover {
+            background: #e9ecef;
+            box-shadow: none;
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 10px;
@@ -589,6 +793,13 @@
             .stat-item .stat-value {
                 font-size: 0.95rem;
             }
+            .champion-trophy { font-size: 5rem; }
+            .champion-text { font-size: 1.5rem; letter-spacing: 2px; }
+            .champion-sub { font-size: 0.88rem; }
+            .prize-title { font-size: 1.05rem; }
+            .prize-title .prize-highlight { font-size: 1.9rem; }
+            .prize-logo { width: 108px; height: 108px; }
+            .claim-btn { padding: 15px 30px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -630,6 +841,14 @@
     </div>
 
     <script>
+        // ==================== KONFIGURASI HADIAH ====================
+        const HADIAH = {
+            logo: 'https://muin123-dr.github.io/Belajar/LOGOstcm.png',
+            nominal: '10.000',
+            waNumber: '6289518938956',
+            waText: '⭐ ALHAMDULALLAH ⭐ \nSaya dapat hadiah 10.000\n\n    - ⭐ -'
+        };
+
         // ==================== DATA SOAL ====================
         const bacaan1 = `Sampah Makanan: Masalah Tersembunyi di Piring Kita\n\nIndonesia tercatat sebagai salah satu negara penghasil sampah makanan (food waste) terbesar di dunia. Banyak orang mengira sampah makanan hanya sekadar sisa nasi atau lauk yang tidak habis. Padahal, masalah ini jauh lebih rumit. Sampah makanan terbagi menjadi dua: food loss dan food waste. Food loss adalah hilangnya bahan pangan sebelum sampai ke tangan konsumen, biasanya terjadi saat proses panen, penyimpanan, atau pengiriman karena minimnya teknologi. Sementara itu, food waste adalah makanan layak konsumsi yang dibuang oleh konsumen, seperti sisa makanan di restoran atau rumah tangga.\n\nDampak sampah makanan sangat serius bagi lingkungan. Ketika sisa makanan menumpuk di Tempat Pembuangan Akhir (TPA), ia akan membusuk dan menghasilkan gas metana. Gas ini merupakan salah satu gas rumah kaca yang 25 kali lebih berbahaya daripada karbon dioksida dalam memerangkap panas matahari, sehingga memperparah pemanasan global. Selain itu, membuang makanan sama artinya dengan membuang sumber daya alam seperti air, tanah, dan energi yang digunakan untuk memproduksi makanan tersebut. Oleh karena itu, langkah kecil seperti mengambil makan secukupnya dan menyimpan bahan makanan dengan benar adalah tindakan pahlawan untuk bumi.`;
 
@@ -1601,17 +1820,39 @@
             quizContainer.appendChild(resultScreen);
 
             if (finalScore === 100) {
-                triggerConfetti();
-                const waBtn = document.createElement('button');
-                waBtn.className = 'wa-btn';
-                waBtn.textContent = '🎁 Klaim Hadiah 5.000 via WhatsApp';
-                waBtn.addEventListener('click', function() {
-                    const phone = '6281234567890'; // Ganti dengan nomor WA tujuan
-                    const text = 'Alhamdulillah aku berhasil dapat 100 & Mendapatkan HADIAH 5.000!';
-                    const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+                // ===== SKOR SEMPURNA: ANIMASI JUARA + HALAMAN HADIAH =====
+                const prizeScreen = document.createElement('div');
+                prizeScreen.className = 'prize-screen';
+                prizeScreen.style.display = 'none';
+                prizeScreen.innerHTML = `
+                    <img class="prize-logo" src="${HADIAH.logo}" alt="Logo">
+                    <div class="prize-title">
+                        ALHAMDULILLAH<br>
+                        KAMU DAPAT HADIAH<br>
+                        <span class="prize-highlight">${HADIAH.nominal}</span>
+                    </div>
+                    <p class="prize-note">🎁 Selamat! Kamu menjawab semua soal dengan benar!</p>
+                    <button class="claim-btn" id="claim-btn">🎁 Klaim Hadiah</button>
+                    <button class="retry-btn retry-secondary" id="retry-btn-100">🔄 Ulangi Tes</button>
+                `;
+                resultScreen.appendChild(prizeScreen);
+
+                // Tampilkan animasi juara dulu, baru halaman hadiah
+                showChampionAnimation(function() {
+                    prizeScreen.style.display = 'block';
+                    prizeScreen.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+
+                // Tombol klaim hadiah -> WhatsApp
+                prizeScreen.querySelector('#claim-btn').addEventListener('click', function() {
+                    const url = `https://wa.me/${HADIAH.waNumber}?text=${encodeURIComponent(HADIAH.waText)}`;
                     window.open(url, '_blank');
                 });
-                resultScreen.appendChild(waBtn);
+
+                // Tombol ulangi tes
+                prizeScreen.querySelector('#retry-btn-100').addEventListener('click', function() {
+                    restartQuiz();
+                });
             } else {
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'retry-btn';
@@ -1627,12 +1868,44 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // ==================== ANIMASI JUARA ====================
+        function showChampionAnimation(onFinish) {
+            const overlay = document.createElement('div');
+            overlay.className = 'champion-overlay';
+            overlay.innerHTML = `
+                <div class="champion-rays"></div>
+                <div class="champion-glow"></div>
+                <div class="champion-trophy">🏆</div>
+                <div class="champion-text">JUARA!</div>
+                <div class="champion-sub">Kamu menjawab SEMUA soal dengan BENAR!<br>Skor Sempurna: 100</div>
+                <div class="champion-stars">⭐ ⭐ ⭐</div>
+            `;
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+
+            requestAnimationFrame(() => overlay.classList.add('show'));
+            triggerConfetti();
+
+            setTimeout(() => {
+                overlay.classList.add('hide');
+                setTimeout(() => {
+                    overlay.remove();
+                    document.body.style.overflow = '';
+                    if (typeof onFinish === 'function') onFinish();
+                }, 500);
+            }, 3600);
+        }
+
         function restartQuiz() {
             currentQuestion = 0;
             userAnswers = {};
             checkedQuestions = {};
             score = 0;
             quizCompleted = false;
+
+            // Hapus layar hasil / hadiah jika ada
+            document.querySelectorAll('.result-screen').forEach(el => el.remove());
+
             btnNext.style.display = 'none';
             btnNext.textContent = 'Soal Berikutnya ➡️';
             btnPrev.style.display = 'flex';
@@ -1646,19 +1919,21 @@
         function triggerConfetti() {
             confettiContainer.style.display = 'block';
             const colors = ['#6C5CE7', '#a29bfe', '#fd79a8', '#fdcb6e', '#00b894', '#e17055', '#74b9ff'];
-            for (let i = 0; i < 80; i++) {
+            for (let i = 0; i < 90; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.left = Math.random() * 100 + '%';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 8 + 6) + 'px';
+                confetti.style.height = (Math.random() * 8 + 6) + 'px';
                 confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDelay = Math.random() * 2.5 + 's';
                 confettiContainer.appendChild(confetti);
             }
             setTimeout(() => {
                 confettiContainer.style.display = 'none';
                 confettiContainer.innerHTML = '';
-            }, 6000);
+            }, 6500);
         }
 
         // ==================== EVENT LISTENERS ====================
