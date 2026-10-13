@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan TKA SD Bahasa Indonesia — Paket B</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-light: #a29bfe;
+            --secondary: #fd79a8;
+            --success: #00b894;
+            --success-bg: #e0f7f1;
+            --danger: #e17055;
+            --danger-bg: #fdf0ed;
+            --warning: #fdcb6e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Comic Sans MS', 'Arial Rounded MT Bold', system-ui, sans-serif;
+            background: linear-gradient(135deg, #dfe6e9 0%, #f8f9fa 30%, #e8e0f0 60%, #fce4ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .quiz-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .quiz-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 50%, #fd79a8 100%);
+            border-radius: var(--radius);
+            padding: 25px 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: float-bg 8s ease-in-out infinite;
+        }
+        @keyframes float-bg {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(10%, 10%);
+            }
+        }
+        .quiz-header h1 {
+            font-size: 1.6rem;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .quiz-header .subtitle {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+        .header-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            animation: bounce-emoji 2s ease-in-out infinite;
+        }
+        @keyframes bounce-emoji {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 80px;
+            border: 2px solid var(--border);
+        }
+        .stat-item .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .progress-container {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 10px 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6C5CE7, #a29bfe, #fd79a8);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        .question-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 25px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+            animation: fadeInUp 0.35s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+        }
+        .question-tag {
+            display: inline-block;
+            background: #fdcb6e;
+            color: #2d3436;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+            margin-left: 6px;
+        }
+        .reading-text {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary-light);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #4a5568;
+            line-height: 1.7;
+            max-height: 200px;
+            overflow-y: auto;
+            position: relative;
+        }
+        .reading-text::before {
+            content: '📖';
+            position: absolute;
+            top: -10px;
+            left: -8px;
+            font-size: 1.2rem;
+            font-style: normal;
+        }
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: var(--radius-sm);
+            border: 3px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.25s ease;
+            color: var(--text);
+            font-family: inherit;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f8f0ff;
+            transform: translateX(3px);
+        }
+        .option-btn .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: #f1f2f6;
+            color: var(--text);
+            transition: all 0.25s;
+        }
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #f0edff;
+        }
+        .option-btn.selected .option-letter {
+            background: var(--primary);
+            color: #fff;
+        }
+        .option-btn.correct-reveal {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+        .option-btn.correct-reveal .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+        .option-btn.wrong-reveal {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+        }
+        .option-btn.wrong-reveal .option-letter {
+            background: var(--danger);
+            color: #fff;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .bs-statement {
+            background: #fafafa;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 10px;
+        }
+        .bs-statement p {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .bs-options {
+            display: flex;
+            gap: 10px;
+        }
+        .bs-btn {
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.25s;
+            font-family: inherit;
+        }
+        .bs-btn.selected {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .bs-btn.correct-reveal {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+        .bs-btn.wrong-reveal {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+        .bs-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .check-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+        }
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 15px 18px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: var(--success-bg);
+            border: 3px solid var(--success);
+            color: #008f6b;
+        }
+        .feedback.wrong {
+            background: var(--danger-bg);
+            border: 3px solid var(--danger);
+            color: #c0392b;
+        }
+        .answer-key {
+            margin-top: 10px;
+            padding: 15px 18px;
+            background: #fff8e1;
+            border: 3px dashed #fdcb6e;
+            border-radius: var(--radius-sm);
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        .answer-key.show {
+            display: block;
+        }
+        .answer-key .ak-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #6d4c41;
+            margin-bottom: 6px;
+        }
+        .answer-key .ak-content {
+            font-size: 0.88rem;
+            color: #4a5568;
+            line-height: 1.7;
+        }
+        .answer-key .ak-content strong {
+            color: var(--primary);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 11px 22px;
+            border-radius: 50px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn.prev {
+            background: #f1f2f6;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .nav-btn.next {
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            border: 2px solid var(--primary);
+            display: none;
+        }
+        .nav-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .result-screen {
+            text-align: center;
+            padding: 30px 20px;
+            animation: fadeInUp 0.5s ease;
+        }
+        .result-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce-emoji 1.5s ease-in-out infinite;
+        }
+        .result-score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .result-message {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .wa-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 50px;
+            background: #25D366;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .wa-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+        .retry-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+        }
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+            display: none;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .quiz-header h1 {
+                font-size: 1.2rem;
+            }
+            .question-card {
+                padding: 18px 14px;
+            }
+            .question-text {
+                font-size: 0.95rem;
+            }
+            .option-btn {
+                padding: 11px 13px;
+                font-size: 0.88rem;
+                gap: 8px;
+            }
+            .option-btn .option-letter {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                font-size: 0.85rem;
+            }
+            .reading-text {
+                font-size: 0.82rem;
+                padding: 10px 12px;
+            }
+            .check-btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+            .nav-btn {
+                padding: 9px 16px;
+                font-size: 0.82rem;
+            }
+            .stat-item {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+            .stat-item .stat-value {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Kulit visual Paket B: nuansa jurnal literasi, kontras tenang dan bentuk tegas. */
+        :root {
+            --primary: #176b67;
+            --primary-light: #4fa69a;
+            --secondary: #e0a443;
+            --success: #27805d;
+            --success-bg: #e6f4eb;
+            --danger: #b94e47;
+            --danger-bg: #faece9;
+            --warning: #e7b65c;
+            --bg: #f4f1e9;
+            --card: #fffdf8;
+            --text: #24343a;
+            --text-light: #64747a;
+            --border: #d8ded8;
+            --shadow: 0 7px 22px rgba(27, 55, 52, .08);
+            --radius: 10px;
+            --radius-sm: 7px;
+        }
+        body { background: #f2f0e8; }
+        .quiz-container { max-width: 860px; }
+        .quiz-header {
+            background: #174e50;
+            border-radius: 10px;
+            border-bottom: 5px solid #e0a443;
+            text-align: left;
+            padding: 26px 30px;
+        }
+        .quiz-header::before {
+            background: repeating-linear-gradient(135deg, transparent 0 18px, rgba(255,255,255,.045) 18px 20px);
+            animation: none;
+        }
+        .header-emoji { display: inline-block; margin-right: 12px; font-size: 2rem; animation: none; vertical-align: middle; }
+        .quiz-header h1 { display: inline-block; font-size: 1.7rem; vertical-align: middle; text-shadow: none; }
+        .quiz-header .subtitle { margin-left: 3.1rem; letter-spacing: .04em; }
+        .stat-item, .progress-container, .question-card { border-radius: 8px; box-shadow: 0 3px 12px rgba(27,55,52,.05); }
+        .stat-item { border-width: 1px; }
+        .progress-bar { height: 8px; border-radius: 2px; background: #e7e9e2; }
+        .progress-fill { background: #e0a443; border-radius: 2px; }
+        .question-card { border-width: 1px; border-top: 4px solid #176b67; }
+        .question-number { border-radius: 4px; background: #176b67; }
+        .question-tag { border-radius: 4px; background: #f3e7c9; }
+        .reading-text { background: #f6f4ee; border-left: 4px solid #e0a443; border-radius: 4px; font-style: normal; }
+        .reading-text::before { content: 'BACAAN'; top: -10px; left: auto; right: 8px; font-size: .62rem; letter-spacing: .12em; font-weight: 800; color: #176b67; background: #fffdf8; padding: 2px 6px; }
+        .option-btn { border-width: 1px; border-radius: 7px; }
+        .option-btn:hover { background: #eff7f4; transform: translateX(2px); }
+        .option-btn .option-letter { border-radius: 6px; background: #eef1eb; }
+        .option-btn.selected { background: #e7f2ef; }
+        .bs-statement { background: #faf9f4; border-width: 1px; }
+        .bs-btn { border-radius: 5px; }
+        .check-btn, .nav-btn, .retry-btn, .wa-btn { border-radius: 6px; }
+        .check-btn, .nav-btn.next, .retry-btn { background: #176b67; border-color: #176b67; }
+        .check-btn:hover { box-shadow: 0 6px 18px rgba(23,107,103,.22); }
+        .answer-key { background: #fbf5e7; border: 1px dashed #d2a344; }
+        .result-score { color: #176b67; }
+        @media (max-width: 600px) {
+            .quiz-header { text-align: center; padding: 22px 16px; }
+            .quiz-header .subtitle { margin-left: 0; }
+            .header-emoji { display: block; margin: 0 auto 4px; }
+            .quiz-header h1 { display: block; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="confetti-container" id="confetti-container"></div>
+    <div class="quiz-container" id="quiz-container">
+        <div class="quiz-header">
+            <span class="header-emoji">📝🏆🌟</span>
+            <h1>Uji Kemampuan TKA Bahasa Indonesia ke-2</h1>
+            <p class="subtitle">• SD/MI/Sederajat •</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">📝 Soal: <span class="stat-value" id="current-q-num">1</span>/50</div>
+            <div class="stat-item">✅ Benar: <span class="stat-value" id="correct-count">0</span></div>
+            <div class="stat-item">❌ Salah: <span class="stat-value" id="wrong-count">0</span></div>
+            <div class="stat-item">⭐ Skor: <span class="stat-value" id="score-val">0</span></div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-label"><span>📊 Progres</span><span id="progress-pct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <div class="question-card" id="question-card">
+            <span class="question-number" id="q-number">Soal No. 1</span>
+            <span class="question-tag" id="q-tag"></span>
+            <div class="reading-text" id="q-reading" style="display:none;"></div>
+            <div class="question-text" id="q-text"></div>
+            <div class="options-container" id="options-container"></div>
+            <button class="check-btn" id="check-btn" disabled>Cek Jawaban ✅</button>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-key" id="answer-key"></div>
+            <div class="nav-buttons">
+                <button class="nav-btn prev" id="btn-prev" disabled>⬅️ Sebelumnya</button>
+                <button class="nav-btn next" id="btn-next">Soal Berikutnya ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA SOAL ====================
+        const bacaan1 = "Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.";
+        const bacaan2 = "Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.";
+        const bacaan3 = "Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.";
+        const bacaan4 = "Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.";
+        const questions = [{"type":"single","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Menurut bacaan, apa yang menjadi sumber makanan kupu-kupu?","options":["Daun kering","Nektar bunga","Getah pohon","Biji-bijian"],"correct":1,"explanation":"Paragraf pertama menyebut bunga sebagai sumber nektar yang dibutuhkan kupu-kupu."},{"type":"single","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Ide pokok paragraf kedua adalah ....","options":["Cara membuat kebun yang membantu kupu-kupu dan serangga","Jenis kupu-kupu yang hidup di kota","Alasan jalan raya dibangun","Cara menggunakan pestisida dengan tepat"],"correct":0,"explanation":"Paragraf kedua menjelaskan langkah membuat kebun ramah serangga dan manfaatnya."},{"type":"single","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Mengapa pestisida berlebihan sebaiknya dihindari?","options":["Pestisida membuat bunga tidak berwarna","Pestisida dapat membahayakan kupu-kupu dan serangga lain","Pestisida membuat jalan semakin ramai","Pestisida mengurangi jumlah pot di halaman"],"correct":1,"explanation":"Teks menyatakan bahan pestisida berlebihan dapat membahayakan kupu-kupu dan serangga lain."},{"type":"single","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Makna kata “penyerbukan” dalam bacaan paling dekat dengan ....","options":["Perpindahan serbuk sari yang membantu tumbuhan berkembang biak","Proses bunga berubah menjadi daun","Kegiatan menyiram tanaman","Proses akar menyerap air"],"correct":0,"explanation":"Penyerbukan adalah proses penting dalam perkembangbiakan tumbuhan yang dibantu lebah."},{"type":"single","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Apa yang mungkin terjadi jika banyak warga menanam bunga di halaman?","options":["Kupu-kupu memiliki lebih banyak tempat untuk mencari makan","Semua serangga akan berpindah ke hutan","Jalan di kota menjadi lebih sempit","Tanaman tidak lagi memerlukan air"],"correct":0,"explanation":"Kebun-kebun yang tersebar dapat menjadi jalur tempat kupu-kupu dan serangga mencari makan."},{"type":"multi","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Pilih dua tindakan yang sesuai dengan isi bacaan untuk membantu kupu-kupu.","options":["Menanam beragam bunga","Menggunakan pestisida sesering mungkin","Merawat kebun di rumah atau sekolah","Menutup semua halaman dengan semen"],"correct":[0,2],"explanation":"Menanam bunga beragam dan merawat kebun menyediakan makanan serta tempat singgah bagi kupu-kupu."},{"type":"benarsalah","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Tentukan Benar atau Salah berdasarkan bacaan!","statements":[{"text":"Berkurangnya tanaman berbunga dapat membuat kupu-kupu sulit memperoleh nektar.","correct":true},{"text":"Kebun kecil tidak mungkin memberi manfaat bagi serangga.","correct":false},{"text":"Lebah membantu penyerbukan tanaman.","correct":true}],"explanation":"Teks menerangkan bahwa bunga menyediakan nektar, kebun kecil dapat membentuk jalur mencari makan, dan lebah membantu penyerbukan."},{"type":"multi","tag":"📖 Bacaan 1","reading":"Kebun Kecil untuk Kupu-Kupu\n\nDi beberapa kota, kupu-kupu semakin jarang terlihat. Salah satu penyebabnya adalah berkurangnya tanaman berbunga yang menjadi sumber nektar. Bangunan dan jalan yang terus bertambah juga membuat tempat hidup kupu-kupu menyempit.\n\nWarga dapat membantu dengan membuat kebun kecil di halaman atau pot. Tanamlah bunga yang beragam agar kupu-kupu memperoleh makanan sepanjang tahun. Hindari penggunaan pestisida berlebihan karena bahan tersebut dapat membahayakan kupu-kupu dan serangga lain. Kebun yang terawat juga mengundang lebah, yang membantu penyerbukan tanaman.\n\nWalau ukurannya kecil, kebun di rumah, sekolah, dan taman dapat membentuk jalur tempat serangga mencari makan. Jika banyak warga ikut merawatnya, lingkungan kota akan menjadi lebih ramah bagi kupu-kupu. Menanam bunga bukan hanya memperindah halaman, tetapi juga membantu menjaga keseimbangan alam.","question":"Pilih dua alasan kebun bunga bermanfaat bagi lingkungan kota.","options":["Membantu menyediakan jalur mencari makan bagi serangga","Membuat semua bangunan di kota hilang","Membantu menjaga keseimbangan alam","Menghilangkan kebutuhan air bagi tanaman"],"correct":[0,2],"explanation":"Kebun yang tersebar membantu serangga mencari makan dan dapat mendukung keseimbangan alam."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Di mana tokoh “Aku” menemukan kertas berisi denah sekolah?","options":["Di bawah pohon mangga","Di dalam kotak pensil yang tertinggal","Di ruang kepala sekolah","Di taman dekat gerbang"],"correct":1,"explanation":"Pada awal cerita, kertas ditemukan di dalam kotak pensil yang tertinggal di meja kelas."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Apa yang ditemukan tokoh-tokoh di dekat pohon mangga?","options":["Buku cerita dan pensil","Kotak berisi biji bunga matahari dan pesan","Sekop milik Pak Arif","Layangan merah"],"correct":1,"explanation":"Di bawah pohon mangga terdapat kotak kecil berisi biji bunga matahari dan pesan."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Watak tokoh “Aku” yang tampak dari tindakannya adalah ....","options":["Mudah menyerah dan pemarah","Penasaran serta mau bekerja sama","Suka merusak taman","Takut mencoba hal baru"],"correct":1,"explanation":"Tokoh mengikuti denah karena penasaran, lalu mengajak Sita dan Damar menanam biji bersama."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Mengapa Pak Arif membuat pesan tanpa menyuruh murid secara langsung?","options":["Ia ingin mengajak murid menghijaukan taman dengan cara menarik","Ia tidak tahu nama murid-murid","Ia ingin menyembunyikan sekop","Ia tidak suka taman sekolah"],"correct":0,"explanation":"Pak Arif menjelaskan bahwa pesan itu dibuat untuk mengajak murid menghijaukan taman tanpa menyuruh langsung."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Bagaimana urutan peristiwa yang tepat?","options":["Menemukan kertas – mengikuti denah – menanam biji – tunas muncul","Menanam biji – menemukan kertas – tunas muncul – mengikuti denah","Mengikuti denah – tunas muncul – menemukan kertas – menanam biji","Tunas muncul – menemukan kertas – menanam biji – bertemu Pak Arif"],"correct":0,"explanation":"Urutan pada cerita dimulai saat kertas ditemukan, denah diikuti, biji ditanam, kemudian tunas muncul."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Mengapa tokoh “Aku” tertawa lega pada akhir cerita?","options":["Ia mengetahui bahwa kotak dan pesan itu bagian dari ajakan Pak Arif, bukan sesuatu yang menakutkan","Ia berhasil membawa pulang sekop","Ia melihat layangan terbang tinggi","Ia tidak perlu menyiram tanaman lagi"],"correct":0,"explanation":"Setelah mengetahui asal pesan dari Pak Arif, tokoh memahami kejadian itu dan merasa lega."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Sudut pandang yang digunakan dalam cerita adalah ....","options":["Orang pertama, ditandai penggunaan kata “Aku”","Orang kedua, ditandai kata “kamu”","Orang ketiga, memakai kata “mereka” saja","Campuran orang kedua dan ketiga"],"correct":0,"explanation":"Pencerita menyebut dirinya “Aku”, sehingga cerita menggunakan sudut pandang orang pertama."},{"type":"multi","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Pilih dua nilai positif yang tampak dalam cerita.","options":["Kerja sama merawat tanaman","Membuang biji-bijian di taman","Menjaga dan menghijaukan lingkungan","Bersaing agar menjadi paling terkenal"],"correct":[0,2],"explanation":"Tokoh bekerja sama menanam dan merawat tanaman untuk menghijaukan taman sekolah."},{"type":"benarsalah","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Tentukan Benar atau Salah berdasarkan cerita!","statements":[{"text":"Kertas denah menunjukkan jalan menuju taman belakang.","correct":true},{"text":"Nara menemukan biji bunga matahari di atas atap.","correct":false},{"text":"Pak Arif bermaksud mengajak murid menghijaukan taman.","correct":true}],"explanation":"Denah menuju taman belakang; biji ditemukan di kotak dekat pohon mangga; Pak Arif menjelaskan maksud ajakannya."},{"type":"single","tag":"📖 Bacaan 2","reading":"Peta di Dalam Kotak Pensil\n\nAku sedang merapikan meja kelas ketika melihat selembar kertas terlipat di dalam kotak pensil yang tertinggal. Kertas itu bergambar denah sekolah. Ada garis putus-putus dari ruang kelas menuju taman belakang, lalu sebuah tanda silang di dekat pohon mangga.\n\nRasa penasaran membuatku mengikuti denah itu saat jam istirahat. Di bawah pohon mangga, aku menemukan kotak kecil dari kardus. Isinya beberapa biji bunga matahari dan secarik pesan: “Tanamlah di sudut taman yang kosong.” Tulisan itu rapi, tetapi tidak ada nama pengirimnya.\n\nAku mengajak Sita dan Damar menanam biji-biji itu. Kami menyiramnya bergantian setiap pagi. Beberapa minggu kemudian, tunas-tunas kecil muncul. Saat kami sedang memandangi tanaman itu, Pak Arif datang membawa sekop.\n\n“Wah, kalian menemukan pesan saya,” katanya tersenyum. Ia menjelaskan bahwa ia ingin mengajak murid-murid menghijaukan taman tanpa menyuruh secara langsung. Kotak pensil itu rupanya milik Pak Arif yang tertinggal ketika ia menggambar denah. Aku tertawa lega. Petualangan kecil itu berakhir dengan tumbuhnya kebun baru di sekolah kami.","question":"Pesan utama cerita tersebut adalah ....","options":["Ajakan menjaga lingkungan dapat dilakukan dengan cara kreatif dan bekerja sama","Semua pesan rahasia harus disembunyikan","Tanaman hanya dapat tumbuh jika dirawat guru","Kotak pensil sebaiknya tidak dibawa ke sekolah"],"correct":0,"explanation":"Cerita menunjukkan cara kreatif mengajak murid menanam dan merawat taman bersama-sama."},{"type":"single","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Apa yang dilakukan perajin sebelum benang ditenun?","options":["Mengikat dan mewarnai benang","Menjahit kain menjadi baju","Mencuci alat tenun di sungai","Menyusun benang menjadi motif di kertas"],"correct":0,"explanation":"Tenun ikat dibuat dengan mengikat dan mewarnai benang sebelum ditenun."},{"type":"single","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Mengapa bagian benang diikat sebelum dicelupkan ke pewarna?","options":["Agar warna tidak meresap ke bagian tertentu","Agar benang cepat putus","Agar kain menjadi lebih berat","Agar motif terlihat sama di semua daerah"],"correct":0,"explanation":"Ikatan melindungi bagian tertentu supaya pewarna tidak meresap ke area tersebut."},{"type":"single","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Ide pokok paragraf ketiga adalah ....","options":["Ragam corak, makna, dan upaya mengenalkan tenun ikat","Cara membuat alat tenun dari bambu","Sejarah perdagangan kain di kota","Perbedaan warna benang dan pewarna"],"correct":0,"explanation":"Paragraf ketiga membahas perbedaan motif, kegunaannya, pemasaran, dan pelestarian tenun ikat."},{"type":"single","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Makna kata “diwariskan” pada paragraf pertama adalah ....","options":["Diturunkan atau diajarkan kepada generasi berikutnya","Dijual kepada pembeli di pameran","Disimpan di dalam lemari","Dibuat hanya oleh satu orang"],"correct":0,"explanation":"Keterampilan yang diwariskan berarti diteruskan atau diajarkan dari generasi ke generasi."},{"type":"single","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Apa tujuan perajin memasarkan kain melalui pameran dan internet?","options":["Agar kain dan keterampilan tradisional lebih dikenal serta usaha perajin terbantu","Agar semua motif menjadi sama","Agar proses menenun tidak perlu dilakukan","Agar kain hanya digunakan saat upacara"],"correct":0,"explanation":"Pemasaran dapat membantu usaha perajin dan menjaga keterampilan tradisional tetap dikenal anak muda."},{"type":"single","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Pernyataan yang sesuai dengan bacaan adalah ....","options":["Semua tenun ikat memiliki makna dan corak yang sama","Proses pewarnaan dapat dilakukan berulang untuk menghasilkan beberapa warna","Benang ditenun sebelum diberi warna","Tenun ikat hanya dibuat untuk pakaian sehari-hari"],"correct":1,"explanation":"Teks menyebut proses mengikat dan mencelup dapat diulang untuk menghasilkan beberapa warna."},{"type":"multi","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Pilih dua hal yang dapat membantu melestarikan tenun ikat.","options":["Mendukung produk perajin dengan membeli kainnya","Mengenalkan keterampilan tradisional kepada anak muda","Menghapus semua motif daerah","Menghentikan kegiatan pameran"],"correct":[0,1],"explanation":"Dukungan pembeli dan pengenalan kepada anak muda membantu keterampilan tenun tetap dikenal."},{"type":"benarsalah","tag":"📖 Bacaan 3","reading":"Tenun Ikat dari Nusa Tenggara\n\nTenun ikat adalah kain tradisional yang dibuat dengan teknik mengikat dan mewarnai benang sebelum ditenun. Di sejumlah daerah Nusa Tenggara, keterampilan ini diwariskan dari satu generasi ke generasi berikutnya. Motifnya beragam, misalnya bentuk hewan, tumbuhan, atau garis geometris.\n\nProses pembuatannya memerlukan ketelitian. Perajin mula-mula mengikat bagian-bagian benang agar warna tidak meresap ke area tertentu. Benang kemudian dicelupkan ke pewarna dan dikeringkan. Setelah ikatan dibuka, benang disusun pada alat tenun. Proses ini dapat dilakukan berulang kali untuk menghasilkan beberapa warna.\n\nSetiap daerah memiliki corak dan makna yang berbeda. Ada motif yang digunakan pada upacara adat, sedangkan motif lain dipakai sehari-hari. Kini, sebagian perajin memasarkan kainnya melalui pameran dan internet. Dukungan pembeli dapat membantu usaha mereka sekaligus menjaga keterampilan tradisional agar tetap dikenal anak muda.","question":"Tentukan Benar atau Salah berdasarkan teks!","statements":[{"text":"Motif tenun ikat dapat berupa bentuk hewan atau tumbuhan.","correct":true},{"text":"Pewarna dicelupkan sebelum benang diikat.","correct":false},{"text":"Beberapa motif digunakan dalam upacara adat.","correct":true}],"explanation":"Motif dapat berupa hewan/tumbuhan; benang diikat sebelum dicelup; sebagian corak digunakan dalam upacara adat."},{"type":"single","tag":"📖 Bacaan 4","reading":"Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.","question":"Apa masalah yang dihadapi Nara pada awal cerita?","options":["Layangan merahnya tersangkut di atap rumah","Tangga rumah hilang","Fikri memutus benang layangan","Kakek tidak mau menolong"],"correct":0,"explanation":"Pada awal cerita, layangan merah Nara tersangkut di atap dekat talang."},{"type":"single","tag":"📖 Bacaan 4","reading":"Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.","question":"Mengapa Kakek melarang Nara memanjat sendiri?","options":["Agar Nara memilih cara yang aman","Karena Kakek ingin menyimpan layangan","Karena tangga terlalu pendek","Agar Fikri pulang ke rumah"],"correct":0,"explanation":"Kakek berkata agar Nara tidak memanjat sendiri dan mengajak mencari cara yang aman."},{"type":"single","tag":"📖 Bacaan 4","reading":"Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.","question":"Bagaimana watak Kakek dalam cerita?","options":["Bijaksana dan mengutamakan keselamatan","Ceroboh dan suka terburu-buru","Pemarah dan tidak peduli","Mudah menyerah"],"correct":0,"explanation":"Kakek memilih cara yang aman dan mengatur agar galah tidak mengenai jendela."},{"type":"single","tag":"📖 Bacaan 4","reading":"Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.","question":"Apa yang dilakukan Fikri saat Kakek menggunakan galah?","options":["Mengawasi agar galah tidak mengenai jendela","Naik ke atap mengambil layangan","Memotong benang layangan","Menyiram tanaman di teras"],"correct":0,"explanation":"Fikri berdiri di samping untuk membantu mengawasi galah."},{"type":"single","tag":"📖 Bacaan 4","reading":"Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.","question":"Apa pelajaran yang diperoleh Nara setelah kejadian itu?","options":["Bermain harus dilakukan dengan hati-hati dan memperhatikan keselamatan","Layangan sebaiknya ditinggalkan di atap","Galah selalu lebih baik daripada tangga","Bermain hanya boleh dilakukan di rumah"],"correct":0,"explanation":"Nara memeriksa arah angin dan memastikan tidak ada kabel listrik sebelum bermain kembali."},{"type":"multi","tag":"📖 Bacaan 4","reading":"Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.","question":"Pilih dua tindakan aman yang dilakukan tokoh-tokoh.","options":["Kakek meminta Nara tidak memanjat sendiri","Fikri membantu mengawasi galah","Nara berlari naik ke atap tanpa bantuan","Kakek mendorong layangan dengan melempar batu"],"correct":[0,1],"explanation":"Kakek menghindari tindakan berbahaya dan Fikri ikut mengawasi saat galah digunakan."},{"type":"benarsalah","tag":"📖 Bacaan 4","reading":"Layangan di Atap Rumah\n\n“Layanganmu tersangkut di atap, Nara!” seru Fikri dari halaman. Nara memandang layangan merahnya yang diam di dekat talang. Ia ingin segera mengambilnya, tetapi tangga di rumah sedang dipakai ayah untuk memperbaiki lampu.\n\nKakek yang duduk di teras memperhatikan mereka. “Jangan memanjat sendiri. Kita cari cara yang aman,” katanya. Ia mengambil galah bambu panjang, lalu meminta Nara memegang bagian bawahnya. Fikri berdiri di samping untuk mengawasi agar galah tidak mengenai jendela.\n\nDengan hati-hati, Kakek mendorong benang layangan menggunakan ujung galah. Benang itu terlepas dari talang dan layangan meluncur ke halaman. Nara bersorak senang. Ia berterima kasih kepada Kakek, lalu menggulung benang dengan rapi.\n\nSore itu, Nara kembali bermain di lapangan bersama Fikri. Sebelum berlari, ia memeriksa arah angin dan memastikan tidak ada kabel listrik di sekitar. Ia kini tahu bahwa bermain seru harus tetap disertai sikap hati-hati.","question":"Tentukan Benar atau Salah berdasarkan cerita!","statements":[{"text":"Tangga sedang digunakan ayah untuk memperbaiki lampu.","correct":true},{"text":"Layangan Nara berwarna biru.","correct":false},{"text":"Setelah layangan turun, Nara menggulung benangnya dengan rapi.","correct":true}],"explanation":"Tangga dipakai ayah, layangan berwarna merah, dan Nara menggulung benang setelah berterima kasih."},{"type":"single","tag":"🌿 Literasi Umum","reading":"Kompos dibuat dari sisa daun dan kulit buah yang membusuk secara alami. Kompos dapat membantu menyuburkan tanah.","question":"Pernyataan yang sesuai dengan teks adalah ....","options":["Kompos dapat dibuat dari bahan sisa organik","Kompos dibuat dari pecahan kaca","Kulit buah tidak dapat membusuk","Kompos membuat tanah menjadi tandus"],"correct":0,"explanation":"Teks menyebut sisa daun dan kulit buah sebagai bahan kompos yang membantu menyuburkan tanah."},{"type":"single","tag":"🌧️ Literasi Umum","reading":"Awan hitam berkumpul. Angin bertiup semakin kencang, lalu terdengar suara guntur.","question":"Suasana yang tergambar adalah ....","options":["Cerah dan tenang","Menegangkan karena hujan lebat mungkin segera turun","Gembira karena matahari bersinar","Sunyi seperti malam hari"],"correct":1,"explanation":"Awan gelap, angin kencang, dan guntur menandakan cuaca buruk akan datang."},{"type":"single","tag":"📢 Literasi Umum","reading":"“Matikan keran setelah digunakan. Setiap tetes air sangat berarti.”","question":"Tujuan kalimat tersebut adalah ....","options":["Mengajak orang menghemat air","Menjelaskan cara membuat keran","Melarang orang mencuci tangan","Memberi tahu harga air"],"correct":0,"explanation":"Kalimat ajakan itu mendorong pembaca mematikan keran agar air tidak terbuang."},{"type":"single","tag":"💬 Bahasa","reading":"","question":"Manakah kalimat yang menyatakan opini?","options":["Perpustakaan sekolah dibuka pukul delapan pagi.","Bumi mengelilingi Matahari.","Menurutku, membaca komik adalah kegiatan paling menyenangkan.","Air laut terasa asin."],"correct":2,"explanation":"Ungkapan “menurutku” menunjukkan pendapat pribadi yang dapat berbeda bagi setiap orang."},{"type":"single","tag":"📚 Bahasa","reading":"","question":"Sinonim kata “cermat” adalah ....","options":["Teliti","Lalai","Bising","Lambat"],"correct":0,"explanation":"Cermat berarti teliti atau berhati-hati dalam memperhatikan sesuatu."},{"type":"single","tag":"🛠️ Teks Prosedur","reading":"(1) Bilas beras hingga bersih.\n(2) Masukkan beras dan air ke dalam penanak nasi.\n(3) Siapkan beras, air, dan penanak nasi.\n(4) Tekan tombol memasak.","question":"Urutan langkah yang tepat adalah ....","options":["(3)–(1)–(2)–(4)","(1)–(4)–(3)–(2)","(2)–(3)–(4)–(1)","(4)–(2)–(1)–(3)"],"correct":0,"explanation":"Siapkan bahan dahulu, bilas beras, masukkan bersama air ke penanak, lalu tekan tombol memasak."},{"type":"single","tag":"🔤 Bahasa","reading":"","question":"Kata berimbuhan yang bermakna “membuat menjadi bersih” adalah ....","options":["Menyapu","Membersihkan","Terlihat","Membacakan"],"correct":1,"explanation":"Membersihkan berarti membuat sesuatu menjadi bersih."},{"type":"single","tag":"🧠 Logika","reading":"Semua anggota regu Melati membawa botol minum. Santi adalah anggota regu Melati.","question":"Kesimpulan yang tepat adalah ....","options":["Santi membawa botol minum","Santi tidak membawa botol minum","Santi mungkin bukan anggota regu","Semua botol minum milik Santi"],"correct":0,"explanation":"Santi termasuk anggota regu Melati, sehingga ia membawa botol minum sesuai informasi."},{"type":"single","tag":"🗺️ Literasi Umum","reading":"","question":"Pada denah, arah yang berlawanan dengan timur adalah ....","options":["Utara","Selatan","Barat","Tenggara"],"correct":2,"explanation":"Barat berlawanan arah dengan timur."},{"type":"single","tag":"📝 Jenis Teks","reading":"","question":"Teks yang menggambarkan ciri-ciri suatu tempat secara terperinci disebut teks ....","options":["Deskripsi","Prosedur","Persuasi","Dialog"],"correct":0,"explanation":"Teks deskripsi menjelaskan objek, tempat, atau suasana dengan rinci."},{"type":"multi","tag":"📝 Bahasa","reading":"","question":"Pilih dua kata yang termasuk kata benda konkret.","options":["Buku","Kejujuran","Sepeda","Indah"],"correct":[0,2],"explanation":"Buku dan sepeda dapat dilihat serta disentuh sehingga termasuk kata benda konkret."},{"type":"multi","tag":"📝 Bahasa","reading":"","question":"Pilih dua kalimat majemuk setara.","options":["Ibu memasak, sedangkan Ayah menyiram tanaman.","Rani membaca buku dan Dito menggambar.","Karena sakit, Edo beristirahat di rumah.","Anak yang berlari itu memakai topi."],"correct":[0,1],"explanation":"Keduanya menggabungkan klausa sederajat; kalimat dengan karena dan yang merupakan kalimat bertingkat."},{"type":"multi","tag":"♻️ Literasi Umum","reading":"Poster bertuliskan: “Bawa tas belanja sendiri. Kurangi kantong plastik sekali pakai.”","question":"Pilih dua pesan yang sesuai dengan poster.","options":["Mengurangi penggunaan kantong plastik","Membawa tas belanja yang dapat dipakai kembali","Membuang semua tas kain","Membeli lebih banyak kantong plastik"],"correct":[0,1],"explanation":"Poster mengajak mengurangi kantong plastik dengan membawa tas belanja sendiri."},{"type":"benarsalah","tag":"✏️ Bahasa","reading":"","question":"Tentukan Benar atau Salah untuk bentuk kata baku berikut!","statements":[{"text":"Risiko","correct":true},{"text":"Ijin","correct":false},{"text":"Nasihat","correct":true}],"explanation":"Bentuk baku adalah risiko dan nasihat; bentuk baku dari ijin adalah izin."},{"type":"multi","tag":"👷 Literasi Umum","reading":"","question":"Pilih dua pasangan profesi dan alat kerja yang tepat.","options":["Penjahit – mesin jahit","Pemadam kebakaran – selang","Dokter – cangkul","Nelayan – kompor"],"correct":[0,1],"explanation":"Penjahit menggunakan mesin jahit dan petugas pemadam kebakaran menggunakan selang."},{"type":"single","tag":"🔎 Literasi Umum","reading":"Perhatikan pengumuman: “Kerja bakti kelas VI dilaksanakan Jumat, pukul 07.30, di halaman sekolah. Siswa diminta membawa sapu atau kemoceng.”","question":"Apa yang perlu dibawa siswa?","options":["Buku gambar","Sapu atau kemoceng","Bola dan peluit","Bekal makan malam"],"correct":1,"explanation":"Pengumuman secara langsung meminta siswa membawa sapu atau kemoceng."},{"type":"single","tag":"✍️ Bahasa","reading":"","question":"Kalimat yang menggunakan tanda baca dengan tepat adalah ....","options":["Siapa nama ketua kelas itu?","Siapa nama ketua kelas itu.","Siapa nama ketua kelas itu,","Siapa nama ketua kelas itu!"],"correct":0,"explanation":"Kalimat tanya diakhiri tanda tanya."}];
+
+        // ==================== STATE ====================
+        let currentQuestion = 0;
+        let userAnswers = {}; // { index: { selected: [], checked: false, correct: bool } }
+        let checkedQuestions = {}; // { index: bool } - apakah sudah dicek
+        let score = 0;
+        let totalQuestions = questions.length;
+        let quizCompleted = false;
+
+        // ==================== DOM ELEMENTS ====================
+        const currentQNumEl = document.getElementById('current-q-num');
+        const correctCountEl = document.getElementById('correct-count');
+        const wrongCountEl = document.getElementById('wrong-count');
+        const scoreValEl = document.getElementById('score-val');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPct = document.getElementById('progress-pct');
+        const qNumberEl = document.getElementById('q-number');
+        const qTagEl = document.getElementById('q-tag');
+        const qReadingEl = document.getElementById('q-reading');
+        const qTextEl = document.getElementById('q-text');
+        const optionsContainer = document.getElementById('options-container');
+        const checkBtn = document.getElementById('check-btn');
+        const feedbackEl = document.getElementById('feedback');
+        const answerKeyEl = document.getElementById('answer-key');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const quizContainer = document.getElementById('quiz-container');
+        const confettiContainer = document.getElementById('confetti-container');
+
+        const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+        // ==================== FUNCTIONS ====================
+        function loadQuestion(index) {
+            const q = questions[index];
+            const saved = userAnswers[index];
+
+            qNumberEl.textContent = `Soal No. ${index + 1}`;
+            qTagEl.textContent = q.tag || '';
+            qTextEl.textContent = q.question || '';
+
+            if (q.reading && q.reading.trim() !== '') {
+                qReadingEl.style.display = 'block';
+                qReadingEl.textContent = q.reading;
+            } else {
+                qReadingEl.style.display = 'none';
+            }
+
+            optionsContainer.innerHTML = '';
+            feedbackEl.className = 'feedback';
+            feedbackEl.innerHTML = '';
+            answerKeyEl.className = 'answer-key';
+            answerKeyEl.innerHTML = '';
+            checkBtn.style.display = 'block';
+            btnNext.style.display = 'none';
+
+            // Reset check button
+            checkBtn.disabled = true;
+            checkBtn.textContent = 'Cek Jawaban ✅';
+
+            // Render options based on type
+            if (q.type === 'single') {
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.setAttribute('data-opt-index', i);
+                    btn.innerHTML = `<span class="option-letter">${optionLabels[i]}</span><span>${opt}</span>`;
+                    if (saved && saved.selected.includes(i)) btn.classList.add('selected');
+                    if (saved && saved.checked) {
+                        btn.classList.add('disabled');
+                        if (i === q.correct) btn.classList.add('correct-reveal');
+                        if (saved.selected.includes(i) && !saved.correct) btn.classList.add('wrong-reveal');
+                    }
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        updateCheckButton();
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            } else if (q.type === 'multi') {
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.setAttribute('data-opt-index', i);
+                    btn.innerHTML = `<span class="option-letter">${optionLabels[i]}</span><span>${opt}</span>`;
+                    if (saved && saved.selected.includes(i)) btn.classList.add('selected');
+                    if (saved && saved.checked) {
+                        btn.classList.add('disabled');
+                        if (q.correct.includes(i)) btn.classList.add('correct-reveal');
+                        if (saved.selected.includes(i) && !q.correct.includes(i)) btn.classList.add('wrong-reveal');
+                    }
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        btn.classList.toggle('selected');
+                        updateCheckButton();
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            } else if (q.type === 'benarsalah') {
+                q.statements.forEach((stmt, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'bs-statement';
+                    div.innerHTML = `
+                        <p>${i + 1}. ${stmt.text}</p>
+                        <div class="bs-options">
+                            <button class="bs-btn bs-true" data-stmt-index="${i}" data-value="true">Benar</button>
+                            <button class="bs-btn bs-false" data-stmt-index="${i}" data-value="false">Salah</button>
+                        </div>
+                    `;
+                    optionsContainer.appendChild(div);
+                });
+
+                // Restore saved state
+                if (saved && saved.selected) {
+                    const selMap = saved.selected;
+                    q.statements.forEach((stmt, i) => {
+                        const trueBtn = optionsContainer.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                        const falseBtn = optionsContainer.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                        if (selMap[i] === true) trueBtn.classList.add('selected');
+                        if (selMap[i] === false) falseBtn.classList.add('selected');
+                    });
+                }
+                if (saved && saved.checked) {
+                    q.statements.forEach((stmt, i) => {
+                        const trueBtn = optionsContainer.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                        const falseBtn = optionsContainer.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                        trueBtn.classList.add('disabled');
+                        falseBtn.classList.add('disabled');
+                        if (stmt.correct === true) trueBtn.classList.add('correct-reveal');
+                        if (stmt.correct === false) falseBtn.classList.add('correct-reveal');
+                        if (saved.selected[i] === true && stmt.correct === false) trueBtn.classList.add('wrong-reveal');
+                        if (saved.selected[i] === false && stmt.correct === true) falseBtn.classList.add('wrong-reveal');
+                    });
+                }
+
+                optionsContainer.querySelectorAll('.bs-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        const stmtIdx = parseInt(this.getAttribute('data-stmt-index'));
+                        const val = this.getAttribute('data-value') === 'true';
+                        const siblings = optionsContainer.querySelectorAll(
+                            `.bs-btn[data-stmt-index="${stmtIdx}"]`);
+                        siblings.forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                        updateCheckButton();
+                    });
+                });
+            }
+
+            btnPrev.disabled = (index === 0);
+            if (index === totalQuestions - 1) {
+                btnNext.textContent = '🏁 Selesai & Lihat Skor';
+            } else {
+                btnNext.textContent = 'Soal Berikutnya ➡️';
+            }
+
+            if (saved && saved.checked) {
+                checkBtn.style.display = 'none';
+                btnNext.style.display = 'flex';
+                showFeedbackForSaved(q, saved);
+            }
+
+            updateStats();
+            updateProgress();
+        }
+
+        function showFeedbackForSaved(q, saved) {
+            if (saved.correct) {
+                feedbackEl.className = 'feedback show correct';
+                feedbackEl.innerHTML = '<span>🎉 BENAR! Hebat!</span>';
+            } else {
+                feedbackEl.className = 'feedback show wrong';
+                feedbackEl.innerHTML = '<span>😅 SALAH! Jangan menyerah!</span>';
+            }
+            answerKeyEl.className = 'answer-key show';
+            let correctAnswerText = '';
+            if (q.type === 'single') {
+                correctAnswerText = `${optionLabels[q.correct]}. ${q.options[q.correct]}`;
+            } else if (q.type === 'multi') {
+                correctAnswerText = q.correct.map(c => `${optionLabels[c]}. ${q.options[c]}`).join(' & ');
+            } else if (q.type === 'benarsalah') {
+                correctAnswerText = q.statements.map((s, i) =>
+                    `${i + 1}. ${s.correct ? 'Benar' : 'Salah'}`
+                ).join(' | ');
+            }
+            answerKeyEl.innerHTML = `
+                <div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div>
+                <div class="ak-content"><strong>Jawaban Benar:</strong> ${correctAnswerText}<br><strong>Pembahasan:</strong> ${q.explanation}</div>
+            `;
+        }
+
+        function updateCheckButton() {
+            const q = questions[currentQuestion];
+            let hasAnswer = false;
+            if (q.type === 'single') {
+                hasAnswer = document.querySelectorAll('.option-btn.selected').length > 0;
+            } else if (q.type === 'multi') {
+                hasAnswer = document.querySelectorAll('.option-btn.selected').length > 0;
+            } else if (q.type === 'benarsalah') {
+                const total = q.statements.length;
+                const answered = document.querySelectorAll('.bs-btn.selected').length;
+                hasAnswer = answered === total;
+            }
+            checkBtn.disabled = !hasAnswer;
+        }
+
+        function checkAnswer() {
+            const q = questions[currentQuestion];
+            const saved = userAnswers[currentQuestion];
+            if (saved && saved.checked) return;
+
+            let selected = [];
+            let isCorrect = false;
+
+            if (q.type === 'single') {
+                const selBtn = document.querySelector('.option-btn.selected');
+                if (!selBtn) return;
+                selected = [parseInt(selBtn.getAttribute('data-opt-index'))];
+                isCorrect = selected[0] === q.correct;
+            } else if (q.type === 'multi') {
+                selected = Array.from(document.querySelectorAll('.option-btn.selected'))
+                    .map(b => parseInt(b.getAttribute('data-opt-index')));
+                isCorrect = selected.length === q.correct.length && selected.every(s => q.correct.includes(s));
+            } else if (q.type === 'benarsalah') {
+                selected = [];
+                q.statements.forEach((stmt, i) => {
+                    const selBtn = document.querySelector(`.bs-btn.selected[data-stmt-index="${i}"]`);
+                    if (selBtn) {
+                        selected.push(selBtn.getAttribute('data-value') === 'true');
+                    } else {
+                        selected.push(null);
+                    }
+                });
+                isCorrect = selected.every((s, i) => s === q.statements[i].correct);
+            }
+
+            const correct = isCorrect;
+            userAnswers[currentQuestion] = { selected, checked: true, correct };
+            checkedQuestions[currentQuestion] = true;
+
+            if (correct) score++;
+            updateStats();
+
+            // Visual feedback
+            const allOptionBtns = document.querySelectorAll('.option-btn');
+            allOptionBtns.forEach(btn => {
+                btn.classList.add('disabled');
+                const idx = parseInt(btn.getAttribute('data-opt-index'));
+                if (q.type === 'single' || q.type === 'multi') {
+                    if (q.type === 'single' ? idx === q.correct : q.correct.includes(idx)) {
+                        btn.classList.add('correct-reveal');
+                    }
+                    if (selected.includes(idx) && !(q.type === 'single' ? idx === q.correct : q.correct.includes(
+                            idx))) {
+                        btn.classList.add('wrong-reveal');
+                    }
+                }
+            });
+
+            if (q.type === 'benarsalah') {
+                q.statements.forEach((stmt, i) => {
+                    const trueBtn = document.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                    const falseBtn = document.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                    trueBtn.classList.add('disabled');
+                    falseBtn.classList.add('disabled');
+                    if (stmt.correct === true) trueBtn.classList.add('correct-reveal');
+                    if (stmt.correct === false) falseBtn.classList.add('correct-reveal');
+                    if (selected[i] === true && stmt.correct === false) trueBtn.classList.add('wrong-reveal');
+                    if (selected[i] === false && stmt.correct === true) falseBtn.classList.add('wrong-reveal');
+                });
+            }
+
+            // Show feedback
+            if (correct) {
+                feedbackEl.className = 'feedback show correct';
+                feedbackEl.innerHTML = '<span>🎉 Jawaban Anda BENAR! Hebat!</span>';
+            } else {
+                feedbackEl.className = 'feedback show wrong';
+                feedbackEl.innerHTML = '<span>😅 Jawaban Anda SALAH! Jangan menyerah!</span>';
+            }
+
+            // Show answer key
+            answerKeyEl.className = 'answer-key show';
+            let correctAnswerText = '';
+            if (q.type === 'single') {
+                correctAnswerText = `${optionLabels[q.correct]}. ${q.options[q.correct]}`;
+            } else if (q.type === 'multi') {
+                correctAnswerText = q.correct.map(c => `${optionLabels[c]}. ${q.options[c]}`).join(' & ');
+            } else if (q.type === 'benarsalah') {
+                correctAnswerText = q.statements.map((s, i) =>
+                    `${i + 1}. ${s.correct ? 'Benar' : 'Salah'}`
+                ).join(' | ');
+            }
+            answerKeyEl.innerHTML = `
+                <div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div>
+                <div class="ak-content"><strong>Jawaban Benar:</strong> ${correctAnswerText}<br><strong>Pembahasan:</strong> ${q.explanation}</div>
+            `;
+
+            checkBtn.style.display = 'none';
+            btnNext.style.display = 'flex';
+        }
+
+        function updateStats() {
+            currentQNumEl.textContent = currentQuestion + 1;
+            let correct = 0;
+            let wrong = 0;
+            Object.values(userAnswers).forEach(ans => {
+                if (ans.checked) {
+                    if (ans.correct) correct++;
+                    else wrong++;
+                }
+            });
+            correctCountEl.textContent = correct;
+            wrongCountEl.textContent = wrong;
+            scoreValEl.textContent = score;
+        }
+
+        function updateProgress() {
+            const pct = Math.round((currentQuestion / totalQuestions) * 100);
+            progressFill.style.width = pct + '%';
+            progressPct.textContent = pct + '%';
+        }
+
+        function goToNext() {
+            if (currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResult();
+            }
+        }
+
+        function goToPrev() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function showResult() {
+            quizCompleted = true;
+            const totalChecked = Object.keys(userAnswers).length;
+            const correctTotal = score;
+            const wrongTotal = totalChecked - correctTotal;
+            const finalScore = totalQuestions > 0 ? Math.round((correctTotal / totalQuestions) * 100) : 0;
+
+            qNumberEl.textContent = '📋 Hasil Akhir';
+            qTagEl.textContent = '🏁 Selesai';
+            qTextEl.textContent = '';
+            qReadingEl.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            checkBtn.style.display = 'none';
+            btnNext.style.display = 'none';
+            btnPrev.style.display = 'none';
+
+            const resultScreen = document.createElement('div');
+            resultScreen.className = 'result-screen';
+            let emoji = '';
+            let message = '';
+            if (finalScore === 100) {
+                emoji = '🏆🎉🌟';
+                message = 'LUAR BIASA! SEMPURNA!';
+            } else if (finalScore >= 80) {
+                emoji = '🌟👏';
+                message = 'HEBAT! Nilaimu sangat bagus!';
+            } else if (finalScore >= 60) {
+                emoji = '👍😊';
+                message = 'CUKUP BAIK! Terus berlatih ya!';
+            } else {
+                emoji = '💪📚';
+                message = 'TETAP SEMANGAT! Yuk belajar lagi!';
+            }
+            resultScreen.innerHTML = `
+                <div class="result-emoji">${emoji}</div>
+                <div class="result-score">${finalScore}</div>
+                <div class="result-message">${message}</div>
+                <p>Kamu menjawab <strong>${correctTotal}</strong> benar dari <strong>${totalQuestions}</strong> soal.</p>
+                <p>Benar: ${correctTotal} | Salah: ${wrongTotal}</p>
+            `;
+            quizContainer.appendChild(resultScreen);
+
+            if (finalScore === 100) triggerConfetti();
+            const retryBtn = document.createElement('button');
+            retryBtn.className = 'retry-btn';
+            retryBtn.textContent = '↻ ULANGI TES';
+            retryBtn.addEventListener('click', restartQuiz);
+            resultScreen.appendChild(retryBtn);
+
+            progressFill.style.width = '100%';
+            progressPct.textContent = '100%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = {};
+            checkedQuestions = {};
+            score = 0;
+            quizCompleted = false;
+            btnNext.style.display = 'none';
+            btnNext.textContent = 'Soal Berikutnya ➡️';
+            btnPrev.style.display = 'flex';
+            btnPrev.disabled = true;
+            loadQuestion(0);
+            updateStats();
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function triggerConfetti() {
+            confettiContainer.style.display = 'block';
+            const colors = ['#176b67', '#4fa69a', '#e0a443', '#27805d', '#d78658', '#8bb4a3'];
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confettiContainer.appendChild(confetti);
+            }
+            setTimeout(() => {
+                confettiContainer.style.display = 'none';
+                confettiContainer.innerHTML = '';
+            }, 6000);
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        checkBtn.addEventListener('click', checkAnswer);
+        btnNext.addEventListener('click', goToNext);
+        btnPrev.addEventListener('click', goToPrev);
+
+        // ==================== INIT ====================
+        loadQuestion(0);
+        updateStats();
+        updateProgress();
+    </script>
+</body>
+</html>

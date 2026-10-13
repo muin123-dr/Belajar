@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Juara TKA Bahasa Indonesia - Kelas 6 SD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            color: #ff6f00;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #00838f;
+            font-size: 16px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .context-box {
+            background: #f1f8e9;
+            border-left: 5px solid #8bc34a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .context-box img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .question-card {
+            background: #fff8e1;
+            border: 2px solid #ffe082;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        .question-number {
+            display: inline-block;
+            background: #ffb300;
+            color: white;
+            font-weight: 900;
+            padding: 5px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-label {
+            background: #ffffff;
+            border: 2px solid #4fc3f7;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .option-label:hover {
+            background: #e1f5fe;
+        }
+        .option-label.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            transform: scale(1.5);
+            margin-right: 10px;
+        }
+        
+        /* Kategori Table Styling */
+        .kategori-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .kategori-table th, .kategori-table td {
+            border: 2px solid #ffe082;
+            padding: 12px;
+            text-align: center;
+        }
+        .kategori-table th { background: #ffecb3; }
+        .kategori-table td.statement { text-align: left; font-weight: bold; }
+        
+        .btn-submit {
+            background: #00bcd4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover { background: #0097a7; }
+        .btn-submit:disabled { background: #b2ebf2; cursor: not-allowed; }
+        
+        .btn-next {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            display: none;
+        }
+        .btn-next:hover { background: #388e3c; }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .feedback.correct-bg { background: #e8f5e9; border: 2px solid #4caf50; }
+        .feedback.wrong-bg { background: #ffebee; border: 2px solid #f44336; }
+        .status { font-size: 20px; font-weight: 900; margin-bottom: 5px; }
+        .correct-text { color: #4caf50; }
+        .wrong-text { color: #f44336; }
+        .explanation { font-size: 15px; line-height: 1.5; color: #37474f; margin-top: 10px; }
+
+        /* Score Screen */
+        #score-screen {
+            text-align: center;
+            display: none;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            background: #ffca28;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            font-weight: 900;
+            color: white;
+            margin: 0 auto 20px auto;
+            border: 8px solid #ff9800;
+        }
+        .champion-anim {
+            font-size: 80px;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite alternate;
+        }
+        .btn-wa {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: 900;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        .btn-wa:hover { background: #1ebe5d; }
+        .btn-retry {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: 900;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-retry:hover { background: #d32f2f; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 24px; }
+            .question-text { font-size: 16px; }
+            .kategori-table th, .kategori-table td { padding: 8px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="quiz-header">
+        <h1>🌟 Latihan TKA Bahasa Indonesia 🌟</h1>
+        <p class="subtitle">Persiapan Juara Kelas 6 SD</p>
+    </div>
+    <div id="quiz-container"></div>
+    
+    <div id="score-screen">
+        <div id="champion-icon" class="champion-anim" style="display: none;">🏆</div>
+        <h2 id="score-title">Nilai Kamu</h2>
+        <div class="score-circle" id="final-score">100</div>
+        <p id="score-message" style="font-size: 18px; font-weight: bold; color: #555;"></p>
+        
+        <a id="btn-wa" class="btn-wa" href="#" target="_blank" style="display: none;">
+            Klaim HADIAH 5.000! 🎁
+        </a>
+        <button id="btn-retry" class="btn-retry" style="display: none;" onclick="location.reload()">
+            🔄 ULANGI TES
+        </button>
+    </div>
+</div>
+
+<script>
+    // Data Text
+    const textHewan = `<b>Hewan Pemakan Daun, Apa Itu?</b><br>Hewan bisa dibagi menjadi tiga kelompok berdasarkan makanan mereka. Karnivora, hewan pemakan daging. Contoh hewan karnivora adalah singa. Selanjutnya herbivora, yaitu hewan pemakan tumbuhan. Sapi adalah contoh hewan herbivora. Terakhir, hewan omnivora, yaitu hewan pemakan daging dan tumbuhan, seperti beruang.<br>Dari kelompok herbivora, ada hewan yang hanya makan daun saja. Mereka disebut folivora. Hewan folivora hanya makan daun untuk hidup. Namun, daun itu susah untuk dicerna, apalagi kalau sudah tua. Kadang-kadang daun juga mengandung zat yang bisa berbahaya.<br>Agar bisa mencerna daun, tubuh hewan folivora punya cara khusus. Mereka punya usus yang panjang agar makanan bisa diproses lebih lama. Tubuh hewan folivora bekerja lebih lambat, jadi tidak terlalu banyak bergerak. Di dalam perut hewan folivora juga ada bakteri baik yang membantu mencerna daun. Beberapa hewan folivora lebih suka daun muda karena lebih lembut dan mudah dimakan.<br>Ada beberapa contoh hewan folivora yang hidup di alam. Misalnya, panda yang makan daun bambu. Ada juga koala yang makan daun eukaliptus. Mereka tinggal di hutan dan sangat bergantung pada daun untuk makan. Karena itu, hutan tempat mereka tinggal harus dijaga supaya mereka bisa terus hidup.`;
+    
+    const textKenthus = `<b>Kenthus yang Sombong</b><br>Di tengah padang rumput terdapat kolam. Kolam itu dihuni banyak katak. Kenthus adalah anak katak yang paling besar dan kuat. Dia merasa tidak terkalahkan.<br>Suatu pagi Kenthus melompat di padang rumput. Ada seekor anak lembu. Ia sedang bermain dan berlari-lari. Anak lembu itu menjulurkan lidahnya untuk makan. Lidahnya mengenai Kenthus.<br>Kenthus melompat. “Berani makhluk ini mengusikku!” kata Kenthus sembari menuju ke tepi kolam.<br>Kenthus sampai di tepi kolam.<br>“Kenthus, mengapa kamu terengah-engah?” tanya Naka.<br>“Wajahmu terlihat pucat,” kata Tata.<br>“Lihatlah di padang rumput itu. Makhluk itu sangat sombong. Ia tadi hendak menelanku!” kata Kenthus dengan napas terengah-engah.<br>Koko, kakak Kenthus, menjelaskan. “Makhluk itu anak lembu. Anak lembu tidak jahat. Lembu tidak makan katak. Ia hanya makan rumput.”<br>“Aku tidak percaya. Tadi, aku dikejarnya dan hampir ditendang olehnya,” jawab Kenthus menggebu-gebu.<br>Koko hanya diam mendengar adiknya berbicara.<br>“Aku sebenarnya bisa melawannya dengan mengembungkan diriku,” lanjut Kenthus dengan bangga.<br>“Kamu tidak akan dapat menandingi lembu itu. Perbuatan kamu berbahaya,” kata Koko.<br>Kenthus mengembungkan tubuhnya. Perutnya membesar secara berlebihan. Tiba-tiba ia jatuh lemas. Perutnya terasa sakit. Perlahan-lahan ia mengempiskan tubuhnya. Akhirnya tubuh Kenthus kembali ke ukuran semula.<br>“Kenthus, kamu tidak apa-apa?” tanya Koko.<br>“Aku baik-baik saja. Maafkan aku, Kak. Aku tidak mendengar kata-katamu,” kata Kenthus sembari menunduk.`;
+    
+    const textAntre = `<b>Antre, Dong!</b><br>Tia dan Devi sedang berada di Toko Buku Gemar. Mereka mencari buku pelajaran. Setelah menemukan buku yang dicari, mereka menuju ke kasir. Mereka menempati urutan kelima dan keenam. Tak lama kemudian, ada orang yang mengantre di belakang mereka. Mereka sabar menunggu giliran membayar di kasir.<br>Namun, tiba-tiba seorang pemuda berjalan ke antrean paling depan. Tentu saja, orang-orang yang sudah mengantre lebih dulu memprotes.<br>“Tolong, antre, Dik,” kata seorang ibu yang berada di belakangnya.<br>“Maaf, Bu, saya harus cepat-cepat. Ini juga hanya satu buku, pasti tidak akan lama. Tidak akan sampai lima menit,” kata pemuda itu.<br>“Tidak boleh seperti itu, Nak. Kita harus membudayakan antre. Jika kamu harus cepat-cepat, bolehkah saya tahu alasannya?” ucap ibu itu.<br>“Iya, Kak, kita harus antre. Semua yang ada di sini juga ingin cepat dilayani. Apa Kakak tidak malu melihat seorang ibu-ibu saja bersedia mengantre? Kakak yang muda justru bertingkah sebaliknya,” sahut Tia. Devi terlihat hanya diam dan menggangguk.<br>Mendengar ada suara seperti keributan, Pak Satpam pun masuk. Dia menenangkan situasi. Pemuda itu harus tetap mengantre sesuai antrean.`;
+    
+    const textGigi = `<b>Kenapa Kita Tidak Boleh Malas Menyikat Gigi?</b><br>Apakah kamu sering lupa menyikat gigi sebelum tidur? Kenapa kita tidak boleh malas menyikat gigi?<br>Bayangkan jika kita tidak memiliki gigi. Kita hanya bisa makan makanan lunak saja. Makanan yang tidak perlu digigit atau dikunyah. Oleh karena itu, kita harus merawat gigi. Faktanya, gigi kita terdiri dari banyak lapisan, lho.<br>Bayangkan jika kita tidak menyikat gigi! Bakteri jahat suka memakan sisa gula. Misalnya sisa kue, keripik, roti, permen, dan yang lainnya. Mereka melepaskan asam yang membuat gigi kita berlubang. Mengerikan, ya!<br>Yuk, rajin menyikat gigi sebelum tidur. Jangan lupa juga menyikat gigi setelah bangun tidur.`;
+    
+    const textPuisi = `<b>Surat untuk Sahabat</b><br>Senyum itu enggan lepas dari bibirmu<br>Ketika kau melihat kedatanganku<br>Uluran tanganmu menyambutku<br>Untuk selalu bersama dan saling berpegang erat<br>Menghadapi segala suka maupun duka<br>Bila sesekali kau marah<br>Itu karena aku tak mau memahamimu<br>Bila sesekali aku berbuat salah<br>Maafmu selalu terbuka untukku<br>Kata terima kasih kuanggap lebih manis daripada kata maaf<br>untuk segala keceriaan yang selalu kau bagi<br>untuk segala ketulusan hati yang selalu kau beri<br>dan untuk kesetiaan yang tak akan pernah lekang oleh masa<br>Bila kita dewasa nanti<br>dan jarak juga waktu memisahkan kita<br>Satu harapku dalam hati<br>Kata persahabatan tidak akan pernah menjadi sebuah kenangan`;
+
+    const textAir = `<b>Air Putih atau Air Mineral?</b><br>Air adalah kebutuhan penting bagi kehidupan sehari-hari. Setiap orang pasti meminumnya setiap hari untuk tetap sehat. Ternyata, air mineral dan air putih berbeda. Yuk, simak penjelasannya!`;
+
+    const questions = [
+        {
+            id: 1, type: "pg",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b001.png' alt='Ilustrasi Fabel'>",
+            q: "Siapa yang mengusulkan untuk meminta bantuan hewan yang cerdik?",
+            options: ["Bani.", "Ucil.", "Rino.", "Hari."],
+            answer: 3,
+            explanation: "Berdasarkan gambar ilustrasi percakapan, tokoh yang bernama Hari adalah yang memberikan usulan tersebut."
+        },
+        {
+            id: 2, type: "pg",
+            context: "“Mereka diam seribu bahasa.”",
+            q: "Apa arti “diam seribu bahasa” pada teks fabel tersebut?",
+            options: ["Para binatang di hutan tidak mampu melakukan sesuatu.", "Semua binatang di hutan menahan untuk tidak berkomentar.", "Penghuni hutan tidak mau mendengarkan pendapat orang lain.", "Binatang-binatang di hutan tidak mengetahui masalah yang terjadi."],
+            answer: 1,
+            explanation: "Ungkapan 'diam seribu bahasa' bermakna terdiam sama sekali atau tidak mengucapkan sepatah kata pun (menahan untuk tidak berkomentar)."
+        },
+        {
+            id: 3, type: "kategori",
+            context: "Masih berkaitan dengan cerita hewan sebelumnya.",
+            q: "Apa contoh peristiwa yang dapat ditemukan dalam kehidupan sehari-hari berdasarkan kejadian yang dialami Ucil pada cerita tersebut?<br>Tentukan Sesuai atau Tidak Sesuai untuk setiap pernyataan berikut!",
+            cats: ["Sesuai", "Tidak Sesuai"],
+            statements: [
+                { text: "Tita memberi ide cemerlang yang dapat dilakukan oleh teman-teman di kelas.", answer: 1 },
+                { text: "Jani menghargai kepercayaan yang diberikan teman-teman sekelas kepada dirinya.", answer: 0 },
+                { text: "Nina bertanggung jawab dalam menjalankan tugas yang dipercayakan kepadanya.", answer: 0 }
+            ],
+            explanation: "Tita memberi ide cemerlang (Tidak Sesuai dengan peran Ucil yang diberi tugas). Jani menghargai kepercayaan & Nina bertanggung jawab (Sesuai dengan sikap yang baik saat diberi amanah seperti Ucil)."
+        },
+        {
+            id: 4, type: "mcma",
+            context: textHewan,
+            q: "Apa saja contoh hewan folivora berdasarkan informasi tersebut? (Pilih lebih dari satu)",
+            options: ["Sapi.", "Koala.", "Panda."],
+            answer: [1, 2],
+            explanation: "Di paragraf terakhir tertulis jelas bahwa contoh hewan folivora adalah panda dan koala. (Sapi adalah herbivora biasa)."
+        },
+        {
+            id: 5, type: "pg",
+            context: textHewan,
+            q: "Bagan mana yang sesuai untuk menggambarkan informasi pada teks tersebut?",
+            options: [
+                "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b002.png' style='max-height:80px'>",
+                "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b003.png' style='max-height:80px'>",
+                "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b004.png' style='max-height:80px'>",
+                "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b005.png' style='max-height:80px'>"
+            ],
+            answer: 3,
+            explanation: "Bagan yang paling tepat dan lengkap memetakan jenis hewan berdasarkan teks (Karnivora, Herbivora -> Folivora, Omnivora) adalah bagan pilihan D (gambar ke-4)."
+        },
+        {
+            id: 6, type: "pg",
+            context: textHewan,
+            q: "Apa gagasan utama yang disampaikan pada paragraf ketiga teks tersebut?",
+            options: ["Jenis daun yang cocok untuk hewan folivora.", "Pembagian hewan berdasarkan makanan mereka.", "Cara khusus tubuh hewan folivora mencerna daun.", "Peranan penting hutan bagi kehidupan hewan folivora."],
+            answer: 2,
+            explanation: "Paragraf ketiga diawali dengan 'Agar bisa mencerna daun, tubuh hewan folivora punya cara khusus.' yang menjadi inti (ide pokok) paragraf tersebut."
+        },
+        {
+            id: 7, type: "mcma",
+            context: textKenthus + "<br><img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b006.png'>",
+            q: "Apa yang dijelaskan Koko tentang anak lembu? (Pilih lebih dari satu)",
+            options: ["Makhluk itu sangat sombong.", "Anak lembu tidak jahat.", "Lembu tidak makan katak."],
+            answer: [1, 2],
+            explanation: "Dalam percakapan, Koko menjelaskan: 'Anak lembu tidak jahat. Lembu tidak makan katak. Ia hanya makan rumput.'"
+        },
+        {
+            id: 8, type: "pg",
+            context: textKenthus,
+            q: "Apa kejadian yang membuat Kenthus merasa menyesal?",
+            options: ["Kenthus hendak ditelan anak lembu di padang rumput.", "Kenthus berlari ke tepi kolam hingga terengah-engah.", "Kenthus mengembang terlalu besar hingga jatuh lemas.", "Kenthus dimarahi Koko karena terlalu menggebu-gebu."],
+            answer: 2,
+            explanation: "Kenthus mengembungkan dirinya terlalu besar hingga jatuh lemas dan sakit perut. Setelah kejadian itu, ia menyesal karena tidak mendengarkan kakaknya."
+        },
+        {
+            id: 9, type: "kategori",
+            context: textKenthus,
+            q: "Amel telah membaca cerita tersebut. Ia merasakan beberapa reaksi saat membacanya. Bagaimana reaksi Amel saat membaca akhir cerita tersebut?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Terharu karena Kenthus mau mengakui kesalahannya.", answer: 0 },
+                { text: "Bahagia karena Kenthus berbaikan dengan anak lembu.", answer: 1 },
+                { text: "Antusias karena Kenthus bisa membuktikan kekuatannya.", answer: 1 }
+            ],
+            explanation: "Pernyataan A Benar (karena Kenthus menunduk minta maaf). Pernyataan B Salah (Kenthus tidak berbaikan dengan lembu). Pernyataan C Salah (Kenthus gagal membuktikan kekuatannya)."
+        },
+        {
+            id: 10, type: "pg",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b007.png'>",
+            q: "Dalam teks, terdapat kalimat “Hari-hari itu sangat menegangkan.”<br>Makna kata menegangkan dalam kalimat tersebut adalah ….",
+            options: ["membuat orang terus waspada dalam bekerja", "menyebabkan orang kehilangan fokus saat bekerja", "membuat suasana menjadi serius dan penuh ketakutan", "menimbulkan rasa khawatir karena situasi yang genting"],
+            answer: 3,
+            explanation: "Menegangkan berarti suatu kondisi/situasi yang genting, mendebarkan, dan memicu kekhawatiran yang besar karena risiko tinggi."
+        },
+        {
+            id: 11, type: "pg",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b007.png'>",
+            q: "Surat membahas peran kode komputer dalam misi Apollo 11. Manakah pernyataan yang mendukung ide utama tersebut?",
+            options: ["Kode komputer mengantar para manusia ke bulan dan Venus.", "Kode komputer dibahas dalam rapat setelah misi utama selesai.", "Kode komputer membuat astronaut dapat mendarat dengan aman.", "Kode komputer mengirim pesan kesalahan saat proses pendaratan."],
+            answer: 2,
+            explanation: "Ide utamanya adalah kesuksesan kode komputer Margaret, yang berhasil memandu astronot Apollo 11 mendarat dengan aman tanpa masalah fatal."
+        },
+        {
+            id: 12, type: "kategori",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b007.png'>",
+            q: "Pengalaman Margaret Hamilton mengandung pelajaran hidup. Apa pelajaran penting yang dapat diambil dari suratnya?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Ketelitian bekerja sangat penting agar tidak terjadi kesalahan.", answer: 0 },
+                { text: "Bekerja di proyek luar angkasa dapat memotivasi orang lain.", answer: 1 },
+                { text: "Tanggung jawab terhadap tugas membuat seseorang tetap fokus.", answer: 0 }
+            ],
+            explanation: "Ketelitian dan rasa tanggung jawab yang tinggi adalah pelajaran berharga (Benar), sedangkan 'memotivasi orang lain' bukanlah inti pelajaran dari teks tersebut (Salah)."
+        },
+        {
+            id: 13, type: "pg",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b008.png'>",
+            q: "Berdasarkan teks, benda yang umum digunakan dalam kerajinan adalah ….",
+            options: ["mainan plastik", "cat semprot", "magnet", "gunting"],
+            answer: 3,
+            explanation: "Gunting adalah alat yang sangat umum dan lazim digunakan untuk kerajinan apa pun secara umum. (Mainan/magnet itu bahan khusus DIY ini)."
+        },
+        {
+            id: 14, type: "mcma",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b008.png'>",
+            q: "Langkah kedua mendukung tujuan utama teks karena …. (Pilih lebih dari satu)",
+            options: ["membuat permukaan mainan tertutup rapi", "memudahkan anak mewarnai mainan hewan", "menutup lubang agar magnet bisa menempel"],
+            answer: [0, 2],
+            explanation: "Menutup bagian tubuh hewan mainan menggunakan kardus bertujuan agar permukaan menjadi rapi (tertutup) dan memberikan bidang datar agar magnet dapat menempel dengan kuat."
+        },
+        {
+            id: 15, type: "pg",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b008.png'>",
+            q: "Mengapa mainan hewan dibagi menjadi dua bagian?",
+            options: ["Supaya ukuran mainan lebih besar dan menarik.", "Agar mainan bisa menempel di permukaan kulkas.", "Karena mainan perlu diwarnai menggunakan cat semprot.", "Untuk memudahkan pemberian lem tembak pada mainan."],
+            answer: 1,
+            explanation: "Hewan dipotong dua agar memiliki sisi yang datar di bagian belakangnya, sehingga bisa ditempelkan magnet dan bisa dipasang rata di permukaan kulkas."
+        },
+        {
+            id: 16, type: "pg",
+            context: textAir + "<br><img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b009.png'>",
+            q: "Apa fungsi kandungan elektrolit yang dimiliki air mineral?",
+            options: ["Menjaga tekanan darah normal.", "Meningkatkan fungsi jantung.", "Membantu mencegah dehidrasi.", "Mempermudah sistem metabolisme tubuh."],
+            answer: 2,
+            explanation: "Berdasarkan infografis, elektrolit pada air mineral sangat baik untuk menjaga keseimbangan cairan tubuh dan mencegah dehidrasi (kekurangan cairan)."
+        },
+        {
+            id: 17, type: "pg",
+            context: textAir + "<br><img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b009.png'>",
+            q: "Mengapa air putih lebih cocok untuk dikonsumsi setiap saat?",
+            options: ["Sumber air putih mudah ditemukan.", "Kandungan air putih sangat banyak.", "Pengolahan air putih melalui proses alami.", "Kandungan pH dalam air putih lebih tinggi."],
+            answer: 0,
+            explanation: "Air putih biasa sangat mudah ditemukan/didapatkan (dari sumur, ledeng) dibandingkan air mineral yang harus diambil dari sumber air pegunungan khusus."
+        },
+        {
+            id: 18, type: "kategori",
+            context: textAir + "<br><img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b009.png'>",
+            q: "Mengapa kata 'BEDA' pada judul infografis berwarna oranye?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Menekankan pokok utama yang ingin disampaikan dalam infografis.", answer: 0 },
+                { text: "Menonjolkan informasi penting yang sedang dibahas dalam infografis.", answer: 0 },
+                { text: "Menyesuaikan warna yang mungkin akan disukai pembaca infografis.", answer: 1 }
+            ],
+            explanation: "Warna yang berbeda digunakan untuk menonjolkan (highlight) inti informasi (Pernyataan A dan B Benar), bukan sekadar urusan selera warna pembaca (Pernyataan C Salah)."
+        },
+        {
+            id: 19, type: "pg",
+            context: textAntre + "<br><img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b010.png'>",
+            q: "Siapakah tokoh yang menyelesaikan keributan dalam cerita tersebut?",
+            options: ["Tia.", "Devi.", "Kasir.", "Pak Satpam."],
+            answer: 3,
+            explanation: "Di paragraf terakhir tertulis dengan jelas: 'Mendengar ada suara seperti keributan, Pak Satpam pun masuk. Dia menenangkan situasi.'"
+        },
+        {
+            id: 20, type: "mcma",
+            context: textAntre,
+            q: "Apa saja peristiwa yang dialami Tia dalam cerita? (Pilih lebih dari satu)",
+            options: ["Mencari dan membeli buku bersama Devi.", "Dinasihati oleh seorang ibu untuk antre.", "Ikut menegur pemuda yang menyerobot antrean."],
+            answer: [0, 2],
+            explanation: "Tia membeli buku bersama Devi (Pilihan 1) dan Tia juga ikut menegur pemuda tersebut dengan berkata 'Iya, Kak, kita harus antre...' (Pilihan 3)."
+        },
+        {
+            id: 21, type: "kategori",
+            context: textAntre,
+            q: "Dalam cerita, pemuda berkata, “hanya satu buku, pasti tidak lama.” Intan merasa perkataan itu tidak dapat dibenarkan.<br>Apa alasan yang mendukung pendapat Intan? (Mendukung / Tidak Mendukung)",
+            cats: ["Mendukung", "Tidak Mendukung"],
+            statements: [
+                { text: "Semua orang yang mengantre juga ingin cepat dilayani.", answer: 0 },
+                { text: "Mengantre membutuhkan kesabaran setiap orang.", answer: 1 },
+                { text: "Aturan antrean harus dihormati oleh semua orang.", answer: 0 }
+            ],
+            explanation: "Pernyataan A dan C MENDUKUNG bahwa menyerobot itu salah. Pernyataan B ('membutuhkan kesabaran') adalah fakta, tapi tidak langsung menjawab argumen 'saya cuma sebentar', sehingga digolongkan TIDAK MENDUKUNG konteks sanggahan."
+        },
+        {
+            id: 22, type: "pg",
+            context: textGigi + "<br><img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b011.png'>",
+            q: "Apa penyebab gigi berlubang?",
+            options: ["Rusaknya enamel pada gigi.", "Enamel gigi tidak sekuat tulang.", "Pembuluh darah dan saraf sensitif.", "Bakteri melepaskan zat asam pada gigi."],
+            answer: 3,
+            explanation: "Teks menyatakan dengan jelas: 'Mereka (bakteri) melepaskan asam yang membuat gigi kita berlubang.'"
+        },
+        {
+            id: 23, type: "mcma",
+            context: textGigi,
+            q: "Apa yang terjadi pada gigi jika tidak dirawat dengan baik? (Pilih lebih dari satu)",
+            options: ["Gigi akan menjadi rusak dan bolong.", "Gigi akan mengunyah makanan lebih lama.", "Gigi akan ditumbuhi oleh bakteri sisa makanan."],
+            answer: [0, 2],
+            explanation: "Jika malas menyikat gigi, sisa makanan akan dimakan bakteri jahat (Pilihan 3), sehingga menghasilkan asam yang merusak dan membuat gigi bolong (Pilihan 1)."
+        },
+        {
+            id: 24, type: "kategori",
+            context: textGigi + "<br><img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b011.png'>",
+            q: "Apa fungsi tanda panah pada gambar teks tersebut?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Mempermudah melihat perbedaan kondisi gigi tiap orang.", answer: 1 },
+                { text: "Menunjukkan lapisan-lapisan gigi yang sedang dijelaskan.", answer: 0 },
+                { text: "Menggambarkan bentuk dan fungsi dari setiap gigi manusia.", answer: 1 }
+            ],
+            explanation: "Tanda panah pada anatomi gigi bertujuan menunjuk dan menamai lapisan gigi (enamel, dentin, dll). Jadi pernyataan B Benar, yang lainnya Salah."
+        },
+        {
+            id: 25, type: "mcma",
+            context: textPuisi,
+            q: "Larik mana saja yang menunjukkan kerinduan? (Pilih lebih dari satu)",
+            options: ["Senyum itu enggan lepas dari bibirmu.", "Uluran tanganmu menyambutku.", "Maafmu selalu terbuka untukku."],
+            answer: [0, 1],
+            explanation: "Larik pertama dan kedua menceritakan momen bertemu kembali (senyum dan uluran tangan menyambut), yang merupakan gambaran rasa rindu setelah lama tidak bertemu."
+        },
+        {
+            id: 26, type: "pg",
+            context: textPuisi,
+            q: "“kesetiaan yang tak akan pernah lekang oleh masa”<br>Makna pada larik puisi tersebut adalah …",
+            options: ["Simbol penerimaan, dukungan, dan rasa aman dalam persahabatan.", "Ungkapan kebahagiaan saat bertemu seseorang yang lama tidak bertemu.", "Penghargaan dan rasa syukur sebagai hal yang berkesan dalam persahabatan.", "Lambang hubungan abadi, tetap kuat meski waktu atau jarak memisahkan."],
+            answer: 3,
+            explanation: "Kata 'tak lekang oleh masa' berarti tidak akan rusak atau hilang walaupun waktu berlalu dengan lama (abadi)."
+        },
+        {
+            id: 27, type: "pg",
+            context: textPuisi,
+            q: "Pesan apa yang ingin disampaikan dalam puisi tersebut?",
+            options: ["Persahabatan membuat seseorang harus mengalah demi menjaga hubungan.", "Persahabatan harus selalu diutamakan di atas hubungan dengan keluarga.", "Persahabatan membutuhkan pengertian, kesetiaan, dan saling menghargai.", "Persahabatan sering diuji oleh konflik sehingga tidak selalu bertahan."],
+            answer: 2,
+            explanation: "Puisi ini penuh dengan ungkapan memaafkan, berterima kasih, dan harapan untuk selalu setia, yang mencerminkan pentingnya pengertian dan saling menghargai."
+        },
+        {
+            id: 28, type: "pg",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b012.png'>",
+            q: "Apa nama kerupuk yang sudah dikonsumsi sejak lama (abad ke-9/10)?",
+            options: ["Rengginang.", "Melarat.", "Rambak.", "Gendar."],
+            answer: 2,
+            explanation: "Berdasarkan infografis sejarah kerupuk, kerupuk Rambak tertulis sudah ada sejak abad ke-9 dan ke-10 di Jawa."
+        },
+        {
+            id: 29, type: "kategori",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b012.png'>",
+            q: "Mengapa kerupuk asal Indonesia semakin mendunia?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Memiliki nilai jual ke luar negeri hingga puluhan juta dolar.", answer: 0 },
+                { text: "Sudah ada di Indonesia sejak abad ke-9 dan ke-10.", answer: 1 },
+                { text: "Dikirim ke luar negeri lebih dari 20 juta kilogram.", answer: 0 }
+            ],
+            explanation: "Bukti kerupuk mendunia adalah angka ekspor (pengiriman) ke luar negeri (Pernyataan A dan C). Sejarah abad ke-9 tidak berhubungan langsung dengan mengapa ia mendunia saat ini."
+        },
+        {
+            id: 30, type: "kategori",
+            context: "<img src='https://muin123-dr.github.io/Belajar/TKA/gbr/sd-b012.png'>",
+            q: "Mengapa terdapat gambar berbagai jenis kerupuk pada teks tersebut?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Menggambarkan aneka ragam kerupuk yang terdapat di Indonesia.", answer: 0 },
+                { text: "Menginformasikan macam-macam kerupuk yang dikenal di Indonesia.", answer: 0 },
+                { text: "Memberikan informasi tentang bahan-bahan kerupuk di Indonesia.", answer: 1 }
+            ],
+            explanation: "Gambar-gambar tersebut berfungsi untuk menunjukkan keanekaragaman dan berbagai macam jenis kerupuk di Nusantara (Benar). Gambar itu bukan untuk menjelaskan bahan pembuatannya (Salah)."
+        }
+    ];
+
+    let currentQ = 0;
+    let correctCount = 0;
+    const quizContainer = document.getElementById('quiz-container');
+    const scoreScreen = document.getElementById('score-screen');
+
+    function renderQuestion() {
+        quizContainer.innerHTML = '';
+        if (currentQ >= questions.length) {
+            showScore();
+            return;
+        }
+
+        const qData = questions[currentQ];
+        const card = document.createElement('div');
+        card.className = 'question-card active';
+
+        // Header & Context
+        let html = `<div class="question-number">Soal ${currentQ + 1} / 30</div>`;
+        if (qData.context) {
+            html += `<div class="context-box">${qData.context}</div>`;
+        }
+        html += `<div class="question-text">${qData.q}</div>`;
+
+        // Render Options based on type
+        html += `<div class="options-container" id="options-${currentQ}">`;
+        
+        if (qData.type === 'pg') {
+            qData.options.forEach((opt, idx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="radio" name="q${currentQ}" value="${idx}">
+                        <span>${opt}</span>
+                    </label>`;
+            });
+        } 
+        else if (qData.type === 'mcma') {
+            qData.options.forEach((opt, idx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="checkbox" name="q${currentQ}" value="${idx}">
+                        <span>${opt}</span>
+                    </label>`;
+            });
+        }
+        else if (qData.type === 'kategori') {
+            html += `<table class="kategori-table">
+                        <tr><th>Pernyataan</th><th>${qData.cats[0]}</th><th>${qData.cats[1]}</th></tr>`;
+            qData.statements.forEach((stmt, idx) => {
+                html += `<tr>
+                            <td class="statement">${stmt.text}</td>
+                            <td><input type="radio" name="cat${currentQ}_${idx}" value="0"></td>
+                            <td><input type="radio" name="cat${currentQ}_${idx}" value="1"></td>
+                         </tr>`;
+            });
+            html += `</table>`;
+        }
+        html += `</div>`; // end options-container
+
+        // Submit Button
+        html += `<button class="btn-submit" id="btn-submit-${currentQ}" onclick="checkAnswer()">Kirim Jawaban</button>`;
+
+        // Feedback Box
+        html += `
+            <div class="feedback" id="feedback-${currentQ}">
+                <div class="status" id="status-${currentQ}"></div>
+                <div class="explanation"><b>Penjelasan:</b> <span id="expl-${currentQ}"></span></div>
+            </div>
+        `;
+
+        // Next Button
+        html += `<button class="btn-next" id="btn-next-${currentQ}" onclick="nextQuestion()">Selanjutnya ➡️</button>`;
+
+        card.innerHTML = html;
+        quizContainer.appendChild(card);
+    }
+
+    function checkAnswer() {
+        const qData = questions[currentQ];
+        let isCorrect = false;
+        let isAnswered = false;
+
+        if (qData.type === 'pg') {
+            const selected = document.querySelector(`input[name="q${currentQ}"]:checked`);
+            if (!selected) return alert("Pilih jawabanmu dulu ya!");
+            isAnswered = true;
+            if (parseInt(selected.value) === qData.answer) isCorrect = true;
+        } 
+        else if (qData.type === 'mcma') {
+            const selectedBoxes = document.querySelectorAll(`input[name="q${currentQ}"]:checked`);
+            if (selectedBoxes.length === 0) return alert("Pilih minimal satu jawaban!");
+            isAnswered = true;
+            let vals = Array.from(selectedBoxes).map(cb => parseInt(cb.value)).sort();
+            let ans = qData.answer.slice().sort();
+            isCorrect = (JSON.stringify(vals) === JSON.stringify(ans));
+        }
+        else if (qData.type === 'kategori') {
+            let allAnswered = true;
+            let correctRows = 0;
+            qData.statements.forEach((stmt, idx) => {
+                const sel = document.querySelector(`input[name="cat${currentQ}_${idx}"]:checked`);
+                if (!sel) allAnswered = false;
+                else if (parseInt(sel.value) === stmt.answer) correctRows++;
+            });
+            if (!allAnswered) return alert("Tentukan pilihan untuk SEMUA baris pernyataan ya!");
+            isAnswered = true;
+            if (correctRows === qData.statements.length) isCorrect = true;
+        }
+
+        if (isAnswered) {
+            // Disable inputs
+            const inputs = document.querySelectorAll(`input`);
+            inputs.forEach(i => i.disabled = true);
+            const labels = document.querySelectorAll('.option-label');
+            labels.forEach(l => l.classList.add('disabled'));
+
+            // Show feedback
+            document.getElementById(`btn-submit-${currentQ}`).style.display = 'none';
+            const feedbackBox = document.getElementById(`feedback-${currentQ}`);
+            const statusText = document.getElementById(`status-${currentQ}`);
+            document.getElementById(`expl-${currentQ}`).innerHTML = qData.explanation;
+
+            feedbackBox.style.display = 'block';
+            if (isCorrect) {
+                correctCount++;
+                feedbackBox.classList.add('correct-bg');
+                statusText.innerHTML = '🎉 HEBAT, JAWABANMU BENAR!';
+                statusText.className = 'status correct-text';
+            } else {
+                feedbackBox.classList.add('wrong-bg');
+                statusText.innerHTML = '❌ YAAH, MASIH KURANG TEPAT!';
+                statusText.className = 'status wrong-text';
+            }
+
+            document.getElementById(`btn-next-${currentQ}`).style.display = 'block';
+        }
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        renderQuestion();
+    }
+
+    function showScore() {
+        document.getElementById('quiz-header').style.display = 'none';
+        scoreScreen.style.display = 'block';
+        
+        // Capping float numbers
+        const score = Math.round((correctCount / questions.length) * 100);
+        document.getElementById('final-score').innerText = score;
+
+        if (score === 100) {
+            document.getElementById('score-message').innerText = "LUAR BIASA! Kamu dapat nilai Sempurna!";
+            document.getElementById('champion-icon').style.display = 'block';
+            
+            // Show WA Button
+            const waBtn = document.getElementById('btn-wa');
+            waBtn.style.display = 'inline-block';
+            const waText = encodeURIComponent("Alhamdulillah aku berhasil dapat 100 & Mendapatkan HADIAH 5.000!");
+            // General WA send link so user can pick contact
+            waBtn.href = `https://wa.me/?text=${waText}`;
+
+            // Trigger Confetti
+            fireConfetti();
+        } else {
+            document.getElementById('score-message').innerText = "Tetap semangat! Yuk coba lagi supaya dapat 100!";
+            document.getElementById('btn-retry').style.display = 'inline-block';
+        }
+    }
+
+    function fireConfetti() {
+        var duration = 3 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff9800', '#4caf50', '#00bcd4']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff9800', '#4caf50', '#00bcd4']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    // Start Quiz
+    window.onload = renderQuestion;
+</script>
+
+</body>
+</html>

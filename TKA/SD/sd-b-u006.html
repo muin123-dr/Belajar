@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Juara TKA Bahasa Indonesia - Paket 3 (Kelas 6 SD)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fff9c4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            color: #f57f17;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #fbc02d;
+            font-size: 16px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .context-box {
+            background: #fffde7;
+            border-left: 5px solid #fbc02d;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .question-card {
+            background: #fff3e0;
+            border: 2px solid #ffb74d;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        .question-number {
+            display: inline-block;
+            background: #ffa726;
+            color: white;
+            font-weight: 900;
+            padding: 5px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-label {
+            background: #ffffff;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .option-label:hover {
+            background: #fff3e0;
+        }
+        .option-label.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            transform: scale(1.5);
+            margin-right: 10px;
+        }
+        
+        /* Kategori Table Styling */
+        .kategori-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .kategori-table th, .kategori-table td {
+            border: 2px solid #ffb74d;
+            padding: 12px;
+            text-align: center;
+        }
+        .kategori-table th { background: #ffe0b2; }
+        .kategori-table td.statement { text-align: left; font-weight: bold; }
+        
+        .btn-submit {
+            background: #00bcd4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover { background: #0097a7; }
+        .btn-submit:disabled { background: #b2ebf2; cursor: not-allowed; }
+        
+        .btn-next {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            display: none;
+        }
+        .btn-next:hover { background: #388e3c; }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .feedback.correct-bg { background: #e8f5e9; border: 2px solid #4caf50; }
+        .feedback.wrong-bg { background: #ffebee; border: 2px solid #f44336; }
+        .status { font-size: 20px; font-weight: 900; margin-bottom: 5px; }
+        .correct-text { color: #4caf50; }
+        .wrong-text { color: #f44336; }
+        .explanation { font-size: 15px; line-height: 1.5; color: #37474f; margin-top: 10px; }
+
+        /* Score Screen */
+        #score-screen {
+            text-align: center;
+            display: none;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            background: #ffca28;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            font-weight: 900;
+            color: white;
+            margin: 0 auto 20px auto;
+            border: 8px solid #ff9800;
+        }
+        .champion-anim {
+            font-size: 80px;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite alternate;
+        }
+        .btn-wa {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: 900;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        .btn-wa:hover { background: #1ebe5d; }
+        .btn-retry {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: 900;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-retry:hover { background: #d32f2f; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 24px; }
+            .question-text { font-size: 16px; }
+            .kategori-table th, .kategori-table td { padding: 8px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="quiz-header">
+        <h1>🌟 Latihan TKA Bahasa Indonesia (Paket 3) 🌟</h1>
+        <p class="subtitle">Variasi Soal Baru - Persiapan Juara Kelas 6 SD</p>
+    </div>
+    <div id="quiz-container"></div>
+    
+    <div id="score-screen">
+        <div id="champion-icon" class="champion-anim" style="display: none;">🏆</div>
+        <h2 id="score-title">Nilai Kamu</h2>
+        <div class="score-circle" id="final-score">100</div>
+        <p id="score-message" style="font-size: 18px; font-weight: bold; color: #555;"></p>
+        
+        <a id="btn-wa" class="btn-wa" href="#" target="_blank" style="display: none;">
+            Klaim HADIAH 5.000! 🎁
+        </a>
+        <button id="btn-retry" class="btn-retry" style="display: none;" onclick="location.reload()">
+            🔄 ULANGI TES
+        </button>
+    </div>
+</div>
+
+<script>
+    const textKuePancong = `<b>Lezatnya Kue Pancong Tradisional</b><br>Kue pancong adalah salah satu jajanan pasar tradisional yang sangat digemari di Indonesia. Kue ini terbuat dari adonan campuran tepung beras, santan kelapa, gula pasir, dan garam secukupnya.<br>Cara memasaknya menggunakan cetakan khusus berbentuk setengah lingkaran yang dipanaskan di atas kompor. Sebelum adonan dituang, cetakan biasanya diolesi sedikit minyak agar tidak lengket. Setelah setengah matang, kue ditutup rapat agar matangnya merata. Ciri khas kue pancong adalah teksturnya yang empuk di bagian dalam namun memiliki pinggiran yang gurih dan sedikit garing karena bersentuhan langsung dengan cetakan panas.<br>Biasanya, saat disajikan di piring, kue pancong diberi taburan gula pasir putih di atasnya untuk menambah rasa manis. Rasanya yang gurih dari santan berpadu sempurna dengan manisnya gula.`;
+
+    const textEkosistem = `<b>Pentingnya Menjaga Ekosistem Mangrove</b><br>Hutan mangrove atau biasa disebut hutan bakau tumbuh di sepanjang garis pantai daerah tropis. Hutan ini memiliki fungsi yang sangat vital bagi bumi kita.<br>Pertama, akar pohon mangrove yang rimbun dan berlapis-lapis berfungsi sebagai penahan alami abrasi. Ombak besar dari laut yang menghantam pantai akan dipecah kekuatannya oleh akar bakau sehingga daratan aman dari pengikisan.<br>Kedua, hutan mangrove menjadi tempat tinggal dan tempat berkembang biak yang sangat aman bagi berbagai jenis hewan air, seperti kepiting bakau, udang, dan ikan kecil. Oleh karena itu, jika hutan mangrove rusak, hasil tangkapan nelayan di sekitar pantai juga akan ikut menurun drastis.`;
+
+    const textBudi = `<b>Kejujuran di Kantin Sekolah</b><br>Jam istirahat berbunyi nyaring. Rian segera berlari menuju kantin sekolah untuk membeli sebotol air mineral dan sepotong roti cokelat. Saat membayar di kasir, Ibu Penjaga Kantin sedang melayani banyak sekali anak yang berdesakan.<br>Karena terburu-buru ingin segera bermain dengan teman-temannya di lapangan, Rian menerima uang kembalian yang ternyata terlalu banyak. Seharusnya ia hanya menerima kembalian dua ribu rupiah, tetapi Ibu Kasir memberinya sepuluh ribu rupiah.<br>Sesampainya di lapangan, Rian baru menyadari kesalahan hitung tersebut. Ia terdiam sejenak, menatap uang di telapak tangannya, lalu memikirkan apa yang harus ia lakukan. Tanpa berpikir panjang, ia berbalik arah dan berjalan cepat kembali ke kasir kantin.<br>"Bu, uang kembalian saya tadi kelebihan. Ini saya kembalikan," kata Rian sambil menyerahkan uang delapan ribu rupiah tersebut dengan senyuman ramah.<br>Ibu penjaga kantin tersenyum lebar dan memuji kejujuran Rian. Hati Rian terasa sangat lega dan bahagia.`;
+
+    const textLumba = `<b>Lumba-Lumba, Mamalia Laut yang Cerdas</b><br>Meskipun hidup di dalam air dan bentuk tubuhnya mirip ikan, lumba-lumba sebenarnya bukanlah kelompok ikan. Lumba-lumba adalah hewan mamalia yang bernapas menggunakan paru-paru. Oleh karena itu, mereka harus secara berkala muncul ke permukaan air untuk mengambil udara segar melalui lubang di atas kepalanya.<br>Lumba-lumba dikenal sebagai salah satu hewan paling cerdas di lautan. Mereka hidup secara berkelompok yang disebut koloni. Dalam kelompoknya, mereka sangat kompak dan saling melindungi jika ada bahaya dari hiu atau hewan pemangsa lainnya. Hewan ini juga berkomunikasi menggunakan suara klik dan peluit yang khas.`;
+
+    const textSuratAyah = `<b>Surat untuk Ayah di Perantauan</b><br>Malang, 12 Oktober 2026<br><br>Ayah tercinta,<br>Bagaimana kabar Ayah di Surabaya? Semoga Ayah selalu sehat dan dimudahkan dalam pekerjaannya, ya.<br><br>Ibu dan aku di rumah baik-baik saja. Minggu lalu, aku berhasil menjadi juara pertama lomba pidato tingkat kecamatan, Yah! Aku mendapatkan piala dan piagam penghargaan. Nanti kalau Ayah pulang ke Malang, piala itu akan kuperlihatkan pertama kali kepada Ayah.<br>Ibu berpesan agar Ayah tidak terlalu lelah bekerja dan jangan lupa menjaga kesehatan makan tepat waktu.<br><br>Kutunggu kepulangan Ayah dengan rindu.<br><br>Anakmu, <br>Dika`;
+
+    const textPantun = `<b>Nasihat Bijak Berbalas Pantun</b><br>Pergi ke kebun memetik tomat,<br>Jangan lupa membawa wadah.<br>Jadilah anak yang berbakti dan hemat,<br>Agar hidupmu kelak bahagia dan mudah.<br><br>Buah durian kulitnya berduri,<br>Manis rasanya di dalam belanga.<br>Janganlah suka beriri hati,<br>Mari berteman dengan sesama warga.`;
+
+    const questions = [
+        // Variasi 1: Teks Prosedur/Makanan (Kue Pancong)
+        {
+            id: 1, type: "pg", context: textKuePancong,
+            q: "Bahan apa saja yang digunakan untuk membuat adonan kue pancong?",
+            options: ["Tepung terigu, mentega, dan cokelat.", "Tepung beras, santan kelapa, gula pasir, dan garam.", "Tepung tapioka, air, dan pewarna makanan.", "Susu segar, telur, dan keju parut."],
+            answer: 1,
+            explanation: "Berdasarkan paragraf pertama, kue pancong terbuat dari adonan campuran tepung beras, santan kelapa, gula pasir, dan garam."
+        },
+        {
+            id: 2, type: "pg", context: textKuePancong,
+            q: "Mengapa cetakan kue pancong biasanya diolesi sedikit minyak sebelum adonan dituang?",
+            options: ["Agar kue memiliki rasa yang lebih asin.", "Agar kue tidak lengket pada cetakan saat dimasak.", "Agar cetakan cepat berubah warna.", "Agar kue matang dalam waktu 1 detik."],
+            answer: 1,
+            explanation: "Teks menyebutkan: 'Sebelum adonan dituang, cetakan biasanya diolesi sedikit minyak agar tidak lengket.'"
+        },
+        {
+            id: 3, type: "mcma", context: textKuePancong,
+            q: "Apa saja ciri khas dari tekstur kue pancong matang? (Pilih lebih dari satu)",
+            options: ["Empuk di bagian dalam.", "Pinggirannya gurih dan sedikit garing.", "Sangat keras seperti batu kerikil.", "Basah dan berair di seluruh bagian."],
+            answer: [0, 1],
+            explanation: "Ciri khas kue pancong adalah teksturnya yang empuk di dalam serta bagian pinggirnya yang gurih dan sedikit garing."
+        },
+        {
+            id: 4, type: "kategori", context: textKuePancong,
+            q: "Tentukan pernyataan berikut Sesuai atau Tidak Sesuai berdasarkan teks kue pancong!",
+            cats: ["Sesuai", "Tidak Sesuai"],
+            statements: [
+                { text: "Kue pancong disajikan dengan taburan gula pasir putih di atasnya.", answer: 0 },
+                { text: "Cetakan kue pancong berbentuk kotak persegi empat.", answer: 1 },
+                { text: "Rasa gurih pada kue berasal dari santan kelapa.", answer: 0 }
+            ],
+            explanation: "Taburan gula pasir dan rasa gurih santan sesuai dengan teks. Bentuk cetakan adalah setengah lingkaran, jadi pernyataan kedua Tidak Sesuai."
+        },
+        {
+            id: 5, type: "pg", context: textKuePancong,
+            q: "Apa fungsi dari menutup rapat cetakan saat kue setengah matang?",
+            options: ["Agar aromanya harum semerbak.", "Agar uap panas terkurung dan matangnya merata.", "Agar kue bisa melompat sendiri dari cetakan.", "Agar warna kue menjadi hitam pekat."],
+            answer: 1,
+            explanation: "Menutup rapat adonan berfungsi agar panasnya merata ke seluruh bagian kue sehingga matang dengan sempurna."
+        },
+
+        // Variasi 2: Teks Lingkungan/Informasi (Ekosistem Mangrove)
+        {
+            id: 6, type: "pg", context: textEkosistem,
+            q: "Di mana biasanya hutan mangrove atau hutan bakau dapat ditemukan?",
+            options: ["Di puncak gunung yang bersalju.", "Di tengah gurun pasir yang kering.", "Di sepanjang garis pantai daerah tropis.", "Di dalam gua yang gelap gulita."],
+            answer: 2,
+            explanation: "Teks informasi tersurat menyatakan bahwa hutan mangrove tumbuh di sepanjang garis pantai daerah tropis."
+        },
+        {
+            id: 7, type: "pg", context: textEkosistem,
+            q: "Apa fungsi utama dari akar pohon mangrove yang rimbun dan berlapis-lapis?",
+            options: ["Sebagai penahan alami abrasi (pengikisan daratan oleh ombak).", "Sebagai bahan utama pembuatan kursi kayu.", "Sebagai tempat bertengger burung elang.", "Sebagai sumber makanan bagi hewan darat."],
+            answer: 0,
+            explanation: "Akar mangrove berfungsi sebagai penahan alami abrasi karena memecah kekuatan ombak besar laut."
+        },
+        {
+            id: 8, type: "mcma", context: textEkosistem,
+            q: "Hewan apa saja yang disebutkan hidup dan berkembang biak di hutan mangrove? (Pilih lebih dari satu)",
+            options: ["Singa padang rumput.", "Kepiting bakau.", "Ikan kecil.", "Beruang kutub."],
+            answer: [1, 2],
+            explanation: "Hewan air yang disebutkan aman tinggal di mangrove adalah kepiting bakau, udang, dan ikan kecil."
+        },
+        {
+            id: 9, type: "kategori", context: textEkosistem,
+            q: "Apa akibatnya jika hutan mangrove mengalami kerusakan parah?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Hasil tangkapan nelayan di sekitar pantai akan ikut menurun drastis.", answer: 0 },
+                { text: "Pantai akan lebih rentan mengalami abrasi atau pengikisan.", answer: 0 },
+                { text: "Air laut di pantai akan berubah menjadi air tawar yang manis.", answer: 1 }
+            ],
+            explanation: "Kerusakan mangrove menyebabkan hasil nelayan turun (karena tempat ikan rusak) dan abrasi meningkat (Pernyataan A & B Benar). Air laut tidak berubah jadi manis (Salah)."
+        },
+        {
+            id: 10, type: "pg", context: textEkosistem,
+            q: "Apa gagasan pokok (ide utama) pada paragraf kedua teks tersebut?",
+            options: ["Peran akar mangrove sebagai penahan abrasi pantai.", "Cara menanam bibit pohon bakau di lumpur.", "Jenis-jenis ikan air tawar di sungai.", "Harga kayu mangrove di pasaran."],
+            answer: 0,
+            explanation: "Paragraf kedua secara khusus membahas fungsi akar mangrove dalam menahan abrasi dari ombak laut."
+        },
+
+        // Variasi 3: Cerita Anak / Fiksi Nilai Moral (Kejujuran Rian)
+        {
+            id: 11, type: "pg", context: textBudi,
+            q: "Apa yang dibeli Rian di kantin sekolah saat jam istirahat?",
+            options: ["Sebuah buku tulis dan pensil warna.", "Sebotol air mineral dan sepotong roti cokelat.", "Sebungkus nasi uduk dan es teh manis.", "Mainan robot-robotan plastik."],
+            answer: 1,
+            explanation: "Teks menyatakan: 'Rian segera berlari menuju kantin sekolah untuk membeli sebotol air mineral dan sepotong roti cokelat.'"
+        },
+        {
+            id: 12, type: "pg", context: textBudi,
+            q: "Berapa jumlah uang kembalian yang seharusnya diterima Rian?",
+            options: ["Sepuluh ribu rupiah.", "Dua ribu rupiah.", "Delapan ribu rupiah.", "Lima puluh ribu rupiah."],
+            answer: 1,
+            explanation: "Teks menyebutkan: 'Seharusnya ia hanya menerima kembalian dua ribu rupiah, tetapi Ibu Kasir memberinya sepuluh ribu rupiah.'"
+        },
+        {
+            id: 13, type: "mcma", context: textBudi,
+            q: "Sikap atau sifat apa saja yang ditunjukkan oleh Rian dalam cerita tersebut? (Pilih lebih dari satu)",
+            options: ["Jujur dan bertanggung jawab.", "Suka berbohong demi keuntungan pribadi.", "Berani mengakui kesalahan hitung kasir.", "Ceroboh dan tidak peduli."],
+            answer: [0, 2],
+            explanation: "Rian menunjukkan sikap jujur dan berani mengembalikan uang yang bukan haknya ke ibu penjaga kantin."
+        },
+        {
+            id: 14, type: "kategori", context: textBudi,
+            q: "Bagaimana perasaan Rian pada awal kejadian versus di akhir cerita?<br>Tentukan Sesuai atau Tidak Sesuai!",
+            cats: ["Sesuai", "Tidak Sesuai"],
+            statements: [
+                { text: "Di awal kejadian, Rian terburu-buru ingin segera bermain ke lapangan.", answer: 0 },
+                { text: "Di akhir cerita, hati Rian merasa sangat lega dan bahagia karena berbuat jujur.", answer: 0 },
+                { text: "Ibu kantin memarahi Rian karena uangnya dikembalikan.", answer: 1 }
+            ],
+            explanation: "Pernyataan A dan B sesuai dengan isi teks. Ibu kantin justru tersenyum dan memuji, jadi pernyataan C Tidak Sesuai."
+        },
+        {
+            id: 15, type: "pg", context: textBudi,
+            q: "Amanat (pesan moral) apa yang dapat kita petik dari kisah Rian di kantin sekolah?",
+            options: ["Kita harus lari kencang saat jam istirahat.", "Kita wajib menjaga kejujuran dalam situasi apa pun.", "Jangan pernah membeli roti cokelat di kantin.", "Kita harus meminta kembalian yang lebih banyak."],
+            answer: 1,
+            explanation: "Cerita ini mengajarkan pentingnya bersikap jujur meskipun dihadapkan pada situasi yang menggoda (seperti kelebihan uang kembalian)."
+        },
+
+        // Variasi 4: Teks Nonfiksi Hewan (Lumba-Lumba)
+        {
+            id: 16, type: "pg", context: textLumba,
+            q: "Mengapa lumba-lumba harus secara berkala muncul ke permukaan air laut?",
+            options: ["Untuk mencari makanan berupa rumput laut.", "Untuk berjemur agar tubuhnya tidak dingin.", "Untuk mengambil udara segar melalui lubang di atas kepalanya karena bernapas dengan paru-paru.", "Untuk melompat-lompat menghibur turis."],
+            answer: 2,
+            explanation: "Teks menyebutkan lumba-lumba bernapas menggunakan paru-paru sehingga harus muncul ke permukaan untuk mengambil udara."
+        },
+        {
+            id: 17, type: "pg", context: textLumba,
+            q: "Apa nama kelompok atau kawanan lumba-lumba yang hidup bersama di lautan?",
+            options: ["Koloni.", "Kawanan domba.", "Gerombolan serigala.", "Sekawanan lebah."],
+            answer: 0,
+            explanation: "Tertulis jelas di teks: 'Mereka hidup secara berkelompok yang disebut koloni.'"
+        },
+        {
+            id: 18, type: "mcma", context: textLumba,
+            q: "Bagaimana cara lumba-lumba melindungi diri dan berkomunikasi di lautan? (Pilih lebih dari satu)",
+            options: ["Mereka hidup berkelompok dan saling melindungi dari hiu.", "Mereka menggunakan suara klik dan peluit yang khas.", "Mereka mengeluarkan racun berbahaya dari kulitnya.", "Mereka bersembunyi di dalam pasir laut selamanya."],
+            answer: [0, 1],
+            explanation: "Lumba-lumba saling melindungi dalam kelompok (koloni) dari pemangsa dan berkomunikasi menggunakan suara klik serta peluit."
+        },
+        {
+            id: 19, type: "kategori", context: textLumba,
+            q: "Tentukan pernyataan berikut Benar atau Salah berdasarkan teks tentang lumba-lumba!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Lumba-lumba adalah kelompok ikan sejati yang bertelur di dalam air.", answer: 1 },
+                { text: "Lumba-lumba termasuk hewan mamalia.", answer: 0 },
+                { text: "Lumba-lumba dikenal sebagai salah satu hewan paling cerdas di lautan.", answer: 0 }
+            ],
+            explanation: "Pernyataan A Salah karena lumba-lumba bukan ikan melainkan mamalia. Pernyataan B dan C Benar sesuai teks."
+        },
+        {
+            id: 20, type: "pg", context: textLumba,
+            q: "Berdasarkan ciri fisiknya, mengapa lumba-lumba sering disangka sebagai ikan oleh banyak orang awam?",
+            options: ["Karena warnanya sama persis dengan ikan hias.", "Karena hidup di dalam air dan bentuk tubuhnya mirip ikan.", "Karena memiliki sirip di punggung ikan paus.", "Karena tidak punya mata."],
+            answer: 1,
+            explanation: "Teks menyatakan: 'Meskipun hidup di dalam air dan bentuk tubuhnya mirip ikan, lumba-lumba sebenarnya bukanlah kelompok ikan.'"
+        },
+
+        // Variasi 5: Surat Pribadi (Surat untuk Ayah)
+        {
+            id: 21, type: "pg", context: textSuratAyah,
+            q: "Di kota mana Ayah Dika sedang bekerja merantau?",
+            options: ["Malang.", "Surabaya.", "Jakarta.", "Bandung."],
+            answer: 1,
+            explanation: "Pada bagian awal surat tertulis sapaan 'Bagaimana kabar Ayah di Surabaya?'"
+        },
+        {
+            id: 22, type: "pg", context: textSuratAyah,
+            q: "Prestasi apa yang berhasil diraih Dika pada minggu lalu?",
+            options: ["Juara pertama lomba lukis poster.", "Juara pertama lomba pidato tingkat kecamatan.", "Juara harapan lomba sepak bola.", "Juara cerdas cermat nasional."],
+            answer: 1,
+            explanation: "Dika menuliskan: 'Minggu lalu, aku berhasil menjadi juara pertama lomba pidato tingkat kecamatan, Yah!'"
+        },
+        {
+            id: 23, type: "mcma", context: textSuratAyah,
+            q: "Pesan atau hal apa saja yang disampaikan Dika dan ibunya kepada Ayah melalui surat tersebut? (Pilih lebih dari satu)",
+            options: ["Mengabarkan bahwa Dika menang lomba pidato.", "Meminta Ayah segera mengirimkan uang jajan tambahan.", "Berpesan agar Ayah tidak terlalu lelah bekerja dan menjaga kesehatan.", "Menanyakan kabar ibu di kampung."],
+            answer: [0, 2],
+            explanation: "Dika mengabarkan piala pidatonya dan menyampaikan pesan ibu agar Ayah menjaga kesehatan serta makan tepat waktu."
+        },
+        {
+            id: 24, type: "kategori", context: textSuratAyah,
+            q: "Tentukan pernyataan berikut Sesuai atau Tidak Sesuai dengan isi surat Dika!",
+            cats: ["Sesuai", "Tidak Sesuai"],
+            statements: [
+                { text: "Surat tersebut ditulis di Kota Malang.", answer: 0 },
+                { text: "Dika mendapatkan hadiah piala dan piagam penghargaan.", answer: 0 },
+                { text: "Ayah sudah berada di rumah bersama Dika dan Ibu.", answer: 1 }
+            ],
+            explanation: "Kota Malang (Sesuai), Piala & piagam (Sesuai). Ayah sedang merantau di Surabaya, jadi pernyataan C Tidak Sesuai."
+        },
+        {
+            id: 25, type: "pg", context: textSuratAyah,
+            q: "Bagaimana bentuk ungkapan rindu Dika kepada ayahnya di akhir surat?",
+            options: ["'Aku tidak sabar ingin segera menyusul Ayah.'", "'Kutunggu kepulangan Ayah dengan rindu.'", "'Cepatlah pulang bawa oleh-oleh yang banyak.'", "'Aku ingin pindah sekolah ke Surabaya.'"],
+            answer: 1,
+            explanation: "Kalimat penutup sebelum nama pengirim tertulis persis: 'Kutunggu kepulangan Ayah dengan rindu.'"
+        },
+
+        // Variasi 6: Teks Puisi / Pantun Nasihat
+        {
+            id: 26, type: "pg", context: textPantun,
+            q: "Nasihat apa yang disampaikan pada bait pertama pantun tersebut?",
+            options: ["Menjadi anak yang berbakti dan hemat agar hidup bahagia.", "Harus rajin menanam pohon tomat di kebun.", "Jangan suka makan buah durian.", "Harus rajin berkeliling dunia."],
+            answer: 0,
+            explanation: "Bait pertama berbunyi: 'Jadilah anak yang berbakti dan hemat, Agar hidupmu kelak bahagia dan mudah.'"
+        },
+        {
+            id: 27, type: "pg", context: textPantun,
+            q: "Pada bait kedua, terdapat kalimat 'Janganlah suka beriri hati'. Apa makna dari kata <b>beriri hati</b>?",
+            options: ["Iri atau dengki melihat kelebihan orang lain.", "Suka menolong teman yang kesusahan.", "Memiliki hati yang sangat penyayang.", "Merasa sedih karena ujian sulit."],
+            answer: 0,
+            explanation: "Iri hati adalah sifat dengki atau merasa tidak suka melihat orang lain mendapatkan kebahagiaan atau kesuksesan."
+        },
+        {
+            id: 28, type: "mcma", context: textPantun,
+            q: "Nilai moral apa saja yang terkandung di dalam kedua bait pantun tersebut? (Pilih lebih dari satu)",
+            options: ["Menjadi anak yang berbakti kepada orang tua.", "Mengajak hidup hemat dan tidak boros.", "Mengajarkan sikap sombong kepada tetangga.", "Menjaga kerukunan dan berteman dengan sesama warga."],
+            answer: [0, 1, 3],
+            explanation: "Pilihan tentang berbakti, hemat, dan berteman dengan sesama warga adalah nilai moral utama dari pantun nasihat tersebut."
+        },
+        {
+            id: 29, type: "kategori", context: textPantun,
+            q: "Tentukan pernyataan berikut Benar atau Salah berdasarkan isi bait pantun!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Buah durian digambarkan memiliki kulit yang berduri.", answer: 0 },
+                { text: "Buah tomat dipetik di kebun.", answer: 0 },
+                { text: "Rasa buah durian di dalam belanga terasa sangat asam.", answer: 1 }
+            ],
+            explanation: "Kulit durian berduri (Benar), Memetik tomat di kebun (Benar). Rasa durian dalam pantun dibilang 'manis', jadi pernyataan C Salah."
+        },
+        {
+            id: 30, type: "pg", context: textPantun,
+            q: "Apa ciri khas bentuk puisi lama (pantun) yang terlihat jelas pada teks di atas?",
+            options: ["Terdiri dari 10 bait cerita panjang tanpa rima.", "Setiap bait terdiri dari 4 baris dengan sajak akhir yang teratur.", "Ditulis dalam bentuk percakapan bebas.", "Tidak memiliki sampiran sama sekali."],
+            answer: 1,
+            explanation: "Ciri pantun adalah tiap baitnya terdiri atas 4 baris dengan pola rima yang teratur (seperti a-b-a-b)."
+        }
+    ];
+
+    let currentQ = 0;
+    let correctCount = 0;
+    const quizContainer = document.getElementById('quiz-container');
+    const scoreScreen = document.getElementById('score-screen');
+
+    function renderQuestion() {
+        quizContainer.innerHTML = '';
+        if (currentQ >= questions.length) {
+            showScore();
+            return;
+        }
+
+        const qData = questions[currentQ];
+        const card = document.createElement('div');
+        card.className = 'question-card active';
+
+        // Header & Context
+        let html = `<div class="question-number">Soal ${currentQ + 1} / 30</div>`;
+        if (qData.context) {
+            html += `<div class="context-box">${qData.context}</div>`;
+        }
+        html += `<div class="question-text">${qData.q}</div>`;
+
+        // Render Options based on type
+        html += `<div class="options-container" id="options-${currentQ}">`;
+        
+        if (qData.type === 'pg') {
+            qData.options.forEach((opt, idx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="radio" name="q${currentQ}" value="${idx}">
+                        <span>${opt}</span>
+                    </label>`;
+            });
+        } 
+        else if (qData.type === 'mcma') {
+            qData.options.forEach((opt, idx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="checkbox" name="q${currentQ}" value="${idx}">
+                        <span>${opt}</span>
+                    </label>`;
+            });
+        }
+        else if (qData.type === 'kategori') {
+            html += `<table class="kategori-table">
+                        <tr><th>Pernyataan</th><th>${qData.cats[0]}</th><th>${qData.cats[1]}</th></tr>`;
+            qData.statements.forEach((stmt, idx) => {
+                html += `<tr>
+                            <td class="statement">${stmt.text}</td>
+                            <td><input type="radio" name="cat${currentQ}_${idx}" value="0"></td>
+                            <td><input type="radio" name="cat${currentQ}_${idx}" value="1"></td>
+                         </tr>`;
+            });
+            html += `</table>`;
+        }
+        html += `</div>`; // end options-container
+
+        // Submit Button
+        html += `<button class="btn-submit" id="btn-submit-${currentQ}" onclick="checkAnswer()">Kirim Jawaban</button>`;
+
+        // Feedback Box
+        html += `
+            <div class="feedback" id="feedback-${currentQ}">
+                <div class="status" id="status-${currentQ}"></div>
+                <div class="explanation"><b>Penjelasan:</b> <span id="expl-${currentQ}"></span></div>
+            </div>
+        `;
+
+        // Next Button
+        html += `<button class="btn-next" id="btn-next-${currentQ}" onclick="nextQuestion()">Selanjutnya ➡️</button>`;
+
+        card.innerHTML = html;
+        quizContainer.appendChild(card);
+    }
+
+    function checkAnswer() {
+        const qData = questions[currentQ];
+        let isCorrect = false;
+        let isAnswered = false;
+
+        if (qData.type === 'pg') {
+            const selected = document.querySelector(`input[name="q${currentQ}"]:checked`);
+            if (!selected) return alert("Pilih jawabanmu dulu ya!");
+            isAnswered = true;
+            if (parseInt(selected.value) === qData.answer) isCorrect = true;
+        } 
+        else if (qData.type === 'mcma') {
+            const selectedBoxes = document.querySelectorAll(`input[name="q${currentQ}"]:checked`);
+            if (selectedBoxes.length === 0) return alert("Pilih minimal satu jawaban!");
+            isAnswered = true;
+            let vals = Array.from(selectedBoxes).map(cb => parseInt(cb.value)).sort();
+            let ans = qData.answer.slice().sort();
+            isCorrect = (JSON.stringify(vals) === JSON.stringify(ans));
+        }
+        else if (qData.type === 'kategori') {
+            let allAnswered = true;
+            let correctRows = 0;
+            qData.statements.forEach((stmt, idx) => {
+                const sel = document.querySelector(`input[name="cat${currentQ}_${idx}"]:checked`);
+                if (!sel) allAnswered = false;
+                else if (parseInt(sel.value) === stmt.answer) correctRows++;
+            });
+            if (!allAnswered) return alert("Tentukan pilihan untuk SEMUA baris pernyataan ya!");
+            isAnswered = true;
+            if (correctRows === qData.statements.length) isCorrect = true;
+        }
+
+        if (isAnswered) {
+            // Disable inputs
+            const inputs = document.querySelectorAll(`input`);
+            inputs.forEach(i => i.disabled = true);
+            const labels = document.querySelectorAll('.option-label');
+            labels.forEach(l => l.classList.add('disabled'));
+
+            // Show feedback
+            document.getElementById(`btn-submit-${currentQ}`).style.display = 'none';
+            const feedbackBox = document.getElementById(`feedback-${currentQ}`);
+            const statusText = document.getElementById(`status-${currentQ}`);
+            document.getElementById(`expl-${currentQ}`).innerHTML = qData.explanation;
+
+            feedbackBox.style.display = 'block';
+            if (isCorrect) {
+                correctCount++;
+                feedbackBox.classList.add('correct-bg');
+                statusText.innerHTML = '🎉 HEBAT, JAWABANMU BENAR!';
+                statusText.className = 'status correct-text';
+            } else {
+                feedbackBox.classList.add('wrong-bg');
+                statusText.innerHTML = '❌ YAAH, MASIH KURANG TEPAT!';
+                statusText.className = 'status wrong-text';
+            }
+
+            document.getElementById(`btn-next-${currentQ}`).style.display = 'block';
+        }
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        renderQuestion();
+    }
+
+    function showScore() {
+        document.getElementById('quiz-header').style.display = 'none';
+        scoreScreen.style.display = 'block';
+        
+        // Capping float numbers
+        const score = Math.round((correctCount / questions.length) * 100);
+        document.getElementById('final-score').innerText = score;
+
+        if (score === 100) {
+            document.getElementById('score-message').innerText = "LUAR BIASA! Kamu dapat nilai Sempurna!";
+            document.getElementById('champion-icon').style.display = 'block';
+            
+            // Show WA Button
+            const waBtn = document.getElementById('btn-wa');
+            waBtn.style.display = 'inline-block';
+            const waText = encodeURIComponent("Alhamdulillah aku berhasil dapat 100 & Mendapatkan HADIAH 5.000!");
+            waBtn.href = `https://wa.me/?text=${waText}`;
+
+            // Trigger Confetti
+            fireConfetti();
+        } else {
+            document.getElementById('score-message').innerText = "Tetap semangat! Yuk coba lagi supaya dapat 100!";
+            document.getElementById('btn-retry').style.display = 'inline-block';
+        }
+    }
+
+    function fireConfetti() {
+        var duration = 3 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff9800', '#4caf50', '#00bcd4']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff9800', '#4caf50', '#00bcd4']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    // Start Quiz
+    window.onload = renderQuestion;
+</script>
+
+</body>
+</html>

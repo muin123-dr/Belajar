@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan TKA 2026 ke-3 - TKA Bahasa Indonesia SD</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-light: #a29bfe;
+            --secondary: #fd79a8;
+            --success: #00b894;
+            --success-bg: #e0f7f1;
+            --danger: #e17055;
+            --danger-bg: #fdf0ed;
+            --warning: #fdcb6e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Comic Sans MS', 'Arial Rounded MT Bold', system-ui, sans-serif;
+            background: linear-gradient(135deg, #dfe6e9 0%, #f8f9fa 30%, #e8e0f0 60%, #fce4ec 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .quiz-container {
+            max-width: 850px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .quiz-header {
+            background: linear-gradient(135deg, #6C5CE7 0%, #a29bfe 50%, #fd79a8 100%);
+            border-radius: var(--radius);
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: float-bg 8s ease-in-out infinite;
+        }
+        @keyframes float-bg {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(10%, 10%);
+            }
+        }
+        .quiz-header h1 {
+            font-size: 1.6rem;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .quiz-header .subtitle {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+        .header-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            animation: bounce-emoji 2s ease-in-out infinite;
+        }
+        @keyframes bounce-emoji {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 80px;
+            border: 2px solid var(--border);
+        }
+        .stat-item .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .progress-container {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 10px 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6C5CE7, #a29bfe, #fd79a8);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        .question-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 25px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+            animation: fadeInUp 0.35s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+        }
+        .reading-text {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary-light);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #4a5568;
+            line-height: 1.7;
+            max-height: 220px;
+            overflow-y: auto;
+            position: relative;
+        }
+        .reading-text::before {
+            content: '📖';
+            position: absolute;
+            top: -10px;
+            left: -8px;
+            font-size: 1.2rem;
+            font-style: normal;
+        }
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: var(--radius-sm);
+            border: 3px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.25s ease;
+            color: var(--text);
+            font-family: inherit;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f8f0ff;
+            transform: translateX(3px);
+        }
+        .option-btn .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: #f1f2f6;
+            color: var(--text);
+            transition: all 0.25s;
+        }
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #f0edff;
+        }
+        .option-btn.selected .option-letter {
+            background: var(--primary);
+            color: #fff;
+        }
+        .option-btn.correct-reveal {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+        .option-btn.correct-reveal .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+        .option-btn.wrong-reveal {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+        }
+        .option-btn.wrong-reveal .option-letter {
+            background: var(--danger);
+            color: #fff;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .bs-statement {
+            background: #fafafa;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 10px;
+        }
+        .bs-statement p {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .bs-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .bs-btn {
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.25s;
+            font-family: inherit;
+        }
+        .bs-btn.selected {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .bs-btn.correct-reveal {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+        .bs-btn.wrong-reveal {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+        .bs-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .check-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+        }
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 15px 18px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: var(--success-bg);
+            border: 3px solid var(--success);
+            color: #008f6b;
+        }
+        .feedback.wrong {
+            background: var(--danger-bg);
+            border: 3px solid var(--danger);
+            color: #c0392b;
+        }
+        .answer-key {
+            margin-top: 10px;
+            padding: 15px 18px;
+            background: #fff8e1;
+            border: 3px dashed #fdcb6e;
+            border-radius: var(--radius-sm);
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        .answer-key.show {
+            display: block;
+        }
+        .answer-key .ak-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #6d4c41;
+            margin-bottom: 6px;
+        }
+        .answer-key .ak-content {
+            font-size: 0.88rem;
+            color: #4a5568;
+            line-height: 1.7;
+        }
+        .answer-key .ak-content strong {
+            color: var(--primary);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 11px 22px;
+            border-radius: 50px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn.prev {
+            background: #f1f2f6;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .nav-btn.next {
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            border: 2px solid var(--primary);
+            display: none;
+        }
+        .nav-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .result-screen {
+            text-align: center;
+            padding: 30px 20px;
+            animation: fadeInUp 0.5s ease;
+        }
+        .result-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce-emoji 1.5s ease-in-out infinite;
+        }
+        .result-score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .result-message {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .wa-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 50px;
+            background: #25D366;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .wa-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+        .retry-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #6C5CE7, #a29bfe);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+        }
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+            display: none;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .quiz-header h1 {
+                font-size: 1.2rem;
+            }
+            .question-card {
+                padding: 18px 14px;
+            }
+            .question-text {
+                font-size: 0.95rem;
+            }
+            .option-btn {
+                padding: 11px 13px;
+                font-size: 0.88rem;
+                gap: 8px;
+            }
+            .option-btn .option-letter {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                font-size: 0.85rem;
+            }
+            .reading-text {
+                font-size: 0.82rem;
+                padding: 10px 12px;
+            }
+            .check-btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+            .nav-btn {
+                padding: 9px 16px;
+                font-size: 0.82rem;
+            }
+            .stat-item {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+            .stat-item .stat-value {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="confetti-container" id="confetti-container"></div>
+    <div class="quiz-container" id="quiz-container">
+        <div class="quiz-header">
+            <span class="header-emoji">📝🏆🌟</span>
+            <h1>Latihan TKA 2026 ke-3</h1>
+            <p class="subtitle">50 Soal • TKA Bahasa Indonesia SD</p>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item">📝 Soal: <span class="stat-value" id="current-q-num">1</span>/50</div>
+            <div class="stat-item">✅ Benar: <span class="stat-value" id="correct-count">0</span></div>
+            <div class="stat-item">❌ Salah: <span class="stat-value" id="wrong-count">0</span></div>
+            <div class="stat-item">⭐ Skor: <span class="stat-value" id="score-val">0</span></div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-label"><span>📊 Progres</span><span id="progress-pct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+        <div class="question-card" id="question-card">
+            <span class="question-number" id="q-number">Soal No. 1</span>
+            <div class="reading-text" id="q-reading" style="display:none;"></div>
+            <div class="question-text" id="q-text"></div>
+            <div class="options-container" id="options-container"></div>
+            <button class="check-btn" id="check-btn" disabled>Cek Jawaban ✅</button>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-key" id="answer-key"></div>
+            <div class="nav-buttons">
+                <button class="nav-btn prev" id="btn-prev" disabled>⬅️ Sebelumnya</button>
+                <button class="nav-btn next" id="btn-next">Soal Berikutnya ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                type: 'benarsalah',
+                reading: 'Suatu hari, seekor merpati melihat ada seekor semut yang terjatuh ke sungai. Semut itu berjuang sangat keras untuk berenang supaya tidak tenggelam, namun ia nampaknya akan segera tenggelam. Merpati segera memetik sehelai daun dari pohon yang ada di dekatnya dan menjatuhkannya ke sungai, dekat dengan si semut. Semut pun merangkak ke atas daun tersebut. Daun itu kemudian terbawa arus dan mendarat di tepian sungai. Semut pun selamat. Beberapa waktu kemudian, seorang pemburu burung datang ke hutan dan hendak menangkap merpati tersebut. Semut yang melihat itu segera merayap ke arah kaki pemburu dan menggigitnya dengan keras. Pemburu merasa kesakitan dan berteriak, yang membuat merpati terkejut dan segera terbang menyelamatkan diri. Merpati pun selamat dari ancaman pemburu berkat bantuan semut.',
+                question: 'Berdasarkan bacaan di atas, pelajaran apa yang bisa kita terapkan dalam kehidupan sehari-hari? Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Kita harus saling tolong menolong tanpa mengharapkan balasan', correct: true },
+                    { text: 'Kita boleh membiarkan teman kesulitan agar ia belajar mandiri', correct: false },
+                    { text: 'Kebaikan akan dibalas dengan kebaikan', correct: true }
+                ],
+                explanation: 'Cerita semut dan merpati mengajarkan kita untuk saling tolong-menolong. Merpati menolong semut, lalu semut menolong merpati. Kita tidak boleh membiarkan teman kesulitan karena kebaikan akan dibalas dengan kebaikan.'
+            },
+            {
+                type: 'multi',
+                reading: 'Berdasarkan teks persahabatan semut dan merpati, latar tempat cerita teks tersebut ada di mana saja?',
+                question: 'Pilih semua jawaban yang benar!',
+                options: ['Di sungai', 'Di dalam rumah pemburu', 'Di hutan', 'Di atas pohon'],
+                correct: [0, 2],
+                explanation: 'Latar tempat dalam cerita adalah di sungai (semut terjatuh) dan di hutan (pemburu datang). Di dalam rumah pemburu tidak disebutkan, dan di atas pohon hanya disebutkan merpati memetik daun.'
+            },
+            {
+                type: 'multi',
+                reading: 'Dokter Dara sedang memeriksa pasien di ruang praktiknya. Ia menggunakan stetoskop untuk mendengarkan detak jantung pasien. Setelah itu, ia menulis resep obat dan menjelaskan cara minumnya. Pasien pun mengucapkan terima kasih dan pulang.',
+                question: 'Berdasarkan bacaan di atas, pilihlah semua kosakata yang sering digunakan pada bidang kesehatan!',
+                options: ['Stetoskop', 'Pasien', 'Menulis', 'Resep obat'],
+                correct: [0, 1, 3],
+                explanation: 'Kosakata bidang kesehatan meliputi stetoskop, pasien, dan resep obat. "Menulis" adalah kata umum, bukan kosakata khusus bidang kesehatan.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Hewan Pemakan Daun, Apa itu?\nHewan pemakan tumbuhan sering disebut herbivora. Namun, ada pengelompokan yang lebih khusus. Hewan pemakan daging disebut karnivora, sedangkan hewan pemakan segala disebut omnivora. Ternyata ada pula hewan yang hanya memakan daun saja. Hewan pemakan daun disebut sebagai folivora. Folivora umumnya memiliki usus yang sangat panjang dan proses metabolisme yang lambat. Hal ini dikarenakan daun seringkali sulit untuk dicerna. Karena metabolisme yang lambat, folivora merupakan hewan yang tidak aktif atau malas bergerak.',
+                question: 'Berdasarkan teks di atas, hewan folivora memiliki beberapa ciri khusus. Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Folivora merupakan hewan yang geraknya sangat aktif', correct: false },
+                    { text: 'Folivora memiliki usus yang panjang', correct: true },
+                    { text: 'Folivora hanya memakan daging', correct: false }
+                ],
+                explanation: 'Folivora adalah hewan pemakan daun yang memiliki usus panjang dan metabolisme lambat sehingga malas bergerak. Folivora tidak aktif dan tidak makan daging.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Humus si Penyubur Tanah\nHumus berasal dari tumbuhan dan hewan yang membusuk. Humus merupakan jenis tanah yang paling subur. Tanah ini berwarna gelap dan bertekstur gembur. Humus dapat kita buat sendiri. Caranya dengan menimbun daun-daun atau sampah organik ke dalam lubang tanah. Udara lembab akan mempercepat pembusukan. Oleh karena itu, lubang sebaiknya dibuat di bawah pohon yang rindang. Pohon yang rindang akan menahan sinar matahari sehingga lubang menjadi tetap lembab.',
+                question: 'Mengapa lubang untuk membuat humus sebaiknya dibuat di bawah pohon yang rindang?',
+                statements: [
+                    { text: 'Karena udara lembab mempercepat pembusukan', correct: true },
+                    { text: 'Karena pohon rindang menahan air hujan agar tidak membasahi daun', correct: false },
+                    { text: 'Karena pohon rindang menghalangi sinar matahari langsung', correct: true }
+                ],
+                explanation: 'Lubang dibuat di bawah pohon rindang karena pohon rindang menghalangi sinar matahari langsung sehingga lubang tetap lembab, dan udara lembab mempercepat pembusukan. Bukan untuk menahan air hujan.'
+            },
+            {
+                type: 'single',
+                reading: 'Humus si Penyubur Tanah\n(Humas berasal dari tumbuhan dan hewan yang membusuk ...)',
+                question: 'Bagan mana yang sesuai untuk menggambarkan informasi pada teks tersebut?',
+                options: [
+                    'Sampah organik → Pembusukan → Humus → Tanah Gembur',
+                    'Tanah Gembur → Pohon Rindang → Humus',
+                    'Sampah → Matahari → Tanah Liat',
+                    'Pohon → Pasir → Gumpalan'
+                ],
+                correct: 0,
+                explanation: 'Bagan yang tepat menggambarkan proses pembuatan humus: sampah organik → pembusukan → humus → tanah gembur.'
+            },
+            {
+                type: 'multi',
+                reading: 'Humus si Penyubur Tanah',
+                question: 'Berdasarkan teks, apa saja manfaat humus bagi tanah?',
+                options: ['Tanah menjadi gembur', 'Tanah menjadi keras', 'Tanah mudah ditanami', 'Tanah menjadi subur'],
+                correct: [0, 2, 3],
+                explanation: 'Humus adalah tanah paling subur, bertekstur gembur, dan mudah ditanami. Tanah keras bukan manfaat humus.'
+            },
+            {
+                type: 'multi',
+                reading: 'Guruku\nKarya: Rizal Musthofa\nEngkau sangat sabar dalam mengajarku\nEngkau sangat sabar dalam membimbingku\nWalau terkadang aku sering membuatmu marah\nEngkau adalah orang yang sangat bijaksana\nJasamu akan kuukir dalam anganku\nSampai kapan pun aku akan mengingatnya',
+                question: 'Apa saja amanat yang dapat dipetik dari puisi di atas?',
+                options: ['Kita harus menghargai jasa guru', 'Guru adalah orang yang bijaksana dan sabar', 'Kita harus belajar tanpa henti setiap hari'],
+                correct: [0, 1],
+                explanation: 'Puisi menggambarkan guru yang sabar dan bijaksana, serta mengajarkan kita untuk menghargai jasa guru. "Belajar tanpa henti" tidak disebutkan dalam puisi.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Perhatikan larik puisi berikut!\n"Engkaulah penyejukku di kala matahari menyengat"',
+                question: 'Apa makna ungkapan tersebut?',
+                statements: [
+                    { text: 'Guru membuat suasana hati menjadi tenang', correct: true },
+                    { text: 'Guru selalu mengajarkan tentang cuaca', correct: false },
+                    { text: 'Guru membantu murid ketika mengalami kesulitan', correct: true }
+                ],
+                explanation: 'Ungkapan "penyejuk di kala matahari menyengat" bermakna guru membuat suasana hati tenang dan membantu murid yang kesulitan, bukan tentang cuaca.'
+            },
+            {
+                type: 'multi',
+                reading: 'Sekitar satu tahun yang lalu, lapangan Sukoreno tampak kumuh dan kurang terawat. Sampah-sampah berserakan di pojok lapangan dan tanahnya berdebu saat musim kemarau. Namun, sejak pemerintah daerah merenovasinya, lapangan itu berubah total. Sekarang, lapangan Sukoreno memiliki taman bunga yang indah, lintasan lari yang rapi, dan bangku-bangku taman yang nyaman. Warga desa sering menghabiskan waktu sore mereka untuk berolahraga atau sekadar mengobrol di sana.',
+                question: 'Berdasarkan cerita tersebut, perubahan apa saja yang terjadi pada lapangan Sukoreno?',
+                options: ['Dari ramai menjadi sepi', 'Dari kumuh menjadi rapi dan indah', 'Dari tanah berdebu menjadi taman hijau'],
+                correct: [1, 2],
+                explanation: 'Lapangan berubah dari kumuh menjadi rapi dan indah, dari tanah berdebu menjadi taman hijau. Tidak disebutkan perubahan dari ramai menjadi sepi.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Desi telah berlatih keras selama berbulan-bulan untuk mengikuti lomba lari tingkat kabupaten. Ia sangat berharap bisa membawa pulang medali emas. Saat perlombaan berlangsung, Desi memimpin di posisi terdepan. Namun, hanya beberapa meter sebelum garis akhir, kakinya terkilir dan ia terjatuh. Meskipun kesakitan, Desi bangkit kembali dan berjalan terpincang-pincang hingga melewati garis akhir. Meskipun ia tidak menjadi juara pertama, pelatih menepuk bahunya dengan bangga karena semangat pantang menyerahnya.',
+                question: 'Berdasarkan cerita tersebut, bagaimana perasaan Desi setelah perlombaan, dan mengapa ia bisa merasakan hal tersebut?',
+                statements: [
+                    { text: 'Sangat kecewa karena gagal menang, meski ia telah berusaha keras', correct: false },
+                    { text: 'Sedih, tetapi tetap bangga karena sudah berjuang hingga akhir', correct: true },
+                    { text: 'Malu karena terjatuh di depan penonton', correct: false }
+                ],
+                explanation: 'Desi sedih karena tidak juara, tetapi bangga karena berjuang hingga akhir dan pelatih bangga padanya. Ia tidak dikatakan sangat kecewa atau malu.'
+            },
+            {
+                type: 'single',
+                reading: 'Perhatikan kalimat-kalimat di bawah ini!\n1) Setiap pulang sekolah, Afkar selalu menyempatkan diri datang ke taman kota.\n2) Ia memang dikenal sebagai anak yang sangat senang membantu orang lain.\n3) Di sana, ia membantu petugas taman menanam bunga-bunga baru.\n4) Tanpa diminta, ia langsung ikut membantu mencangkul tanah.',
+                question: 'Urutan kalimat agar menjadi paragraf yang padu adalah....',
+                options: ['1-3-4-2', '1-4-3-2', '3-1-4-2', '4-1-3-2'],
+                correct: 0,
+                explanation: 'Urutan padu: (1) kalimat pengantar, (3) membantu menanam bunga, (4) ikut mencangkul, (2) penutup yang menjelaskan sifat Afkar.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Festival Kuliner Kota Wates akan diadakan pada hari Sabtu depan. Berdasarkan brosur yang tersebar, festival dimulai pukul 08.00 pagi. Namun, karena ada kendala teknis, pembukaan resmi oleh Bupati Kulon Progo baru dilakukan pukul 09.30. Meskipun demikian, warga sudah memadati area sejak pagi untuk melihat lomba memasak yang tetap dimulai tepat pukul 08.00. Festival ditutup lebih awal pukul 17.00 karena hujan deras, padahal rencana awal adalah pukul 18.00.',
+                question: 'Berdasarkan teks di atas, tentukan pernyataan berikut sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Penutupan festival dilakukan lebih cepat dari rencana awal', correct: true },
+                    { text: 'Lomba masak dimulai tepat pukul 10.00 sesuai brosur', correct: false },
+                    { text: 'Pembukaan resmi festival dilakukan oleh Bupati Kulon Progo', correct: true }
+                ],
+                explanation: 'Penutupan lebih awal pukul 17.00 (rencana 18.00) = sesuai. Lomba masak dimulai pukul 08.00, bukan 10.00 = tidak sesuai. Pembukaan resmi oleh Bupati = sesuai.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Dahulu kala, ada seorang kepala desa yang sangat kaya namun sangat kikir. Ia tidak pernah mau membantu warganya yang sedang kesulitan. Suatu hari, seorang pengemis tua datang ke rumahnya meminta sedikit nasi. Kepala desa itu justru mengusirnya dengan kasar. Pengemis itu kemudian berkata, "Kekayaanmu tidak akan menolongmu jika hatimu tertutup." Keesokan harinya, tangan kepala desa itu tiba-tiba lumpuh dan tidak bisa digerakkan. Ia teringat kata-kata pengemis itu dan segera mencarinya untuk meminta maaf. Setelah ia berjanji akan menyumbangkan sebagian hartanya untuk membangun jembatan desa yang rusak, tangannya kembali normal.',
+                question: 'Apa nilai moral positif yang terkandung di dalam teks tersebut?',
+                statements: [
+                    { text: 'Memberi lebih baik daripada menerima', correct: true },
+                    { text: 'Memberikan sebagian dari harta kita akan membawa kebahagiaan', correct: true },
+                    { text: 'Memberikan semua harta kekayaan tidak akan menjadikan seseorang kesulitan', correct: false }
+                ],
+                explanation: 'Nilai moral: memberi lebih baik daripada menerima, dan menyumbangkan sebagian harta membawa kebahagiaan. Memberikan SEMUA harta tidak disebutkan dalam teks.'
+            },
+            {
+                type: 'multi',
+                reading: 'Berdasarkan teks kepala desa yang kikir, apa makna kata "kikir" dalam teks tersebut?',
+                question: 'Pilih semua jawaban yang benar!',
+                options: ['Suka memberi dan murah hati', 'Sangat pelit', 'Tidak mau memberi atau mengeluarkan hartanya'],
+                correct: [1, 2],
+                explanation: 'Kikir berarti sangat pelit, tidak mau memberi atau mengeluarkan hartanya. Lawan kata kikir adalah dermawan.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Berdasarkan teks kepala desa yang kikir, manakah pernyataan berikut yang sesuai?',
+                question: 'Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Kepala desa lumpuh karena tidak membantu pengemis', correct: true },
+                    { text: 'Kepala desa menyembuhkan diri dengan pergi ke tabib', correct: false },
+                    { text: 'Kepala desa akhirnya berjanji menyumbangkan harta untuk fasilitas umum', correct: true }
+                ],
+                explanation: 'Kepala desa lumpuh setelah mengusir pengemis. Ia tidak pergi ke tabib, melainkan mencari pengemis dan berjanji menyumbangkan harta untuk jembatan desa (fasilitas umum).'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Berdasarkan teks kepala desa yang kikir, apa perubahan karakter yang terjadi pada tokoh kepala desa?',
+                question: 'Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Sombong menjadi dermawan', correct: false },
+                    { text: 'Kikir menjadi rendah hati', correct: true },
+                    { text: 'Peduli sesama menjadi tidak peduli', correct: false }
+                ],
+                explanation: 'Kepala desa berubah dari kikir (pelit) menjadi rendah hati dan mau menyumbangkan hartanya. Bukan dari sombong, dan bukan menjadi tidak peduli.'
+            },
+            {
+                type: 'multi',
+                reading: 'Dahulu kala, hidup seorang ayah dengan tiga orang anaknya di sebuah hutan. Sang ayah hendak pergi ke kota untuk mencari pekerjaan dan berpesan kepada ketiga anaknya agar tidak keluar rumah atau bermain di kolam jernih di dekat hutan saat ia pergi. Namun, kedua anak tertua tidak mematuhi pesan ayah. Mereka pergi ke kolam untuk berendam. Tiba-tiba tubuh mereka berubah menjadi ular besar karena kolam itu sebenarnya adalah tempat kutukan bagi siapa saja yang mandi di sana tanpa izin penunggu hutan. Si bungsu yang sedari tadi mengingatkan mereka hanya bisa menangis melihat kakak-kakaknya.',
+                question: 'Manakah dari kalimat tanya berikut yang jawabannya dapat ditemukan dalam teks?',
+                options: [
+                    'Bagaimana perasaan si bungsu ketika kakaknya berubah wujud?',
+                    'Apa pesan ayah sebelum pergi mencari pekerjaan?',
+                    'Siapa yang mengingatkan kakak-kakaknya agar tidak mandi di kolam?'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'Teks memuat jawaban untuk ketiga pertanyaan: perasaan si bungsu (menangis), pesan ayah (tidak keluar rumah/bermain di kolam), dan yang mengingatkan (si bungsu).'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Berdasarkan teks ayah dan tiga anak, sikap si bungsu dapat kita terapkan dalam kehidupan sehari-hari dengan cara?',
+                question: 'Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Menegur saudara jika melanggar aturan', correct: true },
+                    { text: 'Mengingatkan teman agar tidak melakukan hal berbahaya', correct: true },
+                    { text: 'Menghindari memberi saran agar tidak dimarahi orang lain', correct: false }
+                ],
+                explanation: 'Si bungsu mengingatkan kakaknya agar tidak melanggar aturan. Sikap ini dapat diterapkan dengan menegur saudara dan mengingatkan teman. Menghindari saran karena takut dimarahi adalah sikap tidak baik.'
+            },
+            {
+                type: 'multi',
+                reading: 'Kerbau sedang beristirahat di kandangnya ketika ia melihat seekor ular besar merayap mendekat. Kerbau yang ketakutan meminta pemiliknya untuk segera menyalakan api unggun di dekat kandang. Pemiliknya segera melakukannya. Ternyata benar, ular tersebut menjauh karena ular sangat membenci suhu panas dan cahaya terang dari api. Sejak saat itu, kerbau selalu merasa aman jika api unggun tetap menyala di malam hari.',
+                question: 'Mengapa kerbau meminta api unggun diletakkan di dekat kandangnya?',
+                options: ['Untuk menghindari gangguan ular', 'Agar hangat di malam hari', 'Karena ular takut pada panas api'],
+                correct: [0, 2],
+                explanation: 'Kerbau meminta api unggun untuk menghindari gangguan ular, karena ular sangat membenci suhu panas dan cahaya terang dari api. Bukan untuk kehangatan.'
+            },
+            {
+                type: 'single',
+                reading: 'Berdasarkan teks ayah dan tiga anak, manakah pernyataan berikut yang merupakan fakta dalam cerita?',
+                question: 'Pilih jawaban yang benar!',
+                options: [
+                    'Si bungsu adalah anak yang paling penurut',
+                    'Ayah meninggalkan anak-anaknya karena malas bekerja',
+                    'Ayah berpesan agar tidak mandi atau bermain di kolam air jernih',
+                    'Kakak pertama adalah seorang pemberani'
+                ],
+                correct: 2,
+                explanation: 'Fakta dalam cerita adalah ayah berpesan agar tidak keluar rumah atau bermain di kolam jernih. Pilihan lain adalah opini atau tidak disebutkan dalam teks.'
+            },
+            {
+                type: 'multi',
+                reading: 'Berdasarkan teks kolam kutukan, bagaimana bahasa penulis dalam menggambarkan suasana kolam kutukan tersebut?',
+                question: 'Pilih semua jawaban yang benar!',
+                options: [
+                    'Membuat pembaca mudah membayangkan suasana misterius',
+                    'Sulit dimengerti karena banyak istilah asing',
+                    'Bahasanya sederhana sehingga mudah dipahami anak-anak'
+                ],
+                correct: [0, 2],
+                explanation: 'Penulis menggunakan bahasa sederhana yang mudah dipahami anak-anak, namun tetap membuat suasana misterius terasa jelas bagi pembaca.'
+            },
+            {
+                type: 'multi',
+                reading: 'Pantun Kesehatan\nKe pasar beli buah-buahan\nJangan lupa beli buah manggis\nMari jaga kesehatan\nAgar hidup tidak menangis',
+                question: 'Apa saja pesan yang terkandung dalam pantun tersebut?',
+                options: [
+                    'Kesehatan harus dijaga sebelum sakit datang',
+                    'Mencegah lebih baik daripada mengobati',
+                    'Makan buah setiap hari adalah kewajiban agama'
+                ],
+                correct: [0, 1],
+                explanation: 'Pantun mengajak kita menjaga kesehatan agar tidak sakit. Pesannya: jaga kesehatan sebelum sakit, mencegah lebih baik daripada mengobati. Makan buah tidak disebutkan sebagai kewajiban agama.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Deni : "Ibu, hujan deras sekali di luar."\nIbu : "Iya Deni, jangan keluar rumah dulu ya, nanti kamu sakit."\nDeni : "........................"',
+                question: 'Lengkapi dialog Deni dengan kalimat yang paling sesuai!',
+                statements: [
+                    { text: '"Aku akan tidur di teras saja."', correct: false },
+                    { text: '"Baik, Ibu. Aku akan main di dalam rumah saja."', correct: true },
+                    { text: '"Aku mau main bola di lapangan sekarang juga."', correct: false }
+                ],
+                explanation: 'Jawaban paling sesuai adalah menuruti nasihat Ibu dengan bermain di dalam rumah. Tidur di teras atau main bola di luar tidak sesuai karena melanggar nasihat.'
+            },
+            {
+                type: 'single',
+                reading: 'Ghefira khawatir akan keselamatan kucingnya. Sejak tadi pagi kucingnya tidak kelihatan di rumah. Ghefira sudah mencarinya ke seluruh bagian rumah. Ia mencari ke halaman rumah sambil menyebut nama kucingnya. Namun, kucing kesayangannya belum juga ditemukan.',
+                question: 'Kalimat utama dari paragraf di atas adalah...',
+                options: [
+                    'Ghefira khawatir akan keselamatan kucingnya',
+                    'Ghefira sudah mencari kucingnya ke seluruh bagian rumah',
+                    'Sejak tadi pagi kucingnya tidak kelihatan di rumah',
+                    'Ia mencari ke halaman rumah sambil menyebut nama kucingnya'
+                ],
+                correct: 0,
+                explanation: 'Kalimat utama adalah "Ghefira khawatir akan keselamatan kucingnya". Kalimat lain menjelaskan detail pencariannya.'
+            },
+            {
+                type: 'multi',
+                reading: 'Diana : "Bu Guru, mengapa kita tidak boleh membuang sampah ke sungai?"\nIbu Guru : "Karena sungai yang kotor dapat menyebabkan banjir dan menjadi sumber penyakit, Diana. Selain itu, airnya jadi tidak sehat untuk ikan-ikan."\nDiana : "Oh, begitu ya Bu. Berarti kita harus menjaga kebersihan sungai agar air tetap jernih."',
+                question: 'Apa saja simpulan isi percakapan Diana dan Ibu Guru tentang sungai?',
+                options: [
+                    'Sungai yang kotor dapat menyebabkan penyakit',
+                    'Sungai yang bersih membuat ikan jadi lebih banyak dan sehat',
+                    'Kita harus menjaga kebersihan sungai agar air tetap sehat digunakan'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'Semua pernyataan merupakan simpulan dari percakapan: sungai kotor menyebabkan penyakit, sungai bersih membuat ikan sehat, dan kita harus menjaga kebersihan sungai.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Teks 1: Buku adalah jendela dunia. Dengan membaca buku, kita bisa menjelajahi tempat-tempat jauh tanpa harus pergi ke sana. Buku memberikan kita ilmu yang tidak terbatas.\nTeks 2: Saat ini produksi buku semakin beragam. Ada buku digital yang bisa dibaca melalui gawai. Hal ini memudahkan orang untuk mendapatkan informasi kapan pun dan di mana pun.',
+                question: 'Apa persamaan informasi dari Teks 1 dan Teks 2?',
+                statements: [
+                    { text: 'Buku dapat memberikan banyak ilmu pengetahuan', correct: true },
+                    { text: 'Buku merupakan sumber berbagai informasi bagi pembaca', correct: true },
+                    { text: 'Buku sebagai penunjang utama bagi peserta didik di sekolah', correct: false }
+                ],
+                explanation: 'Teks 1 menyebut buku memberikan ilmu, Teks 2 menyebut buku sebagai sumber informasi. Keduanya membahas buku sebagai sumber ilmu/informasi. Tidak disebutkan tentang penunjang utama di sekolah.'
+            },
+            {
+                type: 'multi',
+                reading: 'Drama: Di Sebuah Taman Kota\nHani : "Aduh, topiku terbang ke tengah kolam!" (Hani nampak panik)\nSusi : "Jangan panik Hani, mari kita minta bantuan orang dewasa untuk mengambilnya."\nIbu : "Sini, Ibu bantu ambilkan menggunakan galah panjang ini." (Seorang pengunjung)\nHani : "Terima kasih banyak ya, Bu. Ibu baik sekali."',
+                question: 'Manakah pernyataan berikut yang benar berdasarkan cuplikan drama tersebut?',
+                options: [
+                    'Seorang ibu membantu mengambilkan topi Hani',
+                    'Susi mengabaikan topi Hani yang terbang',
+                    'Hani berterima kasih kepada ibu yang membantunya'
+                ],
+                correct: [0, 2],
+                explanation: 'Ibu pengunjung membantu mengambil topi dengan galah. Susi TIDAK mengabaikan, ia menenangkan Hani dan mengusulkan minta bantuan. Hani berterima kasih.'
+            },
+            {
+                type: 'single',
+                reading: 'Drama di atas berjudul "Di Sebuah Taman Kota".',
+                question: 'Latar tempat terjadinya peristiwa dalam drama tersebut adalah....',
+                options: ['Taman kota', 'Bangku kota', 'Sekolah', 'Perpustakaan'],
+                correct: 0,
+                explanation: 'Judul drama sudah jelas: "Di Sebuah Taman Kota".'
+            },
+            {
+                type: 'multi',
+                reading: 'Berdasarkan drama di atas, apa watak tokoh Susi?',
+                question: 'Pilih semua jawaban yang benar!',
+                options: ['Peduli terhadap kesulitan teman', 'Tanggap mencari solusi', 'Acuh tak acuh'],
+                correct: [0, 1],
+                explanation: 'Susi peduli pada Hani yang panik dan langsung mengusulkan solusi untuk minta bantuan orang dewasa. Ia tidak acuh tak acuh.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Berdasarkan drama di atas, amanat apa yang dapat diambil dari drama tersebut?',
+                question: 'Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Jangan bermain di taman saat angin kencang', correct: false },
+                    { text: 'Kita harus saling menolong sesama yang kesulitan', correct: true },
+                    { text: 'Mengucapkan terima kasih sebagai bentuk menghargai bantuan orang lain', correct: true }
+                ],
+                explanation: 'Amanat drama: saling menolong sesama dan mengucapkan terima kasih. Tidak ada pesan tentang larangan bermain di taman.'
+            },
+            {
+                type: 'single',
+                reading: 'Pak Sigit adalah seorang nelayan yang tekun. Setiap pagi sebelum matahari terbit, ia sudah pergi melaut. Meskipun ombak seringkali tinggi dan angin berembus kencang, ia tidak pernah menyerah. Ia bekerja tanpa kenal lelah demi memenuhi kebutuhan keluarganya.',
+                question: 'Ungkapan yang sesuai dengan ilustrasi kerja keras Pak Sigit adalah...',
+                options: ['Berat hati', 'Besar kepala', 'Banting tulang', 'Mandi keringat'],
+                correct: 2,
+                explanation: '"Banting tulang" berarti bekerja keras tanpa kenal lelah. "Berat hati" = tidak ikhlas, "Besar kepala" = sombong, "Mandi keringat" = bekerja keras (namun "banting tulang" lebih tepat).'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Berdasarkan teks tentang Pak Sigit, tentukan ringkasan yang tepat!',
+                question: 'Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Pak Sigit adalah nelayan yang bekerja keras demi keluarga tanpa kenal lelah.', correct: true },
+                    { text: 'Pak Sigit berhenti bekerja karena cuaca buruk di tengah laut.', correct: false }
+                ],
+                explanation: 'Ringkasan tepat: Pak Sigit nelayan tekun yang bekerja keras tanpa kenal lelah demi keluarga. Ia tidak berhenti meskipun cuaca buruk.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Tentukan penulisan kata depan "di" dan "ke" (preposisi) yang benar sesuai aturan bahasa!',
+                question: 'Tentukan Benar atau Salah!',
+                statements: [
+                    { text: 'Ayah sedang membaca buku di ruang tamu.', correct: true },
+                    { text: 'Ibu pergi ke pasar untuk membeli sayur.', correct: true },
+                    { text: 'Adik sedang memasak bersama ibu di dapur.', correct: true }
+                ],
+                explanation: 'Kata depan "di" dan "ke" ditulis terpisah jika menunjukkan tempat. Semua pernyataan sudah benar.'
+            },
+            {
+                type: 'multi',
+                reading: 'Cuplikan Pidato:\n"Anak-anakku sekalian, bapak sangat bangga melihat prestasi kalian tahun ini. Terutama untuk Ananda Woro yang berhasil meraih juara pertama dalam ajang FLS2N tingkat Nasional. Semoga prestasi ini menjadi inspirasi bagi siswa-siswa lainnya untuk terus berprestasi dan tetap rendah hati."',
+                question: 'Apa saja isi kutipan pidato tersebut?',
+                options: [
+                    'Ucapan selamat kepada Ananda Woro atas prestasi juara FLS2N Nasional',
+                    'Ajakan kepada siswa lain untuk mengikuti lomba lari',
+                    'Harapan agar Ananda Woro tetap rendah hati dan semangat'
+                ],
+                correct: [0, 2],
+                explanation: 'Pidato berisi ucapan selamat kepada Woro dan harapan agar prestasinya menginspirasi serta tetap rendah hati. Tidak ada ajakan lomba lari.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Syair Sahabat\nWahai sahabat dambaan hati\nEngkau selalu membuatku ceria\nDi saat susah senang pun ada\nSelalu setia menemani hari\nKini aku merasa hampa\nKarena kau tak ada di sisiku\nKenangan indah selalu terlukis\nDalam sanubari yang paling dalam',
+                question: 'Apa maksud isi syair di atas?',
+                statements: [
+                    { text: 'Persahabatan tidak berdampak pada perasaan seseorang', correct: false },
+                    { text: 'Pentingnya kehadiran sahabat dalam hidup seseorang', correct: true },
+                    { text: 'Kehadiran sahabat membuat hidup menjadi lebih bahagia dan ceria', correct: true }
+                ],
+                explanation: 'Syair menggambarkan betapa pentingnya kehadiran sahabat yang membuat hidup bahagia dan ceria. Persahabatan sangat berdampak pada perasaan.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Berdasarkan syair di atas, apa makna dari kata "hampa" pada bait kedua?',
+                question: 'Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Perasaan kosong dan kehilangan semangat setelah sahabat pergi', correct: true },
+                    { text: 'Kesepian karena telah kehilangan kehadiran sahabat', correct: true },
+                    { text: 'Kerinduan mendalam terhadap masa lalu', correct: true }
+                ],
+                explanation: '"Hampa" dalam konteks syair berarti perasaan kosong, kesepian, dan kerinduan mendalam setelah kehilangan kehadiran sahabat.'
+            },
+            {
+                type: 'multi',
+                reading: 'Riza sedang duduk menyendiri di bawah pohon rimbun di pinggir hutan. Ia mendengarkan kicauan burung dan gemericik air sungai yang sangat jernih. Hatinya terasa sangat damai dan tenang berada di sana.',
+                question: 'Apa pesan yang ingin disampaikan penulis melalui paragraf tersebut?',
+                options: [
+                    'Hutan adalah tempat yang sangat berbahaya bagi anak-anak',
+                    'Alam dapat memberikan ketenangan dan kedamaian bagi manusia',
+                    'Kita perlu menjaga kelestarian alam agar tetap indah dinikmati'
+                ],
+                correct: [1, 2],
+                explanation: 'Pesan teks: alam memberi ketenangan dan kedamaian, serta kita perlu menjaga kelestarian alam. Hutan tidak digambarkan berbahaya.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Taman Lestari adalah taman yang sangat asri. Banyak bunga berwarna-warni yang ditata dengan rapi. Udaranya terasa segar karena banyak pohon besar di sana. Jika dibuat kafe kecil di dalam taman, suasananya pasti akan jauh lebih menyenangkan. Penambahan beberapa bangku taman juga akan membuat pengunjung lebih nyaman beristirahat.',
+                question: 'Manakah pernyataan yang termasuk kalimat opini dalam teks tersebut?',
+                statements: [
+                    { text: 'Udara di taman terasa paling segar dibandingkan tempat lain di kota', correct: true },
+                    { text: 'Jika dibuat kafe kecil di dalam taman, suasananya akan lebih menyenangkan', correct: true },
+                    { text: 'Taman Lestari dikunjungi banyak warga setiap akhir pekan', correct: false }
+                ],
+                explanation: '"Paling segar" adalah opini (subjektif). "Suasananya akan lebih menyenangkan" adalah opini (prediksi subjektif). "Dikunjungi banyak warga" adalah fakta yang bisa dibuktikan.'
+            },
+            {
+                type: 'single',
+                reading: 'Berdasarkan teks Taman Lestari, ide pokok teks tersebut adalah....',
+                question: 'Pilih jawaban yang benar!',
+                options: [
+                    'Aktivitas berolahraga warga',
+                    'Fasilitas dan suasana yang ada di Taman Lestari',
+                    'Keindahan bunga di taman',
+                    'Kebutuhan penambahan kafe'
+                ],
+                correct: 1,
+                explanation: 'Ide pokok teks adalah fasilitas dan suasana di Taman Lestari: asri, bunga rapi, udara segar, pohon besar, dan usulan penambahan fasilitas.'
+            },
+            {
+                type: 'single',
+                reading: 'Lia lahir di Kulon Progo pada tanggal 5 Maret 2002. Ia baru saja pindah ke Jakarta dan sekarang tinggal di Jalan Mawar nomor 18. Lia memiliki hobi membaca buku cerita dan berenang.',
+                question: 'Data yang tepat untuk mengisi formulir bagian "Tempat dan Tanggal Lahir" berdasarkan ilustrasi tersebut adalah....',
+                options: [
+                    'Yogyakarta, 5 Maret 2002',
+                    'Kulon Progo, 5 Maret 2002',
+                    'Jalan Mawar, 5 Maret 2002',
+                    'Jakarta, 5 Maret 2002'
+                ],
+                correct: 1,
+                explanation: 'Lia lahir di Kulon Progo pada tanggal 5 Maret 2002, jadi formulir diisi "Kulon Progo, 5 Maret 2002".'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Grafik Pengunjung Kebun Binatang:\n- Senin: 45 orang\n- Kamis: 80 orang\n- Jumat: 110 orang\n- Minggu: 150 orang',
+                question: 'Berdasarkan grafik, tentukan hari di mana jumlah pengunjung melebihi 100 orang!',
+                statements: [
+                    { text: 'Pengunjung melebihi 100 orang pada hari Kamis', correct: false },
+                    { text: 'Pengunjung melebihi 100 orang pada hari Jumat', correct: true },
+                    { text: 'Pengunjung melebihi 100 orang pada hari Minggu', correct: true }
+                ],
+                explanation: 'Kamis = 80 orang (tidak melebihi 100). Jumat = 110 orang (melebihi). Minggu = 150 orang (melebihi).'
+            },
+            {
+                type: 'multi',
+                reading: 'Manakah kalimat berikut yang mengandung majas perbandingan (Simile)?',
+                question: 'Pilih semua jawaban yang benar!',
+                options: [
+                    'Wajahnya sangat pucat seperti kertas putih',
+                    'Hidup ini bagaikan roda yang terus berputar',
+                    'Bunga-bunga bermekaran indah di taman sekolah'
+                ],
+                correct: [0, 1],
+                explanation: 'Majas simile menggunakan kata pembanding "seperti" atau "bagaikan". Kalimat 1 dan 2 menggunakan simile. Kalimat 3 adalah kalimat deskripsi biasa.'
+            },
+            {
+                type: 'multi',
+                reading: 'Salsabila mengundang teman-temannya untuk datang ke acara ulang tahunnya yang ke-17. Acara akan dilaksanakan hari Minggu, 5 September 2025 pukul 09.00 WIB. [... ] Teman-teman jangan lupa datang ya.',
+                question: 'Kalimat efektif yang tepat untuk melengkapi bagian rumpang dalam undangan tersebut adalah....',
+                options: [
+                    'Aku sangat menantikan kehadiran teman-teman semua',
+                    'Teman-teman semua aku tunggu kehadirannya di rumah',
+                    'Kehadiran teman-teman akan membuat acara ulang tahunku lebih meriah'
+                ],
+                correct: [0, 2],
+                explanation: 'Kalimat efektif menggunakan struktur yang jelas dan tidak bertele-tele. Pilihan B kurang efektif karena struktur kalimatnya janggal.'
+            },
+            {
+                type: 'multi',
+                reading: 'Biografi Singkat Moh. Natsir:\nBapak Muhammad Natsir dikenal sebagai tokoh yang memiliki penampilan sangat sederhana. Meskipun pernah menjabat sebagai perdana menteri, beliau sering memakai jas yang bertambal dan tidak mau menggunakan mobil mewah. Beliau juga dikenal cerdas karena menguasai banyak bahasa asing seperti Arab, Jerman, Prancis, Belanda, dan Inggris.',
+                question: 'Apa saja bahasa asing yang dikuasai oleh Bapak Muhammad Natsir berdasarkan biografi tersebut?',
+                options: ['Bahasa Belanda', 'Bahasa China', 'Bahasa Jerman', 'Bahasa Arab'],
+                correct: [0, 2, 3],
+                explanation: 'Biografi menyebutkan Natsir menguasai Arab, Jerman, Prancis, Belanda, dan Inggris. Bahasa China tidak disebutkan.'
+            },
+            {
+                type: 'benarsalah',
+                reading: 'Berdasarkan biografi Moh. Natsir, apa nilai moral yang dapat diteladani?',
+                question: 'Tentukan sesuai atau tidak sesuai!',
+                statements: [
+                    { text: 'Menerima segala fasilitas mewah karena jabatan', correct: false },
+                    { text: 'Hidup sederhana dan tidak berfoya-foya meski berkuasa', correct: true },
+                    { text: 'Berusaha keras menguasai banyak bahasa asing untuk ilmu', correct: true }
+                ],
+                explanation: 'Natsir hidup sederhana meski berkuasa dan berusaha keras menguasai banyak bahasa. Ia tidak menerima fasilitas mewah.'
+            },
+            {
+                type: 'single',
+                reading: 'Hasil Wawancara:\nSiswa : "Apa alasan Bapak menggunakan pupuk alami untuk tanaman sayur ini?"\nPak Irfan : "Selain lebih sehat untuk dikonsumsi, pupuk alami juga ramah terhadap lingkungan desa kita ini, Nak."',
+                question: 'Topik utama dari cuplikan wawancara tersebut adalah....',
+                options: [
+                    'Cara membuat pupuk alami',
+                    'Cara membersihkan rumput liar',
+                    'Pekerjaan petani sayur',
+                    'Pemanfaatan pupuk alami yang sehat'
+                ],
+                correct: 3,
+                explanation: 'Topik utama adalah pemanfaatan pupuk alami yang sehat dan ramah lingkungan. Bukan cara membuat pupuk atau pekerjaan petani.'
+            },
+            {
+                type: 'multi',
+                reading: 'Berdasarkan teks wawancara tersebut, manakah kosakata yang berkaitan dengan dunia pertanian?',
+                question: 'Pilih semua jawaban yang benar!',
+                options: ['Pupuk', 'Lingkungan', 'Sayur'],
+                correct: [0, 2],
+                explanation: '"Pupuk" dan "sayur" berkaitan dengan pertanian. "Lingkungan" lebih umum, bukan khusus pertanian.'
+            },
+            {
+                type: 'single',
+                reading: 'Keluarga Adi pergi berkunjung ke kebun binatang pada hari Minggu yang lalu. Di sana, mereka melihat berbagai jenis hewan seperti gajah, singa, dan burung merak yang sangat indah. Adi sangat senang saat bisa berfoto di dekat jerapah yang sedang makan daun.',
+                question: 'Objek utama yang dibicarakan dalam teks deskripsi tersebut adalah....',
+                options: ['Keluarga Adi', 'Hewan-hewan di kebun binatang', 'Kebun binatang', 'Kegiatan Adi'],
+                correct: 1,
+                explanation: 'Objek utama teks adalah hewan-hewan di kebun binatang yang dilihat keluarga Adi.'
+            },
+            {
+                type: 'single',
+                reading: 'Lengkapilah tanda baca yang tepat pada kalimat berikut:\n"Saat pulang sekolah.... Afkar berkata... Hujan deras sekali hari ini."',
+                question: 'Pilih jawaban yang benar!',
+                options: [
+                    'Saat pulang sekolah, Afkar berkata, "Hujan deras sekali hari ini."',
+                    'Saat pulang sekolah Afkar berkata: "Hujan deras sekali hari ini."',
+                    'Saat pulang sekolah. Afkar berkata, "Hujan deras sekali hari ini"',
+                    'Saat pulang sekolah, Afkar berkata "Hujan deras sekali hari ini."'
+                ],
+                correct: 0,
+                explanation: 'Tanda baca yang tepat: koma setelah "sekolah", koma setelah "berkata", dan tanda petik untuk kalimat langsung yang diakhiri titik. Pilihan A paling tepat.'
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = {};
+        let score = 0;
+        const totalQuestions = questions.length;
+        let quizCompleted = false;
+
+        const currentQNumEl = document.getElementById('current-q-num');
+        const correctCountEl = document.getElementById('correct-count');
+        const wrongCountEl = document.getElementById('wrong-count');
+        const scoreValEl = document.getElementById('score-val');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPct = document.getElementById('progress-pct');
+        const qNumberEl = document.getElementById('q-number');
+        const qReadingEl = document.getElementById('q-reading');
+        const qTextEl = document.getElementById('q-text');
+        const optionsContainer = document.getElementById('options-container');
+        const checkBtn = document.getElementById('check-btn');
+        const feedbackEl = document.getElementById('feedback');
+        const answerKeyEl = document.getElementById('answer-key');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const quizContainer = document.getElementById('quiz-container');
+        const confettiContainer = document.getElementById('confetti-container');
+        const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+        function loadQuestion(index) {
+            const q = questions[index];
+            const saved = userAnswers[index];
+            qNumberEl.textContent = `Soal No. ${index + 1}`;
+            qTextEl.textContent = q.question;
+            if (q.reading && q.reading.trim() !== '') {
+                qReadingEl.style.display = 'block';
+                qReadingEl.textContent = q.reading;
+            } else {
+                qReadingEl.style.display = 'none';
+            }
+            optionsContainer.innerHTML = '';
+            feedbackEl.className = 'feedback';
+            feedbackEl.innerHTML = '';
+            answerKeyEl.className = 'answer-key';
+            answerKeyEl.innerHTML = '';
+            checkBtn.style.display = 'block';
+            btnNext.style.display = 'none';
+            checkBtn.disabled = true;
+
+            if (q.type === 'single') {
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.setAttribute('data-opt-index', i);
+                    btn.innerHTML = `<span class="option-letter">${optionLabels[i]}</span><span>${opt}</span>`;
+                    if (saved && saved.selected === i) btn.classList.add('selected');
+                    if (saved && saved.checked) {
+                        btn.classList.add('disabled');
+                        if (i === q.correct) btn.classList.add('correct-reveal');
+                        if (saved.selected === i && !saved.correct) btn.classList.add('wrong-reveal');
+                    }
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        checkBtn.disabled = false;
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            } else if (q.type === 'multi') {
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.setAttribute('data-opt-index', i);
+                    btn.innerHTML = `<span class="option-letter">${optionLabels[i]}</span><span>${opt}</span>`;
+                    if (saved && saved.selected.includes(i)) btn.classList.add('selected');
+                    if (saved && saved.checked) {
+                        btn.classList.add('disabled');
+                        if (q.correct.includes(i)) btn.classList.add('correct-reveal');
+                        if (saved.selected.includes(i) && !q.correct.includes(i)) btn.classList.add('wrong-reveal');
+                    }
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        btn.classList.toggle('selected');
+                        checkBtn.disabled = false;
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            } else if (q.type === 'benarsalah') {
+                q.statements.forEach((stmt, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'bs-statement';
+                    div.innerHTML = `
+                        <p>${i + 1}. ${stmt.text}</p>
+                        <div class="bs-options">
+                            <button class="bs-btn bs-true" data-stmt-index="${i}" data-value="true">Benar/Sesuai</button>
+                            <button class="bs-btn bs-false" data-stmt-index="${i}" data-value="false">Salah/Tidak</button>
+                        </div>
+                    `;
+                    optionsContainer.appendChild(div);
+                });
+                if (saved && saved.selected) {
+                    q.statements.forEach((stmt, i) => {
+                        const trueBtn = optionsContainer.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                        const falseBtn = optionsContainer.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                        if (saved.selected[i] === true) trueBtn.classList.add('selected');
+                        if (saved.selected[i] === false) falseBtn.classList.add('selected');
+                    });
+                }
+                if (saved && saved.checked) {
+                    q.statements.forEach((stmt, i) => {
+                        const trueBtn = optionsContainer.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                        const falseBtn = optionsContainer.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                        trueBtn.classList.add('disabled');
+                        falseBtn.classList.add('disabled');
+                        if (stmt.correct === true) trueBtn.classList.add('correct-reveal');
+                        if (stmt.correct === false) falseBtn.classList.add('correct-reveal');
+                        if (saved.selected[i] === true && stmt.correct === false) trueBtn.classList.add('wrong-reveal');
+                        if (saved.selected[i] === false && stmt.correct === true) falseBtn.classList.add('wrong-reveal');
+                    });
+                }
+                optionsContainer.querySelectorAll('.bs-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        const stmtIdx = parseInt(this.getAttribute('data-stmt-index'));
+                        const val = this.getAttribute('data-value') === 'true';
+                        const siblings = optionsContainer.querySelectorAll(
+                            `.bs-btn[data-stmt-index="${stmtIdx}"]`);
+                        siblings.forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                        checkBtn.disabled = false;
+                    });
+                });
+            }
+
+            btnPrev.disabled = (index === 0);
+            if (index === totalQuestions - 1) {
+                btnNext.textContent = '🏁 Selesai & Lihat Skor';
+            } else {
+                btnNext.textContent = 'Soal Berikutnya ➡️';
+            }
+            if (saved && saved.checked) {
+                checkBtn.style.display = 'none';
+                btnNext.style.display = 'flex';
+                if (saved.correct) {
+                    feedbackEl.className = 'feedback show correct';
+                    feedbackEl.innerHTML = '<span>🎉 Jawaban Anda BENAR!</span>';
+                } else {
+                    feedbackEl.className = 'feedback show wrong';
+                    feedbackEl.innerHTML = '<span>😅 Jawaban Anda SALAH!</span>';
+                }
+                answerKeyEl.className = 'answer-key show';
+                let correctAnswerText = '';
+                if (q.type === 'single') {
+                    correctAnswerText = `${optionLabels[q.correct]}. ${q.options[q.correct]}`;
+                } else if (q.type === 'multi') {
+                    correctAnswerText = q.correct.map(c => `${optionLabels[c]}. ${q.options[c]}`).join(' & ');
+                } else if (q.type === 'benarsalah') {
+                    correctAnswerText = q.statements.map((s, i) => `${i + 1}. ${s.correct ? 'Sesuai/Benar' : 'Tidak/Salah'}`).join(' | ');
+                }
+                answerKeyEl.innerHTML = `<div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div><div class="ak-content"><strong>Jawaban Benar:</strong> ${correctAnswerText}<br><strong>Pembahasan:</strong> ${q.explanation}</div>`;
+            }
+            updateStats();
+            updateProgress();
+        }
+
+        function checkAnswer() {
+            const q = questions[currentQuestion];
+            if (userAnswers[currentQuestion] && userAnswers[currentQuestion].checked) return;
+            let selected;
+            let isCorrect = false;
+            if (q.type === 'single') {
+                const selBtn = document.querySelector('.option-btn.selected');
+                if (!selBtn) return;
+                selected = parseInt(selBtn.getAttribute('data-opt-index'));
+                isCorrect = selected === q.correct;
+                userAnswers[currentQuestion] = { selected, checked: true, correct: isCorrect };
+            } else if (q.type === 'multi') {
+                const selBtns = document.querySelectorAll('.option-btn.selected');
+                selected = Array.from(selBtns).map(b => parseInt(b.getAttribute('data-opt-index')));
+                isCorrect = selected.length === q.correct.length && selected.every(s => q.correct.includes(s));
+                userAnswers[currentQuestion] = { selected, checked: true, correct: isCorrect };
+            } else if (q.type === 'benarsalah') {
+                selected = [];
+                q.statements.forEach((stmt, i) => {
+                    const selBtn = document.querySelector(`.bs-btn.selected[data-stmt-index="${i}"]`);
+                    if (selBtn) selected.push(selBtn.getAttribute('data-value') === 'true');
+                    else selected.push(null);
+                });
+                isCorrect = selected.every((s, i) => s === q.statements[i].correct);
+                userAnswers[currentQuestion] = { selected, checked: true, correct: isCorrect };
+            }
+            if (isCorrect) score++;
+            updateStats();
+
+            if (q.type === 'single' || q.type === 'multi') {
+                const allBtns = document.querySelectorAll('.option-btn');
+                allBtns.forEach(b => {
+                    b.classList.add('disabled');
+                    const idx = parseInt(b.getAttribute('data-opt-index'));
+                    if (q.type === 'single' ? idx === q.correct : q.correct.includes(idx)) b.classList.add('correct-reveal');
+                    if (selected.includes(idx) && !(q.type === 'single' ? idx === q.correct : q.correct.includes(idx))) b.classList.add('wrong-reveal');
+                });
+            } else if (q.type === 'benarsalah') {
+                q.statements.forEach((stmt, i) => {
+                    const trueBtn = document.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                    const falseBtn = document.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                    trueBtn.classList.add('disabled');
+                    falseBtn.classList.add('disabled');
+                    if (stmt.correct === true) trueBtn.classList.add('correct-reveal');
+                    if (stmt.correct === false) falseBtn.classList.add('correct-reveal');
+                    if (selected[i] === true && stmt.correct === false) trueBtn.classList.add('wrong-reveal');
+                    if (selected[i] === false && stmt.correct === true) falseBtn.classList.add('wrong-reveal');
+                });
+            }
+
+            if (isCorrect) {
+                feedbackEl.className = 'feedback show correct';
+                feedbackEl.innerHTML = '<span>🎉 Jawaban Anda BENAR! Hebat!</span>';
+            } else {
+                feedbackEl.className = 'feedback show wrong';
+                feedbackEl.innerHTML = '<span>😅 Jawaban Anda SALAH! Jangan menyerah!</span>';
+            }
+            answerKeyEl.className = 'answer-key show';
+            let correctAnswerText = '';
+            if (q.type === 'single') {
+                correctAnswerText = `${optionLabels[q.correct]}. ${q.options[q.correct]}`;
+            } else if (q.type === 'multi') {
+                correctAnswerText = q.correct.map(c => `${optionLabels[c]}. ${q.options[c]}`).join(' & ');
+            } else if (q.type === 'benarsalah') {
+                correctAnswerText = q.statements.map((s, i) => `${i + 1}. ${s.correct ? 'Sesuai/Benar' : 'Tidak/Salah'}`).join(' | ');
+            }
+            answerKeyEl.innerHTML = `<div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div><div class="ak-content"><strong>Jawaban Benar:</strong> ${correctAnswerText}<br><strong>Pembahasan:</strong> ${q.explanation}</div>`;
+            checkBtn.style.display = 'none';
+            btnNext.style.display = 'flex';
+        }
+
+        function updateStats() {
+            currentQNumEl.textContent = currentQuestion + 1;
+            let correct = 0,
+                wrong = 0;
+            Object.values(userAnswers).forEach(ans => {
+                if (ans.checked) { if (ans.correct) correct++;
+                    else wrong++; }
+            });
+            correctCountEl.textContent = correct;
+            wrongCountEl.textContent = wrong;
+            scoreValEl.textContent = score;
+        }
+
+        function updateProgress() {
+            const pct = Math.round((currentQuestion / totalQuestions) * 100);
+            progressFill.style.width = pct + '%';
+            progressPct.textContent = pct + '%';
+        }
+
+        function goToNext() {
+            if (currentQuestion < totalQuestions - 1) { currentQuestion++;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' }); } else { showResult(); }
+        }
+
+        function goToPrev() {
+            if (currentQuestion > 0) { currentQuestion--;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        }
+
+        function showResult() {
+            quizCompleted = true;
+            const totalChecked = Object.keys(userAnswers).length;
+            const correctTotal = score;
+            const wrongTotal = totalChecked - correctTotal;
+            const finalScore = totalQuestions > 0 ? Math.round((correctTotal / totalQuestions) * 100) : 0;
+            qNumberEl.textContent = '📋 Hasil Akhir';
+            qTextEl.textContent = '';
+            qReadingEl.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            checkBtn.style.display = 'none';
+            btnNext.style.display = 'none';
+            btnPrev.style.display = 'none';
+
+            const resultScreen = document.createElement('div');
+            resultScreen.className = 'result-screen';
+            let emoji = '',
+                message = '';
+            if (finalScore === 100) { emoji = '🏆🎉🌟';
+                message = 'LUAR BIASA! SEMPURNA!'; } else if (finalScore >= 80) { emoji = '🌟👏';
+                message = 'HEBAT! Nilaimu sangat bagus!'; } else if (finalScore >= 60) { emoji = '👍😊';
+                message = 'CUKUP BAIK! Terus berlatih ya!'; } else { emoji = '💪📚';
+                message = 'TETAP SEMANGAT! Yuk belajar lagi!'; }
+            resultScreen.innerHTML = `<div class="result-emoji">${emoji}</div><div class="result-score">${finalScore}</div><div class="result-message">${message}</div><p>Kamu menjawab <strong>${correctTotal}</strong> benar dari <strong>${totalQuestions}</strong> soal.</p><p>Benar: ${correctTotal} | Salah: ${wrongTotal}</p>`;
+            quizContainer.appendChild(resultScreen);
+            if (finalScore === 100) { triggerConfetti();
+                const waBtn = document.createElement('button');
+                waBtn.className = 'wa-btn';
+                waBtn.textContent = '🎁 Klaim Hadiah 5.000 via WhatsApp';
+                waBtn.addEventListener('click', function() { const phone = '6281234567890';
+                    const text = 'Alhamdulillah aku berhasil dapat 100 & Mendapatkan HADIAH 5.000!';
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank'); });
+                resultScreen.appendChild(waBtn); } else { const retryBtn = document.createElement('button');
+                retryBtn.className = 'retry-btn';
+                retryBtn.textContent = '🔄 ULANGI TES';
+                retryBtn.addEventListener('click', function() { restartQuiz(); });
+                resultScreen.appendChild(retryBtn); }
+            progressFill.style.width = '100%';
+            progressPct.textContent = '100%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() { currentQuestion = 0;
+            userAnswers = {};
+            score = 0;
+            quizCompleted = false;
+            btnNext.style.display = 'none';
+            btnNext.textContent = 'Soal Berikutnya ➡️';
+            btnPrev.style.display = 'flex';
+            btnPrev.disabled = true;
+            loadQuestion(0);
+            updateStats();
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        function triggerConfetti() { confettiContainer.style.display = 'block';
+            const colors = ['#6C5CE7', '#a29bfe', '#fd79a8', '#fdcb6e', '#00b894', '#e17055', '#74b9ff']; for (let i =
+                    0; i < 80; i++) { const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + '%';
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                c.style.animationDelay = Math.random() * 3 + 's';
+                confettiContainer.appendChild(c); }
+            setTimeout(() => { confettiContainer.style.display = 'none';
+                confettiContainer.innerHTML = ''; }, 6000); }
+        checkBtn.addEventListener('click', checkAnswer);
+        btnNext.addEventListener('click', goToNext);
+        btnPrev.addEventListener('click', goToPrev);
+        loadQuestion(0);
+        updateStats();
+        updateProgress();
+    </script>
+</body>
+</html>

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Juara TKA Bahasa Indonesia - Paket 2 (Kelas 6 SD)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #e8eaf6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            color: #3f51b5;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #5c6bc0;
+            font-size: 16px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .context-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .question-card {
+            background: #f3e5f5;
+            border: 2px solid #ce93d8;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        .question-number {
+            display: inline-block;
+            background: #ab47bc;
+            color: white;
+            font-weight: 900;
+            padding: 5px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-label {
+            background: #ffffff;
+            border: 2px solid #9c27b0;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .option-label:hover {
+            background: #f3e5f5;
+        }
+        .option-label.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            transform: scale(1.5);
+            margin-right: 10px;
+        }
+        
+        /* Kategori Table Styling */
+        .kategori-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .kategori-table th, .kategori-table td {
+            border: 2px solid #ce93d8;
+            padding: 12px;
+            text-align: center;
+        }
+        .kategori-table th { background: #e1bee7; }
+        .kategori-table td.statement { text-align: left; font-weight: bold; }
+        
+        .btn-submit {
+            background: #00bcd4;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover { background: #0097a7; }
+        .btn-submit:disabled { background: #b2ebf2; cursor: not-allowed; }
+        
+        .btn-next {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            display: none;
+        }
+        .btn-next:hover { background: #388e3c; }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .feedback.correct-bg { background: #e8f5e9; border: 2px solid #4caf50; }
+        .feedback.wrong-bg { background: #ffebee; border: 2px solid #f44336; }
+        .status { font-size: 20px; font-weight: 900; margin-bottom: 5px; }
+        .correct-text { color: #4caf50; }
+        .wrong-text { color: #f44336; }
+        .explanation { font-size: 15px; line-height: 1.5; color: #37474f; margin-top: 10px; }
+
+        /* Score Screen */
+        #score-screen {
+            text-align: center;
+            display: none;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            background: #ffca28;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            font-weight: 900;
+            color: white;
+            margin: 0 auto 20px auto;
+            border: 8px solid #ff9800;
+        }
+        .champion-anim {
+            font-size: 80px;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite alternate;
+        }
+        .btn-wa {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: 900;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        .btn-wa:hover { background: #1ebe5d; }
+        .btn-retry {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: 900;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-retry:hover { background: #d32f2f; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 24px; }
+            .question-text { font-size: 16px; }
+            .kategori-table th, .kategori-table td { padding: 8px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="quiz-header">
+        <h1>🌟 Latihan TKA Bahasa Indonesia (Paket 2) 🌟</h1>
+        <p class="subtitle">Persiapan Juara Kelas 6 SD</p>
+    </div>
+    <div id="quiz-container"></div>
+    
+    <div id="score-screen">
+        <div id="champion-icon" class="champion-anim" style="display: none;">🏆</div>
+        <h2 id="score-title">Nilai Kamu</h2>
+        <div class="score-circle" id="final-score">100</div>
+        <p id="score-message" style="font-size: 18px; font-weight: bold; color: #555;"></p>
+        
+        <a id="btn-wa" class="btn-wa" href="#" target="_blank" style="display: none;">
+            Klaim HADIAH 5.000! 🎁
+        </a>
+        <button id="btn-retry" class="btn-retry" style="display: none;" onclick="location.reload()">
+            🔄 ULANGI TES
+        </button>
+    </div>
+</div>
+
+<script>
+    const textFabel = `<b>Penyesalan Ciko si Tupai</b><br>Kiki si semut selalu ramah dan suka berbagi makanan dengan serangga lain. Sebaliknya, Ciko si tupai sangat sombong. Ia sering mengejek Kiki. "Hahaha, tubuhmu kecil sekali, Kiki! Angin bertiup sedikit saja kau pasti terbang!" ejek Ciko sambil memakan kacangnya.<br>Suatu sore, terdengar suara minta tolong dari pinggir hutan. Ternyata, Ciko terjebak di dalam jaring perangkap pemburu! Ia meronta-ronta namun jaring itu terlalu kuat.<br>Mendengar teriakan itu, Kiki segera memanggil kawan-kawan semutnya. Ratusan semut merayap ke jaring dan mulai menggigiti tali jaring itu dengan rahang mereka yang tajam. Lama-kelamaan, jaring itu putus dan Ciko berhasil bebas.<br>"Terima kasih, Kiki. Maafkan aku karena sering mengejekmu. Ternyata tubuh kecilmu menyimpan kekuatan dan hati yang besar," ucap Ciko dengan wajah tertunduk malu.`;
+
+    const textInfo = `<b>Manfaat Tidur Siang bagi Anak SD</b><br>Banyak orang mengira tidur siang hanya dibutuhkan oleh bayi atau balita. Padahal, anak usia Sekolah Dasar (SD) juga sangat dianjurkan untuk tidur siang. <br>Durasi tidur siang yang paling baik adalah sekitar 20 hingga 30 menit saja. Jika terlalu lama, anak justru bisa terbangun dengan kepala pusing dan kesulitan tidur di malam hari.<br>Tidur siang memiliki banyak manfaat yang luar biasa. Pertama, tidur siang dapat memulihkan energi setelah lelah belajar di sekolah. Kedua, tidur siang terbukti dapat meningkatkan daya ingat dan konsentrasi. Saat kita tidur, otak merapikan informasi baru yang kita pelajari. Selain itu, anak yang cukup istirahat tubuhnya tidak akan mudah terserang penyakit.`;
+
+    const textProsedur = `<b>Cara Menanam Biji Bunga Matahari</b><br>Ingin halaman rumahmu dihiasi bunga kuning yang cantik? Yuk, ikuti langkah-langkah menanam biji bunga matahari berikut ini!<br>1. Siapkan pot berukuran sedang yang sudah diisi dengan tanah subur dan gembur.<br>2. Buatlah lubang kecil di tengah tanah dengan kedalaman sekitar 2 sentimeter.<br>3. Masukkan satu atau dua biji bunga matahari ke dalam lubang tersebut, lalu tutup kembali dengan tanah tipis-tipis.<br>4. Siramlah tanah dengan air secukupnya agar lembap. Ingat, jangan sampai tanahnya tergenang air (banjir).<br>5. Letakkan pot di tempat yang terkena sinar matahari langsung, karena bunga matahari sangat membutuhkan cahaya untuk tumbuh besar dan mekar.`;
+
+    const textHematEnergi = `<b>Ayo, Hemat Energi dari Sekarang!</b><br>Listrik adalah energi yang sangat penting. Namun, pemborosan listrik dapat merusak lingkungan bumi kita. Kita bisa mulai berhemat dengan langkah kecil di rumah.<br>Biasakan untuk mematikan lampu kamar saat siang hari karena matahari sudah cukup menerangi ruangan. Selain itu, jangan lupa mencabut kabel televisi atau kipas angin dari stopkontak jika sudah tidak digunakan. Jika kamu ingin pergi ke tempat yang dekat, lebih baik menggunakan sepeda daripada naik sepeda motor. Tindakan sederhana ini tidak hanya menghemat biaya listrik bulanan, tetapi juga mengurangi polusi udara.`;
+
+    const textPuisi = `<b>Guruku, Cahaya Masa Depanku</b><br>Setiap pagi kau menyapa dengan senyum tulus<br>Mengajarkanku mengeja huruf dan dunia<br>Menuntunku di kala gelap ketidaktahuan<br>Tak pernah kulihat keluh kesah di wajahmu<br><br>Keringatmu adalah cahaya bagi masa depanku<br>Teguranmu adalah kasih sayang yang tak terucap<br>Terima kasih, pahlawan tanpa tanda jasa<br>Namamu akan selalu mekar di hatiku`;
+
+    const textSurat = `<b>Surat dari Desa</b><br>Halo Bima, apa kabar?<br>Semoga kamu dan keluargamu di Jakarta sehat selalu, ya!<br><br>Aku sedang berada di desa rumah Nenek sekarang. Kemarin, aku ikut Kakek pergi ke kebun untuk panen jagung manis. Seru sekali, Bim! Kami membakar jagung di pinggir sawah sambil merasakan angin yang sejuk. Sayang sekali kamu tidak ada di sini untuk ikut makan bersama.<br><br>Liburan semester depan kamu harus berkunjung ke desaku, ya! Nanti kita main di sungai dan memetik buah mangga langsung dari pohonnya. <br>Kutunggu balasan suratmu!<br><br>Sahabatmu,<br>Rio`;
+
+    const questions = [
+        // Teks Fabel
+        {
+            id: 1, type: "pg", context: textFabel,
+            q: "Siapa yang terjebak di dalam jaring perangkap pemburu?",
+            options: ["Kiki si semut.", "Ciko si tupai.", "Pemilik kebun.", "Sekawanan burung."],
+            answer: 1,
+            explanation: "Di paragraf kedua tertulis jelas: 'Ternyata, Ciko terjebak di dalam jaring perangkap pemburu!'"
+        },
+        {
+            id: 2, type: "pg", context: textFabel,
+            q: "Pada kalimat 'Ia sering mengejek Kiki', makna kata <b>mengejek</b> adalah...",
+            options: ["Memberikan hadiah atau makanan", "Menolong teman yang kesulitan", "Menghina atau menertawakan kekurangan orang lain", "Minta tolong karena ketakutan"],
+            answer: 2,
+            explanation: "Mengejek memiliki arti menghina, mengolok-olok, atau menertawakan kelemahan seseorang (dalam hal ini, Ciko menertawakan tubuh kecil Kiki)."
+        },
+        {
+            id: 3, type: "mcma", context: textFabel,
+            q: "Peristiwa apa saja yang dilakukan Kiki dalam cerita tersebut? (Jawaban lebih dari satu)",
+            options: ["Menertawakan Ciko yang terjebak jaring.", "Suka berbagi makanan dengan serangga lain.", "Memanggil kawan-kawannya untuk menyelamatkan Ciko.", "Marah dan meninggalkan Ciko di hutan."],
+            answer: [1, 2],
+            explanation: "Sikap Kiki dalam teks adalah suka berbagi makanan (di paragraf 1) dan ia memanggil kawan-kawannya untuk menolong Ciko (di paragraf 3)."
+        },
+        {
+            id: 4, type: "kategori", context: textFabel,
+            q: "Nilai kehidupan apa saja yang relevan (sesuai) dengan isi fabel tersebut?<br>Tentukan Sesuai atau Tidak Sesuai!",
+            cats: ["Sesuai", "Tidak Sesuai"],
+            statements: [
+                { text: "Berani mengakui kesalahan dan meminta maaf.", answer: 0 },
+                { text: "Membalas dendam kepada teman yang menyebalkan.", answer: 1 },
+                { text: "Bergotong royong saat menolong orang lain.", answer: 0 }
+            ],
+            explanation: "Ciko meminta maaf (Sesuai), Semut bekerja sama menggigit jaring (Sesuai). Kiki tidak membalas dendam, sehingga pernyataan B Tidak Sesuai."
+        },
+        {
+            id: 5, type: "pg", context: textFabel,
+            q: "Bagaimana respons emosional (perasaan) pembaca saat melihat Ciko diselamatkan dan akhirnya meminta maaf?",
+            options: ["Sangat marah pada Kiki.", "Merasa terharu dan lega karena mereka berbaikan.", "Ketakutan melihat jaring pemburu.", "Kecewa karena ceritanya membosankan."],
+            answer: 1,
+            explanation: "Akhir cerita yang baik (happy ending), di mana tokoh yang salah diselamatkan dan sadar akan kesalahannya, biasanya membuat pembaca merasa lega dan terharu."
+        },
+
+        // Teks Info Tidur Siang
+        {
+            id: 6, type: "pg", context: textInfo,
+            q: "Berapa durasi waktu (lama) tidur siang yang paling baik untuk anak SD?",
+            options: ["Sekitar 1 jam sampai 2 jam.", "Kurang dari 5 menit.", "Sekitar 20 hingga 30 menit.", "Sepanjang sore."],
+            answer: 2,
+            explanation: "Informasi tersurat pada paragraf kedua menyebutkan: 'Durasi tidur siang yang paling baik adalah sekitar 20 hingga 30 menit saja.'"
+        },
+        {
+            id: 7, type: "pg", context: textInfo,
+            q: "Apa gagasan utama (ide pokok) pada paragraf ketiga teks tersebut?",
+            options: ["Anak balita tidak butuh tidur siang.", "Tidur siang memiliki banyak manfaat yang luar biasa bagi tubuh.", "Obat untuk anak yang sedang sakit flu.", "Cara mengatur jam tidur malam agar tidak pusing."],
+            answer: 1,
+            explanation: "Paragraf ketiga diawali dengan kalimat utama yang menjadi intinya, yaitu membahas tentang berbagai macam manfaat tidur siang."
+        },
+        {
+            id: 8, type: "mcma", context: textInfo,
+            q: "Berdasarkan teks, apa saja manfaat dari tidur siang? (Jawaban lebih dari satu)",
+            options: ["Memulihkan energi setelah belajar.", "Membuat tubuh bertambah tinggi dengan cepat.", "Meningkatkan daya ingat dan konsentrasi.", "Membuat anak menjadi kebal penyakit seumur hidup."],
+            answer: [0, 2],
+            explanation: "Dalam paragraf ketiga disebutkan manfaat tidur siang adalah memulihkan energi dan meningkatkan daya ingat/konsentrasi."
+        },
+        {
+            id: 9, type: "kategori", context: textInfo,
+            q: "Mengapa anak tidak disarankan tidur siang terlalu lama?<br>Tentukan Benar atau Salah dari pernyataan berikut!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Bisa menyebabkan anak terbangun dengan kepala pusing.", answer: 0 },
+                { text: "Akan kesulitan untuk tidur saat malam hari.", answer: 0 },
+                { text: "Membuat otak menjadi lupa pada pelajaran sekolah.", answer: 1 }
+            ],
+            explanation: "Berdasarkan paragraf 2, tidur terlalu lama bisa membuat pusing (Benar) dan susah tidur malam (Benar). Tidak ada informasi membuat otak lupa (Salah)."
+        },
+        {
+            id: 10, type: "pg", context: textInfo,
+            q: "Berdasarkan informasi dalam teks, apa kesimpulan (inferensi) yang tepat jika Doni tidur siang dari pukul 14.00 hingga 17.00?",
+            options: ["Doni akan sangat bersemangat saat malam hari.", "Tubuh Doni akan lebih sehat dari teman-temannya.", "Doni mungkin akan merasa pusing saat bangun dan kesulitan tidur di malam harinya.", "Doni akan langsung bermimpi indah."],
+            answer: 2,
+            explanation: "Tidur dari jam 14.00 sampai 17.00 berarti 3 jam (sangat lama). Teks menyebutkan tidur terlalu lama menyebabkan kepala pusing dan sulit tidur malam."
+        },
+
+        // Teks Prosedur Menanam Bunga
+        {
+            id: 11, type: "pg", context: textProsedur,
+            q: "Pada langkah pertama, disebutkan tanah harus 'subur dan gembur'. Makna kata <b>gembur</b> adalah...",
+            options: ["Tanahnya keras seperti batu.", "Tanahnya kering kerontang dan berdebu.", "Tanahnya lunak, berongga, dan tidak padat keras.", "Tanahnya bercampur dengan banyak air (lumpur)."],
+            answer: 2,
+            explanation: "Tanah gembur artinya tanah yang gampang digali, lunak, dan tidak padat, sehingga akar tanaman mudah tumbuh."
+        },
+        {
+            id: 12, type: "mcma", context: textProsedur,
+            q: "Alat dan bahan apa saja yang dibutuhkan berdasarkan teks prosedur tersebut? (Jawaban lebih dari satu)",
+            options: ["Pot berukuran sedang.", "Pupuk kompos buatan.", "Biji bunga matahari.", "Gunting tanaman."],
+            answer: [0, 2],
+            explanation: "Teks menyebutkan 'Siapkan pot' (alat) dan 'Masukkan biji bunga matahari' (bahan). Tidak ada penyebutan pupuk buatan atau gunting."
+        },
+        {
+            id: 13, type: "pg", context: textProsedur,
+            q: "Apa yang harus dilakukan segera setelah memasukkan biji ke dalam lubang tanah?",
+            options: ["Menjemur pot di bawah terik matahari.", "Menutupnya kembali dengan tanah tipis-tipis lalu menyiramnya.", "Memberikan pupuk yang banyak.", "Mencabut biji yang sudah ditanam."],
+            answer: 1,
+            explanation: "Langkah 3 dan 4 secara berurutan menyebutkan: tutup kembali dengan tanah tipis, lalu (langkah selanjutnya) siram dengan air secukupnya."
+        },
+        {
+            id: 14, type: "kategori", context: textProsedur,
+            q: "Apa fungsi meletakkan pot di tempat yang terkena sinar matahari (Langkah 5)?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Sangat dibutuhkan agar tanaman bisa tumbuh besar dan mekar.", answer: 0 },
+                { text: "Untuk membuat biji menjadi gosong terbakar.", answer: 1 },
+                { text: "Agar tanah cepat mengering dan menjadi keras.", answer: 1 }
+            ],
+            explanation: "Teks secara tersurat mengatakan: 'karena bunga matahari sangat membutuhkan cahaya untuk tumbuh besar dan mekar' (Pernyataan 1 Benar)."
+        },
+        {
+            id: 15, type: "pg", context: textProsedur,
+            q: "Berdasarkan informasi teks, apa yang kemungkinan terjadi jika pot bunga matahari diletakkan di dalam kamar yang gelap?",
+            options: ["Bunganya akan tumbuh jauh lebih cepat.", "Tanaman tidak akan bisa tumbuh besar dan mekar dengan baik.", "Warna bunganya akan berubah menjadi merah.", "Daunnya akan bercahaya dalam gelap."],
+            answer: 1,
+            explanation: "Karena syarat utama di langkah 5 adalah 'sangat membutuhkan cahaya', maka jika diletakkan di tempat gelap pertumbuhannya pasti akan terganggu."
+        },
+
+        // Teks Hemat Energi
+        {
+            id: 16, type: "pg", context: textHematEnergi,
+            q: "Apa yang harus kita lakukan pada lampu di rumah saat siang hari tiba?",
+            options: ["Menyalakannya dengan lebih terang.", "Mematikannya karena sudah ada cahaya matahari.", "Menutup lampu dengan kain.", "Membiarkannya menyala sampai malam."],
+            answer: 1,
+            explanation: "Tertulis jelas di teks: 'Biasakan untuk mematikan lampu kamar saat siang hari karena matahari sudah cukup menerangi...'"
+        },
+        {
+            id: 17, type: "pg", context: textHematEnergi,
+            q: "Tujuan utama penulis membuat teks tersebut adalah untuk...",
+            options: ["Menceritakan pengalaman bermain sepeda.", "Mengajak orang-orang untuk menghemat energi listrik.", "Menjelaskan cara membuat kipas angin.", "Mengingatkan bahaya bermain listrik."],
+            answer: 1,
+            explanation: "Teks ini adalah teks ajakan (persuasif) yang menginformasikan cara-cara sederhana untuk menghemat energi (listrik) dan mengurangi polusi."
+        },
+        {
+            id: 18, type: "mcma", context: textHematEnergi,
+            q: "Tindakan apa saja yang merupakan bentuk hemat energi menurut teks tersebut? (Pilih lebih dari satu)",
+            options: ["Mencabut kabel TV jika tidak digunakan.", "Menonton TV sepanjang hari.", "Menggunakan sepeda untuk jarak dekat.", "Mandi dengan air hangat setiap hari."],
+            answer: [0, 2],
+            explanation: "Mencabut kabel jika tidak digunakan dan naik sepeda untuk jarak dekat adalah dua contoh nyata yang disebutkan di dalam teks."
+        },
+        {
+            id: 19, type: "kategori", context: textHematEnergi,
+            q: "Tentukan pernyataan berikut Sesuai atau Tidak Sesuai dengan isi teks!",
+            cats: ["Sesuai", "Tidak Sesuai"],
+            statements: [
+                { text: "Mengendarai sepeda lebih hemat dan bisa mengurangi polusi udara.", answer: 0 },
+                { text: "Mencabut kabel yang tidak dipakai adalah tindakan membuang waktu.", answer: 1 },
+                { text: "Pemborosan listrik dapat berdampak buruk bagi lingkungan bumi.", answer: 0 }
+            ],
+            explanation: "Pernyataan A dan C sangat sesuai dengan teks. Mencabut kabel justru menghemat listrik, bukan membuang waktu, jadi B Tidak Sesuai."
+        },
+        {
+            id: 20, type: "pg", context: textHematEnergi,
+            q: "Makna kata <b>polusi</b> pada kalimat terakhir teks tersebut adalah...",
+            options: ["Udara yang sangat sejuk.", "Keramaian di jalan raya.", "Pencemaran (kotoran/asap) yang merusak lingkungan.", "Pemandangan alam yang indah."],
+            answer: 2,
+            explanation: "Polusi berarti pencemaran lingkungan (seperti asap kendaraan yang mengotori udara)."
+        },
+
+        // Teks Puisi
+        {
+            id: 21, type: "pg", context: textPuisi,
+            q: "Makna kiasan 'Mengeja huruf dan dunia' pada puisi tersebut adalah...",
+            options: ["Guru menyuruh murid membaca buku peta dunia.", "Guru mengajarkan cara membaca dan memberikan ilmu pengetahuan yang luas.", "Guru mengajak murid berjalan-jalan keliling dunia.", "Guru memberikan buku tulis baru."],
+            answer: 1,
+            explanation: "Ini adalah ungkapan kiasan. 'Mengeja huruf' berarti belajar dasar membaca, dan 'mengeja dunia' berarti memahami wawasan dan ilmu pengetahuan luas."
+        },
+        {
+            id: 22, type: "pg", context: textPuisi,
+            q: "Ungkapan 'pahlawan tanpa tanda jasa' di dalam puisi tersebut ditujukan kepada siapa?",
+            options: ["Tentara.", "Dokter.", "Orang tua.", "Guru."],
+            answer: 3,
+            explanation: "Berdasarkan judul puisi ('Guruku, Cahaya Masa Depanku') dan aktivitasnya mengajar, julukan itu ditujukan untuk profesi Guru."
+        },
+        {
+            id: 23, type: "mcma", context: textPuisi,
+            q: "Perasaan apa yang tergambar kuat dari penulis puisi terhadap gurunya? (Jawaban lebih dari satu)",
+            options: ["Kebencian dan kekecewaan.", "Rasa hormat dan kagum.", "Rasa ingin berterima kasih yang dalam.", "Rasa takut dimarahi."],
+            answer: [1, 2],
+            explanation: "Kata 'Terima kasih', 'cahaya masa depan', dan 'mekar di hatiku' mencerminkan rasa hormat, kagum, dan terima kasih yang sangat besar."
+        },
+        {
+            id: 24, type: "kategori", context: textPuisi,
+            q: "Sikap apa saja di kehidupan nyata yang relevan untuk membalas jasa guru seperti di puisi tersebut?<br>Tentukan Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Mendengarkan dengan baik saat guru sedang menerangkan.", answer: 0 },
+                { text: "Sering mengabaikan tugas PR yang diberikan guru.", answer: 1 },
+                { text: "Mengucapkan terima kasih saat pelajaran selesai.", answer: 0 }
+            ],
+            explanation: "Sikap baik untuk membalas guru adalah mendengarkan (Benar) dan berterima kasih (Benar). Mengabaikan tugas tentu tindakan yang Salah."
+        },
+        {
+            id: 25, type: "pg", context: textPuisi,
+            q: "Makna tersirat (tersembunyi) dari larik 'gelap ketidaktahuan' adalah...",
+            options: ["Ruang kelas yang mati lampu.", "Malam hari yang sangat gelap gulita.", "Kondisi saat siswa belum paham atau belum memiliki ilmu.", "Kacamata hitam yang dipakai guru."],
+            answer: 2,
+            explanation: "Dalam puisi, 'gelap' sering dikiaskan sebagai kebodohan, dan guru hadir menuntun memberikan 'cahaya' (ilmu)."
+        },
+
+        // Surat Pribadi
+        {
+            id: 26, type: "pg", context: textSurat,
+            q: "Di mana Rio berada saat ia menulis surat tersebut?",
+            options: ["Di Jakarta.", "Di rumah Bima.", "Di sebuah pulau terpencil.", "Di desa rumah neneknya."],
+            answer: 3,
+            explanation: "Pada paragraf 2 tertulis dengan jelas: 'Aku sedang berada di desa rumah Nenek sekarang.'"
+        },
+        {
+            id: 27, type: "pg", context: textSurat,
+            q: "Peristiwa apa yang dialami Rio sehari sebelum ia menulis surat tersebut?",
+            options: ["Rio pergi ke Jakarta bertemu Bima.", "Rio memetik mangga dan berenang di sungai.", "Rio ikut kakeknya pergi ke kebun untuk panen jagung.", "Rio membeli jagung di pasar malam."],
+            answer: 2,
+            explanation: "Rio menceritakan pengalamannya: 'Kemarin, aku ikut Kakek pergi ke kebun untuk panen jagung manis.'"
+        },
+        {
+            id: 28, type: "mcma", context: textSurat,
+            q: "Informasi apa saja yang disampaikan Rio kepada Bima melalui surat tersebut? (Pilih lebih dari satu)",
+            options: ["Mengabarkan bahwa ia sedang liburan di desa.", "Meminta Bima untuk mengirimkan uang.", "Mengajak Bima untuk liburan ke desanya semester depan.", "Menceritakan tentang macetnya jalan di desa."],
+            answer: [0, 2],
+            explanation: "Rio mengabarkan dirinya di desa (Paragraf 2) dan secara khusus mengajak Bima liburan ke sana semester depan (Paragraf 3)."
+        },
+        {
+            id: 29, type: "kategori", context: textSurat,
+            q: "Berdasarkan teks surat pribadi tersebut, tentukan pernyataan berikut Benar atau Salah!",
+            cats: ["Benar", "Salah"],
+            statements: [
+                { text: "Surat tersebut diawali dengan menanyakan kabar sahabatnya.", answer: 0 },
+                { text: "Rio ikut kakeknya memanen padi di sawah yang luas.", answer: 1 },
+                { text: "Rio sangat berharap Bima membalas suratnya.", answer: 0 }
+            ],
+            explanation: "Menanyakan kabar ada di awal (Benar). Harapan membalas surat ada di akhir (Benar). Pernyataan B Salah karena Rio memanen JAGUNG, bukan padi."
+        },
+        {
+            id: 30, type: "pg", context: textSurat,
+            q: "Dilihat dari bentuk dan isinya (menggunakan sapaan 'Halo', menanyakan kabar, bahasa santai), teks tersebut termasuk jenis...",
+            options: ["Teks Prosedur.", "Surat Resmi (Dinas).", "Surat Pribadi.", "Puisi lama."],
+            answer: 2,
+            explanation: "Surat yang dikirimkan untuk keluarga atau teman dengan gaya bahasa santai dan tidak menggunakan kop surat disebut Surat Pribadi."
+        }
+    ];
+
+    let currentQ = 0;
+    let correctCount = 0;
+    const quizContainer = document.getElementById('quiz-container');
+    const scoreScreen = document.getElementById('score-screen');
+
+    function renderQuestion() {
+        quizContainer.innerHTML = '';
+        if (currentQ >= questions.length) {
+            showScore();
+            return;
+        }
+
+        const qData = questions[currentQ];
+        const card = document.createElement('div');
+        card.className = 'question-card active';
+
+        // Header & Context
+        let html = `<div class="question-number">Soal ${currentQ + 1} / 30</div>`;
+        if (qData.context) {
+            html += `<div class="context-box">${qData.context}</div>`;
+        }
+        html += `<div class="question-text">${qData.q}</div>`;
+
+        // Render Options based on type
+        html += `<div class="options-container" id="options-${currentQ}">`;
+        
+        if (qData.type === 'pg') {
+            qData.options.forEach((opt, idx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="radio" name="q${currentQ}" value="${idx}">
+                        <span>${opt}</span>
+                    </label>`;
+            });
+        } 
+        else if (qData.type === 'mcma') {
+            qData.options.forEach((opt, idx) => {
+                html += `
+                    <label class="option-label">
+                        <input type="checkbox" name="q${currentQ}" value="${idx}">
+                        <span>${opt}</span>
+                    </label>`;
+            });
+        }
+        else if (qData.type === 'kategori') {
+            html += `<table class="kategori-table">
+                        <tr><th>Pernyataan</th><th>${qData.cats[0]}</th><th>${qData.cats[1]}</th></tr>`;
+            qData.statements.forEach((stmt, idx) => {
+                html += `<tr>
+                            <td class="statement">${stmt.text}</td>
+                            <td><input type="radio" name="cat${currentQ}_${idx}" value="0"></td>
+                            <td><input type="radio" name="cat${currentQ}_${idx}" value="1"></td>
+                         </tr>`;
+            });
+            html += `</table>`;
+        }
+        html += `</div>`; // end options-container
+
+        // Submit Button
+        html += `<button class="btn-submit" id="btn-submit-${currentQ}" onclick="checkAnswer()">Kirim Jawaban</button>`;
+
+        // Feedback Box
+        html += `
+            <div class="feedback" id="feedback-${currentQ}">
+                <div class="status" id="status-${currentQ}"></div>
+                <div class="explanation"><b>Penjelasan:</b> <span id="expl-${currentQ}"></span></div>
+            </div>
+        `;
+
+        // Next Button
+        html += `<button class="btn-next" id="btn-next-${currentQ}" onclick="nextQuestion()">Selanjutnya ➡️</button>`;
+
+        card.innerHTML = html;
+        quizContainer.appendChild(card);
+    }
+
+    function checkAnswer() {
+        const qData = questions[currentQ];
+        let isCorrect = false;
+        let isAnswered = false;
+
+        if (qData.type === 'pg') {
+            const selected = document.querySelector(`input[name="q${currentQ}"]:checked`);
+            if (!selected) return alert("Pilih jawabanmu dulu ya!");
+            isAnswered = true;
+            if (parseInt(selected.value) === qData.answer) isCorrect = true;
+        } 
+        else if (qData.type === 'mcma') {
+            const selectedBoxes = document.querySelectorAll(`input[name="q${currentQ}"]:checked`);
+            if (selectedBoxes.length === 0) return alert("Pilih minimal satu jawaban!");
+            isAnswered = true;
+            let vals = Array.from(selectedBoxes).map(cb => parseInt(cb.value)).sort();
+            let ans = qData.answer.slice().sort();
+            isCorrect = (JSON.stringify(vals) === JSON.stringify(ans));
+        }
+        else if (qData.type === 'kategori') {
+            let allAnswered = true;
+            let correctRows = 0;
+            qData.statements.forEach((stmt, idx) => {
+                const sel = document.querySelector(`input[name="cat${currentQ}_${idx}"]:checked`);
+                if (!sel) allAnswered = false;
+                else if (parseInt(sel.value) === stmt.answer) correctRows++;
+            });
+            if (!allAnswered) return alert("Tentukan pilihan untuk SEMUA baris pernyataan ya!");
+            isAnswered = true;
+            if (correctRows === qData.statements.length) isCorrect = true;
+        }
+
+        if (isAnswered) {
+            // Disable inputs
+            const inputs = document.querySelectorAll(`input`);
+            inputs.forEach(i => i.disabled = true);
+            const labels = document.querySelectorAll('.option-label');
+            labels.forEach(l => l.classList.add('disabled'));
+
+            // Show feedback
+            document.getElementById(`btn-submit-${currentQ}`).style.display = 'none';
+            const feedbackBox = document.getElementById(`feedback-${currentQ}`);
+            const statusText = document.getElementById(`status-${currentQ}`);
+            document.getElementById(`expl-${currentQ}`).innerHTML = qData.explanation;
+
+            feedbackBox.style.display = 'block';
+            if (isCorrect) {
+                correctCount++;
+                feedbackBox.classList.add('correct-bg');
+                statusText.innerHTML = '🎉 HEBAT, JAWABANMU BENAR!';
+                statusText.className = 'status correct-text';
+            } else {
+                feedbackBox.classList.add('wrong-bg');
+                statusText.innerHTML = '❌ YAAH, MASIH KURANG TEPAT!';
+                statusText.className = 'status wrong-text';
+            }
+
+            document.getElementById(`btn-next-${currentQ}`).style.display = 'block';
+        }
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        renderQuestion();
+    }
+
+    function showScore() {
+        document.getElementById('quiz-header').style.display = 'none';
+        scoreScreen.style.display = 'block';
+        
+        // Capping float numbers
+        const score = Math.round((correctCount / questions.length) * 100);
+        document.getElementById('final-score').innerText = score;
+
+        if (score === 100) {
+            document.getElementById('score-message').innerText = "LUAR BIASA! Kamu dapat nilai Sempurna!";
+            document.getElementById('champion-icon').style.display = 'block';
+            
+            // Show WA Button
+            const waBtn = document.getElementById('btn-wa');
+            waBtn.style.display = 'inline-block';
+            const waText = encodeURIComponent("Alhamdulillah aku berhasil dapat 100 & Mendapatkan HADIAH 5.000!");
+            // General WA send link so user can pick contact
+            waBtn.href = `https://wa.me/?text=${waText}`;
+
+            // Trigger Confetti
+            fireConfetti();
+        } else {
+            document.getElementById('score-message').innerText = "Tetap semangat! Yuk coba lagi supaya dapat 100!";
+            document.getElementById('btn-retry').style.display = 'inline-block';
+        }
+    }
+
+    function fireConfetti() {
+        var duration = 3 * 1000;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff9800', '#4caf50', '#00bcd4']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff9800', '#4caf50', '#00bcd4']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    // Start Quiz
+    window.onload = renderQuestion;
+</script>
+
+</body>
+</html>
