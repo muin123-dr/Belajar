@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerdas Cermat STCM 2026 - IPA Kelas 3 SD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .brand-font {
+            font-family: 'Fredoka One', cursive;
+        }
+        
+        /* Animations */
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 2s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(8deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop {
+            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .screen.active {
+            display: flex;
+        }
+
+        /* Star Shapes for decoration */
+        .star {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 50px solid #FFD700;
+            transform: rotate(35deg);
+        }
+        .star:before {
+            position: absolute;
+            content: "";
+            top: -12px;
+            left: -25px;
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 50px solid #FFD700;
+            transform: rotate(-70deg);
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 30px;
+            background: #10b981;
+            top: -50px;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+        
+        .split-screen {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            flex: 1;
+        }
+        @media (min-width: 768px) {
+            .split-screen { flex-direction: row; }
+        }
+
+        /* Modals */
+        .modal-overlay {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Custom Notification Modal -->
+    <div id="notification-modal" class="fixed inset-0 modal-overlay z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center transform transition-all animate-pop border-4 border-emerald-400">
+            <h3 class="brand-font text-2xl text-emerald-600 mb-4" id="notif-title">Perhatian!</h3>
+            <p class="text-lg font-bold text-gray-700 mb-6" id="notif-msg">Pesan disini.</p>
+            <button onclick="closeNotification()" class="bg-emerald-500 hover:bg-emerald-600 text-white brand-font text-xl py-3 px-8 rounded-full shadow-lg transition-transform hover:scale-105 w-full">OK</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 1: ROLE SELECTION -->
+    <div id="screen-home" class="screen active items-center justify-center p-6 relative overflow-hidden bg-gradient-to-b from-emerald-100 via-teal-50 to-white">
+        <!-- Decor Geometris -->
+        <div class="absolute top-10 left-10 w-20 h-20 bg-teal-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float"></div>
+        <div class="absolute bottom-10 right-10 w-28 h-28 bg-emerald-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float" style="animation-delay: 1s;"></div>
+        
+        <div class="z-10 flex flex-col items-center max-w-md w-full bg-white/85 p-8 rounded-3xl shadow-2xl backdrop-blur-sm border-4 border-white">
+            <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" alt="Logo STCM" class="h-32 mb-3 animate-pulse-soft object-contain drop-shadow-md">
+            <h1 class="text-3xl md:text-4xl text-center text-emerald-700 mb-1 drop-shadow-sm">Cerdas Cermat STCM</h1>
+            <span class="bg-emerald-100 text-emerald-800 brand-font text-lg px-4 py-1 rounded-full mb-6 border border-emerald-300">🌿 IPA Kelas 3 SD</span>
+            
+            <div class="flex flex-col gap-4 w-full">
+                <button onclick="selectRole('p1')" class="bg-red-500 hover:bg-red-600 text-white brand-font text-2xl py-4 px-6 rounded-2xl shadow-[0_8px_0_#991b1b] active:translate-y-2 active:shadow-none transition-all">Peserta ke-1</button>
+                <button onclick="selectRole('p2')" class="bg-blue-500 hover:bg-blue-600 text-white brand-font text-2xl py-4 px-6 rounded-2xl shadow-[0_8px_0_#1e3a8a] active:translate-y-2 active:shadow-none transition-all">Peserta ke-2</button>
+                <button onclick="selectRole('judge')" class="bg-purple-500 hover:bg-purple-600 text-white brand-font text-2xl py-4 px-6 rounded-2xl shadow-[0_8px_0_#4c1d95] active:translate-y-2 active:shadow-none transition-all mt-2">Juri</button>
+            </div>
+            <button onclick="resetGameData()" class="mt-8 text-xs text-gray-400 hover:text-red-500 underline">Reset Game IPA (Admin)</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: PLAYER SETUP -->
+    <div id="screen-player-setup" class="screen items-center justify-start pt-12 p-6 bg-gradient-to-b from-emerald-100 to-white">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" alt="Logo" class="h-24 mb-2 object-contain">
+        <h2 class="text-2xl text-emerald-700 mb-1 brand-font">Cerdas Cermat STCM 2026</h2>
+        <span class="text-sm font-bold text-emerald-600 mb-6">Materi: IPA Kelas 3 SD</span>
+        
+        <div class="bg-white p-8 rounded-3xl shadow-xl border-4 border-emerald-300 w-full max-w-md animate-pop">
+            <h3 class="text-xl font-bold mb-4 text-center" id="setup-player-title">Peserta</h3>
+            <div class="flex items-center gap-4 mb-6">
+                <label class="brand-font text-xl text-gray-700">Nama:</label>
+                <input type="text" id="player-name-input" class="flex-1 border-4 border-gray-200 rounded-xl p-3 text-xl font-bold focus:border-emerald-400 focus:outline-none transition-colors" placeholder="Tulis namamu...">
+            </div>
+            <button onclick="playerReady()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white brand-font text-2xl py-4 rounded-2xl shadow-[0_6px_0_#065f46] active:translate-y-1 active:shadow-none transition-all">Aku Siap</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: PLAYER WAITING -->
+    <div id="screen-player-waiting" class="screen items-center justify-center p-6 bg-emerald-50">
+        <div class="text-center animate-pulse-soft">
+            <div class="w-24 h-24 border-8 border-emerald-200 border-t-emerald-500 rounded-full animate-spin mx-auto mb-6"></div>
+            <h2 class="text-3xl brand-font text-emerald-600">Menunggu Juri...</h2>
+            <p class="text-xl mt-4 font-bold text-gray-600">Bersiaplah menjawab soal IPA!</p>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: JUDGE WAITING -->
+    <div id="screen-judge-waiting" class="screen items-center p-6 bg-purple-50">
+        <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" alt="Logo" class="h-20 mb-2 mt-4 object-contain">
+        <h2 class="text-2xl text-purple-700 mb-1 brand-font">Cerdas Cermat STCM 2026 - Panel Juri</h2>
+        <span class="text-sm font-bold text-purple-600 mb-6">Lomba IPA Kelas 3 SD</span>
+        
+        <div class="flex flex-col md:flex-row gap-8 w-full max-w-4xl justify-center mb-10">
+            <!-- Box P1 -->
+            <div id="j-p1-box" class="flex-1 bg-red-100 border-4 border-red-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500">
+                <h3 class="brand-font text-2xl text-red-700 mb-2">Peserta ke-1</h3>
+                <div id="j-p1-status" class="text-3xl font-black text-red-600 animate-pulse">PERSIAPAN</div>
+                <div id="j-p1-name" class="mt-4 text-xl font-bold text-gray-700 h-8"></div>
+            </div>
+            <!-- Box P2 -->
+            <div id="j-p2-box" class="flex-1 bg-red-100 border-4 border-red-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500">
+                <h3 class="brand-font text-2xl text-red-700 mb-2">Peserta ke-2</h3>
+                <div id="j-p2-status" class="text-3xl font-black text-red-600 animate-pulse">PERSIAPAN</div>
+                <div id="j-p2-name" class="mt-4 text-xl font-bold text-gray-700 h-8"></div>
+            </div>
+        </div>
+        
+        <button id="btn-start-lomba" onclick="startLomba()" disabled class="bg-gray-400 text-white brand-font text-3xl py-4 px-12 rounded-full shadow-lg opacity-50 cursor-not-allowed transition-all">Mulai Lomba</button>
+    </div>
+
+    <!-- SCREEN 5: PLAYER QUIZ -->
+    <div id="screen-player-quiz" class="screen p-4 bg-emerald-50 justify-center items-center">
+        <div class="w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl border-4 border-emerald-300 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-3 bg-emerald-100"><div id="quiz-progress" class="h-full bg-emerald-500 w-0 transition-all duration-300"></div></div>
+            
+            <div class="flex justify-between items-center mb-4 mt-2">
+                <span class="font-bold text-gray-500">Skor Anda:</span>
+                <span id="player-score-display" class="brand-font text-3xl text-emerald-600">0</span>
+            </div>
+            
+            <div class="bg-emerald-50 border-4 border-emerald-200 rounded-2xl p-6 text-center mb-6 min-h-[140px] flex items-center justify-center">
+                <h2 id="question-text" class="brand-font text-2xl text-gray-800 leading-snug">Soal IPA akan muncul di sini...</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="answers-container">
+                <!-- Pilihan jawaban di-inject melalui JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 6: JUDGE ACTIVE GAME (SPLIT SCREEN) -->
+    <div id="screen-judge-game" class="screen">
+        <div class="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-white p-2 rounded-full shadow-xl">
+            <img src="https://muin123-dr.github.io/Belajar/LOGOstcm.png" alt="Logo" class="h-16 object-contain">
+        </div>
+        <div class="split-screen relative">
+            <!-- P1 Side -->
+            <div class="flex-1 bg-gray-200 flex flex-col justify-center items-center p-8 border-r-8 border-gray-800/10">
+                <div class="w-48 h-48 md:w-64 md:h-64 bg-white rounded-full flex items-center justify-center shadow-inner border-8 border-gray-300 mb-6 relative">
+                    <div class="absolute inset-2 border-4 border-dashed border-gray-200 rounded-full animate-[spin_10s_linear_infinite]"></div>
+                    <span id="j-active-p1-score" class="brand-font text-6xl md:text-8xl text-gray-800 z-10">0</span>
+                </div>
+                <h3 id="j-active-p1-name" class="brand-font text-3xl md:text-4xl text-gray-700 bg-white/50 px-6 py-2 rounded-full">Peserta 1</h3>
+            </div>
+            <!-- P2 Side -->
+            <div class="flex-1 bg-yellow-300 flex flex-col justify-center items-center p-8">
+                <div class="w-48 h-48 md:w-64 md:h-64 bg-white rounded-full flex items-center justify-center shadow-inner border-8 border-yellow-400 mb-6 relative">
+                    <div class="absolute inset-2 border-4 border-dashed border-yellow-200 rounded-full animate-[spin_10s_linear_infinite_reverse]"></div>
+                    <span id="j-active-p2-score" class="brand-font text-6xl md:text-8xl text-yellow-600 z-10">0</span>
+                </div>
+                <h3 id="j-active-p2-name" class="brand-font text-3xl md:text-4xl text-yellow-800 bg-white/50 px-6 py-2 rounded-full">Peserta 2</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 7: WINNER RESULT -->
+    <div id="screen-result" class="screen items-center justify-center p-6 relative overflow-hidden bg-gradient-to-b from-teal-900 to-emerald-900">
+        <!-- Decor Stars -->
+        <div class="star absolute top-20 left-10 scale-50 animate-float"></div>
+        <div class="star absolute bottom-20 right-20 scale-75 animate-float" style="animation-delay: 1s;"></div>
+        <div class="star absolute top-1/4 right-10 scale-50 animate-float" style="animation-delay: 2s;"></div>
+        
+        <div id="confetti-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+        <div class="z-10 text-center animate-pop bg-white/10 backdrop-blur-md p-10 rounded-3xl border-4 border-yellow-400 shadow-[0_0_50px_rgba(250,204,21,0.5)]">
+            <h2 id="result-title" class="brand-font text-5xl md:text-7xl text-yellow-300 drop-shadow-lg mb-4">JUARA!</h2>
+            <h3 id="result-subtitle" class="text-3xl text-white font-bold mb-8">Selamat kepada</h3>
+            <div id="result-name" class="brand-font text-5xl md:text-6xl text-white bg-gradient-to-r from-pink-500 to-orange-400 py-4 px-10 rounded-full shadow-2xl inline-block border-4 border-white transform hover:scale-105 transition-transform">
+                NAMA
+            </div>
+            <br>
+            <button onclick="resetGameData()" class="mt-12 bg-white/20 hover:bg-white/30 text-white px-6 py-2 rounded-full font-bold transition-colors">Kembali ke Awal (Admin)</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4oZiCup8l2C2y73iw6jQjYX_ZqatchXE",
+            authDomain: "cerdascermatstcm.firebaseapp.com",
+            databaseURL: "https://cerdascermatstcm-default-rtdb.firebaseio.com",
+            projectId: "cerdascermatstcm",
+            storageBucket: "cerdascermatstcm.firebasestorage.app",
+            messagingSenderId: "994105946876",
+            appId: "1:994105946876:web:753c54a9026a7616ab5d79"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        // KUNCI UTAMA: Node penyimpanan khusus IPA
+        const gameRef = ref(db, 'stcm_game_ipa');
+
+        // Bank Soal IPA Kelas 3 SD (10 Soal)
+        const ipaQuestions = [
+            {
+                q: "Air yang dipanaskan terus-menerus akan berubah menjadi uap. Peristiwa ini disebut...",
+                options: ["Mencair", "Menguap", "Membeku", "Mengembun"],
+                answer: "Menguap"
+            },
+            {
+                q: "Benda yang memiliki bentuk dan volume yang selalu tetap adalah benda...",
+                options: ["Padat", "Cair", "Gas", "Udara"],
+                answer: "Padat"
+            },
+            {
+                q: "Perubahan wujud benda cair menjadi benda padat disebut...",
+                options: ["Mencair", "Menguap", "Membeku", "Menyublim"],
+                answer: "Membeku"
+            },
+            {
+                q: "Sumber energi utama dan terbesar bagi kehidupan di bumi adalah...",
+                options: ["Angin", "Matahari", "Minyak bumi", "Batu bara"],
+                answer: "Matahari"
+            },
+            {
+                q: "Contoh benda cair yang biasa ditemui di dapur adalah...",
+                options: ["Pensil dan buku", "Sirup dan minyak", "Asap dan angin", "Batu dan kayu"],
+                answer: "Sirup dan minyak"
+            },
+            {
+                q: "Energi yang dimanfaatkan oleh kincir angin untuk berputar adalah energi...",
+                options: ["Panas", "Bunyi", "Gerak", "Cahaya"],
+                answer: "Gerak"
+            },
+            {
+                q: "Keadaan udara pada suatu tempat dan waktu tertentu disebut...",
+                options: ["Iklim", "Musim", "Cuaca", "Suhu"],
+                answer: "Cuaca"
+            },
+            {
+                q: "Alat yang digunakan untuk mengukur suhu secara tepat adalah...",
+                options: ["Barometer", "Termometer", "Anemometer", "Penggaris"],
+                answer: "Termometer"
+            },
+            {
+                q: "Es batu yang diletakkan di ruang terbuka akan berubah menjadi air. Peristiwa ini disebut...",
+                options: ["Membeku", "Mencair", "Mengembun", "Menguap"],
+                answer: "Mencair"
+            },
+            {
+                q: "Contoh benda gas yang ada di dalam benda sekitar kita adalah...",
+                options: ["Air dalam botol", "Udara di dalam balon", "Meja belajar", "Minyak goreng"],
+                answer: "Udara di dalam balon"
+            }
+        ];
+
+        // Global Variables
+        let role = null; // 'p1', 'p2', 'judge'
+        let gameState = {
+            status: 'waiting',
+            p1: { name: '', ready: false, score: 0 },
+            p2: { name: '', ready: false, score: 0 },
+            winner: ''
+        };
+        let currentQuestion = null;
+
+        // Mendengarkan data realtime dari Firebase
+        onValue(gameRef, (snap) => {
+            const data = snap.val();
+            if (data) {
+                gameState = data;
+                updateUI();
+            } else {
+                set(gameRef, gameState);
+            }
+        }, (error) => {
+            console.error("Firebase Database Error:", error);
+        });
+
+        window.onload = () => {
+            generateConfetti();
+        };
+
+        window.selectRole = (selectedRole) => {
+            role = selectedRole;
+            if (role === 'p1' || role === 'p2') {
+                document.getElementById('setup-player-title').innerText = role === 'p1' ? 'Peserta ke-1' : 'Peserta ke-2';
+                showScreen('screen-player-setup');
+            } else if (role === 'judge') {
+                showScreen('screen-judge-waiting');
+                updateUI();
+            }
+        };
+
+        window.playerReady = async () => {
+            const nameInput = document.getElementById('player-name-input').value.trim();
+            if (!nameInput) {
+                showNotification("Perhatian", "Tolong isi namamu dulu ya!");
+                return;
+            }
+
+            let updateData = { ...gameState };
+            if (!updateData.p1) updateData.p1 = { name: '', ready: false, score: 0 };
+            if (!updateData.p2) updateData.p2 = { name: '', ready: false, score: 0 };
+
+            if (role === 'p1') {
+                updateData.p1 = { name: nameInput, ready: true, score: 0 };
+            } else {
+                updateData.p2 = { name: nameInput, ready: true, score: 0 };
+            }
+            
+            await set(gameRef, updateData);
+            
+            showNotification("Persiapan Selesai!", "Baca Bismillah, Lomba akan segera dimulai!");
+            showScreen('screen-player-waiting');
+        };
+
+        window.startLomba = async () => {
+            await set(gameRef, { ...gameState, status: 'playing', winner: '' });
+        };
+
+        window.resetGameData = async () => {
+            await set(gameRef, {
+                status: 'waiting',
+                p1: { name: '', ready: false, score: 0 },
+                p2: { name: '', ready: false, score: 0 },
+                winner: ''
+            });
+            showScreen('screen-home');
+            role = null;
+        };
+
+        // Mengatur tampilan halaman berdasarkan peran dan status game
+        function updateUI() {
+            if (!role) return;
+
+            if (gameState.status === 'finished') {
+                showScreen('screen-result');
+                renderResult();
+                return;
+            }
+
+            if (role === 'judge') {
+                if (gameState.status === 'waiting') {
+                    showScreen('screen-judge-waiting');
+                    
+                    // P1 Box
+                    const b1 = document.getElementById('j-p1-box');
+                    const s1 = document.getElementById('j-p1-status');
+                    document.getElementById('j-p1-name').innerText = gameState.p1?.name || '-';
+                    if (gameState.p1?.ready) {
+                        b1.className = "flex-1 bg-green-100 border-4 border-green-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500";
+                        s1.className = "text-3xl font-black text-green-600";
+                        s1.innerText = "SIAP";
+                    } else {
+                        b1.className = "flex-1 bg-red-100 border-4 border-red-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500";
+                        s1.className = "text-3xl font-black text-red-600 animate-pulse";
+                        s1.innerText = "PERSIAPAN";
+                    }
+
+                    // P2 Box
+                    const b2 = document.getElementById('j-p2-box');
+                    const s2 = document.getElementById('j-p2-status');
+                    document.getElementById('j-p2-name').innerText = gameState.p2?.name || '-';
+                    if (gameState.p2?.ready) {
+                        b2.className = "flex-1 bg-green-100 border-4 border-green-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500";
+                        s2.className = "text-3xl font-black text-green-600";
+                        s2.innerText = "SIAP";
+                    } else {
+                        b2.className = "flex-1 bg-red-100 border-4 border-red-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500";
+                        s2.className = "text-3xl font-black text-red-600 animate-pulse";
+                        s2.innerText = "PERSIAPAN";
+                    }
+
+                    // Tombol Mulai
+                    const btn = document.getElementById('btn-start-lomba');
+                    if (gameState.p1?.ready && gameState.p2?.ready) {
+                        btn.disabled = false;
+                        btn.className = "bg-emerald-500 hover:bg-emerald-600 text-white brand-font text-3xl py-4 px-12 rounded-full shadow-[0_8px_0_#065f46] active:translate-y-2 active:shadow-none transition-all animate-bounce";
+                    } else {
+                        btn.disabled = true;
+                        btn.className = "bg-gray-400 text-white brand-font text-3xl py-4 px-12 rounded-full shadow-lg opacity-50 cursor-not-allowed transition-all";
+                    }
+
+                } else if (gameState.status === 'playing') {
+                    showScreen('screen-judge-game');
+                    document.getElementById('j-active-p1-score').innerText = gameState.p1?.score || 0;
+                    document.getElementById('j-active-p1-name').innerText = gameState.p1?.name || 'Peserta 1';
+                    document.getElementById('j-active-p2-score').innerText = gameState.p2?.score || 0;
+                    document.getElementById('j-active-p2-name').innerText = gameState.p2?.name || 'Peserta 2';
+                }
+            } 
+            else if (role === 'p1' || role === 'p2') {
+                let myState = role === 'p1' ? gameState.p1 : gameState.p2;
+                
+                if (gameState.status === 'waiting' && myState?.ready) {
+                    showScreen('screen-player-waiting');
+                } else if (gameState.status === 'playing') {
+                    if (document.getElementById('screen-player-quiz').style.display !== 'flex') {
+                        showScreen('screen-player-quiz');
+                        generateQuestion();
+                    }
+                    document.getElementById('player-score-display').innerText = myState?.score || 0;
+                    document.getElementById('quiz-progress').style.width = (myState?.score || 0) + '%';
+                }
+            }
+        }
+
+        // Memilih soal acak dari Bank Soal IPA
+        function generateQuestion() {
+            let randIdx = Math.floor(Math.random() * ipaQuestions.length);
+            currentQuestion = ipaQuestions[randIdx];
+            
+            // Acak urutan pilihan jawaban
+            let options = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+
+            document.getElementById('question-text').innerText = currentQuestion.q;
+            
+            const container = document.getElementById('answers-container');
+            container.innerHTML = '';
+            
+            const colors = ['bg-emerald-500 hover:bg-emerald-600', 'bg-teal-500 hover:bg-teal-600', 'bg-blue-500 hover:bg-blue-600', 'bg-amber-500 hover:bg-amber-600'];
+            const shadowColors = ['#065f46', '#115e59', '#1e3a8a', '#92400e'];
+            
+            options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `${colors[idx]} text-white brand-font text-lg md:text-xl py-4 px-3 rounded-2xl shadow-[0_6px_0_${shadowColors[idx]}] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center text-center leading-snug w-full min-h-[64px]`;
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(opt);
+                container.appendChild(btn);
+            });
+        }
+
+        window.handleAnswer = async (selected) => {
+            if (gameState.status !== 'playing') return;
+
+            if (selected === currentQuestion.answer) {
+                let currentScore = role === 'p1' ? (gameState.p1?.score || 0) : (gameState.p2?.score || 0);
+                let newScore = currentScore + 10; // Penambahan skor 10 poin per soal
+                let myName = role === 'p1' ? gameState.p1?.name : gameState.p2?.name;
+                
+                let updateData = { ...gameState };
+                if (!updateData.p1) updateData.p1 = { name: '', ready: false, score: 0 };
+                if (!updateData.p2) updateData.p2 = { name: '', ready: false, score: 0 };
+
+                if (role === 'p1') updateData.p1.score = newScore;
+                if (role === 'p2') updateData.p2.score = newScore;
+
+                if (newScore >= 100) {
+                    updateData.status = 'finished';
+                    updateData.winner = myName;
+                }
+
+                gameState = updateData; 
+                await set(gameRef, updateData);
+            }
+            
+            if (gameState.status === 'playing') {
+                generateQuestion();
+            }
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function renderResult() {
+            const title = document.getElementById('result-title');
+            const sub = document.getElementById('result-subtitle');
+            const nameBox = document.getElementById('result-name');
+            
+            if (role === 'judge') {
+                title.innerText = "JUARA!";
+                sub.innerText = "Selamat kepada";
+                nameBox.innerText = gameState.winner;
+                nameBox.className = "brand-font text-5xl md:text-6xl text-white bg-gradient-to-r from-pink-500 to-orange-400 py-4 px-10 rounded-full shadow-2xl inline-block border-4 border-white transform hover:scale-105 transition-transform";
+            } else {
+                let myName = role === 'p1' ? gameState.p1?.name : gameState.p2?.name;
+                if (myName === gameState.winner) {
+                    title.innerText = "SELAMAT!";
+                    sub.innerText = "Kamu adalah";
+                    nameBox.innerText = "JUARA";
+                    nameBox.className = "brand-font text-5xl md:text-6xl text-white bg-gradient-to-r from-pink-500 to-orange-400 py-4 px-10 rounded-full shadow-2xl inline-block border-4 border-white transform hover:scale-105 transition-transform";
+                } else {
+                    title.innerText = "YAHH...";
+                    sub.innerText = "Maaf kamu belum juara";
+                    nameBox.innerText = "TETAP SEMANGAT!";
+                    nameBox.className = "brand-font text-3xl md:text-5xl text-white bg-gray-500 py-4 px-10 rounded-full shadow-2xl inline-block border-4 border-white";
+                }
+            }
+        }
+
+        window.showNotification = (title, message) => {
+            document.getElementById('notif-title').innerText = title;
+            document.getElementById('notif-msg').innerText = message;
+            document.getElementById('notification-modal').classList.remove('hidden');
+        }
+
+        window.closeNotification = () => {
+            document.getElementById('notification-modal').classList.add('hidden');
+        }
+
+        function generateConfetti() {
+            const colors = ['#10b981', '#14b8a6', '#06b6d4', '#f59e0b', '#ec4899', '#8b5cf6'];
+            const container = document.getElementById('confetti-container');
+            container.innerHTML = '';
+            for(let i=0; i<50; i++) {
+                let conf = document.createElement('div');
+                conf.className = 'confetti-piece';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                conf.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(conf);
+            }
+        }
+    </script>
+</body>
+</html>
