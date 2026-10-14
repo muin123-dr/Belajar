@@ -74,7 +74,7 @@
             transform: rotate(-70deg);
         }
 
-        /* Confetti simplified */
+        /* Confetti */
         .confetti-piece {
             position: absolute;
             width: 10px;
@@ -116,7 +116,6 @@
         </div>
     </div>
 
-    
     <!-- SCREEN 1: ROLE SELECTION -->
     <div id="screen-home" class="screen active items-center justify-center p-6 relative overflow-hidden bg-gradient-to-b from-blue-100 to-white">
         <!-- Decor -->
@@ -182,7 +181,6 @@
         
         <button id="btn-start-lomba" onclick="startLomba()" disabled class="bg-gray-400 text-white brand-font text-3xl py-4 px-12 rounded-full shadow-lg opacity-50 cursor-not-allowed transition-all">Mulai Lomba</button>
     </div>
-
 
     <!-- SCREEN 5: PLAYER QUIZ -->
     <div id="screen-player-quiz" class="screen p-4 bg-gray-100 justify-center items-center">
@@ -251,28 +249,25 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-        // Firebase Config Setup
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cerdas-cermat-stcm';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            // Fallback mock or actual config needs to be provided by environment
-            projectId: "demo-project"
+        // Konfigurasi Firebase Realtime Database Anda
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4oZiCup8l2C2y73iw6jQjYX_ZqatchXE",
+            authDomain: "cerdascermatstcm.firebaseapp.com",
+            databaseURL: "https://cerdascermatstcm-default-rtdb.firebaseio.com",
+            projectId: "cerdascermatstcm",
+            storageBucket: "cerdascermatstcm.firebasestorage.app",
+            messagingSenderId: "994105946876",
+            appId: "1:994105946876:web:753c54a9026a7616ab5d79"
         };
 
-        let app, db, auth;
-        try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-        } catch (e) {
-            console.error("Firebase init error:", e);
-        }
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const gameRef = ref(db, 'stcm_game');
 
         // Global Variables
         let role = null; // 'p1', 'p2', 'judge'
-        let docRef = null;
         let gameState = {
             status: 'waiting',
             p1: { name: '', ready: false, score: 0 },
@@ -281,40 +276,21 @@
         };
         let currentQuestion = null;
 
-        // Ensure Auth before starting
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined') {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                
-                // Define the single document to hold game state
-                // Strict rule path: /artifacts/{appId}/public/data/{collectionName}/{docId}
-                docRef = doc(db, 'artifacts', appId, 'public', 'data', 'cerdasCermat2026', 'mainGame');
-                
-                // Listen to changes
-                onSnapshot(docRef, (snap) => {
-                    if (snap.exists()) {
-                        gameState = snap.data();
-                        updateUI();
-                    } else {
-                        // Initialize document if it doesn't exist
-                        setDoc(docRef, gameState);
-                    }
-                }, (error) => {
-                    console.error("Firestore error:", error);
-                });
-                
-            } catch (error) {
-                console.error("Auth error:", error);
+        // Mendengarkan perubahan data secara real-time
+        onValue(gameRef, (snap) => {
+            const data = snap.val();
+            if (data) {
+                gameState = data;
+                updateUI();
+            } else {
+                set(gameRef, gameState);
             }
-        }
+        }, (error) => {
+            console.error("Firebase Database Error:", error);
+        });
 
         // Initialize App
         window.onload = () => {
-            initAuth();
             generateConfetti();
         };
 
@@ -325,7 +301,7 @@
                 showScreen('screen-player-setup');
             } else if (role === 'judge') {
                 showScreen('screen-judge-waiting');
-                updateUI(); // Force update waiting room
+                updateUI();
             }
         };
 
@@ -335,30 +311,29 @@
                 showNotification("Perhatian", "Tolong isi namamu dulu ya!");
                 return;
             }
-            if (!docRef) return;
 
-            // Update Firebase
-            let updateData = {};
+            let updateData = { ...gameState };
+            if (!updateData.p1) updateData.p1 = { name: '', ready: false, score: 0 };
+            if (!updateData.p2) updateData.p2 = { name: '', ready: false, score: 0 };
+
             if (role === 'p1') {
-                updateData = { ...gameState, p1: { name: nameInput, ready: true, score: 0 } };
+                updateData.p1 = { name: nameInput, ready: true, score: 0 };
             } else {
-                updateData = { ...gameState, p2: { name: nameInput, ready: true, score: 0 } };
+                updateData.p2 = { name: nameInput, ready: true, score: 0 };
             }
             
-            await setDoc(docRef, updateData);
+            await set(gameRef, updateData);
             
             showNotification("Persiapan Selesai!", "Baca Bismillah, Lomba akan segera dimulai!");
             showScreen('screen-player-waiting');
         };
 
         window.startLomba = async () => {
-            if (!docRef) return;
-            await setDoc(docRef, { ...gameState, status: 'playing', winner: '' });
+            await set(gameRef, { ...gameState, status: 'playing', winner: '' });
         };
 
         window.resetGameData = async () => {
-            if (!docRef) return;
-            await setDoc(docRef, {
+            await set(gameRef, {
                 status: 'waiting',
                 p1: { name: '', ready: false, score: 0 },
                 p2: { name: '', ready: false, score: 0 },
@@ -368,9 +343,9 @@
             role = null;
         };
 
-        // UI Manager based on Role and Firebase State
+        // UI Manager berdasarkan Role & State Realtime
         function updateUI() {
-            if (!role) return; // Still on home screen
+            if (!role) return;
 
             if (gameState.status === 'finished') {
                 showScreen('screen-result');
@@ -382,11 +357,11 @@
                 if (gameState.status === 'waiting') {
                     showScreen('screen-judge-waiting');
                     
-                    // Update P1 Box
+                    // P1 Box
                     const b1 = document.getElementById('j-p1-box');
                     const s1 = document.getElementById('j-p1-status');
-                    document.getElementById('j-p1-name').innerText = gameState.p1.name || '-';
-                    if (gameState.p1.ready) {
+                    document.getElementById('j-p1-name').innerText = gameState.p1?.name || '-';
+                    if (gameState.p1?.ready) {
                         b1.className = "flex-1 bg-green-100 border-4 border-green-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500";
                         s1.className = "text-3xl font-black text-green-600";
                         s1.innerText = "SIAP";
@@ -396,11 +371,11 @@
                         s1.innerText = "PERSIAPAN";
                     }
 
-                    // Update P2 Box
+                    // P2 Box
                     const b2 = document.getElementById('j-p2-box');
                     const s2 = document.getElementById('j-p2-status');
-                    document.getElementById('j-p2-name').innerText = gameState.p2.name || '-';
-                    if (gameState.p2.ready) {
+                    document.getElementById('j-p2-name').innerText = gameState.p2?.name || '-';
+                    if (gameState.p2?.ready) {
                         b2.className = "flex-1 bg-green-100 border-4 border-green-500 rounded-3xl p-8 text-center shadow-lg transition-colors duration-500";
                         s2.className = "text-3xl font-black text-green-600";
                         s2.innerText = "SIAP";
@@ -412,7 +387,7 @@
 
                     // Start Button Logic
                     const btn = document.getElementById('btn-start-lomba');
-                    if (gameState.p1.ready && gameState.p2.ready) {
+                    if (gameState.p1?.ready && gameState.p2?.ready) {
                         btn.disabled = false;
                         btn.className = "bg-green-500 hover:bg-green-600 text-white brand-font text-3xl py-4 px-12 rounded-full shadow-[0_8px_0_#166534] active:translate-y-2 active:shadow-none transition-all animate-bounce";
                     } else {
@@ -422,33 +397,31 @@
 
                 } else if (gameState.status === 'playing') {
                     showScreen('screen-judge-game');
-                    document.getElementById('j-active-p1-score').innerText = gameState.p1.score;
-                    document.getElementById('j-active-p1-name').innerText = gameState.p1.name;
-                    document.getElementById('j-active-p2-score').innerText = gameState.p2.score;
-                    document.getElementById('j-active-p2-name').innerText = gameState.p2.name;
+                    document.getElementById('j-active-p1-score').innerText = gameState.p1?.score || 0;
+                    document.getElementById('j-active-p1-name').innerText = gameState.p1?.name || 'Peserta 1';
+                    document.getElementById('j-active-p2-score').innerText = gameState.p2?.score || 0;
+                    document.getElementById('j-active-p2-name').innerText = gameState.p2?.name || 'Peserta 2';
                 }
             } 
             else if (role === 'p1' || role === 'p2') {
                 let myState = role === 'p1' ? gameState.p1 : gameState.p2;
                 
-                if (gameState.status === 'waiting' && myState.ready) {
+                if (gameState.status === 'waiting' && myState?.ready) {
                     showScreen('screen-player-waiting');
                 } else if (gameState.status === 'playing') {
-                    // Start generating questions if not already doing so
                     if (document.getElementById('screen-player-quiz').style.display !== 'flex') {
                         showScreen('screen-player-quiz');
                         generateQuestion();
                     }
-                    document.getElementById('player-score-display').innerText = myState.score;
-                    document.getElementById('quiz-progress').style.width = myState.score + '%';
+                    document.getElementById('player-score-display').innerText = myState?.score || 0;
+                    document.getElementById('quiz-progress').style.width = (myState?.score || 0) + '%';
                 }
             }
         }
 
         function generateQuestion() {
-            // Result max 50
-            let ans = Math.floor(Math.random() * 50) + 1;
-            let a = Math.floor(Math.random() * ans);
+            let ans = Math.floor(Math.random() * 49) + 2; // Hasil 2 s/d 50
+            let a = Math.floor(Math.random() * (ans - 1)) + 1;
             let b = ans - a;
             
             let options = [ans];
@@ -456,7 +429,6 @@
                 let w = Math.floor(Math.random() * 50) + 1;
                 if(!options.includes(w)) options.push(w);
             }
-            // Shuffle
             options.sort(() => Math.random() - 0.5);
 
             currentQuestion = { a, b, answer: ans, options };
@@ -479,15 +451,17 @@
         }
 
         window.handleAnswer = async (selected) => {
-            if (!docRef || gameState.status !== 'playing') return;
+            if (gameState.status !== 'playing') return;
 
             if (selected === currentQuestion.answer) {
-                // Correct!
-                let currentScore = role === 'p1' ? gameState.p1.score : gameState.p2.score;
+                let currentScore = role === 'p1' ? (gameState.p1?.score || 0) : (gameState.p2?.score || 0);
                 let newScore = currentScore + 5;
-                let myName = role === 'p1' ? gameState.p1.name : gameState.p2.name;
+                let myName = role === 'p1' ? gameState.p1?.name : gameState.p2?.name;
                 
                 let updateData = { ...gameState };
+                if (!updateData.p1) updateData.p1 = { name: '', ready: false, score: 0 };
+                if (!updateData.p2) updateData.p2 = { name: '', ready: false, score: 0 };
+
                 if (role === 'p1') updateData.p1.score = newScore;
                 if (role === 'p2') updateData.p2.score = newScore;
 
@@ -496,13 +470,12 @@
                     updateData.winner = myName;
                 }
 
-                // Update locally immediately to prevent multi-clicks then save
                 gameState = updateData; 
-                await setDoc(docRef, updateData);
+                await set(gameRef, updateData);
             }
             
             if (gameState.status === 'playing') {
-                generateQuestion(); // Generate next regardless of correct/wrong
+                generateQuestion();
             }
         };
 
@@ -520,12 +493,14 @@
                 title.innerText = "JUARA!";
                 sub.innerText = "Selamat kepada";
                 nameBox.innerText = gameState.winner;
+                nameBox.className = "brand-font text-5xl md:text-6xl text-white bg-gradient-to-r from-pink-500 to-orange-400 py-4 px-10 rounded-full shadow-2xl inline-block border-4 border-white transform hover:scale-105 transition-transform";
             } else {
-                let myName = role === 'p1' ? gameState.p1.name : gameState.p2.name;
+                let myName = role === 'p1' ? gameState.p1?.name : gameState.p2?.name;
                 if (myName === gameState.winner) {
                     title.innerText = "SELAMAT!";
                     sub.innerText = "Kamu adalah";
                     nameBox.innerText = "JUARA";
+                    nameBox.className = "brand-font text-5xl md:text-6xl text-white bg-gradient-to-r from-pink-500 to-orange-400 py-4 px-10 rounded-full shadow-2xl inline-block border-4 border-white transform hover:scale-105 transition-transform";
                 } else {
                     title.innerText = "YAHH...";
                     sub.innerText = "Maaf kamu belum juara";
@@ -548,6 +523,7 @@
         function generateConfetti() {
             const colors = ['#ff0a54', '#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#f9bec7'];
             const container = document.getElementById('confetti-container');
+            container.innerHTML = '';
             for(let i=0; i<50; i++) {
                 let conf = document.createElement('div');
                 conf.className = 'confetti-piece';
