@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Bilangan — TKA Matematika SD/MI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f7ff;
+    --ink:#1d2b47;
+    --muted:#5c6f92;
+    --primary:#4f7df3;
+    --primary-d:#3560d6;
+    --accent:#ff8a5c;
+    --mint:#2fc7a0;
+    --yellow:#ffc94d;
+    --purple:#9b6bf0;
+    --pink:#ff6f91;
+    --card:#ffffff;
+    --line:#e3ecff;
+    --shadow:0 10px 24px rgba(60,90,160,.10);
+    --shadow-lg:0 18px 40px rgba(60,90,160,.16);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, #e2ecff 0 22%, transparent 55%),
+      radial-gradient(circle at 88% 4%, #ffe9f0 0 18%, transparent 50%),
+      var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,.tab,.btn-toggle,.opt{font-family:'Baloo 2','Nunito',sans-serif;}
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;
+    background:linear-gradient(135deg,#5b8cff 0%,#8f6bff 52%,#ff7ea8 100%);
+    color:#fff;
+    padding:34px 18px 78px;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:-2px;height:60px;
+    background:var(--bg);
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:2;text-align:center;}
+  .badge{
+    display:inline-block;background:rgba(255,255,255,.22);
+    border:1px solid rgba(255,255,255,.5);
+    padding:6px 16px;border-radius:999px;
+    font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:clamp(1.9rem,5.2vw,3rem);
+    margin:14px 0 6px;font-weight:800;letter-spacing:.5px;
+    text-shadow:0 4px 0 rgba(0,0,0,.10);
+  }
+  .hero p{margin:0 auto;max-width:560px;font-size:1rem;color:rgba(255,255,255,.92);font-weight:600;}
+  .float-emoji{
+    position:absolute;font-size:2rem;opacity:.85;animation:bob 4s ease-in-out infinite;
+  }
+  .fe1{top:16px;left:6%;}
+  .fe2{top:70px;right:8%;animation-delay:1s;}
+  .fe3{bottom:80px;left:14%;animation-delay:2s;font-size:1.6rem;}
+  .fe4{bottom:96px;right:16%;animation-delay:.5s;font-size:1.7rem;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-12px) rotate(6deg);}}
+
+  /* ================= SCORE ================= */
+  .score-wrap{
+    max-width:420px;margin:22px auto 0;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.42);
+    backdrop-filter:blur(6px);
+    border-radius:18px;padding:12px 16px;
+  }
+  .score-line{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:.95rem;}
+  .bar{height:12px;background:rgba(255,255,255,.32);border-radius:999px;margin-top:8px;overflow:hidden;}
+  .bar-fill{
+    height:100%;width:0%;border-radius:999px;
+    background:linear-gradient(90deg,#ffe066,#7dffc4);
+    transition:width .5s cubic-bezier(.3,1.4,.5,1);
+  }
+
+  /* ================= TABS ================= */
+  .tabs{
+    position:sticky;top:0;z-index:50;
+    display:flex;gap:8px;overflow-x:auto;
+    padding:12px 14px;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--line);
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;border:none;cursor:pointer;
+    background:#eaf0ff;color:#41537a;
+    padding:10px 16px;border-radius:999px;
+    font-weight:700;font-size:.92rem;
+    transition:transform .15s, background .2s, box-shadow .2s;
+    white-space:nowrap;
+  }
+  .tab:hover{transform:translateY(-2px);background:#dfe8ff;}
+  .tab.active{
+    background:linear-gradient(135deg,var(--primary),#7aa2ff);
+    color:#fff;box-shadow:0 8px 18px rgba(79,125,243,.38);
+  }
+
+  /* ================= LAYOUT ================= */
+  main{max-width:960px;margin:0 auto;padding:22px 16px 70px;}
+  .panel{display:none;animation:pop .35s ease both;}
+  .panel.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+  .chapter-head{
+    display:flex;align-items:center;gap:14px;
+    margin:6px 0 20px;
+  }
+  .chapter-emoji{
+    flex:0 0 auto;width:58px;height:58px;border-radius:18px;
+    display:grid;place-items:center;font-size:1.8rem;
+    background:linear-gradient(135deg,#fff2c9,#ffd98a);
+    box-shadow:var(--shadow);
+  }
+  .chapter-head h2{margin:0;font-size:clamp(1.3rem,3.6vw,1.75rem);font-weight:800;line-height:1.2;}
+  .chapter-head .sub{margin:2px 0 0;color:var(--muted);font-size:.9rem;font-weight:600;}
+
+  /* ================= CARDS ================= */
+  .card{
+    background:var(--card);
+    border-radius:22px;
+    padding:18px 20px;
+    margin-bottom:16px;
+    box-shadow:var(--shadow);
+    border:1px solid #eef3ff;
+  }
+  .card-label{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:.82rem;
+    letter-spacing:.05em;text-transform:uppercase;
+    padding:4px 12px;border-radius:999px;margin-bottom:10px;
+    background:#eaf0ff;color:#3a5bbf;
+  }
+  .card-label.green{background:#e2fbf3;color:#137a5c;}
+  .card-label.orange{background:#fff0e4;color:#b9571f;}
+  .card-label.purple{background:#f1e9ff;color:#6b3ec9;}
+
+  .grid{display:grid;gap:14px;}
+  @media(min-width:640px){ .grid.two{grid-template-columns:1fr 1fr;} .grid.three{grid-template-columns:repeat(3,1fr);} }
+
+  .mini{
+    background:linear-gradient(160deg,#ffffff,#f7faff);
+    border:2px solid var(--line);
+    border-radius:18px;padding:14px 16px;
+    transition:transform .18s, box-shadow .18s;
+  }
+  .mini:hover{transform:translateY(-3px);box-shadow:0 12px 22px rgba(60,90,160,.12);}
+  .mini h4{margin:0 0 6px;font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:7px;}
+  .mini p{margin:0;font-size:.93rem;color:#3d4f70;}
+
+  .concept{
+    border-left:6px solid var(--primary);
+    background:#f7faff;
+    border-radius:14px;padding:12px 16px;margin-bottom:12px;
+  }
+  .concept.y{border-left-color:var(--yellow);background:#fffbf0;}
+  .concept.g{border-left-color:var(--mint);background:#f1fdf9;}
+  .concept.o{border-left-color:var(--accent);background:#fff6f1;}
+  .concept p{margin:0;font-size:.95rem;}
+
+  /* fractions */
+  .fr{
+    display:inline-flex;flex-direction:column;text-align:center;
+    vertical-align:middle;line-height:1.08;font-size:.92em;
+    margin:0 .18em;position:relative;top:-.06em;
+  }
+  .fr i{font-style:normal;padding:0 .3em;}
+  .fr i:first-child{border-bottom:2px solid currentColor;}
+
+  /* ================= TOGGLE BUTTON ================= */
+  .btn-toggle{
+    display:inline-flex;align-items:center;gap:8px;
+    border:2px dashed var(--yellow);
+    background:#fffaea;color:#96630a;
+    padding:9px 18px;border-radius:14px;
+    font-weight:700;font-size:.92rem;cursor:pointer;
+    transition:.2s;margin-top:6px;
+  }
+  .btn-toggle:hover{background:#fff3cd;transform:translateY(-1px);}
+  .btn-toggle.open{
+    background:#e6fbf3;border-color:var(--mint);border-style:solid;color:#0f7a5c;
+  }
+
+  .answer{display:none;margin-top:12px;}
+  .answer.show{display:block;animation:unfold .3s ease both;}
+  @keyframes unfold{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+  .answer-inner{
+    background:linear-gradient(160deg,#f0fdf8,#eafaf4);
+    border:2px solid #bff0e0;
+    border-radius:16px;padding:14px 16px;
+  }
+  .answer-inner p{margin:0 0 8px;font-size:.95rem;}
+  .answer-inner p:last-child{margin-bottom:0;}
+  .answer-inner strong{color:#0f7a5c;}
+  .hl{background:#fff2b8;border-radius:6px;padding:1px 6px;font-weight:800;}
+
+  /* ================= QUIZ ================= */
+  .quiz{position:relative;}
+  .q-head{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px;}
+  .q-num{
+    flex:0 0 auto;width:32px;height:32px;border-radius:11px;
+    display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--primary),#7aa2ff);
+    color:#fff;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:.95rem;
+    box-shadow:0 5px 12px rgba(79,125,243,.3);
+  }
+  .q-head p{margin:0;font-weight:700;font-size:.98rem;}
+  .options{display:grid;gap:9px;}
+  @media(min-width:620px){ .options.two-col{grid-template-columns:1fr 1fr;} }
+  .opt{
+    text-align:left;cursor:pointer;
+    background:#f7faff;border:2px solid #e3ecff;
+    color:var(--ink);padding:11px 15px;border-radius:14px;
+    font-size:.95rem;font-weight:700;
+    transition:.18s;font-family:'Nunito',sans-serif;
+  }
+  .opt:hover:not(.correct):not(.wrong){background:#eaf0ff;border-color:#bcd0ff;transform:translateX(3px);}
+  .opt.correct{background:#dcfbef;border-color:#43d3a6;color:#0d6b51;}
+  .opt.correct::after{content:" ✓";font-weight:900;color:#12a97b;}
+  .opt.wrong{background:#ffe8ec;border-color:#ff8fa6;color:#b3233f;}
+  .opt.wrong::after{content:" ✗";font-weight:900;}
+  .quiz.answered .opt{cursor:default;}
+
+  .feedback{
+    margin-top:10px;font-weight:800;font-size:.9rem;
+    display:none;align-items:center;gap:8px;
+  }
+  .feedback.show{display:flex;}
+  .feedback.ok{color:#0f7a5c;}
+  .feedback.no{color:#c22c4c;}
+
+  /* ================= TABLE ================= */
+  .tbl-wrap{overflow-x:auto;border-radius:16px;border:2px solid var(--line);}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;background:#fff;}
+  th{background:#eaf0ff;color:#35509b;font-family:'Baloo 2',sans-serif;padding:10px 12px;text-align:left;}
+  td{padding:10px 12px;border-top:1px solid var(--line);}
+  tbody tr:nth-child(even){background:#fafcff;}
+
+  /* conversion chips */
+  .conv{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;margin-top:6px;
+  }
+  .chip{
+    background:linear-gradient(150deg,#fff,#f2f8ff);
+    border:2px solid var(--line);border-radius:16px;
+    padding:12px;text-align:center;font-weight:800;
+    font-family:'Baloo 2',sans-serif;font-size:1rem;
+    transition:.18s;
+  }
+  .chip:hover{transform:translateY(-3px) scale(1.02);border-color:#bcd0ff;box-shadow:0 10px 20px rgba(60,90,160,.12);}
+  .chip small{display:block;font-family:'Nunito',sans-serif;font-weight:700;color:var(--muted);font-size:.72rem;margin-top:2px;letter-spacing:.05em;text-transform:uppercase;}
+
+  /* checklist */
+  .check{
+    display:flex;gap:12px;align-items:flex-start;
+    background:#f7faff;border:2px solid var(--line);
+    border-radius:16px;padding:13px 16px;margin-bottom:10px;
+    cursor:pointer;transition:.18s;
+  }
+  .check:hover{border-color:#bcd0ff;background:#f0f5ff;}
+  .check input{
+    appearance:none;-webkit-appearance:none;
+    width:24px;height:24px;flex:0 0 auto;margin-top:2px;
+    border:3px solid #c3d5ff;border-radius:8px;background:#fff;
+    cursor:pointer;position:relative;transition:.18s;
+  }
+  .check input:checked{background:var(--mint);border-color:var(--mint);}
+  .check input:checked::after{
+    content:"✓";position:absolute;inset:0;display:grid;place-items:center;
+    color:#fff;font-weight:900;font-size:15px;line-height:1;
+  }
+  .check span{font-weight:700;font-size:.94rem;}
+  .check input:checked + span{color:#137a5c;}
+
+  .callout{
+    display:flex;gap:12px;align-items:flex-start;
+    background:linear-gradient(135deg,#fff6dc,#fff0c4);
+    border:2px solid #ffe28a;border-radius:18px;padding:14px 16px;
+    margin-bottom:16px;
+  }
+  .callout .ico{font-size:1.4rem;line-height:1;}
+  .callout p{margin:0;font-size:.93rem;font-weight:600;color:#6b4b00;}
+
+  /* ================= VISUALISASI PECAHAN ================= */
+  .viz-wrapper { margin-top: 12px; }
+  .viz-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 10px; color: var(--ink); }
+  
+  /* Kotak visual 1/4 */
+  .viz-squares {
+    display: flex; gap: 8px; margin-bottom: 12px;
+  }
+  .viz-square {
+    flex: 1; height: 70px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: #eef2f9; border: 2px solid #d5dce8;
+    font-weight: 800; font-family: 'Baloo 2', sans-serif;
+    color: #7a8cae; font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+  .viz-square:hover { transform: scale(1.05); }
+  .viz-square.active {
+    background: #f5c15b; border-color: #e3a93b; color: #5c3e00;
+    font-size: 1.4rem;
+  }
+  .viz-caption { font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-top: 4px; }
+
+  /* Bar visual pecahan senilai */
+  .viz-bars { display: flex; flex-direction: column; gap: 14px; margin-top: 16px;}
+  .viz-bar-row { display: flex; flex-direction: column; gap: 4px; }
+  .viz-bar-label { font-weight: 800; font-size: 0.9rem; color: #333; }
+  .viz-bar {
+    display: grid; gap: 4px; height: 28px;
+  }
+  .viz-bar.half { grid-template-columns: repeat(2, 1fr); }
+  .viz-bar.quarter { grid-template-columns: repeat(4, 1fr); }
+  .viz-bar.sixth { grid-template-columns: repeat(6, 1fr); }
+  
+  .viz-part {
+    background: #eef2f9; border: 1px solid #d5dce8; border-radius: 6px;
+    transition: transform 0.2s;
+  }
+  .viz-part:hover { transform: scaleY(1.1); }
+  .viz-part.active { background: #f5c15b; border-color: #e3a93b; }
+
+  footer{
+    text-align:center;padding:26px 16px 40px;
+    color:var(--muted);font-size:.85rem;font-weight:600;
+  }
+  .pulse{animation:pulse .5s ease;}
+  @keyframes pulse{50%{transform:scale(1.08);}}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <span class="float-emoji fe1">🍕</span>
+  <span class="float-emoji fe2">🔢</span>
+  <span class="float-emoji fe3">➗</span>
+  <span class="float-emoji fe4">⭐</span>
+  <div class="hero-inner">
+    <div class="badge">TKA Matematika SD / MI</div>
+    <h1>Petualangan Bilangan 🚀</h1>
+    <p>Modul belajar interaktif — Bagian I: Bilangan. Baca konsepnya, coba soalnya, lalu buka jawaban untuk memeriksa!</p>
+    <div class="score-wrap">
+      <div class="score-line">
+        <span>⭐ Skor latihanmu</span>
+        <span><b id="score">0</b> / <span id="total">34</span></span>
+      </div>
+      <div class="bar"><div class="bar-fill" id="bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= TABS ================= -->
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-target="bab2">🍕 Pecahan Senilai</button>
+  <button class="tab" data-target="bab3">💯 Desimal &amp; Persen</button>
+  <button class="tab" data-target="bab4">🔢 Bilangan Cacah</button>
+  <button class="tab" data-target="bab5">➗ Operasi Pecahan</button>
+  <button class="tab" data-target="bab6">🔍 KPK &amp; FPB</button>
+  <button class="tab" data-target="tes">🏆 Tes Mandiri</button>
+</nav>
+
+<main>
+
+<!-- ============================================================= -->
+<!-- BAB 2 -->
+<!-- ============================================================= -->
+<section class="panel active" id="bab2">
+  <div class="chapter-head">
+    <div class="chapter-emoji">🍕</div>
+    <div>
+      <h2>Bab 2 — Pecahan &amp; Pecahan Senilai</h2>
+      <p class="sub">Memahami bagian, pecahan senilai, menyederhanakan, membandingkan, dan mengurutkan pecahan.</p>
+    </div>
+  </div>
+
+  <!-- VISUALISASI 1: APA ITU PECAHAN -->
+  <div class="card viz-wrapper">
+    <div class="viz-title">Perhatikan gambar pecahan berikut</div>
+    <div class="viz-squares">
+      <div class="viz-square active">✓</div>
+      <div class="viz-square">2</div>
+      <div class="viz-square">3</div>
+      <div class="viz-square">4</div>
+    </div>
+    <div class="viz-caption">Satu bagian dipilih dari empat bagian yang sama besar, sehingga pecahannya adalah <b>1/4</b>.</div>
+  </div>
+
+  <div class="grid three">
+    <div class="mini">
+      <h4>🍰 Apa itu pecahan?</h4>
+      <p>Bilangan yang menyatakan <b>sebagian dari keseluruhan</b> yang dibagi menjadi beberapa bagian <b>sama besar</b>.</p>
+    </div>
+    <div class="mini">
+      <h4>⬆️ Pembilang</h4>
+      <p>Angka di atas: banyak bagian yang <b>diperhatikan</b>.</p>
+    </div>
+    <div class="mini">
+      <h4>⬇️ Penyebut</h4>
+      <p>Angka di bawah: jumlah <b>seluruh bagian</b> sama besar. Penyebut tidak boleh nol.</p>
+    </div>
+  </div>
+
+  <!-- VISUALISASI 2: PECAHAN SENILAI -->
+  <div class="card viz-wrapper" style="margin-top: 20px;">
+    <div class="viz-title">Visualisasi pecahan senilai</div>
+    
+    <div class="viz-bars">
+      <!-- 1/2 -->
+      <div class="viz-bar-row">
+        <div class="viz-bar-label">1/2 — satu dari dua bagian</div>
+        <div class="viz-bar half">
+          <div class="viz-part active"></div>
+          <div class="viz-part"></div>
+        </div>
+      </div>
+      
+      <!-- 2/4 -->
+      <div class="viz-bar-row">
+        <div class="viz-bar-label">2/4 — dua dari empat bagian</div>
+        <div class="viz-bar quarter">
+          <div class="viz-part active"></div>
+          <div class="viz-part active"></div>
+          <div class="viz-part"></div>
+          <div class="viz-part"></div>
+        </div>
+      </div>
+      
+      <!-- 3/6 -->
+      <div class="viz-bar-row">
+        <div class="viz-bar-label">3/6 — tiga dari enam bagian</div>
+        <div class="viz-bar sixth">
+          <div class="viz-part active"></div>
+          <div class="viz-part active"></div>
+          <div class="viz-part active"></div>
+          <div class="viz-part"></div>
+          <div class="viz-part"></div>
+          <div class="viz-part"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="viz-caption" style="margin-top: 12px;">Semua gambar menunjukkan <b>setengah (1/2)</b> dari keseluruhan.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Konsep Penting</div>
+    <div class="concept">
+      <p><b>Pecahan senilai</b> = pecahan berbeda tulisan, tetapi nilainya sama.<br>
+      <span class="fr"><i>1</i><i>2</i></span> = <span class="fr"><i>2</i><i>4</i></span> = <span class="fr"><i>3</i><i>6</i></span> = <span class="fr"><i>4</i><i>8</i></span></p>
+    </div>
+    <div class="concept y">
+      <p><b>Mencari pecahan senilai:</b> kalikan atau bagi pembilang <i>dan</i> penyebut dengan bilangan yang sama (bukan nol).</p>
+    </div>
+    <div class="concept g">
+      <p><b>Menyederhanakan:</b> bagi pembilang dan penyebut dengan faktor persekutuan terbesar.</p>
+    </div>
+    <div class="concept o">
+      <p><b>Membandingkan:</b> samakan penyebut, atau gunakan <b>perkalian silang</b>. Ingat: <b>&gt;</b> lebih besar, <b>&lt;</b> lebih kecil, <b>=</b> sama dengan.</p>
+    </div>
+  </div>
+
+  <!-- CONTOH SOAL -->
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Sebuah kue dipotong menjadi 8 bagian sama besar. Sebanyak 3 bagian telah dimakan. Berapa bagian kue yang dimakan dalam bentuk pecahan?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer">
+      <div class="answer-inner">
+        <p>Seluruh bagian = 8 → jadi <b>penyebut</b> = 8.</p>
+        <p>Bagian yang dimakan = 3 → jadi <b>pembilang</b> = 3.</p>
+        <p>Jawaban: <span class="hl"><span class="fr"><i>3</i><i>8</i></span></span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Dari 12 siswa, 9 siswa mengikuti kegiatan olahraga. Berapa pecahan siswa yang mengikuti kegiatan olahraga?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer">
+      <div class="answer-inner">
+        <p>Pecahannya: <span class="fr"><i>9</i><i>12</i></span></p>
+        <p>Sederhanakan dengan membagi 3: <span class="fr"><i>9</i><i>12</i></span> = <span class="fr"><i>3</i><i>4</i></span></p>
+        <p>Jadi, <span class="hl"><span class="fr"><i>3</i><i>4</i></span></span> bagian siswa mengikuti olahraga.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 3</div>
+    <p style="margin:0;font-weight:700;">Tentukan nilai x pada <span class="fr"><i>3</i><i>5</i></span> = <span class="fr"><i>x</i><i>20</i></span></p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer">
+      <div class="answer-inner">
+        <p>Penyebut 5 dikalikan 4 menjadi 20. Maka pembilang juga harus dikalikan 4.</p>
+        <p>x = 3 × 4 = <span class="hl">12</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 4</div>
+    <p style="margin:0;font-weight:700;">Manakah yang lebih besar, <span class="fr"><i>3</i><i>4</i></span> atau <span class="fr"><i>2</i><i>3</i></span>?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer">
+      <div class="answer-inner">
+        <p><b>Cara 1 — samakan penyebut (12):</b><br>
+        <span class="fr"><i>3</i><i>4</i></span> = <span class="fr"><i>9</i><i>12</i></span> &nbsp;dan&nbsp; <span class="fr"><i>2</i><i>3</i></span> = <span class="fr"><i>8</i><i>12</i></span>. Karena 9 &gt; 8, maka <span class="fr"><i>3</i><i>4</i></span> lebih besar.</p>
+        <p><b>Cara 2 — perkalian silang:</b> 3 × 3 = 9 dan 4 × 2 = 8. Karena 9 &gt; 8 → benar.</p>
+        <p>Jawaban: <span class="hl"><span class="fr"><i>3</i><i>4</i></span> &gt; <span class="fr"><i>2</i><i>3</i></span></span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 5</div>
+    <p style="margin:0;font-weight:700;">Sebuah tangki terisi air <span class="fr"><i>5</i><i>8</i></span> dari kapasitasnya. Kemudian digunakan <span class="fr"><i>2</i><i>8</i></span> dari kapasitas tangki. Berapa bagian yang masih terisi?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer">
+      <div class="answer-inner">
+        <p>Penyebutnya sama (8), jadi kurangkan pembilangnya:</p>
+        <p><span class="fr"><i>5</i><i>8</i></span> − <span class="fr"><i>2</i><i>8</i></span> = <span class="fr"><i>3</i><i>8</i></span></p>
+        <p>Jadi, tangki masih terisi <span class="hl"><span class="fr"><i>3</i><i>8</i></span></span> dari kapasitasnya.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LATIHAN -->
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 2</h3>
+  <p style="margin:-6px 0 14px;color:var(--muted);font-size:.9rem;font-weight:600;">Pilih satu jawaban. Jawaban benar akan berwarna hijau 💚</p>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Pecahan yang menunjukkan 5 bagian dari 8 bagian sama besar adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 5/8</button>
+      <button class="opt">B. 8/5</button>
+      <button class="opt">C. 3/8</button>
+      <button class="opt">D. 5/3</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Bagian yang diperhatikan = 5 → <b>pembilang</b>. Seluruh bagian = 8 → <b>penyebut</b>.</p>
+      <p>Jawaban: <span class="hl">A. 5/8</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Pecahan yang senilai dengan 2/3 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 4/6</button>
+      <button class="opt">B. 3/4</button>
+      <button class="opt">C. 2/4</button>
+      <button class="opt">D. 5/6</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kalikan pembilang dan penyebut dengan 2: (2×2)/(3×2) = <b>4/6</b>.</p>
+      <p>Jawaban: <span class="hl">A. 4/6</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Bentuk paling sederhana dari 15/20 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5/10</button>
+      <button class="opt">B. 4/5</button>
+      <button class="opt" data-correct="true">C. 3/4</button>
+      <button class="opt">D. 2/3</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Bagi pembilang dan penyebut dengan 5: (15÷5)/(20÷5) = <b>3/4</b>.</p>
+      <p>Jawaban: <span class="hl">C. 3/4</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Pernyataan yang benar adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 2/5 &gt; 3/5</button>
+      <button class="opt">B. 3/4 &lt; 2/4</button>
+      <button class="opt" data-correct="true">C. 2/3 &gt; 3/5</button>
+      <button class="opt">D. 1/4 &gt; 1/2</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ubah ke desimal: 2/3 ≈ 0,667 dan 3/5 = 0,6. Karena 0,667 &gt; 0,6, pernyataan C benar.</p>
+      <p>Cek yang lain: A salah (2 &lt; 3), B salah (3 &gt; 2), D salah (1/4 &lt; 1/2).</p>
+      <p>Jawaban: <span class="hl">C. 2/3 &gt; 3/5</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Urutan pecahan dari yang terkecil adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 3/4, 2/3, 1/2</button>
+      <button class="opt" data-correct="true">B. 1/2, 2/3, 3/4</button>
+      <button class="opt">C. 2/3, 1/2, 3/4</button>
+      <button class="opt">D. 1/2, 3/4, 2/3</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Samakan penyebut menjadi 12: 1/2 = 6/12, 2/3 = 8/12, 3/4 = 9/12.</p>
+      <p>Urutan terkecil → terbesar: 6/12, 8/12, 9/12 → <b>1/2, 2/3, 3/4</b>.</p>
+      <p>Jawaban: <span class="hl">B</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">6</span><p>Nilai x pada 3/4 = x/20 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 12</button>
+      <button class="opt" data-correct="true">B. 15</button>
+      <button class="opt">C. 16</button>
+      <button class="opt">D. 18</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Penyebut 4 dikalikan 5 menjadi 20, maka pembilang juga dikalikan 5.</p>
+      <p>x = 3 × 5 = <b>15</b>. Periksa: 15/20 = 3/4 ✔</p>
+      <p>Jawaban: <span class="hl">B. 15</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 3 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab3">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#e2fbf3,#9df0d4);">💯</div>
+    <div>
+      <h2>Bab 3 — Pecahan, Desimal, dan Persen</h2>
+      <p class="sub">Mengubah bentuk bilangan, membandingkan nilainya, dan menyelesaikan soal bagian atau persentase.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label green">🔄 Tiga Wajah Bilangan yang Sama</div>
+    <div class="conv">
+      <div class="chip">1/2<small>0,5 &nbsp;•&nbsp; 50%</small></div>
+      <div class="chip">1/4<small>0,25 &nbsp;•&nbsp; 25%</small></div>
+      <div class="chip">3/4<small>0,75 &nbsp;•&nbsp; 75%</small></div>
+      <div class="chip">1/5<small>0,2 &nbsp;•&nbsp; 20%</small></div>
+      <div class="chip">1/10<small>0,1 &nbsp;•&nbsp; 10%</small></div>
+      <div class="chip">1/100<small>0,01 &nbsp;•&nbsp; 1%</small></div>
+    </div>
+  </div>
+
+  <div class="grid two">
+    <div class="mini">
+      <h4>➡️ Pecahan → Desimal</h4>
+      <p>Bagi pembilang dengan penyebut. Contoh: 3/4 = 3 ÷ 4 = 0,75</p>
+    </div>
+    <div class="mini">
+      <h4>➡️ Pecahan → Persen</h4>
+      <p>Kalikan dengan 100%. Contoh: 7/20 = 35/100 = 35%</p>
+    </div>
+    <div class="mini">
+      <h4>➡️ Desimal → Persen</h4>
+      <p>Kalikan 100. Contoh: 0,35 = 35%; 1,25 = 125%</p>
+    </div>
+    <div class="mini">
+      <h4>➡️ Persen → Desimal</h4>
+      <p>Bagi 100 (koma bergeser 2 tempat ke kiri). Contoh: 35% = 0,35</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">💡</span>
+    <p><b>Mencari persen dari suatu jumlah:</b> (persen ÷ 100) × jumlah total.<br>Contoh: 35% dari 200 buku = (35/100) × 200 = 70 buku.</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Manakah yang terbesar: 3/5, 0,55, atau 58%?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ubah semuanya menjadi desimal: 3/5 = 0,6 &nbsp;|&nbsp; 0,55 = 0,55 &nbsp;|&nbsp; 58% = 0,58</p>
+      <p>Urutannya: 0,55 &lt; 0,58 &lt; 0,6</p>
+      <p>Jadi yang terbesar adalah <span class="hl">3/5</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Di perpustakaan terdapat 200 buku. Sebanyak 35% merupakan buku cerita. Berapa jumlah buku cerita?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>35% × 200 = (35/100) × 200 = 35 × 2 = <b>70</b></p>
+      <p>Jadi, terdapat <span class="hl">70 buku cerita</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 3</div>
+    <p style="margin:0;font-weight:700;">Sebuah buku berharga Rp80.000 mendapat diskon 25%. Berapa harga setelah diskon?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p><b>Langkah 1 — hitung diskon:</b> 25% × Rp80.000 = Rp20.000</p>
+      <p><b>Langkah 2 — kurangi dari harga awal:</b> Rp80.000 − Rp20.000 = <b>Rp60.000</b></p>
+      <p><b>Cara cepat:</b> diskon 25% berarti membayar 75%. 75% × 80.000 = <span class="hl">Rp60.000</span></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 4</div>
+    <p style="margin:0;font-weight:700;">Seorang siswa telah membaca 60% dari buku berisi 150 halaman. Berapa halaman yang belum dibaca?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Persentase yang belum dibaca: 100% − 60% = 40%</p>
+      <p>40% × 150 = (40/100) × 150 = 60 halaman</p>
+      <p>Jadi, masih ada <span class="hl">60 halaman</span> yang belum dibaca.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 3</h3>
+  <p style="margin:-6px 0 14px;color:var(--muted);font-size:.9rem;font-weight:600;">Pilih satu jawaban. Jawaban benar akan berwarna hijau 💚</p>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Bentuk desimal dari 3/5 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 0,3</button>
+      <button class="opt">B. 0,5</button>
+      <button class="opt" data-correct="true">C. 0,6</button>
+      <button class="opt">D. 0,8</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>3 ÷ 5 = 0,6. Bisa juga: 3/5 = 6/10 = 0,6.</p>
+      <p>Jawaban: <span class="hl">C. 0,6</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Bentuk persen dari 0,45 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 4,5%</button>
+      <button class="opt" data-correct="true">B. 45%</button>
+      <button class="opt">C. 450%</button>
+      <button class="opt">D. 0,45%</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>0,45 × 100% = 45%.</p>
+      <p>Jawaban: <span class="hl">B. 45%</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Bentuk pecahan paling sederhana dari 60% adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 3/5</button>
+      <button class="opt">B. 2/3</button>
+      <button class="opt">C. 3/4</button>
+      <button class="opt">D. 6/5</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>60% = 60/100. Bagi keduanya dengan 20 → 3/5.</p>
+      <p>Jawaban: <span class="hl">A. 3/5</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Nilai terbesar di antara pilihan berikut adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 0,7</button>
+      <button class="opt">B. 65%</button>
+      <button class="opt">C. 2/3</button>
+      <button class="opt">D. 0,68</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ubah semua ke desimal: 0,7 = 0,70 &nbsp;|&nbsp; 65% = 0,65 &nbsp;|&nbsp; 2/3 ≈ 0,667 &nbsp;|&nbsp; 0,68 = 0,68</p>
+      <p>Yang terbesar: <b>0,70</b>.</p>
+      <p>Jawaban: <span class="hl">A. 0,7</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Sebanyak 20% dari 250 siswa mengikuti lomba. Berapa siswa yang mengikuti lomba?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 25</button>
+      <button class="opt">B. 40</button>
+      <button class="opt" data-correct="true">C. 50</button>
+      <button class="opt">D. 60</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>(20/100) × 250 = 20 × 2,5 = 50 siswa.</p>
+      <p>Jawaban: <span class="hl">C. 50</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">6</span><p>Harga tas Rp120.000 mendapat diskon 15%. Harga setelah diskon adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. Rp18.000</button>
+      <button class="opt" data-correct="true">B. Rp102.000</button>
+      <button class="opt">C. Rp105.000</button>
+      <button class="opt">D. Rp108.000</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Diskon = 15% × 120.000 = 18.000</p>
+      <p>Harga akhir = 120.000 − 18.000 = <b>Rp102.000</b></p>
+      <p>Jawaban: <span class="hl">B. Rp102.000</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 4 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab4">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#e2ecff,#a9c6ff);">🔢</div>
+    <div>
+      <h2>Bab 4 — Operasi Hitung Bilangan Cacah</h2>
+      <p class="sub">Penjumlahan, pengurangan, perkalian, pembagian, dan soal bertahap.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Nilai Tempat</div>
+    <p style="margin:0 0 10px;font-weight:700;">Contoh bilangan <b>35.482</b>:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Angka</th><th>Nilai Tempat</th><th>Nilai Angka</th></tr></thead>
+        <tbody>
+          <tr><td>3</td><td>Puluh ribuan</td><td>30.000</td></tr>
+          <tr><td>5</td><td>Ribuan</td><td>5.000</td></tr>
+          <tr><td>4</td><td>Ratusan</td><td>400</td></tr>
+          <tr><td>8</td><td>Puluhan</td><td>80</td></tr>
+          <tr><td>2</td><td>Satuan</td><td>2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid two">
+    <div class="mini"><h4>➕ Penjumlahan</h4><p>Menggabungkan dua jumlah atau lebih.</p></div>
+    <div class="mini"><h4>➖ Pengurangan</h4><p>Mencari selisih atau sisa.</p></div>
+    <div class="mini"><h4>✖️ Perkalian</h4><p>Penjumlahan berulang. Contoh: 24 × 36 = 864</p></div>
+    <div class="mini"><h4>➗ Pembagian</h4><p>Membagi menjadi kelompok sama banyak. Bisa bersisa!</p></div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">📏</span>
+    <p><b>Urutan operasi hitung:</b> 1) dalam tanda kurung → 2) perkalian &amp; pembagian (dari kiri ke kanan) → 3) penjumlahan &amp; pengurangan (dari kiri ke kanan).</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Perpustakaan mempunyai 1.275 buku cerita dan 2.468 buku pengetahuan. Berapa jumlah seluruh buku?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>1.275 + 2.468 = <b>3.743</b></p>
+      <p>Jadi, jumlah seluruh buku adalah <span class="hl">3.743 buku</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Ada 24 kotak pensil. Setiap kotak berisi 36 pensil. Berapa jumlah seluruh pensil?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>24 × 36 = (20 × 36) + (4 × 36) = 720 + 144 = <b>864</b></p>
+      <p>Jadi, seluruhnya ada <span class="hl">864 pensil</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 3</div>
+    <p style="margin:0;font-weight:700;">Ada 157 siswa. Setiap kelompok terdiri atas 12 siswa. Berapa kelompok penuh yang dapat dibentuk dan berapa siswa yang tersisa?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>157 ÷ 12 = 13 sisa 1, karena 13 × 12 = 156 dan 157 − 156 = 1.</p>
+      <p>Jadi, terbentuk <span class="hl">13 kelompok penuh dengan sisa 1 siswa</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 4</div>
+    <p style="margin:0;font-weight:700;">Hitunglah 24 + 6 × 5</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Perkalian dikerjakan lebih dulu: 6 × 5 = 30</p>
+      <p>Lalu: 24 + 30 = <b>54</b> (bukan 150!)</p>
+      <p>Jika ada tanda kurung: (24 + 6) × 5 = 30 × 5 = 150.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 5</div>
+    <p style="margin:0;font-weight:700;">Sebuah sekolah membeli 18 dus buku. Setiap dus berisi 24 buku. Sebanyak 75 buku dibagikan kepada kelas 6. Berapa buku yang tersisa?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p><b>Langkah 1:</b> 18 × 24 = 432 buku</p>
+      <p><b>Langkah 2:</b> 432 − 75 = <b>357 buku</b></p>
+      <p>Jadi, tersisa <span class="hl">357 buku</span>.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 4</h3>
+  <p style="margin:-6px 0 14px;color:var(--muted);font-size:.9rem;font-weight:600;">Pilih satu jawaban. Jawaban benar akan berwarna hijau 💚</p>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Hasil dari 4.785 + 2.968 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 7.653</button>
+      <button class="opt" data-correct="true">B. 7.753</button>
+      <button class="opt">C. 7.853</button>
+      <button class="opt">D. 7.953</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>4.785 + 2.968 = <b>7.753</b></p>
+      <p>Jawaban: <span class="hl">B. 7.753</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Hasil dari 8.000 − 3.675 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 4.225</button>
+      <button class="opt" data-correct="true">B. 4.325</button>
+      <button class="opt">C. 4.425</button>
+      <button class="opt">D. 4.525</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>8.000 − 3.675 = <b>4.325</b>. Periksa: 4.325 + 3.675 = 8.000 ✔</p>
+      <p>Jawaban: <span class="hl">B. 4.325</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Sebuah toko mempunyai 28 dus air mineral. Setiap dus berisi 24 botol. Jumlah seluruh botol adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 572</button>
+      <button class="opt">B. 652</button>
+      <button class="opt" data-correct="true">C. 672</button>
+      <button class="opt">D. 692</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>28 × 24 = 28 × 20 + 28 × 4 = 560 + 112 = <b>672 botol</b></p>
+      <p>Jawaban: <span class="hl">C. 672</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Hasil dari 1.575 ÷ 25 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 53</button>
+      <button class="opt" data-correct="true">B. 63</button>
+      <button class="opt">C. 73</button>
+      <button class="opt">D. 83</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>1.575 ÷ 25 = <b>63</b>. Periksa: 63 × 25 = 1.575 ✔</p>
+      <p>Jawaban: <span class="hl">B. 63</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Nilai dari 48 + 12 × 6 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 360</button>
+      <button class="opt" data-correct="true">B. 120</button>
+      <button class="opt">C. 96</button>
+      <button class="opt">D. 60</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Perkalian dulu: 12 × 6 = 72. Lalu 48 + 72 = <b>120</b>.</p>
+      <p>Jawaban: <span class="hl">B. 120</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">6</span><p>Sebuah sekolah memiliki 15 kelas. Setiap kelas memperoleh 28 buku. Jika 65 buku dipinjam untuk kegiatan lain, berapa buku yang masih tersedia untuk kelas?</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 355</button>
+      <button class="opt">B. 365</button>
+      <button class="opt">C. 420</button>
+      <button class="opt">D. 485</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>15 × 28 = 420 buku. Lalu 420 − 65 = <b>355 buku</b>.</p>
+      <p>Jawaban: <span class="hl">A. 355</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">7</span><p>Sebuah toko mempunyai 245 pensil. Pensil dimasukkan ke dalam kotak yang masing-masing berisi 12 pensil. Berapa kotak penuh yang dapat dibuat dan berapa pensil sisanya?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 19 kotak, sisa 7</button>
+      <button class="opt" data-correct="true">B. 20 kotak, sisa 5</button>
+      <button class="opt">C. 20 kotak, sisa 7</button>
+      <button class="opt">D. 21 kotak, sisa 1</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>245 ÷ 12 = 20 sisa 5, karena 20 × 12 = 240 dan 245 − 240 = 5.</p>
+      <p>Jadi, <b>20 kotak penuh</b> dengan <b>sisa 5 pensil</b>.</p>
+      <p>Jawaban: <span class="hl">B. 20 kotak, sisa 5</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 5 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab5">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#ffe9f0,#ffb3c9);">➗</div>
+    <div>
+      <h2>Bab 5 — Operasi Hitung Pecahan</h2>
+      <p class="sub">Penjumlahan, pengurangan, perkalian dengan bilangan asli, dan pembagian dengan bilangan asli.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label purple">🧠 Ringkasan Rumus</div>
+    <div class="concept">
+      <p><b>Penyebut sama</b> → langsung operasikan pembilangnya.<br>
+      <span class="fr"><i>a</i><i>b</i></span> ± <span class="fr"><i>c</i><i>b</i></span> = <span class="fr"><i>a ± c</i><i>b</i></span></p>
+    </div>
+    <div class="concept y">
+      <p><b>Penyebut berbeda</b> → samakan penyebut dulu (pakai KPK), baru operasikan pembilang.</p>
+    </div>
+    <div class="concept g">
+      <p><b>Perkalian dengan bilangan asli:</b> <span class="fr"><i>a</i><i>b</i></span> × n = <span class="fr"><i>a × n</i><i>b</i></span></p>
+    </div>
+    <div class="concept o">
+      <p><b>Pembagian dengan bilangan asli:</b> <span class="fr"><i>a</i><i>b</i></span> ÷ n = <span class="fr"><i>a</i><i>b × n</i></span></p>
+    </div>
+    <div class="callout" style="margin:14px 0 0;">
+      <span class="ico">⚠️</span>
+      <p><b>Hati-hati!</b> Penyebut <u>tidak boleh</u> dijumlahkan atau dikurangkan langsung.<br>
+      <span class="fr"><i>1</i><i>2</i></span> + <span class="fr"><i>1</i><i>3</i></span> <b>bukan</b> 2/5, melainkan 3/6 + 2/6 = 5/6.</p>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Rina menggunakan <span class="fr"><i>2</i><i>8</i></span> meter pita untuk buku pertama dan <span class="fr"><i>3</i><i>8</i></span> meter untuk buku kedua. Berapa meter pita yang digunakan seluruhnya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Penyebut sama (8), jumlahkan pembilangnya: (2 + 3)/8 = <b>5/8</b></p>
+      <p>Jadi, pita yang digunakan <span class="hl"><span class="fr"><i>5</i><i>8</i></span> meter</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Hitunglah <span class="fr"><i>2</i><i>3</i></span> + <span class="fr"><i>1</i><i>4</i></span></p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Penyebut sama-sama diubah menjadi 12.</p>
+      <p><span class="fr"><i>2</i><i>3</i></span> = <span class="fr"><i>8</i><i>12</i></span> &nbsp;dan&nbsp; <span class="fr"><i>1</i><i>4</i></span> = <span class="fr"><i>3</i><i>12</i></span></p>
+      <p><span class="fr"><i>8</i><i>12</i></span> + <span class="fr"><i>3</i><i>12</i></span> = <span class="hl"><span class="fr"><i>11</i><i>12</i></span></span></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 3</div>
+    <p style="margin:0;font-weight:700;">Hitunglah <span class="fr"><i>3</i><i>4</i></span> × 4</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kalikan pembilangnya: (3 × 4)/4 = 12/4 = <b>3</b></p>
+      <p>Jadi, dibutuhkan <span class="hl">3 liter</span> cairan.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 4</div>
+    <p style="margin:0;font-weight:700;">Hitunglah <span class="fr"><i>3</i><i>4</i></span> ÷ 2</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kalikan penyebutnya dengan 2: 3/(4 × 2) = <b>3/8</b></p>
+      <p>Maknanya: 3/4 dibagi rata menjadi 2 bagian sama besar, tiap bagian bernilai <span class="hl"><span class="fr"><i>3</i><i>8</i></span></span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 5</div>
+    <p style="margin:0;font-weight:700;">Sebanyak <span class="fr"><i>3</i><i>5</i></span> dari 40 siswa mengikuti kegiatan pramuka. Berapa siswa yang mengikuti pramuka?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p><b>Trik:</b> bagi total dengan penyebut dulu, lalu kalikan pembilang.</p>
+      <p>40 ÷ 5 = 8, lalu 8 × 3 = <b>24 siswa</b>.</p>
+      <p>Jadi, ada <span class="hl">24 siswa</span> yang mengikuti pramuka.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 6</div>
+    <p style="margin:0;font-weight:700;">Sebuah pabrik menghasilkan 240 roti. Sebanyak <span class="fr"><i>3</i><i>8</i></span> dikirim ke toko A dan <span class="fr"><i>1</i><i>4</i></span> dikirim ke toko B. Berapa roti yang dikirim ke kedua toko?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Roti ke toko A: 3/8 × 240 = 90</p>
+      <p>Roti ke toko B: 1/4 × 240 = 60</p>
+      <p>Total: 90 + 60 = <b>150 roti</b>. Jika ditanya sisa: 240 − 150 = <b>90 roti</b>.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 5</h3>
+  <p style="margin:-6px 0 14px;color:var(--muted);font-size:.9rem;font-weight:600;">Pilih satu jawaban. Jawaban benar akan berwarna hijau 💚</p>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Hasil dari 3/8 + 2/8 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5/16</button>
+      <button class="opt" data-correct="true">B. 5/8</button>
+      <button class="opt">C. 6/8</button>
+      <button class="opt">D. 1/3</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Penyebut sama → jumlahkan pembilangnya saja: (3+2)/8 = <b>5/8</b>. Penyebut tetap 8.</p>
+      <p>Jawaban: <span class="hl">B. 5/8</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Hasil dari 5/6 − 1/3 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 1/2</button>
+      <button class="opt">B. 2/3</button>
+      <button class="opt">C. 1/3</button>
+      <button class="opt">D. 1/6</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ubah 1/3 menjadi 2/6. Lalu 5/6 − 2/6 = 3/6 = <b>1/2</b>.</p>
+      <p>Jawaban: <span class="hl">A. 1/2</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Hasil dari 2/3 + 1/4 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 3/7</button>
+      <button class="opt">B. 5/6</button>
+      <button class="opt" data-correct="true">C. 11/12</button>
+      <button class="opt">D. 7/12</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Penyebut bersama 12: 2/3 = 8/12 dan 1/4 = 3/12.</p>
+      <p>8/12 + 3/12 = <b>11/12</b>. Ingat, penyebut tidak dijumlahkan!</p>
+      <p>Jawaban: <span class="hl">C. 11/12</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Hasil dari 3/4 × 8 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 4</button>
+      <button class="opt">B. 5</button>
+      <button class="opt" data-correct="true">C. 6</button>
+      <button class="opt">D. 8</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>(3 × 8)/4 = 24/4 = <b>6</b>. Trik: 8 ÷ 4 = 2, lalu 2 × 3 = 6.</p>
+      <p>Jawaban: <span class="hl">C. 6</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Hasil dari 5/6 ÷ 5 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 1/6</button>
+      <button class="opt">B. 5/6</button>
+      <button class="opt">C. 5/6 × 5</button>
+      <button class="opt">D. 1/5</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Bagi pecahan dengan bilangan asli → kalikan penyebutnya: 5/(6 × 5) = 5/30 = <b>1/6</b>.</p>
+      <p>Jawaban: <span class="hl">A. 1/6</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">6</span><p>Sebanyak 2/5 dari 150 buku merupakan buku cerita. Berapa banyak buku cerita?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 30</button>
+      <button class="opt">B. 50</button>
+      <button class="opt" data-correct="true">C. 60</button>
+      <button class="opt">D. 75</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>150 ÷ 5 = 30, lalu 30 × 2 = <b>60</b>.</p>
+      <p>Jawaban: <span class="hl">C. 60</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">7</span><p>Sebuah tangki terisi 7/8 bagian. Sebanyak 1/4 bagian dari kapasitas tangki kemudian digunakan. Berapa bagian kapasitas tangki yang tersisa?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 3/8</button>
+      <button class="opt" data-correct="true">B. 5/8</button>
+      <button class="opt">C. 6/8</button>
+      <button class="opt">D. 3/4</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>7/8 − 1/4 = 7/8 − 2/8 = <b>5/8</b></p>
+      <p>Kedua pecahan menyatakan bagian dari kapasitas tangki yang sama, jadi bisa langsung dikurangkan setelah penyebut disamakan.</p>
+      <p>Jawaban: <span class="hl">B. 5/8</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 6 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab6">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#f1e9ff,#c9b0ff);">🔍</div>
+    <div>
+      <h2>Bab 6 — Faktor, Kelipatan, KPK, dan FPB</h2>
+      <p class="sub">Menentukan faktor dan kelipatan serta menggunakannya dalam soal cerita.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">🔁 Faktor vs Kelipatan</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Faktor</th><th>Kelipatan</th></tr></thead>
+        <tbody>
+          <tr><td>Membagi bilangan sampai habis</td><td>Diperoleh dari hasil perkalian</td></tr>
+          <tr><td>Faktor 12: 1, 2, 3, 4, 6, 12</td><td>Kelipatan 12: 12, 24, 36, 48, …</td></tr>
+          <tr><td>Banyaknya terbatas</td><td>Banyaknya tidak terbatas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid two">
+    <div class="mini">
+      <h4>🔗 FPB</h4>
+      <p><b>Faktor Persekutuan Terbesar.</b> Dipakai saat membagi menjadi kelompok sama banyak <b>tanpa sisa</b> dan mencari ukuran/jumlah terbesar.</p>
+    </div>
+    <div class="mini">
+      <h4>⏰ KPK</h4>
+      <p><b>Kelipatan Persekutuan Terkecil.</b> Dipakai untuk <b>kejadian berulang</b> — kapan dua hal terjadi bersamaan lagi.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">🧭</span>
+    <p><b>Jangan hanya menghafal kata kunci.</b> Perhatikan apa yang dicari: kejadian berulang yang bertemu lagi (KPK) atau pembagian sama banyak tanpa sisa (FPB).</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1 (FPB)</div>
+    <p style="margin:0;font-weight:700;">Ibu mempunyai 24 jeruk dan 36 apel. Buah akan dimasukkan ke dalam beberapa paket dengan komposisi sama, tanpa sisa. Berapa paket terbanyak yang dapat dibuat?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24</p>
+      <p>Faktor 36: 1, 2, 3, 4, 6, 9, 12, 18, 36</p>
+      <p>Faktor persekutuan terbesar = <b>12</b> → FPB(24, 36) = 12</p>
+      <p>Setiap paket berisi 24 ÷ 12 = <b>2 jeruk</b> dan 36 ÷ 12 = <b>3 apel</b>.</p>
+      <p>Jadi, dapat dibuat <span class="hl">12 paket</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2 (KPK)</div>
+    <p style="margin:0;font-weight:700;">Sekolah A berolahraga bersama setiap 2 minggu, sekolah B setiap 3 minggu, dan sekolah C setiap 4 minggu. Jika hari ini ketiganya berolahraga bersama, berapa minggu lagi mereka akan bersama kembali?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kelipatan 2: 2, 4, 6, 8, 10, <b>12</b>, …</p>
+      <p>Kelipatan 3: 3, 6, 9, <b>12</b>, …</p>
+      <p>Kelipatan 4: 4, 8, <b>12</b>, …</p>
+      <p>KPK(2, 3, 4) = <b>12</b></p>
+      <p>Jadi, mereka akan berolahraga bersama lagi dalam <span class="hl">12 minggu</span>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 3 (Faktorisasi Prima)</div>
+    <p style="margin:0;font-weight:700;">Tentukan FPB dan KPK dari 12 dan 18 menggunakan faktorisasi prima.</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>12 = 2² × 3 &nbsp;&nbsp;|&nbsp;&nbsp; 18 = 2 × 3²</p>
+      <p><b>FPB:</b> ambil faktor prima yang <b>sama</b> dengan pangkat <b>terkecil</b> → 2¹ × 3¹ = <b>6</b></p>
+      <p><b>KPK:</b> ambil <b>semua</b> faktor prima dengan pangkat <b>terbesar</b> → 2² × 3² = 4 × 9 = <b>36</b></p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 6</h3>
+  <p style="margin:-6px 0 14px;color:var(--muted);font-size:.9rem;font-weight:600;">Pilih satu jawaban. Jawaban benar akan berwarna hijau 💚</p>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Faktor dari 18 adalah …</p></div>
+    <div class="options">
+      <button class="opt" data-correct="true">A. 1, 2, 3, 6, 9, 18</button>
+      <button class="opt">B. 1, 2, 4, 6, 9, 18</button>
+      <button class="opt">C. 2, 3, 5, 6, 9, 18</button>
+      <button class="opt">D. 1, 3, 6, 8, 9, 18</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Semua bilangan pada pilihan A membagi 18 tanpa sisa: 18÷1, 18÷2, 18÷3, 18÷6, 18÷9, 18÷18.</p>
+      <p>Jawaban: <span class="hl">A</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Tiga kelipatan positif pertama dari 7 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 7, 14, 21</button>
+      <button class="opt">B. 7, 21, 28</button>
+      <button class="opt">C. 14, 21, 28</button>
+      <button class="opt">D. 7, 12, 21</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>7×1 = 7, 7×2 = 14, 7×3 = 21.</p>
+      <p>Jawaban: <span class="hl">A. 7, 14, 21</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>FPB dari 24 dan 36 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 6</button>
+      <button class="opt">B. 8</button>
+      <button class="opt" data-correct="true">C. 12</button>
+      <button class="opt">D. 18</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>24 = 2³ × 3 &nbsp;|&nbsp; 36 = 2² × 3²</p>
+      <p>Ambil pangkat terkecil dari faktor yang sama: 2² × 3 = <b>12</b>.</p>
+      <p>Jawaban: <span class="hl">C. 12</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>KPK dari 6 dan 8 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 12</button>
+      <button class="opt" data-correct="true">B. 24</button>
+      <button class="opt">C. 36</button>
+      <button class="opt">D. 48</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kelipatan 6: 6, 12, 18, <b>24</b>, … &nbsp;|&nbsp; Kelipatan 8: 8, 16, <b>24</b>, …</p>
+      <p>Jawaban: <span class="hl">B. 24</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Lampu A berkedip setiap 4 detik dan lampu B setiap 6 detik. Jika keduanya berkedip bersama sekarang, berapa detik lagi keduanya berkedip bersama?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 8 detik</button>
+      <button class="opt">B. 10 detik</button>
+      <button class="opt" data-correct="true">C. 12 detik</button>
+      <button class="opt">D. 24 detik</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ini soal kejadian berulang → gunakan KPK.</p>
+      <p>KPK(4, 6) = <b>12</b> detik.</p>
+      <p>Jawaban: <span class="hl">C. 12 detik</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">6</span><p>Ada 30 pensil dan 45 penghapus. Semua akan dibagikan ke dalam paket sebanyak mungkin dengan isi setiap paket sama dan tanpa sisa. Berapa paket terbanyak yang dapat dibuat?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5</button>
+      <button class="opt">B. 10</button>
+      <button class="opt" data-correct="true">C. 15</button>
+      <button class="opt">D. 30</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Membagi sama banyak tanpa sisa → gunakan FPB.</p>
+      <p>FPB(30, 45) = <b>15</b> paket. Tiap paket: 2 pensil dan 3 penghapus.</p>
+      <p>Jawaban: <span class="hl">C. 15</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">7</span><p>KPK dari 12, 15, dan 20 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 30</button>
+      <button class="opt">B. 45</button>
+      <button class="opt" data-correct="true">C. 60</button>
+      <button class="opt">D. 120</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>12 = 2² × 3 &nbsp;|&nbsp; 15 = 3 × 5 &nbsp;|&nbsp; 20 = 2² × 5</p>
+      <p>Ambil pangkat terbesar: 2² × 3 × 5 = <b>60</b>.</p>
+      <p>Jawaban: <span class="hl">C. 60</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">8</span><p>FPB dari 32 dan 48 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 8</button>
+      <button class="opt">B. 12</button>
+      <button class="opt" data-correct="true">C. 16</button>
+      <button class="opt">D. 24</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>32 = 2⁵ &nbsp;|&nbsp; 48 = 2⁴ × 3</p>
+      <p>Ambil pangkat terkecil dari faktor yang sama: 2⁴ = <b>16</b>.</p>
+      <p>Jawaban: <span class="hl">C. 16</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- TES MANDIRI -->
+<!-- ============================================================= -->
+<section class="panel" id="tes">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#fff2c9,#ffd166);">🏆</div>
+    <div>
+      <h2>Tes Mandiri — Sudah Siapkah Kamu?</h2>
+      <p class="sub">Centang kemampuan yang sudah dapat kamu kerjakan sendiri tanpa melihat contoh.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label green">✅ Daftar Periksa Kemampuan</div>
+    <div id="checklist">
+      <label class="check"><input type="checkbox"><span>Saya dapat menentukan pecahan dari gambar dan cerita.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat menentukan pecahan senilai dan menyederhanakan pecahan.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat membandingkan dan mengurutkan pecahan.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat mengubah pecahan, desimal, dan persen.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat menghitung persen dari suatu jumlah.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat mengerjakan empat operasi hitung bilangan cacah.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat menyelesaikan operasi penjumlahan dan pengurangan pecahan.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat mengalikan atau membagi pecahan dengan bilangan asli.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat menentukan faktor dan kelipatan suatu bilangan.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya dapat membedakan penggunaan KPK dan FPB dalam soal cerita.</span></label>
+    </div>
+    <div style="margin-top:16px;text-align:center;">
+      <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1.5rem;color:var(--primary-d);">
+        <span id="checkCount">0</span> dari 10
+      </div>
+      <p style="margin:4px 0 0;color:var(--muted);font-size:.88rem;font-weight:600;">Kemampuan dikuasai menurut penilaian diri</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">📚</span>
+    <p>Pelajari kembali contoh dan pembahasan pada bab yang belum dikuasai, kemudian kerjakan ulang latihannya. Kamu pasti bisa! 💪</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Modul Belajar Interaktif — TKA Matematika SD/MI · Bagian I: Bilangan 🍕💯🔢➗🔍
+</footer>
+
+<script>
+(function () {
+  /* ---------- TABS ---------- */
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const target = document.getElementById(tab.dataset.target);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  /* ---------- TOTAL SOAL ---------- */
+  const totalQuiz = document.querySelectorAll('.quiz').length;
+  const totalEl = document.getElementById('total');
+  if (totalEl) totalEl.textContent = totalQuiz;
+
+  const scoreEl = document.getElementById('score');
+  const barEl = document.getElementById('bar');
+  let score = 0;
+
+  function updateScore() {
+    if (scoreEl) scoreEl.textContent = score;
+    if (barEl) barEl.style.width = (totalQuiz ? (score / totalQuiz) * 100 : 0) + '%';
+  }
+  updateScore();
+
+  /* ---------- KLIK OPSI ---------- */
+  document.addEventListener('click', function (e) {
+    /* jawaban pilihan ganda */
+    const opt = e.target.closest('.opt');
+    if (opt) {
+      const quiz = opt.closest('.quiz');
+      if (!quiz || quiz.dataset.done === '1') return;
+
+      quiz.dataset.done = '1';
+      quiz.classList.add('answered');
+
+      const isCorrect = opt.dataset.correct === 'true';
+
+      quiz.querySelectorAll('.opt').forEach(o => {
+        if (o.dataset.correct === 'true') o.classList.add('correct');
+      });
+      if (!isCorrect) opt.classList.add('wrong');
+
+      /* feedback */
+      let fb = quiz.querySelector('.feedback');
+      if (!fb) {
+        fb = document.createElement('div');
+        fb.className = 'feedback';
+        const optsBox = quiz.querySelector('.options');
+        optsBox.insertAdjacentElement('afterend', fb);
+      }
+      fb.classList.add('show', isCorrect ? 'ok' : 'no');
+      fb.textContent = isCorrect
+        ? '🎉 Hebat! Jawabanmu benar.'
+        : '💪 Belum tepat. Lihat pembahasannya, ya!';
+
+      if (isCorrect) {
+        score++;
+        updateScore();
+        if (scoreEl) {
+          scoreEl.classList.add('pulse');
+          setTimeout(() => scoreEl.classList.remove('pulse'), 520);
+        }
+      }
+      return;
+    }
+
+    /* tombol lihat jawaban */
+    const btn = e.target.closest('.btn-toggle');
+    if (btn) {
+      const card = btn.parentElement;
+      const ans = card.querySelector('.answer');
+      if (!ans) return;
+
+      const isOpen = ans.classList.toggle('show');
+      btn.classList.toggle('open', isOpen);
+      btn.textContent = isOpen ? 'Sembunyikan Jawaban 🙈' : 'Lihat Jawaban 👀';
+    }
+  });
+
+  /* ---------- CHECKLIST ---------- */
+  const boxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+  const checkCount = document.getElementById('checkCount');
+  boxes.forEach(b => {
+    b.addEventListener('change', () => {
+      const n = document.querySelectorAll('#checklist input:checked').length;
+      if (checkCount) checkCount.textContent = n;
+    });
+  });
+})();
+</script>
+</body>
+</html>
