@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Misi Penalaran — TKA Matematika SD/MI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --ink:#1e293b;
+    --muted:#64748b;
+    --primary:#4f46e5; /* Indigo */
+    --primary-d:#3730a3;
+    --accent:#f97316; /* Oranye */
+    --mint:#14b8a6; /* Teal */
+    --yellow:#fbbf24;
+    --purple:#8b5cf6;
+    --pink:#ec4899;
+    --card:#ffffff;
+    --line:#e2e8f0;
+    --shadow:0 10px 25px rgba(79,70,229,.08);
+    --shadow-lg:0 15px 35px rgba(79,70,229,.15);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:
+      radial-gradient(circle at 10% 10%, #e0e7ff 0 20%, transparent 50%),
+      radial-gradient(circle at 90% 90%, #ffedd5 0 20%, transparent 50%),
+      var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,.tab,.btn-toggle,.opt{font-family:'Baloo 2','Nunito',sans-serif;}
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;
+    background:linear-gradient(135deg,#4f46e5 0%,#8b5cf6 45%,#f97316 100%);
+    color:#fff;
+    padding:36px 18px 80px;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:-2px;height:60px;
+    background:var(--bg);
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:2;text-align:center;}
+  .badge{
+    display:inline-block;background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.4);
+    padding:6px 16px;border-radius:999px;
+    font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:clamp(1.9rem,5.2vw,3rem);
+    margin:14px 0 6px;font-weight:800;letter-spacing:.5px;
+    text-shadow:0 4px 0 rgba(0,0,0,.15);
+  }
+  .hero p{margin:0 auto;max-width:560px;font-size:1rem;color:rgba(255,255,255,.92);font-weight:600;}
+  .float-emoji{
+    position:absolute;font-size:2.2rem;opacity:.85;animation:bob 4s ease-in-out infinite;
+  }
+  .fe1{top:20px;left:8%;}
+  .fe2{top:80px;right:6%;animation-delay:1.5s;}
+  .fe3{bottom:90px;left:10%;animation-delay:2s;font-size:1.8rem;}
+  .fe4{bottom:100px;right:12%;animation-delay:.5s;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-8deg);}50%{transform:translateY(-12px) rotate(8deg);}}
+
+  /* ================= SCORE ================= */
+  .score-wrap{
+    max-width:420px;margin:24px auto 0;
+    background:rgba(0,0,0,.15);
+    border:1px solid rgba(255,255,255,.25);
+    backdrop-filter:blur(8px);
+    border-radius:18px;padding:12px 16px;
+  }
+  .score-line{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:.95rem;}
+  .bar{height:12px;background:rgba(255,255,255,.25);border-radius:999px;margin-top:8px;overflow:hidden;}
+  .bar-fill{
+    height:100%;width:0%;border-radius:999px;
+    background:linear-gradient(90deg,#fbbf24,#14b8a6);
+    transition:width .5s cubic-bezier(.3,1.4,.5,1);
+  }
+
+  /* ================= TABS ================= */
+  .tabs{
+    position:sticky;top:0;z-index:50;
+    display:flex;gap:8px;overflow-x:auto;
+    padding:12px 14px;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--line);
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;border:none;cursor:pointer;
+    background:#f1f5f9;color:#475569;
+    padding:10px 18px;border-radius:999px;
+    font-weight:700;font-size:.92rem;
+    transition:transform .15s, background .2s, box-shadow .2s;
+    white-space:nowrap;
+  }
+  .tab:hover{transform:translateY(-2px);background:#e2e8f0;}
+  .tab.active{
+    background:linear-gradient(135deg,var(--primary),#818cf8);
+    color:#fff;box-shadow:0 8px 18px rgba(79,70,229,.3);
+  }
+
+  /* ================= LAYOUT ================= */
+  main{max-width:960px;margin:0 auto;padding:22px 16px 70px;}
+  .panel{display:none;animation:pop .35s ease both;}
+  .panel.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+  .chapter-head{
+    display:flex;align-items:center;gap:14px;
+    margin:6px 0 20px;
+  }
+  .chapter-emoji{
+    flex:0 0 auto;width:58px;height:58px;border-radius:18px;
+    display:grid;place-items:center;font-size:1.8rem;
+    background:linear-gradient(135deg,#ffedd5,#fdba74);
+    box-shadow:var(--shadow);
+  }
+  .chapter-head h2{margin:0;font-size:clamp(1.3rem,3.6vw,1.75rem);font-weight:800;line-height:1.2;}
+  .chapter-head .sub{margin:2px 0 0;color:var(--muted);font-size:.9rem;font-weight:600;}
+
+  /* ================= CARDS ================= */
+  .card{
+    background:var(--card);
+    border-radius:22px;
+    padding:20px;
+    margin-bottom:16px;
+    box-shadow:var(--shadow);
+    border:1px solid #f1f5f9;
+  }
+  .card-label{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:.82rem;
+    letter-spacing:.05em;text-transform:uppercase;
+    padding:5px 14px;border-radius:999px;margin-bottom:12px;
+    background:#e0e7ff;color:#3730a3;
+  }
+  .card-label.green{background:#ccfbf1;color:#0f766e;}
+  .card-label.orange{background:#ffedd5;color:#c2410c;}
+  .card-label.purple{background:#f3e8ff;color:#6b21a8;}
+
+  .grid{display:grid;gap:14px;}
+  @media(min-width:640px){ .grid.two{grid-template-columns:1fr 1fr;} .grid.three{grid-template-columns:repeat(3,1fr);} }
+
+  .mini{
+    background:linear-gradient(160deg,#ffffff,#f8fafc);
+    border:2px solid var(--line);
+    border-radius:18px;padding:16px;
+    transition:transform .18s, box-shadow .18s;
+  }
+  .mini:hover{transform:translateY(-3px);box-shadow:0 12px 22px rgba(0,0,0,.06);}
+  .mini h4{margin:0 0 8px;font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:8px;}
+  .mini p{margin:0;font-size:.93rem;color:#475569;}
+
+  /* 5 Steps Timeline */
+  .timeline {
+    position: relative; padding-left: 30px; margin-top: 10px;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 14px; top: 0; bottom: 0;
+    width: 4px; background: #e2e8f0; border-radius: 2px;
+  }
+  .step {
+    position: relative; margin-bottom: 20px;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    position: absolute; left: -30px; top: 0;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: grid; place-items: center;
+    font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(79,70,229,.3);
+  }
+  .step-content {
+    background: #f8fafc; padding: 12px 16px; border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+  .step-content h4 { margin: 0 0 4px; color: var(--primary-d); font-size: 1rem; }
+  .step-content p { margin: 0; font-size: 0.9rem; color: #475569; }
+
+  /* ================= TOGGLE BUTTON ================= */
+  .btn-toggle{
+    display:inline-flex;align-items:center;gap:8px;
+    border:2px dashed var(--accent);
+    background:#fff7ed;color:#c2410c;
+    padding:9px 18px;border-radius:14px;
+    font-weight:700;font-size:.92rem;cursor:pointer;
+    transition:.2s;margin-top:12px;
+  }
+  .btn-toggle:hover{background:#ffedd5;transform:translateY(-1px);}
+  .btn-toggle.open{
+    background:#f0fdfa;border-color:var(--mint);border-style:solid;color:#0f766e;
+  }
+
+  .answer{display:none;margin-top:12px;}
+  .answer.show{display:block;animation:unfold .3s ease both;}
+  @keyframes unfold{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+  .answer-inner{
+    background:linear-gradient(160deg,#f0fdfa,#ccfbf1);
+    border:2px solid #5eead4;
+    border-radius:16px;padding:16px;
+  }
+  .answer-inner p{margin:0 0 8px;font-size:.95rem;}
+  .answer-inner p:last-child{margin-bottom:0;}
+  .answer-inner strong{color:#0f766e;}
+  .hl{background:#fef08a;border-radius:6px;padding:2px 6px;font-weight:800;}
+
+  /* ================= QUIZ ================= */
+  .quiz{position:relative;}
+  .q-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;}
+  .q-num{
+    flex:0 0 auto;width:34px;height:34px;border-radius:12px;
+    display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--primary),#818cf8);
+    color:#fff;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1rem;
+    box-shadow:0 5px 12px rgba(79,70,229,.3);
+  }
+  .q-head p{margin:0;font-weight:700;font-size:.98rem;}
+  .options{display:grid;gap:10px;}
+  @media(min-width:620px){ .options.two-col{grid-template-columns:1fr 1fr;} }
+  .opt{
+    text-align:left;cursor:pointer;
+    background:#f8fafc;border:2px solid #e2e8f0;
+    color:var(--ink);padding:12px 16px;border-radius:14px;
+    font-size:.95rem;font-weight:700;
+    transition:.18s;font-family:'Nunito',sans-serif;
+  }
+  .opt:hover:not(.correct):not(.wrong){background:#f1f5f9;border-color:#cbd5e1;transform:translateX(3px);}
+  .opt.correct{background:#ccfbf1;border-color:#14b8a6;color:#0f766e;}
+  .opt.correct::after{content:" ✓";font-weight:900;color:#0f766e;}
+  .opt.wrong{background:#ffe4e6;border-color:#f43f5e;color:#be123c;}
+  .opt.wrong::after{content:" ✗";font-weight:900;color:#be123c;}
+  .quiz.answered .opt{cursor:default;}
+
+  .feedback{
+    margin-top:12px;font-weight:800;font-size:.92rem;
+    display:none;align-items:center;gap:8px;
+  }
+  .feedback.show{display:flex;}
+  .feedback.ok{color:#0f766e;}
+  .feedback.no{color:#be123c;}
+
+  /* ================= TABLES ================= */
+  .tbl-wrap{overflow-x:auto;border-radius:16px;border:2px solid var(--line); margin: 12px 0;}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;background:#fff;}
+  th{background:#e0e7ff;color:#3730a3;font-family:'Baloo 2',sans-serif;padding:12px;text-align:left;}
+  td{padding:12px;border-top:1px solid var(--line);}
+  tbody tr:nth-child(even){background:#f8fafc;}
+  .tbl-center th, .tbl-center td {text-align: center;}
+
+  /* Contextual Cards */
+  .context-card {
+    background: #fff; border: 2px solid #e2e8f0; border-radius: 16px;
+    padding: 16px; text-align: center; transition: transform 0.2s;
+  }
+  .context-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
+  .context-icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .context-title { font-weight: 800; font-size: 1rem; color: var(--primary-d); margin-bottom: 4px; font-family:'Baloo 2',sans-serif;}
+  .context-desc { font-size: 0.85rem; color: var(--muted); }
+
+  /* checklist */
+  .check{
+    display:flex;gap:12px;align-items:flex-start;
+    background:#f8fafc;border:2px solid var(--line);
+    border-radius:16px;padding:14px 16px;margin-bottom:10px;
+    cursor:pointer;transition:.18s;
+  }
+  .check:hover{border-color:#cbd5e1;background:#f1f5f9;}
+  .check input{
+    appearance:none;-webkit-appearance:none;
+    width:24px;height:24px;flex:0 0 auto;margin-top:2px;
+    border:3px solid #cbd5e1;border-radius:8px;background:#fff;
+    cursor:pointer;position:relative;transition:.18s;
+  }
+  .check input:checked{background:var(--mint);border-color:var(--mint);}
+  .check input:checked::after{
+    content:"✓";position:absolute;inset:0;display:grid;place-items:center;
+    color:#fff;font-weight:900;font-size:15px;line-height:1;
+  }
+  .check span{font-weight:700;font-size:.94rem;}
+  .check input:checked + span{color:#0f766e;}
+
+  .callout{
+    display:flex;gap:14px;align-items:flex-start;
+    background:linear-gradient(135deg,#fffbeb,#fef3c7);
+    border:2px solid #fde68a;border-radius:18px;padding:16px;
+    margin-bottom:18px;
+  }
+  .callout .ico{font-size:1.5rem;line-height:1;}
+  .callout p{margin:0;font-size:.94rem;font-weight:600;color:#92400e;}
+
+  footer{
+    text-align:center;padding:30px 16px 40px;
+    color:var(--muted);font-size:.85rem;font-weight:600;
+  }
+  .pulse{animation:pulse .5s ease;}
+  @keyframes pulse{50%{transform:scale(1.08);}}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <span class="float-emoji fe1">🧠</span>
+  <span class="float-emoji fe2">💡</span>
+  <span class="float-emoji fe3">🧩</span>
+  <span class="float-emoji fe4">🎯</span>
+  <div class="hero-inner">
+    <div class="badge">TKA Matematika SD / MI · Bagian IV</div>
+    <h1>Misi Penalaran 🚀</h1>
+    <p>Strategi Jitu Menyelesaikan Soal Cerita, Menemukan Pola, dan Menganalisis Informasi.</p>
+    <div class="score-wrap">
+      <div class="score-line">
+        <span>⭐ Skor Misi</span>
+        <span><b id="score">0</b> / <span id="total">13</span></span>
+      </div>
+      <div class="bar"><div class="bar-fill" id="bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= TABS ================= -->
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-target="bab19">📖 Bab 19: Strategi Soal Cerita</button>
+  <button class="tab" data-target="bab20">🧩 Bab 20: Penalaran & Kontekstual</button>
+  <button class="tab" data-target="ringkasan">🏆 Ringkasan</button>
+</nav>
+
+<main>
+
+<!-- ============================================================= -->
+<!-- BAB 19 -->
+<!-- ============================================================= -->
+<section class="panel active" id="bab19">
+  <div class="chapter-head">
+    <div class="chapter-emoji">📖</div>
+    <div>
+      <h2>Bab 19 — Strategi Soal Cerita</h2>
+      <p class="sub">Bukan sekadar menghitung, tapi memahami masalah dan memilih cara yang tepat.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">💡</span>
+    <p><b>Kunci Sukses:</b> Jangan terburu-buru menghitung! Pahami dulu apa yang diketahui dan apa yang ditanyakan.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">🚀 5 Langkah Utama</div>
+    <div class="timeline">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Baca & Temukan Informasi</h4>
+          <p>Catat angka, satuan, dan hubungan yang disebutkan dalam soal.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Tentukan yang Ditanyakan</h4>
+          <p>Mencari jumlah, sisa, selisih, harga, luas, waktu, atau nilai lainnya?</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Pilih Operasi Hitung</h4>
+          <p>Tentukan apakah perlu tambah, kurang, kali, bagi, atau konsep lain.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Kerjakan Bertahap</h4>
+          <p>Jika ada beberapa langkah, selesaikan satu per satu secara berurutan.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Periksa Hasil & Satuan</h4>
+          <p>Pastikan jawaban masuk akal dan satuannya tepat (cm, kg, jam, dll).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label purple">🔍 Mengenali Operasi dari Situasi</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Situasi dalam Soal</th><th>Konsep yang Mungkin</th></tr></thead>
+        <tbody>
+          <tr><td>Jumlah seluruh benda</td><td>Penjumlahan (+)</td></tr>
+          <tr><td>Sisa setelah digunakan</td><td>Pengurangan (−)</td></tr>
+          <tr><td>Selisih dua jumlah</td><td>Pengurangan (−)</td></tr>
+          <tr><td>Beberapa kelompok isi sama</td><td>Perkalian (×)</td></tr>
+          <tr><td>Dibagikan sama banyak</td><td>Pembagian (÷)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">✏️ Contoh Soal Bertahap</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Rani memiliki uang Rp50.000. Ia membeli buku Rp18.000 dan dua pensil seharga Rp3.000 per buah. Berapa uang Rani yang tersisa?</p>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p><b>Langkah 1:</b> Hitung harga 2 pensil = 2 × Rp3.000 = Rp6.000</p>
+      <p><b>Langkah 2:</b> Hitung total belanja = Rp18.000 + Rp6.000 = Rp24.000</p>
+      <p><b>Langkah 3:</b> Hitung sisa uang = Rp50.000 − Rp24.000 = <b>Rp26.000</b></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Ada 4 kotak. Setiap kotak berisi 6 pensil. Sebanyak 5 pensil diberikan kepada teman. Berapa pensil yang tersisa?</p>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p><b>Model sederhana:</b> 4 kotak × 6 pensil = 24 pensil (jumlah awal).</p>
+      <p>Diberikan 5 pensil, maka: 24 − 5 = <b>19 pensil</b>.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 19</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Di kelas terdapat 28 siswa. Sebanyak 12 siswa mengikuti klub matematika dan 9 siswa mengikuti klub sains. Jika tidak ada siswa yang mengikuti kedua klub, berapa siswa yang tidak mengikuti kedua klub tersebut?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5 siswa</button>
+      <button class="opt" data-correct="true">B. 7 siswa</button>
+      <button class="opt">C. 9 siswa</button>
+      <button class="opt">D. 19 siswa</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Total siswa ikut klub = 12 + 9 = 21 siswa.</p>
+      <p>Siswa yang tidak ikut = 28 − 21 = <b>7 siswa</b>.</p>
+      <p>Jawaban: <span class="hl">B. 7 siswa</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Pak Budi membeli 5 kotak pensil. Setiap kotak berisi 12 pensil. Ia memberikan 17 pensil kepada muridnya. Berapa pensil yang tersisa?</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 43</button>
+      <button class="opt">B. 47</button>
+      <button class="opt">C. 53</button>
+      <button class="opt">D. 60</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>5 kotak × 12 pensil = 60 pensil.</p>
+      <p>Sisa = 60 − 17 = <b>43 pensil</b>.</p>
+      <p>Jawaban: <span class="hl">A. 43</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Jarak rumah ke sekolah 1.200 meter. Siswa sudah berjalan 450 meter. Berapa meter lagi yang harus ditempuh?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 650 meter</button>
+      <button class="opt" data-correct="true">B. 750 meter</button>
+      <button class="opt">C. 850 meter</button>
+      <button class="opt">D. 1.650 meter</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Sisa jarak = 1.200 − 450 = <b>750 meter</b>.</p>
+      <p>Jawaban: <span class="hl">B. 750 meter</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Sebuah persegi panjang panjangnya 12 cm dan lebarnya 5 cm. Jika ditanya luasnya, operasi yang tepat adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 12 + 5</button>
+      <button class="opt">B. 2 × (12 + 5)</button>
+      <button class="opt" data-correct="true">C. 12 × 5</button>
+      <button class="opt">D. 12 – 5</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Luas persegi panjang = panjang × lebar = 12 × 5.</p>
+      <p>Jawaban: <span class="hl">C. 12 × 5</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Sebuah perjalanan dimulai pukul 07.15 dan berlangsung selama 2 jam 30 menit. Pukul berapa perjalanan berakhir?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 09.15</button>
+      <button class="opt">B. 09.30</button>
+      <button class="opt" data-correct="true">C. 09.45</button>
+      <button class="opt">D. 10.15</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>07.15 + 2 jam = 09.15.</p>
+      <p>09.15 + 30 menit = <b>09.45</b>.</p>
+      <p>Jawaban: <span class="hl">C. 09.45</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 20 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab20">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#ccfbf1,#14b8a6);">🧩</div>
+    <div>
+      <h2>Bab 20 — Penalaran & Soal Kontekstual</h2>
+      <p class="sub">Menemukan pola, menggabungkan konsep, dan menganalisis informasi.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">🔍 1. Menemukan Pola</div>
+    <div class="grid two">
+      <div class="mini">
+        <h4>Deret Tambah</h4>
+        <p>4, 8, 12, 16, ...<br>Aturan: <b>+4</b><br>Berikutnya: 16 + 4 = <b>20</b></p>
+      </div>
+      <div class="mini">
+        <h4>Deret Kali</h4>
+        <p>3, 6, 12, 24, ...<br>Aturan: <b>× 2</b><br>Berikutnya: 24 × 2 = <b>48</b></p>
+      </div>
+    </div>
+    <p style="margin:12px 0 0;font-size:0.9rem;color:var(--muted);"><b>Tips:</b> Periksa selisih antarangka dulu. Jika tidak tetap, coba periksa hubungan perkalian/pembagian.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">🔗 2. Menggabungkan Konsep</div>
+    <p style="margin:0 0 10px;font-weight:700;">Kebun berbentuk persegi panjang (15 m × 8 m). 25 m² digunakan untuk bunga. Berapa luas sisa kebun?</p>
+    <div class="callout" style="margin:0;padding:12px;">
+      <span class="ico">💡</span>
+      <p><b>Konsep 1:</b> Luas seluruh = 15 × 8 = 120 m².<br><b>Konsep 2:</b> Sisa = 120 − 25 = <b>95 m²</b>.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">🧠 3. Memilih Informasi Penting</div>
+    <p style="margin:0 0 10px;font-weight:700;">Di toko ada 24 buku, 15 pensil, dan 12 penghapus. Harga 1 buku Rp4.000. Berapa harga seluruh buku?</p>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p><b>Info yang diperlukan:</b> Jumlah buku (24) dan harga per buku (Rp4.000).</p>
+      <p>Info pensil dan penghapus <b>tidak diperlukan</b>.</p>
+      <p>Hitung: 24 × Rp4.000 = <b>Rp96.000</b>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">🧮 4. Membandingkan Kemungkinan</div>
+    <p style="margin:0 0 10px;font-weight:700;">Acara butuh minimal 50 kursi. Kursi dijual per kelompok isi 12. Berapa kelompok minimal yang dibeli?</p>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>3 kelompok = 36 kursi (kurang).</p>
+      <p>4 kelompok = 48 kursi (masih kurang!).</p>
+      <p>5 kelompok = 60 kursi (<b>memenuhi</b> minimal 50).</p>
+      <p>Jadi, butuh <b>5 kelompok</b>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">🌍 5. Situasi Kontekstual Sehari-hari</div>
+    <div class="grid two" style="margin-top:10px;">
+      <div class="context-card">
+        <div class="context-icon">🎒</div>
+        <div class="context-title">Situasi Sekolah</div>
+        <div class="context-desc">Menghitung jumlah siswa, buku perpustakaan, atau alat tulis kelas.</div>
+      </div>
+      <div class="context-card">
+        <div class="context-icon">🛒</div>
+        <div class="context-title">Situasi Belanja</div>
+        <div class="context-desc">Menghitung total harga, uang kembalian, berat, dan jumlah barang.</div>
+      </div>
+      <div class="context-card">
+        <div class="context-icon">🚌</div>
+        <div class="context-title">Situasi Perjalanan</div>
+        <div class="context-desc">Menghitung waktu tiba, lama perjalanan, jarak, atau kecepatan.</div>
+      </div>
+      <div class="context-card">
+        <div class="context-icon">🌳</div>
+        <div class="context-title">Situasi Lingkungan</div>
+        <div class="context-desc">Menghitung luas taman, panjang pagar, atau jumlah tanaman.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 20</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Perhatikan pola berikut: 5, 10, 20, 40, .... Bilangan berikutnya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 45</button>
+      <button class="opt">B. 50</button>
+      <button class="opt">C. 60</button>
+      <button class="opt" data-correct="true">D. 80</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Polanya dikali 2: 5 → 10 → 20 → 40.</p>
+      <p>Berikutnya: 40 × 2 = <b>80</b>.</p>
+      <p>Jawaban: <span class="hl">D. 80</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Sebuah kelas memiliki 32 siswa. Sebanyak 18 siswa mengikuti pramuka dan 9 siswa mengikuti klub seni. Tidak ada siswa yang mengikuti kedua kegiatan. Berapa siswa yang tidak mengikuti keduanya?</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 5</button>
+      <button class="opt">B. 9</button>
+      <button class="opt">C. 14</button>
+      <button class="opt">D. 23</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Total ikut = 18 + 9 = 27.</p>
+      <p>Tidak ikut = 32 − 27 = 5.</p>
+      <p>Jawaban: <span class="hl">A. 5</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Empat bungkus berisi masing-masing 15 kue. Sebanyak 18 kue dimakan. Berapa kue yang tersisa?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 32</button>
+      <button class="opt" data-correct="true">B. 42</button>
+      <button class="opt">C. 52</button>
+      <button class="opt">D. 60</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Total kue = 4 × 15 = 60.</p>
+      <p>Sisa = 60 − 18 = 42.</p>
+      <p>Jawaban: <span class="hl">B. 42</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Sebuah taman berbentuk persegi dengan panjang sisi 9 m. Berapa keliling taman?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 18 m</button>
+      <button class="opt">B. 27 m</button>
+      <button class="opt" data-correct="true">C. 36 m</button>
+      <button class="opt">D. 81 m</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Keliling persegi = 4 × sisi = 4 × 9 = 36 m.</p>
+      <p>Jawaban: <span class="hl">C. 36 m</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Data jumlah pengunjung: Senin 20, Selasa 25, Rabu 18. Berapa jumlah pengunjung selama tiga hari?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 43</button>
+      <button class="opt">B. 53</button>
+      <button class="opt" data-correct="true">C. 63</button>
+      <button class="opt">D. 73</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>20 + 25 + 18 = 63.</p>
+      <p>Jawaban: <span class="hl">C. 63</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">6</span><p>Sebuah acara membutuhkan setidaknya 70 kursi. Kursi disediakan dalam kelompok berisi 10. Berapa kelompok minimal yang diperlukan?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5 kelompok</button>
+      <button class="opt">B. 6 kelompok</button>
+      <button class="opt" data-correct="true">C. 7 kelompok</button>
+      <button class="opt">D. 8 kelompok</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>6 kelompok = 60 kursi (kurang).</p>
+      <p>7 kelompok = 70 kursi (pas/memenuhi).</p>
+      <p>Jawaban: <span class="hl">C. 7 kelompok</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">7</span><p>Sebuah perjalanan dimulai pukul 08.40 dan berakhir pukul 10.10. Lama perjalanan adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 1 jam 20 menit</button>
+      <button class="opt" data-correct="true">B. 1 jam 30 menit</button>
+      <button class="opt">C. 1 jam 40 menit</button>
+      <button class="opt">D. 2 jam 30 menit</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>08.40 ke 09.40 = 1 jam.</p>
+      <p>09.40 ke 10.10 = 30 menit.</p>
+      <p>Total = 1 jam 30 menit.</p>
+      <p>Jawaban: <span class="hl">B. 1 jam 30 menit</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">8</span><p>Panjang pita 2 m. Pita digunakan sepanjang 65 cm. Berapa panjang pita yang tersisa?</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 125 cm</button>
+      <button class="opt" data-correct="true">B. 135 cm</button>
+      <button class="opt">C. 145 cm</button>
+      <button class="opt">D. 165 cm</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ubah ke cm: 2 m = 200 cm.</p>
+      <p>Sisa = 200 − 65 = 135 cm.</p>
+      <p>Jawaban: <span class="hl">B. 135 cm</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- RINGKASAN -->
+<!-- ============================================================= -->
+<section class="panel" id="ringkasan">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#ffedd5,#f97316);">🏆</div>
+    <div>
+      <h2>Checklist Siap TKA</h2>
+      <p class="sub">Centang jika kamu sudah menguasai keterampilan ini.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label green">✅ Evaluasi Diri</div>
+    <div id="checklist">
+      <label class="check"><input type="checkbox"><span>Saya bisa menemukan informasi yang diketahui dan ditanyakan.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa memilih operasi hitung yang sesuai.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa menyelesaikan soal cerita secara bertahap.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa memeriksa satuan dan kewajaran jawaban.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa menemukan pola bilangan sederhana.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa menggabungkan beberapa konsep matematika.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa membedakan informasi penting dan tidak diperlukan.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa memeriksa setiap pernyataan berdasarkan data.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa mengerjakan soal dengan lebih dari satu jawaban benar.</span></label>
+      <label class="check"><input type="checkbox"><span>Saya bisa mengatur waktu dan memeriksa kembali jawaban.</span></label>
+    </div>
+    <div style="margin-top:16px;text-align:center;">
+      <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1.5rem;color:var(--primary-d);">
+        <span id="checkCount">0</span> dari 10
+      </div>
+      <p style="margin:4px 0 0;color:var(--muted);font-size:.88rem;font-weight:600;">Keterampilan ditandai siap</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">💌</span>
+    <p><b>Pesan untuk Siswa:</b><br>Soal matematika tidak selalu harus diselesaikan dengan cara yang panjang. Pahami masalahnya, pilih cara yang tepat, hitung dengan teliti, dan pastikan jawaban benar-benar sesuai dengan pertanyaan. Kamu pasti bisa! 💪</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Modul Belajar Interaktif — TKA Matematika SD/MI · Bagian IV: Penalaran & Strategi 🧠💡🎯
+</footer>
+
+<script>
+(function () {
+  /* ---------- TABS ---------- */
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const target = document.getElementById(tab.dataset.target);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  /* ---------- TOTAL SOAL ---------- */
+  const totalQuiz = document.querySelectorAll('.quiz').length;
+  const totalEl = document.getElementById('total');
+  if (totalEl) totalEl.textContent = totalQuiz;
+
+  const scoreEl = document.getElementById('score');
+  const barEl = document.getElementById('bar');
+  let score = 0;
+
+  function updateScore() {
+    if (scoreEl) scoreEl.textContent = score;
+    if (barEl) barEl.style.width = (totalQuiz ? (score / totalQuiz) * 100 : 0) + '%';
+  }
+  updateScore();
+
+  /* ---------- KLIK OPSI ---------- */
+  document.addEventListener('click', function (e) {
+    /* jawaban pilihan ganda */
+    const opt = e.target.closest('.opt');
+    if (opt) {
+      const quiz = opt.closest('.quiz');
+      if (!quiz || quiz.dataset.done === '1') return;
+
+      quiz.dataset.done = '1';
+      quiz.classList.add('answered');
+
+      const isCorrect = opt.dataset.correct === 'true';
+
+      quiz.querySelectorAll('.opt').forEach(o => {
+        if (o.dataset.correct === 'true') o.classList.add('correct');
+      });
+      if (!isCorrect) opt.classList.add('wrong');
+
+      /* feedback */
+      let fb = quiz.querySelector('.feedback');
+      if (!fb) {
+        fb = document.createElement('div');
+        fb.className = 'feedback';
+        const optsBox = quiz.querySelector('.options');
+        optsBox.insertAdjacentElement('afterend', fb);
+      }
+      fb.classList.add('show', isCorrect ? 'ok' : 'no');
+      fb.textContent = isCorrect
+        ? '🎉 Hebat! Jawabanmu benar.'
+        : '💪 Belum tepat. Lihat pembahasannya, ya!';
+
+      if (isCorrect) {
+        score++;
+        updateScore();
+        if (scoreEl) {
+          scoreEl.classList.add('pulse');
+          setTimeout(() => scoreEl.classList.remove('pulse'), 520);
+        }
+      }
+      return;
+    }
+
+    /* tombol lihat jawaban */
+    const btn = e.target.closest('.btn-toggle');
+    if (btn) {
+      const card = btn.parentElement;
+      const ans = card.querySelector('.answer');
+      if (!ans) return;
+
+      const isOpen = ans.classList.toggle('show');
+      btn.classList.toggle('open', isOpen);
+      btn.textContent = isOpen ? 'Sembunyikan Jawaban 🙈' : 'Lihat Jawaban 👀';
+    }
+  });
+
+  /* ---------- CHECKLIST ---------- */
+  const boxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+  const checkCount = document.getElementById('checkCount');
+  boxes.forEach(b => {
+    b.addEventListener('change', () => {
+      const n = document.querySelectorAll('#checklist input:checked').length;
+      if (checkCount) checkCount.textContent = n;
+    });
+  });
+})();
+</script>
+</body>
+</html>
