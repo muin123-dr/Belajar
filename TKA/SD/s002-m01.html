@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Samudra Bilangan - TKA Matematika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Tema Baru: Samudra (Ocean/Teal) */
+    --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #ccfbf1 100%);
+    --ink: #0f172a;
+    --muted: #64748b;
+    --primary: #0d9488; /* Teal */
+    --primary-hover: #0f766e;
+    --success: #10b981; /* Emerald */
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --card: #ffffff;
+    --shadow: 0 12px 30px rgba(13, 148, 136, 0.15);
+    --border-radius: 28px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  h1, h2, h3, .btn, .opt { font-family: 'Baloo 2', sans-serif; }
+  
+  /* Container Baru */
+  .app-container {
+    background: var(--card);
+    width: 100%;
+    max-width: 700px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+    border: 4px solid #ffffff;
+  }
+
+  /* Screens */
+  .screen { display: none; padding: 35px; }
+  .screen.active { display: block; animation: slideUp 0.4s ease; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Start Screen */
+  #start-screen { text-align: center; }
+  .hero-icon { font-size: 4.5rem; margin-bottom: 10px; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  #start-screen h1 { font-size: 2.2rem; color: var(--primary); margin: 0 0 10px; }
+  #start-screen p { color: var(--muted); font-size: 1.05rem; margin-bottom: 20px; }
+  .info-box {
+    background: #f0fdfa; border: 2px dashed #5eead4; border-radius: 16px;
+    padding: 16px; text-align: left; margin-bottom: 24px; color: #134e4a;
+  }
+  .info-box li { margin-bottom: 8px; font-size: 0.95rem; }
+
+  /* Buttons */
+  .btn {
+    background: var(--primary); color: white; border: none;
+    padding: 16px 28px; border-radius: 16px; font-size: 1.1rem; font-weight: 700;
+    cursor: pointer; transition: 0.3s; width: 100%;
+    box-shadow: 0 4px 0 var(--primary-hover);
+  }
+  .btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
+  .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: none; }
+  .btn:disabled { background: #cbd5e1; cursor: not-allowed; color: #94a3b8; box-shadow: 0 4px 0 #94a3b8; }
+  .btn-next { background: var(--success); box-shadow: 0 4px 0 #047857; margin-top: 15px; display: none; }
+  .btn-next:hover { background: #059669; }
+
+  /* Quiz Screen */
+  .quiz-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f1f5f9;
+  }
+  .progress-text { font-weight: 800; color: var(--primary); font-size: 1.1rem; font-family:'Baloo 2', sans-serif;}
+  .progress-bar-container { height: 10px; background: #e2e8f0; border-radius: 6px; width: 100%; margin-top: 10px; overflow: hidden;}
+  .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; border-radius: 6px;}
+  
+  .question-text { font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; line-height: 1.6; }
+  
+  .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .opt {
+    background: #f8fafc; border: 2px solid #e2e8f0; padding: 14px 20px;
+    border-radius: 14px; font-size: 1rem; font-weight: 700; color: var(--ink);
+    cursor: pointer; transition: 0.2s; text-align: left; display: flex; align-items: center;
+  }
+  .opt:hover:not(.disabled) { border-color: var(--primary); background: #f0fdfa; }
+  .opt.selected { border-color: var(--primary); background: #f0fdfa; box-shadow: 0 0 0 2px var(--primary); }
+  .opt.correct { border-color: var(--success); background: #ecfdf5; color: #065f46; box-shadow: 0 0 0 2px var(--success); }
+  .opt.wrong { border-color: var(--danger); background: #fef2f2; color: #991b1b; box-shadow: 0 0 0 2px var(--danger); }
+  .opt.disabled { cursor: default; opacity: 0.8; }
+  .opt-prefix {
+    width: 32px; height: 32px; border-radius: 8px; background: #e2e8f0;
+    display: inline-flex; justify-content: center; align-items: center;
+    margin-right: 14px; font-size: 0.95rem; color: #475569;
+  }
+  .opt.selected .opt-prefix { background: var(--primary); color: white; }
+  .opt.correct .opt-prefix { background: var(--success); color: white; }
+  .opt.wrong .opt-prefix { background: var(--danger); color: white; }
+
+  .explanation-box {
+    display: none; background: #fffbeb; border-left: 6px solid var(--warning);
+    padding: 18px; border-radius: 12px; margin-bottom: 15px; font-size: 0.95rem;
+    line-height: 1.7; animation: slideUp 0.3s ease;
+  }
+
+  /* End Screen */
+  #end-screen { text-align: center; }
+  .score-circle {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 20px;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 3rem; font-weight: 800; color: white; font-family: 'Baloo 2', sans-serif;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    border: 6px solid rgba(255,255,255,0.5);
+  }
+  .score-message { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; color: var(--primary); }
+  .score-sub { color: var(--muted); margin-bottom: 25px; font-size: 1.05rem;}
+
+  @media (max-width: 480px) {
+    .screen { padding: 20px; }
+    .question-text { font-size: 1.05rem; }
+    .opt { padding: 12px 15px; font-size: 0.95rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- START SCREEN -->
+  <div id="start-screen" class="screen active">
+    <div class="hero-icon">🌊🐠</div>
+    <h1>Samudra Bilangan</h1>
+    <p>Latihan TKA Matematika (Set Baru - 50 Soal)</p>
+    <div class="info-box">
+      <ul>
+        <li>📝 Terdapat <b>50 soal</b> pilihan ganda baru.</li>
+        <li>🖱️ Pilih jawabanmu, lalu klik <b>"Kunci & Penjelasan"</b>.</li>
+        <li>💡 Penjelasan disusun rapi baris per baris.</li>
+        <li>🏆 Dapatkan skor tertinggi dan raih gelar Juara!</li>
+      </ul>
+    </div>
+    <button class="btn" onclick="startQuiz()">Mulai Petualangan 🌊</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen" class="screen">
+    <div class="quiz-header">
+      <div class="progress-text" id="q-progress">Soal 1 dari 50</div>
+      <div class="progress-bar-container"><div class="progress-bar" id="q-bar"></div></div>
+    </div>
+    
+    <div class="question-text" id="q-text">Teks soal...</div>
+    
+    <div class="options" id="q-options">
+      <!-- Options injected via JS -->
+    </div>
+
+    <div class="explanation-box" id="explanation">
+      <b>💡 Pembahasan:</b><br>
+      <div id="exp-text" style="margin-top: 10px;"></div>
+    </div>
+
+    <button class="btn" id="btn-check" onclick="checkAnswer()" disabled>Kunci & Penjelasan</button>
+    <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">Soal Berikutnya ➔</button>
+  </div>
+
+  <!-- END SCREEN -->
+  <div id="end-screen" class="screen">
+    <div class="hero-icon" id="end-icon">🏆</div>
+    <h1>Selesai!</h1>
+    <div class="score-circle" id="score-circle">0</div>
+    <div class="score-message" id="score-message">Pesan</div>
+    <div class="score-sub" id="score-sub">Kamu menjawab X dari 50 soal dengan benar.</div>
+    <button class="btn" onclick="restartQuiz()">Ulangi Latihan 🔄</button>
+  </div>
+
+</div>
+
+<script>
+  // DATA 50 SOAL BARU (Materi Bilangan)
+  const questions = [
+    // A. Bilangan Cacah, Nilai Tempat, dan Urutan
+    {
+      q: "Angka 8 pada bilangan 483.721 menempati nilai tempat ....",
+      options: ["A. puluh ribuan", "B. ratus ribuan", "C. ribuan", "D. ratusan"],
+      answer: 0,
+      exp: "Bilangan 483.721 dibaca:<br>4 = ratus ribuan<br>8 = puluh ribuan<br>3 = ribuan<br>7 = ratusan<br><br>Jadi, angka 8 menempati nilai tempat puluh ribuan."
+    },
+    {
+      q: "Bilangan yang terdiri atas 3 ratus ribuan, 5 puluh ribuan, 2 ribuan, 9 ratusan, 0 puluhan, dan 4 satuan adalah ....",
+      options: ["A. 352.904", "B. 352.940", "C. 325.904", "D. 352.094"],
+      answer: 0,
+      exp: "3 ratus ribuan = 300.000<br>5 puluh ribuan = 50.000<br>2 ribuan = 2.000<br>9 ratusan = 900<br>0 puluhan = 0<br>4 satuan = 4<br><br>Jumlahkan: 300.000 + 50.000 + 2.000 + 900 + 0 + 4 = 352.904."
+    },
+    {
+      q: "Bilangan terkecil dari pilihan berikut adalah ....",
+      options: ["A. 215.678", "B. 215.876", "C. 251.678", "D. 215.687"],
+      answer: 0,
+      exp: "Bandingkan angka ratus ribuan dan puluh ribuan terlebih dahulu.<br>Pilihan C (251.xxx) lebih besar.<br><br>Sekarang bandingkan 215.678, 215.876, dan 215.687.<br>Lihat angka ratusannya:<br>215.678 (600)<br>215.687 (600)<br>215.876 (800)<br><br>Antara 215.678 dan 215.687, angka 215.678 lebih kecil karena puluhannya 7 (lebih kecil dari 8). Jadi, yang terkecil adalah 215.678."
+    },
+    {
+      q: "Urutan bilangan dari yang terbesar ke terkecil adalah ....",
+      options: ["A. 45.120, 45.210, 45.012, 45.102", "B. 45.210, 45.120, 45.102, 45.012", "C. 45.012, 45.102, 45.120, 45.210", "D. 45.210, 45.102, 45.120, 45.012"],
+      answer: 1,
+      exp: "Perhatikan angka ratusan dan puluhan:<br>45.210 (paling besar)<br>45.120<br>45.102<br>45.012 (paling kecil)<br><br>Urutan dari terbesar: 45.210, 45.120, 45.102, 45.012."
+    },
+    {
+      q: "Bilangan 64.327 jika dibulatkan ke ribuan terdekat menjadi ....",
+      options: ["A. 64.000", "B. 64.300", "C. 65.000", "D. 60.000"],
+      answer: 0,
+      exp: "Perhatikan angka ratusan pada 64.327, yaitu 3.<br><br>Karena 3 < 5, maka pembulatan dilakukan ke bawah (tetap).<br><br>Jadi, 64.327 dibulatkan menjadi 64.000."
+    },
+    {
+      q: "Tanda perbandingan yang tepat untuk 412.509 ... 412.590 adalah ....",
+      options: ["A. >", "B. <", "C. =", "D. ≥"],
+      answer: 1,
+      exp: "412.509 dan 412.590.<br>Angka ratus ribuan, puluh ribuan, ribuan, dan ratusan sama.<br><br>Bandingkan angka puluhan: 0 < 9.<br><br>Jadi, 412.509 < 412.590."
+    },
+    
+    // B. Operasi Hitung
+    {
+      q: "Hasil dari 56.892 + 34.759 adalah ....",
+      options: ["A. 91.651", "B. 90.651", "C. 91.751", "D. 92.651"],
+      answer: 0,
+      exp: "Susun bersusun:<br>2+9 = 11 (tulis 1, simpan 1)<br>9+5+1 = 15 (tulis 5, simpan 1)<br>8+7+1 = 16 (tulis 6, simpan 1)<br>6+4+1 = 11 (tulis 1, simpan 1)<br>5+3+1 = 9<br><br>Hasilnya 91.651."
+    },
+    {
+      q: "Hasil dari 80.000 – 24.568 adalah ....",
+      options: ["A. 55.432", "B. 56.432", "C. 55.532", "D. 65.432"],
+      answer: 0,
+      exp: "80.000 - 24.568 = 55.432.<br><br>Lakukan peminjaman berurutan dari angka 8.<br>10 - 8 = 2<br>9 - 6 = 3<br>9 - 5 = 4<br>9 - 4 = 5<br>7 - 2 = 5."
+    },
+    {
+      q: "Hasil dari 315 × 24 adalah ....",
+      options: ["A. 7.560", "B. 7.460", "C. 6.560", "D. 8.560"],
+      answer: 0,
+      exp: "315 × 24 = (315 × 20) + (315 × 4)<br>= 6.300 + 1.260<br>= 7.560."
+    },
+    {
+      q: "Hasil dari 9.184 ÷ 32 adalah ....",
+      options: ["A. 287", "B. 297", "C. 307", "D. 317"],
+      answer: 0,
+      exp: "9.184 ÷ 32 = 287.<br><br>Pembuktian: 287 × 32<br>= 287 × 30 + 287 × 2<br>= 8.610 + 574<br>= 9.184."
+    },
+    {
+      q: "Hasil dari 150 + 35 × 12 adalah ....",
+      options: ["A. 2.220", "B. 570", "C. 1.850", "D. 470"],
+      answer: 1,
+      exp: "Kerjakan perkalian terlebih dahulu:<br>35 × 12 = 420.<br><br>Kemudian tambahkan:<br>150 + 420 = 570."
+    },
+    {
+      q: "Hasil dari (650 – 250) ÷ 8 + 15 adalah ....",
+      options: ["A. 65", "B. 75", "C. 85", "D. 95"],
+      answer: 0,
+      exp: "Kerjakan dalam kurung:<br>650 - 250 = 400.<br><br>Lalu pembagian:<br>400 ÷ 8 = 50.<br><br>Terakhir penjumlahan:<br>50 + 15 = 65."
+    },
+    {
+      q: "Hasil dari 45 × 15 × 2 adalah ....",
+      options: ["A. 1.350", "B. 1.250", "C. 1.150", "D. 1.450"],
+      answer: 0,
+      exp: "Gunakan sifat asosiatif (kelompokkan yang mudah):<br>15 × 2 = 30.<br><br>Lalu 45 × 30 = 1.350."
+    },
+    {
+      q: "Hasil dari 6.000 – 35 × 150 adalah ....",
+      options: ["A. 750", "B. 850", "C. 950", "D. 1.050"],
+      answer: 0,
+      exp: "Kerjakan perkalian dulu:<br>35 × 150 = 5.250.<br><br>Lalu kurangkan:<br>6.000 - 5.250 = 750."
+    },
+    
+    // C. Faktor, Kelipatan, FPB, KPK
+    {
+      q: "Bilangan berikut yang merupakan faktor dari 48 adalah ....",
+      options: ["A. 5", "B. 9", "C. 12", "D. 15"],
+      answer: 2,
+      exp: "Faktor adalah angka yang dapat membagi habis.<br><br>48 ÷ 12 = 4 (habis).<br><br>Sedangkan 48 tidak habis dibagi 5, 9, maupun 15."
+    },
+    {
+      q: "Kelipatan 12 yang terletak antara 50 dan 80 adalah ....",
+      options: ["A. 52, 64, 76", "B. 60, 72", "C. 54, 66, 78", "D. 50, 62, 74"],
+      answer: 1,
+      exp: "Kelipatan 12: 12, 24, 36, 48, 60, 72, 84...<br><br>Yang berada di antara 50 dan 80 adalah 60 dan 72."
+    },
+    {
+      q: "FPB dari 36 dan 48 adalah ....",
+      options: ["A. 6", "B. 8", "C. 12", "D. 16"],
+      answer: 2,
+      exp: "Faktorisasi prima:<br>36 = 2² × 3²<br>48 = 2⁴ × 3<br><br>FPB diambil dari faktor yang sama dengan pangkat terkecil:<br>2² × 3 = 4 × 3 = 12."
+    },
+    {
+      q: "KPK dari 15 dan 20 adalah ....",
+      options: ["A. 30", "B. 45", "C. 60", "D. 75"],
+      answer: 2,
+      exp: "Faktorisasi prima:<br>15 = 3 × 5<br>20 = 2² × 5<br><br>KPK diambil dari semua faktor dengan pangkat terbesar:<br>2² × 3 × 5 = 4 × 3 × 5 = 60."
+    },
+    {
+      q: "Toko A mengirim barang setiap 4 hari sekali, toko B setiap 6 hari sekali, dan toko C setiap 8 hari sekali. Jika hari ini ketiganya mengirim barang bersamaan, mereka akan mengirim bersamaan lagi setelah ... hari.",
+      options: ["A. 12", "B. 24", "C. 36", "D. 48"],
+      answer: 1,
+      exp: "Ini adalah soal KPK (waktu bertemu kembali).<br><br>Cari KPK dari 4, 6, dan 8:<br>4 = 2²<br>6 = 2 × 3<br>8 = 2³<br><br>KPK = 2³ × 3 = 8 × 3 = 24.<br><br>Jadi, mereka akan bertemu lagi setelah 24 hari."
+    },
+    {
+      q: "Ibu memiliki 45 kue bolu dan 60 kue lapis. Kue-kue tersebut akan dimasukkan ke dalam kotak dengan jumlah yang sama rata dan tidak ada yang tersisa. Berapa kotak terbanyak yang dibutuhkan Ibu?",
+      options: ["A. 5 kotak", "B. 10 kotak", "C. 15 kotak", "D. 20 kotak"],
+      answer: 2,
+      exp: "Mencari kotak terbanyak berarti mencari FPB.<br><br>FPB dari 45 dan 60:<br>45 = 3² × 5<br>60 = 2² × 3 × 5<br><br>FPB = 3 × 5 = 15.<br><br>Jadi, Ibu membutuhkan 15 kotak."
+    },
+    
+    // D. Pecahan
+    {
+      q: "Pecahan yang senilai dengan 2/5 adalah ....",
+      options: ["A. 4/10", "B. 3/10", "C. 4/5", "D. 2/10"],
+      answer: 0,
+      exp: "Kalikan pembilang dan penyebut dengan angka yang sama.<br><br>2/5 = (2×2)/(5×2) = 4/10."
+    },
+    {
+      q: "Tanda perbandingan yang tepat untuk 2/3 ... 3/5 adalah ....",
+      options: ["A. >", "B. <", "C. =", "D. ≤"],
+      answer: 0,
+      exp: "Samakan penyebut dengan KPK (15):<br>2/3 = 10/15<br>3/5 = 9/15<br><br>Karena 10 > 9, maka 2/3 > 3/5."
+    },
+    {
+      q: "Urutan pecahan dari yang terkecil adalah ....",
+      options: ["A. 2/5, 1/2, 3/4", "B. 1/2, 2/5, 3/4", "C. 3/4, 2/5, 1/2", "D. 2/5, 3/4, 1/2"],
+      answer: 0,
+      exp: "Ubah ke desimal:<br>2/5 = 0,4<br>1/2 = 0,5<br>3/4 = 0,75<br><br>Urutan dari terkecil: 0,4 ; 0,5 ; 0,75 (atau 2/5, 1/2, 3/4)."
+    },
+    {
+      q: "Hasil dari 4/7 + 2/7 adalah ....",
+      options: ["A. 6/14", "B. 6/7", "C. 2/7", "D. 8/7"],
+      answer: 1,
+      exp: "Karena penyebutnya sama, jumlahkan pembilangnya:<br>4 + 2 = 6.<br><br>Hasilnya 6/7."
+    },
+    {
+      q: "Hasil dari 5/6 – 1/4 adalah ....",
+      options: ["A. 4/2", "B. 4/10", "C. 7/12", "D. 3/12"],
+      answer: 2,
+      exp: "Samakan penyebut dengan KPK (12):<br>5/6 = 10/12<br>1/4 = 3/12<br><br>Kurangkan: 10/12 - 3/12 = 7/12."
+    },
+    {
+      q: "Hasil dari 1 1/2 + 2 1/4 adalah ....",
+      options: ["A. 3 1/4", "B. 3 3/4", "C. 4 1/4", "D. 3 1/2"],
+      answer: 1,
+      exp: "Ubah ke pecahan biasa:<br>1 1/2 = 3/2 = 6/4<br>2 1/4 = 9/4<br><br>Jumlahkan: 6/4 + 9/4 = 15/4<br>= 3 3/4."
+    },
+    {
+      q: "Hasil dari 4/5 × 15/8 adalah ....",
+      options: ["A. 1 1/2", "B. 2 1/2", "C. 3/2", "D. 2/3"],
+      answer: 0,
+      exp: "Kalikan langsung:<br>(4 × 15) / (5 × 8) = 60/40<br><br>Sederhanakan: 60/40 = 6/4 = 3/2 = 1 1/2."
+    },
+    {
+      q: "Hasil dari 2/3 ÷ 4/9 adalah ....",
+      options: ["A. 8/27", "B. 1 1/2", "C. 2/9", "D. 3"],
+      answer: 1,
+      exp: "Pembagian pecahan = kalikan dengan kebalikannya:<br>2/3 × 9/4 = (2 × 9) / (3 × 4)<br>= 18/12<br>= 3/2 = 1 1/2."
+    },
+    {
+      q: "Sebuah pizza dipotong menjadi 8 bagian sama besar. Jika Dina memakan 3 bagian, sisa pizza Dina adalah ....",
+      options: ["A. 3/8", "B. 5/8", "C. 4/8", "D. 2/8"],
+      answer: 1,
+      exp: "Total bagian = 8.<br>Dimakan = 3.<br><br>Sisa = 8 - 3 = 5 bagian.<br><br>Pecahan sisanya adalah 5/8."
+    },
+    
+    // E. Desimal dan Persen
+    {
+      q: "Bentuk desimal dari 9/20 adalah ....",
+      options: ["A. 0,09", "B. 0,45", "C. 0,9", "D. 4,5"],
+      answer: 1,
+      exp: "Ubah penyebut menjadi 100:<br>9/20 = (9×5)/(20×5) = 45/100.<br><br>Bentuk desimalnya 0,45."
+    },
+    {
+      q: "Tanda perbandingan yang tepat untuk 0,8 ... 0,75 adalah ....",
+      options: ["A. <", "B. >", "C. =", "D. ≤"],
+      answer: 1,
+      exp: "Tambahkan nol agar sama:<br>0,80 dan 0,75.<br><br>Karena 80 > 75, maka 0,8 > 0,75."
+    },
+    {
+      q: "Hasil dari 3,45 + 2,6 adalah ....",
+      options: ["A. 5,05", "B. 5,55", "C. 6,05", "D. 6,15"],
+      answer: 2,
+      exp: "Susun bersusun:<br>3,45<br>2,60<br>----- +<br>6,05."
+    },
+    {
+      q: "Hasil dari 7,1 – 2,35 adalah ....",
+      options: ["A. 4,75", "B. 4,85", "C. 5,25", "D. 5,35"],
+      answer: 0,
+      exp: "Susun bersusun dengan meminjam:<br>7,10<br>2,35<br>----- -<br>4,75."
+    },
+    {
+      q: "Bentuk pecahan biasa dari 40% adalah ....",
+      options: ["A. 1/4", "B. 2/5", "C. 3/5", "D. 4/5"],
+      answer: 1,
+      exp: "40% = 40/100.<br><br>Sederhanakan dengan dibagi 20:<br>(40÷20)/(100÷20) = 2/5."
+    },
+    {
+      q: "Dari 400 siswa, sebanyak 15% mengikuti ekstrakurikuler pramuka. Banyak siswa yang mengikuti pramuka adalah ....",
+      options: ["A. 40 siswa", "B. 50 siswa", "C. 60 siswa", "D. 70 siswa"],
+      answer: 2,
+      exp: "15% × 400 = (15/100) × 400<br>= 15 × 4<br>= 60 siswa."
+    },
+    {
+      q: "Sebuah sepatu berharga Rp250.000 mendapat diskon 20%. Harga yang harus dibayar adalah ....",
+      options: ["A. Rp200.000", "B. Rp220.000", "C. Rp230.000", "D. Rp240.000"],
+      answer: 0,
+      exp: "Diskon = 20% × 250.000<br>= (20/100) × 250.000<br>= 50.000.<br><br>Harga bayar = 250.000 - 50.000<br>= Rp200.000."
+    },
+    
+    // F. Pola Bilangan & Penalaran
+    {
+      q: "Perhatikan pola berikut: 8, 13, 18, 23, ... Bilangan berikutnya adalah ....",
+      options: ["A. 25", "B. 26", "C. 28", "D. 29"],
+      answer: 2,
+      exp: "Polanya adalah +5 setiap langkah.<br><br>23 + 5 = 28."
+    },
+    {
+      q: "Perhatikan pola berikut: 3, 9, 27, 81, ... Bilangan berikutnya adalah ....",
+      options: ["A. 162", "B. 243", "C. 324", "D. 729"],
+      answer: 1,
+      exp: "Polanya adalah ×3 setiap langkah.<br><br>81 × 3 = 243."
+    },
+    {
+      q: "Sebuah bilangan jika dikalikan 4, kemudian ditambah 5, menghasilkan 29. Bilangan tersebut adalah ....",
+      options: ["A. 6", "B. 7", "C. 8", "D. 9"],
+      answer: 0,
+      exp: "Buat persamaan:<br>(x × 4) + 5 = 29.<br><br>4x = 29 - 5<br>4x = 24<br>x = 24 ÷ 4<br>x = 6."
+    },
+    {
+      q: "Bilangan terkecil yang dapat dibentuk dari angka 4, 0, 7, 2, dan 9 (setiap angka dipakai sekali) adalah ....",
+      options: ["A. 20479", "B. 20497", "C. 24790", "D. 97420"],
+      answer: 0,
+      exp: "Urutkan dari angka terkecil ke terbesar.<br>Namun, angka pertama tidak boleh 0.<br><br>Angka terkecil adalah 2, diikuti 0, 4, 7, 9.<br>Jadi, 20479."
+    },
+    
+    // G. Soal Cerita Terpadu
+    {
+      q: "Pak Budi memiliki 300 butir telur. Sebanyak 120 telur terjual di pasar, dan 75 telur pecah di jalan. Sisa telur Pak Budi adalah ....",
+      options: ["A. 95 butir", "B. 105 butir", "C. 115 butir", "D. 125 butir"],
+      answer: 1,
+      exp: "Sisa = Total awal - terjual - pecah<br>= 300 - 120 - 75<br>= 180 - 75<br>= 105 butir."
+    },
+    {
+      q: "Sebuah pabrik memproduksi 25 kardus susu. Setiap kardus berisi 36 kaleng susu. Semua susu akan didistribusikan ke 15 toko dengan jumlah sama banyak. Berapa kaleng susu yang diterima setiap toko?",
+      options: ["A. 50 kaleng", "B. 60 kaleng", "C. 70 kaleng", "D. 80 kaleng"],
+      answer: 1,
+      exp: "Total susu = 25 × 36 = 900 kaleng.<br><br>Susu per toko = 900 ÷ 15<br>= 60 kaleng."
+    },
+    {
+      q: "Ayah memiliki sebidang tanah seluas 1/3 hektar. Sebanyak 1/6 hektar ditanami jagung. Sisa tanah Ayah yang belum ditanami adalah ....",
+      options: ["A. 1/6 hektar", "B. 1/3 hektar", "C. 1/2 hektar", "D. 2/3 hektar"],
+      answer: 0,
+      exp: "Sisa = 1/3 - 1/6.<br>Samakan penyebut:<br>1/3 = 2/6.<br><br>2/6 - 1/6 = 1/6 hektar."
+    },
+    {
+      q: "Andi memiliki tabungan Rp500.000. Ia menggunakan 30% tabungannya untuk membeli sepatu dan 20% untuk membeli tas. Sisa tabungan Andi adalah ....",
+      options: ["A. Rp200.000", "B. Rp250.000", "C. Rp300.000", "D. Rp350.000"],
+      answer: 1,
+      exp: "Total persentase belanja = 30% + 20% = 50%.<br><br>Sisa persentase = 100% - 50% = 50%.<br><br>Sisa uang = 50% × 500.000<br>= (50/100) × 500.000<br>= Rp250.000."
+    },
+    {
+      q: "Sebanyak 60 pensil dan 90 buku akan dimasukkan ke dalam paket. Setiap paket berisi pensil dan buku dengan jumlah yang sama. Jika jumlah paket dibuat sebanyak mungkin, berapa isi pensil dan buku di setiap paket?",
+      options: ["A. 2 pensil, 3 buku", "B. 3 pensil, 2 buku", "C. 4 pensil, 6 buku", "D. 5 pensil, 7 buku"],
+      answer: 0,
+      exp: "Cari FPB dari 60 dan 90.<br>60 = 2² × 3 × 5<br>90 = 2 × 3² × 5<br><br>FPB = 2 × 3 × 5 = 30 paket.<br><br>Pensil per paket = 60 ÷ 30 = 2.<br>Buku per paket = 90 ÷ 30 = 3.<br><br>Jadi, 2 pensil dan 3 buku."
+    },
+    {
+      q: "Sebuah bilangan dua angka memiliki jumlah angka 9. Jika angka satuannya adalah 5, maka bilangan tersebut adalah ....",
+      options: ["A. 45", "B. 54", "C. 63", "D. 72"],
+      answer: 0,
+      exp: "Misal bilangan itu AB (A puluhan, B satuan).<br>A + B = 9.<br>Diketahui B = 5.<br><br>Maka A + 5 = 9 -> A = 4.<br>Bilangannya adalah 45."
+    },
+    {
+      q: "Harga 1 kg jeruk adalah Rp18.000. Ibu membeli 2 kg jeruk dan membayar dengan uang Rp50.000. Uang kembalian Ibu adalah ....",
+      options: ["A. Rp14.000", "B. Rp16.000", "C. Rp18.000", "D. Rp20.000"],
+      answer: 0,
+      exp: "Total harga = 2 kg × Rp18.000 = Rp36.000.<br><br>Kembalian = Rp50.000 - Rp36.000 = Rp14.000."
+    },
+    {
+      q: "Sebuah bak penampungan air berkapasitas 300 liter. Bak tersebut telah terisi air sebanyak 2/3 bagian. Banyak air yang perlu ditambahkan agar bak penuh adalah ....",
+      options: ["A. 50 liter", "B. 100 liter", "C. 150 liter", "D. 200 liter"],
+      answer: 1,
+      exp: "Air saat ini = 2/3 × 300<br>= 2 × 100 = 200 liter.<br><br>Kekurangan = 300 - 200 = 100 liter."
+    },
+    {
+      q: "Rina membeli 3 1/2 meter pita. Ia menggunakan 1 1/4 meter untuk menghias kado. Sisa pita Rina adalah ....",
+      options: ["A. 2 1/4 meter", "B. 2 1/2 meter", "C. 2 3/4 meter", "D. 3 meter"],
+      answer: 0,
+      exp: "Ubah ke pecahan biasa:<br>3 1/2 = 7/2 = 14/4<br>1 1/4 = 5/4<br><br>Kurangkan: 14/4 - 5/4 = 9/4 = 2 1/4 meter."
+    },
+    {
+      q: "Lampu hijau menyala setiap 5 detik dan lampu kuning menyala setiap 7 detik. Jika saat ini keduanya menyala bersama, berapa detik lagi keduanya akan menyala bersama kembali?",
+      options: ["A. 12 detik", "B. 25 detik", "C. 35 detik", "D. 42 detik"],
+      answer: 2,
+      exp: "Cari KPK dari 5 dan 7.<br><br>Karena 5 dan 7 adalah bilangan prima, KPK-nya adalah 5 × 7 = 35.<br><br>Jadi, keduanya menyala bersama lagi setelah 35 detik."
+    }
+  ];
+
+  let currentQ = 0;
+  let score = 0;
+  let selectedOpt = null;
+  let isAnswered = false;
+
+  const startScreen = document.getElementById('start-screen');
+  const quizScreen = document.getElementById('quiz-screen');
+  const endScreen = document.getElementById('end-screen');
+  
+  const qProgress = document.getElementById('q-progress');
+  const qBar = document.getElementById('q-bar');
+  const qText = document.getElementById('q-text');
+  const qOptions = document.getElementById('q-options');
+  const explanationBox = document.getElementById('explanation');
+  const expText = document.getElementById('exp-text');
+  
+  const btnCheck = document.getElementById('btn-check');
+  const btnNext = document.getElementById('btn-next');
+
+  function startQuiz() {
+    startScreen.classList.remove('active');
+    quizScreen.classList.add('active');
+    currentQ = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    isAnswered = false;
+    selectedOpt = null;
+    
+    // Reset UI
+    btnCheck.disabled = true;
+    btnCheck.style.display = 'block';
+    btnNext.style.display = 'none';
+    explanationBox.style.display = 'none';
+    qOptions.innerHTML = '';
+    
+    // Update Progress
+    qProgress.innerText = `Soal ${currentQ + 1} dari ${questions.length}`;
+    qBar.style.width = `${((currentQ) / questions.length) * 100}%`;
+    
+    const data = questions[currentQ];
+    qText.innerText = data.q;
+    
+    // Render options
+    data.options.forEach((opt, index) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.innerHTML = `<span class="opt-prefix">${String.fromCharCode(65 + index)}</span> ${opt.substring(3)}`;
+      btn.onclick = () => selectOption(btn, index);
+      qOptions.appendChild(btn);
+    });
+  }
+
+  function selectOption(btn, index) {
+    if (isAnswered) return;
+    
+    // Remove selected class from all
+    Array.from(qOptions.children).forEach(b => b.classList.remove('selected'));
+    
+    // Add to clicked
+    btn.classList.add('selected');
+    selectedOpt = index;
+    
+    // Enable check button
+    btnCheck.disabled = false;
+  }
+
+  function checkAnswer() {
+    if (isAnswered || selectedOpt === null) return;
+    isAnswered = true;
+    
+    const data = questions[currentQ];
+    const optionsDOM = qOptions.children;
+    
+    // Disable all options
+    Array.from(optionsDOM).forEach(b => {
+      b.classList.add('disabled');
+      b.classList.remove('selected');
+    });
+    
+    // Highlight correct
+    optionsDOM[data.answer].classList.add('correct');
+    
+    // Highlight wrong if user chose wrong
+    if (selectedOpt !== data.answer) {
+      optionsDOM[selectedOpt].classList.add('wrong');
+    } else {
+      score++;
+    }
+    
+    // Show explanation
+    expText.innerHTML = data.exp;
+    explanationBox.style.display = 'block';
+    
+    // Toggle buttons
+    btnCheck.style.display = 'none';
+    btnNext.style.display = 'block';
+    
+    if (currentQ === questions.length - 1) {
+      btnNext.innerText = 'Lihat Hasil Akhir 🏁';
+    }
+  }
+
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ < questions.length) {
+      loadQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    quizScreen.classList.remove('active');
+    endScreen.classList.add('active');
+    
+    const totalQ = questions.length;
+    const finalScore = Math.round((score / totalQ) * 100);
+    
+    const scoreCircle = document.getElementById('score-circle');
+    const scoreMessage = document.getElementById('score-message');
+    const scoreSub = document.getElementById('score-sub');
+    const endIcon = document.getElementById('end-icon');
+    
+    scoreCircle.innerText = finalScore;
+    scoreSub.innerText = `Kamu menjawab ${score} dari ${totalQ} soal dengan benar.`;
+    
+    // Category logic
+    if (finalScore >= 91) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      scoreMessage.innerText = "Luar Biasa! Kamu siap jadi juara TKA! 🌟";
+      endIcon.innerText = "🏆";
+    } else if (finalScore >= 81) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #0ea5e9, #0284c7)';
+      scoreMessage.innerText = "Hebat sekali! Sedikit lagi menuju sempurna! 🚀";
+      endIcon.innerText = "🎉";
+    } else if (finalScore >= 71) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #8b5cf6, #6d28d9)';
+      scoreMessage.innerText = "Bagus! Terus berlatih dan teliti ya! 💪";
+      endIcon.innerText = "⭐";
+    } else if (finalScore >= 61) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+      scoreMessage.innerText = "Cukup baik! Yuk pelajari lagi bagian yang masih salah. 📚";
+      endIcon.innerText = "📖";
+    } else {
+      scoreCircle.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+      scoreMessage.innerText = "Jangan menyerah! Ayo ulangi dan pelajari konsep dasarnya. 💡";
+      endIcon.innerText = "💪";
+    }
+  }
+
+  function restartQuiz() {
+    endScreen.classList.remove('active');
+    startScreen.classList.add('active');
+  }
+</script>
+</body>
+</html>
