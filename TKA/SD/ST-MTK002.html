@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tryout TKA Matematika SD/MI - Simulasi Terpadu</title>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --primary-light: #a29bfe;
+            --secondary: #fd79a8;
+            --success: #00b894;
+            --success-bg: #e0f7f1;
+            --danger: #e17055;
+            --danger-bg: #fdf0ed;
+            --warning: #fdcb6e;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Comic Sans MS', 'Arial Rounded MT Bold', system-ui, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f8f9fa 30%, #fce4ec 60%, #e8eaf6 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* Ornamen Matematika Melayang */
+        .math-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .math-symbol {
+            position: absolute;
+            font-size: 2rem;
+            font-weight: bold;
+            opacity: 0.15;
+            animation: float-symbol 15s linear infinite;
+        }
+        .math-symbol:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; color: #6C5CE7; }
+        .math-symbol:nth-child(2) { top: 20%; left: 80%; animation-delay: 2s; color: #fd79a8; }
+        .math-symbol:nth-child(3) { top: 60%; left: 15%; animation-delay: 4s; color: #00b894; }
+        .math-symbol:nth-child(4) { top: 70%; left: 75%; animation-delay: 1s; color: #fdcb6e; }
+        .math-symbol:nth-child(5) { top: 40%; left: 50%; animation-delay: 3s; color: #e17055; }
+        .math-symbol:nth-child(6) { top: 85%; left: 40%; animation-delay: 5s; color: #a29bfe; }
+        @keyframes float-symbol {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(20deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .quiz-header {
+            background: linear-gradient(135deg, #00cec9 0%, #6C5CE7 50%, #fd79a8 100%);
+            border-radius: var(--radius);
+            padding: 25px 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            animation: float-bg 8s ease-in-out infinite;
+        }
+        @keyframes float-bg {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+        .quiz-header h1 {
+            font-size: 1.6rem;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .quiz-header .subtitle {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+        .header-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+            animation: bounce-emoji 2s ease-in-out infinite;
+        }
+        @keyframes bounce-emoji {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text);
+            flex: 1;
+            justify-content: center;
+            min-width: 80px;
+            border: 2px solid var(--border);
+        }
+        .stat-item .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .progress-container {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 10px 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00cec9, #6C5CE7, #fd79a8);
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        .question-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 25px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 2px solid var(--border);
+            animation: fadeInUp 0.35s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #00cec9, #6C5CE7);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+        }
+        .question-tag {
+            display: inline-block;
+            background: #fdcb6e;
+            color: #2d3436;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+            margin-left: 6px;
+        }
+        .reading-text {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary-light);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #4a5568;
+            line-height: 1.7;
+            max-height: 250px;
+            overflow-y: auto;
+            position: relative;
+            white-space: pre-line;
+        }
+        .reading-text::before {
+            content: '📖';
+            position: absolute;
+            top: -10px;
+            left: -8px;
+            font-size: 1.2rem;
+            font-style: normal;
+        }
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-radius: var(--radius-sm);
+            border: 3px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.25s ease;
+            color: var(--text);
+            font-family: inherit;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: #f8f0ff;
+            transform: translateX(3px);
+        }
+        .option-btn .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: #f1f2f6;
+            color: var(--text);
+            transition: all 0.25s;
+        }
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: #f0edff;
+        }
+        .option-btn.selected .option-letter {
+            background: var(--primary);
+            color: #fff;
+        }
+        .option-btn.correct-reveal {
+            border-color: var(--success);
+            background: var(--success-bg);
+        }
+        .option-btn.correct-reveal .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+        .option-btn.wrong-reveal {
+            border-color: var(--danger);
+            background: var(--danger-bg);
+        }
+        .option-btn.wrong-reveal .option-letter {
+            background: var(--danger);
+            color: #fff;
+        }
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .bs-statement {
+            background: #fafafa;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 10px;
+        }
+        .bs-statement p {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .bs-options {
+            display: flex;
+            gap: 10px;
+        }
+        .bs-btn {
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.25s;
+            font-family: inherit;
+        }
+        .bs-btn.selected {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .bs-btn.correct-reveal {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+        .bs-btn.wrong-reveal {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+        .bs-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .check-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            background: linear-gradient(135deg, #00cec9, #6C5CE7);
+            color: #fff;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+        }
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 15px 18px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            background: var(--success-bg);
+            border: 3px solid var(--success);
+            color: #008f6b;
+        }
+        .feedback.wrong {
+            background: var(--danger-bg);
+            border: 3px solid var(--danger);
+            color: #c0392b;
+        }
+        .answer-key {
+            margin-top: 10px;
+            padding: 15px 18px;
+            background: #fff8e1;
+            border: 3px dashed #fdcb6e;
+            border-radius: var(--radius-sm);
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+        .answer-key.show {
+            display: block;
+        }
+        .answer-key .ak-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #6d4c41;
+            margin-bottom: 6px;
+        }
+        .answer-key .ak-content {
+            font-size: 0.88rem;
+            color: #4a5568;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+        .answer-key .ak-content strong {
+            color: var(--primary);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 11px 22px;
+            border-radius: 50px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn.prev {
+            background: #f1f2f6;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+        .nav-btn.next {
+            background: linear-gradient(135deg, #00cec9, #6C5CE7);
+            color: #fff;
+            border: 2px solid var(--primary);
+            display: none;
+        }
+        .nav-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .result-screen {
+            text-align: center;
+            padding: 30px 20px;
+            animation: fadeInUp 0.5s ease;
+        }
+        .result-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce-emoji 1.5s ease-in-out infinite;
+        }
+        .result-score {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .result-message {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .retry-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #00cec9, #6C5CE7);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .retry-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+        }
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+            display: none;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ==================== ANIMASI JUARA ==================== */
+        .champion-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, rgba(108, 92, 231, 0.96) 0%, rgba(24, 12, 60, 0.98) 70%);
+            z-index: 9990;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            overflow: hidden;
+        }
+        .champion-overlay.show { opacity: 1; }
+        .champion-overlay.hide { opacity: 0; }
+        .champion-rays {
+            position: absolute;
+            width: 200vmax;
+            height: 200vmax;
+            border-radius: 50%;
+            background: repeating-conic-gradient(from 0deg,
+                rgba(255, 255, 255, 0.16) 0deg 7deg,
+                transparent 7deg 15deg);
+            animation: spin-rays 14s linear infinite;
+        }
+        @keyframes spin-rays {
+            to { transform: rotate(360deg); }
+        }
+        .champion-glow {
+            position: absolute;
+            width: 70vmin;
+            height: 70vmin;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(253, 203, 110, 0.55) 0%, transparent 65%);
+            animation: glow-pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+        .champion-trophy {
+            font-size: 7rem;
+            line-height: 1;
+            z-index: 2;
+            filter: drop-shadow(0 0 28px rgba(253, 203, 110, 0.95));
+            animation: trophy-pop 0.9s cubic-bezier(0.2, 1.6, 0.4, 1) both,
+                       trophy-float 2s ease-in-out 0.9s infinite;
+        }
+        @keyframes trophy-pop {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            70% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        @keyframes trophy-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-16px) scale(1.06); }
+        }
+        .champion-text {
+            margin-top: 14px;
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #fdcb6e;
+            text-shadow: 0 0 22px rgba(253, 203, 110, 0.9), 0 5px 0 rgba(0, 0, 0, 0.25);
+            z-index: 2;
+            text-align: center;
+            animation: text-pop 0.7s 0.45s both;
+        }
+        @keyframes text-pop {
+            from { transform: scale(0.2); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .champion-sub {
+            margin-top: 10px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: center;
+            padding: 0 24px;
+            z-index: 2;
+            animation: fadeInUp 0.6s 1s both;
+        }
+        .champion-stars {
+            margin-top: 16px;
+            font-size: 1.8rem;
+            z-index: 2;
+            letter-spacing: 8px;
+            animation: fadeInUp 0.6s 1.2s both;
+        }
+
+        /* ==================== HALAMAN HADIAH ==================== */
+        .prize-screen {
+            margin-top: 22px;
+            padding: 26px 18px 22px;
+            border-radius: var(--radius);
+            background: linear-gradient(160deg, #ffffff 0%, #fdf6ff 45%, #fff8e1 100%);
+            border: 3px solid #fdcb6e;
+            box-shadow: 0 14px 40px rgba(108, 92, 231, 0.22);
+            animation: prize-in 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes prize-in {
+            0% { transform: scale(0.75) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .prize-screen::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -60%;
+            width: 220%;
+            height: 220%;
+            background: conic-gradient(from 0deg, transparent 0deg 12deg, rgba(253, 203, 110, 0.16) 12deg 18deg);
+            animation: spin-rays 20s linear infinite;
+            pointer-events: none;
+        }
+        .prize-logo {
+            width: 132px;
+            height: 132px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            animation: bounce-emoji 2.2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 22px rgba(108, 92, 231, 0.35));
+        }
+        .prize-title {
+            position: relative;
+            z-index: 1;
+            margin: 12px 0 6px;
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+            color: #2d3436;
+            text-transform: uppercase;
+        }
+        .prize-title .prize-highlight {
+            display: inline-block;
+            font-size: 2.4rem;
+            background: linear-gradient(90deg, #6C5CE7, #fd79a8, #e17055);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+            animation: bounce-emoji 1.8s ease-in-out infinite;
+        }
+        .prize-note {
+            position: relative;
+            z-index: 1;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .claim-btn {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            padding: 17px 42px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #fff;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45);
+            margin-top: 18px;
+            animation: pulse-claim 1.7s ease-in-out infinite;
+        }
+        @keyframes pulse-claim {
+            0%, 100% { transform: scale(1); box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45); }
+            50% { transform: scale(1.06); box-shadow: 0 16px 36px rgba(37, 211, 102, 0.65); }
+        }
+        .claim-btn:hover {
+            background: linear-gradient(135deg, #2ee06f, #17a085);
+        }
+        .claim-btn:active {
+            transform: scale(0.97);
+        }
+        .retry-secondary {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin: 14px auto 0;
+            padding: 12px 26px;
+            font-size: 0.9rem;
+            background: #f1f2f6;
+            color: var(--text);
+            border: 2px solid var(--border);
+            box-shadow: none;
+        }
+        .retry-secondary:hover {
+            background: #e9ecef;
+            box-shadow: none;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .quiz-header h1 { font-size: 1.2rem; }
+            .question-card { padding: 18px 14px; }
+            .question-text { font-size: 0.95rem; }
+            .option-btn { padding: 11px 13px; font-size: 0.88rem; gap: 8px; }
+            .option-btn .option-letter { width: 28px; height: 28px; min-width: 28px; font-size: 0.85rem; }
+            .reading-text { font-size: 0.82rem; padding: 10px 12px; }
+            .check-btn { padding: 12px 16px; font-size: 0.9rem; }
+            .nav-btn { padding: 9px 16px; font-size: 0.82rem; }
+            .stat-item { padding: 6px 10px; font-size: 0.75rem; }
+            .stat-item .stat-value { font-size: 0.95rem; }
+            .champion-trophy { font-size: 5rem; }
+            .champion-text { font-size: 1.5rem; letter-spacing: 2px; }
+            .champion-sub { font-size: 0.88rem; }
+            .prize-title { font-size: 1.05rem; }
+            .prize-title .prize-highlight { font-size: 1.9rem; }
+            .prize-logo { width: 108px; height: 108px; }
+            .claim-btn { padding: 15px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ornamen Latar Belakang Matematika -->
+    <div class="math-bg">
+        <div class="math-symbol">➕</div>
+        <div class="math-symbol">➖</div>
+        <div class="math-symbol">✖️</div>
+        <div class="math-symbol">➗</div>
+        <div class="math-symbol">🔢</div>
+        <div class="math-symbol">📐</div>
+    </div>
+
+    <div class="confetti-container" id="confetti-container"></div>
+    <div class="quiz-container" id="quiz-container">
+        <div class="quiz-header">
+            <span class="header-emoji">🧮🔢🏆</span>
+            <h1>Tryout TKA Matematika SD/MI</h1>
+            <p class="subtitle">Simulasi Terpadu Bagian I - IV • 40 Soal</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">📝 Soal: <span class="stat-value" id="current-q-num">1</span>/40</div>
+            <div class="stat-item">✅ Benar: <span class="stat-value" id="correct-count">0</span></div>
+            <div class="stat-item">❌ Salah: <span class="stat-value" id="wrong-count">0</span></div>
+            <div class="stat-item">⭐ Skor: <span class="stat-value" id="score-val">0</span></div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-label"><span>📊 Progres</span><span id="progress-pct">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <div class="question-card" id="question-card">
+            <span class="question-number" id="q-number">Soal No. 1</span>
+            <span class="question-tag" id="q-tag"></span>
+            <div class="reading-text" id="q-reading" style="display:none;"></div>
+            <div class="question-text" id="q-text"></div>
+            <div class="options-container" id="options-container"></div>
+            <button class="check-btn" id="check-btn" disabled>Cek Jawaban ✅</button>
+            <div class="feedback" id="feedback"></div>
+            <div class="answer-key" id="answer-key"></div>
+            <div class="nav-buttons">
+                <button class="nav-btn prev" id="btn-prev" disabled>⬅️ Sebelumnya</button>
+                <button class="nav-btn next" id="btn-next">Soal Berikutnya ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== KONFIGURASI HADIAH ====================
+        const HADIAH = {
+            logo: 'https://muin123-dr.github.io/Belajar/LOGOstcm.png',
+            nominal: '5.000',
+            waNumber: '6281326380620',
+            waText: '⭐ ALHAMDULALLAH ⭐ \nSaya dapat hadiah 5.000\n\n    - ⭐ -'
+        };
+
+        // ==================== DATA SOAL (40 SOAL) ====================
+        const questions = [
+            // I. Bilangan
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Pak Arman memiliki persediaan 240 kg beras. Pada pagi hari, 3/8 dari persediaan tersebut dijual. Pada siang hari, ia menjual lagi 45 kg. Berapa kilogram beras yang tersisa?',
+                options: ['75 kg', '105 kg', '150 kg', '165 kg'],
+                correct: 1,
+                explanation: 'Beras yang dijual pada pagi hari:\n3/8 × 240 = 90 kg\n\nSisa setelah penjualan pagi:\n240 - 90 = 150 kg\n\nSetelah menjual 45 kg lagi:\n150 - 45 = 105 kg.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Sebuah toko menjual buku komik seharga Rp24.000,00. Harga buku gambar adalah 3/4 harga buku komik, sedangkan harga buku tulis adalah 0,5 kali harga buku komik. Jika toko memberikan diskon 10% untuk setiap buku gambar dan buku tulis, berapa harga kedua buku tersebut setelah diskon?',
+                options: ['Rp28.800,00', 'Rp27.000,00', 'Rp25.200,00', 'Rp21.600,00'],
+                correct: 1,
+                explanation: 'Harga buku gambar:\n3/4 × 24.000 = 18.000\n\nHarga buku tulis:\n0,5 × 24.000 = 12.000\n\nTotal sebelum diskon = 18.000 + 12.000 = 30.000.\n\nSetelah diskon 10%, pembeli membayar 90% dari harga awal:\n90% × 30.000 = 27.000.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Hasil dari 480 ÷ 12 + 25 × 4 - 30 adalah ....',
+                options: ['70', '90', '110', '130'],
+                correct: 2,
+                explanation: 'Kerjakan pembagian dan perkalian terlebih dahulu.\n480 ÷ 12 + 25 × 4 - 30\n= 40 + 100 - 30\n= 110.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Panitia memiliki 72 pensil dan 96 penghapus. Semua barang akan dimasukkan ke dalam paket-paket dengan isi setiap paket sama, tanpa sisa. Setiap paket harus memiliki jumlah paket sebanyak mungkin. Berapa paket yang dapat dibuat?',
+                options: ['12 paket', '18 paket', '24 paket', '36 paket'],
+                correct: 2,
+                explanation: 'Cari FPB dari 72 dan 96.\nFPB(72, 96) = 24.\n\nJadi, dapat dibuat 24 paket.\nSetiap paket berisi:\n- 72 ÷ 24 = 3 pensil\n- 96 ÷ 24 = 4 penghapus.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Tiga lampu berkedip secara berkala. Lampu merah berkedip setiap 6 detik, lampu kuning setiap 8 detik, dan lampu hijau setiap 12 detik. Jika ketiganya berkedip bersama sekarang, setelah berapa detik ketiganya akan berkedip bersama lagi?',
+                options: ['12 detik', '18 detik', '24 detik', '48 detik'],
+                correct: 2,
+                explanation: 'Cari KPK dari 6, 8, dan 12.\nKelipatan 6: 6, 12, 18, 24, ...\nKelipatan 8: 8, 16, 24, ...\nKelipatan 12: 12, 24, ...\n\nKPK = 24.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Manakah bilangan yang nilainya paling besar?',
+                options: ['5/8', '2/3', '65%', '0,7'],
+                correct: 3,
+                explanation: 'Samakan bentuk bilangan agar mudah dibandingkan:\n5/8 = 0,625\n2/3 ≈ 0,667\n65% = 0,65\n0,7 = 0,7\n\nNilai terbesar adalah 0,7.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Sebuah wadah berisi 3 liter jus. Jus tersebut dituangkan sama banyak ke dalam 8 gelas. Berapa liter jus dalam 3 gelas?',
+                options: ['3/8 liter', '9/8 liter', '8/3 liter', '3/5 liter'],
+                correct: 1,
+                explanation: 'Jus untuk setiap gelas:\n3 ÷ 8 = 3/8 liter.\n\nJus untuk 3 gelas:\n3 × 3/8 = 9/8 liter.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Sebuah bilangan terdiri atas tiga angka berbeda. Angka ratusannya 5, angka puluhannya dua kali angka satuannya, dan jumlah ketiga angkanya 11. Bilangan tersebut adalah ....',
+                options: ['524', '542', '563', '581'],
+                correct: 1,
+                explanation: 'Angka ratusan adalah 5. Misalkan angka satuan x, maka angka puluhan 2x.\n5 + 2x + x = 11\n3x = 6 → x = 2.\n\nAngka satuan = 2 dan puluhan = 4.\nBilangannya adalah 542.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Sebuah toko memiliki 360 botol minuman. Sebanyak 35% botol terjual pada pagi hari, lalu 80 botol terjual pada sore hari. Berapa botol yang masih tersisa?',
+                options: ['126 botol', '154 botol', '180 botol', '206 botol'],
+                correct: 1,
+                explanation: 'Botol yang terjual pada pagi hari:\n35% × 360 = 126.\n\nSisa setelah pagi:\n360 - 126 = 234.\n\nSisa setelah penjualan sore:\n234 - 80 = 154.'
+            },
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Perhatikan pola bilangan berikut.\n3, 7, 15, 31, 63, ...\nBilangan berikutnya adalah ....',
+                options: ['95', '111', '126', '127'],
+                correct: 3,
+                explanation: 'Polanya adalah dikali 2, kemudian ditambah 1.\n3 × 2 + 1 = 7\n7 × 2 + 1 = 15\n15 × 2 + 1 = 31\n63 × 2 + 1 = 127.'
+            },
+
+            // II. Geometri dan Pengukuran
+            {
+                type: 'single',
+                tag: '📐 Geometri',
+                question: 'Sebuah bangun datar mempunyai empat sisi sama panjang, dua pasang sisi berhadapan sejajar, dan diagonal yang saling berpotongan tegak lurus. Sudut-sudutnya tidak harus siku-siku. Bangun tersebut adalah ....',
+                options: ['Persegi panjang', 'Jajar genjang', 'Belah ketupat', 'Trapesium'],
+                correct: 2,
+                explanation: 'Belah ketupat memiliki empat sisi sama panjang, dua pasang sisi berhadapan sejajar, dan diagonal yang berpotongan tegak lurus. Sudutnya tidak harus siku-siku.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Geometri',
+                question: 'Sebuah taman berbentuk persegi panjang memiliki panjang 18 m dan lebar 12 m. Di sekeliling taman akan dipasang pagar, tetapi disisakan pintu selebar 2 m tanpa pagar. Berapa panjang pagar yang diperlukan?',
+                options: ['30 m', '58 m', '60 m', '216 m'],
+                correct: 1,
+                explanation: 'Keliling taman:\n2 × (18 + 12) = 60 m.\n\nKarena pintu selebar 2 m tidak dipasangi pagar:\n60 - 2 = 58 m.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Geometri',
+                question: 'Sebuah lantai berbentuk persegi panjang memiliki panjang 8 m dan lebar 6 m. Lantai akan ditutup dengan ubin persegi yang masing-masing memiliki luas 0,25 m². Berapa ubin yang diperlukan jika tidak ada ubin terbuang?',
+                options: ['48 ubin', '96 ubin', '192 ubin', '240 ubin'],
+                correct: 2,
+                explanation: 'Luas lantai:\n8 × 6 = 48 m².\n\nLuas satu ubin = 0,25 m².\n48 ÷ 0,25 = 192 ubin.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Geometri',
+                question: 'Sebuah kotak berbentuk balok memiliki panjang 12 cm, lebar 8 cm, dan tinggi 5 cm. Volume kotak tersebut adalah ....',
+                options: ['25 cm³', '96 cm³', '240 cm³', '480 cm³'],
+                correct: 3,
+                explanation: 'Volume balok:\nV = p × l × t\nV = 12 × 8 × 5 = 480 cm³.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Geometri',
+                question: 'Sebuah bak berbentuk kubus memiliki panjang rusuk 1,2 m. Volume bak tersebut adalah ....',
+                options: ['1,44 m³', '1,728 m³', '3,6 m³', '4,32 m³'],
+                correct: 1,
+                explanation: 'Volume kubus:\nV = s³ = 1,2 × 1,2 × 1,2\nV = 1,728 m³.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Pengukuran',
+                question: 'Sebuah kendaraan menempuh jarak 150 km dengan kecepatan rata-rata 60 km/jam. Jika kendaraan berangkat pukul 08.15 dan tidak berhenti, pukul berapa kendaraan tiba?',
+                options: ['10.15', '10.30', '10.45', '11.00'],
+                correct: 2,
+                explanation: 'Waktu perjalanan:\n150 ÷ 60 = 2,5 jam.\n2,5 jam = 2 jam 30 menit.\n\nWaktu tiba:\n08.15 + 2 jam 30 menit = 10.45.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Pengukuran',
+                question: 'Sebuah tali panjangnya 4,5 m. Tali itu dipotong menjadi beberapa potongan, masing-masing sepanjang 35 cm. Berapa potongan penuh yang diperoleh dan berapa panjang tali yang tersisa?',
+                options: ['12 potongan, sisa 20 cm', '12 potongan, sisa 30 cm', '13 potongan, sisa 5 cm', '13 potongan, sisa 20 cm'],
+                correct: 1,
+                explanation: 'Ubah 4,5 m menjadi 450 cm.\n450 ÷ 35 = 12 sisa 30.\n\nSebab 12 × 35 = 420, sehingga tersisa:\n450 - 420 = 30 cm.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Pengukuran',
+                question: 'Sebuah wadah berisi 0,75 hektoliter air. Air itu akan dipindahkan ke botol-botol yang masing-masing berisi 1,5 liter. Berapa botol yang dapat diisi penuh?',
+                options: ['5 botol', '25 botol', '50 botol', '500 botol'],
+                correct: 2,
+                explanation: 'Satu hektoliter = 100 liter.\n0,75 hl = 75 liter.\n\nBanyak botol:\n75 ÷ 1,5 = 50 botol.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Pengukuran',
+                question: 'Berat sebuah paket adalah 2 kg 350 g. Berat paket lain adalah 1,8 kg. Berapa selisih berat kedua paket tersebut dalam gram?',
+                options: ['350 g', '450 g', '550 g', '650 g'],
+                correct: 2,
+                explanation: 'Berat pertama = 2.350 g.\nBerat kedua:\n1,8 kg = 1.800 g.\n\nSelisih:\n2.350 - 1.800 = 550 g.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Geometri',
+                question: 'Sebuah sudut besarnya 37°. Besar sudut pelengkapnya adalah ....',
+                options: ['37°', '53°', '63°', '143°'],
+                correct: 1,
+                explanation: 'Sudut pelengkap berjumlah 90°.\n90° - 37° = 53°.'
+            },
+
+            // III. Data
+            {
+                type: 'single',
+                tag: '📊 Data',
+                reading: 'Perhatikan tabel jumlah pengunjung perpustakaan berikut!\n\nHari | Jumlah Pengunjung\nSenin | 24\nSelasa | 30\nRabu | 27\nKamis | 36\nJumat | 33',
+                question: 'Jumlah pengunjung selama lima hari tersebut adalah ....',
+                options: ['140 orang', '145 orang', '150 orang', '160 orang'],
+                correct: 2,
+                explanation: '24 + 30 + 27 + 36 + 33 = 150.'
+            },
+            {
+                type: 'single',
+                tag: '📊 Data',
+                question: 'Berdasarkan tabel pada soal sebelumnya, selisih jumlah pengunjung terbanyak dan paling sedikit adalah ....',
+                options: ['6 orang', '9 orang', '12 orang', '15 orang'],
+                correct: 2,
+                explanation: 'Jumlah terbanyak = 36, jumlah paling sedikit = 24.\n36 - 24 = 12.'
+            },
+            {
+                type: 'single',
+                tag: '📊 Data',
+                question: 'Berdasarkan tabel pada soal sebelumnya, pernyataan yang benar adalah ....',
+                options: [
+                    'Pengunjung hari Selasa lebih banyak 9 orang daripada hari Jumat.',
+                    'Pengunjung hari Kamis adalah dua kali pengunjung hari Senin.',
+                    'Pengunjung hari Rabu lebih sedikit 3 orang daripada hari Selasa.',
+                    'Pengunjung hari Jumat lebih banyak 12 orang daripada hari Senin.'
+                ],
+                correct: 2,
+                explanation: 'Periksa tiap pernyataan:\nA: Selasa (30) - Jumat (33) = -3 (Salah).\nB: Kamis (36) vs 2 x Senin (48) (Salah).\nC: Selasa (30) - Rabu (27) = 3. Artinya Rabu 3 orang lebih sedikit dari Selasa (Benar).\nD: Jumat (33) - Senin (24) = 9, bukan 12 (Salah).\n\nJadi jawaban yang benar adalah C.'
+            },
+            {
+                type: 'single',
+                tag: '📊 Data',
+                question: 'Dalam sebuah piktogram, satu gambar buku mewakili 4 buku. Rani memiliki 5 gambar, Budi 7 gambar, dan Siti 3 gambar. Berapa jumlah buku yang mereka baca seluruhnya?',
+                options: ['15 buku', '30 buku', '60 buku', '64 buku'],
+                correct: 2,
+                explanation: 'Jumlah gambar = 5 + 7 + 3 = 15.\nSetiap gambar = 4 buku.\n15 × 4 = 60 buku.'
+            },
+            {
+                type: 'single',
+                tag: '📊 Data',
+                reading: 'Nilai ulangan matematika sekelompok siswa disajikan dalam tabel frekuensi berikut.\n\nNilai | Banyak Siswa\n60 | 3\n70 | 5\n80 | 8\n90 | 4',
+                question: 'Berapa siswa yang memperoleh nilai sekurang-kurangnya 80?',
+                options: ['8 siswa', '12 siswa', '15 siswa', '20 siswa'],
+                correct: 1,
+                explanation: 'Kata "sekurang-kurangnya 80" berarti nilai 80 atau lebih tinggi.\nSiswa yang mendapat nilai 80 = 8 siswa.\nSiswa yang mendapat nilai 90 = 4 siswa.\nJumlah = 8 + 4 = 12 siswa.'
+            },
+            {
+                type: 'single',
+                tag: '📊 Data',
+                reading: 'Jumlah buku yang dipinjam dari perpustakaan selama tiga bulan adalah sebagai berikut.\n- Januari: 120 buku\n- Februari: 150 buku\n- Maret: 135 buku',
+                question: 'Pernyataan yang benar adalah ....',
+                options: [
+                    'Februari memiliki jumlah peminjaman paling sedikit.',
+                    'Jumlah peminjaman Januari dan Maret adalah 255 buku.',
+                    'Selisih peminjaman Februari dan Januari adalah 20 buku.',
+                    'Jumlah peminjaman selama tiga bulan adalah 415 buku.'
+                ],
+                correct: 1,
+                explanation: 'Periksa tiap pernyataan:\nA: Paling sedikit adalah Januari (120). (Salah)\nB: Januari (120) + Maret (135) = 255. (Benar)\nC: Februari (150) - Januari (120) = 30, bukan 20. (Salah)\nD: Total = 120 + 150 + 135 = 405. (Salah)'
+            },
+
+            // IV. Penalaran dan Strategi
+            {
+                type: 'single',
+                tag: '🧠 Penalaran',
+                question: 'Sebuah sekolah akan membawa 235 siswa untuk kegiatan kunjungan. Setiap bus dapat mengangkut maksimal 42 siswa. Berapa bus paling sedikit yang diperlukan agar semua siswa terangkut?',
+                options: ['5 bus', '6 bus', '7 bus', '8 bus'],
+                correct: 1,
+                explanation: '235 ÷ 42 = 5 sisa 25.\nLima bus hanya dapat membawa 210 siswa.\nMasih ada 25 siswa yang membutuhkan bus tambahan.\nJadi, diperlukan 6 bus.'
+            },
+            {
+                type: 'single',
+                tag: '🧠 Penalaran',
+                question: 'Ibu membeli 2,5 kg tepung. Sebanyak 750 g digunakan untuk membuat kue pertama dan 0,6 kg digunakan untuk membuat kue kedua. Berapa gram tepung yang tersisa?',
+                options: ['850 g', '1.000 g', '1.150 g', '1.250 g'],
+                correct: 2,
+                explanation: 'Ubah 0,6 kg menjadi 600 g dan 2,5 kg menjadi 2.500 g.\nSisa tepung:\n2.500 - 750 - 600 = 1.150 g.'
+            },
+            {
+                type: 'single',
+                tag: '🧠 Penalaran',
+                question: 'Sebuah persegi panjang mempunyai keliling 54 cm. Panjangnya 17 cm. Berapa lebarnya?',
+                options: ['8 cm', '10 cm', '12 cm', '20 cm'],
+                correct: 1,
+                explanation: 'Keliling = 2 × (p + l)\n54 = 2 × (17 + l)\n27 = 17 + l\nl = 10 cm.'
+            },
+            {
+                type: 'single',
+                tag: '🧠 Penalaran',
+                question: 'Sebuah tangki berisi 240 liter air. Pada pagi hari digunakan 1/3 bagian air. Pada sore hari digunakan lagi 50 liter. Berapa liter air yang tersisa?',
+                options: ['80 liter', '110 liter', '160 liter', '190 liter'],
+                correct: 1,
+                explanation: 'Air yang digunakan pada pagi hari:\n1/3 × 240 = 80 liter.\n\nSisa setelah pagi:\n240 - 80 = 160 liter.\n\nSetelah digunakan 50 liter lagi:\n160 - 50 = 110 liter.'
+            },
+            {
+                type: 'multi',
+                tag: '🧠 PGK-MCMA',
+                reading: 'Sebuah paket sembako berisi 2 kg beras, 5 bungkus gula masing-masing 200 g, dan 4 bungkus mi masing-masing 85 g.',
+                question: 'Pilih semua pernyataan yang benar.',
+                options: [
+                    'Berat gula seluruhnya adalah 1 kg.',
+                    'Berat mi seluruhnya adalah 340 g.',
+                    'Berat total paket adalah 3,34 kg.',
+                    'Berat seluruh gula lebih ringan daripada berat seluruh mi.'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'A benar: 5 × 200 = 1.000 g = 1 kg.\nB benar: 4 × 85 = 340 g.\nC benar: 2 + 1 + 0,34 = 3,34 kg.\nD salah: gula 1 kg lebih berat daripada mi 340 g.'
+            },
+            {
+                type: 'multi',
+                tag: '🧠 PGK-MCMA',
+                question: 'Sebuah kotak harus memiliki volume 48 cm³. Pilih semua ukuran kotak yang memenuhi ketentuan tersebut.',
+                options: [
+                    '4 cm × 3 cm × 4 cm',
+                    '6 cm × 2 cm × 4 cm',
+                    '8 cm × 3 cm × 2 cm',
+                    '4 cm × 4 cm × 4 cm'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'Volume kotak dihitung dengan p × l × t.\nA: 4 × 3 × 4 = 48 cm³.\nB: 6 × 2 × 4 = 48 cm³.\nC: 8 × 3 × 2 = 48 cm³.\nD: 4 × 4 × 4 = 64 cm³.\nJadi, A, B, dan C benar.'
+            },
+            {
+                type: 'multi',
+                tag: '🧠 PGK-MCMA',
+                reading: 'Data olahraga yang disukai siswa adalah sebagai berikut.\n\nOlahraga | Jumlah Siswa\nSepak bola | 24\nBulu tangkis | 18\nRenang | 12\nBola basket | 16',
+                question: 'Pilih semua pernyataan yang benar.',
+                options: [
+                    'Jumlah seluruh siswa adalah 70.',
+                    'Sepak bola paling banyak dipilih.',
+                    'Selisih pemilih sepak bola dan renang adalah 12 siswa.',
+                    'Jumlah pemilih bulu tangkis dan bola basket adalah 32 siswa.'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'A benar: 24 + 18 + 12 + 16 = 70.\nB benar: Sepak bola memiliki jumlah terbanyak.\nC benar: 24 - 12 = 12.\nD salah: 18 + 16 = 34, bukan 32.'
+            },
+            {
+                type: 'benarsalah',
+                tag: '🧠 PGK-Kategori',
+                reading: 'Sebuah bus menempuh jarak 180 km dalam 3 jam dengan kecepatan rata-rata tetap.',
+                question: 'Tentukan Benar atau Salah untuk setiap pernyataan.',
+                statements: [
+                    { text: 'Kecepatan rata-rata bus adalah 60 km/jam.', correct: true },
+                    { text: 'Dalam 2 jam, bus menempuh jarak 120 km.', correct: true },
+                    { text: 'Untuk menempuh 300 km dengan kecepatan yang sama, bus memerlukan waktu 4 jam.', correct: false }
+                ],
+                explanation: 'A benar: 180 ÷ 3 = 60 km/jam.\nB benar: 60 × 2 = 120 km.\nC salah: 300 ÷ 60 = 5 jam, bukan 4 jam.'
+            },
+            {
+                type: 'benarsalah',
+                tag: '🧠 PGK-Kategori',
+                reading: 'Perhatikan data jumlah pengunjung berikut.\n\nHari | Pengunjung\nSenin | 20\nSelasa | 25\nRabu | 35\nKamis | 30',
+                question: 'Tentukan Benar atau Salah untuk setiap pernyataan.',
+                statements: [
+                    { text: 'Jumlah pengunjung selama empat hari adalah 110 orang.', correct: true },
+                    { text: 'Jumlah pengunjung pada hari Rabu 10 orang lebih banyak daripada hari Senin.', correct: false },
+                    { text: 'Jumlah pengunjung pada hari Kamis 5 orang lebih sedikit daripada hari Rabu.', correct: true }
+                ],
+                explanation: 'A benar: 20 + 25 + 35 + 30 = 110.\nB salah: 35 - 20 = 15, bukan 10.\nC benar: 35 - 30 = 5.'
+            },
+            {
+                type: 'benarsalah',
+                tag: '🧠 PGK-Kategori',
+                reading: 'Sebuah kebun berbentuk persegi panjang memiliki panjang 20 m dan lebar 12 m.',
+                question: 'Tentukan Benar atau Salah untuk setiap pernyataan.',
+                statements: [
+                    { text: 'Luas kebun adalah 240 m².', correct: true },
+                    { text: 'Keliling kebun adalah 64 m.', correct: true },
+                    { text: 'Jika panjang bertambah 5 m dan lebar tetap, luasnya menjadi 300 m².', correct: true }
+                ],
+                explanation: 'A benar: 20 × 12 = 240 m².\nB benar: 2(20 + 12) = 64 m.\nC benar: Panjang baru = 25 m, sehingga luas baru = 25 × 12 = 300 m².'
+            },
+
+            // TAMBAHAN SOAL 37 - 40
+            {
+                type: 'single',
+                tag: '🔢 Bilangan',
+                question: 'Sebuah toko menjual 5 buku dengan harga Rp15.000 per buku. Toko memberikan diskon 20% untuk total pembelian. Berapa total uang yang harus dibayar?',
+                options: ['Rp60.000', 'Rp65.000', 'Rp70.000', 'Rp75.000'],
+                correct: 0,
+                explanation: 'Total harga awal = 5 × Rp15.000 = Rp75.000.\n\nBesar diskon = 20% × Rp75.000 = Rp15.000.\n\nHarga yang harus dibayar = Rp75.000 - Rp15.000 = Rp60.000.'
+            },
+            {
+                type: 'single',
+                tag: '📐 Geometri',
+                question: 'Sebuah bak mandi berbentuk kubus dengan panjang rusuk 8 dm. Bak tersebut diisi air hingga penuh. Berapa liter air di dalam bak? (1 dm³ = 1 liter)',
+                options: ['64 liter', '128 liter', '512 liter', '1.024 liter'],
+                correct: 2,
+                explanation: 'Volume kubus = s × s × s\n= 8 dm × 8 dm × 8 dm\n= 512 dm³.\n\nKarena 1 dm³ = 1 liter, maka volumenya 512 liter.'
+            },
+            {
+                type: 'multi',
+                tag: '📊 PGK-MCMA',
+                reading: 'Data nilai ulangan Matematika dari 6 siswa: 70, 80, 80, 90, 70, 60.',
+                question: 'Pilih semua pernyataan yang benar berdasarkan data tersebut.',
+                options: [
+                    'Modus dari data adalah 80.',
+                    'Nilai tertinggi adalah 90.',
+                    'Rata-rata nilai adalah 75.',
+                    'Banyak siswa yang mendapat nilai 70 adalah 3.'
+                ],
+                correct: [0, 1, 2],
+                explanation: 'A benar: Nilai 80 muncul 2 kali (paling banyak).\nB benar: Nilai tertinggi adalah 90.\nC benar: Rata-rata = (70+80+80+90+70+60) / 6 = 450 / 6 = 75.\nD salah: Nilai 70 muncul 2 kali, bukan 3.'
+            },
+            {
+                type: 'benarsalah',
+                tag: '📐 PGK-Kategori',
+                question: 'Tentukan Benar atau Salah untuk setiap pernyataan konversi satuan berikut.',
+                statements: [
+                    { text: '2 jam 15 menit sama dengan 135 menit.', correct: true },
+                    { text: '3.500 gram sama dengan 3,5 kg.', correct: true },
+                    { text: '4,5 liter sama dengan 450 ml.', correct: false }
+                ],
+                explanation: 'A benar: (2 × 60) + 15 = 120 + 15 = 135 menit.\nB benar: 3.500 ÷ 1.000 = 3,5 kg.\nC salah: 4,5 liter = 4,5 × 1.000 = 4.500 ml, bukan 450 ml.'
+            }
+        ];
+
+        // ==================== STATE ====================
+        let currentQuestion = 0;
+        let userAnswers = {}; 
+        let checkedQuestions = {}; 
+        let score = 0;
+        let totalQuestions = questions.length;
+        let quizCompleted = false;
+
+        // ==================== DOM ELEMENTS ====================
+        const currentQNumEl = document.getElementById('current-q-num');
+        const correctCountEl = document.getElementById('correct-count');
+        const wrongCountEl = document.getElementById('wrong-count');
+        const scoreValEl = document.getElementById('score-val');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPct = document.getElementById('progress-pct');
+        const qNumberEl = document.getElementById('q-number');
+        const qTagEl = document.getElementById('q-tag');
+        const qReadingEl = document.getElementById('q-reading');
+        const qTextEl = document.getElementById('q-text');
+        const optionsContainer = document.getElementById('options-container');
+        const checkBtn = document.getElementById('check-btn');
+        const feedbackEl = document.getElementById('feedback');
+        const answerKeyEl = document.getElementById('answer-key');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const quizContainer = document.getElementById('quiz-container');
+        const confettiContainer = document.getElementById('confetti-container');
+
+        const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+        // ==================== FUNCTIONS ====================
+        function loadQuestion(index) {
+            const q = questions[index];
+            const saved = userAnswers[index];
+
+            qNumberEl.textContent = `Soal No. ${index + 1}`;
+            qTagEl.textContent = q.tag || '';
+            qTextEl.textContent = q.question || '';
+
+            if (q.reading && q.reading.trim() !== '') {
+                qReadingEl.style.display = 'block';
+                qReadingEl.textContent = q.reading;
+            } else {
+                qReadingEl.style.display = 'none';
+            }
+
+            optionsContainer.innerHTML = '';
+            feedbackEl.className = 'feedback';
+            feedbackEl.innerHTML = '';
+            answerKeyEl.className = 'answer-key';
+            answerKeyEl.innerHTML = '';
+            checkBtn.style.display = 'block';
+            btnNext.style.display = 'none';
+
+            checkBtn.disabled = true;
+            checkBtn.textContent = 'Cek Jawaban ✅';
+
+            if (q.type === 'single') {
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.setAttribute('data-opt-index', i);
+                    btn.innerHTML = `<span class="option-letter">${optionLabels[i]}</span><span>${opt}</span>`;
+                    if (saved && saved.selected.includes(i)) btn.classList.add('selected');
+                    if (saved && saved.checked) {
+                        btn.classList.add('disabled');
+                        if (i === q.correct) btn.classList.add('correct-reveal');
+                        if (saved.selected.includes(i) && !saved.correct) btn.classList.add('wrong-reveal');
+                    }
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        updateCheckButton();
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            } else if (q.type === 'multi') {
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.setAttribute('data-opt-index', i);
+                    btn.innerHTML = `<span class="option-letter">${optionLabels[i]}</span><span>${opt}</span>`;
+                    if (saved && saved.selected.includes(i)) btn.classList.add('selected');
+                    if (saved && saved.checked) {
+                        btn.classList.add('disabled');
+                        if (q.correct.includes(i)) btn.classList.add('correct-reveal');
+                        if (saved.selected.includes(i) && !q.correct.includes(i)) btn.classList.add('wrong-reveal');
+                    }
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        btn.classList.toggle('selected');
+                        updateCheckButton();
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            } else if (q.type === 'benarsalah') {
+                q.statements.forEach((stmt, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'bs-statement';
+                    div.innerHTML = `
+                        <p>${i + 1}. ${stmt.text}</p>
+                        <div class="bs-options">
+                            <button class="bs-btn bs-true" data-stmt-index="${i}" data-value="true">Benar</button>
+                            <button class="bs-btn bs-false" data-stmt-index="${i}" data-value="false">Salah</button>
+                        </div>
+                    `;
+                    optionsContainer.appendChild(div);
+                });
+
+                if (saved && saved.selected) {
+                    const selMap = saved.selected;
+                    q.statements.forEach((stmt, i) => {
+                        const trueBtn = optionsContainer.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                        const falseBtn = optionsContainer.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                        if (selMap[i] === true) trueBtn.classList.add('selected');
+                        if (selMap[i] === false) falseBtn.classList.add('selected');
+                    });
+                }
+                if (saved && saved.checked) {
+                    q.statements.forEach((stmt, i) => {
+                        const trueBtn = optionsContainer.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                        const falseBtn = optionsContainer.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                        trueBtn.classList.add('disabled');
+                        falseBtn.classList.add('disabled');
+                        if (stmt.correct === true) trueBtn.classList.add('correct-reveal');
+                        if (stmt.correct === false) falseBtn.classList.add('correct-reveal');
+                        if (saved.selected[i] === true && stmt.correct === false) trueBtn.classList.add('wrong-reveal');
+                        if (saved.selected[i] === false && stmt.correct === true) falseBtn.classList.add('wrong-reveal');
+                    });
+                }
+
+                optionsContainer.querySelectorAll('.bs-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (saved && saved.checked) return;
+                        const stmtIdx = parseInt(this.getAttribute('data-stmt-index'));
+                        const val = this.getAttribute('data-value') === 'true';
+                        const siblings = optionsContainer.querySelectorAll(
+                            `.bs-btn[data-stmt-index="${stmtIdx}"]`);
+                        siblings.forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                        updateCheckButton();
+                    });
+                });
+            }
+
+            btnPrev.disabled = (index === 0);
+            if (index === totalQuestions - 1) {
+                btnNext.textContent = '🏁 Selesai & Lihat Skor';
+            } else {
+                btnNext.textContent = 'Soal Berikutnya ➡️';
+            }
+
+            if (saved && saved.checked) {
+                checkBtn.style.display = 'none';
+                btnNext.style.display = 'flex';
+                showFeedbackForSaved(q, saved);
+            }
+
+            updateStats();
+            updateProgress();
+        }
+
+        function showFeedbackForSaved(q, saved) {
+            if (saved.correct) {
+                feedbackEl.className = 'feedback show correct';
+                feedbackEl.innerHTML = '<span>🎉 BENAR! Hebat!</span>';
+            } else {
+                feedbackEl.className = 'feedback show wrong';
+                feedbackEl.innerHTML = '<span>😅 SALAH! Jangan menyerah!</span>';
+            }
+            answerKeyEl.className = 'answer-key show';
+            let correctAnswerText = '';
+            if (q.type === 'single') {
+                correctAnswerText = `${optionLabels[q.correct]}. ${q.options[q.correct]}`;
+            } else if (q.type === 'multi') {
+                correctAnswerText = q.correct.map(c => `${optionLabels[c]}. ${q.options[c]}`).join(' & ');
+            } else if (q.type === 'benarsalah') {
+                correctAnswerText = q.statements.map((s, i) =>
+                    `${i + 1}. ${s.correct ? 'Benar' : 'Salah'}`
+                ).join(' | ');
+            }
+            answerKeyEl.innerHTML = `
+                <div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div>
+                <div class="ak-content"><strong>Jawaban Benar:</strong> ${correctAnswerText}<br><br>${q.explanation}</div>
+            `;
+        }
+
+        function updateCheckButton() {
+            const q = questions[currentQuestion];
+            let hasAnswer = false;
+            if (q.type === 'single') {
+                hasAnswer = document.querySelectorAll('.option-btn.selected').length > 0;
+            } else if (q.type === 'multi') {
+                hasAnswer = document.querySelectorAll('.option-btn.selected').length > 0;
+            } else if (q.type === 'benarsalah') {
+                const total = q.statements.length;
+                const answered = document.querySelectorAll('.bs-btn.selected').length;
+                hasAnswer = answered === total;
+            }
+            checkBtn.disabled = !hasAnswer;
+        }
+
+        function checkAnswer() {
+            const q = questions[currentQuestion];
+            const saved = userAnswers[currentQuestion];
+            if (saved && saved.checked) return;
+
+            let selected = [];
+            let isCorrect = false;
+
+            if (q.type === 'single') {
+                const selBtn = document.querySelector('.option-btn.selected');
+                if (!selBtn) return;
+                selected = [parseInt(selBtn.getAttribute('data-opt-index'))];
+                isCorrect = selected[0] === q.correct;
+            } else if (q.type === 'multi') {
+                selected = Array.from(document.querySelectorAll('.option-btn.selected'))
+                    .map(b => parseInt(b.getAttribute('data-opt-index')));
+                isCorrect = selected.length === q.correct.length && selected.every(s => q.correct.includes(s));
+            } else if (q.type === 'benarsalah') {
+                selected = [];
+                q.statements.forEach((stmt, i) => {
+                    const selBtn = document.querySelector(`.bs-btn.selected[data-stmt-index="${i}"]`);
+                    if (selBtn) {
+                        selected.push(selBtn.getAttribute('data-value') === 'true');
+                    } else {
+                        selected.push(null);
+                    }
+                });
+                isCorrect = selected.every((s, i) => s === q.statements[i].correct);
+            }
+
+            const correct = isCorrect;
+            userAnswers[currentQuestion] = { selected, checked: true, correct };
+            checkedQuestions[currentQuestion] = true;
+
+            if (correct) score++;
+            updateStats();
+
+            const allOptionBtns = document.querySelectorAll('.option-btn');
+            allOptionBtns.forEach(btn => {
+                btn.classList.add('disabled');
+                const idx = parseInt(btn.getAttribute('data-opt-index'));
+                if (q.type === 'single' || q.type === 'multi') {
+                    if (q.type === 'single' ? idx === q.correct : q.correct.includes(idx)) {
+                        btn.classList.add('correct-reveal');
+                    }
+                    if (selected.includes(idx) && !(q.type === 'single' ? idx === q.correct : q.correct.includes(
+                            idx))) {
+                        btn.classList.add('wrong-reveal');
+                    }
+                }
+            });
+
+            if (q.type === 'benarsalah') {
+                q.statements.forEach((stmt, i) => {
+                    const trueBtn = document.querySelector(`.bs-true[data-stmt-index="${i}"]`);
+                    const falseBtn = document.querySelector(`.bs-false[data-stmt-index="${i}"]`);
+                    trueBtn.classList.add('disabled');
+                    falseBtn.classList.add('disabled');
+                    if (stmt.correct === true) trueBtn.classList.add('correct-reveal');
+                    if (stmt.correct === false) falseBtn.classList.add('correct-reveal');
+                    if (selected[i] === true && stmt.correct === false) trueBtn.classList.add('wrong-reveal');
+                    if (selected[i] === false && stmt.correct === true) falseBtn.classList.add('wrong-reveal');
+                });
+            }
+
+            if (correct) {
+                feedbackEl.className = 'feedback show correct';
+                feedbackEl.innerHTML = '<span>🎉 Jawaban Anda BENAR! Hebat!</span>';
+            } else {
+                feedbackEl.className = 'feedback show wrong';
+                feedbackEl.innerHTML = '<span>😅 Jawaban Anda SALAH! Jangan menyerah!</span>';
+            }
+
+            answerKeyEl.className = 'answer-key show';
+            let correctAnswerText = '';
+            if (q.type === 'single') {
+                correctAnswerText = `${optionLabels[q.correct]}. ${q.options[q.correct]}`;
+            } else if (q.type === 'multi') {
+                correctAnswerText = q.correct.map(c => `${optionLabels[c]}. ${q.options[c]}`).join(' & ');
+            } else if (q.type === 'benarsalah') {
+                correctAnswerText = q.statements.map((s, i) =>
+                    `${i + 1}. ${s.correct ? 'Benar' : 'Salah'}`
+                ).join(' | ');
+            }
+            answerKeyEl.innerHTML = `
+                <div class="ak-title">🔑 Kunci Jawaban & Pembahasan:</div>
+                <div class="ak-content"><strong>Jawaban Benar:</strong> ${correctAnswerText}<br><br>${q.explanation}</div>
+            `;
+
+            checkBtn.style.display = 'none';
+            btnNext.style.display = 'flex';
+        }
+
+        function updateStats() {
+            currentQNumEl.textContent = currentQuestion + 1;
+            let correct = 0;
+            let wrong = 0;
+            Object.values(userAnswers).forEach(ans => {
+                if (ans.checked) {
+                    if (ans.correct) correct++;
+                    else wrong++;
+                }
+            });
+            correctCountEl.textContent = correct;
+            wrongCountEl.textContent = wrong;
+            scoreValEl.textContent = score;
+        }
+
+        function updateProgress() {
+            const pct = Math.round((currentQuestion / totalQuestions) * 100);
+            progressFill.style.width = pct + '%';
+            progressPct.textContent = pct + '%';
+        }
+
+        function goToNext() {
+            if (currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResult();
+            }
+        }
+
+        function goToPrev() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function showResult() {
+            quizCompleted = true;
+            const totalChecked = Object.keys(userAnswers).length;
+            const correctTotal = score;
+            const wrongTotal = totalChecked - correctTotal;
+            const finalScore = totalQuestions > 0 ? Math.round((correctTotal / totalQuestions) * 100) : 0;
+
+            qNumberEl.textContent = '📋 Hasil Akhir';
+            qTagEl.textContent = '🏁 Selesai';
+            qTextEl.textContent = '';
+            qReadingEl.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            checkBtn.style.display = 'none';
+            btnNext.style.display = 'none';
+            btnPrev.style.display = 'none';
+
+            const resultScreen = document.createElement('div');
+            resultScreen.className = 'result-screen';
+            
+            let emoji = '';
+            let message = '';
+            let encouragement = '';
+            
+            if (finalScore === 100) {
+                emoji = '🏆🎉🌟';
+                message = 'LUAR BIASA! SEMPURNA!';
+                encouragement = 'Kamu menjawab semua soal dengan benar. Kamu memang juara!';
+            } else if (finalScore >= 80) {
+                emoji = '🌟👏';
+                message = 'HEBAT! Nilaimu sangat bagus!';
+                encouragement = 'Sedikit lagi menuju sempurna. Terus pertahankan semangat belajarmu!';
+            } else if (finalScore >= 60) {
+                emoji = '👍😊';
+                message = 'CUKUP BAIK! Terus berlatih ya!';
+                encouragement = 'Kamu sudah di jalur yang benar. Pelajari kembali soal yang salah agar makin jago!';
+            } else {
+                emoji = '💪📚';
+                message = 'TETAP SEMANGAT! Yuk belajar lagi!';
+                encouragement = 'Jangan berkecil hati. Setiap kesalahan adalah pelajaran berharga. Ayo coba lagi!';
+            }
+            
+            resultScreen.innerHTML = `
+                <div class="result-emoji">${emoji}</div>
+                <div class="result-score">${finalScore}</div>
+                <div class="result-message">${message}</div>
+                <p style="margin-bottom: 10px; font-weight: 600; color: #636e72;">"${encouragement}"</p>
+                <p>Kamu menjawab <strong>${correctTotal}</strong> benar dari <strong>${totalQuestions}</strong> soal.</p>
+                <p>Benar: ${correctTotal} | Salah: ${wrongTotal}</p>
+            `;
+            quizContainer.appendChild(resultScreen);
+
+            if (finalScore === 100) {
+                const prizeScreen = document.createElement('div');
+                prizeScreen.className = 'prize-screen';
+                prizeScreen.style.display = 'none';
+                prizeScreen.innerHTML = `
+                    <img class="prize-logo" src="${HADIAH.logo}" alt="Logo">
+                    <div class="prize-title">
+                        ALHAMDULILLAH<br>
+                        KAMU DAPAT HADIAH<br>
+                        <span class="prize-highlight">Rp ${HADIAH.nominal}</span>
+                    </div>
+                    <p class="prize-note">🎁 Selamat! Kamu menjawab semua soal dengan benar!</p>
+                    <button class="claim-btn" id="claim-btn">🎁 Klaim Hadiah</button>
+                    <button class="retry-btn retry-secondary" id="retry-btn-100">🔄 Ulangi Tes</button>
+                `;
+                resultScreen.appendChild(prizeScreen);
+
+                showChampionAnimation(function() {
+                    prizeScreen.style.display = 'block';
+                    prizeScreen.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+
+                prizeScreen.querySelector('#claim-btn').addEventListener('click', function() {
+                    const url = `https://wa.me/${HADIAH.waNumber}?text=${encodeURIComponent(HADIAH.waText)}`;
+                    window.open(url, '_blank');
+                });
+
+                prizeScreen.querySelector('#retry-btn-100').addEventListener('click', function() {
+                    restartQuiz();
+                });
+            } else {
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'retry-btn';
+                retryBtn.textContent = '🔄 ULANGI TES';
+                retryBtn.addEventListener('click', function() {
+                    restartQuiz();
+                });
+                resultScreen.appendChild(retryBtn);
+            }
+
+            progressFill.style.width = '100%';
+            progressPct.textContent = '100%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showChampionAnimation(onFinish) {
+            const overlay = document.createElement('div');
+            overlay.className = 'champion-overlay';
+            overlay.innerHTML = `
+                <div class="champion-rays"></div>
+                <div class="champion-glow"></div>
+                <div class="champion-trophy">🏆</div>
+                <div class="champion-text">JUARA!</div>
+                <div class="champion-sub">Kamu menjawab SEMUA soal dengan BENAR!<br>Skor Sempurna: 100</div>
+                <div class="champion-stars">⭐ ⭐ ⭐</div>
+            `;
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+
+            requestAnimationFrame(() => overlay.classList.add('show'));
+            triggerConfetti();
+
+            setTimeout(() => {
+                overlay.classList.add('hide');
+                setTimeout(() => {
+                    overlay.remove();
+                    document.body.style.overflow = '';
+                    if (typeof onFinish === 'function') onFinish();
+                }, 500);
+            }, 3600);
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = {};
+            checkedQuestions = {};
+            score = 0;
+            quizCompleted = false;
+
+            document.querySelectorAll('.result-screen').forEach(el => el.remove());
+
+            btnNext.style.display = 'none';
+            btnNext.textContent = 'Soal Berikutnya ➡️';
+            btnPrev.style.display = 'flex';
+            btnPrev.disabled = true;
+            loadQuestion(0);
+            updateStats();
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function triggerConfetti() {
+            confettiContainer.style.display = 'block';
+            const colors = ['#00cec9', '#6C5CE7', '#fd79a8', '#fdcb6e', '#00b894', '#e17055', '#74b9ff'];
+            for (let i = 0; i < 90; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 8 + 6) + 'px';
+                confetti.style.height = (Math.random() * 8 + 6) + 'px';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 2.5 + 's';
+                confettiContainer.appendChild(confetti);
+            }
+            setTimeout(() => {
+                confettiContainer.style.display = 'none';
+                confettiContainer.innerHTML = '';
+            }, 6500);
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        checkBtn.addEventListener('click', checkAnswer);
+        btnNext.addEventListener('click', goToNext);
+        btnPrev.addEventListener('click', goToPrev);
+
+        // ==================== INIT ====================
+        loadQuestion(0);
+        updateStats();
+        updateProgress();
+    </script>
+</body>
+</html>

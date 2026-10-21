@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analisis Kesalahan TKA - Matematika SD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Tema Baru: Cosmic Latte (Deep Purple & Gold) */
+    --bg-gradient: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
+    --ink: #f8fafc;
+    --muted: #cbd5e1;
+    --primary: #fcd34d; /* Gold */
+    --primary-hover: #f59e0b;
+    --accent: #fb923c; /* Orange */
+    --success: #10b981;
+    --danger: #ef4444;
+    --card: #2e1065;
+    --border: #4c1d95;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Ornamen Bintang & Planet */
+  .ornament {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.4;
+    animation: float 5s ease-in-out infinite;
+    z-index: 1;
+  }
+  .orn-1 { top: 10%; left: 10%; animation-delay: 0s; font-size: 2.5rem;}
+  .orn-2 { top: 20%; right: 15%; animation-delay: 1.5s; }
+  .orn-3 { bottom: 15%; left: 15%; animation-delay: 2s; font-size: 1.8rem;}
+  .orn-4 { bottom: 20%; right: 10%; animation-delay: 0.8s; font-size: 2.2rem;}
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+  }
+
+  h1, h2, h3, .btn { font-family: 'Outfit', sans-serif; }
+  
+  /* Container */
+  .app-container {
+    background: var(--card);
+    width: 100%;
+    max-width: 750px;
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    border: 1px solid var(--border);
+  }
+
+  /* Screens */
+  .screen { display: none; padding: 35px; }
+  .screen.active { display: block; animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Start Screen */
+  #start-screen { text-align: center; }
+  .hero-icon { font-size: 5rem; margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--primary)); }
+  #start-screen h1 { font-size: 2.2rem; color: var(--primary); margin: 0 0 10px; letter-spacing: 1px;}
+  #start-screen p { color: var(--muted); font-size: 1.05rem; margin-bottom: 25px; font-weight: 600;}
+  .info-box {
+    background: rgba(255, 255, 255, 0.05); border: 1px dashed var(--border); border-radius: 16px;
+    padding: 20px; text-align: left; margin-bottom: 25px; color: var(--ink);
+  }
+  .info-box li { margin-bottom: 10px; font-size: 0.95rem; font-weight: 600;}
+  .info-box li::marker { color: var(--primary); }
+
+  /* Buttons */
+  .btn {
+    background: var(--primary); color: #1e1b4b; border: none;
+    padding: 16px 28px; border-radius: 12px; font-size: 1.1rem; font-weight: 800;
+    cursor: pointer; transition: 0.3s; width: 100%; letter-spacing: 1px;
+    box-shadow: 0 5px 0 var(--primary-hover);
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 7px 0 var(--primary-hover); }
+  .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+  .btn:disabled { background: #475569; cursor: not-allowed; color: #94a3b8; box-shadow: 0 5px 0 #334155; }
+  .btn-next { background: var(--accent); box-shadow: 0 5px 0 #ea580c; margin-top: 15px; display: none; color: white;}
+  .btn-next:hover { box-shadow: 0 7px 0 #ea580c; }
+
+  /* Quiz Screen */
+  .quiz-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border);
+  }
+  .progress-text { font-weight: 700; color: var(--primary); font-size: 1.05rem; font-family:'Outfit', sans-serif;}
+  .progress-bar-container { height: 8px; background: #1e1b4b; border-radius: 4px; width: 100%; margin-top: 10px; overflow: hidden;}
+  .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
+  
+  .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; line-height: 1.7; color: #f1f5f9;}
+  
+  .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .opt {
+    background: #1e1b4b; border: 1px solid var(--border); padding: 15px 20px;
+    border-radius: 12px; font-size: 1rem; font-weight: 600; color: #e2e8f0;
+    cursor: pointer; transition: 0.2s; text-align: left; display: flex; align-items: center;
+  }
+  .opt:hover:not(.disabled) { border-color: var(--primary); background: #4c1d95; }
+  .opt.selected { border-color: var(--primary); background: rgba(252, 211, 77, 0.1); box-shadow: 0 0 0 2px var(--primary); color: white;}
+  .opt.correct { border-color: var(--success); background: rgba(16, 185, 129, 0.15); color: #34d399; box-shadow: 0 0 0 2px var(--success); }
+  .opt.wrong { border-color: var(--danger); background: rgba(239, 68, 68, 0.15); color: #f87171; box-shadow: 0 0 0 2px var(--danger); }
+  .opt.disabled { cursor: default; opacity: 0.8; }
+  .opt-prefix {
+    width: 32px; height: 32px; border-radius: 8px; background: #475569;
+    display: inline-flex; justify-content: center; align-items: center;
+    margin-right: 15px; font-size: 0.9rem; color: #cbd5e1; flex-shrink: 0;
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+  }
+  .opt.selected .opt-prefix { background: var(--primary); color: #1e1b4b; }
+  .opt.correct .opt-prefix { background: var(--success); color: white; }
+  .opt.wrong .opt-prefix { background: var(--danger); color: white; }
+
+  /* Explanation Box - Highly Prominent */
+  .explanation-box {
+    display: none; background: #fffbeb; border-left: 6px solid var(--primary);
+    padding: 20px; border-radius: 12px; margin-bottom: 20px; font-size: 0.95rem;
+    line-height: 1.6; animation: slideUp 0.3s ease; color: #451a03;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  .explanation-box h4 {
+    margin: 0 0 10px 0; color: #b45309; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;
+  }
+  
+  .mistake-box {
+    background: #fef2f2; border: 1px solid #fca5a5; padding: 12px; border-radius: 8px;
+    margin-bottom: 15px; color: #991b1b; font-weight: 600;
+  }
+
+  .math-box {
+    background: #fff; border: 2px dashed #d97706; padding: 15px;
+    border-radius: 8px; margin: 12px 0; font-family: monospace;
+    font-size: 1.05rem; font-weight: 700; color: #1e293b;
+    line-height: 1.8;
+  }
+  
+  .math-box span.step {
+    display: block;
+    padding-left: 10px;
+  }
+  
+  .lesson-text {
+    font-weight: 700; color: #047857; background: #ecfdf5; padding: 10px; border-radius: 8px;
+    border-left: 4px solid #10b981;
+  }
+
+  /* End Screen */
+  #end-screen { text-align: center; }
+  .score-circle {
+    width: 160px; height: 160px; border-radius: 50%; margin: 0 auto 25px;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 3.5rem; font-weight: 900; color: #1e1b4b; font-family: 'Outfit', sans-serif;
+    box-shadow: 0 0 30px rgba(252, 211, 77, 0.3);
+    border: 6px solid rgba(255,255,255,0.2);
+    background: var(--primary);
+  }
+  .score-message { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; color: var(--primary); letter-spacing: 1px;}
+  .score-sub { color: var(--muted); margin-bottom: 30px; font-size: 1.05rem; font-weight: 600;}
+
+  @media (max-width: 480px) {
+    .screen { padding: 20px; }
+    .question-text { font-size: 1rem; }
+    .opt { padding: 12px 15px; font-size: 0.95rem; }
+    .math-box { font-size: 0.95rem; padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ornamen -->
+<div class="ornament orn-1">🌌</div>
+<div class="ornament orn-2">✨</div>
+<div class="ornament orn-3">🪐</div>
+<div class="ornament orn-4">💫</div>
+
+<div class="app-container">
+  
+  <!-- START SCREEN -->
+  <div id="start-screen" class="screen active">
+    <div class="hero-icon">🧠🔍</div>
+    <h1>Analisis Kesalahan TKA</h1>
+    <p>Belajar dari Kesalahan, Raih Skor Sempurna!</p>
+    <div class="info-box">
+      <ul>
+        <li>📝 Terdapat <b>40 soal</b> Pilihan Ganda.</li>
+        <li>🕵️ Fokus pada <b>penyebab kesalahan</b> umum.</li>
+        <li>💡 Pembahasan langkah demi langkah disusun sangat rapi.</li>
+        <li>🏆 Pahami polanya, dan kamu siap menaklukkan TKA!</li>
+      </ul>
+    </div>
+    <button class="btn" onclick="startQuiz()">Mulai Analisis 🚀</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen" class="screen">
+    <div class="quiz-header">
+      <div class="progress-text" id="q-progress">Soal 1 / 40</div>
+      <div class="progress-bar-container"><div class="progress-bar" id="q-bar"></div></div>
+    </div>
+    
+    <div class="question-text" id="q-text">Teks soal...</div>
+    
+    <div class="options" id="q-options">
+      <!-- Options injected via JS -->
+    </div>
+
+    <div class="explanation-box" id="explanation">
+      <h4>💡 Analisis Jawaban</h4>
+      <div id="exp-text"></div>
+    </div>
+
+    <button class="btn" id="btn-check" onclick="checkAnswer()" disabled>Kunci & Penjelasan</button>
+    <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">Soal Berikutnya ➔</button>
+  </div>
+
+  <!-- END SCREEN -->
+  <div id="end-screen" class="screen">
+    <div class="hero-icon" id="end-icon">🏆</div>
+    <h1>Analisis Selesai!</h1>
+    <div class="score-circle" id="score-circle">0</div>
+    <div class="score-message" id="score-message">Pesan</div>
+    <div class="score-sub" id="score-sub">Kamu menjawab X dari 40 soal dengan benar.</div>
+    <button class="btn" onclick="restartQuiz()">Ulangi Analisis 🔄</button>
+  </div>
+
+</div>
+
+<script>
+  // DATA 40 SOAL ANALISIS KESALAHAN
+  const questions = [
+    {
+      q: "Di sebuah toko terdapat 250 buku. Pada hari Senin terjual 68 buku, sedangkan pada hari Selasa terjual 47 buku. Berapa buku yang masih tersisa?",
+      options: ["A. 365 buku", "B. 135 buku", "C. 182 buku", "D. 115 buku"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Siswa menjumlahkan semua angka (250 + 68 + 47 = 365) karena terburu-buru melihat angka.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">1. Total buku terjual = 68 + 47 = 115</span>
+          <span class="step">2. Buku tersisa = 250 - 115 = <b>135</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Pahami kata kunci "masih tersisa". Artinya, kurangi jumlah awal dengan total yang berkurang.</div>
+      `
+    },
+    {
+      q: "Hasil dari 60 - 12 ÷ 3 × 2 adalah ....",
+      options: ["A. 32", "B. 52", "C. 56", "D. 96"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menghitung dari kiri ke kanan (60 - 12 = 48, lalu 48 ÷ 3 × 2). Ingat, perkalian dan pembagian didahulukan!</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Kerjakan ÷ dan × dari kiri ke kanan:</span>
+          <span class="step">12 ÷ 3 = 4</span>
+          <span class="step">4 × 2 = 8</span>
+          <span class="step">Lalu kurangkan: 60 - 8 = <b>52</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Urutan operasi hitung: Kurung -> Kali/Bagi -> Tambah/Kurang.</div>
+      `
+    },
+    {
+      q: "Hasil dari 120 - (35 + 25) ÷ 5 adalah ....",
+      options: ["A. 17", "B. 108", "C. 112", "D. 118"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Mengabaikan tanda kurung dan langsung membagi salah satu angka dengan 5.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Kerjakan dalam kurung dulu:</span>
+          <span class="step">35 + 25 = 60</span>
+          <span class="step">Lalu pembagian: 60 ÷ 5 = 12</span>
+          <span class="step">Terakhir pengurangan: 120 - 12 = <b>108</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Segala operasi di dalam tanda kurung ( ) wajib diselesaikan paling awal.</div>
+      `
+    },
+    {
+      q: "Sebanyak 157 siswa akan dibagi ke dalam kelompok yang masing-masing berisi 12 siswa. Berapa kelompok penuh yang terbentuk dan berapa siswa yang tersisa?",
+      options: ["A. 12 kelompok, sisa 13 siswa", "B. 13 kelompok, sisa 1 siswa", "C. 13 kelompok, sisa 12 siswa", "D. 14 kelompok, sisa 1 siswa"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Bingung menentukan sisa pembagian.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">157 ÷ 12 = 13 sisa ...</span>
+          <span class="step">Cek: 13 × 12 = 156</span>
+          <span class="step">Sisa = 157 - 156 = <b>1</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Rumus: (Pembagi × Hasil Bagi) + Sisa = Bilangan Awal.</div>
+      `
+    },
+    {
+      q: "Sebuah bus dapat mengangkut maksimal 40 siswa. Jika ada 163 siswa yang akan mengikuti wisata, berapa bus minimal yang diperlukan?",
+      options: ["A. 4 bus", "B. 4 bus dan 3 siswa tidak terangkut", "C. 5 bus", "D. 6 bus"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjawab 4 bus karena melihat hasil pembagian bulatnya. Padahal ada sisanya!</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">163 ÷ 40 = 4 sisa 3</span>
+          <span class="step">4 bus hanya mengangkut 160 siswa.</span>
+          <span class="step">Sisa 3 siswa harus diangkut, jadi butuh 1 bus tambahan.</span>
+          <span class="step">Total bus = 4 + 1 = <b>5 bus</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Jika konteksnya "wadah/kendaraan untuk menampung semua", hasil pembagian bersisa selalu dibulatkan ke ATAS.</div>
+      `
+    },
+    {
+      q: "Pada bilangan 573.426, angka 7 menempati nilai tempat ....",
+      options: ["A. Ribuan", "B. Puluh ribuan", "C. Ratus ribuan", "D. Ratusan"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Salah menghitung urutan angka dari kanan.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">6 = Satuan</span>
+          <span class="step">2 = Puluhan</span>
+          <span class="step">4 = Ratusan</span>
+          <span class="step">3 = Ribuan</span>
+          <span class="step">7 = <b>Puluh ribuan</b></span>
+          <span class="step">5 = Ratus ribuan</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Hitung posisi dari paling kanan (satuan) menuju ke kiri.</div>
+      `
+    },
+    {
+      q: "Perhatikan pola berikut: 4, 7, 10, 13, .... Bilangan berikutnya adalah ....",
+      options: ["A. 15", "B. 16", "C. 17", "D. 18"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menebak angka secara acak tanpa melihat selisihnya.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">4 ke 7 = +3</span>
+          <span class="step">7 ke 10 = +3</span>
+          <span class="step">10 ke 13 = +3</span>
+          <span class="step">Maka 13 + 3 = <b>16</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Selalu periksa pola selisih (tambah/kurang) atau rasio (kali/bagi) antar angka.</div>
+      `
+    },
+    {
+      q: "Perhatikan pola berikut: 2, 6, 18, 54, .... Bilangan berikutnya adalah ....",
+      options: ["A. 108", "B. 162", "C. 216", "D. 324"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menganggap polanya penjumlahan (+4, +12), padahal itu perkalian.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">2 × 3 = 6</span>
+          <span class="step">6 × 3 = 18</span>
+          <span class="step">18 × 3 = 54</span>
+          <span class="step">Maka 54 × 3 = <b>162</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Pola perkalian sering muncul. Cek apakah angka berikutnya adalah hasil kali angka sebelumnya.</div>
+      `
+    },
+    {
+      q: "Tanpa menghitung secara tepat, perkiraan terbaik untuk 398 × 21 adalah ....",
+      options: ["A. 400 × 20 = 8.000", "B. 300 × 20 = 6.000", "C. 400 × 10 = 4.000", "D. 500 × 30 = 15.000"],
+      answer: 0,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Memilih angka pembulatan yang terlalu jauh sehingga perkiraan tidak akurat.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">398 dibulatkan menjadi 400 (mendekati).</span>
+          <span class="step">21 dibulatkan menjadi 20 (mendekati).</span>
+          <span class="step">400 × 20 = <b>8.000</b></span>
+          <span class="step">(Hasil tepatnya 8.358, jadi 8.000 sangat masuk akal).</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Bulatkan ke puluhan/ratusan terdekat agar perkiraan tetap logis.</div>
+      `
+    },
+    {
+      q: "Hasil dari 1/2 + 1/3 adalah ....",
+      options: ["A. 2/5", "B. 2/6", "C. 5/6", "D. 1/5"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjumlahkan pembilang dan penyebut secara langsung (1+1=2, 2+3=5) sehingga jawabannya 2/5. INI SALAH!</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Samakan penyebut (KPK dari 2 dan 3 adalah 6):</span>
+          <span class="step">1/2 = 3/6</span>
+          <span class="step">1/3 = 2/6</span>
+          <span class="step">3/6 + 2/6 = <b>5/6</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Penyebut WAJIB disamakan dulu sebelum pembilangnya dijumlahkan.</div>
+      `
+    },
+    {
+      q: "Hasil dari 3/4 - 1/2 adalah ....",
+      options: ["A. 2/2", "B. 1/4", "C. 2/3", "D. 1/2"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Mengurangkan penyebut secara langsung (4 - 2 = 2).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Samakan penyebut menjadi 4:</span>
+          <span class="step">1/2 = 2/4</span>
+          <span class="step">3/4 - 2/4 = <b>1/4</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Sama seperti penjumlahan, pengurangan pecahan butuh penyebut yang sama.</div>
+      `
+    },
+    {
+      q: "Di sebuah kelas terdapat 40 siswa. Sebanyak 3/5 dari seluruh siswa mengikuti pramuka. Berapa siswa yang mengikuti pramuka?",
+      options: ["A. 8 siswa", "B. 15 siswa", "C. 24 siswa", "D. 35 siswa"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Berhenti menghitung di tengah jalan (40 ÷ 5 = 8), padahal harus dilanjutkan dikali pembilang.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Bagi total dengan penyebut: 40 ÷ 5 = 8</span>
+          <span class="step">Kalikan dengan pembilang: 8 × 3 = <b>24 siswa</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Rumus mencari nilai pecahan: (Total ÷ Penyebut) × Pembilang.</div>
+      `
+    },
+    {
+      q: "Sebuah tangki berisi 120 liter air. Sebanyak 1/4 bagian air digunakan. Berapa liter air yang masih tersisa?",
+      options: ["A. 30 liter", "B. 60 liter", "C. 90 liter", "D. 100 liter"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjawab 30 liter. Itu adalah jumlah air yang DIGUNAKAN, bukan yang TERSISA.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Air digunakan = 1/4 × 120 = 30 liter</span>
+          <span class="step">Air tersisa = Total - Digunakan</span>
+          <span class="step">120 - 30 = <b>90 liter</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Baca soal dengan teliti. Apakah yang ditanya jumlah yang dipakai atau sisa?</div>
+      `
+    },
+    {
+      q: "Bilangan 0,7 sama dengan ....",
+      options: ["A. 7/100", "B. 7/10", "C. 70/1000", "D. 7"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Bingung membedakan persepuluhan dan perseratusan.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">0,7 (satu angka di belakang koma)</span>
+          <span class="step">Artinya 7 per 10.</span>
+          <span class="step">0,7 = <b>7/10</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Satu angka di belakang koma = persepuluhan (per 10). Dua angka = perseratusan (per 100).</div>
+      `
+    },
+    {
+      q: "Harga sebuah tas Rp100.000,00. Tas tersebut mendapat diskon 20%. Berapa harga setelah diskon?",
+      options: ["A. Rp20.000,00", "B. Rp80.000,00", "C. Rp100.000,00", "D. Rp120.000,00"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjawab Rp20.000. Itu adalah NILAI DISKON-nya, bukan harga akhir yang harus dibayar.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Diskon = 20% × 100.000 = 20.000</span>
+          <span class="step">Harga Akhir = Harga Awal - Diskon</span>
+          <span class="step">100.000 - 20.000 = <b>Rp80.000</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Pahami pertanyaannya. Jika ditanya "harga setelah diskon", berarti harus dikurangkan.</div>
+      `
+    },
+    {
+      q: "Jumlah pengunjung meningkat dari 80 menjadi 100 orang. Berapa persen kenaikannya dibandingkan jumlah semula?",
+      options: ["A. 20%", "B. 25%", "C. 80%", "D. 125%"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Membagi selisih dengan angka akhir (20/100 = 20%). Padahal acuannya adalah jumlah SEMULA.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Kenaikan = 100 - 80 = 20</span>
+          <span class="step">Persentase = (Kenaikan ÷ Nilai Awal) × 100%</span>
+          <span class="step">(20 ÷ 80) × 100% = 0,25 × 100% = <b>25%</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Persentase kenaikan/penurunan selalu dihitung dari NILAI AWAL (sebelum ada perubahan).</div>
+      `
+    },
+    {
+      q: "Panjang sebuah pita adalah 3 meter 45 sentimeter. Panjang tersebut sama dengan ....",
+      options: ["A. 345 cm", "B. 3045 cm", "C. 3,045 cm", "D. 34,5 cm"],
+      answer: 0,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menganggap 3 meter 45 cm sebagai 3045 cm, atau salah meletakkan koma.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">1 meter = 100 cm</span>
+          <span class="step">3 meter = 3 × 100 = 300 cm</span>
+          <span class="step">Total = 300 cm + 45 cm = <b>345 cm</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Selalu ingat tangga satuan. Turun 2 tangga (m ke cm) berarti dikali 100.</div>
+      `
+    },
+    {
+      q: "Berat sebuah karung beras adalah 2,5 kg. Jika dinyatakan dalam gram, beratnya adalah ....",
+      options: ["A. 25 gram", "B. 250 gram", "C. 2.050 gram", "D. 2.500 gram"],
+      answer: 3,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Salah mengalikan faktor konversi (mengira 1 kg = 100 gram).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">1 kg = 1.000 gram</span>
+          <span class="step">2,5 kg = 2,5 × 1.000</span>
+          <span class="step">= <b>2.500 gram</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Kg ke gram turun 3 tangga, artinya dikalikan 1.000.</div>
+      `
+    },
+    {
+      q: "Sebuah taman berbentuk persegi panjang memiliki panjang 12 meter dan lebar 7 meter. Keliling taman adalah ....",
+      options: ["A. 19 meter", "B. 38 meter", "C. 84 meter", "D. 168 meter"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menghitung 12 × 7 = 84. Itu adalah LUAS, bukan KELILING.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Keliling = 2 × (Panjang + Lebar)</span>
+          <span class="step">K = 2 × (12 + 7)</span>
+          <span class="step">K = 2 × 19 = <b>38 meter</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Keliling adalah jarak mengelilingi bangun (jumlah semua sisi). Luas adalah daerah di dalamnya.</div>
+      `
+    },
+    {
+      q: "Sebuah persegi memiliki sisi 9 cm. Luas persegi tersebut adalah ....",
+      options: ["A. 18 cm²", "B. 36 cm²", "C. 81 cm²", "D. 81 cm"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Memilih jawaban 81 cm (salah satuan). Luas harus menggunakan satuan persegi (cm²).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Luas = sisi × sisi</span>
+          <span class="step">L = 9 × 9 = 81</span>
+          <span class="step">Satuan luas = <b>cm²</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Selalu perhatikan satuan. Panjang/Keliling = cm, m. Luas = cm², m². Volume = cm³, m³.</div>
+      `
+    },
+    {
+      q: "Sebuah kotak berbentuk balok memiliki panjang 8 cm, lebar 5 cm, dan tinggi 4 cm. Volumenya adalah ....",
+      options: ["A. 17 cm³", "B. 40 cm³", "C. 80 cm³", "D. 160 cm³"],
+      answer: 3,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjumlahkan semua angka (8+5+4 = 17) atau hanya mengalikan 2 angka (8×5 = 40).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Volume Balok = p × l × t</span>
+          <span class="step">V = 8 × 5 × 4</span>
+          <span class="step">V = 40 × 4 = <b>160 cm³</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Volume butuh 3 dimensi ukuran (panjang, lebar, tinggi).</div>
+      `
+    },
+    {
+      q: "Sebuah perjalanan dimulai pukul 08.35 dan berakhir pukul 10.10. Lama perjalanan adalah ....",
+      options: ["A. 1 jam 25 menit", "B. 1 jam 35 menit", "C. 1 jam 45 menit", "D. 2 jam 35 menit"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Mengurangkan langsung 10.10 - 08.35 dan tersesat dalam hitungan menit.</div>
+        <b>Cara Berpikir yang Benar (Bertahap):</b>
+        <div class="math-box">
+          <span class="step">08.35 ke 09.35 = 1 jam</span>
+          <span class="step">09.35 ke 10.10 = 35 menit</span>
+          <span class="step">Total = <b>1 jam 35 menit</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Hitung melompat per jam terdekat terlebih dahulu agar lebih mudah.</div>
+      `
+    },
+    {
+      q: "Sebuah mobil menempuh jarak 180 km dalam waktu 3 jam. Kecepatan rata-ratanya adalah ....",
+      options: ["A. 30 km/jam", "B. 60 km/jam", "C. 90 km/jam", "D. 540 km/jam"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Mengalikan jarak dengan waktu (180 × 3 = 540).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Kecepatan = Jarak ÷ Waktu</span>
+          <span class="step">v = 180 ÷ 3 = <b>60 km/jam</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Hafalkan segitiga rumus: Jarak (J) di atas, Kecepatan (K) dan Waktu (W) di bawah.</div>
+      `
+    },
+    {
+      q: "Jumlah buku yang dibaca empat siswa: Andi 8, Beni 12, Citra 6, Dodi 10. Siapa yang membaca buku paling banyak?",
+      options: ["A. Andi", "B. Beni", "C. Citra", "D. Dodi"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Memilih angka yang pertama dilihat (Andi 8) tanpa membandingkan seluruh data.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Bandingkan semua angka:</span>
+          <span class="step">8, <b>12</b>, 6, 10</span>
+          <span class="step">Angka terbesar adalah 12, milik <b>Beni</b>.</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Periksa seluruh data secara menyeluruh sebelum menyimpulkan.</div>
+      `
+    },
+    {
+      q: "Berdasarkan data pada soal sebelumnya (8, 12, 6, 10), berapa jumlah seluruh buku yang dibaca keempat siswa?",
+      options: ["A. 26 buku", "B. 30 buku", "C. 36 buku", "D. 40 buku"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Ada angka yang terlewat saat menjumlahkan.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">8 + 12 + 6 + 10</span>
+          <span class="step">= 20 + 6 + 10</span>
+          <span class="step">= 26 + 10 = <b>36 buku</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Jumlahkan secara sistematis (berurutan) dan hitung ulang untuk memastikan.</div>
+      `
+    },
+    {
+      q: "Jumlah pengunjung perpustakaan pada hari Senin adalah 45 orang dan pada hari Selasa 32 orang. Selisih jumlah pengunjung kedua hari tersebut adalah ....",
+      options: ["A. 13 orang", "B. 23 orang", "C. 77 orang", "D. 1.440 orang"],
+      answer: 0,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjumlahkan kedua angka (45 + 32 = 77) karena tidak paham arti kata "selisih".</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Selisih = Nilai terbesar - Nilai terkecil</span>
+          <span class="step">45 - 32 = <b>13 orang</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Kata "selisih" artinya perbedaan, yang dicari dengan pengurangan.</div>
+      `
+    },
+    {
+      q: "Dalam sebuah piktogram, satu gambar buku mewakili 5 buku. Jika terdapat 7 gambar buku, berapa jumlah buku sebenarnya?",
+      options: ["A. 7 buku", "B. 12 buku", "C. 25 buku", "D. 35 buku"],
+      answer: 3,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjawab 7 karena hanya menghitung jumlah gambarnya saja.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Nilai 1 gambar = 5 buku</span>
+          <span class="step">Banyak gambar = 7</span>
+          <span class="step">Total = 7 × 5 = <b>35 buku</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Pada piktogram, WAJIB membaca keterangan legenda (nilai per simbol) sebelum menghitung.</div>
+      `
+    },
+    {
+      q: "Perbandingan jumlah kelereng Ali dan Budi adalah 2 : 3. Jika jumlah kelereng mereka 25 buah, berapa kelereng Ali?",
+      options: ["A. 5 buah", "B. 10 buah", "C. 15 buah", "D. 20 buah"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menganggap angka 2 pada perbandingan langsung sebagai jumlah kelereng Ali.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Total bagian = 2 + 3 = 5 bagian</span>
+          <span class="step">Nilai 1 bagian = 25 ÷ 5 = 5 buah</span>
+          <span class="step">Ali (2 bagian) = 2 × 5 = <b>10 buah</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Angka perbandingan adalah "bagian", bukan jumlah aslinya. Cari nilai 1 bagian dulu.</div>
+      `
+    },
+    {
+      q: "Sebuah toko menjual 20 buku tulis dengan harga Rp4.000,00 per buku. Toko itu juga memiliki 15 penggaris. Berapa uang yang diperoleh dari penjualan seluruh buku tulis jika semua buku terjual?",
+      options: ["A. Rp19.000,00", "B. Rp35.000,00", "C. Rp80.000,00", "D. Rp140.000,00"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menggunakan semua angka di soal, termasuk 15 penggaris, padahal yang ditanya hanya buku tulis.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Abaikan info penggaris.</span>
+          <span class="step">Buku terjual = 20</span>
+          <span class="step">Harga per buku = Rp4.000</span>
+          <span class="step">Total = 20 × 4.000 = <b>Rp80.000</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Soal cerita sering memiliki jebakan "informasi tidak penting". Fokus pada apa yang ditanyakan!</div>
+      `
+    },
+    {
+      q: "Sebuah toko memiliki 96 jeruk. Jeruk dimasukkan ke dalam 8 keranjang dengan jumlah sama. Seorang siswa menjawab bahwa setiap keranjang berisi 768 jeruk. Apa yang seharusnya dilakukan siswa tersebut?",
+      options: ["A. Menerima jawaban karena 96 × 8 = 768", "B. Memeriksa kembali apakah seharusnya menggunakan pembagian", "C. Mengurangi 96 dengan 8", "D. Menambahkan 96 dengan 8"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Tidak memeriksa kewajaran jawaban. Masa isi 1 keranjang (768) lebih banyak dari total jeruk (96)?</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Kata kunci: "dimasukkan sama banyak"</span>
+          <span class="step">Artinya dibagi (÷), bukan dikali (×).</span>
+          <span class="step">96 ÷ 8 = <b>12 jeruk per keranjang</b>.</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Selalu tanya: "Apakah hasil akhirku masuk akal dengan cerita di soal?"</div>
+      `
+    },
+    {
+      q: "Sebuah toko memiliki 150 pensil. Pada pagi hari terjual 35 pensil. Pada siang hari, toko menerima kiriman 40 pensil. Berapa pensil yang dimiliki toko setelah kedua kejadian tersebut?",
+      options: ["A. 75 pensil", "B. 115 pensil", "C. 155 pensil", "D. 225 pensil"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menjumlahkan semua angka (150 + 35 + 40) karena tidak membedakan barang masuk dan keluar.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Stok awal = 150</span>
+          <span class="step">Terjual (berkurang) = -35</span>
+          <span class="step">Kiriman datang (bertambah) = +40</span>
+          <span class="step">150 - 35 + 40 = 115 + 40 = <b>155 pensil</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: "Terjual" = kurangi, "Datang/Menerima" = tambah.</div>
+      `
+    },
+    {
+      q: "Seorang guru memiliki 50 lembar kertas. Setiap siswa membutuhkan 6 lembar. Berapa siswa paling banyak yang dapat menerima kertas secara lengkap?",
+      options: ["A. 7 siswa", "B. 8 siswa", "C. 9 siswa", "D. 10 siswa"],
+      answer: 1,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Membulatkan ke atas menjadi 9 siswa, padahal sisa 2 kertas tidak cukup untuk 1 siswa.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">50 ÷ 6 = 8 sisa 2</span>
+          <span class="step">Artinya ada 8 siswa yang dapat 6 lembar.</span>
+          <span class="step">Sisa 2 lembar tidak cukup.</span>
+          <span class="step">Jadi maksimal <b>8 siswa</b>.</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Perhatikan konteksnya. Jika yang ditanya "berapa kelompok/siswa yang terlayani", sisa diabaikan (dibulatkan ke bawah).</div>
+      `
+    },
+    {
+      q: "Manakah pecahan yang nilainya paling besar? (1/2, 2/3, 3/4, 4/5)",
+      options: ["A. 1/2", "B. 2/3", "C. 3/4", "D. 4/5"],
+      answer: 3,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Hanya melihat angka pembilang atau penyebutnya saja.</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Ubah ke desimal (bagi pembilang dengan penyebut):</span>
+          <span class="step">1/2 = 0,5</span>
+          <span class="step">2/3 ≈ 0,67</span>
+          <span class="step">3/4 = 0,75</span>
+          <span class="step">4/5 = <b>0,8</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Cara tercepat membandingkan pecahan adalah dengan mengubahnya ke bentuk desimal.</div>
+      `
+    },
+    {
+      q: "Lampu merah menyala setiap 6 detik dan lampu biru menyala setiap 8 detik. Jika keduanya menyala bersama sekarang, setelah berapa detik keduanya akan menyala bersama lagi?",
+      options: ["A. 2 detik", "B. 14 detik", "C. 24 detik", "D. 48 detik"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Menggunakan FPB (2) atau menjumlahkan waktunya (6+8=14).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Kejadian berulang bersamaan = KPK.</span>
+          <span class="step">Kelipatan 6: 6, 12, 18, <b>24</b>...</span>
+          <span class="step">Kelipatan 8: 8, 16, <b>24</b>...</span>
+          <span class="step">KPK = <b>24 detik</b>.</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: KPK untuk "kapan bertemu lagi", FPB untuk "membagi rata sebanyak mungkin".</div>
+      `
+    },
+    {
+      q: "Seorang anak berdiri pada angka 5 di garis bilangan. Ia melompat ke kanan sebanyak 4 langkah, setiap langkah maju 3 angka. Di angka berapakah ia berhenti?",
+      options: ["A. 12", "B. 15", "C. 17", "D. 20"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Mengalikan 4 × 3 = 12, lupa menambahkan posisi awal (5).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Posisi awal = 5</span>
+          <span class="step">Total lompatan = 4 × 3 = 12</span>
+          <span class="step">Posisi akhir = 5 + 12 = <b>17</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Jangan lupa titik start (posisi awal) saat menghitung perpindahan.</div>
+      `
+    },
+    {
+      q: "Sebuah bilangan dua angka memiliki jumlah angka puluhan dan satuan sebesar 9. Angka puluhannya 3 lebih besar daripada angka satuannya. Bilangan tersebut adalah ....",
+      options: ["A. 36", "B. 45", "C. 54", "D. 63"],
+      answer: 3,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Hanya memeriksa jumlahnya (9), tapi lupa memeriksa selisihnya (3).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Puluhan (P) + Satuan (S) = 9</span>
+          <span class="step">P = S + 3</span>
+          <span class="step">Substitusi: (S + 3) + S = 9</span>
+          <span class="step">2S + 3 = 9  =>  2S = 6  =>  S = 3</span>
+          <span class="step">Maka P = 3 + 3 = 6. Bilangannya <b>63</b>.</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Soal logika butuh memeriksa SEMUA syarat yang diberikan di soal.</div>
+      `
+    },
+    {
+      q: "Hasil dari 144 ÷ 12 adalah 12. Cara terbaik untuk memeriksa kebenaran hasil tersebut adalah ....",
+      options: ["A. 144 + 12 = 156", "B. 144 - 12 = 132", "C. 12 × 12 = 144", "D. 144 ÷ 2 = 72"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Tidak terbiasa melakukan pengecekan balik (kembali ke operasi awal).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">Operasi pembagian dicek dengan perkalian.</span>
+          <span class="step">Hasil bagi × Pembagi = Bilangan awal.</span>
+          <span class="step">12 × 12 = <b>144</b> (Cocok!).</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Selalu cek balik. Pembagian dicek dengan perkalian, pengurangan dicek dengan penjumlahan.</div>
+      `
+    },
+    {
+      q: "Sebuah kolam memiliki volume air 2.500 liter. Sebanyak 750 liter digunakan untuk menyiram tanaman. Berapa liter air yang tersisa?",
+      options: ["A. 1.750 liter", "B. 1.850 liter", "C. 1.750 ml", "D. 3.250 liter"],
+      answer: 0,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Hasil hitungan benar, tetapi salah menuliskan satuan (menggunakan ml padahal soal menggunakan liter).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">2.500 - 750 = 1.750</span>
+          <span class="step">Karena soal dalam satuan liter, jawabannya <b>1.750 liter</b>.</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Selalu perhatikan satuan yang diminta di pertanyaan. Jangan terjebak pada pilihan jawaban yang satuannya salah.</div>
+      `
+    },
+    {
+      q: "Sebuah bilangan dikalikan 5, kemudian hasilnya dikurangi 8. Hasil akhirnya 32. Bilangan tersebut adalah ....",
+      options: ["A. 6", "B. 7", "C. 8", "D. 9"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Langsung membagi 32 dengan 5, padahal harus membalik operasi dari belakang.</div>
+        <b>Cara Berpikir yang Benar (Balik Operasi):</b>
+        <div class="math-box">
+          <span class="step">Misal bilangan = x</span>
+          <span class="step">(x × 5) - 8 = 32</span>
+          <span class="step">Balik urutan: 32 + 8 = 40</span>
+          <span class="step">40 ÷ 5 = <b>8</b></span>
+          <span class="step">Uji: (8 × 5) - 8 = 40 - 8 = 32 (Benar).</span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Gunakan aljabar dasar atau balik operasi (tambah jadi kurang, kali jadi bagi) dari hasil akhir ke belakang.</div>
+      `
+    },
+    {
+      q: "Sebuah bilangan ditambah 15, lalu hasilnya dibagi 5. Hasil akhirnya 9. Bilangan tersebut adalah ....",
+      options: ["A. 20", "B. 25", "C. 30", "D. 35"],
+      answer: 2,
+      exp: `
+        <div class="mistake-box">🚨 Kesalahan Umum: Tidak teliti membalik operasi (mengurangi 15 duluan sebelum dikali 5).</div>
+        <b>Cara Berpikir yang Benar:</b>
+        <div class="math-box">
+          <span class="step">(x + 15) ÷ 5 = 9</span>
+          <span class="step">Balik 1 (kali 5): x + 15 = 9 × 5</span>
+          <span class="step">x + 15 = 45</span>
+          <span class="step">Balik 2 (kurang 15): x = 45 - 15</span>
+          <span class="step">x = <b>30</b></span>
+        </div>
+        <div class="lesson-text">💡 Pelajaran: Selesaikan dari operasi paling akhir menuju ke awal dengan lawan operasinya.</div>
+      `
+    }
+  ];
+
+  let currentQ = 0;
+  let score = 0;
+  let selectedOpt = null;
+  let isAnswered = false;
+
+  const startScreen = document.getElementById('start-screen');
+  const quizScreen = document.getElementById('quiz-screen');
+  const endScreen = document.getElementById('end-screen');
+  
+  const qProgress = document.getElementById('q-progress');
+  const qBar = document.getElementById('q-bar');
+  const qText = document.getElementById('q-text');
+  const qOptions = document.getElementById('q-options');
+  const explanationBox = document.getElementById('explanation');
+  const expText = document.getElementById('exp-text');
+  
+  const btnCheck = document.getElementById('btn-check');
+  const btnNext = document.getElementById('btn-next');
+
+  function startQuiz() {
+    startScreen.classList.remove('active');
+    quizScreen.classList.add('active');
+    currentQ = 0;
+    score = 0;
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    isAnswered = false;
+    selectedOpt = null;
+    
+    // Reset UI
+    btnCheck.disabled = true;
+    btnCheck.style.display = 'block';
+    btnNext.style.display = 'none';
+    explanationBox.style.display = 'none';
+    qOptions.innerHTML = '';
+    
+    // Update Progress
+    qProgress.innerText = `Soal ${currentQ + 1} / ${questions.length}`;
+    qBar.style.width = `${((currentQ) / questions.length) * 100}%`;
+    
+    const data = questions[currentQ];
+    qText.innerText = data.q;
+    
+    // Render options
+    data.options.forEach((opt, index) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.innerHTML = `<span class="opt-prefix">${String.fromCharCode(65 + index)}</span> ${opt.substring(3)}`;
+      btn.onclick = () => selectOption(btn, index);
+      qOptions.appendChild(btn);
+    });
+  }
+
+  function selectOption(btn, index) {
+    if (isAnswered) return;
+    
+    // Remove selected class from all
+    Array.from(qOptions.children).forEach(b => b.classList.remove('selected'));
+    
+    // Add to clicked
+    btn.classList.add('selected');
+    selectedOpt = index;
+    
+    // Enable check button
+    btnCheck.disabled = false;
+  }
+
+  function checkAnswer() {
+    if (isAnswered || selectedOpt === null) return;
+    isAnswered = true;
+    
+    const data = questions[currentQ];
+    const optionsDOM = qOptions.children;
+    
+    // Disable all options
+    Array.from(optionsDOM).forEach(b => {
+      b.classList.add('disabled');
+      b.classList.remove('selected');
+    });
+    
+    // Highlight correct
+    optionsDOM[data.answer].classList.add('correct');
+    
+    // Highlight wrong if user chose wrong
+    if (selectedOpt !== data.answer) {
+      optionsDOM[selectedOpt].classList.add('wrong');
+    } else {
+      score++;
+    }
+    
+    // Show explanation
+    expText.innerHTML = data.exp;
+    explanationBox.style.display = 'block';
+    
+    // Toggle buttons
+    btnCheck.style.display = 'none';
+    btnNext.style.display = 'block';
+    
+    if (currentQ === questions.length - 1) {
+      btnNext.innerText = 'Lihat Hasil Analisis 🏁';
+    }
+  }
+
+  function nextQuestion() {
+    currentQ++;
+    if (currentQ < questions.length) {
+      loadQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    quizScreen.classList.remove('active');
+    endScreen.classList.add('active');
+    
+    const totalQ = questions.length;
+    const finalScore = Math.round((score / totalQ) * 100);
+    
+    const scoreCircle = document.getElementById('score-circle');
+    const scoreMessage = document.getElementById('score-message');
+    const scoreSub = document.getElementById('score-sub');
+    const endIcon = document.getElementById('end-icon');
+    
+    scoreCircle.innerText = finalScore;
+    scoreSub.innerText = `Kamu menjawab ${score} dari ${totalQ} soal dengan benar.`;
+    
+    // Category logic
+    if (finalScore >= 91) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      scoreCircle.style.boxShadow = '0 0 30px rgba(16, 185, 129, 0.6)';
+      scoreMessage.innerText = "Luar Biasa! Kamu sangat teliti! 🌟";
+      endIcon.innerText = "🏆";
+    } else if (finalScore >= 81) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #fcd34d, #f59e0b)';
+      scoreCircle.style.boxShadow = '0 0 30px rgba(252, 211, 77, 0.6)';
+      scoreMessage.innerText = "Hebat! Sedikit lagi sempurna! 🚀";
+      endIcon.innerText = "🎉";
+    } else if (finalScore >= 71) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #fb923c, #ea580c)';
+      scoreCircle.style.boxShadow = '0 0 30px rgba(251, 146, 60, 0.6)';
+      scoreMessage.innerText = "Bagus! Terus asah ketelitianmu! 💪";
+      endIcon.innerText = "⭐";
+    } else if (finalScore >= 61) {
+      scoreCircle.style.background = 'linear-gradient(135deg, #f87171, #dc2626)';
+      scoreCircle.style.boxShadow = '0 0 30px rgba(248, 113, 113, 0.6)';
+      scoreMessage.innerText = "Cukup! Yuk pelajari kembali analisis kesalahannya! 📚";
+      endIcon.innerText = "📖";
+    } else {
+      scoreCircle.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+      scoreCircle.style.boxShadow = '0 0 30px rgba(239, 68, 68, 0.6)';
+      scoreMessage.innerText = "Jangan menyerah! Pahami pola kesalahannya dan coba lagi! 💡";
+      endIcon.innerText = "💪";
+    }
+  }
+
+  function restartQuiz() {
+    endScreen.classList.remove('active');
+    startScreen.classList.add('active');
+  }
+</script>
+</body>
+</html>
