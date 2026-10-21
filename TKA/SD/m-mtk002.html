@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Bentuk & Ukuran — TKA Matematika SD/MI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f7ff;
+    --ink:#1d2b47;
+    --muted:#5c6f92;
+    --primary:#4f7df3;
+    --primary-d:#3560d6;
+    --accent:#ff8a5c;
+    --mint:#2fc7a0;
+    --yellow:#ffc94d;
+    --purple:#9b6bf0;
+    --pink:#ff6f91;
+    --card:#ffffff;
+    --line:#e3ecff;
+    --shadow:0 10px 24px rgba(60,90,160,.10);
+    --shadow-lg:0 18px 40px rgba(60,90,160,.16);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, #e2ecff 0 22%, transparent 55%),
+      radial-gradient(circle at 88% 4%, #ffe9f0 0 18%, transparent 50%),
+      var(--bg);
+    color:var(--ink);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,.tab,.btn-toggle,.opt{font-family:'Baloo 2','Nunito',sans-serif;}
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;
+    background:linear-gradient(135deg,#2fc7a0 0%,#4f7df3 52%,#9b6bf0 100%);
+    color:#fff;
+    padding:34px 18px 78px;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:-2px;height:60px;
+    background:var(--bg);
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .hero-inner{max-width:960px;margin:0 auto;position:relative;z-index:2;text-align:center;}
+  .badge{
+    display:inline-block;background:rgba(255,255,255,.22);
+    border:1px solid rgba(255,255,255,.5);
+    padding:6px 16px;border-radius:999px;
+    font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:clamp(1.9rem,5.2vw,3rem);
+    margin:14px 0 6px;font-weight:800;letter-spacing:.5px;
+    text-shadow:0 4px 0 rgba(0,0,0,.10);
+  }
+  .hero p{margin:0 auto;max-width:560px;font-size:1rem;color:rgba(255,255,255,.92);font-weight:600;}
+  .float-emoji{
+    position:absolute;font-size:2rem;opacity:.85;animation:bob 4s ease-in-out infinite;
+  }
+  .fe1{top:16px;left:6%;}
+  .fe2{top:70px;right:8%;animation-delay:1s;}
+  .fe3{bottom:80px;left:14%;animation-delay:2s;font-size:1.6rem;}
+  .fe4{bottom:96px;right:16%;animation-delay:.5s;font-size:1.7rem;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-12px) rotate(6deg);}}
+
+  /* ================= SCORE ================= */
+  .score-wrap{
+    max-width:420px;margin:22px auto 0;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.42);
+    backdrop-filter:blur(6px);
+    border-radius:18px;padding:12px 16px;
+  }
+  .score-line{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:.95rem;}
+  .bar{height:12px;background:rgba(255,255,255,.32);border-radius:999px;margin-top:8px;overflow:hidden;}
+  .bar-fill{
+    height:100%;width:0%;border-radius:999px;
+    background:linear-gradient(90deg,#ffe066,#7dffc4);
+    transition:width .5s cubic-bezier(.3,1.4,.5,1);
+  }
+
+  /* ================= TABS ================= */
+  .tabs{
+    position:sticky;top:0;z-index:50;
+    display:flex;gap:8px;overflow-x:auto;
+    padding:12px 14px;
+    background:rgba(255,255,255,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--line);
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;border:none;cursor:pointer;
+    background:#eaf0ff;color:#41537a;
+    padding:10px 16px;border-radius:999px;
+    font-weight:700;font-size:.92rem;
+    transition:transform .15s, background .2s, box-shadow .2s;
+    white-space:nowrap;
+  }
+  .tab:hover{transform:translateY(-2px);background:#dfe8ff;}
+  .tab.active{
+    background:linear-gradient(135deg,var(--primary),#7aa2ff);
+    color:#fff;box-shadow:0 8px 18px rgba(79,125,243,.38);
+  }
+
+  /* ================= LAYOUT ================= */
+  main{max-width:960px;margin:0 auto;padding:22px 16px 70px;}
+  .panel{display:none;animation:pop .35s ease both;}
+  .panel.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+  .chapter-head{
+    display:flex;align-items:center;gap:14px;
+    margin:6px 0 20px;
+  }
+  .chapter-emoji{
+    flex:0 0 auto;width:58px;height:58px;border-radius:18px;
+    display:grid;place-items:center;font-size:1.8rem;
+    background:linear-gradient(135deg,#fff2c9,#ffd98a);
+    box-shadow:var(--shadow);
+  }
+  .chapter-head h2{margin:0;font-size:clamp(1.3rem,3.6vw,1.75rem);font-weight:800;line-height:1.2;}
+  .chapter-head .sub{margin:2px 0 0;color:var(--muted);font-size:.9rem;font-weight:600;}
+
+  /* ================= CARDS ================= */
+  .card{
+    background:var(--card);
+    border-radius:22px;
+    padding:18px 20px;
+    margin-bottom:16px;
+    box-shadow:var(--shadow);
+    border:1px solid #eef3ff;
+  }
+  .card-label{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:.82rem;
+    letter-spacing:.05em;text-transform:uppercase;
+    padding:4px 12px;border-radius:999px;margin-bottom:10px;
+    background:#eaf0ff;color:#3a5bbf;
+  }
+  .card-label.green{background:#e2fbf3;color:#137a5c;}
+  .card-label.orange{background:#fff0e4;color:#b9571f;}
+  .card-label.purple{background:#f1e9ff;color:#6b3ec9;}
+
+  .grid{display:grid;gap:14px;}
+  @media(min-width:640px){ .grid.two{grid-template-columns:1fr 1fr;} .grid.three{grid-template-columns:repeat(3,1fr);} }
+
+  .mini{
+    background:linear-gradient(160deg,#ffffff,#f7faff);
+    border:2px solid var(--line);
+    border-radius:18px;padding:14px 16px;
+    transition:transform .18s, box-shadow .18s;
+  }
+  .mini:hover{transform:translateY(-3px);box-shadow:0 12px 22px rgba(60,90,160,.12);}
+  .mini h4{margin:0 0 6px;font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:7px;}
+  .mini p{margin:0;font-size:.93rem;color:#3d4f70;}
+
+  .concept{
+    border-left:6px solid var(--primary);
+    background:#f7faff;
+    border-radius:14px;padding:12px 16px;margin-bottom:12px;
+  }
+  .concept.y{border-left-color:var(--yellow);background:#fffbf0;}
+  .concept.g{border-left-color:var(--mint);background:#f1fdf9;}
+  .concept.o{border-left-color:var(--accent);background:#fff6f1;}
+  .concept p{margin:0;font-size:.95rem;}
+
+  /* fractions */
+  .fr{
+    display:inline-flex;flex-direction:column;text-align:center;
+    vertical-align:middle;line-height:1.08;font-size:.92em;
+    margin:0 .18em;position:relative;top:-.06em;
+  }
+  .fr i{font-style:normal;padding:0 .3em;}
+  .fr i:first-child{border-bottom:2px solid currentColor;}
+
+  /* ================= TOGGLE BUTTON ================= */
+  .btn-toggle{
+    display:inline-flex;align-items:center;gap:8px;
+    border:2px dashed var(--yellow);
+    background:#fffaea;color:#96630a;
+    padding:9px 18px;border-radius:14px;
+    font-weight:700;font-size:.92rem;cursor:pointer;
+    transition:.2s;margin-top:6px;
+  }
+  .btn-toggle:hover{background:#fff3cd;transform:translateY(-1px);}
+  .btn-toggle.open{
+    background:#e6fbf3;border-color:var(--mint);border-style:solid;color:#0f7a5c;
+  }
+
+  .answer{display:none;margin-top:12px;}
+  .answer.show{display:block;animation:unfold .3s ease both;}
+  @keyframes unfold{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+  .answer-inner{
+    background:linear-gradient(160deg,#f0fdf8,#eafaf4);
+    border:2px solid #bff0e0;
+    border-radius:16px;padding:14px 16px;
+  }
+  .answer-inner p{margin:0 0 8px;font-size:.95rem;}
+  .answer-inner p:last-child{margin-bottom:0;}
+  .answer-inner strong{color:#0f7a5c;}
+  .hl{background:#fff2b8;border-radius:6px;padding:1px 6px;font-weight:800;}
+
+  /* ================= QUIZ ================= */
+  .quiz{position:relative;}
+  .q-head{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px;}
+  .q-num{
+    flex:0 0 auto;width:32px;height:32px;border-radius:11px;
+    display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--primary),#7aa2ff);
+    color:#fff;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:.95rem;
+    box-shadow:0 5px 12px rgba(79,125,243,.3);
+  }
+  .q-head p{margin:0;font-weight:700;font-size:.98rem;}
+  .options{display:grid;gap:9px;}
+  @media(min-width:620px){ .options.two-col{grid-template-columns:1fr 1fr;} }
+  .opt{
+    text-align:left;cursor:pointer;
+    background:#f7faff;border:2px solid #e3ecff;
+    color:var(--ink);padding:11px 15px;border-radius:14px;
+    font-size:.95rem;font-weight:700;
+    transition:.18s;font-family:'Nunito',sans-serif;
+  }
+  .opt:hover:not(.correct):not(.wrong){background:#eaf0ff;border-color:#bcd0ff;transform:translateX(3px);}
+  .opt.correct{background:#dcfbef;border-color:#43d3a6;color:#0d6b51;}
+  .opt.correct::after{content:" ✓";font-weight:900;color:#12a97b;}
+  .opt.wrong{background:#ffe8ec;border-color:#ff8fa6;color:#b3233f;}
+  .opt.wrong::after{content:" ✗";font-weight:900;}
+  .quiz.answered .opt{cursor:default;}
+
+  .feedback{
+    margin-top:10px;font-weight:800;font-size:.9rem;
+    display:none;align-items:center;gap:8px;
+  }
+  .feedback.show{display:flex;}
+  .feedback.ok{color:#0f7a5c;}
+  .feedback.no{color:#c22c4c;}
+
+  /* ================= VISUALISASI BENTUK & GEOMETRI ================= */
+  .viz-box {
+    display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+    margin: 16px 0;
+  }
+  .shape-item {
+    display: flex; flex-direction: column; align-items: center;
+    background: #fff; padding: 12px; border-radius: 16px;
+    border: 2px solid var(--line); width: 130px;
+    transition: transform 0.2s;
+  }
+  .shape-item:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
+  .shape-item svg { width: 80px; height: 80px; }
+  .shape-item span { font-weight: 800; font-size: 0.85rem; margin-top: 8px; font-family:'Baloo 2',sans-serif;}
+  
+  /* 3D Shapes */
+  .shape-3d svg { width: 100px; height: 100px; }
+  
+  /* Tangga Satuan */
+  .staircase {
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 6px; background: #f7faff; padding: 16px; border-radius: 16px;
+    border: 2px solid var(--line); max-width: 400px; margin: 0 auto;
+  }
+  .step-row { display: flex; align-items: center; gap: 10px; }
+  .step-box {
+    background: #fff; border: 2px solid var(--primary); color: var(--primary-d);
+    font-weight: 800; padding: 6px 14px; border-radius: 8px; min-width: 80px; text-align: center;
+    font-family: 'Baloo 2', sans-serif;
+  }
+  .step-arrow { font-size: 0.8rem; color: var(--muted); font-weight: 800; }
+
+  /* Angles */
+  .angle-box svg { width: 120px; height: 80px; }
+  
+  /* Unit Cubes */
+  .unit-cubes {
+    display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
+    background: #eef2f9; padding: 16px; border-radius: 16px; border: 2px dashed #d5dce8;
+  }
+  .cube { width: 24px; height: 24px; background: #f5c15b; border-radius: 4px; box-shadow: inset -2px -2px 0 rgba(0,0,0,0.15); }
+
+  footer{
+    text-align:center;padding:26px 16px 40px;
+    color:var(--muted);font-size:.85rem;font-weight:600;
+  }
+  .pulse{animation:pulse .5s ease;}
+  @keyframes pulse{50%{transform:scale(1.08);}}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <span class="float-emoji fe1">📐</span>
+  <span class="float-emoji fe2">📦</span>
+  <span class="float-emoji fe3">⏱️</span>
+  <span class="float-emoji fe4">🏎️</span>
+  <div class="hero-inner">
+    <div class="badge">TKA Matematika SD / MI · Bagian II</div>
+    <h1>Petualangan Bentuk & Ukuran 📐</h1>
+    <p>Modul interaktif Geometri dan Pengukuran. Pelajari bentuk, hitung luas & volume, kenali satuan, dan pecahkan soal cerita!</p>
+    <div class="score-wrap">
+      <div class="score-line">
+        <span>⭐ Skor latihanmu</span>
+        <span><b id="score">0</b> / <span id="total">50</span></span>
+      </div>
+      <div class="bar"><div class="bar-fill" id="bar"></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= TABS ================= -->
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-target="bab7">📐 Bangun Datar</button>
+  <button class="tab" data-target="bab8">📏 Keliling & Luas</button>
+  <button class="tab" data-target="bab9">📦 Bangun Ruang</button>
+  <button class="tab" data-target="bab10">🧊 Volume</button>
+  <button class="tab" data-target="bab11">📏 Ukur Panjang</button>
+  <button class="tab" data-target="bab12">⚖️ Ukur Berat</button>
+  <button class="tab" data-target="bab13">💧 Vol. Cairan</button>
+  <button class="tab" data-target="bab14">⏰ Waktu</button>
+  <button class="tab" data-target="bab15">🏎️ Kecepatan</button>
+  <button class="tab" data-target="bab16">📐 Sudut</button>
+  <button class="tab" data-target="ringkasan">🏆 Ringkasan</button>
+</nav>
+
+<main>
+
+<!-- ============================================================= -->
+<!-- BAB 7 -->
+<!-- ============================================================= -->
+<section class="panel active" id="bab7">
+  <div class="chapter-head">
+    <div class="chapter-emoji">📐</div>
+    <div>
+      <h2>Bab 7 — Mengenal Bentuk & Sifat Bangun Datar</h2>
+      <p class="sub">Mengenali bangun dari ciri-cirinya, bukan hanya dari gambar.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Macam-Macam Bangun Datar</div>
+    <div class="viz-box">
+      <!-- Segitiga -->
+      <div class="shape-item">
+        <svg viewBox="0 0 100 100">
+          <polygon points="50,10 10,90 90,90" fill="#ff8a5c" stroke="#d05c2b" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        <span>Segitiga</span>
+      </div>
+      <!-- Persegi -->
+      <div class="shape-item">
+        <svg viewBox="0 0 100 100">
+          <rect x="15" y="15" width="70" height="70" fill="#4f7df3" stroke="#2f52b0" stroke-width="3"/>
+        </svg>
+        <span>Persegi</span>
+      </div>
+      <!-- Persegi Panjang -->
+      <div class="shape-item">
+        <svg viewBox="0 0 100 100">
+          <rect x="10" y="25" width="80" height="50" fill="#2fc7a0" stroke="#138a6a" stroke-width="3"/>
+        </svg>
+        <span>Persegi Panjang</span>
+      </div>
+      <!-- Jajargenjang -->
+      <div class="shape-item">
+        <svg viewBox="0 0 100 100">
+          <polygon points="30,20 90,20 70,80 10,80" fill="#ffc94d" stroke="#c99a15" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        <span>Jajargenjang</span>
+      </div>
+      <!-- Belah Ketupat -->
+      <div class="shape-item">
+        <svg viewBox="0 0 100 100">
+          <polygon points="50,10 90,50 50,90 10,50" fill="#9b6bf0" stroke="#643bc2" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        <span>Belah Ketupat</span>
+      </div>
+      <!-- Layang-layang -->
+      <div class="shape-item">
+        <svg viewBox="0 0 100 100">
+          <polygon points="50,10 80,40 50,90 20,40" fill="#ff6f91" stroke="#c73f5f" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        <span>Layang-layang</span>
+      </div>
+      <!-- Trapesium -->
+      <div class="shape-item">
+        <svg viewBox="0 0 100 100">
+          <polygon points="30,20 70,20 90,80 10,80" fill="#00bcd4" stroke="#00838f" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        <span>Trapesium</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid two">
+    <div class="mini">
+      <h4>🔺 Segitiga</h4>
+      <p>• 3 sisi dan 3 titik sudut.<br>• Jumlah sudut = 180°.</p>
+    </div>
+    <div class="mini">
+      <h4>⬛ Persegi</h4>
+      <p>• 4 sisi sama panjang.<br>• 4 sudut siku-siku (90°).</p>
+    </div>
+    <div class="mini">
+      <h4>▭ Persegi Panjang</h4>
+      <p>• Sisi berhadapan sama panjang.<br>• 4 sudut siku-siku.</p>
+    </div>
+    <div class="mini">
+      <h4>▱ Jajargenjang</h4>
+      <p>• Sisi berhadapan sejajar & sama panjang.<br>• Sudut berhadapan sama besar.</p>
+    </div>
+    <div class="mini">
+      <h4>🔷 Belah Ketupat</h4>
+      <p>• 4 sisi sama panjang.<br>• Diagonal tegak lurus.</p>
+    </div>
+    <div class="mini">
+      <h4>🪁 Layang-layang</h4>
+      <p>• 2 pasang sisi berdekatan sama panjang.<br>• Diagonal tegak lurus.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Segi Banyak</div>
+    <p style="margin:0 0 10px;font-weight:700;">Bangun datar tertutup yang dibatasi garis lurus:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nama</th><th>Banyak Sisi</th></tr></thead>
+        <tbody>
+          <tr><td>Segitiga</td><td>3</td></tr>
+          <tr><td>Segi empat</td><td>4</td></tr>
+          <tr><td>Segi lima</td><td>5</td></tr>
+          <tr><td>Segi enam</td><td>6</td></tr>
+          <tr><td>Segi delapan</td><td>8</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 7</h3>
+  
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Bangun yang mempunyai empat sisi sama panjang dan empat sudut siku-siku adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. Belah ketupat</button>
+      <button class="opt" data-correct="true">B. Persegi</button>
+      <button class="opt">C. Jajargenjang</button>
+      <button class="opt">D. Layang-layang</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Empat sisi sama panjang → bisa belah ketupat atau persegi. Karena ditambah <b>empat sudut siku-siku</b>, maka jawabannya persegi.</p>
+      <p>Jawaban: <span class="hl">B. Persegi</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Bangun datar yang memiliki tiga sisi dan tiga titik sudut adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. Segitiga</button>
+      <button class="opt">B. Segi empat</button>
+      <button class="opt">C. Trapesium</button>
+      <button class="opt">D. Segi lima</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ciri "tiga sisi dan tiga titik sudut" melekat pada segitiga.</p>
+      <p>Jawaban: <span class="hl">A. Segitiga</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Bangun yang memiliki sisi berhadapan sejajar dan sama panjang, tetapi tidak harus memiliki sudut siku-siku adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. Persegi</button>
+      <button class="opt">B. Segitiga</button>
+      <button class="opt" data-correct="true">C. Jajargenjang</button>
+      <button class="opt">D. Layang-layang</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Jajargenjang memiliki sisi berhadapan sejajar & sama panjang, tetapi sudutnya tidak harus 90°.</p>
+      <p>Jawaban: <span class="hl">C. Jajargenjang</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Banyak diagonal pada persegi adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 1</button>
+      <button class="opt" data-correct="true">B. 2</button>
+      <button class="opt">C. 3</button>
+      <button class="opt">D. 4</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Persegi punya 2 diagonal yang menghubungkan titik sudut yang bersebrangan.</p>
+      <p>Jawaban: <span class="hl">B. 2</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Bangun segi banyak yang mempunyai enam sisi disebut …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. Segi lima</button>
+      <button class="opt" data-correct="true">B. Segi enam</button>
+      <button class="opt">C. Segi tujuh</button>
+      <button class="opt">D. Segi delapan</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Enam sisi = segi enam (heksagon).</p>
+      <p>Jawaban: <span class="hl">B. Segi enam</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 8 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab8">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#e2fbf3,#9df0d4);">📏</div>
+    <div>
+      <h2>Bab 8 — Keliling & Luas Bangun Datar</h2>
+      <p class="sub">Memahami perbedaan keliling dan luas serta menggunakan rumusnya.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">💡</span>
+    <p><b>Keliling</b> = jumlah panjang seluruh sisi (satuan: cm, m).<br>
+       <b>Luas</b> = ukuran daerah di dalam bangun (satuan: cm², m²).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Rumus Penting</div>
+    <div class="grid three">
+      <div class="mini">
+        <h4>⬛ Persegi</h4>
+        <p>Keliling = 4 × s<br>Luas = s × s</p>
+      </div>
+      <div class="mini">
+        <h4>▭ Persegi Panjang</h4>
+        <p>Keliling = 2 × (p + l)<br>Luas = p × l</p>
+      </div>
+      <div class="mini">
+        <h4>🔺 Segitiga</h4>
+        <p>Keliling = jumlah 3 sisi<br>Luas = <span class="fr"><i>1</i><i>2</i></span> × a × t</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1 (Persegi)</div>
+    <p style="margin:0;font-weight:700;">Sebuah persegi memiliki sisi 8 cm. Hitung keliling dan luasnya!</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Keliling = 4 × 8 = <b>32 cm</b></p>
+      <p>Luas = 8 × 8 = <b>64 cm²</b></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2 (Segitiga)</div>
+    <p style="margin:0;font-weight:700;">Segitiga dengan alas 10 cm, tinggi 6 cm, dan sisi miring masing-masing 8 cm. Hitung luas dan kelilingnya!</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Luas = ½ × 10 × 6 = <b>30 cm²</b></p>
+      <p>Keliling = 10 + 8 + 8 = <b>26 cm</b></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 3 (Sisi Tidak Diketahui)</div>
+    <p style="margin:0;font-weight:700;">Keliling persegi panjang 30 cm. Panjangnya 9 cm. Berapa lebarnya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>K = 2 × (p + l)<br>30 = 2 × (9 + l)<br>15 = 9 + l<br>l = <b>6 cm</b></p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 8</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Persegi mempunyai sisi 7 cm. Kelilingnya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 14 cm</button>
+      <button class="opt" data-correct="true">B. 28 cm</button>
+      <button class="opt">C. 49 cm</button>
+      <button class="opt">D. 56 cm</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>K = 4 × s = 4 × 7 = 28 cm.</p>
+      <p>Jawaban: <span class="hl">B. 28 cm</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Persegi panjang berukuran 10 cm × 4 cm. Luasnya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 14 cm²</button>
+      <button class="opt">B. 28 cm²</button>
+      <button class="opt" data-correct="true">C. 40 cm²</button>
+      <button class="opt">D. 80 cm²</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>L = p × l = 10 × 4 = 40 cm².</p>
+      <p>Jawaban: <span class="hl">C. 40 cm²</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Segitiga memiliki alas 12 cm dan tinggi 5 cm. Luasnya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 17 cm²</button>
+      <button class="opt" data-correct="true">B. 30 cm²</button>
+      <button class="opt">C. 60 cm²</button>
+      <button class="opt">D. 120 cm²</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>L = ½ × a × t = ½ × 12 × 5 = 6 × 5 = 30 cm².</p>
+      <p>Jawaban: <span class="hl">B. 30 cm²</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Keliling persegi 36 cm. Panjang sisinya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 6 cm</button>
+      <button class="opt">B. 8 cm</button>
+      <button class="opt" data-correct="true">C. 9 cm</button>
+      <button class="opt">D. 12 cm</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>K = 4 × s → 36 = 4 × s → s = 36 ÷ 4 = 9 cm.</p>
+      <p>Jawaban: <span class="hl">C. 9 cm</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Panjang pagar untuk mengelilingi taman berukuran 15 m × 10 m adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 25 m</button>
+      <button class="opt" data-correct="true">B. 50 m</button>
+      <button class="opt">C. 100 m</button>
+      <button class="opt">D. 150 m</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ini menghitung keliling (pagar di pinggir taman).</p>
+      <p>K = 2 × (p + l) = 2 × (15 + 10) = 2 × 25 = 50 m.</p>
+      <p>Jawaban: <span class="hl">B. 50 m</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 9 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab9">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#e2ecff,#a9c6ff);">📦</div>
+    <div>
+      <h2>Bab 9 — Bangun Ruang & Visualisasi Spasial</h2>
+      <p class="sub">Mengenal kubus, balok, dan menghitung kubus satuan.</p>
+    </div>
+  </div>
+
+  <div class="viz-box">
+    <!-- Kubus -->
+    <div class="shape-item shape-3d">
+      <svg viewBox="0 0 100 100">
+        <polygon points="20,40 50,20 80,40 80,80 50,100 20,80" fill="#a9c6ff" stroke="#3560d6" stroke-width="3" stroke-linejoin="round"/>
+        <line x1="50" y1="20" x2="50" y2="60" stroke="#3560d6" stroke-width="3" stroke-dasharray="4"/>
+        <line x1="20" y1="40" x2="50" y2="60" stroke="#3560d6" stroke-width="3" stroke-dasharray="4"/>
+        <line x1="80" y1="40" x2="50" y2="60" stroke="#3560d6" stroke-width="3" stroke-dasharray="4"/>
+        <polygon points="20,40 50,60 50,100 20,80" fill="#4f7df3" stroke="#3560d6" stroke-width="3" stroke-linejoin="round"/>
+        <polygon points="50,60 80,40 80,80 50,100" fill="#2f52b0" stroke="#3560d6" stroke-width="3" stroke-linejoin="round"/>
+      </svg>
+      <span>Kubus</span>
+    </div>
+    <!-- Balok -->
+    <div class="shape-item shape-3d">
+      <svg viewBox="0 0 100 100">
+        <polygon points="10,40 40,15 90,15 60,40" fill="#b2f5e6" stroke="#138a6a" stroke-width="3" stroke-linejoin="round"/>
+        <polygon points="10,40 60,40 60,85 10,85" fill="#2fc7a0" stroke="#138a6a" stroke-width="3" stroke-linejoin="round"/>
+        <polygon points="60,40 90,15 90,60 60,85" fill="#138a6a" stroke="#138a6a" stroke-width="3" stroke-linejoin="round"/>
+        <line x1="40" y1="15" x2="40" y2="60" stroke="#138a6a" stroke-width="3" stroke-dasharray="4"/>
+        <line x1="40" y1="60" x2="90" y2="60" stroke="#138a6a" stroke-width="3" stroke-dasharray="4"/>
+        <line x1="40" y1="60" x2="10" y2="85" stroke="#138a6a" stroke-width="3" stroke-dasharray="4"/>
+      </svg>
+      <span>Balok</span>
+    </div>
+  </div>
+
+  <div class="grid two">
+    <div class="mini">
+      <h4>📦 Kubus</h4>
+      <p>• 6 sisi berbentuk persegi.<br>• 12 rusuk sama panjang.<br>• 8 titik sudut.</p>
+    </div>
+    <div class="mini">
+      <h4>🧱 Balok</h4>
+      <p>• 6 sisi berbentuk persegi panjang.<br>• 12 rusuk.<br>• 8 titik sudut.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Kubus Satuan</div>
+    <p style="margin:0 0 10px;font-weight:700;">Banyak kubus = panjang × lebar × tinggi</p>
+    <div class="unit-cubes">
+      <div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div>
+      <div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div>
+      <div class="cube"></div><div class="cube"></div><div class="cube"></div><div class="cube"></div>
+    </div>
+    <p style="margin:10px 0 0;text-align:center;font-weight:700;">Contoh: 4 × 3 = 12 kubus satuan.</p>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 9</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Banyak sisi pada kubus adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 4</button>
+      <button class="opt" data-correct="true">B. 6</button>
+      <button class="opt">C. 8</button>
+      <button class="opt">D. 12</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kubus punya 6 sisi (atas, bawah, kiri, kanan, depan, belakang).</p>
+      <p>Jawaban: <span class="hl">B. 6</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Banyak rusuk pada balok adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 6</button>
+      <button class="opt">B. 8</button>
+      <button class="opt">C. 10</button>
+      <button class="opt" data-correct="true">D. 12</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Balok memiliki 12 rusuk (4 panjang, 4 lebar, 4 tinggi).</p>
+      <p>Jawaban: <span class="hl">D. 12</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Banyak titik sudut pada kubus adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 6</button>
+      <button class="opt" data-correct="true">B. 8</button>
+      <button class="opt">C. 10</button>
+      <button class="opt">D. 12</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kubus memiliki 8 titik sudut (4 di atas, 4 di bawah).</p>
+      <p>Jawaban: <span class="hl">B. 8</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Susunan berbentuk balok memiliki 5 kubus panjang, 2 kubus lebar, dan 3 lapisan. Banyak kubus satuannya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 10</button>
+      <button class="opt">B. 15</button>
+      <button class="opt">C. 20</button>
+      <button class="opt" data-correct="true">D. 30</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>5 × 2 × 3 = 30 kubus satuan.</p>
+      <p>Jawaban: <span class="hl">D. 30</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Pada dadu standar, sisi yang berlawanan dengan sisi bernilai 3 adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 1</button>
+      <button class="opt">B. 2</button>
+      <button class="opt" data-correct="true">C. 4</button>
+      <button class="opt">D. 6</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Pada dadu standar, jumlah sisi berlawanan adalah 7. Jadi 3 berlawanan dengan 4 (3 + 4 = 7).</p>
+      <p>Jawaban: <span class="hl">C. 4</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 10 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab10">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#ffe9f0,#ffb3c9);">🧊</div>
+    <div>
+      <h2>Bab 10 — Volume Bangun Ruang</h2>
+      <p class="sub">Menghitung volume kubus dan balok serta menentukan ukuran yang belum diketahui.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Rumus Volume</div>
+    <div class="grid two">
+      <div class="mini">
+        <h4>📦 Kubus</h4>
+        <p>V = s × s × s = s³</p>
+      </div>
+      <div class="mini">
+        <h4>🧱 Balok</h4>
+        <p>V = p × l × t</p>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:14px;">
+      <span class="ico">💡</span>
+      <p>Satuan volume: cm³, dm³, m³.<br>
+      Ingat: 1 cm³ = 1 mL, 1 dm³ = 1 L, 1 m³ = 1.000 L.</p>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1 (Kubus)</div>
+    <p style="margin:0;font-weight:700;">Panjang rusuk kubus 5 cm. Berapa volumenya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>V = 5 × 5 × 5 = <b>125 cm³</b></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2 (Balok)</div>
+    <p style="margin:0;font-weight:700;">Balok dengan panjang 8 cm, lebar 4 cm, tinggi 3 cm. Berapa volumenya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>V = 8 × 4 × 3 = <b>96 cm³</b></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 3 (Cari Tinggi)</div>
+    <p style="margin:0;font-weight:700;">Volume balok 120 cm³. Panjang 10 cm, lebar 4 cm. Berapa tingginya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>V = p × l × t<br>120 = 10 × 4 × t<br>120 = 40 × t<br>t = 120 ÷ 40 = <b>3 cm</b></p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 10</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Volume kubus dengan rusuk 4 cm adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 16 cm³</button>
+      <button class="opt">B. 32 cm³</button>
+      <button class="opt">C. 48 cm³</button>
+      <button class="opt" data-correct="true">D. 64 cm³</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>V = 4 × 4 × 4 = 64 cm³.</p>
+      <p>Jawaban: <span class="hl">D. 64 cm³</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Balok berukuran 10 cm × 3 cm × 2 cm mempunyai volume …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 15 cm³</button>
+      <button class="opt">B. 30 cm³</button>
+      <button class="opt" data-correct="true">C. 60 cm³</button>
+      <button class="opt">D. 100 cm³</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>V = 10 × 3 × 2 = 60 cm³.</p>
+      <p>Jawaban: <span class="hl">C. 60 cm³</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Volume balok 96 cm³. Panjang 8 cm dan lebar 4 cm. Tingginya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 2 cm</button>
+      <button class="opt" data-correct="true">B. 3 cm</button>
+      <button class="opt">C. 4 cm</button>
+      <button class="opt">D. 6 cm</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>96 = 8 × 4 × t → 96 = 32 × t → t = 96 ÷ 32 = 3 cm.</p>
+      <p>Jawaban: <span class="hl">B. 3 cm</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Bak berkapasitas 45 liter diisi dengan ember 5 liter. Banyak ember penuh yang diperlukan adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5</button>
+      <button class="opt">B. 8</button>
+      <button class="opt" data-correct="true">C. 9</button>
+      <button class="opt">D. 10</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>45 ÷ 5 = 9 ember.</p>
+      <p>Jawaban: <span class="hl">C. 9</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Volume sebuah balok 30 cm³. Jika panjangnya menjadi dua kali lipat dan ukuran lainnya tetap, volumenya menjadi …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 15 cm³</button>
+      <button class="opt">B. 32 cm³</button>
+      <button class="opt" data-correct="true">C. 60 cm³</button>
+      <button class="opt">D. 90 cm³</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Volume berbanding lurus dengan panjang. Jika panjang menjadi 2x, volume menjadi 2x lipat.</p>
+      <p>30 × 2 = 60 cm³.</p>
+      <p>Jawaban: <span class="hl">C. 60 cm³</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 11 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab11">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#fff2c9,#ffd166);">📏</div>
+    <div>
+      <h2>Bab 11 — Pengukuran Panjang</h2>
+      <p class="sub">Mengubah satuan panjang dan menyelesaikan soal cerita.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Tangga Satuan Panjang</div>
+    <p style="font-size:0.9rem; margin-bottom:8px;">Turun 1 tingkat <b>× 10</b> &nbsp;|&nbsp; Naik 1 tingkat <b>÷ 10</b></p>
+    <div class="staircase">
+      <div class="step-row" style="margin-left:0px;"><div class="step-box">km</div><span class="step-arrow">Kilometer</span></div>
+      <div class="step-row" style="margin-left:30px;"><div class="step-box">hm</div><span class="step-arrow">Hektometer</span></div>
+      <div class="step-row" style="margin-left:60px;"><div class="step-box">dam</div><span class="step-arrow">Dekameter</span></div>
+      <div class="step-row" style="margin-left:90px;"><div class="step-box">m</div><span class="step-arrow">Meter</span></div>
+      <div class="step-row" style="margin-left:120px;"><div class="step-box">dm</div><span class="step-arrow">Desimeter</span></div>
+      <div class="step-row" style="margin-left:150px;"><div class="step-box">cm</div><span class="step-arrow">Sentimeter</span></div>
+      <div class="step-row" style="margin-left:180px;"><div class="step-box">mm</div><span class="step-arrow">Milimeter</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">4 m = … cm</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Dari meter ke sentimeter turun 2 tingkat, jadi dikali 100.</p>
+      <p>4 × 100 = <b>400 cm</b></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Pita sepanjang 5 m dipotong 125 cm. Berapa cm sisanya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ubah dulu ke satuan yang sama: 5 m = 500 cm.</p>
+      <p>500 cm − 125 cm = <b>375 cm</b></p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 11</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>3 m sama dengan … cm.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 30</button>
+      <button class="opt" data-correct="true">B. 300</button>
+      <button class="opt">C. 3.000</button>
+      <button class="opt">D. 30.000</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>m ke cm turun 2 tingkat → × 100.</p>
+      <p>3 × 100 = 300 cm.</p>
+      <p>Jawaban: <span class="hl">B. 300</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>2,5 km sama dengan … m.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 25</button>
+      <button class="opt">B. 250</button>
+      <button class="opt" data-correct="true">C. 2.500</button>
+      <button class="opt">D. 25.000</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>km ke m turun 3 tingkat → × 1.000.</p>
+      <p>2,5 × 1.000 = 2.500 m.</p>
+      <p>Jawaban: <span class="hl">C. 2.500</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>450 cm sama dengan … m.</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. 4,5</button>
+      <button class="opt">B. 45</button>
+      <button class="opt">C. 0,45</button>
+      <button class="opt">D. 450</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>cm ke m naik 2 tingkat → ÷ 100.</p>
+      <p>450 ÷ 100 = 4,5 m.</p>
+      <p>Jawaban: <span class="hl">A. 4,5</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Tali 8 m dipotong sepanjang 250 cm. Sisa tali adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 350 cm</button>
+      <button class="opt">B. 450 cm</button>
+      <button class="opt" data-correct="true">C. 550 cm</button>
+      <button class="opt">D. 650 cm</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>8 m = 800 cm.</p>
+      <p>800 − 250 = 550 cm.</p>
+      <p>Jawaban: <span class="hl">C. 550 cm</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Jarak 1 km 250 m sama dengan … m.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 1.025</button>
+      <button class="opt">B. 1.205</button>
+      <button class="opt" data-correct="true">C. 1.250</button>
+      <button class="opt">D. 1.500</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>1 km = 1.000 m.</p>
+      <p>1.000 + 250 = 1.250 m.</p>
+      <p>Jawaban: <span class="hl">C. 1.250</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 12 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab12">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#e2fbf3,#9df0d4);">⚖️</div>
+    <div>
+      <h2>Bab 12 — Pengukuran Berat</h2>
+      <p class="sub">Mengubah satuan berat dan menyelesaikan soal cerita.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Tangga Satuan Berat</div>
+    <p style="font-size:0.9rem; margin-bottom:8px;">Turun 1 tingkat <b>× 10</b> &nbsp;|&nbsp; Naik 1 tingkat <b>÷ 10</b></p>
+    <div class="staircase">
+      <div class="step-row" style="margin-left:0px;"><div class="step-box">kg</div><span class="step-arrow">Kilogram</span></div>
+      <div class="step-row" style="margin-left:30px;"><div class="step-box">hg</div><span class="step-arrow">Hektogram</span></div>
+      <div class="step-row" style="margin-left:60px;"><div class="step-box">dag</div><span class="step-arrow">Dekagram</span></div>
+      <div class="step-row" style="margin-left:90px;"><div class="step-box">g</div><span class="step-arrow">Gram</span></div>
+      <div class="step-row" style="margin-left:120px;"><div class="step-box">dg</div><span class="step-arrow">Desigram</span></div>
+      <div class="step-row" style="margin-left:150px;"><div class="step-box">cg</div><span class="step-arrow">Sentigram</span></div>
+      <div class="step-row" style="margin-left:180px;"><div class="step-box">mg</div><span class="step-arrow">Miligram</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Ibu membeli 2 kg beras, 750 g gula, dan 500 g tepung. Berapa gram total beratnya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Ubah kg ke gram: 2 kg = 2.000 g.</p>
+      <p>Total = 2.000 + 750 + 500 = <b>3.250 gram</b>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Persediaan tepung 5 kg. Dipakai 1 kg 750 g. Berapa sisanya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>5 kg = 5.000 g. 1 kg 750 g = 1.750 g.</p>
+      <p>5.000 − 1.750 = <b>3.250 g</b> atau <b>3 kg 250 g</b>.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 12</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>4 kg sama dengan … gram.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 40</button>
+      <button class="opt">B. 400</button>
+      <button class="opt" data-correct="true">C. 4.000</button>
+      <button class="opt">D. 40.000</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>kg ke g turun 3 tingkat → × 1.000.</p>
+      <p>4 × 1.000 = 4.000 g.</p>
+      <p>Jawaban: <span class="hl">C. 4.000</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>2.500 g sama dengan … kg.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 0,25</button>
+      <button class="opt" data-correct="true">B. 2,5</button>
+      <button class="opt">C. 25</button>
+      <button class="opt">D. 250</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>g ke kg naik 3 tingkat → ÷ 1.000.</p>
+      <p>2.500 ÷ 1.000 = 2,5 kg.</p>
+      <p>Jawaban: <span class="hl">B. 2,5</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Ibu membeli 1 kg gula dan 750 g tepung. Berat totalnya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 1.075 g</button>
+      <button class="opt">B. 1.500 g</button>
+      <button class="opt" data-correct="true">C. 1.750 g</button>
+      <button class="opt">D. 2.750 g</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>1 kg = 1.000 g.</p>
+      <p>1.000 + 750 = 1.750 g.</p>
+      <p>Jawaban: <span class="hl">C. 1.750 g</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Persediaan beras 10 kg. Dipakai 3 kg 500 g. Sisanya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 3,5 kg</button>
+      <button class="opt">B. 5,5 kg</button>
+      <button class="opt" data-correct="true">C. 6,5 kg</button>
+      <button class="opt">D. 7,5 kg</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>10 kg = 10.000 g. 3 kg 500 g = 3.500 g.</p>
+      <p>10.000 − 3.500 = 6.500 g = 6,5 kg.</p>
+      <p>Jawaban: <span class="hl">C. 6,5 kg</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Berat 6 paket sama besar adalah 3 kg. Berat satu paket adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 250 g</button>
+      <button class="opt" data-correct="true">B. 500 g</button>
+      <button class="opt">C. 750 g</button>
+      <button class="opt">D. 1.000 g</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>3 kg = 3.000 g.</p>
+      <p>3.000 ÷ 6 = 500 g.</p>
+      <p>Jawaban: <span class="hl">B. 500 g</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 13 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab13">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#e2ecff,#a9c6ff);">💧</div>
+    <div>
+      <h2>Bab 13 — Pengukuran Volume Cairan</h2>
+      <p class="sub">Mengubah satuan liter dan mililiter, serta menghitung kapasitas.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Tangga Satuan Volume Cairan</div>
+    <p style="font-size:0.9rem; margin-bottom:8px;">Turun 1 tingkat <b>× 10</b> &nbsp;|&nbsp; Naik 1 tingkat <b>÷ 10</b></p>
+    <div class="staircase">
+      <div class="step-row" style="margin-left:0px;"><div class="step-box">kL</div><span class="step-arrow">Kiloliter</span></div>
+      <div class="step-row" style="margin-left:30px;"><div class="step-box">hL</div><span class="step-arrow">Hektoliter</span></div>
+      <div class="step-row" style="margin-left:60px;"><div class="step-box">daL</div><span class="step-arrow">Dekaliter</span></div>
+      <div class="step-row" style="margin-left:90px;"><div class="step-box">L</div><span class="step-arrow">Liter</span></div>
+      <div class="step-row" style="margin-left:120px;"><div class="step-box">dL</div><span class="step-arrow">Desiliter</span></div>
+      <div class="step-row" style="margin-left:150px;"><div class="step-box">cL</div><span class="step-arrow">Sentiliter</span></div>
+      <div class="step-row" style="margin-left:180px;"><div class="step-box">mL</div><span class="step-arrow">Mililiter</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Sebuah wadah berisi 2 L air. Ditambahkan 750 mL. Berapa mL totalnya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>2 L = 2.000 mL.</p>
+      <p>2.000 + 750 = <b>2.750 mL</b>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">6 L air dituangkan ke botol 500 mL. Berapa botol penuh yang terisi?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>6 L = 6.000 mL.</p>
+      <p>6.000 ÷ 500 = <b>12 botol</b>.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 13</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>5 L sama dengan … mL</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 50</button>
+      <button class="opt">B. 500</button>
+      <button class="opt" data-correct="true">C. 5.000</button>
+      <button class="opt">D. 50.000</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>L ke mL turun 3 tingkat → × 1.000.</p>
+      <p>5 × 1.000 = 5.000 mL.</p>
+      <p>Jawaban: <span class="hl">C. 5.000</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>3.500 mL sama dengan … L.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 0,35</button>
+      <button class="opt" data-correct="true">B. 3,5</button>
+      <button class="opt">C. 35</button>
+      <button class="opt">D. 350</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>mL ke L naik 3 tingkat → ÷ 1.000.</p>
+      <p>3.500 ÷ 1.000 = 3,5 L.</p>
+      <p>Jawaban: <span class="hl">B. 3,5</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Wadah berisi 2 L air ditambah 500 mL. Volume seluruhnya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 2.050 mL</button>
+      <button class="opt" data-correct="true">B. 2.500 mL</button>
+      <button class="opt">C. 3.000 mL</button>
+      <button class="opt">D. 3.500 mL</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>2 L = 2.000 mL.</p>
+      <p>2.000 + 500 = 2.500 mL.</p>
+      <p>Jawaban: <span class="hl">B. 2.500 mL</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Air 4 L dibagi ke botol berkapasitas 250 mL. Banyak botol yang dapat diisi penuh adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 8</button>
+      <button class="opt">B. 12</button>
+      <button class="opt" data-correct="true">C. 16</button>
+      <button class="opt">D. 20</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>4 L = 4.000 mL.</p>
+      <p>4.000 ÷ 250 = 16 botol.</p>
+      <p>Jawaban: <span class="hl">C. 16</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Bak berkapasitas 80 L telah berisi 65 L. Sisa kapasitasnya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5 L</button>
+      <button class="opt" data-correct="true">B. 15 L</button>
+      <button class="opt">C. 25 L</button>
+      <button class="opt">D. 35 L</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>80 − 65 = 15 L.</p>
+      <p>Jawaban: <span class="hl">B. 15 L</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 14 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab14">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#ffe9f0,#ffb3c9);">⏰</div>
+    <div>
+      <h2>Bab 14 — Pengukuran Waktu</h2>
+      <p class="sub">Menghitung lama kegiatan, waktu selesai, dan waktu tiba.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Hubungan Satuan Waktu</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Satuan</th><th>Hubungan</th></tr></thead>
+        <tbody>
+          <tr><td>1 menit</td><td>60 detik</td></tr>
+          <tr><td>1 jam</td><td>60 menit</td></tr>
+          <tr><td>1 hari</td><td>24 jam</td></tr>
+          <tr><td>1 pekan</td><td>7 hari</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Pelajaran dimulai 07.15 dan selesai 09.00. Berapa lama pelajaran?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>07.15 ke 08.15 = 1 jam.</p>
+      <p>08.15 ke 09.00 = 45 menit.</p>
+      <p>Total = <b>1 jam 45 menit</b>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Film dimulai 13.20 dan berlangsung 1 jam 35 menit. Pukul berapa film selesai?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>13.20 + 1 jam = 14.20.</p>
+      <p>14.20 + 35 menit = <b>14.55</b>.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 14</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>2 jam sama dengan … menit.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 60</button>
+      <button class="opt">B. 100</button>
+      <button class="opt" data-correct="true">C. 120</button>
+      <button class="opt">D. 200</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>1 jam = 60 menit. Jadi 2 × 60 = 120 menit.</p>
+      <p>Jawaban: <span class="hl">C. 120</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Kegiatan dimulai pukul 07.30 dan berakhir pukul 09.15. Lama kegiatan adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 1 jam 15 menit</button>
+      <button class="opt">B. 1 jam 30 menit</button>
+      <button class="opt" data-correct="true">C. 1 jam 45 menit</button>
+      <button class="opt">D. 2 jam 15 menit</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>07.30 ke 08.30 = 1 jam.</p>
+      <p>08.30 ke 09.15 = 45 menit.</p>
+      <p>Total = 1 jam 45 menit.</p>
+      <p>Jawaban: <span class="hl">C. 1 jam 45 menit</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Film dimulai pukul 14.25 dan berlangsung 1 jam 20 menit. Film selesai pukul …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 15.35</button>
+      <button class="opt" data-correct="true">B. 15.45</button>
+      <button class="opt">C. 16.05</button>
+      <button class="opt">D. 16.15</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>14.25 + 1 jam = 15.25.</p>
+      <p>15.25 + 20 menit = 15.45.</p>
+      <p>Jawaban: <span class="hl">B. 15.45</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Bus berangkat pukul 08.15 dan tiba pukul 10.45. Lama perjalanan adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 1 jam 30 menit</button>
+      <button class="opt">B. 2 jam</button>
+      <button class="opt" data-correct="true">C. 2 jam 30 menit</button>
+      <button class="opt">D. 3 jam</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>08.15 ke 10.15 = 2 jam.</p>
+      <p>10.15 ke 10.45 = 30 menit.</p>
+      <p>Total = 2 jam 30 menit.</p>
+      <p>Jawaban: <span class="hl">C. 2 jam 30 menit</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>3 hari sama dengan … jam.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 24</button>
+      <button class="opt">B. 36</button>
+      <button class="opt">C. 48</button>
+      <button class="opt" data-correct="true">D. 72</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>1 hari = 24 jam.</p>
+      <p>3 × 24 = 72 jam.</p>
+      <p>Jawaban: <span class="hl">D. 72</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 15 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab15">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#fff2c9,#ffd166);">🏎️</div>
+    <div>
+      <h2>Bab 15 — Kecepatan & Hubungan Jarak–Waktu</h2>
+      <p class="sub">Menggunakan rumus jarak, waktu, dan kecepatan.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Tiga Rumus Utama</div>
+    <div class="grid three">
+      <div class="mini">
+        <h4>Kecepatan (v)</h4>
+        <p>Jarak ÷ Waktu</p>
+      </div>
+      <div class="mini">
+        <h4>Jarak (s)</h4>
+        <p>Kecepatan × Waktu</p>
+      </div>
+      <div class="mini">
+        <h4>Waktu (t)</h4>
+        <p>Jarak ÷ Kecepatan</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:24px 0 12px;font-size:1.15rem;">✏️ Contoh Soal</h3>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 1</div>
+    <p style="margin:0;font-weight:700;">Kendaraan menempuh 120 km dalam 3 jam. Berapa kecepatannya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>v = 120 ÷ 3 = <b>40 km/jam</b>.</p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-label orange">Contoh 2</div>
+    <p style="margin:0;font-weight:700;">Kendaraan melaju 60 km/jam selama 2 jam. Berapa jaraknya?</p>
+    <button class="btn-toggle" type="button">Lihat Jawaban 👀</button>
+    <div class="answer"><div class="answer-inner">
+      <p>s = 60 × 2 = <b>120 km</b>.</p>
+    </div></div>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 15</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Jarak 150 km ditempuh dalam 3 jam. Kecepatan rata-rata adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 30 km/jam</button>
+      <button class="opt">B. 40 km/jam</button>
+      <button class="opt" data-correct="true">C. 50 km/jam</button>
+      <button class="opt">D. 60 km/jam</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>v = 150 ÷ 3 = 50 km/jam.</p>
+      <p>Jawaban: <span class="hl">C. 50 km/jam</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Kendaraan bergerak dengan kecepatan 60 km/jam selama 2 jam. Jaraknya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 30 km</button>
+      <button class="opt">B. 60 km</button>
+      <button class="opt" data-correct="true">C. 120 km</button>
+      <button class="opt">D. 180 km</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>s = 60 × 2 = 120 km.</p>
+      <p>Jawaban: <span class="hl">C. 120 km</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Jarak 240 km ditempuh dengan kecepatan 80 km/jam. Waktu yang dibutuhkan adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 2 jam</button>
+      <button class="opt" data-correct="true">B. 3 jam</button>
+      <button class="opt">C. 4 jam</button>
+      <button class="opt">D. 5 jam</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>t = 240 ÷ 80 = 3 jam.</p>
+      <p>Jawaban: <span class="hl">B. 3 jam</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Kendaraan berangkat pukul 08.00. Perjalanan memerlukan 2 jam 30 menit dan berhenti 30 menit. Waktu tibanya adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 10.00</button>
+      <button class="opt">B. 10.30</button>
+      <button class="opt" data-correct="true">C. 11.00</button>
+      <button class="opt">D. 11.30</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Total waktu = 2 jam 30 menit + 30 menit = 3 jam.</p>
+      <p>08.00 + 3 jam = 11.00.</p>
+      <p>Jawaban: <span class="hl">C. 11.00</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Kecepatan 36 km/jam sama dengan … m/detik.</p></div>
+    <div class="options two-col">
+      <button class="opt">A. 5</button>
+      <button class="opt" data-correct="true">B. 10</button>
+      <button class="opt">C. 18</button>
+      <button class="opt">D. 36</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>36 km = 36.000 m. 1 jam = 3.600 detik.</p>
+      <p>36.000 ÷ 3.600 = 10 m/detik. (Atau bagi 3,6).</p>
+      <p>Jawaban: <span class="hl">B. 10</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- BAB 16 -->
+<!-- ============================================================= -->
+<section class="panel" id="bab16">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#f1e9ff,#c9b0ff);">📐</div>
+    <div>
+      <h2>Bab 16 — Sudut & Penaksiran Ukuran</h2>
+      <p class="sub">Mengenali jenis sudut dan memilih satuan yang sesuai.</p>
+    </div>
+  </div>
+
+  <div class="viz-box">
+    <!-- Lancip -->
+    <div class="shape-item angle-box">
+      <svg viewBox="0 0 100 100">
+        <line x1="10" y1="90" x2="90" y2="90" stroke="#1d2b47" stroke-width="4"/>
+        <line x1="10" y1="90" x2="80" y2="20" stroke="#1d2b47" stroke-width="4"/>
+        <path d="M 30 90 A 20 20 0 0 1 25.3 75.3" fill="none" stroke="#ff8a5c" stroke-width="4"/>
+        <text x="40" y="80" font-size="14" font-weight="bold" fill="#ff8a5c">45°</text>
+      </svg>
+      <span>Lancip (&lt;90°)</span>
+    </div>
+    <!-- Siku-siku -->
+    <div class="shape-item angle-box">
+      <svg viewBox="0 0 100 100">
+        <line x1="10" y1="90" x2="90" y2="90" stroke="#1d2b47" stroke-width="4"/>
+        <line x1="10" y1="90" x2="10" y2="10" stroke="#1d2b47" stroke-width="4"/>
+        <rect x="10" y="75" width="15" height="15" fill="none" stroke="#4f7df3" stroke-width="4"/>
+        <text x="35" y="80" font-size="14" font-weight="bold" fill="#4f7df3">90°</text>
+      </svg>
+      <span>Siku-siku (90°)</span>
+    </div>
+    <!-- Tumpul -->
+    <div class="shape-item angle-box">
+      <svg viewBox="0 0 100 100">
+        <line x1="50" y1="90" x2="90" y2="90" stroke="#1d2b47" stroke-width="4"/>
+        <line x1="50" y1="90" x2="10" y2="40" stroke="#1d2b47" stroke-width="4"/>
+        <path d="M 70 90 A 20 20 0 0 0 35.3 74.3" fill="none" stroke="#9b6bf0" stroke-width="4"/>
+        <text x="65" y="75" font-size="14" font-weight="bold" fill="#9b6bf0">120°</text>
+      </svg>
+      <span>Tumpul (&gt;90°)</span>
+    </div>
+    <!-- Lurus -->
+    <div class="shape-item angle-box">
+      <svg viewBox="0 0 100 100">
+        <line x1="10" y1="50" x2="90" y2="50" stroke="#1d2b47" stroke-width="4"/>
+        <path d="M 30 50 A 20 20 0 0 1 70 50" fill="none" stroke="#2fc7a0" stroke-width="4"/>
+        <text x="40" y="40" font-size="14" font-weight="bold" fill="#2fc7a0">180°</text>
+      </svg>
+      <span>Lurus (180°)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">📘 Penaksiran</div>
+    <p style="margin:0;font-weight:700;">Memilih satuan yang masuk akal:</p>
+    <ul style="font-size:0.95rem; color:#3d4f70; padding-left:20px; margin-top:8px;">
+      <li>Panjang pensil: <b>cm</b></li>
+      <li>Tinggi pintu: <b>m</b></li>
+      <li>Jarak antarkota: <b>km</b></li>
+      <li>Berat sekantong beras: <b>kg</b></li>
+      <li>Volume botol minuman: <b>mL</b> atau <b>L</b></li>
+      <li>Luas lantai kelas: <b>m²</b></li>
+    </ul>
+  </div>
+
+  <h3 style="margin:26px 0 12px;font-size:1.15rem;">🎯 Latihan Bab 16</h3>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">1</span><p>Sudut yang besarnya 45° termasuk sudut …</p></div>
+    <div class="options two-col">
+      <button class="opt" data-correct="true">A. Lancip</button>
+      <button class="opt">B. Siku-siku</button>
+      <button class="opt">C. Tumpul</button>
+      <button class="opt">D. Lurus</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Kurang dari 90° = sudut lancip.</p>
+      <p>Jawaban: <span class="hl">A. Lancip</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">2</span><p>Sudut yang besarnya tepat 90° disebut …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. Lancip</button>
+      <button class="opt" data-correct="true">B. Siku-siku</button>
+      <button class="opt">C. Tumpul</button>
+      <button class="opt">D. Lurus</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Tepat 90° = sudut siku-siku.</p>
+      <p>Jawaban: <span class="hl">B. Siku-siku</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">3</span><p>Sudut 135° termasuk sudut …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. Lancip</button>
+      <button class="opt">B. Siku-siku</button>
+      <button class="opt" data-correct="true">C. Tumpul</button>
+      <button class="opt">D. Lurus</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Antara 90° dan 180° = sudut tumpul.</p>
+      <p>Jawaban: <span class="hl">C. Tumpul</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">4</span><p>Satuan yang paling sesuai untuk menyatakan jarak antarkota adalah …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. mm</button>
+      <button class="opt">B. cm</button>
+      <button class="opt">C. m</button>
+      <button class="opt" data-correct="true">D. km</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Jarak antarkota sangat jauh, menggunakan kilometer (km).</p>
+      <p>Jawaban: <span class="hl">D. km</span></p>
+    </div></div>
+  </div>
+
+  <div class="card quiz">
+    <div class="q-head"><span class="q-num">5</span><p>Luas lantai sebuah ruangan paling tepat dinyatakan dalam …</p></div>
+    <div class="options two-col">
+      <button class="opt">A. cm</button>
+      <button class="opt">B. m</button>
+      <button class="opt" data-correct="true">C. m²</button>
+      <button class="opt">D. m³</button>
+    </div>
+    <button class="btn-toggle" type="button">Lihat Pembahasan 💡</button>
+    <div class="answer"><div class="answer-inner">
+      <p>Luas menggunakan satuan persegi (pangkat dua). Lantai ruangan biasanya dalam meter persegi (m²).</p>
+      <p>Jawaban: <span class="hl">C. m²</span></p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- RINGKASAN -->
+<!-- ============================================================= -->
+<section class="panel" id="ringkasan">
+  <div class="chapter-head">
+    <div class="chapter-emoji" style="background:linear-gradient(135deg,#fff2c9,#ffd166);">🏆</div>
+    <div>
+      <h2>Ringkasan & Daftar Cek Kemampuan</h2>
+      <p class="sub">Centang kemampuan yang sudah dapat kamu kerjakan sendiri.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label green">✅ Daftar Periksa</div>
+    <div id="checklist">
+      <label class="check"><input type="checkbox"><span>Menentukan nama bangun datar berdasarkan sifat-sifatnya.</span></label>
+      <label class="check"><input type="checkbox"><span>Membedakan keliling dan luas serta menggunakan rumusnya.</span></label>
+      <label class="check"><input type="checkbox"><span>Menghitung panjang sisi yang belum diketahui.</span></label>
+      <label class="check"><input type="checkbox"><span>Menghitung keliling atau luas bangun gabungan.</span></label>
+      <label class="check"><input type="checkbox"><span>Mengenali sisi, rusuk, dan titik sudut kubus serta balok.</span></label>
+      <label class="check"><input type="checkbox"><span>Menghitung kubus satuan dan memahami tampak depan, atas, atau samping.</span></label>
+      <label class="check"><input type="checkbox"><span>Menghitung volume kubus dan balok serta menentukan ukuran yang belum diketahui.</span></label>
+      <label class="check"><input type="checkbox"><span>Mengonversi satuan panjang, berat, dan volume cairan.</span></label>
+      <label class="check"><input type="checkbox"><span>Menyelesaikan soal cerita tentang jumlah, selisih, dan kapasitas pengukuran.</span></label>
+      <label class="check"><input type="checkbox"><span>Menghitung lama kegiatan, waktu tiba, dan selang waktu.</span></label>
+      <label class="check"><input type="checkbox"><span>Menggunakan rumus jarak, waktu, dan kecepatan.</span></label>
+      <label class="check"><input type="checkbox"><span>Mengenali jenis sudut serta memilih satuan yang sesuai.</span></label>
+      <label class="check"><input type="checkbox"><span>Memeriksa kewajaran hasil hitungan dan satuan.</span></label>
+    </div>
+    <div style="margin-top:16px;text-align:center;">
+      <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1.5rem;color:var(--primary-d);">
+        <span id="checkCount">0</span> dari 13
+      </div>
+      <p style="margin:4px 0 0;color:var(--muted);font-size:.88rem;font-weight:600;">Kemampuan dikuasai menurut penilaian diri</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="ico">💡</span>
+    <p><b>Strategi Mengerjakan Soal TKA:</b><br>
+    1. Baca pertanyaan, pahami apa yang dicari.<br>
+    2. Catat info & satuannya.<br>
+    3. Samakan satuan jika perlu.<br>
+    4. Pilih rumus yang tepat.<br>
+    5. Periksa kewajaran jawaban!</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Modul Belajar Interaktif — TKA Matematika SD/MI · Bagian II: Geometri & Pengukuran 📐📦⏱️🏎️
+</footer>
+
+<script>
+(function () {
+  /* ---------- TABS ---------- */
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const target = document.getElementById(tab.dataset.target);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  /* ---------- TOTAL SOAL ---------- */
+  const totalQuiz = document.querySelectorAll('.quiz').length;
+  const totalEl = document.getElementById('total');
+  if (totalEl) totalEl.textContent = totalQuiz;
+
+  const scoreEl = document.getElementById('score');
+  const barEl = document.getElementById('bar');
+  let score = 0;
+
+  function updateScore() {
+    if (scoreEl) scoreEl.textContent = score;
+    if (barEl) barEl.style.width = (totalQuiz ? (score / totalQuiz) * 100 : 0) + '%';
+  }
+  updateScore();
+
+  /* ---------- KLIK OPSI ---------- */
+  document.addEventListener('click', function (e) {
+    /* jawaban pilihan ganda */
+    const opt = e.target.closest('.opt');
+    if (opt) {
+      const quiz = opt.closest('.quiz');
+      if (!quiz || quiz.dataset.done === '1') return;
+
+      quiz.dataset.done = '1';
+      quiz.classList.add('answered');
+
+      const isCorrect = opt.dataset.correct === 'true';
+
+      quiz.querySelectorAll('.opt').forEach(o => {
+        if (o.dataset.correct === 'true') o.classList.add('correct');
+      });
+      if (!isCorrect) opt.classList.add('wrong');
+
+      /* feedback */
+      let fb = quiz.querySelector('.feedback');
+      if (!fb) {
+        fb = document.createElement('div');
+        fb.className = 'feedback';
+        const optsBox = quiz.querySelector('.options');
+        optsBox.insertAdjacentElement('afterend', fb);
+      }
+      fb.classList.add('show', isCorrect ? 'ok' : 'no');
+      fb.textContent = isCorrect
+        ? '🎉 Hebat! Jawabanmu benar.'
+        : '💪 Belum tepat. Lihat pembahasannya, ya!';
+
+      if (isCorrect) {
+        score++;
+        updateScore();
+        if (scoreEl) {
+          scoreEl.classList.add('pulse');
+          setTimeout(() => scoreEl.classList.remove('pulse'), 520);
+        }
+      }
+      return;
+    }
+
+    /* tombol lihat jawaban */
+    const btn = e.target.closest('.btn-toggle');
+    if (btn) {
+      const card = btn.parentElement;
+      const ans = card.querySelector('.answer');
+      if (!ans) return;
+
+      const isOpen = ans.classList.toggle('show');
+      btn.classList.toggle('open', isOpen);
+      btn.textContent = isOpen ? 'Sembunyikan Jawaban 🙈' : 'Lihat Jawaban 👀';
+    }
+  });
+
+  /* ---------- CHECKLIST ---------- */
+  const boxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+  const checkCount = document.getElementById('checkCount');
+  boxes.forEach(b => {
+    b.addEventListener('change', () => {
+      const n = document.querySelectorAll('#checklist input:checked').length;
+      if (checkCount) checkCount.textContent = n;
+    });
+  });
+})();
+</script>
+</body>
+</html>
