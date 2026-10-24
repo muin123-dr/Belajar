@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار: المخصص والاستثناء — أصول الفقه</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f3ee; --card:#fff; --ink:#1f2a37; --ink-soft:#55606e;
+    --accent:#0f766e; --accent-soft:#ccfbf1; --gold:#b8860b;
+    --ok:#15803d; --ok-bg:#dcfce7; --bad:#b91c1c; --bad-bg:#fee2e2;
+    --line:#e5e7eb; --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Tajawal','Segoe UI',sans-serif;line-height:1.7;}
+  body{padding:14px 12px 40px;}
+  .wrap{max-width:720px;margin:0 auto;}
+
+  /* ===== HEADER ===== */
+  header.hero{
+    background:linear-gradient(135deg,#0f766e 0%,#115e59 100%);
+    color:#fff;border-radius:16px;padding:18px 18px 16px;
+    box-shadow:var(--shadow);margin-bottom:14px;position:relative;overflow:hidden;
+  }
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 85% -10%,rgba(255,255,255,.2),transparent 60%);
+  }
+  header.hero h1{margin:0 0 4px;font-family:'Amiri',serif;font-size:1.35rem;}
+  header.hero p{margin:0;opacity:.9;font-size:.85rem;}
+
+  /* ===== TOOLBAR ===== */
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;justify-content:center;}
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:9px 15px;border-radius:10px;border:1px solid transparent;
+    background:var(--accent);color:#fff;font-family:inherit;font-size:.85rem;
+    font-weight:500;cursor:pointer;transition:.18s;box-shadow:var(--shadow);
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line);}
+  .btn.gold{background:var(--gold);}
+
+  /* ===== PROGRESS ===== */
+  .progress-info{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.82rem;color:var(--ink-soft);margin:0 4px 6px;
+  }
+  .progress-info .badge{
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:2px 10px;font-weight:600;color:var(--accent);
+  }
+  .progress-info .score-badge{
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:2px 10px;font-weight:600;color:var(--ok);
+  }
+  .progress-wrap{
+    background:#e6e2d9;border-radius:999px;height:6px;overflow:hidden;
+    margin-bottom:14px;
+  }
+  .progress-fill{
+    height:100%;width:0;
+    background:linear-gradient(90deg,var(--accent),var(--gold));
+    transition:width .35s ease;
+  }
+
+  /* ===== QUESTION CARD ===== */
+  .q{
+    background:var(--card);border-radius:16px;padding:18px 16px;
+    box-shadow:var(--shadow);border:1px solid var(--line);
+    animation:fadeIn .25s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .q-head{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;}
+  .q-num{
+    flex-shrink:0;width:34px;height:34px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.9rem;
+  }
+  .q-text{font-size:1.02rem;font-weight:500;padding-top:4px;line-height:1.65;}
+
+  .opts{display:grid;gap:8px;}
+  .opt{
+    display:flex;gap:10px;align-items:center;
+    padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);
+    background:#fafafa;transition:.15s;font-size:.95rem;
+  }
+  .opt:not(.locked){cursor:pointer;}
+  .opt:not(.locked):hover{border-color:var(--accent);background:#f0fdfa;}
+  .opt .mark{
+    flex-shrink:0;width:26px;height:26px;border-radius:50%;
+    border:1.5px solid #cbd5e1;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.8rem;color:var(--ink-soft);
+  }
+  .opt .label{flex:1;}
+  .opt.correct-opt{border-color:var(--ok);background:var(--ok-bg);}
+  .opt.correct-opt .mark{background:var(--ok);color:#fff;border-color:var(--ok);}
+  .opt.wrong-opt{border-color:var(--bad);background:var(--bad-bg);}
+  .opt.wrong-opt .mark{background:var(--bad);color:#fff;border-color:var(--bad);}
+
+  /* ===== FEEDBACK & EXPLANATION ===== */
+  .feedback{
+    margin-top:14px;padding:10px 12px;border-radius:10px;
+    font-size:.9rem;font-weight:600;
+  }
+  .feedback.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #86efac;}
+  .feedback.bad{background:var(--bad-bg);color:var(--bad);border:1px solid #fca5a5;}
+
+  .explanation{
+    margin-top:10px;padding:11px 13px;border-radius:10px;
+    background:#fef9ec;border:1px solid #fde68a;
+    font-size:.9rem;color:#3f3a1c;line-height:1.7;
+  }
+  .explanation strong{color:#92760a;}
+
+  .next-btn{
+    width:100%;justify-content:center;margin-top:14px;
+    padding:12px;font-size:.95rem;font-weight:600;
+  }
+
+  /* ===== SUMMARY ===== */
+  .summary{
+    background:var(--card);border-radius:16px;padding:28px 20px;
+    text-align:center;box-shadow:var(--shadow);border:1px solid var(--line);
+    animation:fadeIn .3s ease;
+  }
+  .summary .big-score{
+    font-family:'Amiri',serif;font-size:2.6rem;font-weight:700;
+    color:var(--accent);line-height:1.1;
+  }
+  .summary .pct{font-size:1.1rem;color:var(--gold);margin-bottom:8px;font-weight:600;}
+  .summary .msg{color:var(--ink-soft);margin:6px 0 20px;font-size:.95rem;}
+  .summary .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+  /* ===== PRINT VIEW ===== */
+  .print-view{display:none;}
+  .print-header{text-align:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--accent);}
+  .print-header h1{font-family:'Amiri',serif;margin:0 0 4px;color:var(--accent);font-size:1.4rem;}
+  .print-header p{margin:0;color:#555;font-size:.85rem;}
+  .pq{
+    border:1px solid #ccc;border-radius:8px;padding:10px 12px;
+    margin-bottom:10px;break-inside:avoid;page-break-inside:avoid;
+  }
+  .pq-q{font-weight:600;margin-bottom:6px;font-size:.95rem;}
+  .pq-opts{display:grid;gap:4px;margin-bottom:6px;}
+  .pq-opt{font-size:.88rem;padding:2px 6px;border-radius:4px;}
+  .pq-opt.correct{background:#e6f7ec;font-weight:700;color:#15803d;}
+  .pq-exp{
+    font-size:.83rem;background:#fef9ec;border:1px solid #fde68a;
+    padding:6px 8px;border-radius:6px;color:#3f3a1c;
+  }
+  .pq-exp b{color:#92760a;}
+
+  @media (max-width:520px){
+    body{padding:10px 8px 30px;}
+    header.hero{padding:15px 14px;}
+    header.hero h1{font-size:1.15rem;}
+    .q{padding:15px 13px;}
+    .q-text{font-size:.96rem;}
+    .opt{padding:10px 11px;font-size:.9rem;}
+    .btn{padding:8px 12px;font-size:.8rem;}
+  }
+
+  @media print{
+    @page{size:A4;margin:14mm;}
+    body{background:#fff;padding:0;color:#000;}
+    .app-view{display:none !important;}
+    .print-view{display:block !important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== APP VIEW ==================== -->
+<div class="app-view wrap">
+
+  <header class="hero">
+    <h1>أسئلة في المخصِّص والاستثناء</h1>
+    <p>اختبار اختيار من متعدد — أصول الفقه · ٣٥ سؤالًا</p>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn ghost" onclick="restart()">🔄 إعادة البدء</button>
+    <button class="btn gold" onclick="window.print()">🖨️ طباعة / PDF</button>
+  </div>
+
+  <div class="progress-info">
+    <span class="badge" id="qCounter">السؤال ١ من ٣٥</span>
+    <span class="score-badge" id="scoreBadge">الصحيحة: ٠</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div id="cardHost"></div>
+
+</div>
+
+<!-- ==================== PRINT VIEW ==================== -->
+<div class="print-view" id="printView"></div>
+
+<script>
+/* ================= DATA ================= */
+const letters = ["أ","ب","ج","د"];
+const ar = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+
+const questions = [
+  {q:"ما المقصود بالخاص في اصطلاح الأصوليين؟",
+   opts:["اللفظ الدال على جميع الأفراد بلا حصر.","اللفظ الدال على محصور.","اللفظ الدال على معنى مجهول.","اللفظ الدال على الفعل فقط."],ans:1,
+   exp:"الخاص هو اللفظ الدال على فرد أو أفراد محصورين، بخلاف العام الذي يشمل الأفراد بلا حصر."},
+
+  {q:"ما المقصود بالتخصيص في اصطلاح الأصوليين؟",
+   opts:["إدخال جميع أفراد العام في الحكم.","تحويل الحكم من الوجوب إلى الاستحباب.","إخراج بعض أفراد العام من الحكم العام.","حذف اللفظ العام من الكلام."],ans:2,
+   exp:"التخصيص: إخراج بعض أفراد العام من الحكم الذي شملهم ظاهر اللفظ العام."},
+
+  {q:"ينقسم المخصص المتصل والمنفصل باعتبار:",
+   opts:["نوع الحكم الشرعي.","عدد أفراد اللفظ.","زمن نزول النص.","اتصال المخصص بالعام أو استقلاله عنه."],ans:3,
+   exp:"يُقسم المخصص إلى متصل ومنفصل باعتبار اتصال المخصص بالعام أو استقلاله عنه في دليل آخر."},
+
+  {q:"أيُّ الآتي من المخصصات المتصلة؟",
+   opts:["الاستثناء والشرط والصفة.","الإجماع والقياس فقط.","العقل والحس فقط.","الكتاب والسنة فقط."],ans:0,
+   exp:"من المخصصات المتصلة: الاستثناء، والشرط، والصفة، والغاية، ونحوها؛ لأنها في نفس النص."},
+
+  {q:"المخصص المتصل هو الذي:",
+   opts:["يأتي في دليل مستقل دائمًا.","لا علاقة له باللفظ العام.","لا يستقل بنفسه، بل يكون العام والمخصص في نص واحد.","لا يوجد إلا في السنة."],ans:2,
+   exp:"المتصل: ما كان العام والمخصص فيه داخل نص واحد، لا يستقل بنفسه في دليل آخر."},
+
+  {q:"ما أداة الاستثناء في قولنا: «جَاءَ الْقَوْمُ إِلَّا زَيْدًا»؟",
+   opts:["الْقَوْمُ.","جَاءَ.","زَيْدًا.","إِلَّا."],ans:3,
+   exp:"الأداة هي «إِلَّا»، وهي أشهر أدوات الاستثناء وأصل الباب."},
+
+  {q:"ما المستثنى في قولنا: «حَضَرَ الطُّلَّابُ إِلَّا خَالِدًا»؟",
+   opts:["حَضَرَ.","الطُّلَّابُ.","خَالِدًا.","إِلَّا."],ans:2,
+   exp:"«خالدًا» هو المستثنى؛ لأنه المُخرَج من الحكم الذي شمل الطلاب."},
+
+  {q:"ما المستثنى منه في قولنا: «جَاءَ الْقَوْمُ إِلَّا زَيْدًا»؟",
+   opts:["الْقَوْمُ.","زَيْدًا.","إِلَّا.","جَاءَ."],ans:0,
+   exp:"«القوم» هو المستثنى منه؛ لأنه اللفظ العام الذي دخل عليه الاستثناء."},
+
+  {q:"أيُّ تعريفٍ هو الأقرب إلى معنى الاستثناء اصطلاحًا؟",
+   opts:["إثبات الحكم لجميع أفراد العام.","إخراج ما لولاه لدخل في الكلام بإلّا أو إحدى أخواتها.","تعليق حكم على شرط مستقبل فقط.","تخصيص الحكم بفرد واحد دون أداة."],ans:1,
+   exp:"الاستثناء: إخراج ما لولاه لدخل في الكلام بإلّا أو إحدى أخواتها؛ كـ«غير، سوى، خلا، عدا، حاشا»."},
+
+  {q:"أيُّ مثالٍ مما يأتي يشتمل على استثناء؟",
+   opts:["أَكْرِمِ الْعُلَمَاءَ.","إِنْ جَاءَ زَيْدٌ فَأَكْرِمْهُ.","أَكْرِمِ الطَّالِبَ الْمُجْتَهِدَ.","حَضَرَ الطُّلَّابُ إِلَّا خَالِدًا."],ans:3,
+   exp:"المثال فيه أداة الاستثناء «إلا» ومستثنى «خالدًا» ومستثنى منه «الطلاب»."},
+
+  {q:"ما الشرط المذكور لصحة الاستثناء من جهة بقاء المستثنى منه؟",
+   opts:["أن يكون المستثنى أكثر من المستثنى منه.","أن يكون المستثنى والمستثنى منه لفظًا واحدًا.","أن يبقى شيء من المستثنى منه بعد الاستثناء.","أن يخلو الكلام من أداة الاستثناء."],ans:2,
+   exp:"الشرط الأول: أن يبقى بعد الاستثناء شيء من المستثنى منه؛ لأن استثناء الكل يُبطل حكم الكلام."},
+
+  {q:"أيُّ العبارات الآتية صحيحة بحسب المقال؟",
+   opts:["يجوز تقديم المستثنى على أداة الاستثناء في كل تركيب بلا قيد.","يجوز تقديم المستثنى على المستثنى منه.","يجب دائمًا تأخير المستثنى عن المستثنى منه.","لا يجوز تقديم المستثنى على المستثنى منه، ويجوز تقديمه في الكلام بحسب ما ذُكر."],ans:3,
+   exp:"لا يجوز تقديم المستثنى على المستثنى منه؛ لأنه مُخرَج من عمومه، ويجوز تقديمه على أداة الاستثناء في بعض الصور."},
+
+  {q:"ما المراد بقولهم: «الاستثناء المتصل»؟",
+   opts:["أن يكون المستثنى من جنس المستثنى منه.","أن يكون المستثنى من غير جنس المستثنى منه دائمًا.","أن يقع الاستثناء في جملة ثانية مستقلة.","أن تكون أداة الاستثناء محذوفة."],ans:0,
+   exp:"المتصل: أن يكون المستثنى من جنس المستثنى منه؛ كاستثناء زيد من القوم."},
+
+  {q:"أيُّ مثالٍ مما يأتي استثناء متصل؟",
+   opts:["جَاءَ الْقَوْمُ إِلَّا فَرَسًا.","قَامَ الْقَوْمُ إِلَّا زَيْدًا.","حَضَرَ الطُّلَّابُ إِلَّا كِتَابًا.","جَاءَ الْقَوْمُ ثُمَّ جَاءَ زَيْدٌ."],ans:1,
+   exp:"«قام القوم إلا زيدًا» — زيد من القوم، فهو استثناء متصل."},
+
+  {q:"أيُّ مثالٍ مما يأتي استثناء من غير الجنس؟",
+   opts:["حَضَرَ الطُّلَّابُ إِلَّا خَالِدًا.","جَاءَ الْقَوْمُ إِلَّا زَيْدًا.","جَاءَ الْقَوْمُ إِلَّا فَرَسًا.","قَامَ زَيْدٌ وَعَمْرٌو."],ans:2,
+   exp:"«جاء القوم إلا فرسًا» — الفرس ليس من جنس القوم، فهو استثناء منقطع."},
+
+  {q:"ما المقصود بالاستثناء المنقطع؟",
+   opts:["أن يكون المستثنى من جنس المستثنى منه.","أن يكون المستثنى صفةً للمستثنى منه.","أن يكون المستثنى شرطًا للحكم.","أن يكون المستثنى من غير جنس المستثنى منه."],ans:3,
+   exp:"المنقطع: أن يكون المستثنى من غير جنس المستثنى منه."},
+
+  {q:"أيُّ الآتي يُعدُّ من أدوات الاستثناء المذكورة؟",
+   opts:["إِلَّا.","إِنْ.","إِذَا.","لَوْ."],ans:0,
+   exp:"من أدوات الاستثناء: «إلّا» وأخواتها كـ«غير» و«سوى» و«خلا» و«عدا» و«حاشا»."},
+
+  {q:"ما المقصود بالمخصِّص؟",
+   opts:["اللفظ العام قبل ورود التخصيص فقط.","الدليل الذي حصل به الإخراج، ويُطلق أيضًا على فاعل التخصيص.","المستثنى منه وحده.","الحكم المنسوخ فقط."],ans:1,
+   exp:"المخصص: الدليل الذي حصل به إخراج بعض أفراد العام، ويُطلق أيضًا على فاعل التخصيص (المخَصِّص بكسر الصاد)."},
+
+  {q:"قال شخص: «وَقَفْتُ عَلَى أَوْلَادِي إِلَّا الْغَنِيَّ». ما وظيفة الاستثناء؟",
+   opts:["إدخال الغني في حكم الوقف.","إلغاء حكم الوقف عن جميع الأولاد.","إخراج الغني من حكم الوقف المذكور.","تحويل الوقف إلى هبة."],ans:2,
+   exp:"الاستثناء يُخرج الغني من عموم الأولاد في الوقف؛ فيبقى الوقف على غير الغني منهم."},
+
+  {q:"في قولنا: «اعْتَقْ عَبِيدِي إِلَّا سَعِيدًا»، ما الذي يدل عليه الاستثناء؟",
+   opts:["أن سعيدًا داخل في حكم العتق حتمًا.","أن جميع العبيد مستثنون من العتق.","أن الأمر بالعتق لا يشمل أحدًا.","أن سعيدًا أُخرج من الحكم الذي شمل العبيد."],ans:3,
+   exp:"سعيد أُخرج من الأمر بالعتق الذي شمل جميع العبيد؛ فلا يجب عتقه بهذا الأمر."},
+
+  {q:"ما الشرط الثاني لصحة الاستثناء المذكور؟",
+   opts:["أن يكون متصلًا بالكلام اتصالًا معتبرًا.","أن يكون المستثنى أكبر عددًا من المستثنى منه.","أن يكون المستثنى من غير الجنس فقط.","أن يقع الاستثناء في كلام جديد بعد انتهاء المجلس."],ans:0,
+   exp:"الشرط الثاني: أن يكون الاستثناء متصلًا بالكلام اتصالًا معتبرًا، بحيث لا يُعدّ كلامًا مستقلًا."},
+
+  {q:"إذا قال المتكلم: «اعْتَقْ عَبِيدِي» ثم قال مباشرة: «إِلَّا سَعِيدًا»، فما وجه صحة الاستثناء؟",
+   opts:["لأن المستثنى جاء بعد زمن طويل.","لأن المستثنى اتصل بالكلام السابق.","لأن الاستثناء لا يحتاج إلى كلام سابق.","لأن سعيدًا ليس من العبيد."],ans:1,
+   exp:"الصحة هنا لاتصال «إلا سعيدًا» بكلامه مباشرة، فالاستثناء متصل بالجملة السابقة."},
+
+  {q:"إذا فُصل بين المستثنى والمستثنى منه بسكوت أو كلام، فما الحكم عند الجمهور؟",
+   opts:["يبطل الاستثناء في جميع الأحوال بلا تفصيل.","يصح الاستثناء دائمًا ولو طال الفصل.","الأصل عند الجمهور بطلان الاستثناء مع الفصل، مع تفصيل يتعلق بالسكوت اليسير أو الكلام الواحد.","يتحول الاستثناء إلى شرط."],ans:2,
+   exp:"الأصل عند الجمهور: بطلان الاستثناء مع الفصل، مع تفصيل في السكوت اليسير حيث يُتسامح به بخلاف الفصل الطويل."},
+
+  {q:"ما المثال الذي أورده المقال للاستدلال على اتصال الاستثناء في الكلام؟",
+   opts:["قوله تعالى: ﴿وَاللَّهُ خَلَقَ كُلَّ شَيْءٍ﴾.","قوله تعالى: ﴿وَأَقِيمُوا الصَّلَاةَ﴾.","قوله تعالى: ﴿وَآتُوا الزَّكَاةَ﴾.","قول النبي ﷺ: «إِنَّ هَذَا الْبَلَدَ حَرَّمَهُ اللَّهُ...»، ثم قوله: «إِلَّا الْإِذْخِرَ»."],ans:3,
+   exp:"المثال: حديث النبي ﷺ في تحريم المدينة ثم استثناء «الإذخر»، وهو استثناء متصل بالكلام السابق."},
+
+  {q:"ما حكم الاستثناء إذا كان المستثنى أكثر من نصف المستثنى منه؟",
+   opts:["فيه خلاف بين الأصوليين؛ فمنهم من أجازه ومنهم من منعه.","أجمع العلماء على منعه.","أجمع العلماء على وجوبه.","لا يصح إلا إذا كان المستثنى هو جميع المستثنى منه."],ans:0,
+   exp:"استثناء الأكثر من النصف: فيه خلاف؛ فمنهم من أجازه ومنهم من منعه."},
+
+  {q:"ما حكم الاستثناء إذا كان المستثنى أقل من النصف؟",
+   opts:["لا يجوز بالإجماع.","جائز بالإجماع، كما نقل المقال عن الشوكاني.","لا يجوز إلا في القرآن.","لا يصح إلا إذا كان من غير الجنس."],ans:1,
+   exp:"استثناء الأقل من النصف: جائز بالإجماع كما نقل الشوكاني، وهو القدر المتفق عليه."},
+
+  {q:"إذا كان الاستثناء من صفة، فما الذي ذُكر بشأن استثناء الأكثر أو الكل؟",
+   opts:["يجوز استثناء الكل دائمًا.","لا يجوز استثناء أي فرد من الصفة.","يصح استثناء الأكثر أو الكل في بعض الصور، واستُدل بأمثلة قرآنية.","لا علاقة للاستثناء بالصفات."],ans:2,
+   exp:"في الاستثناء من صفة: يصح استثناء الأكثر أو الكل في بعض الصور، واستُدل بأمثلة قرآنية كاستثناء ﴿إِلَّا مَنِ اتَّبَعَكَ مِنَ الْغَاوِينَ﴾."},
+
+  {q:"في قوله تعالى: ﴿إِنْ عِبَادِي لَيْسَ لَكَ عَلَيْهِمْ سُلْطَانٌ إِلَّا مَنِ اتَّبَعَكَ مِنَ الْغَاوِينَ﴾، ما وظيفة «إِلَّا مَنِ اتَّبَعَكَ»؟",
+   opts:["إثبات السلطان للشيطان على جميع العباد.","نفي السلطان عن جميع الناس دون استثناء.","إثبات أن جميع العباد من الغاوين.","استثناء فئة من الغاوين من الحكم العام المذكور."],ans:3,
+   exp:"الآية استثنت فئة من الغاوين من عموم نفي السلطان؛ فالاستثناء هنا مخصص للحكم العام."},
+
+  {q:"ما الفرق الأساسي بين العام والخاص؟",
+   opts:["العام يشمل أفرادًا بلا حصر، والخاص يدل على فرد أو أفراد محصورين.","العام لا يدخل في الأحكام الشرعية، والخاص يدخل فيها.","العام خاص بالأفعال، والخاص خاص بالأسماء.","لا فرق بينهما في الاصطلاح."],ans:0,
+   exp:"العام: يشمل أفراده بلا حصر. الخاص: يدل على فرد أو أفراد محصورين."},
+
+  {q:"ما العلاقة بين العام والتخصيص؟",
+   opts:["التخصيص هو إدخال جميع أفراد العام في الحكم.","التخصيص هو إخراج بعض أفراد العام من الحكم الذي شملهم ظاهر اللفظ.","التخصيص هو نسخ الحكم كله دون استثناء.","التخصيص هو حذف العام من اللغة."],ans:1,
+   exp:"التخصيص يُخرج بعض أفراد العام من الحكم، فيبقى العام مخصصًا في الباقي."},
+
+  {q:"أيُّ العبارات أدق في بيان الفرق بين المخصص المتصل والمنفصل؟",
+   opts:["المتصل لا يكون إلا في القرآن، والمنفصل لا يكون إلا في السنة.","المتصل ينسخ الحكم، والمنفصل لا ينسخه.","المتصل يكون العام والمخصص فيه في نص واحد، والمنفصل يستقل بنفسه ويأتي في دليل آخر.","لا يوجد فرق بينهما."],ans:2,
+   exp:"المتصل: العام والمخصص في نص واحد. المنفصل: يأتي في دليل مستقل كآية أخرى أو حديث أو إجماع أو قياس."},
+
+  {q:"لماذا اشترط بقاء شيء من المستثنى منه في بعض صور الاستثناء العددي؟",
+   opts:["لأن المستثنى يجب أن يساوي المستثنى منه دائمًا.","لأن الاستثناء لا يقع إلا في الأسماء.","لأن المستثنى لا يجوز أن يكون عددًا.","لأن استثناء جميع المستثنى منه يثير إشكالًا في بقاء حكم الكلام، وقد ذُكر تفصيل وخلاف في بعض الصور."],ans:3,
+   exp:"اشتراط بقاء شيء من المستثنى منه، لأن استثناء الكل يجعل الكلام لغوًا؛ وقد ذُكر تفصيل وخلاف في بعض الصور كالاستثناء من الصفة."},
+
+  {q:"أيُّ عبارة تمثل الرأي الذي نُسب إلى جمهور العلماء في جواز استثناء الأقل من النصف؟",
+   opts:["الجواز.","التحريم.","الوجوب.","النسخ."],ans:0,
+   exp:"ذهب جمهور العلماء إلى جواز استثناء الأقل من النصف؛ لأنه القدر المتيقن المتفق عليه."},
+
+  {q:"أيُّ عبارة تمثل بدقة ما ذُكر في الاستثناء من غير الجنس؟",
+   opts:["لا يجوز الاستثناء من غير الجنس مطلقًا.","ذُكر جوازه، وأُوردت أمثلة من القرآن وكلام العرب، مع الإشارة إلى الخلاف في قوة بعض الأقوال.","لا يقع إلا في السنة.","الاستثناء من غير الجنس هو نفسه الشرط."],ans:1,
+   exp:"الاستثناء من غير الجنس (المنقطع): ذُكر جوازه، وأُوردت له أمثلة، مع الإشارة إلى الخلاف في قوة بعض الأقوال."},
+
+  {q:"ما المنهج الصحيح لفهم مسائل الاستثناء كما يدل عليه المقال؟",
+   opts:["حفظ الأمثلة دون فهم التعريفات.","اعتبار جميع صور الاستثناء متفقًا عليها بلا خلاف.","فهم تعريف الاستثناء وشروطه، والتمييز بين المتصل والمنقطع، ومراعاة مواضع الخلاف.","إهمال الأمثلة والاستدلالات."],ans:2,
+   exp:"المنهج: فهم التعريف والشروط، والتمييز بين المتصل والمنقطع، ومراعاة مواضع الخلاف؛ لا مجرد حفظ الأمثلة."}
+];
+
+/* ================= STATE ================= */
+const STORAGE_KEY = "quiz_mukhassis_v2";
+const state = { current: 0, answers: {} };
+const total = questions.length;
+
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    if(typeof s.current === "number" && s.current >= 0 && s.current < total) state.current = s.current;
+    if(s.answers && typeof s.answers === "object") state.answers = s.answers;
+  }catch(e){}
+}
+
+/* ================= RENDER ================= */
+const cardHost   = document.getElementById('cardHost');
+const qCounter   = document.getElementById('qCounter');
+const scoreBadge = document.getElementById('scoreBadge');
+const progressFill = document.getElementById('progressFill');
+
+function correctCount(){
+  let n = 0;
+  Object.keys(state.answers).forEach(k => {
+    if(state.answers[k] === questions[k].ans) n++;
+  });
+  return n;
+}
+
+function updateProgressUI(){
+  qCounter.textContent = `السؤال ${ar(state.current + 1)} من ${ar(total)}`;
+  scoreBadge.textContent = `الصحيحة: ${ar(correctCount())}`;
+  progressFill.style.width = `${((state.current + 1) / total) * 100}%`;
+}
+
+function renderCard(){
+  const idx = state.current;
+  const q = questions[idx];
+  const sel = state.answers[idx];
+  const answered = sel !== undefined;
+
+  let optsHTML = '';
+  q.opts.forEach((o, i) => {
+    let cls = 'opt';
+    if(answered){
+      if(i === q.ans) cls += ' correct-opt';
+      if(i === sel && sel !== q.ans) cls += ' wrong-opt';
+    }
+    optsHTML += `<div class="${cls}" data-i="${i}" ${answered ? 'style="cursor:default"' : ''}>
+      <span class="mark">${letters[i]}</span><span class="label">${o}</span>
+    </div>`;
+  });
+
+  const isCorrect = answered && sel === q.ans;
+
+  cardHost.innerHTML = `
+    <div class="q">
+      <div class="q-head">
+        <div class="q-num">${ar(idx + 1)}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="opts">${optsHTML}</div>
+      ${answered ? `
+        <div class="feedback ${isCorrect ? 'ok' : 'bad'}">
+          ${isCorrect ? '✅ إجابة صحيحة' : `❌ إجابة خاطئة — الصحيحة: (${letters[q.ans]})`}
+        </div>
+        <div class="explanation"><strong>التعليل:</strong> ${q.exp}</div>
+        <button class="btn next-btn" id="nextBtn">
+          ${idx < total - 1 ? 'السؤال التالي ←' : 'عرض النتيجة ✓'}
+        </button>
+      ` : ''}
+    </div>
+  `;
+
+  if(!answered){
+    cardHost.querySelectorAll('.opt').forEach(o => {
+      o.addEventListener('click', () => selectOption(parseInt(o.dataset.i)));
+    });
+  } else {
+    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  }
+
+  updateProgressUI();
+}
+
+function selectOption(optIdx){
+  const idx = state.current;
+  if(state.answers[idx] !== undefined) return;
+  state.answers[idx] = optIdx;
+  saveState();
+  renderCard();
+}
+
+function nextQuestion(){
+  if(state.current < total - 1){
+    state.current++;
+    saveState();
+    renderCard();
+    window.scrollTo({top:0, behavior:'smooth'});
+  } else {
+    renderSummary();
+  }
+}
+
+function renderSummary(){
+  const correct = correctCount();
+  const pct = Math.round((correct / total) * 100);
+  let msg = '';
+  if(pct >= 90) msg = 'ما شاء الله! إتقانٌ تامّ، بارك الله فيك.';
+  else if(pct >= 75) msg = 'أداءٌ ممتاز، واصل المراجعة لتثبيت المسائل.';
+  else if(pct >= 50) msg = 'أداءٌ جيد، يُنصح بمراجعة التعريفات والشروط.';
+  else msg = 'تحتاج مراجعةً أعمق للتعريفات والأمثلة، ولا بأس بالمعاودة.';
+
+  progressFill.style.width = '100%';
+  qCounter.textContent = 'اكتمل الاختبار';
+  scoreBadge.textContent = `الصحيحة: ${ar(correct)}`;
+
+  cardHost.innerHTML = `
+    <div class="summary">
+      <div class="big-score">${ar(correct)} / ${ar(total)}</div>
+      <div class="pct">${ar(pct)}٪</div>
+      <p class="msg">${msg}</p>
+      <div class="actions">
+        <button class="btn" onclick="restart()">🔄 إعادة الاختبار</button>
+        <button class="btn gold" onclick="window.print()">🖨️ طباعة / PDF</button>
+      </div>
+    </div>
+  `;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restart(){
+  state.current = 0;
+  state.answers = {};
+  saveState();
+  renderCard();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ================= PRINT VIEW ================= */
+function buildPrintView(){
+  let html = `<div class="print-header">
+    <h1>أسئلة في المخصِّص والاستثناء</h1>
+    <p>أصول الفقه — ٣٥ سؤالًا مع الإجابات والتعليلات</p>
+  </div>`;
+  questions.forEach((q, i) => {
+    const optsHTML = q.opts.map((o, j) =>
+      `<div class="pq-opt ${j === q.ans ? 'correct' : ''}">${letters[j]}) ${o}${j === q.ans ? ' ✓' : ''}</div>`
+    ).join('');
+    html += `<div class="pq">
+      <div class="pq-q">${ar(i + 1)}. ${q.q}</div>
+      <div class="pq-opts">${optsHTML}</div>
+      <div class="pq-exp"><b>التعليل:</b> ${q.exp}</div>
+    </div>`;
+  });
+  document.getElementById('printView').innerHTML = html;
+}
+
+/* ================= INIT ================= */
+(function init(){
+  loadState();
+  renderCard();
+  buildPrintView();
+})();
+</script>
+</body>
+</html>
