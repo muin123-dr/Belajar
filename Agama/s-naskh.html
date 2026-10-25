@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>النسخ والتعارض بين الأدلة — أصول الفقه</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f3ee; --card:#fff; --ink:#1f2a37; --ink-soft:#55606e;
+    --accent:#0f766e; --accent-soft:#ccfbf1; --gold:#b8860b;
+    --ok:#15803d; --ok-bg:#dcfce7; --bad:#b91c1c; --bad-bg:#fee2e2;
+    --line:#e5e7eb; --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Tajawal','Segoe UI',sans-serif;line-height:1.7;}
+  body{padding:14px 12px 40px;}
+  .wrap{max-width:720px;margin:0 auto;}
+
+  header.hero{
+    background:linear-gradient(135deg,#0f766e 0%,#115e59 100%);
+    color:#fff;border-radius:16px;padding:18px 18px 16px;
+    box-shadow:var(--shadow);margin-bottom:14px;position:relative;overflow:hidden;
+  }
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 85% -10%,rgba(255,255,255,.2),transparent 60%);
+  }
+  header.hero h1{margin:0 0 4px;font-family:'Amiri',serif;font-size:1.3rem;}
+  header.hero p{margin:0;opacity:.9;font-size:.83rem;}
+
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;justify-content:center;}
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:9px 15px;border-radius:10px;border:1px solid transparent;
+    background:var(--accent);color:#fff;font-family:inherit;font-size:.85rem;
+    font-weight:500;cursor:pointer;transition:.18s;box-shadow:var(--shadow);
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line);}
+  .btn.gold{background:var(--gold);}
+
+  .progress-info{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.82rem;color:var(--ink-soft);margin:0 4px 6px;
+  }
+  .progress-info .badge{
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:2px 10px;font-weight:600;color:var(--accent);
+  }
+  .progress-info .score-badge{
+    background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:2px 10px;font-weight:600;color:var(--ok);
+  }
+  .progress-wrap{
+    background:#e6e2d9;border-radius:999px;height:6px;overflow:hidden;margin-bottom:14px;
+  }
+  .progress-fill{
+    height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));
+    transition:width .35s ease;
+  }
+
+  .level-chip{
+    display:inline-block;font-size:.72rem;font-weight:600;
+    background:#fef3c7;color:#92400e;border:1px solid #fde68a;
+    padding:2px 10px;border-radius:999px;margin-bottom:10px;
+  }
+
+  .q{
+    background:var(--card);border-radius:16px;padding:18px 16px;
+    box-shadow:var(--shadow);border:1px solid var(--line);
+    animation:fadeIn .25s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .q-head{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;}
+  .q-num{
+    flex-shrink:0;width:34px;height:34px;border-radius:50%;
+    background:var(--accent-soft);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.9rem;
+  }
+  .q-text{font-size:1.02rem;font-weight:500;padding-top:4px;line-height:1.65;}
+
+  .opts{display:grid;gap:8px;}
+  .opt{
+    display:flex;gap:10px;align-items:center;
+    padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);
+    background:#fafafa;transition:.15s;font-size:.95rem;
+  }
+  .opt:not(.locked){cursor:pointer;}
+  .opt:not(.locked):hover{border-color:var(--accent);background:#f0fdfa;}
+  .opt .mark{
+    flex-shrink:0;width:26px;height:26px;border-radius:50%;
+    border:1.5px solid #cbd5e1;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:.8rem;color:var(--ink-soft);
+  }
+  .opt .label{flex:1;}
+  .opt.correct-opt{border-color:var(--ok);background:var(--ok-bg);}
+  .opt.correct-opt .mark{background:var(--ok);color:#fff;border-color:var(--ok);}
+  .opt.wrong-opt{border-color:var(--bad);background:var(--bad-bg);}
+  .opt.wrong-opt .mark{background:var(--bad);color:#fff;border-color:var(--bad);}
+
+  .feedback{
+    margin-top:14px;padding:10px 12px;border-radius:10px;
+    font-size:.9rem;font-weight:600;
+  }
+  .feedback.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #86efac;}
+  .feedback.bad{background:var(--bad-bg);color:var(--bad);border:1px solid #fca5a5;}
+
+  .explanation{
+    margin-top:10px;padding:11px 13px;border-radius:10px;
+    background:#fef9ec;border:1px solid #fde68a;
+    font-size:.9rem;color:#3f3a1c;line-height:1.7;
+  }
+  .explanation strong{color:#92760a;}
+
+  .next-btn{
+    width:100%;justify-content:center;margin-top:14px;
+    padding:12px;font-size:.95rem;font-weight:600;
+  }
+
+  .summary{
+    background:var(--card);border-radius:16px;padding:28px 20px;
+    text-align:center;box-shadow:var(--shadow);border:1px solid var(--line);
+    animation:fadeIn .3s ease;
+  }
+  .summary .big-score{
+    font-family:'Amiri',serif;font-size:2.6rem;font-weight:700;
+    color:var(--accent);line-height:1.1;
+  }
+  .summary .pct{font-size:1.1rem;color:var(--gold);margin-bottom:8px;font-weight:600;}
+  .summary .msg{color:var(--ink-soft);margin:6px 0 20px;font-size:.95rem;}
+  .summary .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+  .print-view{display:none;}
+  .print-header{text-align:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--accent);}
+  .print-header h1{font-family:'Amiri',serif;margin:0 0 4px;color:var(--accent);font-size:1.4rem;}
+  .print-header p{margin:0;color:#555;font-size:.85rem;}
+  .print-section{
+    background:#f0fdfa;border:1px solid #99f6e4;padding:6px 10px;border-radius:6px;
+    font-family:'Amiri',serif;font-weight:700;color:#0f766e;
+    margin:14px 0 8px;font-size:1rem;break-after:avoid;page-break-after:avoid;
+  }
+  .pq{
+    border:1px solid #ccc;border-radius:8px;padding:10px 12px;
+    margin-bottom:10px;break-inside:avoid;page-break-inside:avoid;
+  }
+  .pq-q{font-weight:600;margin-bottom:6px;font-size:.92rem;}
+  .pq-opts{display:grid;gap:4px;margin-bottom:6px;}
+  .pq-opt{font-size:.86rem;padding:2px 6px;border-radius:4px;}
+  .pq-opt.correct{background:#e6f7ec;font-weight:700;color:#15803d;}
+  .pq-exp{
+    font-size:.82rem;background:#fef9ec;border:1px solid #fde68a;
+    padding:6px 8px;border-radius:6px;color:#3f3a1c;
+  }
+  .pq-exp b{color:#92760a;}
+
+  @media (max-width:520px){
+    body{padding:10px 8px 30px;}
+    header.hero{padding:15px 14px;}
+    header.hero h1{font-size:1.12rem;}
+    .q{padding:15px 13px;}
+    .q-text{font-size:.95rem;}
+    .opt{padding:10px 11px;font-size:.9rem;}
+    .btn{padding:8px 12px;font-size:.8rem;}
+  }
+
+  @media print{
+    @page{size:A4;margin:14mm;}
+    body{background:#fff;padding:0;color:#000;}
+    .app-view{display:none !important;}
+    .print-view{display:block !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app-view wrap">
+
+  <header class="hero">
+    <h1>النسخ وأقسامه، والناسخ والمنسوخ، والتعارض بين الأدلة</h1>
+    <p>أسئلة اختيار من متعدد — أصول الفقه · ٥٠ سؤالًا</p>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn ghost" onclick="restart()">🔄 إعادة البدء</button>
+    <button class="btn gold" onclick="window.print()">🖨️ طباعة / PDF</button>
+  </div>
+
+  <div class="progress-info">
+    <span class="badge" id="qCounter">السؤال ١ من ٥٠</span>
+    <span class="score-badge" id="scoreBadge">الصحيحة: ٠</span>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div id="cardHost"></div>
+
+</div>
+
+<div class="print-view" id="printView"></div>
+
+<script>
+/* ================= DATA ================= */
+const letters = ["أ","ب","ج","د"];
+const ar = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+
+const questions = [
+  /* ===== المستوى الأول: سهل (١–١٢) ===== */
+  {q:"ما معنى النسخ في اللغة؟",
+   opts:["البيان والإيضاح فقط","الرفع والإزالة، ويأتي بمعنى النقل","الأمر والنهي","العموم والخصوص"],ans:1,
+   exp:"النسخ في اللغة يأتي بمعنى الرفع والإزالة، ويأتي أيضًا بمعنى النقل."},
+
+  {q:"ما تعريف النسخ اصطلاحًا وفق التعريف المختصر المذكور في المقال؟",
+   opts:["بيان اللفظ العام ببعض أفراده","نقل الحكم من مكان إلى آخر","رفع حكم دليل شرعي أو لفظه بدليل من الكتاب أو السنة","إثبات الحكم بالقياس"],ans:2,
+   exp:"هذا هو التعريف المختصر الذي اقترحه الشارح في المقال."},
+
+  {q:"من الناسخ الحقيقي في الحقيقة؟",
+   opts:["المجتهد","الإجماع","القياس","الله تعالى"],ans:3,
+   exp:"الله تعالى هو الناسخ الحقيقي؛ ويُطلق الناسخ أيضًا على النص الدال على رفع الحكم."},
+
+  {q:"ما المراد بالخطاب في تعريف الناسخ؟",
+   opts:["الكتاب والسنة","الإجماع والقياس فقط","أقوال الصحابة فقط","أقوال الفقهاء"],ans:0,
+   exp:"المقصود بالخطاب هنا الكتاب والسنة."},
+
+  {q:"أيُّ مما يأتي لا يكون ناسخًا بنفسه وفق المقال؟",
+   opts:["القرآن","السنة","الإجماع والقياس","الخطاب الشرعي المتأخر"],ans:2,
+   exp:"الإجماع والقياس لا ينسخان الحكم بنفسيهما وفق المقال."},
+
+  {q:"ما المراد بالحكم المنسوخ؟",
+   opts:["الحكم الذي لم يثبت أصلًا","الحكم الشرعي الذي انتهى بالدليل المتأخر","الحكم الذي لا يتغير أبدًا","الحكم الذي ثبت بالقياس فقط"],ans:1,
+   exp:"المنسوخ هو الحكم الشرعي الذي انتهى بالدليل المتأخر."},
+
+  {q:"لماذا لا يُعَدُّ رفع حكم البراءة الأصلية نسخًا؟",
+   opts:["لأنه لا يتعلق بالأحكام الشرعية","لأنه لا يحتاج إلى دليل","لأنه يقع بعد وفاة النبي ﷺ فقط","لأن البراءة الأصلية لم تثبت بخطاب شرعي سابق"],ans:3,
+   exp:"البراءة الأصلية لم تثبت بخطاب شرعي سابق حتى يكون رفعها نسخًا."},
+
+  {q:"ما المقصود بقول الأصوليين: «مع تراخيه عنه»؟",
+   opts:["وجود مدة بين الخطاب الأول والخطاب الناسخ","اتصال الخطابين في كلام واحد","اتحاد الناسخ والمنسوخ","عدم وجود دليل على الحكم الأول"],ans:0,
+   exp:"التراخي هو وجود مدة بين الخطاب الأول والخطاب الدال على رفع الحكم."},
+
+  {q:"إذا كان الخطاب الثاني متصلًا بالأول، وكان يوضح المراد منه، فما الوصف الأنسب وفق المقال؟",
+   opts:["نسخ","إجماع","بيان","قياس"],ans:2,
+   exp:"الخطاب المتصل الذي يوضح المراد يكون بيانًا، لا نسخًا."},
+
+  {q:"ما المقصود بالرسم في قولهم: «نسخ الرسم وبقاء الحكم»؟",
+   opts:["حكم القياس","اللفظ المكتوب المتلو","إجماع العلماء","المعنى اللغوي فقط"],ans:1,
+   exp:"الرسم هنا هو اللفظ القرآني المكتوب والمتلو."},
+
+  {q:"أيُّ أنواع النسخ باعتبار المنسوخ هو الأكثر وقوعًا وفق المقال؟",
+   opts:["نسخ الحكم وبقاء الرسم","نسخ الحكم والرسم معًا","نسخ الرسم وبقاء الحكم","النسخ من غير دليل"],ans:0,
+   exp:"ذكر المقال أن نسخ الحكم مع بقاء الرسم أكثر أنواع النسخ."},
+
+  {q:"ما المراد بالنسخ إلى بدل؟",
+   opts:["زوال الحكم من غير أي حكم آخر","بقاء الحكم القديم كما هو","انتقال الحكم إلى حكم آخر يحل محله","بيان الحكم العام بالخاص"],ans:2,
+   exp:"النسخ إلى بدل هو أن يأتي حكم آخر مكان الحكم المنسوخ."},
+
+  /* ===== المستوى الثاني: متوسط (١٣–٢٥) ===== */
+  {q:"أيُّ مثال ذكره المقال لنسخ الرسم وبقاء الحكم؟",
+   opts:["آية الصيام","آية الرجم","آية المصابرة","آية الصدقة قبل مناجاة الرسول ﷺ"],ans:1,
+   exp:"ذكر المقال آية الرجم مثالًا لنسخ الرسم مع بقاء الحكم."},
+
+  {q:"ما المثال المذكور لنسخ الحكم وبقاء الرسم؟",
+   opts:["آية الرجم","آية الوصية للوالدين فقط","آية استقبال القبلة","آية مصابرة العشرين لمائتين من الكفار"],ans:3,
+   exp:"حكم مصابرة العشرين للمائتين نُسخ مع بقاء الآية متلوة."},
+
+  {q:"ما الحكمة من بقاء تلاوة الآية مع نسخ حكمها وفق المقال؟",
+   opts:["بقاء ثواب التلاوة وتذكير الأمة بحكمة النسخ","إلغاء العمل بجميع القرآن","إثبات أن الحكم القديم لا يمكن أن يتغير","الاستغناء عن السنة"],ans:0,
+   exp:"ذكر المقال بقاء ثواب التلاوة وتذكير الأمة بحكمة النسخ."},
+
+  {q:"أيُّ الأنواع الآتية لم يذكره المصنف ضمن الأنواع المذكورة في بداية المبحث، لكنه أضافه الشارح؟",
+   opts:["نسخ الحكم وبقاء الرسم","نسخ الرسم وبقاء الحكم","نسخ الحكم والرسم معًا","النسخ إلى بدل أخف"],ans:2,
+   exp:"أضاف الشارح نوع نسخ الحكم والرسم معًا."},
+
+  {q:"ما المثال الذي أورده المقال للنسخ إلى غير بدل؟",
+   opts:["تحويل القبلة إلى الكعبة","نسخ وجوب تقديم الصدقة بين يدي مناجاة الرسول ﷺ","نسخ النهي عن زيارة القبور","نسخ حكم مصابرة العشرين للمائتين"],ans:1,
+   exp:"ذكر المقال نسخ وجوب الصدقة قبل مناجاة الرسول ﷺ مثالًا للنسخ إلى غير بدل عند الجمهور."},
+
+  {q:"ما حكم النسخ إلى غير بدل عند جمهور العلماء كما ورد في المقال؟",
+   opts:["ممتنع مطلقًا","واجب في كل حكم","لا يقع إلا بالإجماع","جائز"],ans:3,
+   exp:"الجمهور يجيزون النسخ إلى غير بدل، خلافًا لمن منعه."},
+
+  {q:"ما رأي الظاهرية في النسخ إلى غير بدل كما ذكر المقال؟",
+   opts:["منعوه","أوجبوه","جعلوه خاصًا بالقرآن","جعلوه خاصًا بالسنة"],ans:0,
+   exp:"ذكر المقال أن الظاهرية منعوا النسخ إلى غير بدل."},
+
+  {q:"ما أقسام النسخ إلى بدل من حيث مقدار المشقة؟",
+   opts:["واجب ومندوب ومباح","عام وخاص ومطلق","بدل أغلظ وبدل أخف وبدل مساوٍ","متواتر وآحاد وإجماع"],ans:2,
+   exp:"البدل قد يكون أغلظ أو أخف أو مساويًا للحكم السابق."},
+
+  {q:"أيُّ مثال يمثّل النسخ إلى بدل أغلظ وفق المقال؟",
+   opts:["تحويل القبلة من بيت المقدس إلى الكعبة","الانتقال من التخيير بين الصيام والإطعام إلى وجوب الصيام","الانتقال من مصابرة الواحد لعشرة إلى مصابرة الواحد لاثنين","نسخ رسم آية الرجم مع بقاء حكمها"],ans:1,
+   exp:"الانتقال من التخيير إلى وجوب الصيام مثال للبدل الأغلظ."},
+
+  {q:"أيُّ مثال يمثّل النسخ إلى بدل أخف؟",
+   opts:["وجوب الصيام بدل التخيير","نسخ الحكم والرسم معًا","نسخ وجوب الصدقة قبل المناجاة","تخفيف نسبة مصابرة المسلمين من الواحد لعشرة إلى الواحد لاثنين"],ans:3,
+   exp:"تخفيف نسبة المصابرة من الواحد لعشرة إلى الواحد لاثنين مثال للبدل الأخف."},
+
+  {q:"أيُّ مثال يمثّل النسخ إلى بدل مساوٍ؟",
+   opts:["تحويل القبلة من بيت المقدس إلى الكعبة","نسخ وجوب الصدقة قبل المناجاة","تخفيف نسبة المصابرة من الواحد لعشرة إلى الواحد لاثنين","الانتقال من التخيير إلى وجوب الصيام"],ans:0,
+   exp:"استقبال الكعبة بدل استقبال بيت المقدس، وهما متساويان من حيث فعل المكلف."},
+
+  {q:"أيُّ نوع من النسخ اتفق القائلون بالنسخ على جوازه وفق المقال؟",
+   opts:["نسخ القرآن بالحديث الآحاد","نسخ المتواتر بالآحاد","نسخ الحكم وبقاء الرسم","نسخ الكتاب بالسنة الآحاد"],ans:2,
+   exp:"ذكر المقال أن نسخ الحكم مع بقاء الرسم جائز، وضرب له مثالًا بآية المصابرة وغيرها."},
+
+  {q:"ما الدليل الذي ذكره المقال على نسخ السنة بالسنة؟",
+   opts:["حديث «لا وصية لوارث»","حديث «كنت نهيتكم عن زيارة القبور فزوروها»","آية «فمن شهد منكم الشهر فليصمه»","آية «ولله على الناس حج البيت»"],ans:1,
+   exp:"حديث زيارة القبور يبيّن النهي السابق ثم الإذن اللاحق."},
+
+  /* ===== المستوى الثالث: صعب (٢٦–٤٠) ===== */
+  {q:"ما المقصود بقول الأصوليين: «الشيء ينسخ بمثله أو بما هو أقوى منه»؟",
+   opts:["أن السنة لا يمكن أن تنسخ السنة","أن كل دليل ظني أقوى من الدليل القطعي","أن الإجماع ينسخ القرآن مباشرة","مراعاة قوة الدليل الناسخ بالنسبة إلى الدليل المنسوخ"],ans:3,
+   exp:"المقصود مراعاة قوة الناسخ بالنسبة إلى المنسوخ، وفق التقسيم المذكور في المقال."},
+
+  {q:"ما حكم نسخ الكتاب بالكتاب وفق المقال؟",
+   opts:["جائز ولا خلاف فيه","ممتنع عند الجمهور","جائز بشرط الإجماع","جائز إذا كان المنسوخ حديثًا"],ans:0,
+   exp:"نسخ الكتاب بالكتاب جائز ولا خلاف فيه وفق المقال."},
+
+  {q:"ما قول الجمهور في نسخ السنة بالكتاب؟",
+   opts:["المنع مطلقًا","الجواز","الجواز في الأحكام العبادية فقط","المنع إلا بالقياس"],ans:1,
+   exp:"الجمهور يجيزون نسخ السنة بالكتاب."},
+
+  {q:"ما المثال المذكور لنسخ حكم ثابت بالسنة بالقرآن؟",
+   opts:["نسخ استقبال بيت المقدس بالسنة","نسخ النهي عن زيارة القبور","إباحة المباشرة والأكل والشرب في ليالي الصيام بعد أن كانت محرمة بالسنة","تخصيص آية السرقة بحديث النصاب"],ans:2,
+   exp:"أورد المقال إباحة المباشرة والأكل والشرب في ليالي الصيام بعد تحريمها بالسنة مثالًا."},
+
+  {q:"ما القول الذي رجّحه المقال في نسخ القرآن بالسنة المتواترة؟",
+   opts:["المنع مطلقًا","الجواز بالإجماع","المنع إلا عند الضرورة","الجواز، لأن السنة الصحيحة وحي من الله تعالى"],ans:3,
+   exp:"رجّح المقال جواز نسخ القرآن بالسنة المتواترة، لأن السنة الصحيحة وحي من الله."},
+
+  {q:"ما حكم نسخ الآحاد بالآحاد وفق المقال؟",
+   opts:["جائز، وهو محل اتفاق بين القائلين بالنسخ","ممتنع مطلقًا","جائز فقط إذا كان الناسخ قرآنًا","جائز بشرط أن يكون الناسخ إجماعًا"],ans:0,
+   exp:"ذكر المقال أن نسخ الآحاد بالآحاد محل اتفاق بين القائلين بالنسخ."},
+
+  {q:"ما حكم نسخ الآحاد بالمتواتر وفق المقال؟",
+   opts:["ممتنع لأن الآحاد أقوى","جائز لأن المتواتر أقوى، وهو محل اتفاق بين القائلين بالنسخ","جائز فقط في المعاملات","لا يمكن وقوعه لأن الآحاد لا يثبت حكمًا"],ans:1,
+   exp:"نسخ الآحاد بالمتواتر جائز لأن المتواتر أقوى، وفق المقال."},
+
+  {q:"لماذا منع الجمهور نسخ المتواتر بالآحاد؟",
+   opts:["لأن الآحاد لا يُستعمل في الأحكام","لأن القرآن لا يدل على الأحكام","لأن المتواتر قطعي والآحاد ظني، والمتواتر أقوى من الآحاد","لأن النسخ لا يقع في السنة"],ans:2,
+   exp:"هذا تعليل الجمهور: المتواتر قطعي والآحاد ظني، فلا ينسخ الأقوى بالأضعف عندهم."},
+
+  {q:"ما الترجيح الذي ذكره المقال في مسألة نسخ المتواتر بالآحاد؟",
+   opts:["المنع مطلقًا، لأن القطعي لا يمكن أن تكون دلالته ظنية","المنع لأن خبر الواحد لا يُقبل مطلقًا","الجواز بشرط الإجماع على كل مسألة","الجواز؛ لأن محل النسخ هو الحكم، وقد تكون دلالة اللفظ المتواتر ظنية"],ans:3,
+   exp:"رجّح المقال الجواز، وعلّل ذلك بأن محل النسخ هو الحكم، وقد تكون دلالة اللفظ المتواتر ظنية."},
+
+  {q:"ما المقصود بالتعارض اصطلاحًا؟",
+   opts:["تقابل الدليلين بحيث يخالف أحدهما الآخر","اتفاق دليلين على حكم واحد","تخصيص العام بالخاص دائمًا","ثبوت الحكم بدليل واحد"],ans:0,
+   exp:"هذا هو تعريف التعارض اصطلاحًا المذكور في المقال."},
+
+  {q:"ما القاعدة الأصولية في التعامل مع الدليلين المتعارضين ظاهرًا إذا أمكن الجمع بينهما؟",
+   opts:["إهمال الدليلين","الجمع بينهما أولى من الترجيح","تقديم القياس عليهما","نسخ أحدهما من غير معرفة التاريخ"],ans:1,
+   exp:"الجمع أولى من الترجيح لأنه يحقق العمل بالدليلين."},
+
+  {q:"إذا تعارض دليلان عامان، وتعذر الجمع بينهما، ولم يُعلم التاريخ، فما الموقف المذكور في المقال؟",
+   opts:["نسخ الدليلين معًا","تقديم الأضعف منهما","التوقف فيهما إلى أن يظهر مرجح","إلغاء الحكمين نهائيًا"],ans:2,
+   exp:"إذا تعذر الجمع ولم يُعرف التاريخ، يُتوقف حتى يظهر مرجح."},
+
+  {q:"إذا تعارض دليلان عامان، وتعذر الجمع وعُلم التاريخ، فما الطريق المذكور؟",
+   opts:["تقديم المتقدم دائمًا","إهمال الدليل المتأخر","التوقف مع وجود التاريخ","نسخ المتقدم بالمتأخر"],ans:3,
+   exp:"إذا عُرف التاريخ وتعذر الجمع، يُنسخ المتقدم بالمتأخر."},
+
+  {q:"إذا كان أحد الدليلين عامًا والآخر خاصًا، فما القاعدة المذكورة في المقال؟",
+   opts:["يُخصَّص العام بالخاص","يُخصَّص الخاص بالعام في كل حال","يُلغى الدليل الخاص","يُقدَّم القياس على النصين"],ans:0,
+   exp:"إذا كان أحد الدليلين عامًا والآخر خاصًا، يُخصَّص العام بالخاص."},
+
+  {q:"إذا كان كل واحد من الدليلين عامًا من وجه وخاصًا من وجه آخر، فما القاعدة المذكورة؟",
+   opts:["نسخ أحدهما بالآخر مطلقًا","تخصيص عموم كل واحد منهما بخصوص الآخر، إن دل على ذلك دليل","تقديم العامين وإهمال الخصوص","ترك الدليلين من غير بحث"],ans:1,
+   exp:"يُخصَّص عموم كل واحد بخصوص الآخر إذا دل الدليل على ذلك."},
+
+  /* ===== المستوى الرابع: صعب جدًا (٤١–٥٠) ===== */
+  {q:"قال الأصوليون في تعريف النسخ: «رفع حكم دليل شرعي أو لفظه بدليل من الكتاب أو السنة». ما الذي يميّز هذا التعريف عن التعريف المطوّل المذكور أولًا؟",
+   opts:["أنه يجعل القياس ناسخًا للقرآن","أنه لا يشترط وجود دليل شرعي","أنه أوضح وأخصر، ويشمل رفع الحكم أو اللفظ","أنه يعرّف الإجماع دون النسخ"],ans:2,
+   exp:"التعريف المختصر أوضح وأخصر، ويذكر رفع الحكم أو اللفظ."},
+
+  {q:"قال الله تعالى: ﴿وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا﴾. لماذا لا يُعَدُّ إخراج غير المستطيع من وجوب الحج نسخًا؟",
+   opts:["لأن وجوب الحج لا يثبت بالقرآن","لأن الحكم الخاص بالاستطاعة بيان متصل، ولأن إخراج غير المستطيع ليس رفعًا لحكم ثابت بخطاب سابق","لأن غير المستطيع لا يدخل في خطاب الشريعة مطلقًا","لأن كل تخصيص يُعَدُّ نسخًا"],ans:1,
+   exp:"الاستطاعة متصلة بالنص، والإخراج هنا بيان للمراد، لا رفع لحكم سابق ثابت بخطاب."},
+
+  {q:"ما الفرق الأساسي بين النسخ والتخصيص وفق المقال؟",
+   opts:["النسخ لا يحتاج إلى دليل، والتخصيص يحتاج إليه","التخصيص لا يقع في القرآن، والنسخ يقع فيه فقط","لا فرق بينهما من أي وجه","النسخ رفع لحكم شرعي ثابت بخطاب سابق، أما التخصيص فبيان أن بعض أفراد العام غير مرادين بالحكم العام"],ans:3,
+   exp:"النسخ يرفع حكمًا ثابتًا بخطاب سابق، والتخصيص يبيّن أن بعض أفراد العام غير مرادين به."},
+
+  {q:"ورد في المقال مثال آية المصابرة: ﴿إِنْ يَكُنْ مِنْكُمْ عِشْرُونَ صَابِرُونَ يَغْلِبُوا مِائَتَيْنِ﴾، ثم قوله تعالى: ﴿فَإِنْ يَكُنْ مِنْكُمْ مِائَةٌ صَابِرَةٌ يَغْلِبُوا مِائَتَيْنِ﴾. ما نوع النسخ هنا باعتبار الحكم الجديد؟",
+   opts:["نسخ إلى بدل أخف","نسخ الرسم وبقاء الحكم","نسخ إلى بدل أغلظ","نسخ إلى غير بدل"],ans:0,
+   exp:"الانتقال إلى نسبة مصابرة أخف هو النسخ إلى بدل أخف."},
+
+  {q:"استدل بعض المانعين للنسخ إلى غير بدل بقوله تعالى: ﴿مَا نَنْسَخْ مِنْ آيَةٍ أَوْ نُنْسِهَا نَأْتِ بِخَيْرٍ مِنْهَا أَوْ مِثْلِهَا﴾. ما الجواب الذي ذكره المقال من أوجه الجواب عن هذا الاستدلال؟",
+   opts:["يمكن أن يكون المراد بالآية لفظ الآية ونظمها، لا الحكم وحده","الآية لا تتعلق بالنسخ مطلقًا","كل حكم منسوخ يجب أن يُستبدل بحكم أشد","النسخ لا يقع إلا بالسنة"],ans:0,
+   exp:"هذا أحد الأجوبة التي ذكرها المقال عن الاستدلال بالآية على منع النسخ إلى غير بدل."},
+
+  {q:"تعارض ظاهرًا حديثان في مسألة مس الذكر: أحدهما يأمر بالوضوء، والآخر يدل على عدم وجوبه. ما الطريق الذي ذكره المقال لترجيح حديث الأمر بالوضوء عند الجمهور؟",
+   opts:["لأنه ورد في القرآن","لأنه ناسخ بالضرورة، دون حاجة إلى معرفة التاريخ","لأن كل حديث يثبت الوجوب مقدّم على غيره مطلقًا","لأنه أكثر طرقًا، ولأن العمل به أحوط، ولأنه ناقل عن البراءة الأصلية"],ans:3,
+   exp:"ذكر المقال الاحتياط وكثرة الطرق وكون الحديث ناقلًا عن البراءة الأصلية من وجوه الترجيح."},
+
+  {q:"ورد في المقال مثال تعارض آية عدة المتوفى عنها زوجها أربعة أشهر وعشرًا مع آية عدة الحامل حتى تضع حملها. كيف يُجمع بين الدليلين وفق المقال؟",
+   opts:["تُلغى آية عدة المتوفى عنها زوجها","تُخصَّص عمومية كل آية بخصوص الأخرى، فتكون عدة الحامل بوضع حملها","تُخصَّص آية الحامل بالنساء غير الحوامل","يُقدَّم الحكم الأشد دون النظر إلى الأدلة"],ans:1,
+   exp:"يُجمع بين الآيتين بتخصيص عموم كل منهما بخصوص الأخرى."},
+
+  {q:"ما وجه الاستدلال بحديث سبيعة الأسلمية في مسألة عدة الحامل المتوفى عنها زوجها؟",
+   opts:["أنه يدل على وجوب الاعتداد أربعة أشهر وعشرًا في جميع الحالات","أنه يدل على أن الحامل لا عدة لها","أنه يدل على جواز انتهاء عدة الحامل بوضع حملها، ولو كان بعد وفاة زوجها بمدة قصيرة","أنه ينسخ جميع أحكام العدة"],ans:2,
+   exp:"استدل المقال بحديث سبيعة على أن عدة الحامل تنتهي بوضع الحمل."},
+
+  {q:"ذكر المقال أن الجمع بين الدليلين أولى من الترجيح. ما السبب الأصولي لذلك؟",
+   opts:["لأنه يتيح العمل بالدليلين معًا بدل إهمال أحدهما","لأن الترجيح ممنوع في جميع الأحوال","لأن الدليلين المتعارضين لا يمكن أن يكونا صحيحين","لأن الجمع يُغني دائمًا عن معرفة دلالة النصوص"],ans:0,
+   exp:"الجمع يسمح بالعمل بكلا الدليلين، بخلاف إهدار أحدهما بالترجيح."},
+
+  {q:"أيُّ العبارات الآتية أدق في تلخيص منهج التعامل مع التعارض الظاهري بين النصوص وفق المقال؟",
+   opts:["يُنسخ الدليل المتقدم دائمًا، سواء عُرف التاريخ أم لم يُعرف","يُقدَّم الخاص على العام في جميع الصور، ولا حاجة إلى الجمع أو الترجيح","يُترك الدليلان إذا ظهر بينهما تعارض","يُبدأ بالجمع إن أمكن، ثم يُنظر في النسخ عند معرفة التاريخ، أو الترجيح عند تعذر الجمع والنسخ، مع مراعاة علاقة العموم والخصوص"],ans:3,
+   exp:"هذا يلخص مسالك الجمع والنسخ والترجيح، مع مراعاة العام والخاص."}
+];
+
+/* ================= SECTIONS ================= */
+const sections = [
+  {title:"المستوى الأول: سهل — التعريفات والمفاهيم الأساسية", from:0, to:11},
+  {title:"المستوى الثاني: متوسط — الأقسام والأمثلة والشروط", from:12, to:24},
+  {title:"المستوى الثالث: صعب — الفروق الأصولية والمسائل الخلافية", from:25, to:39},
+  {title:"المستوى الرابع: صعب جدًا — التطبيق والتحليل والترجيح", from:40, to:49}
+];
+
+function levelOf(idx){
+  const s = sections.find(s => idx >= s.from && idx <= s.to);
+  return s ? s.title.split("—")[0].trim() : "";
+}
+
+/* ================= STATE ================= */
+const STORAGE_KEY = "quiz_naskh_v1";
+const state = { current: 0, answers: {} };
+const total = questions.length;
+
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    if(typeof s.current === "number" && s.current >= 0 && s.current < total) state.current = s.current;
+    if(s.answers && typeof s.answers === "object") state.answers = s.answers;
+  }catch(e){}
+}
+
+/* ================= RENDER ================= */
+const cardHost     = document.getElementById('cardHost');
+const qCounter     = document.getElementById('qCounter');
+const scoreBadge   = document.getElementById('scoreBadge');
+const progressFill = document.getElementById('progressFill');
+
+function correctCount(){
+  let n = 0;
+  Object.keys(state.answers).forEach(k => {
+    if(state.answers[k] === questions[k].ans) n++;
+  });
+  return n;
+}
+
+function updateProgressUI(){
+  qCounter.textContent = `السؤال ${ar(state.current + 1)} من ${ar(total)}`;
+  scoreBadge.textContent = `الصحيحة: ${ar(correctCount())}`;
+  progressFill.style.width = `${((state.current + 1) / total) * 100}%`;
+}
+
+function renderCard(){
+  const idx = state.current;
+  const q = questions[idx];
+  const sel = state.answers[idx];
+  const answered = sel !== undefined;
+
+  let optsHTML = '';
+  q.opts.forEach((o, i) => {
+    let cls = 'opt';
+    if(answered){
+      if(i === q.ans) cls += ' correct-opt';
+      if(i === sel && sel !== q.ans) cls += ' wrong-opt';
+    }
+    optsHTML += `<div class="${cls}" data-i="${i}" ${answered ? 'style="cursor:default"' : ''}>
+      <span class="mark">${letters[i]}</span><span class="label">${o}</span>
+    </div>`;
+  });
+
+  const isCorrect = answered && sel === q.ans;
+
+  cardHost.innerHTML = `
+    <div class="q">
+      <div class="level-chip">${levelOf(idx)}</div>
+      <div class="q-head">
+        <div class="q-num">${ar(idx + 1)}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="opts">${optsHTML}</div>
+      ${answered ? `
+        <div class="feedback ${isCorrect ? 'ok' : 'bad'}">
+          ${isCorrect ? '✅ إجابة صحيحة' : `❌ إجابة خاطئة — الصحيحة: (${letters[q.ans]})`}
+        </div>
+        <div class="explanation"><strong>التعليل:</strong> ${q.exp}</div>
+        <button class="btn next-btn" id="nextBtn">
+          ${idx < total - 1 ? 'السؤال التالي ←' : 'عرض النتيجة ✓'}
+        </button>
+      ` : ''}
+    </div>
+  `;
+
+  if(!answered){
+    cardHost.querySelectorAll('.opt').forEach(o => {
+      o.addEventListener('click', () => selectOption(parseInt(o.dataset.i)));
+    });
+  } else {
+    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  }
+
+  updateProgressUI();
+}
+
+function selectOption(optIdx){
+  const idx = state.current;
+  if(state.answers[idx] !== undefined) return;
+  state.answers[idx] = optIdx;
+  saveState();
+  renderCard();
+}
+
+function nextQuestion(){
+  if(state.current < total - 1){
+    state.current++;
+    saveState();
+    renderCard();
+    window.scrollTo({top:0, behavior:'smooth'});
+  } else {
+    renderSummary();
+  }
+}
+
+function renderSummary(){
+  const correct = correctCount();
+  const pct = Math.round((correct / total) * 100);
+  let msg = '';
+  if(pct >= 90) msg = 'ما شاء الله! إتقانٌ تامّ، بارك الله فيك.';
+  else if(pct >= 75) msg = 'أداءٌ ممتاز، واصل المراجعة لتثبيت المسائل.';
+  else if(pct >= 50) msg = 'أداءٌ جيد، يُنصح بمراجعة التعريفات والشروط.';
+  else msg = 'تحتاج مراجعةً أعمق للتعريفات والأمثلة، ولا بأس بالمعاودة.';
+
+  progressFill.style.width = '100%';
+  qCounter.textContent = 'اكتمل الاختبار';
+  scoreBadge.textContent = `الصحيحة: ${ar(correct)}`;
+
+  cardHost.innerHTML = `
+    <div class="summary">
+      <div class="big-score">${ar(correct)} / ${ar(total)}</div>
+      <div class="pct">${ar(pct)}٪</div>
+      <p class="msg">${msg}</p>
+      <div class="actions">
+        <button class="btn" onclick="restart()">🔄 إعادة الاختبار</button>
+        <button class="btn gold" onclick="window.print()">🖨️ طباعة / PDF</button>
+      </div>
+    </div>
+  `;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restart(){
+  state.current = 0;
+  state.answers = {};
+  saveState();
+  renderCard();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ================= PRINT VIEW ================= */
+function buildPrintView(){
+  let html = `<div class="print-header">
+    <h1>النسخ وأقسامه، والناسخ والمنسوخ، والتعارض بين الأدلة</h1>
+    <p>أصول الفقه — ٥٠ سؤالًا مع الإجابات والتعليلات</p>
+  </div>`;
+
+  sections.forEach(sec => {
+    html += `<div class="print-section">${sec.title}</div>`;
+    for(let i = sec.from; i <= sec.to; i++){
+      const q = questions[i];
+      const optsHTML = q.opts.map((o, j) =>
+        `<div class="pq-opt ${j === q.ans ? 'correct' : ''}">${letters[j]}) ${o}${j === q.ans ? ' ✓' : ''}</div>`
+      ).join('');
+      html += `<div class="pq">
+        <div class="pq-q">${ar(i + 1)}. ${q.q}</div>
+        <div class="pq-opts">${optsHTML}</div>
+        <div class="pq-exp"><b>التعليل:</b> ${q.exp}</div>
+      </div>`;
+    }
+  });
+
+  document.getElementById('printView').innerHTML = html;
+}
+
+/* ================= INIT ================= */
+(function init(){
+  loadState();
+  renderCard();
+  buildPrintView();
+})();
+</script>
+</body>
+</html>
