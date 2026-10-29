@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>Belajar Bahasa Arab dari Nol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===================== VARIABEL & TEMA ===================== */
+:root{
+  --body-bg: radial-gradient(1100px 600px at 8% -12%, #d6f0e4 0%, rgba(214,240,228,0) 60%),
+             radial-gradient(900px 520px at 108% 4%, #fbeecd 0%, rgba(251,238,205,0) 58%),
+             #f7f5ef;
+  --surface:#ffffff;
+  --surface-2:#fbfaf6;
+  --text:#16241f;
+  --muted:#6d7c76;
+  --primary:#0f766e;
+  --primary-2:#0ea5a0;
+  --primary-soft:#e6f5f1;
+  --on-primary:#ffffff;
+  --accent:#b8912a;
+  --border:#e4e8e2;
+  --shadow:0 12px 32px rgba(15,60,50,.08);
+  --shadow-sm:0 4px 14px rgba(15,60,50,.06);
+  --ok:#15803d; --ok-soft:#dcfce7;
+  --bad:#b91c1c; --bad-soft:#fee2e2;
+}
+[data-theme="dark"]{
+  --body-bg: radial-gradient(1100px 600px at 8% -12%, #0f3b33 0%, rgba(15,59,51,0) 60%),
+             radial-gradient(900px 520px at 108% 4%, #3a2f12 0%, rgba(58,47,18,0) 58%),
+             #0d1512;
+  --surface:#131f1b;
+  --surface-2:#0f1a17;
+  --text:#e8f0ec;
+  --muted:#9bb0a8;
+  --primary:#2dd4bf;
+  --primary-2:#5eead4;
+  --primary-soft:#10312c;
+  --on-primary:#04211d;
+  --accent:#e3c46a;
+  --border:#22332d;
+  --shadow:0 12px 32px rgba(0,0,0,.35);
+  --shadow-sm:0 4px 14px rgba(0,0,0,.25);
+  --ok:#4ade80; --ok-soft:#0f2f1d;
+  --bad:#f87171; --bad-soft:#3a1414;
+}
+
+/* ===================== DASAR ===================== */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--body-bg);
+  background-attachment:fixed;
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.6;
+  transition:background-color .3s,color .3s;
+  -webkit-font-smoothing:antialiased;
+}
+.ar{font-family:'Amiri','Noto Naskh Arabic','Traditional Arabic',serif;direction:rtl;unicode-bidi:isolate;line-height:2}
+.hidden{display:none !important}
+.wrap{max-width:920px;margin:0 auto;padding:26px 18px 90px}
+
+/* ===================== TOPBAR ===================== */
+.topbar{position:fixed;top:14px;right:14px;z-index:60}
+.icon-btn{
+  width:46px;height:46px;border-radius:15px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm);
+  cursor:pointer;font-size:18px;display:grid;place-items:center;transition:.18s;
+}
+.icon-btn:hover{transform:translateY(-2px);border-color:var(--primary)}
+
+/* ===================== PAGE ===================== */
+.page{display:none;animation:fade .38s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ===================== HERO ===================== */
+.hero{text-align:center;padding:44px 8px 26px}
+.hero-badge{
+  display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--primary);background:var(--primary-soft);border:1px solid var(--border);
+  padding:7px 16px;border-radius:999px;font-weight:800;
+}
+.hero h1{
+  font-size:clamp(1.75rem,5.6vw,2.9rem);line-height:1.18;margin:18px 0 12px;
+  font-weight:800;letter-spacing:-.025em;
+}
+.hero-sub{color:var(--muted);margin:0 auto;max-width:540px;font-size:.98rem}
+.hero-ar{
+  font-size:clamp(2.2rem,9vw,3.4rem);color:var(--accent);opacity:.9;
+  margin-top:18px;font-weight:700;letter-spacing:.02em;
+}
+
+/* ===================== MENU ===================== */
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:28px}
+.menu-card{
+  text-align:left;padding:26px 24px;border-radius:22px;border:1px solid var(--border);
+  background:var(--surface);box-shadow:var(--shadow);cursor:pointer;transition:.22s;
+  display:flex;flex-direction:column;gap:7px;font-family:inherit;color:inherit;
+}
+.menu-card:hover{transform:translateY(-5px);border-color:var(--primary);box-shadow:0 20px 44px rgba(15,60,50,.16)}
+.menu-card:active{transform:translateY(-1px)}
+.menu-icon{font-size:30px;line-height:1}
+.menu-title{font-weight:800;letter-spacing:.06em;font-size:1rem;color:var(--primary);margin-top:4px}
+.menu-desc{font-size:.89rem;color:var(--muted);line-height:1.55}
+
+/* ===================== TOMBOL ===================== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 22px;border-radius:14px;border:none;font-family:inherit;
+  font-weight:700;font-size:.94rem;cursor:pointer;transition:.18s;text-decoration:none;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--primary),var(--primary-2));
+  color:var(--on-primary);box-shadow:0 8px 22px rgba(15,118,110,.28);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,118,110,.36)}
+.btn-ghost{background:var(--surface);color:var(--text);border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none !important;box-shadow:none}
+
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:13px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  font-family:inherit;font-weight:700;font-size:.88rem;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:.18s;margin-bottom:18px;
+}
+.back-btn:hover{border-color:var(--primary);color:var(--primary);transform:translateX(-3px)}
+
+/* ===================== KARTU & JUDUL ===================== */
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:20px;box-shadow:var(--shadow-sm);
+}
+.note-card{
+  background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--primary);
+  border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-sm);
+  font-size:.9rem;line-height:1.65;margin-bottom:20px;
+}
+.note-card b{color:var(--primary)}
+.sec-title{
+  display:flex;align-items:center;gap:11px;font-size:1.02rem;font-weight:800;
+  margin:30px 0 13px;letter-spacing:-.01em;
+}
+.sec-title::before{
+  content:'';width:6px;height:22px;border-radius:99px;
+  background:linear-gradient(var(--primary),var(--primary-2));flex:0 0 auto;
+}
+.sec-title:first-child{margin-top:6px}
+.page-title{
+  font-size:clamp(1.4rem,4.6vw,2rem);font-weight:800;margin:0 0 6px;letter-spacing:-.02em;
+}
+.page-sub{color:var(--muted);margin:0 0 20px;font-size:.93rem}
+
+/* ===================== TABEL ===================== */
+.table-wrap{
+  overflow-x:auto;border-radius:16px;border:1px solid var(--border);
+  background:var(--surface);box-shadow:var(--shadow-sm);-webkit-overflow-scrolling:touch;
+}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:440px}
+th,td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--border);vertical-align:middle}
+th{
+  background:var(--primary-soft);color:var(--primary);font-weight:800;
+  font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--surface-2)}
+td.ar,th.ar{text-align:right;font-size:1.2rem}
+td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
+
+/* ===================== DAFTAR KOSA KATA ===================== */
+.voc-list{list-style:none;margin:0;padding:6px 18px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.voc-item{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  padding:13px 0;border-bottom:1px dashed var(--border);
+}
+.voc-item:last-child{border-bottom:none}
+.voc-left{min-width:0;flex:1}
+.voc-id{font-size:.93rem;font-weight:600}
+.voc-tr{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:2px}
+.voc-ar{font-size:1.3rem;color:var(--primary);flex:0 0 auto;text-align:right;font-weight:700}
+
+.group-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  flex-wrap:wrap;margin:26px 0 12px;
+}
+.group-head h3{margin:0;font-size:1rem;font-weight:800}
+.group-head .tag{
+  font-size:.74rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--primary);background:var(--primary-soft);border:1px solid var(--border);
+  padding:5px 12px;border-radius:999px;
+}
+.group-ar{
+  font-size:1.35rem;color:var(--accent);font-weight:700;margin-bottom:10px;
+  padding:10px 16px;background:var(--surface-2);border:1px dashed var(--border);
+  border-radius:14px;display:inline-block;
+}
+
+/* ===================== CHIP FILTER ===================== */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{
+  padding:9px 15px;border-radius:999px;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);font-size:.83rem;font-weight:700;
+  cursor:pointer;transition:.15s;font-family:inherit;
+}
+.chip:hover{border-color:var(--primary);color:var(--primary)}
+.chip.active{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+
+/* ===================== FLASHCARD ===================== */
+.flip-card{
+  perspective:1400px;-webkit-perspective:1400px;
+  margin:6px 0 16px;cursor:pointer;user-select:none;
+}
+.flip-inner{
+  position:relative;width:100%;height:310px;
+  transition:transform .6s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;-webkit-transform-style:preserve-3d;
+}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+
+.flip-face{
+  position:absolute;inset:0;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:26px;border:1px solid var(--border);background:var(--surface);
+  box-shadow:var(--shadow);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;padding:26px;text-align:center;overflow:hidden;
+  /* safety net: fade face out after it rotates away */
+  transition:opacity .18s ease .24s, visibility 0s linear .42s;
+}
+/* pastikan semua anak & pseudo-element juga menghormati backface */
+.flip-face *{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
+.flip-front{opacity:1;visibility:visible}
+.flip-front::after{
+  content:'';position:absolute;inset:auto -40% -55% auto;width:220px;height:220px;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--primary-soft),transparent 70%);
+  opacity:.9;pointer-events:none;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
+.flip-back{
+  transform:rotateY(180deg);
+  background:linear-gradient(160deg,var(--primary-soft),var(--surface) 70%);
+  opacity:1;visibility:visible;
+}
+
+/* sembunyikan muka yang sedang membelakangi */
+.flip-card.flipped .flip-front{opacity:0;visibility:hidden}
+.flip-card:not(.flipped) .flip-back{opacity:0;visibility:hidden}
+
+.fc-badge{
+  font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;
+  color:var(--primary);background:var(--surface);border:1px solid var(--border);
+  padding:5px 13px;border-radius:999px;
+}
+.fc-ar{font-size:clamp(1.8rem,7.5vw,2.6rem);font-weight:700;color:var(--text);padding:0 6px}
+.fc-hint{font-size:.78rem;color:var(--muted)}
+.fc-id{font-size:clamp(1.1rem,4.4vw,1.5rem);font-weight:800;color:var(--text)}
+.fc-tr{font-size:.88rem;color:var(--muted);font-style:italic}
+.fc-ar-small{font-size:1.25rem;color:var(--primary);font-weight:700;margin-top:4px}
+
+.fc-controls{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.fc-controls .btn{flex:1;min-width:110px}
+.fc-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.83rem;color:var(--muted);font-weight:700;margin:14px 2px 6px;
+}
+@media(max-width:420px){
+  .flip-inner{height:280px}
+  .voc-ar{font-size:1.15rem}
+}
+
+/* ===================== PROGRESS ===================== */
+.progress{height:8px;border-radius:99px;background:var(--border);overflow:hidden;margin:12px 0}
+.progress > i{
+  display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-2));transition:width .35s ease;
+}
+
+/* ===================== QUIZ ===================== */
+.quiz-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.quiz-top .label{font-size:.85rem;font-weight:800;color:var(--muted)}
+.pill{
+  font-size:.8rem;font-weight:800;padding:6px 14px;border-radius:999px;
+  background:var(--primary-soft);color:var(--primary);border:1px solid var(--border);
+}
+.q-label{font-size:.83rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.q-ar{
+  font-size:clamp(1.6rem,6.5vw,2.2rem);font-weight:700;color:var(--text);
+  text-align:center;padding:16px 10px;line-height:2;
+}
+.q-id{
+  font-size:clamp(1.1rem,4.5vw,1.4rem);font-weight:800;color:var(--text);
+  text-align:center;padding:16px 10px;
+}
+.options{display:grid;gap:10px;margin-top:6px}
+.opt{
+  display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:16px;
+  border:1.5px solid var(--border);background:var(--surface);cursor:pointer;text-align:left;
+  font-family:inherit;font-size:.95rem;color:var(--text);transition:.16s;width:100%;line-height:1.5;
+}
+.opt:hover:not(:disabled){border-color:var(--primary);transform:translateX(3px)}
+.opt:disabled{cursor:default}
+.opt .key{
+  width:27px;height:27px;border-radius:9px;background:var(--surface-2);
+  border:1px solid var(--border);display:grid;place-items:center;
+  font-size:.78rem;font-weight:800;color:var(--muted);flex:0 0 auto;
+}
+.opt .txt{flex:1;min-width:0}
+.opt .txt.ar{font-size:1.2rem;text-align:right;color:var(--text);font-weight:700}
+.opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+.opt.correct .key{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .key{background:var(--bad);color:#fff;border-color:var(--bad)}
+.feedback{min-height:26px;font-weight:800;font-size:.9rem;margin-top:12px}
+.feedback.ok{color:var(--ok)}
+.feedback.no{color:var(--bad)}
+
+/* ===================== HASIL ===================== */
+.result-card{text-align:center;padding:34px 22px}
+.result-emoji{font-size:52px;line-height:1;margin-bottom:8px}
+.result-card h2{margin:0 0 6px;font-size:1.5rem;letter-spacing:-.02em}
+.result-card p{color:var(--muted);margin:0 0 20px;font-size:.94rem}
+.ring{
+  width:158px;height:158px;border-radius:50%;margin:0 auto 20px;
+  display:grid;place-items:center;position:relative;
+  background:conic-gradient(var(--primary) calc(var(--p)*1%), var(--border) 0);
+}
+.ring::before{
+  content:'';position:absolute;inset:11px;border-radius:50%;background:var(--surface);
+}
+.ring span{position:relative;font-size:2.1rem;font-weight:800;letter-spacing:-.03em}
+.ring small{position:relative;display:block;font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.stat-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0 24px}
+.stat{
+  flex:1;min-width:120px;padding:16px;border-radius:16px;
+  background:var(--surface-2);border:1px solid var(--border);
+}
+.stat b{display:block;font-size:1.4rem;letter-spacing:-.02em}
+.stat small{color:var(--muted);font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.cta-box{
+  margin-top:22px;padding:20px;border-radius:18px;
+  background:linear-gradient(135deg,var(--primary-soft),var(--surface));
+  border:1px dashed var(--primary);
+}
+.cta-box p{margin:0 0 14px;color:var(--text);font-weight:700;font-size:.92rem}
+.locked-box{
+  margin-top:22px;padding:20px;border-radius:18px;
+  background:var(--surface-2);border:1px dashed var(--border);
+  color:var(--muted);font-size:.9rem;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="icon-btn" id="themeBtn" aria-label="Ganti tema" onclick="toggleTheme()">🌙</button>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= HALAMAN AWAL ================= -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-badge">✦ Kursus Dasar Bahasa Arab</div>
+      <h1>Belajar Bahasa Arab<br>dari Nol</h1>
+      <p class="hero-sub">Pahami kaidah dasar, kenali isim isyaroh, dan hafalkan kosa kata baru dengan cara yang menyenangkan.</p>
+      <div class="hero-ar ar">اَلْعَرَبِيَّة</div>
+    </div>
+
+    <div class="menu">
+      <button class="menu-card" onclick="go('rangkuman')">
+        <span class="menu-icon">📚</span>
+        <span class="menu-title">RANGKUMAN</span>
+        <span class="menu-desc">Ringkasan materi: kata, kalimat, jumlah ismiyah &amp; isim isyaroh.</span>
+      </button>
+      <button class="menu-card" onclick="go('kosa')">
+        <span class="menu-icon">✍️</span>
+        <span class="menu-title">TAMBAH KOSA KATA</span>
+        <span class="menu-desc">60 contoh mubtada' isim isyaroh + flashcard hafalan + latihan.</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= HALAMAN RANGKUMAN ================= -->
+  <section class="page" id="page-rangkuman">
+    <button class="back-btn" onclick="go('home')">← Kembali</button>
+
+    <h2 class="page-title">RANGKUMAN MATERI</h2>
+    <p class="page-sub">Inti-inti pelajaran bahasa Arab dasar dalam satu halaman.</p>
+
+    <!-- Kata -->
+    <div class="sec-title">Kata dalam Bahasa Arab</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th style="width:120px">Jenis</th><th>Penjelasan Singkat</th><th>Contoh</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Harf</b></td>
+            <td>Kata sambung / kata tugas. Tidak bisa berdiri sendiri dan tidak memiliki makna sempurna.</td>
+            <td class="ar">مِنْ ، إِلَى ، فِي</td>
+          </tr>
+          <tr>
+            <td><b>Fi'il</b></td>
+            <td>Kata kerja. Terbagi menjadi fi'il madhi (lampau), fi'il mudhari' (sekarang), dan fi'il amr (perintah).</td>
+            <td class="ar">ذَهَبَ ، يَذْهَبُ ، اِذْهَبْ</td>
+          </tr>
+          <tr>
+            <td><b>Isim</b></td>
+            <td>Kata benda, kata sifat, atau kata keterangan. Tidak terikat waktu.</td>
+            <td class="ar">كِتَابٌ ، مَسْجِدٌ ، رَجُلٌ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Kalimat -->
+    <div class="sec-title">Kalimat dalam Bahasa Arab</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th style="width:150px">Jenis</th><th>Penjelasan Singkat</th><th>Contoh</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Jumlah Fi'liyah</b></td>
+            <td>Kalimat yang diawali dengan <i>fi'il</i> (kata kerja), lalu fa'il (pelaku).</td>
+            <td class="ar">ذَهَبَ الطَّالِبُ</td>
+          </tr>
+          <tr>
+            <td><b>Jumlah Ismiyah</b></td>
+            <td>Kalimat yang diawali dengan <i>isim</i>. Terdiri dari mubtada' dan khobar.</td>
+            <td class="ar">الطَّالِبُ مُجْتَهِدٌ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Jumlah Ismiyah -->
+    <div class="sec-title">Jumlah Ismiyah</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th style="width:130px">Unsur</th><th>Penjelasan</th><th>Contoh</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Mubtada'</b></td>
+            <td>Isim yang menjadi pokok kalimat, umumnya terletak di awal.</td>
+            <td class="ar">هٰذَا</td>
+          </tr>
+          <tr>
+            <td><b>Khobar</b></td>
+            <td>Keterangan yang menyempurnakan mubtada' sehingga kalimat menjadi sempurna. Pada materi ini khobar berupa <b>isim mufrod</b> (satu kata).</td>
+            <td class="ar">كِتَابٌ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Ketentuan Umum -->
+    <div class="sec-title">Ketentuan Umum</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th style="width:190px">Istilah</th><th>Keterangan</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Khobar</b></td><td>Pelengkap mubtada'. Harus sesuai dengan mubtada' dalam hal jenis (mudzakar/muannats) dan jumlah (mufrod/mutsanna/jama').</td></tr>
+          <tr><td><b>Mubtada'</b></td><td>Pokok kalimat. Boleh berupa isim zhohir, dhomir, atau isim isyaroh.</td></tr>
+          <tr><td><b>Nakhiroh</b></td><td>Isim yang masih umum / belum tertentu. Ciri umumnya berharakat tanwin.</td></tr>
+          <tr><td><b>Ma'rifat</b></td><td>Isim yang sudah tertentu, misalnya didahului <span class="ar">ال</span>, isim isyaroh, dhomir, atau nama.</td></tr>
+          <tr><td><b>Isim Isyaroh</b></td><td>Kata tunjuk, seperti <span class="ar">هٰذَا</span> (ini) dan <span class="ar">ذٰلِكَ</span> (itu).</td></tr>
+          <tr><td><b>Sama dalam Muannats – Mudzakar</b></td><td>Khobar wajib mengikuti mubtada' dalam hal mudzakar (laki-laki) dan muannats (perempuan).</td></tr>
+          <tr><td><b>Sama-sama marfu' (dhommah di akhir kata)</b></td><td>Mubtada' dan khobar keduanya berkedudukan <b>marfu'</b>. Pada isim mufrod, tanda marfu'nya adalah <b>dhammah</b> di akhir kata, misalnya <span class="ar">هٰذَا كِتَابٌ</span> — kata <span class="ar">كِتَابٌ</span> berharakat dhammah.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Isim Isyaroh -->
+    <div class="sec-title">ISIM ISYAROH</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:110px">Jumlah</th>
+            <th style="width:100px">Jarak</th>
+            <th class="ar">Mudzakar</th>
+            <th class="ar">Muannats</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td rowspan="2"><b>Mufrod</b></td><td>Dekat</td><td class="ar">هٰذَا</td><td class="ar">هٰذِهِ</td></tr>
+          <tr><td>Jauh</td><td class="ar">ذَاكَ / ذٰلِكَ</td><td class="ar">تِلْكَ</td></tr>
+          <tr><td rowspan="2"><b>Mutsanna</b></td><td>Dekat</td><td class="ar">هٰذَانِ</td><td class="ar">هَاتَانِ</td></tr>
+          <tr><td>Jauh</td><td class="ar">ذَانِكَ</td><td class="ar">تَانِكَ</td></tr>
+          <tr><td rowspan="2"><b>Jama'</b></td><td>Dekat</td><td class="ar">هٰؤُلَاءِ</td><td class="ar">هٰؤُلَاءِ</td></tr>
+          <tr><td>Jauh</td><td class="ar">أُولَئِكَ</td><td class="ar">أُولَئِكَ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec-title">Menunjuk Tempat</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th style="width:110px">Jarak</th><th class="ar" style="width:130px">Kata</th><th>Arti</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Dekat</td><td class="ar">هُنَا</td><td>di sini</td></tr>
+          <tr><td>Sedang</td><td class="ar">هُنَاكَ</td><td>di sana</td></tr>
+          <tr><td>Jauh</td><td class="ar">هُنَالِكَ</td><td>di sana (jauh)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:28px;text-align:center">
+      <button class="btn btn-primary" onclick="go('kosa')">Lanjut ke Kosa Kata →</button>
+    </div>
+  </section>
+
+  <!-- ================= HALAMAN KOSA KATA ================= -->
+  <section class="page" id="page-kosa">
+    <button class="back-btn" onclick="go('home')">← Kembali</button>
+
+    <h2 class="page-title">TAMBAH KOSA KATA</h2>
+    <p class="page-sub">Contoh Mubtada' berupa Isim Isyaroh — 60 contoh dengan khobar yang berbeda.</p>
+
+    <div class="note-card">
+      <b>Catatan:</b> Semua contoh menggunakan <b>khobar mufrod</b> (satu kata), bukan mudhaf–mudhaf ilaih dan bukan na'at–man'ut. Khobar berupa isim mufrod yang <b>marfu'</b> dengan tanda <b>dhammah</b> di akhir kata, misalnya <span class="ar">هٰذَا كِتَابٌ</span>.
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+      <button class="btn btn-primary" onclick="go('flash')">🃏 Mulai Hafalan</button>
+      <button class="btn btn-ghost" onclick="go('quiz')">📝 Mulai Latihan</button>
+    </div>
+
+    <div class="group-head">
+      <h3>a. Mudzakar Mufrod — Dekat</h3>
+      <span class="tag" id="count-A1">15 contoh</span>
+    </div>
+    <div class="group-ar ar">هٰذَا</div>
+    <ul class="voc-list" id="list-A1"></ul>
+
+    <div class="group-head">
+      <h3>a. Mudzakar Mufrod — Jauh</h3>
+      <span class="tag" id="count-A2">15 contoh</span>
+    </div>
+    <div class="group-ar ar">ذٰلِكَ</div>
+    <ul class="voc-list" id="list-A2"></ul>
+
+    <div class="group-head">
+      <h3>b. Muannats Mufrod — Dekat</h3>
+      <span class="tag" id="count-B1">15 contoh</span>
+    </div>
+    <div class="group-ar ar">هٰذِهِ</div>
+    <ul class="voc-list" id="list-B1"></ul>
+
+    <div class="group-head">
+      <h3>b. Muannats Mufrod — Jauh</h3>
+      <span class="tag" id="count-B2">15 contoh</span>
+    </div>
+    <div class="group-ar ar">تِلْكَ</div>
+    <ul class="voc-list" id="list-B2"></ul>
+
+    <div style="margin-top:30px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="go('flash')">🃏 Melatih Hafalan</button>
+      <button class="btn btn-ghost" onclick="go('quiz')">📝 Latihan Quiz</button>
+    </div>
+  </section>
+
+  <!-- ================= HALAMAN FLASHCARD ================= -->
+  <section class="page" id="page-flash">
+    <button class="back-btn" onclick="go('kosa')">← Kembali</button>
+
+    <h2 class="page-title">Melatih Hafalan</h2>
+    <p class="page-sub">Klik kartu untuk membalik. Gunakan tombol panah keyboard (← →) dan spasi untuk membalik.</p>
+
+    <div class="chips" id="fcChips">
+      <button class="chip active" data-g="ALL" onclick="setFilter(this)">Semua</button>
+      <button class="chip" data-g="A1" onclick="setFilter(this)">هٰذَا</button>
+      <button class="chip" data-g="A2" onclick="setFilter(this)">ذٰلِكَ</button>
+      <button class="chip" data-g="B1" onclick="setFilter(this)">هٰذِهِ</button>
+      <button class="chip" data-g="B2" onclick="setFilter(this)">تِلْكَ</button>
+    </div>
+
+    <div class="flip-card" id="flipCard" onclick="flipCard()">
+      <div class="flip-inner">
+        <div class="flip-face flip-front">
+          <span class="fc-badge" id="fcFrontBadge">Mudzakar Mufrod — Dekat</span>
+          <div class="fc-ar ar" id="fcFrontAr">هٰذَا كِتَابٌ</div>
+          <div class="fc-hint">👆 Ketuk untuk melihat arti</div>
+        </div>
+        <div class="flip-face flip-back">
+          <span class="fc-badge">Arti</span>
+          <div class="fc-id" id="fcBackId">Ini buku</div>
+          <div class="fc-tr" id="fcBackTr">hādzā kitābun</div>
+          <div class="fc-ar-small ar" id="fcBackAr">هٰذَا كِتَابٌ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-meta">
+      <span id="fcCounter">1 / 60</span>
+      <span>Kartu Hafalan</span>
+    </div>
+    <div class="progress"><i id="fcBar"></i></div>
+
+    <div class="fc-controls">
+      <button class="btn btn-ghost" id="fcPrev" onclick="moveCard(-1)">← Sebelumnya</button>
+      <button class="btn btn-primary" onclick="flipCard()">Balik Kartu</button>
+      <button class="btn btn-ghost" id="fcNext" onclick="moveCard(1)">Berikutnya →</button>
+    </div>
+
+    <div style="text-align:center;margin-top:14px">
+      <button class="btn btn-ghost" onclick="shuffleDeck()">🔀 Acak Kartu</button>
+    </div>
+
+    <div style="text-align:center;margin-top:26px">
+      <button class="btn btn-primary" onclick="go('quiz')">📝 Lanjut ke Latihan Quiz</button>
+    </div>
+  </section>
+
+  <!-- ================= HALAMAN QUIZ ================= -->
+  <section class="page" id="page-quiz">
+    <button class="back-btn" onclick="go('kosa')">← Kembali</button>
+
+    <div id="quizBody">
+      <h2 class="page-title">Latihan</h2>
+      <p class="page-sub">Jawab semua soal. Skor minimal <b>80%</b> untuk membuka materi berikutnya.</p>
+
+      <div class="quiz-top">
+        <span class="label" id="quizCount">Soal 1 dari 60</span>
+        <span class="pill" id="quizScore">Benar: 0</span>
+      </div>
+      <div class="progress"><i id="quizBar"></i></div>
+
+      <div class="card" style="margin-top:16px">
+        <div id="quizQuestion"></div>
+        <div class="options" id="quizOptions"></div>
+        <div class="feedback" id="quizFeedback"></div>
+      </div>
+
+      <div style="text-align:right;margin-top:16px">
+        <button class="btn btn-primary hidden" id="quizNext" onclick="nextQuestion()">Soal Berikutnya →</button>
+      </div>
+    </div>
+
+    <div id="quizResult" class="hidden">
+      <div class="card result-card">
+        <div class="result-emoji" id="resultEmoji">🎉</div>
+        <h2>Latihan Selesai!</h2>
+        <p id="resultMsg">Semangat, terus berlatih!</p>
+
+        <div class="ring" id="scoreRing" style="--p:0">
+          <div>
+            <span id="scorePct">0%</span>
+            <small>Skor</small>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat"><b id="statCorrect">0</b><small>Benar</small></div>
+          <div class="stat"><b id="statWrong">0</b><small>Salah</small></div>
+          <div class="stat"><b id="statTotal">0</b><small>Total Soal</small></div>
+        </div>
+
+        <div id="resultAction"></div>
+
+        <div style="margin-top:18px">
+          <button class="btn btn-ghost" onclick="go('kosa')">← Kembali ke Kosa Kata</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA KOSA KATA (60 contoh) — KHOBAR MUFROD (satu kata)
+   ============================================================ */
+const GROUPS = {
+  A1: { label: 'Mudzakar Mufrod — Dekat', ar: 'هٰذَا' },
+  A2: { label: 'Mudzakar Mufrod — Jauh',  ar: 'ذٰلِكَ' },
+  B1: { label: 'Muannats Mufrod — Dekat', ar: 'هٰذِهِ' },
+  B2: { label: 'Muannats Mufrod — Jauh',  ar: 'تِلْكَ' }
+};
+
+const VOCAB = [
+  /* ---------- A1 : Mudzakar Mufrod Dekat (هٰذَا) ---------- */
+  { g:'A1', ar:'هٰذَا كِتَابٌ',    tr:'hādzā kitābun',    id:'Ini buku' },
+  { g:'A1', ar:'هٰذَا قَلَمٌ',     tr:'hādzā qalamun',    id:'Ini pena' },
+  { g:'A1', ar:'هٰذَا بَيْتٌ',     tr:'hādzā baitun',     id:'Ini rumah' },
+  { g:'A1', ar:'هٰذَا مَسْجِدٌ',   tr:'hādzā masjidun',   id:'Ini masjid' },
+  { g:'A1', ar:'هٰذَا رَجُلٌ',     tr:'hādzā rajulun',    id:'Ini lelaki' },
+  { g:'A1', ar:'هٰذَا جَبَلٌ',     tr:'hādzā jabalun',    id:'Ini gunung' },
+  { g:'A1', ar:'هٰذَا نَهْرٌ',     tr:'hādzā nahrun',     id:'Ini sungai' },
+  { g:'A1', ar:'هٰذَا خُبْزٌ',     tr:'hādzā khubzun',    id:'Ini roti' },
+  { g:'A1', ar:'هٰذَا لَحْمٌ',     tr:'hādzā laḥmun',     id:'Ini daging' },
+  { g:'A1', ar:'هٰذَا عَسَلٌ',     tr:'hādzā ʿasalun',    id:'Ini madu' },
+  { g:'A1', ar:'هٰذَا تُفَّاحٌ',   tr:'hādzā tuffāḥun',   id:'Ini apel' },
+  { g:'A1', ar:'هٰذَا مِفْتَاحٌ',  tr:'hādzā miftāḥun',   id:'Ini kunci' },
+  { g:'A1', ar:'هٰذَا قَمَرٌ',     tr:'hādzā qamarun',    id:'Ini bulan' },
+  { g:'A1', ar:'هٰذَا نَجْمٌ',     tr:'hādzā najmun',     id:'Ini bintang' },
+  { g:'A1', ar:'هٰذَا بَحْرٌ',     tr:'hādzā baḥrun',     id:'Ini laut' },
+
+  /* ---------- A2 : Mudzakar Mufrod Jauh (ذٰلِكَ) ---------- */
+  { g:'A2', ar:'ذٰلِكَ حِمَارٌ',   tr:'dzālika ḥimārun',  id:'Itu keledai' },
+  { g:'A2', ar:'ذٰلِكَ حِصَانٌ',   tr:'dzālika ḥiṣānun',  id:'Itu kuda' },
+  { g:'A2', ar:'ذٰلِكَ جَمَلٌ',    tr:'dzālika jamalun',  id:'Itu unta' },
+  { g:'A2', ar:'ذٰلِكَ دِيكٌ',     tr:'dzālika dīkun',    id:'Itu ayam jantan' },
+  { g:'A2', ar:'ذٰلِكَ ثَوْبٌ',    tr:'dzālika tsawbun',  id:'Itu pakaian' },
+  { g:'A2', ar:'ذٰلِكَ بَابٌ',     tr:'dzālika bābun',    id:'Itu pintu' },
+  { g:'A2', ar:'ذٰلِكَ طَعَامٌ',   tr:'dzālika ṭaʿāmun',  id:'Itu makanan' },
+  { g:'A2', ar:'ذٰلِكَ حَجَرٌ',    tr:'dzālika ḥajarun',  id:'Itu batu' },
+  { g:'A2', ar:'ذٰلِكَ وَلَدٌ',    tr:'dzālika waladun',  id:'Itu anak laki-laki' },
+  { g:'A2', ar:'ذٰلِكَ أُسْتَاذٌ', tr:'dzālika ustādzun', id:'Itu ustadz' },
+  { g:'A2', ar:'ذٰلِكَ طَالِبٌ',   tr:'dzālika ṭālibun',  id:'Itu siswa' },
+  { g:'A2', ar:'ذٰلِكَ سَرِيرٌ',   tr:'dzālika sarīrun',  id:'Itu tempat tidur' },
+  { g:'A2', ar:'ذٰلِكَ قَلْبٌ',    tr:'dzālika qalbun',   id:'Itu hati' },
+  { g:'A2', ar:'ذٰلِكَ وَجْهٌ',    tr:'dzālika wajhun',   id:'Itu wajah' },
+  { g:'A2', ar:'ذٰلِكَ نَعْلٌ',    tr:'dzālika naʿlun',   id:'Itu sandal' },
+
+  /* ---------- B1 : Muannats Mufrod Dekat (هٰذِهِ) ---------- */
+  { g:'B1', ar:'هٰذِهِ مَدْرَسَةٌ', tr:'hādzihi madrasatun', id:'Ini sekolah' },
+  { g:'B1', ar:'هٰذِهِ غُرْفَةٌ',   tr:'hādzihi ghurfatun',  id:'Ini kamar' },
+  { g:'B1', ar:'هٰذِهِ حَقِيبَةٌ',  tr:'hādzihi ḥaqībatun',  id:'Ini tas' },
+  { g:'B1', ar:'هٰذِهِ نَافِذَةٌ',  tr:'hādzihi nāfidzatun', id:'Ini jendela' },
+  { g:'B1', ar:'هٰذِهِ سَاعَةٌ',    tr:'hādzihi sāʿatun',    id:'Ini jam' },
+  { g:'B1', ar:'هٰذِهِ حَدِيقَةٌ',  tr:'hādzihi ḥadīqatun',  id:'Ini taman' },
+  { g:'B1', ar:'هٰذِهِ شَمْسٌ',     tr:'hādzihi syamsun',    id:'Ini matahari' },
+  { g:'B1', ar:'هٰذِهِ نَخْلَةٌ',   tr:'hādzihi nakhlatun',  id:'Ini pohon kurma' },
+  { g:'B1', ar:'هٰذِهِ زَهْرَةٌ',   tr:'hādzihi zahratun',   id:'Ini bunga' },
+  { g:'B1', ar:'هٰذِهِ قِطَّةٌ',    tr:'hādzihi qiṭṭatun',   id:'Ini kucing' },
+  { g:'B1', ar:'هٰذِهِ دَجَاجَةٌ',  tr:'hādzihi dajājatun',  id:'Ini ayam betina' },
+  { g:'B1', ar:'هٰذِهِ بَقَرَةٌ',   tr:'hādzihi baqaratun',  id:'Ini sapi betina' },
+  { g:'B1', ar:'هٰذِهِ سَمَكَةٌ',   tr:'hādzihi samakatun',  id:'Ini ikan' },
+  { g:'B1', ar:'هٰذِهِ طَاوِلَةٌ',  tr:'hādzihi ṭāwilatun',  id:'Ini meja' },
+  { g:'B1', ar:'هٰذِهِ طَالِبَةٌ',  tr:'hādzihi ṭālibatun',  id:'Ini siswi' },
+
+  /* ---------- B2 : Muannats Mufrod Jauh (تِلْكَ) ---------- */
+  { g:'B2', ar:'تِلْكَ مَكْتَبَةٌ', tr:'tilka maktabatun',  id:'Itu perpustakaan' },
+  { g:'B2', ar:'تِلْكَ مَزْرَعَةٌ', tr:'tilka mazraʿatun',  id:'Itu ladang' },
+  { g:'B2', ar:'تِلْكَ دَرَّاجَةٌ', tr:'tilka darrājatun',  id:'Itu sepeda' },
+  { g:'B2', ar:'تِلْكَ سَجَّادَةٌ', tr:'tilka sajjādatun',  id:'Itu sajadah' },
+  { g:'B2', ar:'تِلْكَ وِسَادَةٌ',  tr:'tilka wisādatun',   id:'Itu bantal' },
+  { g:'B2', ar:'تِلْكَ مِرْوَحَةٌ', tr:'tilka mirwaḥatun',  id:'Itu kipas' },
+  { g:'B2', ar:'تِلْكَ ثَلَّاجَةٌ', tr:'tilka tsallājatun', id:'Itu kulkas' },
+  { g:'B2', ar:'تِلْكَ مِظَلَّةٌ',  tr:'tilka miẓallatun',  id:'Itu payung' },
+  { g:'B2', ar:'تِلْكَ بَاخِرَةٌ',  tr:'tilka bākhiratun',  id:'Itu kapal' },
+  { g:'B2', ar:'تِلْكَ كُرَةٌ',     tr:'tilka kuratun',     id:'Itu bola' },
+  { g:'B2', ar:'تِلْكَ مِلْعَقَةٌ', tr:'tilka milʿaqatun',  id:'Itu sendok' },
+  { g:'B2', ar:'تِلْكَ شَوْكَةٌ',   tr:'tilka syawkatun',   id:'Itu garpu' },
+  { g:'B2', ar:'تِلْكَ صُورَةٌ',    tr:'tilka ṣūratun',     id:'Itu gambar' },
+  { g:'B2', ar:'تِلْكَ عَرَبَةٌ',   tr:'tilka ʿarabatun',   id:'Itu gerobak' },
+  { g:'B2', ar:'تِلْكَ حَافِلَةٌ',  tr:'tilka ḥāfilatun',   id:'Itu bus' }
+];
+
+/* ============================================================
+   UTILITAS
+   ============================================================ */
+function shuffle(a){
+  const arr = a.slice();
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+/* ============================================================
+   TEMA
+   ============================================================ */
+function toggleTheme(){
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('arab-theme', next); } catch(e){}
+}
+(function initTheme(){
+  let saved = null;
+  try { saved = localStorage.getItem('arab-theme'); } catch(e){}
+  if(saved === 'dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('themeBtn').textContent = '☀️';
+  }
+})();
+
+/* ============================================================
+   NAVIGASI
+   ============================================================ */
+function go(id){
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.toggle('active', p.id === 'page-' + id);
+  });
+  window.scrollTo(0, 0);
+  if(id === 'flash') initFlash();
+  if(id === 'quiz')  startQuiz();
+}
+
+/* ============================================================
+   RENDER DAFTAR KOSA KATA
+   ============================================================ */
+function renderVocabLists(){
+  ['A1','A2','B1','B2'].forEach(g => {
+    const items = VOCAB.filter(v => v.g === g);
+    const ul = document.getElementById('list-' + g);
+    ul.innerHTML = items.map(v => `
+      <li class="voc-item">
+        <div class="voc-left">
+          <div class="voc-id">${v.id}</div>
+          <div class="voc-tr">${v.tr}</div>
+        </div>
+        <div class="voc-ar ar">${v.ar}</div>
+      </li>
+    `).join('');
+    document.getElementById('count-' + g).textContent = items.length + ' contoh';
+  });
+}
+renderVocabLists();
+
+/* ============================================================
+   FLASHCARD
+   ============================================================ */
+let fcDeck = VOCAB.slice();
+let fcIdx = 0;
+let fcFilter = 'ALL';
+
+function initFlash(){
+  fcFilter = 'ALL';
+  document.querySelectorAll('#fcChips .chip').forEach(c =>
+    c.classList.toggle('active', c.dataset.g === 'ALL'));
+  buildDeck();
+}
+
+function buildDeck(keepOrder){
+  fcDeck = fcFilter === 'ALL' ? VOCAB.slice() : VOCAB.filter(v => v.g === fcFilter);
+  if(!keepOrder) fcDeck = shuffle(fcDeck);
+  fcIdx = 0;
+  renderCard();
+}
+
+function setFilter(el){
+  document.querySelectorAll('#fcChips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  fcFilter = el.dataset.g;
+  buildDeck();
+}
+
+function shuffleDeck(){
+  fcDeck = shuffle(fcDeck);
+  fcIdx = 0;
+  renderCard();
+}
+
+function renderCard(){
+  const v = fcDeck[fcIdx];
+  const card = document.getElementById('flipCard');
+  card.classList.remove('flipped');
+
+  document.getElementById('fcFrontBadge').textContent = GROUPS[v.g].label;
+  document.getElementById('fcFrontAr').textContent = v.ar;
+  document.getElementById('fcBackId').textContent = v.id;
+  document.getElementById('fcBackTr').textContent = v.tr;
+  document.getElementById('fcBackAr').textContent = v.ar;
+
+  document.getElementById('fcCounter').textContent = (fcIdx + 1) + ' / ' + fcDeck.length;
+  document.getElementById('fcBar').style.width = ((fcIdx + 1) / fcDeck.length * 100) + '%';
+  document.getElementById('fcPrev').disabled = fcDeck.length < 2;
+  document.getElementById('fcNext').disabled = fcDeck.length < 2;
+}
+
+function flipCard(){
+  document.getElementById('flipCard').classList.toggle('flipped');
+}
+
+function moveCard(dir){
+  if(fcDeck.length < 2) return;
+  fcIdx = (fcIdx + dir + fcDeck.length) % fcDeck.length;
+  renderCard();
+}
+
+document.addEventListener('keydown', function(e){
+  if(!document.getElementById('page-flash').classList.contains('active')) return;
+  if(e.key === 'ArrowRight'){ moveCard(1); }
+  else if(e.key === 'ArrowLeft'){ moveCard(-1); }
+  else if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); flipCard(); }
+});
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+let quizItems = [];
+let qi = 0;
+let qScore = 0;
+let answered = false;
+
+function startQuiz(){
+  const order = shuffle(VOCAB.map((_, i) => i));
+  quizItems = order.map((idx, k) => {
+    const item = VOCAB[idx];
+    const type = (k % 2 === 0) ? 'ar2id' : 'id2ar';
+    const others = shuffle(VOCAB.filter((_, j) => j !== idx)).slice(0, 3);
+    if(type === 'ar2id'){
+      return {
+        item, type,
+        answer: item.id,
+        options: shuffle([item.id].concat(others.map(o => o.id)))
+      };
+    }
+    return {
+      item, type,
+      answer: item.ar,
+      options: shuffle([item.ar].concat(others.map(o => o.ar)))
+    };
+  });
+
+  qi = 0; qScore = 0;
+  document.getElementById('quizBody').classList.remove('hidden');
+  document.getElementById('quizResult').classList.add('hidden');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = quizItems[qi];
+
+  document.getElementById('quizCount').textContent = 'Soal ' + (qi + 1) + ' dari ' + quizItems.length;
+  document.getElementById('quizScore').textContent = 'Benar: ' + qScore;
+  document.getElementById('quizBar').style.width = (qi / quizItems.length * 100) + '%';
+
+  const qBox = document.getElementById('quizQuestion');
+  if(q.type === 'ar2id'){
+    qBox.innerHTML = '<div class="q-label">Apa arti kalimat berikut?</div>' +
+                     '<div class="q-ar ar">' + q.item.ar + '</div>';
+  } else {
+    qBox.innerHTML = '<div class="q-label">Manakah Bahasa Arab dari kalimat berikut?</div>' +
+                     '<div class="q-id">' + q.item.id + '</div>';
+  }
+
+  const opts = document.getElementById('quizOptions');
+  opts.innerHTML = q.options.map((o, i) => {
+    const cls = q.type === 'id2ar' ? 'txt ar' : 'txt';
+    return '<button class="opt" data-i="' + i + '" onclick="answerQuestion(this)">' +
+             '<span class="key">' + 'ABCD'[i] + '</span>' +
+             '<span class="' + cls + '">' + o + '</span>' +
+           '</button>';
+  }).join('');
+
+  const fb = document.getElementById('quizFeedback');
+  fb.textContent = '';
+  fb.className = 'feedback';
+
+  const nextBtn = document.getElementById('quizNext');
+  nextBtn.classList.add('hidden');
+  nextBtn.textContent = (qi === quizItems.length - 1) ? 'Lihat Hasil →' : 'Soal Berikutnya →';
+}
+
+function answerQuestion(btn){
+  if(answered) return;
+  answered = true;
+
+  const q = quizItems[qi];
+  const picked = parseInt(btn.dataset.i, 10);
+  const isCorrect = q.options[picked] === q.answer;
+
+  document.querySelectorAll('#quizOptions .opt').forEach((b, i) => {
+    b.disabled = true;
+    if(q.options[i] === q.answer) b.classList.add('correct');
+    else if(i === picked) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('quizFeedback');
+  if(isCorrect){
+    qScore++;
+    fb.textContent = '✅ Benar!';
+    fb.className = 'feedback ok';
+  } else {
+    const correctText = (q.type === 'ar2id') ? q.item.id : q.item.ar;
+    fb.textContent = '❌ Kurang tepat. Jawaban benar: ' + correctText;
+    fb.className = 'feedback no';
+  }
+
+  document.getElementById('quizScore').textContent = 'Benar: ' + qScore;
+  document.getElementById('quizNext').classList.remove('hidden');
+}
+
+function nextQuestion(){
+  if(qi < quizItems.length - 1){
+    qi++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult(){
+  const total = quizItems.length;
+  const wrong = total - qScore;
+  const pct = Math.round(qScore / total * 100);
+
+  document.getElementById('quizBody').classList.add('hidden');
+  const res = document.getElementById('quizResult');
+  res.classList.remove('hidden');
+
+  document.getElementById('statCorrect').textContent = qScore;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statTotal').textContent = total;
+
+  const ring = document.getElementById('scoreRing');
+  ring.style.setProperty('--p', 0);
+  document.getElementById('scorePct').textContent = '0%';
+
+  setTimeout(() => {
+    ring.style.transition = 'background .9s ease';
+    ring.style.setProperty('--p', pct);
+    let cur = 0;
+    const step = Math.max(1, Math.round(pct / 40));
+    const timer = setInterval(() => {
+      cur += step;
+      if(cur >= pct){ cur = pct; clearInterval(timer); }
+      document.getElementById('scorePct').textContent = cur + '%';
+    }, 22);
+  }, 120);
+
+  const emoji = document.getElementById('resultEmoji');
+  const msg = document.getElementById('resultMsg');
+  if(pct >= 90){ emoji.textContent = '🏆'; msg.textContent = 'Luar biasa! Hafalanmu sangat baik.'; }
+  else if(pct >= 80){ emoji.textContent = '🎉'; msg.textContent = 'Hebat! Kamu sudah menguasai materi ini.'; }
+  else if(pct >= 60){ emoji.textContent = '💪'; msg.textContent = 'Bagus, sedikit lagi! Ulangi hafalan lalu coba lagi.'; }
+  else { emoji.textContent = '📚'; msg.textContent = 'Jangan menyerah! Buka flashcard dulu, lalu ulangi latihan.'; }
+
+  const action = document.getElementById('resultAction');
+  if(pct >= 80){
+    action.innerHTML =
+      '<div class="cta-box">' +
+        '<p>✨ Selamat! Skor kamu ' + pct + '% (minimal 80%). Materi berikutnya sudah terbuka.</p>' +
+        '<a class="btn btn-primary" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/001b" ' +
+        'target="_blank" rel="noopener">Lanjut ke Materi Berikutnya →</a>' +
+      '</div>';
+  } else {
+    action.innerHTML =
+      '<div class="locked-box">🔒 Skor kamu ' + pct + '%. Materi berikutnya terbuka jika skor minimal <b>80%</b>. ' +
+      'Silakan ulangi latihan.</div>';
+  }
+}
+</script>
+</body>
+</html>
