@@ -28,6 +28,8 @@
   --shadow-sm:0 4px 14px rgba(15,60,50,.06);
   --ok:#15803d; --ok-soft:#dcfce7;
   --bad:#b91c1c; --bad-soft:#fee2e2;
+  --diagram-blue:#1a3d7c;
+  --diagram-red:#8b1a1a;
 }
 [data-theme="dark"]{
   --body-bg: radial-gradient(1100px 600px at 8% -12%, #0f3b33 0%, rgba(15,59,51,0) 60%),
@@ -47,6 +49,8 @@
   --shadow-sm:0 4px 14px rgba(0,0,0,.25);
   --ok:#4ade80; --ok-soft:#0f2f1d;
   --bad:#f87171; --bad-soft:#3a1414;
+  --diagram-blue:#93c5fd;
+  --diagram-red:#fca5a5;
 }
 
 /* ===================== DASAR ===================== */
@@ -232,10 +236,8 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
   box-shadow:var(--shadow);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:14px;padding:26px;text-align:center;overflow:hidden;
-  /* safety net: fade face out after it rotates away */
   transition:opacity .18s ease .24s, visibility 0s linear .42s;
 }
-/* pastikan semua anak & pseudo-element juga menghormati backface */
 .flip-face *{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 
 .flip-front{opacity:1;visibility:visible}
@@ -252,7 +254,6 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
   opacity:1;visibility:visible;
 }
 
-/* sembunyikan muka yang sedang membelakangi */
 .flip-card.flipped .flip-front{opacity:0;visibility:hidden}
 .flip-card:not(.flipped) .flip-back{opacity:0;visibility:hidden}
 
@@ -357,6 +358,104 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
   background:var(--surface-2);border:1px dashed var(--border);
   color:var(--muted);font-size:.9rem;
 }
+
+/* ===================== DIAGRAM INTERAKTIF ===================== */
+.diagram{
+  border-radius:14px;overflow:hidden;
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow:var(--shadow-sm);
+  margin-bottom:24px;
+}
+.diagram-header{
+  padding:14px 18px;text-align:center;
+  font-weight:800;color:#fff;font-size:1rem;letter-spacing:.02em;
+}
+.diagram-row{display:flex;flex-wrap:wrap}
+.diagram-btn{
+  flex:1;min-width:100px;padding:16px 14px;border:none;
+  border-right:1px solid rgba(0,0,0,.15);
+  border-top:1px solid rgba(0,0,0,.15);
+  color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;
+  cursor:pointer;transition:.18s;position:relative;
+}
+.diagram-btn:last-child{border-right:none}
+.diagram-btn:hover{
+  filter:brightness(1.18);z-index:2;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+  transform:scale(1.02);
+}
+.diagram-detail-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid rgba(0,0,0,.12);
+}
+.detail-left{
+  padding:12px 10px;text-align:center;
+  border-right:1px solid rgba(0,0,0,.12);
+  background:var(--surface);
+}
+.detail-right{
+  padding:12px 10px;display:flex;justify-content:space-around;
+  align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface);
+}
+.detail-btn{
+  background:none;border:none;font-family:inherit;
+  font-size:.92rem;font-weight:700;text-decoration:underline;
+  cursor:pointer;padding:4px 10px;border-radius:8px;transition:.15s;
+}
+.detail-btn:hover{background:var(--surface-2);transform:translateY(-1px)}
+.detail-note{
+  padding:12px 14px;text-align:center;font-weight:700;
+  font-size:.9rem;color:var(--text);background:var(--surface);
+  border-top:1px solid rgba(0,0,0,.12);
+}
+
+/* ===================== MODAL ===================== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;
+  z-index:100;padding:20px;animation:fadeIn .2s ease;
+}
+.modal-overlay.active{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:var(--surface);border-radius:20px;
+  max-width:480px;width:100%;max-height:85vh;overflow-y:auto;
+  padding:26px 24px 24px;position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  border:1px solid var(--border);
+  animation:modalIn .25s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes modalIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-close{
+  position:absolute;top:12px;right:12px;
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  font-size:22px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;transition:.18s;
+}
+.modal-close:hover{
+  background:var(--bad-soft);color:var(--bad);
+  border-color:var(--bad);transform:rotate(90deg);
+}
+.modal-title{font-size:1.3rem;font-weight:800;margin:0 0 4px;color:var(--primary)}
+.modal-ar-title{font-size:1.6rem;color:var(--accent);margin-bottom:14px;font-weight:700}
+.modal-desc{color:var(--text);font-size:.92rem;line-height:1.65;margin-bottom:16px}
+.modal-examples-title{
+  font-size:.78rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px;
+}
+.modal-example{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;border-radius:12px;background:var(--surface-2);
+  border:1px solid var(--border);margin-bottom:8px;gap:12px;
+}
+.modal-example .ex-ar{
+  font-family:'Amiri','Noto Naskh Arabic',serif;
+  font-size:1.3rem;color:var(--primary);font-weight:700;
+  direction:rtl;flex:0 0 auto;
+}
+.modal-example .ex-id{font-size:.88rem;color:var(--muted);font-weight:600;text-align:right}
 </style>
 </head>
 <body>
@@ -370,8 +469,8 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
   <!-- ================= HALAMAN AWAL ================= -->
   <section class="page active" id="page-home">
     <div class="hero">
-      <div class="hero-badge">✦ Kursus Dasar Bahasa Arab</div>
-      <h1>Belajar Bahasa Arab<br>dari Nol</h1>
+      <div class="hero-badge">✦ Kursus Bahasa Arab</div>
+      <h1>Rangkuman <i>- 001</i></h1>
       <p class="hero-sub">Pahami kaidah dasar, kenali isim isyaroh, dan hafalkan kosa kata baru dengan cara yang menyenangkan.</p>
       <div class="hero-ar ar">اَلْعَرَبِيَّة</div>
     </div>
@@ -397,75 +496,43 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
     <h2 class="page-title">RANGKUMAN MATERI</h2>
     <p class="page-sub">Inti-inti pelajaran bahasa Arab dasar dalam satu halaman.</p>
 
-    <!-- Kata -->
-    <div class="sec-title">Kata dalam Bahasa Arab</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th style="width:120px">Jenis</th><th>Penjelasan Singkat</th><th>Contoh</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>Harf</b></td>
-            <td>Kata sambung / kata tugas. Tidak bisa berdiri sendiri dan tidak memiliki makna sempurna.</td>
-            <td class="ar">مِنْ ، إِلَى ، فِي</td>
-          </tr>
-          <tr>
-            <td><b>Fi'il</b></td>
-            <td>Kata kerja. Terbagi menjadi fi'il madhi (lampau), fi'il mudhari' (sekarang), dan fi'il amr (perintah).</td>
-            <td class="ar">ذَهَبَ ، يَذْهَبُ ، اِذْهَبْ</td>
-          </tr>
-          <tr>
-            <td><b>Isim</b></td>
-            <td>Kata benda, kata sifat, atau kata keterangan. Tidak terikat waktu.</td>
-            <td class="ar">كِتَابٌ ، مَسْجِدٌ ، رَجُلٌ</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Kata — diagram interaktif -->
+    <div class="diagram">
+      <div class="diagram-header" style="background:#4a7fc1">Kata dalam Bahasa Arab</div>
+      <div class="diagram-row">
+        <button class="diagram-btn" style="background:#8b1a1a" onclick="openModal('harf')" aria-label="Buka penjelasan Harf">Harf</button>
+        <button class="diagram-btn" style="background:#6b9d3a" onclick="openModal('fil')" aria-label="Buka penjelasan Fi'il">Fi'il</button>
+        <button class="diagram-btn" style="background:#d62828" onclick="openModal('isim')" aria-label="Buka penjelasan Isim">Isim</button>
+      </div>
     </div>
 
-    <!-- Kalimat -->
-    <div class="sec-title">Kalimat dalam Bahasa Arab</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th style="width:150px">Jenis</th><th>Penjelasan Singkat</th><th>Contoh</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>Jumlah Fi'liyah</b></td>
-            <td>Kalimat yang diawali dengan <i>fi'il</i> (kata kerja), lalu fa'il (pelaku).</td>
-            <td class="ar">ذَهَبَ الطَّالِبُ</td>
-          </tr>
-          <tr>
-            <td><b>Jumlah Ismiyah</b></td>
-            <td>Kalimat yang diawali dengan <i>isim</i>. Terdiri dari mubtada' dan khobar.</td>
-            <td class="ar">الطَّالِبُ مُجْتَهِدٌ</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Kalimat — diagram interaktif -->
+    <div class="diagram">
+      <div class="diagram-header" style="background:#4a7fc1">Kalimat dalam Bahasa Arab</div>
+      <div class="diagram-row">
+        <button class="diagram-btn" style="background:#2e5e2e" onclick="openModal('filiyah')" aria-label="Buka penjelasan Jumlah Fi'liyah">Jumlah Fi'liyah</button>
+        <button class="diagram-btn" style="background:#d62828" onclick="openModal('ismiyah')" aria-label="Buka penjelasan Jumlah Ismiyah">Jumlah Ismiyah</button>
+      </div>
     </div>
 
-    <!-- Jumlah Ismiyah -->
-    <div class="sec-title">Jumlah Ismiyah</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th style="width:130px">Unsur</th><th>Penjelasan</th><th>Contoh</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>Mubtada'</b></td>
-            <td>Isim yang menjadi pokok kalimat, umumnya terletak di awal.</td>
-            <td class="ar">هٰذَا</td>
-          </tr>
-          <tr>
-            <td><b>Khobar</b></td>
-            <td>Keterangan yang menyempurnakan mubtada' sehingga kalimat menjadi sempurna. Pada materi ini khobar berupa <b>isim mufrod</b> (satu kata).</td>
-            <td class="ar">كِتَابٌ</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Jumlah Ismiyah — diagram interaktif -->
+    <div class="diagram">
+      <div class="diagram-header" style="background:#d62828">Jumlah Ismiyah</div>
+      <div class="diagram-row">
+        <button class="diagram-btn" style="background:#2e5e2e" onclick="openModal('khobar')" aria-label="Buka penjelasan Khobar">Khobar</button>
+        <button class="diagram-btn" style="background:#4a7fc1" onclick="openModal('mubtada')" aria-label="Buka penjelasan Mubtada'">Mubtada'</button>
+      </div>
+      <div class="diagram-detail-row">
+        <div class="detail-left">
+          <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('nakhiroh')" aria-label="Buka penjelasan Nakhiroh">Nakhiroh</button>
+        </div>
+        <div class="detail-right">
+          <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('marifat')" aria-label="Buka penjelasan Ma'rifat">Ma'rifat</button>
+          <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('isyaroh')" aria-label="Buka penjelasan Isim Isyaroh">Isim Isyaroh</button>
+        </div>
+      </div>
+      <div class="detail-note">Sama dalam Muannats – Mudzakar</div>
+      <div class="detail-note">Sama-sama marfu' (dhammah di akhir kata)</div>
     </div>
 
     <!-- Ketentuan Umum -->
@@ -686,6 +753,14 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
 
 </div>
 
+<!-- ================= MODAL ================= -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()" role="dialog" aria-modal="true">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()" aria-label="Tutup">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    DATA KOSA KATA (60 contoh) — KHOBAR MUFROD (satu kata)
@@ -768,6 +843,106 @@ const VOCAB = [
 ];
 
 /* ============================================================
+   DATA PENJELASAN (untuk modal interaktif)
+   ============================================================ */
+const EXPLANATIONS = {
+  harf: {
+    title: 'Harf',
+    ar: 'حَرْف',
+    desc: 'Kata sambung / kata tugas. Tidak bisa berdiri sendiri dan tidak memiliki makna sempurna. Harf berfungsi menghubungkan kata dengan kata lain dalam kalimat.',
+    examples: [
+      { ar: 'مِنْ', id: 'dari' },
+      { ar: 'إِلَى', id: 'ke' },
+      { ar: 'فِي', id: 'di dalam' }
+    ]
+  },
+  fil: {
+    title: "Fi'il",
+    ar: 'فِعْل',
+    desc: "Kata kerja. Terbagi menjadi fi'il madhi (lampau), fi'il mudhari' (sekarang), dan fi'il amr (perintah). Fi'il terikat dengan waktu.",
+    examples: [
+      { ar: 'ذَهَبَ', id: 'telah pergi (madhi)' },
+      { ar: 'يَذْهَبُ', id: 'sedang pergi (mudhari\')' },
+      { ar: 'اِذْهَبْ', id: 'pergilah (amr)' }
+    ]
+  },
+  isim: {
+    title: 'Isim',
+    ar: 'اِسْم',
+    desc: 'Kata benda, kata sifat, atau kata keterangan. Tidak terikat waktu.',
+    examples: [
+      { ar: 'كِتَابٌ', id: 'buku' },
+      { ar: 'مَسْجِدٌ', id: 'masjid' },
+      { ar: 'رَجُلٌ', id: 'lelaki' }
+    ]
+  },
+  filiyah: {
+    title: "Jumlah Fi'liyah",
+    ar: 'جُمْلَة فِعْلِيَّة',
+    desc: "Kalimat yang diawali dengan fi'il (kata kerja), lalu fa'il (pelaku).",
+    examples: [
+      { ar: 'ذَهَبَ الطَّالِبُ', id: 'Siswa itu telah pergi' }
+    ]
+  },
+  ismiyah: {
+    title: 'Jumlah Ismiyah',
+    ar: 'جُمْلَة اِسْمِيَّة',
+    desc: "Kalimat yang diawali dengan isim. Terdiri dari mubtada' (pokok) dan khobar (keterangan).",
+    examples: [
+      { ar: 'الطَّالِبُ مُجْتَهِدٌ', id: 'Siswa itu rajin' }
+    ]
+  },
+  khobar: {
+    title: 'Khobar',
+    ar: 'خَبَر',
+    desc: "Keterangan yang menyempurnakan mubtada' sehingga kalimat menjadi sempurna. Pada materi ini khobar berupa isim mufrod (satu kata). Khobar umumnya bersifat nakhiroh (belum tertentu) dan marfu' (dhammah di akhir).",
+    examples: [
+      { ar: 'كِتَابٌ', id: 'buku (nakhiroh, bertanwin)' },
+      { ar: 'مُجْتَهِدٌ', id: 'rajin' }
+    ]
+  },
+  mubtada: {
+    title: "Mubtada'",
+    ar: 'مُبْتَدَأ',
+    desc: "Isim yang menjadi pokok kalimat, umumnya terletak di awal. Mubtada' bersifat ma'rifat (sudah tertentu), misalnya berupa isim isyaroh, dhomir, atau didahului ال.",
+    examples: [
+      { ar: 'هٰذَا', id: 'ini (isim isyaroh)' },
+      { ar: 'الطَّالِبُ', id: 'siswa itu (ma\'rifat)' }
+    ]
+  },
+  nakhiroh: {
+    title: 'Nakhiroh',
+    ar: 'نَكِرَة',
+    desc: 'Isim yang masih umum / belum tertentu. Ciri umumnya berharakat tanwin. Khobar pada jumlah ismiyah umumnya berupa nakhiroh.',
+    examples: [
+      { ar: 'كِتَابٌ', id: 'sebuah buku' },
+      { ar: 'قَلَمٌ', id: 'sebuah pena' }
+    ]
+  },
+  marifat: {
+    title: "Ma'rifat",
+    ar: 'مَعْرِفَة',
+    desc: "Isim yang sudah tertentu, misalnya didahului ال, isim isyaroh, dhomir, atau nama. Mubtada' umumnya berupa ma'rifat.",
+    examples: [
+      { ar: 'الْكِتَابُ', id: 'buku itu (didahului ال)' },
+      { ar: 'هٰذَا', id: 'ini (isim isyaroh)' },
+      { ar: 'مُحَمَّدٌ', id: 'Muhammad (nama)' }
+    ]
+  },
+  isyaroh: {
+    title: 'Isim Isyaroh',
+    ar: 'اِسْم إِشَارَة',
+    desc: "Kata tunjuk, seperti هٰذَا (ini) dan ذٰلِكَ (itu). Isim isyaroh termasuk isim ma'rifat.",
+    examples: [
+      { ar: 'هٰذَا', id: 'ini (mudzakar dekat)' },
+      { ar: 'هٰذِهِ', id: 'ini (muannats dekat)' },
+      { ar: 'ذٰلِكَ', id: 'itu (mudzakar jauh)' },
+      { ar: 'تِلْكَ', id: 'itu (muannats jauh)' }
+    ]
+  }
+};
+
+/* ============================================================
    UTILITAS
    ============================================================ */
 function shuffle(a){
@@ -809,6 +984,39 @@ function go(id){
   if(id === 'flash') initFlash();
   if(id === 'quiz')  startQuiz();
 }
+
+/* ============================================================
+   MODAL INTERAKTIF
+   ============================================================ */
+function openModal(key){
+  const data = EXPLANATIONS[key];
+  if(!data) return;
+  const examples = data.examples.map(ex => `
+    <div class="modal-example">
+      <span class="ex-ar">${ex.ar}</span>
+      <span class="ex-id">${ex.id}</span>
+    </div>
+  `).join('');
+  document.getElementById('modalContent').innerHTML = `
+    <h3 class="modal-title">${data.title}</h3>
+    <div class="modal-ar-title ar">${data.ar}</div>
+    <p class="modal-desc">${data.desc}</p>
+    <div class="modal-examples-title">Contoh</div>
+    ${examples}
+  `;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+/* Tutup modal dengan tombol Escape (selalu aktif) */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeModal();
+});
 
 /* ============================================================
    RENDER DAFTAR KOSA KATA
