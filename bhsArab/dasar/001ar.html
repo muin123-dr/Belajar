@@ -30,6 +30,11 @@
   --bad:#b91c1c; --bad-soft:#fee2e2;
   --diagram-blue:#1a3d7c;
   --diagram-red:#8b1a1a;
+  /* Warna tabel lembut */
+  --th-bg:#edf4f0;
+  --th-color:#41665a;
+  --row-hover:#f5f9f6;
+  --td-border:#e9efeb;
 }
 [data-theme="dark"]{
   --body-bg: radial-gradient(1100px 600px at 8% -12%, #0f3b33 0%, rgba(15,59,51,0) 60%),
@@ -51,6 +56,10 @@
   --bad:#f87171; --bad-soft:#3a1414;
   --diagram-blue:#93c5fd;
   --diagram-red:#fca5a5;
+  --th-bg:#152420;
+  --th-color:#8fbfae;
+  --row-hover:#16241f;
+  --td-border:#1e2e28;
 }
 
 /* ===================== DASAR ===================== */
@@ -163,21 +172,34 @@ body{
 }
 .page-sub{color:var(--muted);margin:0 0 20px;font-size:.93rem}
 
-/* ===================== TABEL ===================== */
+/* ===================== TABEL (warna lembut) ===================== */
 .table-wrap{
   overflow-x:auto;border-radius:16px;border:1px solid var(--border);
   background:var(--surface);box-shadow:var(--shadow-sm);-webkit-overflow-scrolling:touch;
 }
 table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:440px}
-th,td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--border);vertical-align:middle}
+th,td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--td-border);vertical-align:middle}
 th{
-  background:var(--primary-soft);color:var(--primary);font-weight:800;
+  background:var(--th-bg);color:var(--th-color);font-weight:800;
   font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;
 }
 tbody tr:last-child td{border-bottom:none}
-tbody tr:hover{background:var(--surface-2)}
+tbody tr:hover{background:var(--row-hover)}
 td.ar,th.ar{text-align:right;font-size:1.2rem}
 td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
+
+/* Tabel transformasi nakhiroh → ma'rifat */
+.transform-table td.ar{text-align:center;font-size:1.32rem;font-weight:700;color:var(--text)}
+.transform-table .ma-rif{color:var(--primary)}
+.arrow-cell{text-align:center;white-space:nowrap}
+.arrow-wrap{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--primary);font-weight:800;
+  background:var(--primary-soft);border:1px solid var(--border);
+  padding:4px 9px;border-radius:999px;
+}
+.arrow-wrap .al{font-family:'Amiri',serif;font-size:1rem;direction:rtl;line-height:1}
+.arrow-wrap .arrow{font-size:1rem;line-height:1}
 
 /* ===================== DAFTAR KOSA KATA ===================== */
 .voc-list{list-style:none;margin:0;padding:6px 18px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
@@ -392,11 +414,14 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
   padding:12px 10px;text-align:center;
   border-right:1px solid rgba(0,0,0,.12);
   background:var(--surface);
+  display:flex;align-items:center;justify-content:center;
 }
 .detail-right{
-  padding:12px 10px;display:flex;justify-content:space-around;
-  align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface);
+  padding:12px 10px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;gap:4px;
+  background:var(--surface);
 }
+.detail-right-row{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
 .detail-btn{
   background:none;border:none;font-family:inherit;
   font-size:.92rem;font-weight:700;text-decoration:underline;
@@ -471,7 +496,7 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
     <div class="hero">
       <div class="hero-badge">✦ Kursus Bahasa Arab</div>
       <h1>Rangkuman <i>- 001</i></h1>
-      <p class="hero-sub">Pahami kaidah dasar, kenali isim isyaroh, dan hafalkan kosa kata baru dengan cara yang menyenangkan.</p>
+      <p class="hero-sub">Pahami kaidah dasar, kenali isim ma'rifat, dan hafalkan kosa kata baru dengan cara yang menyenangkan.</p>
       <div class="hero-ar ar">اَلْعَرَبِيَّة</div>
     </div>
 
@@ -479,12 +504,12 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
       <button class="menu-card" onclick="go('rangkuman')">
         <span class="menu-icon">📚</span>
         <span class="menu-title">RANGKUMAN</span>
-        <span class="menu-desc">Ringkasan materi: kata, kalimat, jumlah ismiyah &amp; isim isyaroh.</span>
+        <span class="menu-desc">Ringkasan materi: kata, kalimat, jumlah ismiyah &amp; isim ma'rifat.</span>
       </button>
       <button class="menu-card" onclick="go('kosa')">
         <span class="menu-icon">✍️</span>
         <span class="menu-title">TAMBAH KOSA KATA</span>
-        <span class="menu-desc">60 contoh mubtada' isim isyaroh + flashcard hafalan + latihan.</span>
+        <span class="menu-desc">50 contoh mubtada' isim yang diawali alif lam + flashcard hafalan + latihan.</span>
       </button>
     </div>
   </section>
@@ -527,8 +552,11 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
           <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('nakhiroh')" aria-label="Buka penjelasan Nakhiroh">Nakhiroh</button>
         </div>
         <div class="detail-right">
-          <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('marifat')" aria-label="Buka penjelasan Ma'rifat">Ma'rifat</button>
-          <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('isyaroh')" aria-label="Buka penjelasan Isim Isyaroh">Isim Isyaroh</button>
+          <div class="detail-right-row">
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('marifat')" aria-label="Buka penjelasan Ma'rifat">Ma'rifat</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('isyaroh')" aria-label="Buka penjelasan Isim Isyaroh">Isim Isyaroh</button>
+          </div>
+          <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('aliflam')" aria-label="Buka penjelasan Isim yang diawali alif lam">Isim yg diawali (ال)</button>
         </div>
       </div>
       <div class="detail-note">Sama dalam Muannats – Mudzakar</div>
@@ -554,39 +582,56 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
       </table>
     </div>
 
-    <!-- Isim Isyaroh -->
-    <div class="sec-title">ISIM ISYAROH</div>
+    <!-- Mengubah Nakhiroh menjadi Ma'rifat -->
+    <div class="sec-title">Mengubah Isim Nakhiroh menjadi Ma'rifat</div>
+    <div class="note-card">
+      <b>Cara mengubah:</b> Tambahkan <span class="ar">ال</span> (alif lam) di awal isim nakhiroh. Harakat akhir berubah dari <b>tanwin</b> (<span class="ar">ـٌ</span>) menjadi <b>dhammah</b> (<span class="ar">ـُ</span>) karena isim tersebut berkedudukan sebagai mubtada' yang <b>marfu'</b>.
+    </div>
+
+    <div class="group-head">
+      <h3>Mudzakkar Mufrod</h3>
+      <span class="tag">5 contoh</span>
+    </div>
     <div class="table-wrap">
-      <table>
+      <table class="transform-table">
         <thead>
           <tr>
-            <th style="width:110px">Jumlah</th>
-            <th style="width:100px">Jarak</th>
-            <th class="ar">Mudzakar</th>
-            <th class="ar">Muannats</th>
+            <th style="width:32%">Nakhiroh</th>
+            <th style="width:16%"></th>
+            <th style="width:32%">Ma'rifat</th>
+            <th style="width:20%">Arti</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td rowspan="2"><b>Mufrod</b></td><td>Dekat</td><td class="ar">هٰذَا</td><td class="ar">هٰذِهِ</td></tr>
-          <tr><td>Jauh</td><td class="ar">ذَاكَ / ذٰلِكَ</td><td class="ar">تِلْكَ</td></tr>
-          <tr><td rowspan="2"><b>Mutsanna</b></td><td>Dekat</td><td class="ar">هٰذَانِ</td><td class="ar">هَاتَانِ</td></tr>
-          <tr><td>Jauh</td><td class="ar">ذَانِكَ</td><td class="ar">تَانِكَ</td></tr>
-          <tr><td rowspan="2"><b>Jama'</b></td><td>Dekat</td><td class="ar">هٰؤُلَاءِ</td><td class="ar">هٰؤُلَاءِ</td></tr>
-          <tr><td>Jauh</td><td class="ar">أُولَئِكَ</td><td class="ar">أُولَئِكَ</td></tr>
+          <tr><td class="ar">كِتَابٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْكِتَابُ</td><td>buku</td></tr>
+          <tr><td class="ar">قَلَمٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْقَلَمُ</td><td>pena</td></tr>
+          <tr><td class="ar">بَيْتٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْبَيْتُ</td><td>rumah</td></tr>
+          <tr><td class="ar">مَسْجِدٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْمَسْجِدُ</td><td>masjid</td></tr>
+          <tr><td class="ar">بَابٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْبَابُ</td><td>pintu</td></tr>
         </tbody>
       </table>
     </div>
 
-    <div class="sec-title">Menunjuk Tempat</div>
+    <div class="group-head">
+      <h3>Muannats Mufrod</h3>
+      <span class="tag">5 contoh</span>
+    </div>
     <div class="table-wrap">
-      <table>
+      <table class="transform-table">
         <thead>
-          <tr><th style="width:110px">Jarak</th><th class="ar" style="width:130px">Kata</th><th>Arti</th></tr>
+          <tr>
+            <th style="width:32%">Nakhiroh</th>
+            <th style="width:16%"></th>
+            <th style="width:32%">Ma'rifat</th>
+            <th style="width:20%">Arti</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>Dekat</td><td class="ar">هُنَا</td><td>di sini</td></tr>
-          <tr><td>Sedang</td><td class="ar">هُنَاكَ</td><td>di sana</td></tr>
-          <tr><td>Jauh</td><td class="ar">هُنَالِكَ</td><td>di sana (jauh)</td></tr>
+          <tr><td class="ar">مَدْرَسَةٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْمَدْرَسَةُ</td><td>sekolah</td></tr>
+          <tr><td class="ar">غُرْفَةٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْغُرْفَةُ</td><td>kamar</td></tr>
+          <tr><td class="ar">حَقِيْبَةٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">الْحَقِيْبَةُ</td><td>tas</td></tr>
+          <tr><td class="ar">نَافِذَةٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">النَّافِذَةُ</td><td>jendela</td></tr>
+          <tr><td class="ar">سَاعَةٌ</td><td class="arrow-cell"><span class="arrow-wrap"><span class="al">ال</span><span class="arrow">→</span></span></td><td class="ar ma-rif">السَّاعَةُ</td><td>jam</td></tr>
         </tbody>
       </table>
     </div>
@@ -601,10 +646,10 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
     <button class="back-btn" onclick="go('home')">← Kembali</button>
 
     <h2 class="page-title">TAMBAH KOSA KATA</h2>
-    <p class="page-sub">Contoh Mubtada' berupa Isim Isyaroh — 60 contoh dengan khobar yang berbeda.</p>
+    <p class="page-sub">Contoh Mubtada' berupa Isim yang diawali alif lam (ال) — 50 contoh dengan khobar yang berbeda.</p>
 
     <div class="note-card">
-      <b>Catatan:</b> Semua contoh menggunakan <b>khobar mufrod</b> (satu kata), bukan mudhaf–mudhaf ilaih dan bukan na'at–man'ut. Khobar berupa isim mufrod yang <b>marfu'</b> dengan tanda <b>dhammah</b> di akhir kata, misalnya <span class="ar">هٰذَا كِتَابٌ</span>.
+      <b>Catatan:</b> Semua contoh menggunakan <b>mubtada'</b> berupa isim yang diawali <span class="ar">ال</span> (isim ma'rifat) dan <b>khobar mufrod</b> (satu kata) yang <b>marfu'</b> dengan tanda <b>dhammah</b> di akhir kata, misalnya <span class="ar">اَلْكِتَابُ جَدِيْدٌ</span>.
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
@@ -613,32 +658,18 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
     </div>
 
     <div class="group-head">
-      <h3>a. Mudzakar Mufrod — Dekat</h3>
-      <span class="tag" id="count-A1">15 contoh</span>
+      <h3>a. Mudzakkar Mufrod</h3>
+      <span class="tag" id="count-A">25 contoh</span>
     </div>
-    <div class="group-ar ar">هٰذَا</div>
-    <ul class="voc-list" id="list-A1"></ul>
+    <div class="group-ar ar">اَلْمُذَكَّرُ الْمُفْرَد</div>
+    <ul class="voc-list" id="list-A"></ul>
 
     <div class="group-head">
-      <h3>a. Mudzakar Mufrod — Jauh</h3>
-      <span class="tag" id="count-A2">15 contoh</span>
+      <h3>b. Muannats Mufrod</h3>
+      <span class="tag" id="count-B">25 contoh</span>
     </div>
-    <div class="group-ar ar">ذٰلِكَ</div>
-    <ul class="voc-list" id="list-A2"></ul>
-
-    <div class="group-head">
-      <h3>b. Muannats Mufrod — Dekat</h3>
-      <span class="tag" id="count-B1">15 contoh</span>
-    </div>
-    <div class="group-ar ar">هٰذِهِ</div>
-    <ul class="voc-list" id="list-B1"></ul>
-
-    <div class="group-head">
-      <h3>b. Muannats Mufrod — Jauh</h3>
-      <span class="tag" id="count-B2">15 contoh</span>
-    </div>
-    <div class="group-ar ar">تِلْكَ</div>
-    <ul class="voc-list" id="list-B2"></ul>
+    <div class="group-ar ar">اَلْمُؤَنَّثُ الْمُفْرَد</div>
+    <ul class="voc-list" id="list-B"></ul>
 
     <div style="margin-top:30px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <button class="btn btn-primary" onclick="go('flash')">🃏 Melatih Hafalan</button>
@@ -655,30 +686,28 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
 
     <div class="chips" id="fcChips">
       <button class="chip active" data-g="ALL" onclick="setFilter(this)">Semua</button>
-      <button class="chip" data-g="A1" onclick="setFilter(this)">هٰذَا</button>
-      <button class="chip" data-g="A2" onclick="setFilter(this)">ذٰلِكَ</button>
-      <button class="chip" data-g="B1" onclick="setFilter(this)">هٰذِهِ</button>
-      <button class="chip" data-g="B2" onclick="setFilter(this)">تِلْكَ</button>
+      <button class="chip" data-g="A" onclick="setFilter(this)">Mudzakkar</button>
+      <button class="chip" data-g="B" onclick="setFilter(this)">Muannats</button>
     </div>
 
     <div class="flip-card" id="flipCard" onclick="flipCard()">
       <div class="flip-inner">
         <div class="flip-face flip-front">
-          <span class="fc-badge" id="fcFrontBadge">Mudzakar Mufrod — Dekat</span>
-          <div class="fc-ar ar" id="fcFrontAr">هٰذَا كِتَابٌ</div>
+          <span class="fc-badge" id="fcFrontBadge">Mudzakkar Mufrod</span>
+          <div class="fc-ar ar" id="fcFrontAr">اَلْكِتَابُ جَدِيْدٌ</div>
           <div class="fc-hint">👆 Ketuk untuk melihat arti</div>
         </div>
         <div class="flip-face flip-back">
           <span class="fc-badge">Arti</span>
-          <div class="fc-id" id="fcBackId">Ini buku</div>
-          <div class="fc-tr" id="fcBackTr">hādzā kitābun</div>
-          <div class="fc-ar-small ar" id="fcBackAr">هٰذَا كِتَابٌ</div>
+          <div class="fc-id" id="fcBackId">Buku itu baru</div>
+          <div class="fc-tr" id="fcBackTr">al-kitābu jadīdun</div>
+          <div class="fc-ar-small ar" id="fcBackAr">اَلْكِتَابُ جَدِيْدٌ</div>
         </div>
       </div>
     </div>
 
     <div class="fc-meta">
-      <span id="fcCounter">1 / 60</span>
+      <span id="fcCounter">1 / 50</span>
       <span>Kartu Hafalan</span>
     </div>
     <div class="progress"><i id="fcBar"></i></div>
@@ -707,7 +736,7 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
       <p class="page-sub">Jawab semua soal. Skor minimal <b>80%</b> untuk membuka materi berikutnya.</p>
 
       <div class="quiz-top">
-        <span class="label" id="quizCount">Soal 1 dari 60</span>
+        <span class="label" id="quizCount">Soal 1 dari 50</span>
         <span class="pill" id="quizScore">Benar: 0</span>
       </div>
       <div class="progress"><i id="quizBar"></i></div>
@@ -751,6 +780,15 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
     </div>
   </section>
 
+  <!-- Tombol lanjut pelajaran ke-2: tampil di bawah setiap halaman -->
+  <div style="text-align:center;margin:36px 0 0;">
+    <a class="btn btn-primary"
+       href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/001b"
+       target="_blank" rel="noopener">
+      Lanjut Pelajaran ke-2 →
+    </a>
+  </div>
+
 </div>
 
 <!-- ================= MODAL ================= -->
@@ -763,83 +801,68 @@ td.num{color:var(--muted);font-size:.82rem;width:44px;font-weight:700}
 
 <script>
 /* ============================================================
-   DATA KOSA KATA (60 contoh) — KHOBAR MUFROD (satu kata)
+   DATA KOSA KATA (50 contoh) — MUBTADA' ISIM YANG DIAWALI (ال)
+   Khobar mufrod, marfu' (dhammah di akhir)
    ============================================================ */
 const GROUPS = {
-  A1: { label: 'Mudzakar Mufrod — Dekat', ar: 'هٰذَا' },
-  A2: { label: 'Mudzakar Mufrod — Jauh',  ar: 'ذٰلِكَ' },
-  B1: { label: 'Muannats Mufrod — Dekat', ar: 'هٰذِهِ' },
-  B2: { label: 'Muannats Mufrod — Jauh',  ar: 'تِلْكَ' }
+  A: { label: 'Mudzakkar Mufrod', ar: 'الْمُذَكَّر' },
+  B: { label: 'Muannats Mufrod',  ar: 'الْمُؤَنَّث' }
 };
 
 const VOCAB = [
-  /* ---------- A1 : Mudzakar Mufrod Dekat (هٰذَا) ---------- */
-  { g:'A1', ar:'هٰذَا كِتَابٌ',    tr:'hādzā kitābun',    id:'Ini buku' },
-  { g:'A1', ar:'هٰذَا قَلَمٌ',     tr:'hādzā qalamun',    id:'Ini pena' },
-  { g:'A1', ar:'هٰذَا بَيْتٌ',     tr:'hādzā baitun',     id:'Ini rumah' },
-  { g:'A1', ar:'هٰذَا مَسْجِدٌ',   tr:'hādzā masjidun',   id:'Ini masjid' },
-  { g:'A1', ar:'هٰذَا رَجُلٌ',     tr:'hādzā rajulun',    id:'Ini lelaki' },
-  { g:'A1', ar:'هٰذَا جَبَلٌ',     tr:'hādzā jabalun',    id:'Ini gunung' },
-  { g:'A1', ar:'هٰذَا نَهْرٌ',     tr:'hādzā nahrun',     id:'Ini sungai' },
-  { g:'A1', ar:'هٰذَا خُبْزٌ',     tr:'hādzā khubzun',    id:'Ini roti' },
-  { g:'A1', ar:'هٰذَا لَحْمٌ',     tr:'hādzā laḥmun',     id:'Ini daging' },
-  { g:'A1', ar:'هٰذَا عَسَلٌ',     tr:'hādzā ʿasalun',    id:'Ini madu' },
-  { g:'A1', ar:'هٰذَا تُفَّاحٌ',   tr:'hādzā tuffāḥun',   id:'Ini apel' },
-  { g:'A1', ar:'هٰذَا مِفْتَاحٌ',  tr:'hādzā miftāḥun',   id:'Ini kunci' },
-  { g:'A1', ar:'هٰذَا قَمَرٌ',     tr:'hādzā qamarun',    id:'Ini bulan' },
-  { g:'A1', ar:'هٰذَا نَجْمٌ',     tr:'hādzā najmun',     id:'Ini bintang' },
-  { g:'A1', ar:'هٰذَا بَحْرٌ',     tr:'hādzā baḥrun',     id:'Ini laut' },
+  /* ---------- A : Mudzakkar Mufrod (ال) ---------- */
+  { g:'A', ar:'اَلْكِتَابُ جَدِيْدٌ',    tr:'al-kitābu jadīdun',    id:'Buku itu baru' },
+  { g:'A', ar:'اَلْقَلَمُ طَوِيْلٌ',     tr:'al-qalamu ṭawīlun',    id:'Pena itu panjang' },
+  { g:'A', ar:'اَلْبَيْتُ كَبِيْرٌ',      tr:'al-baitu kabīrun',     id:'Rumah itu besar' },
+  { g:'A', ar:'اَلْمَسْجِدُ قَرِيْبٌ',    tr:'al-masjidu qarībun',   id:'Masjid itu dekat' },
+  { g:'A', ar:'اَلْبَابُ مَفْتُوْحٌ',     tr:'al-bābu maftūḥun',     id:'Pintu itu terbuka' },
+  { g:'A', ar:'اَلْوَلَدُ صَغِيْرٌ',      tr:'al-waladu ṣaghīrun',   id:'Anak itu kecil' },
+  { g:'A', ar:'اَلْجَبَلُ شَاهِقٌ',      tr:'al-jabalu syāhiqun',   id:'Gunung itu menjulang' },
+  { g:'A', ar:'اَلنَّهْرُ عَذْبٌ',        tr:'an-nahru ʿadzbun',     id:'Sungai itu tawar' },
+  { g:'A', ar:'اَلْبَحْرُ وَاسِعٌ',       tr:'al-baḥru wāsiʿun',     id:'Laut itu luas' },
+  { g:'A', ar:'اَلْقَمَرُ مُنِيْرٌ',       tr:'al-qamaru munīrun',    id:'Bulan itu bercahaya' },
+  { g:'A', ar:'اَلنَّجْمُ لَامِعٌ',       tr:'an-najmu lāmiʿun',     id:'Bintang itu berkilau' },
+  { g:'A', ar:'اَلْخُبْزُ لَذِيْذٌ',      tr:'al-khubzu ladzīdzun',  id:'Roti itu lezat' },
+  { g:'A', ar:'اَلْعَسَلُ مُفِيْدٌ',      tr:'al-ʿasalu mufīdun',    id:'Madu itu bermanfaat' },
+  { g:'A', ar:'اَلتُّفَّاحُ أَحْمَرُ',    tr:'at-tuffāḥu aḥmaru',    id:'Apel itu merah' },
+  { g:'A', ar:'اَلْحَجَرُ ثَقِيْلٌ',       tr:'al-ḥajaru tsaqīlun',   id:'Batu itu berat' },
+  { g:'A', ar:'اَلْقَلْبُ سَلِيْمٌ',       tr:'al-qalbu salīmun',     id:'Hati itu sehat' },
+  { g:'A', ar:'اَلْوَجْهُ جَمِيْلٌ',       tr:'al-wajhu jamīlun',     id:'Wajah itu indah' },
+  { g:'A', ar:'اَلنَّعْلُ قَدِيْمٌ',       tr:'an-naʿlu qadīmun',     id:'Sandal itu lama' },
+  { g:'A', ar:'اَلثَّوْبُ نَظِيْفٌ',      tr:'ats-tsawbu naẓīfun',   id:'Pakaian itu bersih' },
+  { g:'A', ar:'اَلطَّعَامُ سَاخِنٌ',      tr:'aṭ-ṭaʿāmu sākhinun',   id:'Makanan itu panas' },
+  { g:'A', ar:'اَلْحِمَارُ نَشِيْطٌ',     tr:'al-ḥimāru nasyīṭun',   id:'Keledai itu aktif' },
+  { g:'A', ar:'اَلْحِصَانُ سَرِيْعٌ',     tr:'al-ḥiṣānu sarīʿun',    id:'Kuda itu cepat' },
+  { g:'A', ar:'اَلْجَمَلُ صَبُوْرٌ',      tr:'al-jamalu ṣabūrun',    id:'Unta itu sabar' },
+  { g:'A', ar:'اَلدِّيْكُ مُنْتَبِهٌ',     tr:'ad-dīku muntabihun',   id:'Ayam jantan itu waspada' },
+  { g:'A', ar:'اَلطَّالِبُ مَشْهُوْرٌ',   tr:'aṭ-ṭālibu masyhūrun',  id:'Siswa itu terkenal' },
 
-  /* ---------- A2 : Mudzakar Mufrod Jauh (ذٰلِكَ) ---------- */
-  { g:'A2', ar:'ذٰلِكَ حِمَارٌ',   tr:'dzālika ḥimārun',  id:'Itu keledai' },
-  { g:'A2', ar:'ذٰلِكَ حِصَانٌ',   tr:'dzālika ḥiṣānun',  id:'Itu kuda' },
-  { g:'A2', ar:'ذٰلِكَ جَمَلٌ',    tr:'dzālika jamalun',  id:'Itu unta' },
-  { g:'A2', ar:'ذٰلِكَ دِيكٌ',     tr:'dzālika dīkun',    id:'Itu ayam jantan' },
-  { g:'A2', ar:'ذٰلِكَ ثَوْبٌ',    tr:'dzālika tsawbun',  id:'Itu pakaian' },
-  { g:'A2', ar:'ذٰلِكَ بَابٌ',     tr:'dzālika bābun',    id:'Itu pintu' },
-  { g:'A2', ar:'ذٰلِكَ طَعَامٌ',   tr:'dzālika ṭaʿāmun',  id:'Itu makanan' },
-  { g:'A2', ar:'ذٰلِكَ حَجَرٌ',    tr:'dzālika ḥajarun',  id:'Itu batu' },
-  { g:'A2', ar:'ذٰلِكَ وَلَدٌ',    tr:'dzālika waladun',  id:'Itu anak laki-laki' },
-  { g:'A2', ar:'ذٰلِكَ أُسْتَاذٌ', tr:'dzālika ustādzun', id:'Itu ustadz' },
-  { g:'A2', ar:'ذٰلِكَ طَالِبٌ',   tr:'dzālika ṭālibun',  id:'Itu siswa' },
-  { g:'A2', ar:'ذٰلِكَ سَرِيرٌ',   tr:'dzālika sarīrun',  id:'Itu tempat tidur' },
-  { g:'A2', ar:'ذٰلِكَ قَلْبٌ',    tr:'dzālika qalbun',   id:'Itu hati' },
-  { g:'A2', ar:'ذٰلِكَ وَجْهٌ',    tr:'dzālika wajhun',   id:'Itu wajah' },
-  { g:'A2', ar:'ذٰلِكَ نَعْلٌ',    tr:'dzālika naʿlun',   id:'Itu sandal' },
-
-  /* ---------- B1 : Muannats Mufrod Dekat (هٰذِهِ) ---------- */
-  { g:'B1', ar:'هٰذِهِ مَدْرَسَةٌ', tr:'hādzihi madrasatun', id:'Ini sekolah' },
-  { g:'B1', ar:'هٰذِهِ غُرْفَةٌ',   tr:'hādzihi ghurfatun',  id:'Ini kamar' },
-  { g:'B1', ar:'هٰذِهِ حَقِيبَةٌ',  tr:'hādzihi ḥaqībatun',  id:'Ini tas' },
-  { g:'B1', ar:'هٰذِهِ نَافِذَةٌ',  tr:'hādzihi nāfidzatun', id:'Ini jendela' },
-  { g:'B1', ar:'هٰذِهِ سَاعَةٌ',    tr:'hādzihi sāʿatun',    id:'Ini jam' },
-  { g:'B1', ar:'هٰذِهِ حَدِيقَةٌ',  tr:'hādzihi ḥadīqatun',  id:'Ini taman' },
-  { g:'B1', ar:'هٰذِهِ شَمْسٌ',     tr:'hādzihi syamsun',    id:'Ini matahari' },
-  { g:'B1', ar:'هٰذِهِ نَخْلَةٌ',   tr:'hādzihi nakhlatun',  id:'Ini pohon kurma' },
-  { g:'B1', ar:'هٰذِهِ زَهْرَةٌ',   tr:'hādzihi zahratun',   id:'Ini bunga' },
-  { g:'B1', ar:'هٰذِهِ قِطَّةٌ',    tr:'hādzihi qiṭṭatun',   id:'Ini kucing' },
-  { g:'B1', ar:'هٰذِهِ دَجَاجَةٌ',  tr:'hādzihi dajājatun',  id:'Ini ayam betina' },
-  { g:'B1', ar:'هٰذِهِ بَقَرَةٌ',   tr:'hādzihi baqaratun',  id:'Ini sapi betina' },
-  { g:'B1', ar:'هٰذِهِ سَمَكَةٌ',   tr:'hādzihi samakatun',  id:'Ini ikan' },
-  { g:'B1', ar:'هٰذِهِ طَاوِلَةٌ',  tr:'hādzihi ṭāwilatun',  id:'Ini meja' },
-  { g:'B1', ar:'هٰذِهِ طَالِبَةٌ',  tr:'hādzihi ṭālibatun',  id:'Ini siswi' },
-
-  /* ---------- B2 : Muannats Mufrod Jauh (تِلْكَ) ---------- */
-  { g:'B2', ar:'تِلْكَ مَكْتَبَةٌ', tr:'tilka maktabatun',  id:'Itu perpustakaan' },
-  { g:'B2', ar:'تِلْكَ مَزْرَعَةٌ', tr:'tilka mazraʿatun',  id:'Itu ladang' },
-  { g:'B2', ar:'تِلْكَ دَرَّاجَةٌ', tr:'tilka darrājatun',  id:'Itu sepeda' },
-  { g:'B2', ar:'تِلْكَ سَجَّادَةٌ', tr:'tilka sajjādatun',  id:'Itu sajadah' },
-  { g:'B2', ar:'تِلْكَ وِسَادَةٌ',  tr:'tilka wisādatun',   id:'Itu bantal' },
-  { g:'B2', ar:'تِلْكَ مِرْوَحَةٌ', tr:'tilka mirwaḥatun',  id:'Itu kipas' },
-  { g:'B2', ar:'تِلْكَ ثَلَّاجَةٌ', tr:'tilka tsallājatun', id:'Itu kulkas' },
-  { g:'B2', ar:'تِلْكَ مِظَلَّةٌ',  tr:'tilka miẓallatun',  id:'Itu payung' },
-  { g:'B2', ar:'تِلْكَ بَاخِرَةٌ',  tr:'tilka bākhiratun',  id:'Itu kapal' },
-  { g:'B2', ar:'تِلْكَ كُرَةٌ',     tr:'tilka kuratun',     id:'Itu bola' },
-  { g:'B2', ar:'تِلْكَ مِلْعَقَةٌ', tr:'tilka milʿaqatun',  id:'Itu sendok' },
-  { g:'B2', ar:'تِلْكَ شَوْكَةٌ',   tr:'tilka syawkatun',   id:'Itu garpu' },
-  { g:'B2', ar:'تِلْكَ صُورَةٌ',    tr:'tilka ṣūratun',     id:'Itu gambar' },
-  { g:'B2', ar:'تِلْكَ عَرَبَةٌ',   tr:'tilka ʿarabatun',   id:'Itu gerobak' },
-  { g:'B2', ar:'تِلْكَ حَافِلَةٌ',  tr:'tilka ḥāfilatun',   id:'Itu bus' }
+  /* ---------- B : Muannats Mufrod (ال) ---------- */
+  { g:'B', ar:'اَلْمَدْرَسَةُ كَبِيْرَةٌ',  tr:'al-madrasatu kabīratun',   id:'Sekolah itu besar' },
+  { g:'B', ar:'اَلْغُرْفَةُ نَظِيْفَةٌ',    tr:'al-ghurfatu naẓīfatun',    id:'Kamar itu bersih' },
+  { g:'B', ar:'اَلْحَقِيْبَةُ جَدِيْدَةٌ',  tr:'al-ḥaqībatu jadīdatun',    id:'Tas itu baru' },
+  { g:'B', ar:'اَلنَّافِذَةُ مَفْتُوْحَةٌ', tr:'an-nāfidzatu maftūḥatun',  id:'Jendela itu terbuka' },
+  { g:'B', ar:'اَلسَّاعَةُ صَغِيْرَةٌ',     tr:'as-sāʿatu ṣaghīratun',     id:'Jam itu kecil' },
+  { g:'B', ar:'اَلْحَدِيْقَةُ وَاسِعَةٌ',   tr:'al-ḥadīqatu wāsiʿatun',    id:'Taman itu luas' },
+  { g:'B', ar:'اَلشَّمْسُ مُشْرِقَةٌ',     tr:'asy-syamsu musyriqatun',   id:'Matahari itu bersinar' },
+  { g:'B', ar:'اَلنَّخْلَةُ عَالِيَةٌ',     tr:'an-nakhlatu ʿāliyatun',    id:'Pohon kurma itu tinggi' },
+  { g:'B', ar:'اَلزَّهْرَةُ جَمِيْلَةٌ',   tr:'az-zahratu jamīlatun',     id:'Bunga itu indah' },
+  { g:'B', ar:'اَلْقِطَّةُ لَطِيْفَةٌ',     tr:'al-qiṭṭatu laṭīfatun',     id:'Kucing itu lucu' },
+  { g:'B', ar:'اَلدَّجَاجَةُ سَمِيْنَةٌ',   tr:'ad-dajājatu samīnatun',    id:'Ayam itu gemuk' },
+  { g:'B', ar:'اَلْبَقَرَةُ ثَقِيْلَةٌ',    tr:'al-baqaratu tsaqīlatun',   id:'Sapi itu berat' },
+  { g:'B', ar:'اَلسَّمَكَةُ طَازَجَةٌ',    tr:'as-samakatu ṭāzajatun',    id:'Ikan itu segar' },
+  { g:'B', ar:'اَلطَّاوِلَةُ طَوِيْلَةٌ',  tr:'aṭ-ṭāwilatu ṭawīlatun',    id:'Meja itu panjang' },
+  { g:'B', ar:'اَلطَّالِبَةُ نَشِيْطَةٌ',  tr:'aṭ-ṭālibatu nasyīṭatun',   id:'Siswi itu aktif' },
+  { g:'B', ar:'اَلْمَكْتَبَةُ قَرِيْبَةٌ',  tr:'al-maktabatu qarībatun',   id:'Perpustakaan itu dekat' },
+  { g:'B', ar:'اَلْمَزْرَعَةُ خَصْبَةٌ',   tr:'al-mazraʿatu khaṣbatun',   id:'Ladang itu subur' },
+  { g:'B', ar:'اَلدَّرَّاجَةُ سَرِيْعَةٌ',  tr:'ad-darrājatu sarīʿatun',   id:'Sepeda itu cepat' },
+  { g:'B', ar:'اَلسَّجَّادَةُ نَاعِمَةٌ',  tr:'as-sajjādatu nāʿimatun',   id:'Sajadah itu lembut' },
+  { g:'B', ar:'اَلْوِسَادَةُ مُرِيْحَةٌ',   tr:'al-wisādatu murīḥatun',    id:'Bantal itu nyaman' },
+  { g:'B', ar:'اَلْمِرْوَحَةُ دَائِرَةٌ',  tr:'al-mirwaḥatu dā\'iratun',  id:'Kipas itu berputar' },
+  { g:'B', ar:'اَلثَّلَّاجَةُ بَارِدَةٌ',  tr:'ats-tsallājatu bāridatun', id:'Kulkas itu dingin' },
+  { g:'B', ar:'اَلْمِظَلَّةُ مُلَوَّنَةٌ',  tr:'al-miẓallatu mulawwanatun',id:'Payung itu berwarna' },
+  { g:'B', ar:'اَلْكُرَةُ مُسْتَدِيْرَةٌ', tr:'al-kuratu mustadīratun',   id:'Bola itu bulat' },
+  { g:'B', ar:'اَلْحَافِلَةُ حَدِيْثَةٌ',  tr:'al-ḥāfilatu ḥadītsatun',   id:'Bus itu modern' }
 ];
 
 /* ============================================================
@@ -939,6 +962,18 @@ const EXPLANATIONS = {
       { ar: 'ذٰلِكَ', id: 'itu (mudzakar jauh)' },
       { ar: 'تِلْكَ', id: 'itu (muannats jauh)' }
     ]
+  },
+  aliflam: {
+    title: "Isim yang diawali (ال)",
+    ar: 'ال + اِسْم',
+    desc: "Isim yang diawali ( ال) termasuk isim ma'rifat. Dengan menambahkan alif lam (ال) di awal isim nakhiroh, isim tersebut berubah menjadi ma'rifat (sudah tertentu).",
+    examples: [
+      { ar: 'الْكِتَابُ', id: 'buku itu' },
+      { ar: 'الْقَلَمُ', id: 'pena itu' },
+      { ar: 'الْبَيْتُ', id: 'rumah itu' },
+      { ar: 'الْمَسْجِدُ', id: 'masjid itu' },
+      { ar: 'الْبَابُ', id: 'pintu itu' }
+    ]
   }
 };
 
@@ -1013,7 +1048,7 @@ function closeModal(){
   document.body.style.overflow = '';
 }
 
-/* Tutup modal dengan tombol Escape (selalu aktif) */
+/* Tutup modal dengan tombol Escape */
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') closeModal();
 });
@@ -1022,7 +1057,7 @@ document.addEventListener('keydown', function(e){
    RENDER DAFTAR KOSA KATA
    ============================================================ */
 function renderVocabLists(){
-  ['A1','A2','B1','B2'].forEach(g => {
+  ['A','B'].forEach(g => {
     const items = VOCAB.filter(v => v.g === g);
     const ul = document.getElementById('list-' + g);
     ul.innerHTML = items.map(v => `
@@ -1255,7 +1290,7 @@ function showResult(){
     action.innerHTML =
       '<div class="cta-box">' +
         '<p>✨ Selamat! Skor kamu ' + pct + '% (minimal 80%). Materi berikutnya sudah terbuka.</p>' +
-        '<a class="btn btn-primary" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/001b" ' +
+        '<a class="btn btn-primary" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/001c" ' +
         'target="_blank" rel="noopener">Lanjut ke Materi Berikutnya →</a>' +
       '</div>';
   } else {
