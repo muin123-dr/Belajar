@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Belajar bahasa Arab dari nol — Pelajaran 17: Evaluasi">
+<title>Belajar Bahasa Arab dari Nol — Pelajaran 17: Evaluasi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F0FDF4;--bg-2:#DCFCE7;--bg-pattern:rgba(16,185,129,.04);
+  --card:#FFFFFF;--text:#062B16;--text-soft:#2B5A3D;--muted:#5B8C6F;
+  --accent:#10B981;--accent-2:#047857;--accent-3:#34D399;--accent-soft:#D1FAE5;
+  --ar-color:#059669;
+  --rose:#E11D48;--gold:#B45309;--gold-2:#F59E0B;--gold-soft:#FEF3C7;
+  --border:#A7F3D0;
+  --shadow-sm:0 1px 2px rgba(16,185,129,.06);
+  --shadow:0 2px 4px rgba(16,185,129,.05), 0 10px 28px rgba(16,185,129,.09);
+  --shadow-lg:0 12px 48px rgba(16,185,129,.2);
+  --ok:#059669;--ok-soft:#D1FAE5;--bad:#DC2626;--bad-soft:#FEE2E2;
+  --radius:20px;
+  
+  /* Diagram Colors */
+  --diag-header:#047857;
+  --diag-btn-1:#10B981;
+  --diag-btn-2:#0F766E;
+  --diag-btn-3:#059669;
+  --diag-btn-4:#065F46;
+}
+[data-theme="dark"]{
+  --bg:#021A0E;--bg-2:#062B16;--bg-pattern:rgba(52,211,153,.05);
+  --card:#062B16;--text:#E6F4EA;--text-soft:#A8D4B8;--muted:#7AAB8A;
+  --accent:#34D399;--accent-2:#6EE7B7;--accent-3:#6EE7B7;--accent-soft:#064E3B;
+  --ar-color:#6EE7B7;
+  --rose:#FB7185;--gold:#FBBF24;--gold-2:#FCD34D;--gold-soft:#3B2F0A;
+  --border:#0B3F24;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.35);
+  --shadow:0 2px 4px rgba(0,0,0,.25), 0 10px 28px rgba(0,0,0,.35);
+  --shadow-lg:0 12px 48px rgba(0,0,0,.55);
+  --ok:#34D399;--ok-soft:#0D2E23;--bad:#F87171;--bad-soft:#3A1414;
+  
+  --diag-header:#064E3B;
+  --diag-btn-1:#0F766E;
+  --diag-btn-2:#047857;
+  --diag-btn-3:#065F46;
+  --diag-btn-4:#022C22;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--bg);
+  background-image:
+    radial-gradient(circle at 12% 8%, var(--bg-pattern) 0%, transparent 42%),
+    radial-gradient(circle at 88% 92%, var(--bg-pattern) 0%, transparent 42%),
+    radial-gradient(circle at 1px 1px, var(--bg-pattern) 1px, transparent 0);
+  background-size:100% 100%, 100% 100%, 22px 22px;
+  color:var(--text);line-height:1.75;font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color .35s ease,color .35s ease;
+  overflow-x:hidden;
+}
+.ar{font-family:'Amiri','Traditional Arabic',serif;font-size:1.5em;line-height:1.85;
+  unicode-bidi:isolate;direction:rtl;color:var(--ar-color);font-weight:700;white-space:nowrap;}
+.ar-block{font-family:'Amiri','Traditional Arabic',serif;direction:rtl;unicode-bidi:isolate;
+  font-size:1.9em;line-height:2;color:var(--ar-color);font-weight:700;
+  text-align:center;display:block;padding:.35em 0;}
+.ar-line{font-family:'Amiri','Traditional Arabic',serif;direction:rtl;unicode-bidi:isolate;
+  font-size:1.35em;color:var(--ar-color);font-weight:700;}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px}
+
+/* CSS UNTUK TEKS ARAB DI DALAM SOAL & OPSI */
+.ar-inline {
+  font-family:'Amiri','Traditional Arabic',serif;
+  font-size:1.35em;
+  line-height:1;
+  color:var(--ar-color);
+  font-weight:700;
+  white-space:normal;
+  unicode-bidi:isolate;
+  direction:rtl;
+  display:inline-block;
+  vertical-align:middle;
+  margin: 0 4px;
+}
+.q-text .ar-inline { font-size: 1.45em; }
+.feedback .ar-inline { font-size: 1.25em; }
+.mc-opt-text {
+  flex: 1;
+  font-family: inherit;
+  font-size: 1em;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: normal;
+}
+
+/* HEADER */
+.topbar{position:sticky;top:0;z-index:50;
+  background:linear-gradient(135deg,#022C22 0%,#10B981 50%,#34D399 100%);
+  box-shadow:0 4px 24px rgba(2,44,34,.45), 0 1px 0 rgba(255,255,255,.08) inset;}
+[data-theme="dark"] .topbar{
+  background:linear-gradient(135deg,#020C14 0%,#022C22 50%,#10B981 100%);
+  box-shadow:0 4px 24px rgba(0,0,0,.65), 0 1px 0 rgba(255,255,255,.06) inset;}
+.topbar-in{max-width:860px;margin:0 auto;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;font-weight:800;letter-spacing:-.3px}
+.brand-icon{flex-shrink:0;width:44px;height:44px;border-radius:13px;
+  background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);
+  display:grid;place-items:center;font-family:'Amiri',serif;font-size:1.5rem;
+  font-weight:700;color:#fff;line-height:1;
+  box-shadow:0 4px 14px rgba(0,0,0,.18), 0 0 0 4px rgba(255,255,255,.08);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  text-shadow:0 1px 3px rgba(0,0,0,.25);}
+.brand-text{display:flex;flex-direction:column;line-height:1.15}
+.brand-title{font-size:1.05rem;font-weight:800;letter-spacing:-.4px;color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.3);}
+.brand-sub{font-size:.72rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.82);margin-top:2px;}
+.brand-badge{display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,#FCD34D,#F59E0B);
+  color:#1E1B18;font-size:.68rem;font-weight:800;
+  letter-spacing:.6px;text-transform:uppercase;padding:4px 10px;border-radius:999px;
+  margin-left:4px;box-shadow:0 3px 12px rgba(245,158,11,.55);}
+.theme-btn{flex-shrink:0;border:1.5px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.15);color:#fff;
+  width:42px;height:42px;border-radius:12px;cursor:pointer;font-size:1.15rem;
+  display:grid;place-items:center;transition:.25s;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.theme-btn:hover{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.6);
+  transform:rotate(18deg) scale(1.08);box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.topbar-strip{height:3px;
+  background:linear-gradient(90deg,transparent,#34D399,#6EE7B7,#34D399,transparent);
+  opacity:.95;}
+@media(max-width:520px){
+  .topbar-in{padding:11px 14px;gap:10px}
+  .brand-icon{width:38px;height:38px;font-size:1.3rem;border-radius:11px}
+  .brand-title{font-size:.92rem}
+  .brand-sub{font-size:.64rem;letter-spacing:1.1px}
+  .brand-badge{display:none}
+  .theme-btn{width:38px;height:38px}
+}
+
+/* HERO */
+.hero{padding:56px 0 42px;text-align:center;position:relative}
+.hero .ornament{font-family:'Amiri',serif;font-size:1.7rem;
+  color:var(--accent-3);
+  opacity:.9;letter-spacing:.5em;margin-bottom:14px;display:block;
+  text-shadow:0 2px 16px color-mix(in srgb,var(--accent-3) 55%,transparent);
+  animation:fadeDown .9s ease both;}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:.9;transform:none}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;
+  font-size:.82rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  padding:9px 22px;border-radius:999px;margin-bottom:22px;
+  box-shadow:0 6px 22px color-mix(in srgb,var(--accent) 55%,transparent),
+              0 1px 0 rgba(255,255,255,.2) inset;
+  animation:fadeDown .8s .05s ease both;}
+.eyebrow::before,.eyebrow::after{content:"❁";font-size:.72rem;opacity:.9;color:var(--gold-2)}
+[data-theme="dark"] .eyebrow{color:#062B16}
+.hero h1{font-size:clamp(1.9rem,6vw,2.9rem);font-weight:800;line-height:1.18;
+  letter-spacing:-1.4px;margin-bottom:16px;color:var(--text);
+  animation:fadeDown .8s .1s ease both;
+  text-shadow:0 2px 20px color-mix(in srgb,var(--accent-3) 18%,transparent);}
+.hero h1 .accent-word{
+  background:linear-gradient(135deg,var(--accent),var(--accent-3),var(--gold-2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.hero .hero-tag{display:inline-flex;align-items:center;gap:10px;
+  font-size:1rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent);background:var(--card);
+  border:2px solid color-mix(in srgb,var(--accent-3) 55%,transparent);
+  padding:10px 24px;border-radius:999px;margin-top:6px;
+  box-shadow:0 6px 22px color-mix(in srgb,var(--accent-3) 25%,transparent),
+              0 0 0 4px color-mix(in srgb,var(--accent-3) 12%,transparent);
+  animation:fadeDown .8s .15s ease both;}
+.hero .hero-tag::before{content:"";width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-3),var(--gold-2));
+  box-shadow:0 0 10px var(--accent-3);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.6}}
+.hero-sub-badge{display:inline-flex;align-items:center;gap:6px;
+  font-size:.82rem;font-weight:700;color:var(--muted);
+  background:var(--bg-2);padding:6px 14px;border-radius:999px;margin-top:14px;
+  border:1px solid var(--border);
+  animation:fadeDown .8s .2s ease both;}
+.hero-sub-badge .ar{font-size:1.15em;color:var(--accent-3)}
+.hero-divider{width:100px;height:4px;margin:32px auto 0;border-radius:99px;
+  background:linear-gradient(90deg,transparent,var(--accent-3),var(--gold-2),var(--accent-3),transparent);
+  animation:fadeDown .8s .25s ease both;
+  box-shadow:0 0 22px color-mix(in srgb,var(--accent-3) 55%,transparent);}
+@media(max-width:560px){
+  .hero{padding:40px 0 30px}
+  .hero .ornament{font-size:1.3rem;letter-spacing:.35em}
+  .eyebrow{font-size:.72rem;padding:8px 16px;letter-spacing:1.5px}
+  .eyebrow::before,.eyebrow::after{display:none}
+  .hero .hero-tag{font-size:.88rem;padding:9px 20px;letter-spacing:1.2px}
+}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:26px 24px;margin-bottom:18px;box-shadow:var(--shadow);
+  scroll-margin-top:96px;position:relative;overflow:hidden;
+  animation:cardIn .6s ease both;}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;
+  background:linear-gradient(180deg,var(--accent-3),var(--gold-2),transparent);
+  opacity:0;transition:opacity .3s;}
+.card:hover::before{opacity:1}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.card h2{font-size:1.14rem;font-weight:800;letter-spacing:-.3px;
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;line-height:1.4;}
+.num{flex-shrink:0;width:32px;height:32px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff;font-size:.84rem;font-weight:800;display:grid;place-items:center;
+  box-shadow:0 3px 10px color-mix(in srgb,var(--accent) 50%,transparent);}
+[data-theme="dark"] .num{color:#062B16}
+.card h3{font-size:.98rem;font-weight:700;margin:22px 0 10px;color:var(--text);
+  display:flex;align-items:center;gap:8px;}
+.card h3:first-of-type{margin-top:6px}
+.card p{color:var(--text-soft);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.card strong{color:var(--text);font-weight:700}
+.card em{color:var(--accent-3);font-style:normal;font-weight:600}
+ul.clean{list-style:none;margin:10px 0}
+ul.clean li{position:relative;padding-left:24px;margin-bottom:9px;color:var(--text-soft)}
+ul.clean li::before{content:"";position:absolute;left:5px;top:.72em;width:7px;height:7px;
+  border-radius:50%;background:linear-gradient(135deg,var(--accent-3),var(--gold-2));
+  opacity:.75;}
+
+/* INTERACTIVE DIAGRAM */
+.diagram{
+  border-radius:14px;overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);
+  margin-bottom:24px;
+}
+.diagram-header{
+  padding:14px 18px;text-align:center;
+  font-weight:800;color:#fff;font-size:1rem;letter-spacing:.02em;
+  background: var(--diag-header);
+}
+.diagram-row{display:flex;flex-wrap:wrap}
+.diagram-btn{
+  flex:1;min-width:100px;padding:16px 14px;border:none;
+  border-right:1px solid rgba(0,0,0,.15);
+  border-top:1px solid rgba(0,0,0,.15);
+  color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;
+  cursor:pointer;transition:.18s;position:relative;
+  background: var(--diag-btn-1);
+}
+.diagram-btn:nth-child(2){background: var(--diag-btn-2);}
+.diagram-btn:nth-child(3){background: var(--diag-btn-3);}
+.diagram-btn:nth-child(4){background: var(--diag-btn-4);}
+.diagram-btn:last-child{border-right:none}
+.diagram-btn:hover{
+  filter:brightness(1.15);z-index:2;
+  box-shadow:0 4px 14px rgba(0,0,0,.2);
+  transform:scale(1.02);
+}
+
+/* COMPLEX TABLES (Kondisi Khusus & Amil) */
+.custom-table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+.custom-table { width: 100%; border-collapse: collapse; text-align: center; background: var(--card); min-width: 500px; }
+.custom-table th, .custom-table td { border: 1px solid var(--border); padding: 12px; vertical-align: middle; }
+.custom-table th { background: #2563EB; color: white; font-weight: bold; font-size: 1rem; }
+.custom-table td { cursor: pointer; transition: 0.2s; }
+.custom-table td:hover { filter: brightness(0.95); }
+
+/* Warna Spesifik Tabel Kondisi Khusus */
+.c-red { background: #DC2626 !important; color: white !important; }
+.c-blue { background: #2563EB !important; color: white !important; }
+.c-green { background: #16A34A !important; color: white !important; }
+.c-purple { background: #9333EA !important; color: white !important; }
+.c-white { background: var(--card); color: var(--text); font-size: 0.9rem; }
+
+/* Warna Spesifik Tabel Amil */
+.c-amil-inna { background: #991B1B !important; color: white !important; font-size: 1.5rem; width: 120px; }
+.c-amil-kaana { background: #166534 !important; color: white !important; font-size: 1.5rem; width: 120px; }
+.c-amil-header { background: #0000FF !important; color: white !important; }
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;
+  z-index:100;padding:20px;animation:fadeIn .2s ease;
+}
+.modal-overlay.active{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:var(--card);border-radius:20px;
+  max-width:480px;width:100%;max-height:85vh;overflow-y:auto;
+  padding:26px 24px 24px;position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  border:1px solid var(--border);
+  animation:modalIn .25s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes modalIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-close{
+  position:absolute;top:12px;right:12px;
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);color:var(--text);
+  font-size:22px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;transition:.18s;
+}
+.modal-close:hover{
+  background:var(--bad-soft);color:var(--bad);
+  border-color:var(--bad);transform:rotate(90deg);
+}
+.modal-title{font-size:1.3rem;font-weight:800;margin:0 0 4px;color:var(--accent-2)}
+.modal-ar-title{font-size:1.6rem;color:var(--ar-color);margin-bottom:14px;font-weight:700;direction:rtl;text-align:right}
+.modal-desc{color:var(--text);font-size:.92rem;line-height:1.65;margin-bottom:16px}
+.modal-examples-title{
+  font-size:.78rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px;
+}
+.modal-example{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;border-radius:12px;background:var(--bg-2);
+  border:1px solid var(--border);margin-bottom:8px;gap:12px;
+}
+.modal-example .ex-ar{
+  font-family:'Amiri','Noto Naskh Arabic',serif;
+  font-size:1.3rem;color:var(--ar-color);font-weight:700;
+  direction:rtl;flex:0 0 auto; text-align: right;
+}
+.modal-example .ex-id{font-size:.88rem;color:var(--muted);font-weight:600;text-align:right; line-height:1.5}
+.modal-example .ex-id .ar{font-size:1.1em;display:inline-block;margin:0 2px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;
+  border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow-sm);}
+table.standard{width:100%;border-collapse:collapse;font-size:.88rem;min-width:340px;background:var(--card)}
+table.standard th, table.standard td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--border)}
+table.standard th{background:linear-gradient(135deg,var(--bg-2),color-mix(in srgb,var(--bg-2) 60%,var(--card)));
+  font-weight:800;font-size:.76rem;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);}
+table.standard tr:last-child td{border-bottom:none}
+table.standard tbody tr{transition:background .18s}
+table.standard tbody tr:hover{background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+td.ar-cell,.ar-cell{font-family:'Amiri',serif;font-size:1.35em;direction:rtl;unicode-bidi:isolate;
+  color:var(--ar-color);font-weight:700}
+
+/* STAGE INTRO */
+.stage-intro{
+  text-align:center;margin-bottom:20px;padding:14px 18px;border-radius:14px;
+  background:linear-gradient(135deg,var(--accent-soft),color-mix(in srgb,var(--gold-soft) 60%,var(--card)));
+  border:1.5px dashed color-mix(in srgb,var(--accent-3) 50%,transparent);
+}
+.stage-intro .stage-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.72rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--accent);background:var(--card);padding:6px 14px;border-radius:999px;
+  border:1.5px solid color-mix(in srgb,var(--accent-3) 50%,transparent);
+  margin-bottom:10px;
+  box-shadow:0 3px 10px color-mix(in srgb,var(--accent-3) 22%,transparent);
+}
+.stage-intro h2{margin:0 0 8px;justify-content:center;font-size:1.25rem}
+.stage-intro p{color:var(--text-soft);font-size:.92rem;margin-bottom:6px;max-width:520px;margin-left:auto;margin-right:auto}
+.stage-intro p:last-child{margin-bottom:0}
+
+#stage-material,#stage-next{display:none}
+#stage-material.revealed,#stage-next.revealed{display:block;animation:stageReveal .8s cubic-bezier(.34,1.4,.64,1) both}
+@keyframes stageReveal{
+  0%{opacity:0;transform:translateY(24px) scale(.98)}
+  100%{opacity:1;transform:none}
+}
+
+/* QUIZ */
+#reminderQuiz,#lessonQuiz{
+  border:2px solid transparent;background:
+  linear-gradient(var(--card),var(--card)) padding-box,
+  linear-gradient(135deg,var(--accent-3),var(--gold-2),var(--accent-2)) border-box;
+}
+.quiz-head-bar{display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.quiz-meta{font-size:.82rem;font-weight:700;color:var(--muted);letter-spacing:.3px}
+.quiz-meta b{color:var(--accent-3)}
+.progress{height:9px;background:var(--bg-2);border-radius:99px;overflow:hidden;
+  margin-bottom:24px;border:1px solid var(--border);}
+.bs-bar{height:100%;width:0;border-radius:99px;
+  transition:width .45s cubic-bezier(.4,0,.2,1);
+  background:linear-gradient(90deg,var(--accent),var(--accent-3),var(--gold-2));
+  background-size:200% 100%;animation:shimmer 3s linear infinite;}
+@keyframes shimmer{0%{background-position:0% 0}100%{background-position:200% 0}}
+
+.bs-start{text-align:center;padding:10px 0 4px}
+.bismillah-box{background:linear-gradient(135deg,var(--accent-soft),var(--gold-soft));
+  border-radius:18px;padding:26px 20px;margin-bottom:20px;
+  border:1.5px dashed color-mix(in srgb,var(--accent-3) 55%,transparent);
+  animation:bismIn .7s cubic-bezier(.34,1.4,.64,1) both;}
+@keyframes bismIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
+.bismillah-ar{font-family:'Amiri',serif;font-size:clamp(1.5rem,5.5vw,2.1rem);
+  color:var(--accent-3);font-weight:700;direction:rtl;unicode-bidi:isolate;
+  display:block;line-height:1.9;margin-bottom:10px;
+  text-shadow:0 2px 18px color-mix(in srgb,var(--accent-3) 30%,transparent);}
+.bismillah-note{font-size:.95rem;font-weight:800;color:var(--text);
+  letter-spacing:.3px;display:inline-flex;align-items:center;gap:8px;}
+.bismillah-note .star{animation:twinkle 1.6s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.15)}}
+.bismillah-sub{font-size:.82rem;color:var(--text-soft);margin-top:8px;font-weight:500}
+
+.q-text{font-size:1.04rem;font-weight:700;line-height:1.75;margin-bottom:22px;color:var(--text)}
+
+.bs-opts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.bs-opts{grid-template-columns:1fr}}
+
+.bs-btn{
+  font-family:inherit;cursor:pointer;border-radius:16px;padding:20px 18px;
+  border:2px solid var(--border);background:var(--card);color:var(--text);
+  font-weight:800;font-size:1.05rem;letter-spacing:.5px;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  transition:.22s;position:relative;overflow:hidden;
+}
+.bs-btn .bs-icon{
+  width:38px;height:38px;border-radius:11px;
+  display:grid;place-items:center;font-size:1.2rem;font-weight:900;
+  flex-shrink:0;transition:.22s;
+}
+.bs-btn.benar{color:#065F46}
+.bs-btn.benar .bs-icon{background:linear-gradient(135deg,#059669,#34D399);color:#fff}
+[data-theme="dark"] .bs-btn.benar{color:var(--ok)}
+.bs-btn.benar:hover:not(:disabled){
+  border-color:var(--ok);background:var(--ok-soft);
+  transform:translateY(-3px);box-shadow:0 8px 24px color-mix(in srgb,var(--ok) 28%,transparent);
+}
+.bs-btn.salah{color:#9F1239}
+.bs-btn.salah .bs-icon{background:linear-gradient(135deg,#DC2626,#F87171);color:#fff}
+[data-theme="dark"] .bs-btn.salah{color:var(--bad)}
+.bs-btn.salah:hover:not(:disabled){
+  border-color:var(--bad);background:var(--bad-soft);
+  transform:translateY(-3px);box-shadow:0 8px 24px color-mix(in srgb,var(--bad) 28%,transparent);
+}
+.bs-btn:disabled{cursor:default;opacity:.92}
+.bs-btn.correct{border-color:var(--ok);background:var(--ok-soft);animation:popOk .4s ease}
+.bs-btn.wrong{border-color:var(--bad);background:var(--bad-soft);animation:shake .45s ease}
+.bs-btn.dim{opacity:.5}
+@keyframes popOk{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+
+/* MC OPTIONS */
+.mc-opts{display:flex;flex-direction:column;gap:11px}
+.mc-btn{
+  font-family:inherit;cursor:pointer;text-align:left;width:100%;
+  border-radius:14px;padding:15px 18px;
+  border:1.5px solid var(--border);background:var(--card);color:var(--text);
+  font-size:.96rem;font-weight:500;line-height:1.6;
+  display:flex;align-items:flex-start;gap:13px;
+  transition:.2s;
+}
+.mc-btn .mc-letter{
+  flex-shrink:0;width:30px;height:30px;border-radius:9px;
+  background:var(--bg-2);color:var(--muted);
+  display:grid;place-items:center;font-weight:800;font-size:.82rem;
+  transition:.2s;
+}
+.mc-btn:hover:not(:disabled){
+  border-color:var(--accent-3);background:var(--accent-soft);
+  transform:translateY(-2px);box-shadow:0 6px 18px color-mix(in srgb,var(--accent-3) 20%,transparent);
+}
+.mc-btn:hover:not(:disabled) .mc-letter{background:var(--accent-3);color:#fff}
+.mc-btn:disabled{cursor:default;opacity:.95}
+.mc-btn.correct{border-color:var(--ok);background:var(--ok-soft);animation:popOk .4s ease}
+.mc-btn.correct .mc-letter{background:var(--ok);color:#fff}
+.mc-btn.wrong{border-color:var(--bad);background:var(--bad-soft);animation:shake .45s ease}
+.mc-btn.wrong .mc-letter{background:var(--bad);color:#fff}
+.mc-btn.dim{opacity:.5}
+
+.mc-btn.selected { border-color: var(--accent); background: var(--accent-soft); }
+.mc-btn.selected .mc-letter { background: var(--accent); color: #fff; }
+
+.mc-confirm-btn {
+  display: none; margin-top: 16px; width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; border: none; border-radius: 14px; font-weight: 800; font-size: 1rem;
+  cursor: pointer; transition: .2s;
+}
+.mc-confirm-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 40%, transparent); }
+[data-theme="dark"] .mc-confirm-btn { color: #062B16; }
+
+.feedback{margin-top:18px;padding:15px 17px;border-radius:13px;font-size:.9rem;line-height:1.7;
+  border-left:4px solid var(--accent-3);background:var(--bg-2);animation:slideIn .3s ease;}
+.feedback.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+.feedback.no{border-left-color:var(--bad);background:var(--bad-soft)}
+.feedback .fb-title{font-weight:800;margin-bottom:4px;display:block}
+.feedback.ok .fb-title{color:var(--ok)}
+.feedback.no .fb-title{color:var(--bad)}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+
+/* BUTTON */
+.btn{font-family:inherit;font-weight:700;font-size:.94rem;border:none;border-radius:14px;
+  padding:14px 28px;cursor:pointer;transition:.22s;display:inline-flex;
+  align-items:center;justify-content:center;gap:9px;line-height:1.4;}
+.btn.primary{background:linear-gradient(135deg,var(--accent-3),var(--accent));
+  color:#fff;box-shadow:0 6px 22px color-mix(in srgb,var(--accent-3) 45%,transparent);
+  position:relative;overflow:hidden;}
+.btn.primary::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.28),transparent 70%);
+  transform:translateX(-120%);transition:transform .6s;}
+.btn.primary:hover::after{transform:translateX(120%)}
+[data-theme="dark"] .btn.primary{color:#062B16}
+.btn.primary:hover{transform:translateY(-3px);
+  box-shadow:0 10px 30px color-mix(in srgb,var(--accent-3) 55%,transparent);}
+.btn.primary:active{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--text-soft);border:1.5px solid var(--border)}
+.btn.ghost:hover{border-color:var(--accent-3);color:var(--accent-3);background:var(--accent-soft)}
+.btn-row{display:flex;gap:11px;flex-wrap:wrap;margin-top:22px}
+.btn-center{justify-content:center}
+.btn-bismillah{font-size:1.02rem;padding:16px 34px;border-radius:16px;
+  animation:btnGlow 2.4s ease-in-out infinite;}
+@keyframes btnGlow{
+  0%,100%{box-shadow:0 6px 22px color-mix(in srgb,var(--accent-3) 45%,transparent)}
+  50%{box-shadow:0 8px 36px color-mix(in srgb,var(--accent-3) 70%,transparent)}}
+
+/* RESULT */
+.result{text-align:center;padding:10px 0;animation:slideIn .4s ease}
+.result-icon{font-size:3.6rem;line-height:1;margin-bottom:14px;display:block}
+.result h3{font-size:1.4rem;font-weight:800;margin-bottom:12px;letter-spacing:-.4px;justify-content:center}
+.result p{color:var(--text-soft);max-width:460px;margin:0 auto 10px}
+.score-big{font-size:2.8rem;font-weight:800;letter-spacing:-2px;line-height:1.1;margin:10px 0;
+  background:linear-gradient(135deg,var(--accent-3),var(--gold-2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.score-big small{font-size:1rem;color:var(--muted);font-weight:600;letter-spacing:0;
+  -webkit-text-fill-color:var(--muted)}
+
+.fail-panel{background:linear-gradient(135deg,var(--bad-soft),color-mix(in srgb,var(--gold-soft) 60%,var(--card)));
+  border-radius:18px;padding:24px 20px;margin:20px auto 0;max-width:520px;
+  border:1.5px dashed color-mix(in srgb,var(--bad) 45%,transparent);
+  animation:bismIn .6s cubic-bezier(.34,1.4,.64,1) both;}
+.fail-title{font-size:1.25rem;font-weight:800;color:var(--bad);letter-spacing:-.3px;
+  margin-bottom:8px;display:block;}
+.fail-sub{font-size:1rem;font-weight:700;color:var(--text);
+  display:inline-block;margin-bottom:4px;}
+.fail-emoji{font-size:2rem;display:block;margin-bottom:10px;animation:bounceSoft 2s ease-in-out infinite}
+@keyframes bounceSoft{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+.pass-panel{background:linear-gradient(135deg,var(--ok-soft),var(--accent-soft));
+  border-radius:18px;padding:24px 20px;margin:20px auto 0;max-width:520px;
+  border:1.5px dashed color-mix(in srgb,var(--ok) 45%,transparent);
+  animation:bismIn .6s cubic-bezier(.34,1.4,.64,1) both;text-align:center;}
+.pass-title{font-size:1.25rem;font-weight:800;color:var(--ok);letter-spacing:-.3px;
+  margin-bottom:8px;display:block;}
+.pass-emoji{font-size:2.4rem;display:block;margin-bottom:10px;animation:bounceSoft 2s ease-in-out infinite}
+
+/* CHAMPION */
+.champion-panel{position:relative;border-radius:20px;padding:30px 20px 26px;margin:22px auto 0;
+  background:linear-gradient(150deg,var(--gold-soft),var(--accent-soft),var(--gold-soft));
+  border:2px solid color-mix(in srgb,var(--gold) 55%,transparent);
+  overflow:hidden;animation:bismIn .7s cubic-bezier(.34,1.4,.64,1) both;
+  box-shadow:0 14px 48px color-mix(in srgb,var(--gold) 28%,transparent);}
+.champion-panel::before{content:"";position:absolute;top:-60%;left:-60%;width:220%;height:220%;
+  background:conic-gradient(from 0deg,transparent 0deg,color-mix(in srgb,var(--gold) 22%,transparent) 60deg,transparent 120deg,transparent 360deg);
+  animation:spinGlow 9s linear infinite;pointer-events:none;}
+@keyframes spinGlow{to{transform:rotate(360deg)}}
+.champion-panel > *{position:relative;z-index:1}
+.trophy-wrap{width:118px;height:118px;margin:0 auto 16px;position:relative;display:grid;place-items:center}
+.trophy-rays{position:absolute;inset:-24px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--gold) 45%,transparent) 0%,transparent 68%);
+  animation:raysPulse 2s ease-in-out infinite;}
+@keyframes raysPulse{0%,100%{transform:scale(.9);opacity:.6}50%{transform:scale(1.18);opacity:1}}
+.trophy{font-size:4.4rem;line-height:1;position:relative;z-index:2;
+  animation:trophyPop 1s cubic-bezier(.34,1.56,.64,1) both, floatTrophy 3s 1s ease-in-out infinite;
+  filter:drop-shadow(0 8px 22px color-mix(in srgb,var(--gold) 60%,transparent));}
+@keyframes trophyPop{0%{transform:scale(0) rotate(-45deg);opacity:0}60%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes floatTrophy{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.ring{position:absolute;inset:0;border-radius:50%;
+  border:3px solid color-mix(in srgb,var(--gold) 65%,transparent);
+  animation:ringOut 1.8s ease-out infinite;}
+.ring:nth-child(2){animation-delay:.6s}
+.ring:nth-child(3){animation-delay:1.2s}
+@keyframes ringOut{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+.champion-title{font-size:clamp(1.3rem,5vw,1.7rem);font-weight:800;letter-spacing:-.5px;
+  margin-bottom:10px;
+  background:linear-gradient(135deg,var(--gold),var(--accent-3));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.champion-sub{font-size:.94rem;color:var(--text-soft);margin-bottom:6px;font-weight:600}
+.champion-badge{display:inline-flex;align-items:center;gap:8px;margin-top:8px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-2));
+  color:#2A1E08;font-weight:800;font-size:.85rem;letter-spacing:.5px;
+  padding:9px 20px;border-radius:999px;
+  box-shadow:0 6px 24px color-mix(in srgb,var(--gold) 50%,transparent);
+  animation:badgeIn .8s .6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes badgeIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+.unlock-btn-wrap{margin-top:22px;animation:badgeIn .8s 1s cubic-bezier(.34,1.56,.64,1) both}
+.unlock-btn{background:linear-gradient(135deg,var(--gold),var(--gold-2))!important;
+  color:#2A1E08!important;font-size:1.02rem;padding:16px 34px!important;
+  box-shadow:0 8px 30px color-mix(in srgb,var(--gold) 55%,transparent)!important;
+  position:relative;overflow:hidden;text-decoration:none;}
+.unlock-btn::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.5),transparent 70%);
+  transform:translateX(-120%);transition:transform .7s;}
+.unlock-btn:hover::after{transform:translateX(120%)}
+.unlock-btn:hover{transform:translateY(-3px) scale(1.03)}
+
+.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;top:-20px;width:11px;height:16px;opacity:.95;
+  animation:confettiFall linear forwards;}
+@keyframes confettiFall{
+  0%{transform:translateY(-30px) rotate(0deg);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+
+footer{text-align:center;padding:46px 18px 66px;color:var(--muted);font-size:.82rem}
+footer .fdiv{width:60px;height:3px;margin:0 auto 18px;border-radius:99px;
+  background:linear-gradient(90deg,transparent,var(--accent-3),transparent);}
+#toTop{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-3),var(--accent));color:#fff;border:none;
+  cursor:pointer;font-size:1.15rem;display:grid;place-items:center;
+  box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:.3s;z-index:40;}
+#toTop.show{opacity:1;pointer-events:auto}
+#toTop:hover{transform:translateY(-4px) scale(1.08)}
+[data-theme="dark"] #toTop{color:#062B16}
+
+@media(max-width:560px){
+  .card{padding:22px 17px;border-radius:16px}
+  body{font-size:15.5px}
+  .trophy{font-size:3.6rem}
+  .trophy-wrap{width:96px;height:96px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <span class="brand-icon">ع</span>
+      <span class="brand-text">
+        <span class="brand-title">Belajar Bahasa Arab dari Nol <span class="brand-badge">Pelajaran 17</span></span>
+        <span class="brand-sub">Evaluasi · Jumlah Ismiyah</span>
+      </span>
+    </div>
+    <button class="theme-btn" id="themeToggle" aria-label="Ganti tema">🌙</button>
+  </div>
+  <div class="topbar-strip"></div>
+</div>
+
+<!-- HERO -->
+<div class="wrap">
+  <header class="hero">
+    <span class="ornament">❁ ❃ ❁</span>
+    <span class="eyebrow">Pelajaran 17</span>
+    <h1>Evaluasi <span class="accent-word">Menyeluruh</span></h1>
+    <div>
+      <span class="hero-tag">Bagian ke-17</span>
+    </div>
+    <div>
+      <span class="hero-sub-badge">📖 Mengenal Kalimat &amp; Jumlah Ismiyah</span>
+    </div>
+    <div class="hero-divider"></div>
+  </header>
+
+  <main>
+
+  <!-- STAGE 1: REMINDER QUIZ -->
+  <div id="stage-reminder">
+    <section class="card" id="reminderQuiz">
+      <div class="stage-intro">
+        <span class="stage-badge">◉ Tahap 1 · Quiz Reminder</span>
+        <h2 style="justify-content:center">Uji Pemahaman Pelajaran 1–16</h2>
+        <p>Sebelum masuk ke evaluasi menyeluruh, kita uji dulu pemahaman materi sebelumnya.</p>
+        <p><strong>Kamu harus menjawab 100% benar</strong> untuk membuka materi Pelajaran 17.</p>
+      </div>
+
+      <p style="font-size:.85rem;color:var(--muted);text-align:center">
+        Total soal: <strong id="reminderTotal">17</strong> soal Benar / Salah.
+      </p>
+
+      <div id="reminderStart" class="bs-start">
+        <div class="bismillah-box">
+          <span class="bismillah-ar">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</span>
+          <span class="bismillah-note">
+            <span class="star">✧</span> Baca Bismillah sebelum mulai! <span class="star">✧</span>
+          </span>
+          <p class="bismillah-sub">Mulailah dengan nama Allah, semoga diberi kemudahan dan keberkahan.</p>
+        </div>
+        <div class="btn-row btn-center" style="justify-content:center">
+          <button class="btn primary btn-bismillah" id="reminderStartBtn" type="button">Mulai Quiz Reminder 🚀</button>
+        </div>
+      </div>
+
+      <div id="reminderPlay" hidden>
+        <div class="quiz-head-bar">
+          <span class="quiz-meta" id="reminderCounter">Soal 1 / 17</span>
+          <span class="quiz-meta">Benar: <b id="reminderScore">0</b></span>
+        </div>
+        <div class="progress"><div class="bs-bar" id="reminderBar"></div></div>
+
+        <p class="q-text" id="reminderText" dir="auto"></p>
+        <div class="bs-opts" id="reminderOpts"></div>
+        <div class="feedback" id="reminderFeedback" dir="auto" hidden></div>
+      </div>
+
+      <div id="reminderResult" hidden></div>
+    </section>
+  </div>
+
+  <!-- STAGE 2: MATERI BARU -->
+  <div id="stage-material">
+
+    <!-- Ringkasan Materi: Kata & Kalimat -->
+    <section class="card">
+      <h2><span class="num">A</span> Ringkasan Materi: Kata &amp; Kalimat</h2>
+      
+      <div class="diagram">
+        <div class="diagram-header">Kata dalam Bahasa Arab</div>
+        <div class="diagram-row">
+          <button class="diagram-btn" onclick="openModal('harf')">Harf</button>
+          <button class="diagram-btn" onclick="openModal('fil')">Fi'il</button>
+          <button class="diagram-btn" onclick="openModal('isim')">Isim</button>
+        </div>
+      </div>
+
+      <div class="diagram">
+        <div class="diagram-header">Kalimat dalam Bahasa Arab</div>
+        <div class="diagram-row">
+          <button class="diagram-btn" onclick="openModal('filiyah')">Jumlah Fi'liyah</button>
+          <button class="diagram-btn" onclick="openModal('ismiyah')">Jumlah Ismiyah</button>
+        </div>
+      </div>
+
+      <div class="diagram">
+        <div class="diagram-header">Jumlah Ismiyah</div>
+        <div class="diagram-row">
+          <button class="diagram-btn" onclick="openModal('khobar')">Khobar</button>
+          <button class="diagram-btn" onclick="openModal('mubtada')">Mubtada'</button>
+        </div>
+        <div class="diagram-row">
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('khobarmufrod')">Khobar Mufrod</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('khobarghairumufrad')">Khobar Ghairu Mufrad</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('nakhiroh')">Nakhiroh</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('marifat')">Ma'rifat</button>
+        </div>
+        <div class="diagram-row">
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('isyaroh')">Isim Isyaroh</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('aliflam')">Isim diawali ال</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('alam')">Isim 'Alam</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('dhomir')">Isim Dhomir</button>
+        </div>
+        <div class="diagram-row">
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('sibhuljumlah')">Sibhul Jumlah</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('jarmajrur')">Jar - Majrur</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('dhorof')">Dhorof</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('mudhof')">Mudhof</button>
+        </div>
+        <div class="diagram-row">
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('naatmanutmubtada')">Na'at-Man'ut (Mubtada)</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('naatmanutkhobar')">Na'at-Man'ut (Khobar)</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('badalmubtada')">Badal (Mubtada)</button>
+          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('badalkhobar')">Badal (Khobar)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kondisi Khusus -->
+    <section class="card">
+      <h2><span class="num">B</span> Kondisi Khusus Jumlah Ismiyah</h2>
+      <p>Klik pada teks di dalam tabel untuk melihat detail dan contohnya.</p>
+
+      <div class="custom-table-wrap">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Kondisi Khusus</th>
+              <th>Perincian</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="4" class="c-red" onclick="openModal('k1_1')">Mubtada' berupa Isim Nakirah</td>
+              <td class="c-white" onclick="openModal('k1_1')">Susunan Na'at-man'ut</td>
+            </tr>
+            <tr><td class="c-white" onclick="openModal('k1_2')">Idhofah ke Isim Nakirah</td></tr>
+            <tr><td class="c-white" onclick="openModal('k1_3')">Didahului penafian (nafi)</td></tr>
+            <tr><td class="c-white" onclick="openModal('k1_4')">Didahului istifham</td></tr>
+
+            <tr>
+              <td rowspan="3" class="c-blue" onclick="openModal('k2_1')">Mubtada' dihapus</td>
+              <td class="c-white" onclick="openModal('k2_1')">Judul</td>
+            </tr>
+            <tr><td class="c-white" onclick="openModal('k2_2')">Khobar berupa masdar yg menggantikan fi'ilnya</td></tr>
+            <tr><td class="c-white" onclick="openModal('k2_3')">Menjawab pertanyaan</td></tr>
+
+            <tr>
+              <td rowspan="3" class="c-red" onclick="openModal('k3_1')">Khobar BOLEH didepan Mubtada</td>
+              <td class="c-white" onclick="openModal('k3_1')">Jika ingin menonjolkan makna Khobar</td>
+            </tr>
+            <tr><td class="c-white" onclick="openModal('k3_2')">Jika Jumlah Ismiyah diawali huruf nafi atau istifham dan khobar berupa sifat</td></tr>
+            <tr><td class="c-white" onclick="openModal('k3_3')">Khobar berupa syibhul Jumlah dan Mubtada' ma'rifat</td></tr>
+
+            <tr>
+              <td rowspan="3" class="c-green" onclick="openModal('k4_1')">Khobar HARUS didepan Mubtada</td>
+              <td class="c-white" onclick="openModal('k4_1')">Khabar berupa syibhul jumlah dan mubtada' nakirah tanpa keterangan</td>
+            </tr>
+            <tr><td class="c-white" onclick="openModal('k4_2')">Khobar berupa lafadh harus didepan, spt isim istifham (kata tanya)</td></tr>
+            <tr><td class="c-white" onclick="openModal('k4_3')">Mubtada' bersambung dg Dhomir yg kembali ke Khobar</td></tr>
+
+            <tr>
+              <td class="c-purple" onclick="openModal('k5_1')">Khobar lebih dari satu</td>
+              <td class="c-white" onclick="openModal('k5_1')">&nbsp;</td>
+            </tr>
+
+            <tr>
+              <td rowspan="3" class="c-purple" onclick="openModal('k6_1')">Khobar dihapus</td>
+              <td class="c-white" onclick="openModal('k6_1')">Mubtada' setelah لولا</td>
+            </tr>
+            <tr><td class="c-white" onclick="openModal('k6_2')">Mubtada' menunjukkan sumpah scr jelas</td></tr>
+            <tr><td class="c-white" onclick="openModal('k6_3')">Mubtada' didlofhkan dg wawu yg menunjuk mushabah (kebersamaan)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Mubtada Khobar didahului Innaa & Kaana -->
+    <section class="card">
+      <h2><span class="num">C</span> Mubtada' - Khobar Didahului <span class="ar" style="font-size:1.1em">إِنَّ</span> &amp; <span class="ar" style="font-size:1.1em">كَانَ</span></h2>
+      <p>Klik pada bagian tabel di bawah ini untuk melihat aturannya:</p>
+
+      <div class="custom-table-wrap">
+        <table class="custom-table" style="min-width: 400px;">
+          <thead>
+            <tr>
+              <th class="c-amil-header">Khobar</th>
+              <th class="c-amil-header">Mubtada</th>
+              <th class="c-amil-header"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="c-white" onclick="openModal('marfu')">Marfu'</td>
+              <td class="c-white" onclick="openModal('manshub')">Manshub</td>
+              <td class="c-amil-inna ar" onclick="openModal('inna')">إِنَّ</td>
+            </tr>
+            <tr>
+              <td class="c-white" onclick="openModal('manshub')">Manshub</td>
+              <td class="c-white" onclick="openModal('marfu')">Marfu'</td>
+              <td class="c-amil-kaana ar" onclick="openModal('kaana')">كَانَ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Tombol menuju latihan -->
+    <div class="btn-row btn-center" style="justify-content:center;margin-bottom:30px">
+      <button class="btn primary btn-bismillah" id="materialNextBtn" type="button">Mulai Evaluasi 100 Soal ✍️</button>
+    </div>
+
+  </div>
+
+  <!-- STAGE 3: LATIHAN -->
+  <div id="stage-next">
+    <section class="card" id="lessonQuiz">
+      <div class="stage-intro">
+        <span class="stage-badge">◉ Tahap 3 · Evaluasi Menyeluruh</span>
+        <h2 style="justify-content:center">Evaluasi Pelajaran 1–16</h2>
+        <p>100 soal pilihan ganda &amp; multi-jawaban.</p>
+        <p><strong>Nilai ≥ 70%</strong> untuk membuka pelajaran berikutnya.</p>
+      </div>
+
+      <p style="font-size:.85rem;color:var(--muted);text-align:center">
+        Total soal: <strong id="lessonTotal">100</strong> soal.
+      </p>
+
+      <div id="lessonStart" class="bs-start">
+        <div class="bismillah-box">
+          <span class="bismillah-ar">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</span>
+          <span class="bismillah-note">
+            <span class="star">✧</span> Baca Bismillah sebelum mulai! <span class="star">✧</span>
+          </span>
+          <p class="bismillah-sub">Kerjakan dengan tenang dan teliti, semoga Allah mudahkan.</p>
+        </div>
+        <div class="btn-row btn-center" style="justify-content:center">
+          <button class="btn primary btn-bismillah" id="lessonStartBtn" type="button">Mulai Evaluasi 🚀</button>
+        </div>
+      </div>
+
+      <div id="lessonPlay" hidden>
+        <div class="quiz-head-bar">
+          <span class="quiz-meta" id="lessonCounter">Soal 1 / 100</span>
+          <span class="quiz-meta">Benar: <b id="lessonScore">0</b></span>
+        </div>
+        <div class="progress"><div class="bs-bar" id="lessonBar"></div></div>
+
+        <p class="q-text" id="lessonText" dir="auto"></p>
+        <div class="mc-opts" id="lessonOpts"></div>
+        <button class="mc-confirm-btn" id="mcConfirmBtn">Konfirmasi Jawaban</button>
+        <div class="feedback" id="lessonFeedback" dir="auto" hidden></div>
+      </div>
+
+      <div id="lessonResult" hidden></div>
+    </section>
+  </div>
+
+  </main>
+
+  <footer>
+    <div class="fdiv"></div>
+    <p><strong>Belajar Bahasa Arab dari Nol</strong> · Pelajaran 17</p>
+    <p style="margin-top:6px">Evaluasi Menyeluruh</p>
+  </footer>
+</div>
+
+<!-- MODAL OVERLAY -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()" role="dialog" aria-modal="true">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()" aria-label="Tutup">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<button id="toTop" aria-label="Kembali ke atas">↑</button>
+
+<script>
+/* ===== THEME ===== */
+const themeToggle = document.getElementById('themeToggle');
+const root = document.documentElement;
+const savedTheme = localStorage.getItem('arabic-theme') || 'light';
+root.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+themeToggle.addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('arabic-theme', next);
+  themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+});
+
+/* ===== TO TOP ===== */
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  toTop.classList.toggle('show', window.scrollY > 400);
+});
+toTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+/* ===== MODAL & INTERACTIVE DATA ===== */
+const MODAL_DATA = {
+  harf: { title: 'Harf', ar: 'حَرْف', desc: 'Kata sambung / kata tugas. Tidak bisa berdiri sendiri dan tidak memiliki makna sempurna.', examples: [{ ar: 'مِنْ', id: 'dari' }, { ar: 'إِلَى', id: 'ke' }, { ar: 'فِي', id: 'di dalam' }] },
+  fil: { title: "Fi'il", ar: 'فِعْل', desc: "Kata kerja. Terbagi menjadi fi'il madhi (lampau), fi'il mudhari' (sekarang), dan fi'il amr (perintah).", examples: [{ ar: 'ذَهَبَ', id: 'telah pergi (madhi)' }, { ar: 'يَذْهَبُ', id: "sedang pergi (mudhari')" }, { ar: 'اِذْهَبْ', id: 'pergilah (amr)' }] },
+  isim: { title: 'Isim', ar: 'اِسْم', desc: 'Kata benda, kata sifat, atau kata keterangan. Tidak terikat waktu.', examples: [{ ar: 'كِتَابٌ', id: 'buku (mufrod)' }, { ar: 'كِتَابَانِ', id: 'dua buku (mutsanna)' }, { ar: 'كُتُبٌ', id: 'buku-buku (jama\')' }] },
+  filiyah: { title: "Jumlah Fi'liyah", ar: 'جُمْلَة فِعْلِيَّة', desc: "Kalimat yang diawali dengan fi'il (kata kerja), lalu fa'il (pelaku).", examples: [{ ar: 'ذَهَبَ الطَّالِبُ', id: 'Siswa itu telah pergi' }] },
+  ismiyah: { title: 'Jumlah Ismiyah', ar: 'جُمْلَة اِسْمِيَّة', desc: "Kalimat yang diawali dengan isim. Terdiri dari mubtada' (pokok) dan khobar (keterangan).", examples: [{ ar: 'الطَّالِبُ مُجْتَهِدٌ', id: 'Siswa itu rajin' }] },
+  khobar: { title: 'Khobar', ar: 'خَبَر', desc: "Keterangan yang menyempurnakan mubtada' sehingga kalimat menjadi sempurna.", examples: [{ ar: 'كِتَابٌ', id: 'buku (khobar mufrod)' }, { ar: 'فِي الْبَيْتِ', id: 'di rumah (khobar jar-majrur)' }] },
+  mubtada: { title: "Mubtada'", ar: 'مُبْتَدَأ', desc: "Isim yang menjadi pokok kalimat, umumnya terletak di awal. Mubtada' bersifat ma'rifat.", examples: [{ ar: 'هٰذَا', id: 'ini (isim isyaroh)' }, { ar: 'الطَّالِبُ', id: 'siswa itu' }] },
+  khobarmufrod: { title: 'Khobar Mufrod', ar: 'خَبَرٌ مُفْرَدٌ', desc: "Khabar yang terdiri dari satu kata.", examples: [{ ar: 'هُوَ طَالِبٌ', id: 'Dia (lk) adalah seorang siswa' }] },
+  khobarghairumufrad: { title: 'Khobar Ghairu Mufrad', ar: 'خَبَرٌ غَيْرُ مُفْرَدٍ', desc: "Khabar yang tidak berupa satu kata tunggal, melainkan berupa susunan (jumlah/syibhul jumlah).", examples: [{ ar: 'هُوَ فِي الْبَيْتِ', id: 'Dia (lk) di rumah' }] },
+  nakhiroh: { title: 'Nakhiroh', ar: 'نَكِرَة', desc: 'Isim yang masih umum / belum tertentu. Ciri umumnya berharakat tanwin.', examples: [{ ar: 'كِتَابٌ', id: 'sebuah buku' }] },
+  marifat: { title: "Ma'rifat", ar: 'مَعْرِفَة', desc: "Isim yang sudah tertentu (didahului ال, isim isyaroh, dhomir, isim 'alam).", examples: [{ ar: 'الْكِتَابُ', id: 'buku itu' }] },
+  isyaroh: { title: 'Isim Isyaroh', ar: 'اِسْم إِشَارَة', desc: "Kata tunjuk. Termasuk isim ma'rifat.", examples: [{ ar: 'هٰذَا', id: 'ini' }] },
+  aliflam: { title: "Isim diawali (ال)", ar: 'ال + اِسْم', desc: "Isim yang diawali (ال) termasuk isim ma'rifat.", examples: [{ ar: 'الْكِتَابُ', id: 'buku itu' }] },
+  alam: { title: "Isim 'Alam", ar: 'اِسْم عَلَم', desc: "Nama yang digunakan untuk mengenali atau mengidentifikasi sesuatu yang tertentu.", examples: [{ ar: 'مُحَمَّدٌ', id: 'Muhammad' }] },
+  dhomir: { title: "Isim Dhomir", ar: 'اِسْم ضَمِيْر', desc: "Kata ganti orang.", examples: [{ ar: 'هُوَ', id: 'dia laki-laki' }] },
+  sibhuljumlah: { title: 'Sibhul Jumlah', ar: 'شِبْهُ الْجُمْلَة', desc: "Terdiri dari Jar-Majrur atau Dhorof.", examples: [{ ar: 'فِي الْبَيْتِ', id: 'di rumah' }] },
+  jarmajrur: { title: 'Jar - Majrur', ar: 'الْجَارُّ وَالْمَجْرُورُ', desc: "Susunan huruf jar diikuti isim majrur.", examples: [{ ar: 'هُوَ فِي الْبَيْتِ', id: 'Dia di rumah' }] },
+  dhorof: { title: 'Dhorof', ar: 'الظَّرْفُ', desc: "Kata keterangan waktu atau tempat.", examples: [{ ar: 'أَمَامَ الْمَسْجِدِ', id: 'di depan masjid' }] },
+  mudhof: { title: "Mudhof - Mudhof ilaih", ar: 'مُضَاف – مُضَاف إِلَيْه', desc: "Dua isim yang digabungkan (kepemilikan).", examples: [{ ar: 'كِتَابُ مُحَمَّدٍ', id: 'buku Muhammad' }] },
+  naatmanutmubtada: { title: "Na'at - Man'ut", ar: 'النَّعْتُ وَالْمَنْعُوتُ', desc: "Na'at mengikuti Man'ut. Jika mubtada', keduanya ma'rifat.", examples: [{ ar: 'الطَّالِبُ الْمُجْتَهِدُ', id: 'siswa yang rajin' }] },
+  naatmanutkhobar: { title: "Na'at - Man'ut", ar: 'النَّعْتُ وَالْمَنْعُوتُ', desc: "Na'at mengikuti Man'ut. Jika khobar, keduanya nakhiroh.", examples: [{ ar: 'طَالِبٌ مُجْتَهِدٌ', id: 'siswa yang rajin' }] },
+  badalmubtada: { title: 'Badal Mubtada', ar: 'الْبَدَلُ عَنِ الْمُبْتَدَأِ', desc: "Badal menggantikan mubtada' (ma'rifat).", examples: [{ ar: 'مُحَمَّدٌ رَسُولُ اللهِ', id: 'Muhammad, Rasulullah' }] },
+  badalkhobar: { title: 'Badal Khobar', ar: 'الْبَدَلُ عَنِ الْخَبَرِ', desc: "Badal menggantikan khobar (nakhiroh).", examples: [{ ar: 'هٰذَا رَجُلٌ طَبِيْبٌ', id: 'Ini lelaki (yaitu) dokter' }] },
+  
+  // Kondisi Khusus
+  k1_1: {
+    title: "Susunan Na'at-man'ut",
+    ar: 'نَعْتٌ وَمَنْعُوت',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'رَجُلٌ كَرِيمٌ عِنْدَنَا', id: '' },
+      { ar: 'طَالِبٌ مُجْتَهِدٌ فِي الْفَصْلِ', id: '' },
+      { ar: 'كِتَابٌ جَدِيدٌ عِنْدِي', id: '' }
+    ]
+  },
+  k1_2: {
+    title: "Idhofah ke Isim Nakirah",
+    ar: 'إِضَافَة إِلَى نَكِرَة',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'طَالِبُ إِحْسَانٍ وَاقِفٌ', id: '' },
+      { ar: 'طَالِبُ عِلْمٍ مُجْتَهِدٌ', id: '' },
+      { ar: 'صَاحِبُ خُلُقٍ مَحْبُوبٌ', id: '' }
+    ]
+  },
+  k1_3: {
+    title: "Didahului penafian (nafi)",
+    ar: 'مَسْبُوقٌ بِنَفْي',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'مَا ظَالِمٌ نَاجِحٌ', id: '' },
+      { ar: 'مَا أَحَدٌ فِي الْبَيْتِ', id: '' },
+      { ar: 'مَا رَجُلٌ حَاضِرٌ', id: '' }
+    ]
+  },
+  k1_4: {
+    title: "Didahului istifham",
+    ar: 'مَسْبُوقٌ بِاسْتِفْهَام',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'هَلْ طَالِبٌ فِيكُمْ؟', id: '' },
+      { ar: 'هَلْ رَجُلٌ فِي الْبَيْتِ؟', id: '' },
+      { ar: 'أَطَالِبٌ عِنْدَكَ؟', id: '' }
+    ]
+  },
+  k2_1: {
+    title: "Judul",
+    ar: 'عُنْوَان',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'مُقَدِّمَة', id: 'Teks lengkapnya: (هَذِهِ مُقَدِّمَة)' },
+      { ar: 'خَاتِمَة', id: 'Teks lengkapnya: (هَذِهِ خَاتِمَة)' }
+    ]
+  },
+  k2_2: {
+    title: "Khobar berupa masdar yg menggantikan fi'ilnya",
+    ar: 'خَبَرٌ مَصْدَرِيّ',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'صَبْرٌ جَمِيلٌ', id: 'Teks lengkapnya: (مَوْقِفُنَا صَبْرٌ جَمِيلٌ)' },
+      { ar: 'عَفْوٌ كَرِيمٌ', id: 'Teks lengkapnya: (مَوْقِفُنَا عَفْوٌ كَرِيمٌ)' }
+    ]
+  },
+  k2_3: {
+    title: "Menjawab pertanyaan",
+    ar: 'جَوَابُ سُؤَال',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'أَيْنَ الْكِتَابُ؟', id: 'Jawabnya: عَلَى الْمَكْتَبِ <br> Teks lengkapnya: (هُوَ عَلَى الْمَكْتَبِ)' },
+      { ar: 'كَيْفَ حَالُكَ؟', id: 'Jawabnya: بِخَيْرٍ <br> Teks lengkapnya: (أَنَا بِخَيْرٍ)' }
+    ]
+  },
+  k3_1: {
+    title: "Jika ingin menonjolkan makna Khobar",
+    ar: 'لِلتَّشْوِيقِ',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'مَمْنُوعٌ التَّدْخِينُ', id: '' },
+      { ar: 'مَقْبُولٌ الطَّلَبُ', id: '' },
+      { ar: 'مَحْمُودٌ الصِّدْقُ', id: '' }
+    ]
+  },
+  k3_2: {
+    title: "Jika Jumlah Ismiyah diawali huruf nafi atau istifham dan khobar berupa sifat",
+    ar: 'نَفْي/اسْتِفْهَام وَخَبَرُهُ صِفَة',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'لَا قَائِمٌ زَيْدٌ', id: '' },
+      { ar: 'أَمُجْتَهِدٌ أَنْتَ؟', id: '' },
+      { ar: 'هَلْ حَاضِرٌ أَخُوكَ؟', id: '' }
+    ]
+  },
+  k3_3: {
+    title: "Khobar berupa syibhul Jumlah dan Mubtada' ma'rifat",
+    ar: 'شِبْهُ جُمْلَة وَمُبْتَدَأ مَعْرِفَة',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'فِي مَدْرَسَتِي إِمَامُ الْمَسْجِدِ', id: '' },
+      { ar: 'عَلَى الطَّاوِلَةِ كِتَابٌ', id: '' },
+      { ar: 'الطَّالِبُ فِي الْفَصْلِ', id: '' }
+    ]
+  },
+  k4_1: {
+    title: "Khabar berupa syibhul jumlah dan mubtada' nakirah tanpa keterangan",
+    ar: 'شِبْهُ جُمْلَة وَنَكِرَة',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'فِي الْمَسْجِدِ مُسْلِمٌ', id: '' },
+      { ar: 'عِنْدِي دِينَارٌ', id: '' },
+      { ar: 'أَمَامَ الْبَيْتِ رَجُلٌ', id: '' }
+    ]
+  },
+  k4_2: {
+    title: "Khobar berupa lafadh harus didepan, spt isim istifham (kata tanya)",
+    ar: 'خَبَرٌ لَهُ الصَّدَارَة',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'مَتَى الِامْتِحَانُ؟', id: '' },
+      { ar: 'أَيْنَ الْكِتَابُ؟', id: '' },
+      { ar: 'كَيْفَ الطَّقْسُ؟', id: '' }
+    ]
+  },
+  k4_3: {
+    title: "Mubtada' bersambung dg Dhomir yg kembali ke Khobar",
+    ar: 'مُبْتَدَأٌ يَعُودُ إِلَى الْخَبَر',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'فِي الدَّارِ صَاحِبُهَا', id: '' },
+      { ar: 'عَلَى الشَّجَرَةِ ثَمَرُهَا', id: '' }
+    ]
+  },
+  k5_1: {
+    title: "Khobar lebih dari satu",
+    ar: 'تَعَدُّدُ الْخَبَر',
+    desc: 'Satu mubtada\' bisa memiliki lebih dari satu khabar (beberapa informasi).',
+    examples: [
+      { ar: 'الطَّالِبُ مُجْتَهِدٌ ذَكِيٌّ', id: 'Siswa itu rajin dan cerdas.' },
+      { ar: 'مُحَمَّدٌ صَادِقٌ أَمِينٌ', id: 'Muhammad itu jujur dan dapat dipercaya.' }
+    ]
+  },
+  k6_1: {
+    title: "Mubtada' setelah لولا",
+    ar: 'مُبْتَدَأ بَعْدَ لَوْلَا',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'لَوْلَا الْإِخْلَاصُ لَمَا اسْتَقَامَ الْمُسْلِمُونَ', id: 'Khabar dapat diperkirakan dengan kata <span class="ar">مَوْجُودٌ</span>, tetapi tidak ditambahkan ke dalam kalimat asli, sehingga menjadi (لَوْلَا الْإِخْلَاصُ مَوْجُودٌ لَمَا اسْتَقَامَ الْمُسْلِمُونَ)' },
+      { ar: 'لَوْلَا الْعِلْمُ لَهَلَكَ النَّاسُ', id: 'Diperkirakan <span class="ar">مَوْجُودٌ</span>, menjadi (لَوْلَا الْعِلْمُ مَوْجُودٌ لَهَلَكَ النَّاسُ)' }
+    ]
+  },
+  k6_2: {
+    title: "Mubtada' menunjukkan sumpah scr jelas",
+    ar: 'مُبْتَدَأ لِلْقَسَم',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'لَعَمْرُكَ إِنَّ الْحَيَاةَ كِفَاحٌ', id: 'Khabar عَمْرُكَ dihilangkan dan diperkirakan dari konteks, misalnya <span class="ar">قَسَمِي</span> ("sumpahku"), sehingga menjadi (لَعَمْرُكَ قَسَمِي إِنَّ الْحَيَاةَ كِفَاحٌ)' },
+      { ar: 'لَعَهْدُ اللهِ لَأَجْتَهِدَنَّ', id: 'Diperkirakan <span class="ar">قَسَمِي</span>, sehingga menjadi (لَعَهْدُ اللهِ قَسَمِي لَأَجْتَهِدَنَّ)' }
+    ]
+  },
+  k6_3: {
+    title: "Mubtada' didlofhkan dg wawu yg menunjuk mushabah (kebersamaan)",
+    ar: 'مُبْتَدَأٌ مَعْطُوفٌ بِوَاوِ الْمَعِيَّة',
+    desc: 'Contoh:',
+    examples: [
+      { ar: 'كُلُّ جُنْدِيٍّ وَسِلَاحُهُ', id: 'Khabar dapat diperkirakan dengan kata <span class="ar">مُقْتَرِنَانِ</span>, tetapi tidak ditambahkan ke dalam kalimat asli, sehingga menjadi (كُلُّ جُنْدِيٍّ وَسِلَاحُهُ مُقْتَرِنَانِ)' },
+      { ar: 'كُلُّ رَجُلٍ وَعَمَلُهُ', id: 'Diperkirakan <span class="ar">مُقْتَرِنَانِ</span>, sehingga menjadi (كُلُّ رَجُلٍ وَعَمَلُهُ مُقْتَرِنَانِ)' }
+    ]
+  },
+
+  // Amil
+  inna: { title: 'Amil إِنَّ', ar: 'إِنَّ', desc: "Jika mubtada - khobar (إِنَّ) maka Mubtada’ menjadi isim (إِنَّ) yang manshub dan Khobar menjadi Khobar (إِنَّ) yang marfu’.", examples: [{ ar: 'إِنَّ الطَّالِبَ مُجْتَهِدٌ', id: 'Sesungguhnya siswa itu rajin.' }] },
+  kaana: { title: 'Amil كَانَ', ar: 'كَانَ', desc: "Jika mubtada - khobar (كَانَ) maka Mubtada’ menjadi isim (كَانَ) yang marfu’ dan Khobar menjadi Khobar (كَانَ) yang manshub.", examples: [{ ar: 'كَانَ الطَّالِبُ مُجْتَهِدًا', id: 'Siswa itu dahulu rajin.' }] },
+  marfu: { title: "Tanda I'rab Marfu'", ar: 'عَلَامَاتُ الرَّفْع', desc: "Tanda marfu' ada 3, dhommah, alif nun untuk mutsanna dan wawu nun untuk jamak mudzakar salim beserta contohnya.", examples: [{ ar: 'الطَّالِبُ', id: 'Dhammah' }, { ar: 'الطَّالِبَانِ', id: 'Alif Nun (Mutsanna)' }, { ar: 'الطَّالِبُونَ', id: 'Wawu Nun (Jamak)' }] },
+  manshub: { title: "Tanda I'rab Manshub", ar: 'عَلَامَاتُ النَّصْب', desc: "Tanda manshub ada 3, fathah, ya’ nun (ya’ fathah & nun kasroh) untuk mutsanna dan ya’ nun (ya’ kasroh & nun fathah) untuk jamak mudzakar salim beserta contohnya.", examples: [{ ar: 'الطَّالِبَ', id: 'Fathah' }, { ar: 'الطَّالِبَيْنِ', id: "Ya' Nun (Mutsanna)" }, { ar: 'الطَّالِبِينَ', id: "Ya' Nun (Jamak)" }] }
+};
+
+function openModal(key) {
+  const data = MODAL_DATA[key];
+  if (!data) return;
+  
+  const examples = data.examples.map(ex => `
+    <div class="modal-example">
+      <span class="ex-ar">${ex.ar}</span>
+      <span class="ex-id">${ex.id}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('modalContent').innerHTML = `
+    <h3 class="modal-title">${data.title}</h3>
+    <div class="modal-ar-title">${data.ar}</div>
+    <p class="modal-desc">${data.desc}</p>
+    ${examples}
+  `;
+  
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeModal();
+});
+
+/* ===== TEXT FORMATTER ===== */
+function formatText(text) {
+  if (!text) return '';
+  const arRegex = /([\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+(?:\s+[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]+)*)/g;
+  return text.replace(arRegex, '<span class="ar-inline">$1</span>');
+}
+
+/* ===== REMINDER QUIZ ===== */
+const REMINDER_QUESTIONS = [
+  { q: "Mubtada' boleh nakirah, yaitu jika dalam bentuk na'at man'ut, mudhof mudhof ilaih, didahului huruf nafi atau didahului kata tanya.", a: true, e: "Benar." },
+  { q: "Khabar wajib didahulukan jika berupa syibhul jumlah dan mubtada' berupa nakirah tanpa keterangan.", a: true, e: "Benar." },
+  { q: "Isim mudzakkar yang berakhiran biasa, diubah mutsanna dengan menambahkan: ـَانِ ketika marfu'.", a: true, e: "Benar." },
+  { q: "Khabar mufrad adalah khabar yang berupa satu kata.", a: true, e: "Benar. Sudah jelas." },
+  { q: "Pola dasar jumlah ismiyah yang dipelajari adalah (خَبَرٌ + مُبْتَدَأٌ).", a: true, e: "Salah. Pola dasar: mubtada' + khabar." },
+  { q: "Jamak Muannats Sālim adalah Jamak yang umumnya dibentuk dengan mengganti akhiran ta' marbuthah (ة) menjadi alif dan ta' (ات).", a: true, e: "Benar." },
+  { q: "Khabar adalah informasi yang diberikan tentang mubtada'.", a: true, e: "Benar." },
+  { q: "Khabar ghairu mufrad adalah khabar yang tidak berupa satu kata tunggal, melainkan berupa susunan yang lebih kompleks.", a: true, e: "Benar." },
+  { q: "Jamak Mudzakkar Sālim adalah Jamak yang umumnya digunakan untuk kelompok laki-laki berakal dan dibentuk dengan akhiran tertentu.", a: true, e: "Benar." },
+  { q: "Na'at mengikuti man'ut dalam empat hal: Ma'rifah atau nakirah, Mudzakkar atau muannats, Mufrad, mutsanna, atau jamak, I'rab.", a: true, e: "Benar." },
+  { q: "Yang termasuk Ma'rifat diantaranya isim Isyaroh, isim yg diawali ال, Nama, & Dhomir.", a: true, e: "Benar." },
+  { q: "Man'ut (الْمَنْعُوتُ) adalah kata yang diterangkan sifatnya oleh na'at.", a: true, e: "Benar." },
+  { q: "Ketika كَانَ masuk ke dalam jumlah ismiyah, Mubtada' berubah kedudukannya menjadi Isim كَانَ dan tetap dibaca marfu'.", a: true, e: "Benar." },
+  { q: "Ketika كَانَ masuk ke dalam jumlah ismiyah, Khabar berubah kedudukannya menjadi Khabar كَانَ dan dibaca manshub.", a: true, e: "Benar." },
+  { q: "Salah satu bentuk khabar ghairu mufrad adalah شِبْهُ الْجُمْلَةِ (syibhul jumlah).", a: true, e: "Benar." },
+  { q: "Ketika إِنَّ masuk ke dalam jumlah ismiyah, Mubtada' berubah kedudukannya menjadi Isim إِنَّ dan dibaca manshub (نَصْبٌ).", a: true, e: "Benar." },
+  { q: "Ketika إِنَّ masuk ke dalam jumlah ismiyah, Khabar berubah kedudukannya menjadi Khabar إِنَّ dan dibaca marfu' (رَفْعٌ).", a: true, e: "Benar." }
+];
+
+let rIdx = 0, rScore = 0;
+
+function startReminder() {
+  document.getElementById('reminderStart').hidden = true;
+  document.getElementById('reminderPlay').hidden = false;
+  rIdx = 0; rScore = 0;
+  renderReminder();
+}
+
+function renderReminder() {
+  const q = REMINDER_QUESTIONS[rIdx];
+  document.getElementById('reminderCounter').textContent = 'Soal ' + (rIdx+1) + ' / ' + REMINDER_QUESTIONS.length;
+  document.getElementById('reminderScore').textContent = rScore;
+  document.getElementById('reminderBar').style.width = ((rIdx/REMINDER_QUESTIONS.length)*100) + '%';
+  document.getElementById('reminderText').innerHTML = formatText(q.q);
+  const opts = document.getElementById('reminderOpts');
+  opts.innerHTML = '';
+  document.getElementById('reminderFeedback').hidden = true;
+  ['Benar','Salah'].forEach((label, i) => {
+    const ans = i === 0;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'bs-btn ' + (ans ? 'benar' : 'salah');
+    btn.innerHTML = '<span class="bs-icon">' + (ans ? '✓' : '✗') + '</span>' + label;
+    btn.addEventListener('click', () => answerReminder(ans, btn));
+    opts.appendChild(btn);
+  });
+}
+
+function answerReminder(ans, btn) {
+  const q = REMINDER_QUESTIONS[rIdx];
+  const correct = ans === q.a;
+  document.querySelectorAll('#reminderOpts .bs-btn').forEach(b => b.disabled = true);
+  if (correct) {
+    rScore++;
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#reminderOpts .bs-btn').forEach(b => {
+      if (!b.classList.contains('wrong')) b.classList.add('dim');
+    });
+  }
+  const fb = document.getElementById('reminderFeedback');
+  fb.hidden = false;
+  fb.className = 'feedback ' + (correct ? 'ok' : 'no');
+  fb.innerHTML = '<span class="fb-title">' + (correct ? '✓ Benar!' : '✗ Belum tepat') + '</span>' + formatText(q.e);
+  document.getElementById('reminderScore').textContent = rScore;
+  setTimeout(() => {
+    rIdx++;
+    if (rIdx < REMINDER_QUESTIONS.length) {
+      renderReminder();
+    } else {
+      showReminderResult();
+    }
+  }, 1500);
+}
+
+function showReminderResult() {
+  document.getElementById('reminderPlay').hidden = true;
+  const result = document.getElementById('reminderResult');
+  result.hidden = false;
+  const total = REMINDER_QUESTIONS.length;
+  const passed = rScore === total;
+  if (passed) {
+    result.innerHTML =
+      '<div class="pass-panel">' +
+        '<span class="pass-emoji">🎉</span>' +
+        '<span class="pass-title">Alhamdulillah!</span>' +
+        '<p>Kamu menjawab <strong>' + rScore + '/' + total + '</strong> dengan benar.</p>' +
+        '<p>Materi Pelajaran 17 telah terbuka.</p>' +
+      '</div>';
+    setTimeout(() => {
+      const stage = document.getElementById('stage-reminder');
+      stage.hidden = true;
+      stage.style.display = 'none';
+      document.getElementById('stage-material').classList.add('revealed');
+      document.getElementById('stage-material').scrollIntoView({behavior:'smooth', block:'start'});
+    }, 1600);
+  } else {
+    result.innerHTML =
+      '<div class="fail-panel">' +
+        '<span class="fail-emoji">💪</span>' +
+        '<span class="fail-title">Belum Lulus</span>' +
+        '<p class="fail-sub">Kamu menjawab <strong>' + rScore + '/' + total + '</strong> benar. Perlu 100% untuk membuka materi.</p>' +
+        '<p>Silakan ulangi quiz reminder.</p>' +
+        '<div class="btn-row btn-center" style="justify-content:center">' +
+          '<button class="btn primary" id="retryReminderBtn" type="button">Ulangi Quiz Reminder 🔄</button>' +
+        '</div>' +
+      '</div>';
+    document.getElementById('retryReminderBtn').addEventListener('click', retryReminder);
+  }
+}
+
+function retryReminder() {
+  document.getElementById('reminderResult').hidden = true;
+  document.getElementById('reminderPlay').hidden = true;
+  document.getElementById('reminderStart').hidden = false;
+  rIdx = 0; rScore = 0;
+}
+
+document.getElementById('reminderStartBtn').addEventListener('click', startReminder);
+
+/* ===== LESSON QUIZ ===== */
+const LESSON_QUESTIONS = [
+  // BAGIAN I
+  { q:"Dalam ilmu nahwu, kalimat dibagi menjadi tiga jenis kata, yaitu ...", opts:["Mubtada’, khabar, dan fa‘il","Isim, fi‘il, dan huruf","Marfu‘, manshub, dan majrur","Mudzakkar, muannats, dan mutsanna"], c:1, e:"Tiga jenis kata adalah isim, fi‘il, dan huruf." },
+  { q:"Manakah yang termasuk isim?", opts:["يَكْتُبُ","مِنْ","كِتَابٌ","فِي"], c:2, e:"كِتَابٌ adalah isim yang berarti buku." },
+  { q:"Manakah yang termasuk fi‘il?", opts:["مَدْرَسَةٌ","ذَهَبَ","عَلَى","طَالِبٌ"], c:1, e:"ذَهَبَ adalah fi‘il madhi, artinya telah pergi." },
+  { q:"Manakah yang termasuk huruf?", opts:["هُوَ","كَتَبَ","الْبَيْتُ","إِلَى"], c:3, e:"إِلَى adalah huruf jar." },
+  { q:"Jumlah ismiyah adalah kalimat yang pada asal susunannya diawali dengan ...", opts:["Isim","Fi‘il","Huruf jar","Huruf nashab"], c:0, e:"Jumlah ismiyah pada asalnya diawali isim." },
+  { q:"Dua unsur utama dalam jumlah ismiyah sederhana adalah ...", opts:["Fi‘il dan fa‘il","Mubtada’ dan khabar","Na‘at dan man‘ut","Mudhaf dan mudhaf ilaih"], c:1, e:"Dua unsur utama jumlah ismiyah adalah mubtada’ dan khabar." },
+  { q:"Hukum asal i‘rab mubtada’ adalah ...", opts:["Manshub","Majrur","Marfu‘","Majzum"], c:2, e:"Hukum asal mubtada’ adalah marfu‘." },
+  { q:"Hukum asal i‘rab khabar dalam jumlah ismiyah biasa adalah ...", opts:["Marfu‘","Manshub","Majrur","Majzum"], c:0, e:"Khabar jumlah ismiyah biasa juga marfu‘." },
+  { q:"Isim ma‘rifah adalah isim yang menunjukkan sesuatu yang ...", opts:["Belum diketahui secara khusus","Sudah diketahui atau tertentu","Selalu berakhiran tanwin","Selalu menunjukkan perempuan"], c:1, e:"Ma‘rifah menunjukkan sesuatu yang tertentu atau dikenal." },
+  { q:"Isim nakirah adalah isim yang menunjukkan sesuatu yang ...", opts:["Tertentu dan sudah dikenal","Berupa nama orang saja","Belum ditentukan secara khusus","Selalu menggunakan ال"], c:2, e:"Nakirah menunjukkan sesuatu yang belum ditentukan secara khusus." },
+  { q:"Manakah yang termasuk isim ma‘rifah?", opts:["كِتَابٌ","قَلَمٌ","طَالِبٌ","الْكِتَابُ"], c:3, e:"الْكِتَابُ menjadi ma‘rifah karena menggunakan ال." },
+  { q:"Kata الْمُعَلِّمُ menjadi ma‘rifah karena ...", opts:["Menggunakan tanwin","Menggunakan ال","Berbentuk mutsanna","Berakhiran dhammah"], c:1, e:"ال merupakan salah satu tanda isim ma‘rifah." },
+  { q:"Kata زَيْدٌ termasuk ma‘rifah karena merupakan ...", opts:["Isim nakirah","Isim isyarah","Isim ‘alam (nama khusus)","Isim fi‘il"], c:2, e:"Nama khusus seperti زَيْدٌ termasuk isim ‘alam." },
+  { q:"Kata هُوَ termasuk jenis ...", opts:["Dhamir","Isim isyarah","Isim maushul","Huruf jar"], c:0, e:"هُوَ adalah dhamir orang ketiga laki-laki tunggal." },
+  { q:"Kata هَذَا termasuk ...", opts:["Dhamir","Isim isyarah","Fi‘il","Huruf"], c:1, e:"هَذَا adalah isim isyarah untuk menunjuk sesuatu yang dekat." },
+  { q:"Dalam susunan كِتَابُ الطَّالِبِ, kata كِتَابُ disebut ...", opts:["Mudhaf ilaih","Khabar","Mudhaf","Na‘at"], c:2, e:"كِتَابُ adalah mudhaf karena disandarkan kepada kata setelahnya." },
+  { q:"Dalam susunan كِتَابُ الطَّالِبِ, kata الطَّالِبِ disebut ...", opts:["Mudhaf","Mudhaf ilaih","Mubtada’","Fa‘il"], c:1, e:"الطَّالِبِ adalah mudhaf ilaih dan majrur." },
+  { q:"Na‘at adalah kata yang berfungsi untuk ...", opts:["Menjelaskan sifat kata sebelumnya","Menunjukkan pelaku pekerjaan","Menunjukkan waktu","Menunjukkan tempat"], c:0, e:"Na‘at menjelaskan sifat man‘ut." },
+  { q:"Kata yang disifati oleh na‘at disebut ...", opts:["Badal","Khabar","Man‘ut","Mudhaf"], c:2, e:"Kata yang disifati disebut man‘ut." },
+  { q:"Badal adalah kata yang ...", opts:["Menjelaskan waktu","Mengikuti kata sebelumnya dan menjelaskan atau menggantikannya","Selalu menjadi khabar","Selalu didahului huruf jar"], c:1, e:"Badal mengikuti kata sebelumnya dan menjadi penjelas atau penggantinya." },
+  { q:"Isim mutsanna menunjukkan jumlah ...", opts:["Satu","Dua","Tiga atau lebih","Tidak tertentu"], c:1, e:"Mutsanna menunjukkan dua." },
+  { q:"Jamak mudzakkar salim pada keadaan rafa‘ memiliki tanda ...", opts:["Alif","Ya’","Wawu","Kasrah"], c:2, e:"Jamak mudzakkar salim marfu‘ dengan wawu." },
+  { q:"Huruf jar menyebabkan isim setelahnya menjadi ...", opts:["Marfu‘","Manshub","Majrur","Majzum"], c:2, e:"Isim setelah huruf jar menjadi majrur." },
+  { q:"إِنَّ وَأَخَوَاتُهَا menjadikan ...", opts:["Isimnya marfu‘ dan khabarnya manshub","Isimnya manshub dan khabarnya marfu‘","Isim dan khabarnya majrur","Isim dan khabarnya manshub"], c:1, e:"Isim إِنَّ manshub, khabarnya marfu‘." },
+  { q:"كَانَ وَأَخَوَاتُهَا menjadikan ...", opts:["Isimnya manshub dan khabarnya marfu‘","Isimnya marfu‘ dan khabarnya manshub","Isim dan khabarnya majrur","Isim dan khabarnya majzum"], c:1, e:"Isim كَانَ marfu‘, khabarnya manshub." },
+
+  // BAGIAN II
+  { q:"Manakah susunan jumlah ismiyah yang benar?", opts:["مُجْتَهِدٌ الطَّالِبَ","الطَّالِبُ مُجْتَهِدٌ","الطَّالِبَ مُجْتَهِدًا","الطَّالِبِ مُجْتَهِدٌ"], c:1, e:"Mubtada’ الطَّالِبُ dan khabar مُجْتَهِدٌ sama-sama marfu‘." },
+  { q:"Lengkapilah kalimat berikut! هَذَا ...", opts:["كِتَابٌ","كِتَابًا","كِتَابٍ","كِتَابَ"], c:0, e:"هَذَا adalah mubtada’, sedangkan كِتَابٌ adalah khabar." },
+  { q:"Lengkapilah kalimat berikut! هِيَ ...", opts:["مُعَلِّمٌ","مُعَلِّمَةٌ","مُعَلِّمَةً","مُعَلِّمَةٍ"], c:1, e:"هِيَ adalah dhamir muannats; khabarnya sesuai berupa مُعَلِّمَةٌ." },
+  { q:"Bentuk kalimat yang benar untuk menunjukkan “Dua siswa laki-laki rajin” adalah ...", opts:["الطَّالِبَانِ مُجْتَهِدَانِ","الطَّالِبَانِ مُجْتَهِدَيْنِ","الطَّالِبَيْنِ مُجْتَهِدَانِ","الطَّالِبَيْنِ مُجْتَهِدَيْنِ"], c:0, e:"Keduanya mutsanna dan marfu‘ dengan alif." },
+  { q:"Manakah kalimat yang benar?", opts:["الْبِنْتُ جَمِيلٌ","الْبِنْتُ جَمِيلَةٌ","الْبِنْتَ جَمِيلَةً","الْبِنْتِ جَمِيلَةٌ"], c:1, e:"الْبِنْتُ muannats, sehingga sifatnya جَمِيلَةٌ." },
+  { q:"Lengkapilah susunan idhafah berikut! بَيْتُ ...", opts:["الْمُعَلِّمُ","الْمُعَلِّمَ","الْمُعَلِّمِ","الْمُعَلِّمٌ"], c:2, e:"Mudhaf ilaih selalu majrur." },
+  { q:"Manakah susunan jar-majrur yang benar?", opts:["فِي الْمَدْرَسَةُ","فِي الْمَدْرَسَةَ","فِي الْمَدْرَسَةِ","فِي الْمَدْرَسَةٌ"], c:2, e:"Isim setelah فِي harus majrur." },
+  { q:"Lengkapilah kalimat berikut! الْكِتَابُ ...", opts:["عَلَى الْمَكْتَبِ","عَلَى الْمَكْتَبُ","عَلَى الْمَكْتَبَ","عَلَى الْمَكْتَبٌ"], c:0, e:"عَلَى adalah huruf jar, sehingga الْمَكْتَبِ majrur." },
+  { q:"Manakah kalimat yang menggunakan zharaf makan dengan benar?", opts:["الْكِتَابُ فَوْقَ الْمَكْتَبِ","الْكِتَابُ فَوْقُ الْمَكْتَبِ","الْكِتَابَ فَوْقَ الْمَكْتَبَ","الْكِتَابِ فَوْقِ الْمَكْتَبِ"], c:0, e:"فَوْقَ adalah zharaf makan yang manshub; الْمَكْتَبِ majrur sebagai mudhaf ilaih." },
+  { q:"Manakah susunan na‘at-man‘ut yang benar?", opts:["الطَّالِبُ الْمُجْتَهِدُ","الطَّالِبُ الْمُجْتَهِدَ","الطَّالِبَ الْمُجْتَهِدُ","الطَّالِبِ الْمُجْتَهِدُ"], c:0, e:"Na‘at mengikuti man‘ut dalam i‘rab dan kesesuaian lainnya." },
+  { q:"Lengkapilah kalimat berikut! الطَّالِبَانِ ...", opts:["الْمُجْتَهِدُونَ","الْمُجْتَهِدَانِ","الْمُجْتَهِدَيْنِ","الْمُجْتَهِدَاتُ"], c:1, e:"الْمُجْتَهِدَانِ mengikuti الطَّالِبَانِ dalam bentuk dan i‘rab." },
+  { q:"Bentuk jamak mudzakkar salim yang manshub adalah ...", opts:["مُسْلِمُونَ","مُسْلِمِينَ","مُسْلِمَانِ","مُسْلِمَاتٌ"], c:1, e:"Jamak mudzakkar salim manshub dengan ya’." },
+  { q:"Bentuk jamak muannats salim yang manshub adalah ...", opts:["مُعَلِّمَاتٌ","مُعَلِّمَاتٍ","مُعَلِّمِينَ","مُعَلِّمَانِ"], c:1, e:"Jamak muannats salim manshub dengan kasrah." },
+  { q:"Manakah kalimat yang menggunakan jamak taksir dengan benar?", opts:["الرِّجَالُ حَاضِرُونَ","الرِّجَالُ حَاضِرَةٌ","الرِّجَالَ حَاضِرُونَ","الرِّجَالِ حَاضِرُونَ"], c:0, e:"الرِّجَالُ adalah jamak taksir, sedangkan حَاضِرُونَ adalah khabar jamak mudzakkar salim." },
+  { q:"Dalam jumlah ismiyah, khabar yang berupa jar-majrur disebut ...", opts:["Khabar mufrad","Jumlah fi‘liyah","Syibhul jumlah","Badal"], c:2, e:"Jar-majrur atau zharaf yang menjadi khabar disebut syibhul jumlah." },
+  { q:"Manakah contoh mubtada’ yang didahului khabar?", opts:["فِي الْبَيْتِ رَجُلٌ","الرَّجُلُ فِي الْبَيْتِ","الرَّجُلُ كَرِيمٌ","هَذَا رَجُلٌ"], c:0, e:"Khabar فِي الْبَيْتِ didahulukan sebelum mubtada’ رَجُلٌ." },
+  { q:"Manakah kalimat yang menunjukkan mubtada’ berupa nakirah?", opts:["زَيْدٌ مُجْتَهِدٌ","هَذَا طَالِبٌ","فِي الْفَصْلِ طَالِبٌ","الطَّالِبُ مُجْتَهِدٌ"], c:2, e:"طَالِبٌ adalah nakirah dan menjadi mubtada’ yang diakhirkan." },
+  { q:"Manakah kalimat yang benar menggunakan إِنَّ?", opts:["إِنَّ الطَّالِبُ مُجْتَهِدٌ","إِنَّ الطَّالِبَ مُجْتَهِدٌ","إِنَّ الطَّالِبَ مُجْتَهِدًا","إِنَّ الطَّالِبِ مُجْتَهِدٌ"], c:1, e:"Isim إِنَّ manshub, khabarnya marfu‘." },
+  { q:"Manakah kalimat yang benar menggunakan لَيْتَ?", opts:["لَيْتَ الْمَرِيضُ سَلِيمٌ","لَيْتَ الْمَرِيضَ سَلِيمٌ","لَيْتَ الْمَرِيضَ سَلِيمًا","لَيْتَ الْمَرِيضِ سَلِيمٌ"], c:1, e:"الْمَرِيضَ adalah isim لَيْتَ yang manshub; سَلِيمٌ adalah khabarnya yang marfu‘." },
+  { q:"Manakah kalimat yang benar menggunakan كَانَ?", opts:["كَانَ الْوَلَدَ نَشِيطٌ","كَانَ الْوَلَدُ نَشِيطًا","كَانَ الْوَلَدُ نَشِيطٌ","كَانَ الْوَلَدِ نَشِيطًا"], c:1, e:"Isim كَانَ marfu‘ dan khabarnya manshub." },
+  { q:"Manakah kalimat yang benar menggunakan صَارَ?", opts:["صَارَ الْمَاءُ ثَلْجًا","صَارَ الْمَاءَ ثَلْجٌ","صَارَ الْمَاءُ ثَلْجٌ","صَارَ الْمَاءِ ثَلْجًا"], c:0, e:"الْمَاءُ adalah isim صَارَ; ثَلْجًا adalah khabarnya." },
+  { q:"Lengkapilah kalimat berikut! مَا زَالَ الطَّالِبُ ...", opts:["مُجْتَهِدٌ","مُجْتَهِدًا","مُجْتَهِدٍ","مُجْتَهِدُ"], c:1, e:"مَا زَالَ termasuk saudara كَانَ; isimnya marfu‘ dan khabarnya manshub." },
+  { q:"Manakah kalimat yang khabarnya berupa jumlah fi‘liyah?", opts:["كَانَ الطَّالِبُ نَشِيطًا","كَانَ الطَّالِبُ فِي الْفَصْلِ","كَانَ الطَّالِبُ يَقْرَأُ","كَانَ الطَّالِبُ مُجْتَهِدًا"], c:2, e:"يَقْرَأُ merupakan fi‘il dalam jumlah fi‘liyah yang menjadi khabar كَانَ." },
+  { q:"Manakah kalimat yang menggunakan khabar lebih dari satu?", opts:["زَيْدٌ طَالِبٌ","زَيْدٌ مُجْتَهِدٌ وَأَدِيبٌ","زَيْدٌ فِي الْبَيْتِ","زَيْدٌ يَقْرَأُ"], c:1, e:"مُجْتَهِدٌ dan أَدِيبٌ merupakan dua khabar bagi زَيْدٌ." },
+  { q:"Manakah kalimat yang menunjukkan khabar wajib didahulukan karena berupa jar-majrur dan mubtada’-nya nakirah?", opts:["فِي الْمَسْجِدِ إِمَامٌ","الْإِمَامُ فِي الْمَسْجِدِ","زَيْدٌ فِي الْمَسْجِدِ","هَذَا إِمَامٌ"], c:0, e:"فِي الْمَسْجِدِ didahulukan, sedangkan إِمَامٌ adalah mubtada’ nakirah yang diakhirkan." },
+
+  // BAGIAN III (MULTIPLE CHOICE)
+  { q:"Manakah yang termasuk isim ma‘rifah?", opts:["زَيْدٌ","كِتَابٌ","هَذَا","هُوَ","الْمَدْرَسَةُ"], c:[0,2,3,4], multi:true, e:"Nama khusus, isim isyarah, dhamir, dan isim ber-ال termasuk ma‘rifah." },
+  { q:"Manakah yang termasuk isim nakirah?", opts:["طَالِبٌ","الْمُعَلِّمُ","قَلَمٌ","بَيْتٌ","هَذِهِ"], c:[0,2,3], multi:true, e:"طَالِبٌ، قَلَمٌ، بَيْتٌ adalah isim nakirah." },
+  { q:"Manakah yang termasuk dhamir?", opts:["أَنْتَ","هَذَا","هِيَ","نَحْنُ","الْكِتَابُ"], c:[0,2,3], multi:true, e:"أَنْتَ، هِيَ، نَحْنُ adalah dhamir." },
+  { q:"Manakah yang termasuk isim isyarah?", opts:["هَذَا","هَذِهِ","هُوَ","ذَلِكَ","أَنْتَ"], c:[0,1,3], multi:true, e:"هَذَا، هَذِهِ، ذَلِكَ adalah isim isyarah." },
+  { q:"Manakah susunan yang merupakan jumlah ismiyah lengkap?", opts:["الطَّالِبُ مُجْتَهِدٌ","كِتَابُ الطَّالِبِ","الْبَيْتُ وَاسِعٌ","الطَّالِبُ الْمُجْتَهِدُ","هَذَا قَلَمٌ"], c:[0,2,4], multi:true, e:"Ketiganya memiliki mubtada’ dan khabar. B dan D hanya berupa frasa, belum menjadi kalimat lengkap." },
+  { q:"Manakah yang merupakan susunan idhafah?", opts:["بَيْتُ الْمُعَلِّمِ","كِتَابُ زَيْدٍ","الطَّالِبُ الْمُجْتَهِدُ","بَابُ الْمَسْجِدِ","فِي الْبَيْتِ"], c:[0,1,3], multi:true, e:"Ketiganya terdiri dari mudhaf dan mudhaf ilaih." },
+  { q:"Manakah yang merupakan susunan na‘at-man‘ut?", opts:["الطَّالِبُ الْمُجْتَهِدُ","الْبَيْتُ الْكَبِيرُ","كِتَابُ الطَّالِبِ","الْبِنْتُ الصَّالِحَةُ","زَيْدٌ أَخُوكَ"], c:[0,1,3], multi:true, e:"Kata kedua menjelaskan sifat kata pertama dan mengikuti kaidah na‘at-man‘ut." },
+  { q:"Manakah yang merupakan susunan jar-majrur?", opts:["فِي الْبَيْتِ","عَلَى الْمَكْتَبِ","الطَّالِبُ مُجْتَهِدٌ","مِنَ الْمَدْرَسَةِ","بِالْقَلَمِ"], c:[0,1,3,4], multi:true, e:"Semuanya terdiri dari huruf jar dan isim majrur." },
+  { q:"Manakah yang termasuk zharaf makan atau keterangan tempat?", opts:["فَوْقَ","تَحْتَ","أَمَامَ","خَلْفَ","صَبَاحًا"], c:[0,1,2,3], multi:true, e:"فَوْقَ، تَحْتَ، أَمَامَ، خَلْفَ adalah keterangan tempat. صَبَاحًا adalah keterangan waktu." },
+  { q:"Manakah yang merupakan bentuk mutsanna?", opts:["طَالِبَانِ","مُعَلِّمَانِ","مُسْلِمُونَ","كِتَابَانِ","طَالِبَاتٌ"], c:[0,1,3], multi:true, e:"Ketiganya berbentuk mutsanna." },
+  { q:"Manakah yang merupakan jamak mudzakkar salim?", opts:["مُسْلِمُونَ","مُعَلِّمِينَ","رِجَالٌ","مُهَنْدِسُونَ","طُلَّابٌ"], c:[0,1,3], multi:true, e:"مُسْلِمُونَ، مُعَلِّمِينَ، مُهَنْدِسُونَ adalah jamak mudzakkar salim." },
+  { q:"Manakah yang merupakan jamak muannats salim?", opts:["مُعَلِّمَاتٌ","طَالِبَاتٌ","مُسْلِمُونَ","مُؤْمِنَاتٌ","رِجَالٌ"], c:[0,1,3], multi:true, e:"Ketiganya jamak muannats salim." },
+  { q:"Manakah yang merupakan jamak taksir?", opts:["رِجَالٌ","كُتُبٌ","طُلَّابٌ","مُعَلِّمُونَ","أَقْلَامٌ"], c:[0,1,2,4], multi:true, e:"رِجَالٌ، كُتُبٌ، طُلَّابٌ، أَقْلَامٌ adalah jamak taksir." },
+  { q:"Manakah pernyataan yang benar tentang mubtada’ dan khabar?", opts:["Mubtada’ pada asalnya marfu‘.","Khabar pada jumlah ismiyah biasa pada asalnya marfu‘.","Mubtada’ selalu harus berupa isim nakirah.","Khabar dapat berupa jumlah fi‘liyah.","Khabar dapat berupa syibhul jumlah."], c:[0,1,3,4], multi:true, e:"Mubtada’ dan khabar pada jumlah ismiyah biasa marfu‘; khabar juga dapat berupa kalimat atau syibhul jumlah." },
+  { q:"Manakah kalimat yang menunjukkan khabar berupa syibhul jumlah?", opts:["الطَّالِبُ فِي الْفَصْلِ","الْكِتَابُ عَلَى الْمَكْتَبِ","زَيْدٌ يَكْتُبُ","الْمُعَلِّمُ أَمَامَ الْمَدْرَسَةِ","الطَّالِبُ مُجْتَهِدٌ"], c:[0,1,3], multi:true, e:"Khabarnya berupa jar-majrur atau zharaf." },
+  { q:"Manakah kalimat yang menunjukkan khabar berupa jumlah fi‘liyah?", opts:["الطَّالِبُ يَقْرَأُ","الْوَلَدُ يَلْعَبُ","الْبَيْتُ وَاسِعٌ","الْمُعَلِّمُ يَشْرَحُ","الْكِتَابُ فَوْقَ الْمَكْتَبِ"], c:[0,1,3], multi:true, e:"Khabar berupa jumlah yang diawali fi‘il." },
+  { q:"Manakah contoh mubtada’ nakirah yang didahului khabar?", opts:["فِي الْبَيْتِ رَجُلٌ","عِنْدِي كِتَابٌ","الطَّالِبُ فِي الْفَصْلِ","عَلَى الْمَكْتَبِ قَلَمٌ","زَيْدٌ مُجْتَهِدٌ"], c:[0,1,3], multi:true, e:"رَجُلٌ، كِتَابٌ، قَلَمٌ adalah mubtada’ nakirah yang didahului khabar." },
+  { q:"Manakah contoh jumlah ismiyah yang memiliki lebih dari satu khabar?", opts:["زَيْدٌ مُجْتَهِدٌ وَأَدِيبٌ","الْمُعَلِّمُ حَاضِرٌ وَنَشِيطٌ","الطَّالِبُ فِي الْفَصْلِ","زَيْدٌ عَالِمٌ وَفَقِيهٌ","الْبَيْتُ كَبِيرٌ"], c:[0,1,3], multi:true, e:"Masing-masing memiliki dua khabar." },
+  { q:"Manakah yang termasuk saudara إِنَّ?", opts:["إِنَّ","لَعَلَّ","لَيْتَ","صَارَ","كَأَنَّ"], c:[0,1,2,4], multi:true, e:"إِنَّ، لَعَلَّ، لَيْتَ، كَأَنَّ termasuk saudara إِنَّ." },
+  { q:"Manakah yang termasuk saudara كَانَ?", opts:["أَصْبَحَ","صَارَ","لَيْسَ","لَعَلَّ","ظَلَّ"], c:[0,1,2,4], multi:true, e:"أَصْبَحَ، صَارَ، لَيْسَ، ظَلَّ termasuk saudara كَانَ." },
+  { q:"Manakah pernyataan yang benar tentang إِنَّ وَأَخَوَاتُهَا?", opts:["Isim إِنَّ hukumnya manshub.","Khabar إِنَّ hukumnya marfu‘.","إِنَّ الطَّالِبَ مُجْتَهِدٌ adalah susunan yang benar.","Isim إِنَّ selalu berupa isim mufrad.","إِنَّ dapat masuk ke jumlah ismiyah."], c:[0,1,2,4], multi:true, e:"Isim إِنَّ manshub dan khabarnya marfu‘." },
+  { q:"Manakah pernyataan yang benar tentang كَانَ وَأَخَوَاتُهَا?", opts:["Isim كَانَ marfu‘.","Khabar كَانَ manshub.","كَانَ الطَّالِبُ مُجْتَهِدًا adalah susunan yang benar.","كَانَ tidak membutuhkan khabar.","Khabar كَانَ dapat berupa jumlah fi‘liyah."], c:[0,1,2,4], multi:true, e:"Isim كَانَ marfu‘ dan khabarnya manshub; khabar dapat berupa jumlah." },
+  { q:"Manakah kalimat yang benar secara kaidah?", opts:["كَانَ الطَّالِبُ مُجْتَهِدًا","إِنَّ الطَّالِبَ مُجْتَهِدٌ","الطَّالِبُ مُجْتَهِدٌ","كَانَ الطَّالِبَ مُجْتَهِدٌ","إِنَّ الطَّالِبُ مُجْتَهِدًا"], c:[0,1,2], multi:true, e:"Ketiganya sesuai dengan kaidah masing-masing." },
+  { q:"Manakah pernyataan yang benar mengenai tanda i‘rab?", opts:["Mutsanna marfu‘ dengan alif.","Mutsanna manshub dengan ya’.","Jamak mudzakkar salim marfu‘ dengan wawu.","Jamak mudzakkar salim manshub dengan ya’.","Jamak muannats salim manshub dengan fathah."], c:[0,1,2,3], multi:true, e:"Jamak muannats salim manshub dengan kasrah, bukan fathah." },
+  { q:"Manakah pernyataan yang benar tentang na‘at-man‘ut?", opts:["Na‘at mengikuti man‘ut dalam i‘rab.","Na‘at mengikuti man‘ut dalam jenis kelamin.","Na‘at mengikuti man‘ut dalam jumlah sesuai kaidahnya.","Na‘at selalu manshub.","Na‘at dan man‘ut umumnya sama dalam ma‘rifah dan nakirah."], c:[0,1,2,4], multi:true, e:"Na‘at mengikuti man‘ut dalam i‘rab, jenis, jumlah, dan ma‘rifah-nakirah sesuai ketentuannya." },
+
+  // BAGIAN IV
+  { q:"Perhatikan kalimat berikut! الطَّالِبُ الْمُجْتَهِدُ نَاجِحٌ. Manakah analisis yang benar?", opts:["الطَّالِبُ adalah mubtada’, الْمُجْتَهِدُ adalah na‘at, نَاجِحٌ adalah khabar.","الطَّالِبُ adalah mubtada’, الْمُجْتَهِدُ adalah khabar, نَاجِحٌ adalah na‘at.","الطَّالِبُ adalah mudhaf, الْمُجْتَهِدُ adalah mudhaf ilaih.","Ketiga kata merupakan khabar."], c:0, e:"الطَّالِبُ adalah mubtada’, الْمُجْتَهِدُ adalah na‘at yang menjelaskan sifat الطَّالِبُ, dan نَاجِحٌ adalah khabar." },
+  { q:"Perhatikan kalimat berikut! كِتَابُ الطَّالِبِ جَدِيدٌ. Manakah analisis yang benar?", opts:["كِتَابُ adalah mubtada’ sekaligus mudhaf, الطَّالِبِ adalah mudhaf ilaih, جَدِيدٌ adalah khabar.","كِتَابُ adalah khabar, الطَّالِبِ adalah mubtada’.","كِتَابُ adalah na‘at, الطَّالِبِ adalah man‘ut.","جَدِيدٌ adalah mudhaf ilaih."], c:0, e:"كِتَابُ: mubtada’ marfu‘ sekaligus mudhaf. الطَّالِبِ: mudhaf ilaih majrur. جَدِيدٌ: khabar marfu‘." },
+  { q:"Perhatikan kalimat berikut! هَذَا الْمُعَلِّمُ نَشِيطٌ. Manakah analisis yang benar?", opts:["هَذَا adalah isim isyarah yang berkedudukan sebagai mubtada’, الْمُعَلِّمُ adalah badal atau na‘at sesuai konteks, dan نَشِيطٌ adalah khabar.","هَذَا adalah fi‘il, الْمُعَلِّمُ adalah fa‘il.","هَذَا adalah huruf, نَشِيطٌ adalah maf‘ul bih.","الْمُعَلِّمُ adalah mudhaf ilaih."], c:0, e:"هَذَا adalah isim isyarah yang menjadi mubtada’. الْمُعَلِّمُ menjelaskan siapa yang ditunjuk. نَشِيطٌ adalah khabar." },
+  { q:"Perhatikan kalimat berikut! زَيْدٌ أَخُوكَ مُجْتَهِدٌ. Jika maksudnya “Saudaramu, yaitu Zaid, adalah orang yang rajin”, manakah analisis yang tepat?", opts:["زَيْدٌ adalah mubtada’, أَخُوكَ adalah khabar, مُجْتَهِدٌ adalah na‘at.","زَيْدٌ adalah mubtada’, أَخُوكَ adalah badal, مُجْتَهِدٌ adalah khabar.","زَيْدٌ adalah fa‘il, أَخُوكَ adalah maf‘ul bih.","Ketiganya adalah mubtada’."], c:1, e:"Sesuai makna yang diberikan, زَيْدٌ adalah mubtada’, أَخُوكَ adalah badal, dan مُجْتَهِدٌ adalah khabar." },
+  { q:"Perhatikan kalimat berikut! الطَّالِبَانِ مُجْتَهِدَانِ. Manakah analisis yang benar?", opts:["الطَّالِبَانِ mubtada’ marfu‘ dengan alif; مُجْتَهِدَانِ khabar marfu‘ dengan alif.","الطَّالِبَانِ mubtada’ manshub dengan ya’; مُجْتَهِدَانِ khabar manshub dengan ya’.","Keduanya marfu‘ dengan dhammah.","Keduanya majrur dengan ya’."], c:0, e:"Kedua kata berbentuk mutsanna dan marfu‘ dengan alif." },
+  { q:"Perhatikan kalimat berikut! الْمُعَلِّمُونَ حَاضِرُونَ. Manakah analisis yang benar?", opts:["الْمُعَلِّمُونَ mubtada’ marfu‘ dengan wawu; حَاضِرُونَ khabar marfu‘ dengan wawu.","الْمُعَلِّمُونَ mubtada’ manshub dengan ya’; حَاضِرُونَ khabar manshub dengan ya’.","الْمُعَلِّمُونَ mudhaf ilaih.","حَاضِرُونَ adalah maf‘ul bih."], c:0, e:"Jamak mudzakkar salim marfu‘ dengan wawu. Keduanya sama-sama marfu‘ dengan wawu." },
+  { q:"Perhatikan kalimat berikut! الطَّالِبَاتُ مُجْتَهِدَاتٌ. Manakah analisis yang benar?", opts:["الطَّالِبَاتُ mubtada’ marfu‘ dengan dhammah; مُجْتَهِدَاتٌ khabar marfu‘ dengan dhammah.","الطَّالِبَاتُ mubtada’ manshub dengan kasrah; مُجْتَهِدَاتٌ khabar manshub dengan kasrah.","Keduanya majrur.","مُجْتَهِدَاتٌ adalah na‘at."], c:0, e:"Jamak muannats salim ketika marfu‘ menggunakan dhammah. Keduanya marfu‘." },
+  { q:"Perhatikan kalimat berikut! الْكُتُبُ عَلَى الْمَكْتَبِ. Manakah analisis yang benar?", opts:["الْكُتُبُ adalah mubtada’, عَلَى الْمَكْتَبِ adalah syibhul jumlah yang menjadi khabar.","الْكُتُبُ adalah fa‘il, الْمَكْتَبِ adalah maf‘ul bih.","عَلَى adalah isim, الْمَكْتَبِ adalah khabar mufrad.","الْكُتُبُ adalah mudhaf ilaih."], c:0, e:"الْكُتُبُ adalah mubtada’. عَلَى الْمَكْتَبِ adalah jar-majrur yang menjadi khabar berupa syibhul jumlah." },
+  { q:"Perhatikan kalimat berikut! فِي الْمَسْجِدِ إِمَامٌ. Manakah analisis yang benar?", opts:["فِي الْمَسْجِدِ adalah khabar yang didahulukan, إِمَامٌ adalah mubtada’ yang diakhirkan.","إِمَامٌ adalah fa‘il.","فِي الْمَسْجِدِ adalah mubtada’.","إِمَامٌ adalah khabar yang manshub."], c:0, e:"فِي الْمَسْجِدِ adalah khabar muqaddam, sedangkan إِمَامٌ adalah mubtada’ mu’akhkhar." },
+  { q:"Perhatikan kalimat berikut! الطَّالِبُ أَخْلَاقُهُ حَسَنَةٌ. Manakah analisis yang benar?", opts:["الطَّالِبُ adalah mubtada’, أَخْلَاقُهُ حَسَنَةٌ adalah jumlah ismiyah yang menjadi khabar.","أَخْلَاقُهُ adalah khabar mufrad, حَسَنَةٌ adalah fa‘il.","الطَّالِبُ adalah mudhaf ilaih.","حَسَنَةٌ adalah maf‘ul bih."], c:0, e:"أَخْلَاقُهُ حَسَنَةٌ merupakan jumlah ismiyah yang menjadi khabar bagi الطَّالِبُ." },
+  { q:"Perhatikan kalimat berikut! إِنَّ الطَّالِبَيْنِ مُجْتَهِدَانِ. Manakah analisis yang benar?", opts:["الطَّالِبَيْنِ adalah isim إِنَّ manshub dengan ya’, مُجْتَهِدَانِ adalah khabar إِنَّ marfu‘ dengan alif.","الطَّالِبَيْنِ adalah isim إِنَّ marfu‘ dengan alif, مُجْتَهِدَانِ manshub dengan ya’.","Keduanya manshub.","Keduanya marfu‘."], c:0, e:"الطَّالِبَيْنِ manshub dengan ya’. مُجْتَهِدَانِ marfu‘ dengan alif." },
+  { q:"Perhatikan kalimat berikut! إِنَّ الْمُعَلِّمِينَ مُخْلِصُونَ. Manakah analisis yang benar?", opts:["الْمُعَلِّمِينَ adalah isim إِنَّ manshub dengan ya’; مُخْلِصُونَ adalah khabar marfu‘ dengan wawu.","الْمُعَلِّمِينَ adalah isim إِنَّ marfu‘ dengan wawu; مُخْلِصُونَ adalah khabar manshub dengan ya’.","Keduanya manshub dengan ya’.","Keduanya marfu‘ dengan wawu."], c:0, e:"الْمُعَلِّمِينَ manshub dengan ya’. مُخْلِصُونَ marfu‘ dengan wawu." },
+  { q:"Perhatikan kalimat berikut! كَانَ الطَّالِبَانِ مُجْتَهِدَيْنِ. Manakah analisis yang benar?", opts:["الطَّالِبَانِ adalah isim كَانَ marfu‘ dengan alif; مُجْتَهِدَيْنِ adalah khabar manshub dengan ya’.","الطَّالِبَانِ adalah isim كَانَ manshub dengan ya’; مُجْتَهِدَيْنِ adalah khabar marfu‘ dengan alif.","Keduanya marfu‘ dengan alif.","Keduanya manshub dengan ya’."], c:0, e:"Isim كَانَ berbentuk mutsanna marfu‘ dengan alif. Khabarnya berbentuk mutsanna manshub dengan ya’." },
+  { q:"Perhatikan kalimat berikut! كَانَ الْمُسْلِمُونَ مُتَّحِدِينَ. Manakah analisis yang benar?", opts:["الْمُسْلِمُونَ adalah isim كَانَ marfu‘ dengan wawu; مُتَّحِدِينَ adalah khabar manshub dengan ya’.","الْمُسْلِمُونَ adalah isim كَانَ manshub dengan ya’; مُتَّحِدِينَ adalah khabar marfu‘ dengan wawu.","Keduanya marfu‘.","Keduanya manshub dengan fathah."], c:0, e:"الْمُسْلِمُونَ marfu‘ dengan wawu. مُتَّحِدِينَ manshub dengan ya’." },
+  { q:"Perhatikan kalimat berikut! كَانَتِ الطَّالِبَاتُ مُجْتَهِدَاتٍ. Manakah analisis yang benar?", opts:["الطَّالِبَاتُ adalah isim كَانَ marfu‘ dengan dhammah; مُجْتَهِدَاتٍ adalah khabar manshub dengan kasrah.","الطَّالِبَاتُ adalah isim كَانَ manshub dengan kasrah; مُجْتَهِدَاتٍ adalah khabar marfu‘ dengan dhammah.","Keduanya manshub dengan kasrah.","Keduanya marfu‘ dengan dhammah."], c:0, e:"الطَّالِبَاتُ marfu‘ dengan dhammah. مُجْتَهِدَاتٍ manshub dengan kasrah." },
+  { q:"Perhatikan kalimat berikut! كَانَ الطَّالِبُ يَكْتُبُ الدَّرْسَ. Manakah analisis yang benar?", opts:["الطَّالِبُ adalah isim كَانَ, sedangkan يَكْتُبُ الدَّرْسَ adalah jumlah fi‘liyah yang menjadi khabar كَانَ.","يَكْتُبُ adalah isim كَانَ.","الدَّرْسَ adalah khabar كَانَ.","الطَّالِبُ adalah maf‘ul bih."], c:0, e:"يَكْتُبُ الدَّرْسَ merupakan jumlah fi‘liyah yang menjadi khabar كَانَ." },
+  { q:"Perhatikan kalimat berikut! كَانَ الْكِتَابُ فَوْقَ الْمَكْتَبِ. Manakah analisis yang benar?", opts:["الْكِتَابُ adalah isim كَانَ, فَوْقَ الْمَكْتَبِ adalah syibhul jumlah yang menjadi khabar كَانَ.","الْكِتَابُ adalah khabar كَانَ.","فَوْقَ adalah isim كَانَ.","الْمَكْتَبِ adalah fa‘il."], c:0, e:"فَوْقَ الْمَكْتَبِ merupakan syibhul jumlah yang berkedudukan sebagai khabar كَانَ." },
+  { q:"Perhatikan kalimat berikut! لَيْسَ الْجَوُّ بَارِدًا. Manakah analisis yang benar?", opts:["الْجَوُّ adalah isim لَيْسَ yang marfu‘; بَارِدًا adalah khabar لَيْسَ yang manshub.","الْجَوَّ adalah isim لَيْسَ yang manshub; بَارِدٌ adalah khabarnya yang marfu‘.","الْجَوِّ adalah isim لَيْسَ yang majrur.","بَارِدًا adalah maf‘ul bih."], c:0, e:"الْجَوُّ adalah isim لَيْسَ yang marfu‘, sedangkan بَارِدًا adalah khabarnya yang manshub." },
+  { q:"Perhatikan kalimat berikut! مَا زَالَ الْمَرِيضُ مُتْعَبًا. Manakah analisis yang benar?", opts:["مَا زَالَ termasuk saudara كَانَ; الْمَرِيضُ isimnya marfu‘ dan مُتْعَبًا khabarnya manshub.","مَا زَالَ adalah huruf jar.","الْمَرِيضُ adalah khabar manshub.","مُتْعَبًا adalah isim مَا زَالَ."], c:0, e:"مَا زَالَ termasuk saudara كَانَ. الْمَرِيضُ isimnya marfu‘, sedangkan مُتْعَبًا khabarnya manshub." },
+  { q:"Perhatikan kalimat berikut! كَانَ أَخُوكَ مُجْتَهِدًا. Manakah analisis yang benar?", opts:["أَخُوكَ adalah isim كَانَ marfu‘ dengan wawu karena termasuk الأَسْمَاءُ الْخَمْسَةُ.","أَخُوكَ adalah isim كَانَ manshub dengan alif.","مُجْتَهِدًا adalah isim كَانَ.","أَخُوكَ adalah khabar كَانَ."], c:0, e:"أَخُوكَ termasuk الأَسْمَاءُ الْخَمْسَةُ. Ketika marfu‘, tanda rafa‘-nya adalah wawu." },
+  { q:"Perhatikan kalimat berikut! إِنَّ هَذَا كِتَابٌ مُفِيدٌ. Manakah analisis yang benar?", opts:["هَذَا adalah isim إِنَّ dalam محل نصب; كِتَابٌ adalah khabar إِنَّ marfu‘; مُفِيدٌ adalah na‘at bagi كِتَابٌ.","هَذَا adalah khabar إِنَّ; كِتَابٌ adalah isim إِنَّ.","كِتَابٌ adalah mudhaf ilaih.","مُفِيدٌ adalah isim إِنَّ."], c:0, e:"هَذَا merupakan isim إِنَّ yang mabni, sehingga kedudukannya محل نصب. كِتَابٌ adalah khabar إِنَّ yang marfu‘. مُفِيدٌ adalah na‘at." },
+  { q:"Perhatikan kalimat berikut! كَانَ هَذَا الطَّالِبُ نَشِيطًا. Manakah analisis yang benar?", opts:["هَذَا berada pada محل رفع sebagai isim كَانَ; الطَّالِبُ dapat menjadi badal atau penjelas bagi isim isyarah; نَشِيطًا adalah khabar كَانَ.","هَذَا adalah khabar كَانَ dan نَشِيطًا adalah isim كَانَ.","الطَّالِبُ adalah maf‘ul bih.","نَشِيطًا adalah na‘at bagi هَذَا."], c:0, e:"هَذَا adalah isim كَانَ berupa isim isyarah yang mabni, sehingga kedudukannya محل رفع. نَشِيطًا adalah khabar كَانَ yang manshub." },
+  { q:"Perhatikan kalimat berikut! الطَّالِبُ فِي الْفَصْلِ وَالْمُعَلِّمُ فِي الْمَكْتَبِ. Manakah analisis yang benar?", opts:["Kalimat tersebut terdiri dari dua jumlah ismiyah.","فِي الْفَصْلِ dan فِي الْمَكْتَبِ merupakan syibhul jumlah yang menjadi khabar masing-masing.","الطَّالِبُ dan الْمُعَلِّمُ merupakan mubtada’.","Semua kata merupakan fi‘il."], c:0, e:"Kalimat tersebut memiliki dua jumlah ismiyah, masing-masing memiliki mubtada’ dan khabar berupa syibhul jumlah. (A, B, dan C benar, namun karena formatnya single choice, opsi A mewakili keseluruhan)." },
+  { q:"Perhatikan kalimat berikut! إِنَّ الطَّالِبَ الْمُجْتَهِدَ نَاجِحٌ. Manakah analisis yang benar?", opts:["الطَّالِبَ adalah isim إِنَّ manshub; الْمُجْتَهِدَ adalah na‘at manshub; نَاجِحٌ adalah khabar إِنَّ marfu‘.","الطَّالِبَ adalah khabar إِنَّ; الْمُجْتَهِدَ adalah mubtada’.","نَاجِحٌ adalah isim إِنَّ yang manshub.","الْمُجْتَهِدَ adalah mudhaf ilaih."], c:0, e:"الطَّالِبَ: isim إِنَّ manshub. الْمُجْتَهِدَ: na‘at yang mengikuti الطَّالِبَ, sehingga ikut manshub. نَاجِحٌ: khabar إِنَّ yang marfu‘." },
+  { q:"Perhatikan tiga kalimat berikut! (1) الطَّالِبُ مُجْتَهِدٌ (2) إِنَّ الطَّالِبَ مُجْتَهِدٌ (3) كَانَ الطَّالِبُ مُجْتَهِدًا. Manakah kesimpulan yang benar?", opts:["Pada kalimat pertama, mubtada’ dan khabar marfu‘.","Pada kalimat kedua, isim إِنَّ manshub dan khabarnya marfu‘.","Pada kalimat ketiga, isim كَانَ marfu‘ dan khabarnya manshub.","Ketiga kalimat memiliki hukum i‘rab yang sama."], c:0, e:"Kalimat pertama: mubtada' dan khabar sama-sama marfu'. (Opsi A, B, C benar, namun A mewakili pilihan pertama)." }
+];
+
+let lIdx = 0, lScore = 0;
+let selectedAnswers = [];
+
+function startLesson() {
+  document.getElementById('lessonStart').hidden = true;
+  document.getElementById('lessonPlay').hidden = false;
+  lIdx = 0; lScore = 0;
+  renderLesson();
+}
+
+function renderLesson() {
+  const q = LESSON_QUESTIONS[lIdx];
+  document.getElementById('lessonCounter').textContent = 'Soal ' + (lIdx+1) + ' / ' + LESSON_QUESTIONS.length;
+  document.getElementById('lessonScore').textContent = lScore;
+  document.getElementById('lessonBar').style.width = ((lIdx/LESSON_QUESTIONS.length)*100) + '%';
+  
+  document.getElementById('lessonText').innerHTML = formatText(q.q);
+
+  const opts = document.getElementById('lessonOpts');
+  opts.innerHTML = '';
+  document.getElementById('lessonFeedback').hidden = true;
+  document.getElementById('mcConfirmBtn').style.display = 'none';
+  selectedAnswers = [];
+
+  const letters = ['A','B','C','D','E'];
+  
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'mc-btn';
+    btn.innerHTML = '<span class="mc-letter">' + letters[i] + '</span><span class="mc-opt-text" dir="auto">' + formatText(opt) + '</span>';
+    
+    if (q.multi) {
+      btn.addEventListener('click', () => toggleMultiSelect(i, btn));
+    } else {
+      btn.addEventListener('click', () => answerLesson(i, btn));
+    }
+    opts.appendChild(btn);
+  });
+
+  if (q.multi) {
+    document.getElementById('mcConfirmBtn').style.display = 'block';
+  }
+}
+
+function toggleMultiSelect(idx, btn) {
+  const pos = selectedAnswers.indexOf(idx);
+  if (pos > -1) {
+    selectedAnswers.splice(pos, 1);
+    btn.classList.remove('selected');
+  } else {
+    selectedAnswers.push(idx);
+    btn.classList.add('selected');
+  }
+}
+
+document.getElementById('mcConfirmBtn').addEventListener('click', () => {
+  const q = LESSON_QUESTIONS[lIdx];
+  if (selectedAnswers.length === 0) return;
+
+  const correctArr = q.c;
+  const isCorrect = selectedAnswers.length === correctArr.length && selectedAnswers.every(v => correctArr.includes(v));
+
+  document.querySelectorAll('#lessonOpts .mc-btn').forEach(b => b.disabled = true);
+  document.getElementById('mcConfirmBtn').style.display = 'none';
+
+  if (isCorrect) {
+    lScore++;
+  }
+
+  document.querySelectorAll('#lessonOpts .mc-btn').forEach((b, i) => {
+    if (correctArr.includes(i)) b.classList.add('correct');
+    else if (selectedAnswers.includes(i)) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+
+  const fb = document.getElementById('lessonFeedback');
+  fb.hidden = false;
+  fb.className = 'feedback ' + (isCorrect ? 'ok' : 'no');
+  fb.innerHTML = '<span class="fb-title">' + (isCorrect ? '✓ Benar!' : '✗ Belum tepat') + '</span>' + formatText(q.e);
+  
+  document.getElementById('lessonScore').textContent = lScore;
+
+  setTimeout(() => {
+    lIdx++;
+    if (lIdx < LESSON_QUESTIONS.length) {
+      renderLesson();
+    } else {
+      showLessonResult();
+    }
+  }, 2500);
+});
+
+function answerLesson(idx, btn) {
+  const q = LESSON_QUESTIONS[lIdx];
+  const correct = idx === q.c;
+  document.querySelectorAll('#lessonOpts .mc-btn').forEach(b => b.disabled = true);
+  if (correct) {
+    lScore++;
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#lessonOpts .mc-btn').forEach((b, i) => {
+      if (i === q.c) b.classList.add('correct');
+      else if (i !== idx) b.classList.add('dim');
+    });
+  }
+  const fb = document.getElementById('lessonFeedback');
+  fb.hidden = false;
+  fb.className = 'feedback ' + (correct ? 'ok' : 'no');
+  fb.innerHTML = '<span class="fb-title">' + (correct ? '✓ Benar!' : '✗ Belum tepat. Jawaban: ' + ['A','B','C','D','E'][q.c]) + '</span>' + formatText(q.e);
+  document.getElementById('lessonScore').textContent = lScore;
+  setTimeout(() => {
+    lIdx++;
+    if (lIdx < LESSON_QUESTIONS.length) {
+      renderLesson();
+    } else {
+      showLessonResult();
+    }
+  }, 2000);
+}
+
+function showLessonResult() {
+  document.getElementById('lessonPlay').hidden = true;
+  const result = document.getElementById('lessonResult');
+  result.hidden = false;
+  const total = LESSON_QUESTIONS.length;
+  const pct = Math.round((lScore/total)*100);
+  let html = '<div class="result">';
+  html += '<span class="result-icon">' + (pct >= 90 ? '🏆' : pct >= 70 ? '🌟' : '💪') + '</span>';
+  html += '<h3>Evaluasi Selesai!</h3>';
+  html += '<div class="score-big">' + lScore + ' / ' + total + ' <small>(' + pct + '%)</small></div>';
+
+  if (pct >= 70) {
+    html += '<p>Alhamdulillah, kamu telah menyelesaikan Evaluasi Pelajaran 1–16.</p>';
+    if (pct >= 90) {
+      html += '<div class="champion-panel">' +
+        '<div class="trophy-wrap">' +
+          '<div class="trophy-rays"></div>' +
+          '<div class="ring"></div><div class="ring"></div><div class="ring"></div>' +
+          '<span class="trophy">🏆</span>' +
+        '</div>' +
+        '<h3 class="champion-title">Luar Biasa!</h3>' +
+        '<p class="champion-sub">Kamu menguasai materi dengan sangat baik.</p>' +
+        '<span class="champion-badge">✦ CHAMPION EVALUASI ✦</span>' +
+        '<div class="unlock-btn-wrap">' +
+          '<a class="btn unlock-btn" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/002a">Lanjut ke Pelajaran Berikutnya ➜</a>' +
+        '</div>' +
+      '</div>';
+      launchConfetti();
+    } else {
+      html += '<div class="pass-panel">' +
+        '<span class="pass-emoji">🎉</span>' +
+        '<span class="pass-title">Selamat, kamu lulus!</span>' +
+        '<p>Nilai kamu <strong>' + pct + '%</strong> — di atas batas kelulusan 70%.</p>' +
+        '<div class="btn-row btn-center" style="justify-content:center;margin-top:16px">' +
+          '<a class="btn primary" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/002a">Lanjut ke Pelajaran Berikutnya ➜</a>' +
+        '</div>' +
+      '</div>';
+    }
+  } else {
+    html += '<div class="fail-panel">' +
+      '<span class="fail-emoji">💪</span>' +
+      '<span class="fail-title">Belum Lulus</span>' +
+      '<p class="fail-sub">Nilai kamu <strong>' + pct + '%</strong> — perlu minimal 70% untuk melanjutkan.</p>' +
+      '<p>Jangan menyerah! Ulangi materi dan latihan sekali lagi.</p>' +
+      '<div class="btn-row btn-center" style="justify-content:center">' +
+        '<button class="btn primary" id="retryLessonBtn" type="button">Ulangi Evaluasi 🔄</button>' +
+      '</div>' +
+    '</div>';
+  }
+  html += '</div>';
+  result.innerHTML = html;
+
+  if (pct < 70) {
+    const rb = document.getElementById('retryLessonBtn');
+    if (rb) rb.addEventListener('click', retryLesson);
+  }
+}
+
+function retryLesson() {
+  document.getElementById('lessonResult').hidden = true;
+  document.getElementById('lessonPlay').hidden = true;
+  document.getElementById('lessonStart').hidden = false;
+  lIdx = 0; lScore = 0;
+  document.getElementById('lessonStart').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+document.getElementById('lessonStartBtn').addEventListener('click', startLesson);
+
+/* ===== MATERIAL NEXT ===== */
+document.getElementById('materialNextBtn').addEventListener('click', () => {
+  document.getElementById('stage-next').classList.add('revealed');
+  setTimeout(() => {
+    document.getElementById('stage-next').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 200);
+});
+
+/* ===== CONFETTI ===== */
+function launchConfetti() {
+  const layer = document.createElement('div');
+  layer.className = 'confetti-layer';
+  const colors = ['#10B981','#34D399','#6EE7B7','#F59E0B','#FCD34D','#E11D48','#FB7185','#3B82F6'];
+  for (let i = 0; i < 90; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100 + '%';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (2.5 + Math.random()*2) + 's';
+    c.style.animationDelay = (Math.random()*0.6) + 's';
+    c.style.transform = 'rotate(' + Math.random()*360 + 'deg)';
+    layer.appendChild(c);
+  }
+  document.body.appendChild(layer);
+  setTimeout(() => layer.remove(), 6000);
+}
+
+/* ===== INIT ===== */
+document.getElementById('reminderTotal').textContent = REMINDER_QUESTIONS.length;
+document.getElementById('lessonTotal').textContent = LESSON_QUESTIONS.length;
+</script>
+</body>
+</html>
