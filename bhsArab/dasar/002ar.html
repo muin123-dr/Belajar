@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#9f1239">
+<title>Ringkasan - Pelajaran ke-1 | Belajar Bahasa Arab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===================== VARIABEL & TEMA ===================== */
+:root{
+  --body-bg: radial-gradient(1100px 600px at 8% -12%, #ffe4e6 0%, rgba(255,228,230,0) 60%),
+             radial-gradient(900px 520px at 108% 4%, #cffafe 0%, rgba(207,250,254,0) 58%),
+             #fdf7f8;
+  --surface:#ffffff;
+  --surface-2:#fdf9fa;
+  --text:#2a0810;
+  --muted:#7a5560;
+  --primary:#9f1239;
+  --primary-2:#e11d48;
+  --primary-soft:#ffe4e6;
+  --on-primary:#ffffff;
+  --accent:#0891b2;
+  --border:#f0dde3;
+  --shadow:0 12px 32px rgba(159,18,57,.10);
+  --shadow-sm:0 4px 14px rgba(159,18,57,.07);
+  --bad:#b91c1c; --bad-soft:#fee2e2;
+}
+[data-theme="dark"]{
+  --body-bg: radial-gradient(1100px 600px at 8% -12%, #4c0519 0%, rgba(76,5,25,0) 60%),
+             radial-gradient(900px 520px at 108% 4%, #083344 0%, rgba(8,51,68,0) 58%),
+             #0a0308;
+  --surface:#1a0810;
+  --surface-2:#12060c;
+  --text:#f7e0e7;
+  --muted:#c09aab;
+  --primary:#fb7185;
+  --primary-2:#fda4af;
+  --primary-soft:#4c0519;
+  --on-primary:#1c030a;
+  --accent:#22d3ee;
+  --border:#2d1420;
+  --shadow:0 12px 32px rgba(0,0,0,.45);
+  --shadow-sm:0 4px 14px rgba(0,0,0,.3);
+  --bad:#f87171; --bad-soft:#3a1414;
+}
+
+/* ===================== DASAR ===================== */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--body-bg);
+  background-attachment:fixed;
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.6;
+  transition:background-color .3s,color .3s;
+  -webkit-font-smoothing:antialiased;
+}
+.ar{font-family:'Amiri','Noto Naskh Arabic','Traditional Arabic',serif;direction:rtl;unicode-bidi:isolate;line-height:2}
+.wrap{max-width:920px;margin:0 auto;padding:26px 18px 60px}
+
+/* ===================== TOPBAR ===================== */
+.topbar{position:fixed;top:14px;right:14px;z-index:60}
+.icon-btn{
+  width:46px;height:46px;border-radius:15px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm);
+  cursor:pointer;font-size:18px;display:grid;place-items:center;transition:.18s;
+}
+.icon-btn:hover{transform:translateY(-2px);border-color:var(--primary)}
+
+/* ===================== HERO / JUDUL ATAS ===================== */
+.hero{text-align:center;padding:34px 8px 24px;position:relative;overflow:hidden}
+.hero::before{
+  content:'';position:absolute;inset:-60px -30px auto;height:260px;
+  background:
+    radial-gradient(circle at 20% 24%, rgba(225,29,72,.18), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(8,145,178,.14), transparent 26%);
+  pointer-events:none;
+}
+.hero > *{position:relative;z-index:1}
+.hero h1{
+  font-size:clamp(1.85rem,5.5vw,2.75rem);line-height:1.15;margin:0 0 8px;
+  font-weight:800;letter-spacing:.04em;color:var(--primary);
+}
+.hero-sub{
+  display:inline-block;font-size:.95rem;font-weight:700;
+  color:var(--text);background:var(--primary-soft);border:1px solid var(--border);
+  padding:6px 20px;border-radius:999px;margin:0;
+}
+.hero-hint{
+  color:var(--muted);font-size:.86rem;margin:14px auto 0;
+}
+
+/* ===================== KARTU & DIAGRAM INTERAKTIF ===================== */
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:22px;box-shadow:var(--shadow-sm);
+}
+.diagram{
+  border-radius:12px;overflow:hidden;
+  border:1px solid rgba(0,0,0,.15);
+  box-shadow:var(--shadow-sm);
+  margin-bottom:20px;
+}
+.diagram:last-child{margin-bottom:0}
+.diagram-header{
+  padding:13px 16px;text-align:center;
+  font-weight:800;color:#fff;font-size:1rem;letter-spacing:.02em;
+  background:#0000FF;
+}
+.diagram-row{display:flex;flex-wrap:wrap}
+.diagram-btn{
+  flex:1;min-width:110px;padding:15px 12px;border:none;
+  border-right:1px solid rgba(255,255,255,.25);
+  border-top:1px solid rgba(255,255,255,.25);
+  color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;
+  cursor:pointer;transition:.18s;position:relative;text-align:center;
+}
+.diagram-btn:last-child{border-right:none}
+.diagram-btn:hover{
+  filter:brightness(1.18);z-index:2;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+  transform:scale(1.015);
+}
+.diagram-btn:active{transform:scale(0.99)}
+
+/* Warna sel sesuai gambar tabelfi'il.png */
+.bg-maroon{background:#8B0000;}
+.bg-green{background:#2D572C;}
+.bg-olive{background:#806000;}
+
+/* ===================== TOMBOL LANJUT & FOOTER ===================== */
+.next-wrap{
+  text-align:center;
+  margin-top:32px;
+}
+.btn-next{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 32px;border-radius:14px;border:none;font-family:inherit;
+  font-weight:800;font-size:1rem;cursor:pointer;transition:.2s;text-decoration:none;
+  background:linear-gradient(135deg,var(--primary),var(--primary-2));
+  color:var(--on-primary);box-shadow:0 8px 22px rgba(159,18,57,.32);
+}
+.btn-next:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(159,18,57,.42);
+}
+footer{
+  text-align:center;
+  margin-top:36px;
+  padding-top:18px;
+  border-top:1px dashed var(--border);
+  font-size:.82rem;
+  color:var(--muted);
+}
+
+/* ===================== MODAL NOTIFIKASI ===================== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.58);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;
+  z-index:100;padding:20px;animation:fadeIn .2s ease;
+}
+.modal-overlay.active{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:var(--surface);border-radius:20px;
+  max-width:520px;width:100%;max-height:86vh;overflow-y:auto;
+  padding:26px 24px 24px;position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  border:1px solid var(--border);
+  animation:modalIn .25s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes modalIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-close{
+  position:absolute;top:14px;right:14px;
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--border);background:var(--surface);color:var(--text);
+  font-size:22px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;transition:.18s;
+}
+.modal-close:hover{
+  background:var(--bad-soft);color:var(--bad);
+  border-color:var(--bad);transform:rotate(90deg);
+}
+.modal-title{font-size:1.35rem;font-weight:800;margin:0 36px 10px 0;color:var(--primary);line-height:1.4}
+.modal-title .ar-inline{
+  font-family:'Amiri','Noto Naskh Arabic',serif;
+  font-size:1.55rem;color:var(--accent);font-weight:700;
+}
+.modal-desc{color:var(--text);font-size:.95rem;line-height:1.68;margin:0 0 18px}
+.modal-examples-title{
+  font-size:.78rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:10px;
+}
+.modal-example{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 14px;border-radius:12px;background:var(--surface-2);
+  border:1px solid var(--border);margin-bottom:8px;gap:12px;
+}
+.modal-example:last-child{margin-bottom:0}
+.modal-example .ex-ar{
+  font-family:'Amiri','Noto Naskh Arabic',serif;
+  font-size:1.35rem;color:var(--primary);font-weight:700;
+  direction:rtl;flex:0 0 auto;
+}
+.modal-example .ex-id{font-size:.88rem;color:var(--muted);font-weight:600;text-align:right;line-height:1.45}
+
+@media(max-width:480px){
+  .diagram-btn{min-width:95px;padding:13px 8px;font-size:.88rem}
+  .modal-example{flex-direction:column;align-items:flex-end;gap:4px}
+  .modal-example .ex-id{text-align:left;align-self:flex-start}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="icon-btn" id="themeBtn" aria-label="Ganti tema" onclick="toggleTheme()">🌙</button>
+</div>
+
+<div class="wrap">
+
+  <!-- ================= JUDUL ATAS ================= -->
+  <header class="hero">
+    <h1>RINGKASAN</h1>
+    <p class="hero-sub">Pelajaran ke-1</p>
+    <p class="hero-hint">Klik pada setiap kotak bagian Fi'il di bawah ini untuk melihat penjelasan &amp; contohnya.</p>
+  </header>
+
+  <!-- ================= TABEL INTERAKTIF ================= -->
+  <main class="card">
+    
+    <!-- Tabel 1: Fi'il berdasarkan Waktu Kejadian -->
+    <div class="diagram">
+      <div class="diagram-header">Fi'il berdasarkan Waktu Kejadian</div>
+      <div class="diagram-row">
+        <button class="diagram-btn bg-maroon" onclick="openModal('madhi')">Fi'il Madhi</button>
+        <button class="diagram-btn bg-green" onclick="openModal('mudhari')">Fi'il Mudhari'</button>
+        <button class="diagram-btn bg-olive" onclick="openModal('amr')">Fi'il 'Amr</button>
+      </div>
+    </div>
+
+    <!-- Tabel 2: Fi'il berdasarkan Obyek (Maf'ul biih) -->
+    <div class="diagram">
+      <div class="diagram-header">Fi'il berdasarkan Obyek (Maf'ul biih)</div>
+      <div class="diagram-row">
+        <button class="diagram-btn bg-maroon" onclick="openModal('mutaaddi')">Fi'il Muta'addi</button>
+        <button class="diagram-btn bg-green" onclick="openModal('lazim')">Fi'il Lazim</button>
+      </div>
+    </div>
+
+    <!-- Tabel 3: Fi'il berdasarkan Aktif/Pasif -->
+    <div class="diagram">
+      <div class="diagram-header">Fi'il berdasarkan Aktif/Pasif</div>
+      <div class="diagram-row">
+        <button class="diagram-btn bg-maroon" onclick="openModal('malum')">Fi'il Ma'lum</button>
+        <button class="diagram-btn bg-green" onclick="openModal('majhul')">Fi'il Majhul</button>
+      </div>
+    </div>
+
+    <!-- Tabel 4: Fi'il berdasarkan Harokat Akhir -->
+    <div class="diagram">
+      <div class="diagram-header">Fi'il berdasarkan Harokat Akhir</div>
+      <div class="diagram-row">
+        <button class="diagram-btn bg-maroon" onclick="openModal('mabni')">Fi'il Mabni</button>
+        <button class="diagram-btn bg-green" onclick="openModal('murob')">Fi'il Mu'rof</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= TOMBOL LANJUT ================= -->
+  <div class="next-wrap">
+    <a class="btn-next" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/002b">Lanjut &gt;&gt;</a>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    Belajar Bahasa Arab Dasar &bull; Ringkasan Pelajaran ke-1
+  </footer>
+
+</div>
+
+<!-- ================= MODAL PENJELASAN ================= -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()" role="dialog" aria-modal="true">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()" aria-label="Tutup">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA PENJELASAN & CONTOH KALIMAT
+   ============================================================ */
+const EXPLANATIONS = {
+  madhi: {
+    title: "Fi’il Madhi",
+    ar: "الْفِعْلُ الْمَاضِي",
+    desc: "kata kerja yang menunjukkan suatu pekerjaan yang telah terjadi atau telah selesai dilakukan.",
+    examples: [
+      { ar: "كَتَبَ الطَّالِبُ الدَّرْسَ", id: "Siswa itu telah menulis pelajaran" },
+      { ar: "ذَهَبَ زَيْدٌ إِلَى الْمَسْجِدِ", id: "Zaid telah pergi ke masjid" }
+    ]
+  },
+  mudhari: {
+    title: "Fi’il Mudhari’",
+    ar: "الْفِعْلُ الْمُضَارِعُ",
+    desc: "kata kerja yang menunjukkan pekerjaan yang sedang berlangsung atau akan terjadi.",
+    examples: [
+      { ar: "يَقْرَأُ مُحَمَّدٌ الْقُرْآنَ", id: "Muhammad sedang membaca Al-Qur'an" },
+      { ar: "يَجْلِسُ الْأُسْتَاذُ عَلَى الْكُرْسِيِّ", id: "Ustadz sedang duduk di atas kursi" }
+    ]
+  },
+  amr: {
+    title: "Fi’il Amr",
+    ar: "فِعْلُ الْأَمْرِ",
+    desc: "kata kerja yang menunjukkan perintah untuk melakukan suatu pekerjaan .",
+    examples: [
+      { ar: "اُكْتُبِ الدَّرْسَ!", id: "Tulislah pelajaran itu!" },
+      { ar: "اِجْلِسْ هُنَا!", id: "Duduklah di sini!" },
+      { ar: "اِقْرَأْ كِتَابَكَ!", id: "Bacalah bukumu!" }
+    ]
+  },
+  mutaaddi: {
+    title: "Fi’il Muta’addi",
+    ar: "الْفِعْلُ الْمُتَعَدِّي",
+    desc: "kata kerja yang membutuhkan objek (<span class='ar'>مَفْعُولٌ بِهِ</span>) agar makna pekerjaannya menjadi jelas atau sempurna. Biasanya dapat diikuti pertanyaan apa atau siapa.",
+    examples: [
+      { ar: "فَتَحَ الْوَلَدُ الْبَابَ", id: "Anak itu telah membuka pintu" },
+      { ar: "يَشْرَبُ الطِّفْلُ اللَّبَنَ", id: "Anak kecil itu sedang minum susu" }
+    ]
+  },
+  lazim: {
+    title: "Fi’il Lazim",
+    ar: "الْفِعْلُ اللَّازِمُ",
+    desc: "kata kerja yang tidak membutuhkan objek (<span class='ar'>مَفْعُولٌ بِهِ</span>) untuk menyempurnakan maknanya. Pekerjaan tersebut cukup dipahami dengan adanya pelaku saja.",
+    examples: [
+      { ar: "نَامَ الطِّفْلُ", id: "Anak kecil itu telah tidur" },
+      { ar: "يَخْرُجُ الطَّالِبُ مِنَ الْفَصْلِ", id: "Siswa itu sedang keluar dari kelas" }
+    ]
+  },
+  malum: {
+    title: "Fi’il Ma’lum",
+    ar: "الْفِعْلُ الْمَعْلُومُ",
+    desc: "kata kerja yang pelakunya disebutkan atau diketahui dalam susunan kalimat (kalimat aktif).",
+    examples: [
+      { ar: "ضَرَبَ زَيْدٌ الْكَلْبَ", id: "Zaid telah memukul anjing itu" },
+      { ar: "يَكْتُبُ الْأُسْتَاذُ الدَّرْسَ", id: "Ustadz sedang menulis pelajaran" }
+    ]
+  },
+  majhul: {
+    title: "Fi’il Majhul",
+    ar: "الْفِعْلُ الْمَجْهُولُ",
+    desc: "kata kerja yang pelakunya tidak disebutkan dalam susunan kalimat (kalimat pasif).",
+    examples: [
+      { ar: "ضُرِبَ الْكَلْبُ", id: "Anjing itu telah dipukul" },
+      { ar: "يُكْتَبُ الدَّرْسُ", id: "Pelajaran itu sedang ditulis" }
+    ]
+  },
+  mabni: {
+    title: "Fi’il Mabni",
+    ar: "مَبْنِيٌّ",
+    desc: "Fi’il Madhi &amp; Fi’il ‘Amr adalah Mabni (tidak berubah harokat akhirnya)",
+    examples: [
+      { ar: "كَتَبَ زَيْدٌ الرِّسَالَةَ", id: "Zaid telah menulis surat (Madhi - tetap fathah)" },
+      { ar: "اِذْهَبْ إِلَى الْمَدْرَسَةِ!", id: "Pergilah ke sekolah! ('Amr - tetap sukun)" }
+    ]
+  },
+  murob: {
+    title: "Fi’il Mu’rab",
+    ar: "مُعْرَبٌ",
+    desc: "Fi’il Mudhori’ pada dasarnya adalah Mu’rof (berubah harokat akhirnya)",
+    examples: [
+      { ar: "يَذْهَبُ الطَّالِبُ", id: "Siswa itu sedang pergi (Marfu' - dhommah)" },
+      { ar: "لَنْ يَذْهَبَ الطَّالِبُ", id: "Siswa itu tidak akan pergi (Manshub - fathah)" },
+      { ar: "لَمْ يَذْهَبْ الطَّالِبُ", id: "Siswa itu belum pergi (Majzum - sukun)" }
+    ]
+  }
+};
+
+/* ============================================================
+   TEMA (LIGHT / DARK)
+   ============================================================ */
+function toggleTheme(){
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('arab-theme-001', next); } catch(e){}
+}
+(function initTheme(){
+  let saved = null;
+  try { saved = localStorage.getItem('arab-theme-001'); } catch(e){}
+  if(saved === 'dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.getElementById('themeBtn').textContent = '☀️';
+  }
+})();
+
+/* ============================================================
+   MODAL INTERAKTIF
+   ============================================================ */
+function openModal(key){
+  const data = EXPLANATIONS[key];
+  if(!data) return;
+  const examples = data.examples.map(ex => `
+    <div class="modal-example">
+      <span class="ex-ar">${ex.ar}</span>
+      <span class="ex-id">${ex.id}</span>
+    </div>
+  `).join('');
+  document.getElementById('modalContent').innerHTML = `
+    <h3 class="modal-title">${data.title} (<span class="ar-inline">${data.ar}</span>)</h3>
+    <p class="modal-desc">${data.desc}</p>
+    <div class="modal-examples-title">Contoh Kalimat</div>
+    ${examples}
+  `;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
