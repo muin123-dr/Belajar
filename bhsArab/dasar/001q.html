@@ -28,6 +28,8 @@
   --diag-btn-2:#0F766E;
   --diag-btn-3:#059669;
   --diag-btn-4:#065F46;
+  --diagram-blue:#0F766E;
+  --diagram-red:#BE123C;
 }
 [data-theme="dark"]{
   --bg:#021A0E;--bg-2:#062B16;--bg-pattern:rgba(52,211,153,.05);
@@ -46,6 +48,8 @@
   --diag-btn-2:#047857;
   --diag-btn-3:#065F46;
   --diag-btn-4:#022C22;
+  --diagram-blue:#5EEAD4;
+  --diagram-red:#FDA4AF;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -255,6 +259,34 @@ ul.clean li::before{content:"";position:absolute;left:5px;top:.72em;width:7px;he
   filter:brightness(1.15);z-index:2;
   box-shadow:0 4px 14px rgba(0,0,0,.2);
   transform:scale(1.02);
+}
+.diagram-detail-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--border);
+}
+.detail-left{
+  padding:12px 10px;
+  border-right:1px solid var(--border);
+  background:var(--card);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:4px;
+}
+.detail-right{
+  padding:12px 10px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;gap:4px;
+  background:var(--card);
+}
+.detail-btn{
+  background:none;border:none;font-family:inherit;
+  font-size:.92rem;font-weight:700;text-decoration:underline;
+  cursor:pointer;padding:4px 10px;border-radius:8px;transition:.15s;
+}
+.detail-btn:hover{background:var(--bg-2);transform:translateY(-1px)}
+.detail-note{
+  padding:12px 14px;text-align:center;font-weight:700;
+  font-size:.9rem;color:var(--text);background:var(--card);
+  border-top:1px solid var(--border);
 }
 
 /* COMPLEX TABLES (Kondisi Khusus & Amil) */
@@ -717,36 +749,38 @@ footer .fdiv{width:60px;height:3px;margin:0 auto 18px;border-radius:99px;
         </div>
       </div>
 
+      <!-- Jumlah Ismiyah — diagram interaktif -->
       <div class="diagram">
         <div class="diagram-header">Jumlah Ismiyah</div>
         <div class="diagram-row">
-          <button class="diagram-btn" onclick="openModal('khobar')">Khobar</button>
-          <button class="diagram-btn" onclick="openModal('mubtada')">Mubtada'</button>
+          <button class="diagram-btn" onclick="openModal('khobar')" aria-label="Buka penjelasan Khobar">Khobar</button>
+          <button class="diagram-btn" onclick="openModal('mubtada')" aria-label="Buka penjelasan Mubtada'">Mubtada'</button>
         </div>
-        <div class="diagram-row">
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('khobarmufrod')">Khobar Mufrod</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('khobarghairumufrad')">Khobar Ghairu Mufrad</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('nakhiroh')">Nakhiroh</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('marifat')">Ma'rifat</button>
+        <div class="diagram-detail-row">
+          <div class="detail-left">
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('nakhiroh')" aria-label="Buka penjelasan Nakhiroh">Nakhiroh</button>
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('khobarmufrod')" aria-label="Buka penjelasan Khobar Mufrod">Khobar Mufrod</button>
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('khobarghairumufrad')" aria-label="Buka penjelasan Khobar Ghairu Mufrad">Khobar Ghairu Mufrad</button>
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('sibhuljumlah')" aria-label="Buka penjelasan Sibhul Jumlah">Sibhul Jumlah</button>
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('jarmajrur')" aria-label="Buka penjelasan Jar - Majrur">Jar - Majrur</button>
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('dhorof')" aria-label="Buka penjelasan Dhorof">Dhorof</button>
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('naatmanutkhobar')" aria-label="Buka penjelasan Na'at Man'ut sebagai khobar">Na'at - Man'ut</button>
+            <button class="detail-btn" style="color:var(--diagram-blue)" onclick="openModal('badalkhobar')" aria-label="Buka penjelasan Badal terhadap khobar">Badal</button>
+          </div>
+          <div class="detail-right">
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('marifat')" aria-label="Buka penjelasan Ma'rifat">Ma'rifat</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('isyaroh')" aria-label="Buka penjelasan Isim Isyaroh">Isim Isyaroh</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('aliflam')" aria-label="Buka penjelasan Isim yang diawali alif lam">Isim yg diawali (ال)</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('alam')" aria-label="Buka penjelasan Isim 'Alam">Isim 'Alam</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('dhomir')" aria-label="Buka penjelasan Isim Dhomir">Isim Dhomir</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('mudhof')" aria-label="Buka penjelasan Mudhof - Mudhof ilaih">Mudhof - Mudhof ilaih</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('naatmanutmubtada')" aria-label="Buka penjelasan Na'at Man'ut sebagai mubtada'">Na'at - Man'ut</button>
+            <button class="detail-btn" style="color:var(--diagram-red)" onclick="openModal('badalmubtada')" aria-label="Buka penjelasan Badal terhadap mubtada'">Badal</button>
+          </div>
         </div>
-        <div class="diagram-row">
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('isyaroh')">Isim Isyaroh</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('aliflam')">Isim diawali ال</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('alam')">Isim 'Alam</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('dhomir')">Isim Dhomir</button>
-        </div>
-        <div class="diagram-row">
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('sibhuljumlah')">Sibhul Jumlah</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('jarmajrur')">Jar - Majrur</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('dhorof')">Dhorof</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('mudhof')">Mudhof</button>
-        </div>
-        <div class="diagram-row">
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('naatmanutmubtada')">Na'at-Man'ut (Mubtada)</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('naatmanutkhobar')">Na'at-Man'ut (Khobar)</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('badalmubtada')">Badal (Mubtada)</button>
-          <button class="diagram-btn" style="border-top:1px solid rgba(0,0,0,.15); font-size:0.85rem;" onclick="openModal('badalkhobar')">Badal (Khobar)</button>
-        </div>
+        <div class="detail-note">Sama dalam jumlah/adad (mufrod, mutsanna &amp; Jama')</div>
+        <div class="detail-note">Sama dalam Muannats – Mudzakar</div>
+        <div class="detail-note">Sama-sama marfu' (dhammah di akhir kata)</div>
       </div>
     </section>
 
@@ -780,17 +814,17 @@ footer .fdiv{width:60px;height:3px;margin:0 auto 18px;border-radius:99px;
             <tr><td class="c-white" onclick="openModal('k2_3')">Menjawab pertanyaan</td></tr>
 
             <tr>
-              <td rowspan="3" class="c-red" onclick="openModal('k3_1')">Khobar BOLEH didepan Mubtada</td>
+              <td rowspan="3" class="c-red" onclick="openModal('k3_1')">Khobar BOLEH di depan Mubtada</td>
               <td class="c-white" onclick="openModal('k3_1')">Jika ingin menonjolkan makna Khobar</td>
             </tr>
             <tr><td class="c-white" onclick="openModal('k3_2')">Jika Jumlah Ismiyah diawali huruf nafi atau istifham dan khobar berupa sifat</td></tr>
             <tr><td class="c-white" onclick="openModal('k3_3')">Khobar berupa syibhul Jumlah dan Mubtada' ma'rifat</td></tr>
 
             <tr>
-              <td rowspan="3" class="c-green" onclick="openModal('k4_1')">Khobar HARUS didepan Mubtada</td>
+              <td rowspan="3" class="c-green" onclick="openModal('k4_1')">Khobar HARUS di depan Mubtada</td>
               <td class="c-white" onclick="openModal('k4_1')">Khabar berupa syibhul jumlah dan mubtada' nakirah tanpa keterangan</td>
             </tr>
-            <tr><td class="c-white" onclick="openModal('k4_2')">Khobar berupa lafadh harus didepan, spt isim istifham (kata tanya)</td></tr>
+            <tr><td class="c-white" onclick="openModal('k4_2')">Khobar berupa lafadh harus di depan, spt isim istifham (kata tanya)</td></tr>
             <tr><td class="c-white" onclick="openModal('k4_3')">Mubtada' bersambung dg Dhomir yg kembali ke Khobar</td></tr>
 
             <tr>
@@ -803,7 +837,7 @@ footer .fdiv{width:60px;height:3px;margin:0 auto 18px;border-radius:99px;
               <td class="c-white" onclick="openModal('k6_1')">Mubtada' setelah لولا</td>
             </tr>
             <tr><td class="c-white" onclick="openModal('k6_2')">Mubtada' menunjukkan sumpah scr jelas</td></tr>
-            <tr><td class="c-white" onclick="openModal('k6_3')">Mubtada' didlofhkan dg wawu yg menunjuk mushabah (kebersamaan)</td></tr>
+            <tr><td class="c-white" onclick="openModal('k6_3')">Mubtada' diathofkan dg wawu yg menunjuk mushahabah (kebersamaan)</td></tr>
           </tbody>
         </table>
       </div>
@@ -1066,7 +1100,7 @@ const MODAL_DATA = {
     ]
   },
   k4_2: {
-    title: "Khobar berupa lafadh harus didepan, spt isim istifham (kata tanya)",
+    title: "Khobar berupa lafadh harus di depan, spt isim istifham (kata tanya)",
     ar: 'خَبَرٌ لَهُ الصَّدَارَة',
     desc: 'Contoh:',
     examples: [
@@ -1112,7 +1146,7 @@ const MODAL_DATA = {
     ]
   },
   k6_3: {
-    title: "Mubtada' didlofhkan dg wawu yg menunjuk mushabah (kebersamaan)",
+    title: "Mubtada' diathofkan dg wawu yg menunjuk mushahabah (kebersamaan)",
     ar: 'مُبْتَدَأٌ مَعْطُوفٌ بِوَاوِ الْمَعِيَّة',
     desc: 'Contoh:',
     examples: [
@@ -1122,8 +1156,8 @@ const MODAL_DATA = {
   },
 
   // Amil
-  inna: { title: 'Amil إِنَّ', ar: 'إِنَّ', desc: "Jika mubtada - khobar (إِنَّ) maka Mubtada’ menjadi isim (إِنَّ) yang manshub dan Khobar menjadi Khobar (إِنَّ) yang marfu’.", examples: [{ ar: 'إِنَّ الطَّالِبَ مُجْتَهِدٌ', id: 'Sesungguhnya siswa itu rajin.' }] },
-  kaana: { title: 'Amil كَانَ', ar: 'كَانَ', desc: "Jika mubtada - khobar (كَانَ) maka Mubtada’ menjadi isim (كَانَ) yang marfu’ dan Khobar menjadi Khobar (كَانَ) yang manshub.", examples: [{ ar: 'كَانَ الطَّالِبُ مُجْتَهِدًا', id: 'Siswa itu dahulu rajin.' }] },
+  inna: { title: 'Amil إِنَّ', ar: 'إِنَّ', desc: "Jika mubtada - khobar didahului (إِنَّ) maka Mubtada’ menjadi isim (إِنَّ) yang manshub dan Khobar menjadi Khobar (إِنَّ) yang marfu’.", examples: [{ ar: 'إِنَّ الطَّالِبَ مُجْتَهِدٌ', id: 'Sesungguhnya siswa itu rajin.' }] },
+  kaana: { title: 'Amil كَانَ', ar: 'كَانَ', desc: "Jika mubtada - khobar didahului (كَانَ) maka Mubtada’ menjadi isim (كَانَ) yang marfu’ dan Khobar menjadi Khobar (كَانَ) yang manshub.", examples: [{ ar: 'كَانَ الطَّالِبُ مُجْتَهِدًا', id: 'Siswa itu dahulu rajin.' }] },
   marfu: { title: "Tanda I'rab Marfu'", ar: 'عَلَامَاتُ الرَّفْع', desc: "Tanda marfu' ada 3, dhommah, alif nun untuk mutsanna dan wawu nun untuk jamak mudzakar salim beserta contohnya.", examples: [{ ar: 'الطَّالِبُ', id: 'Dhammah' }, { ar: 'الطَّالِبَانِ', id: 'Alif Nun (Mutsanna)' }, { ar: 'الطَّالِبُونَ', id: 'Wawu Nun (Jamak)' }] },
   manshub: { title: "Tanda I'rab Manshub", ar: 'عَلَامَاتُ النَّصْب', desc: "Tanda manshub ada 3, fathah, ya’ nun (ya’ fathah & nun kasroh) untuk mutsanna dan ya’ nun (ya’ kasroh & nun fathah) untuk jamak mudzakar salim beserta contohnya.", examples: [{ ar: 'الطَّالِبَ', id: 'Fathah' }, { ar: 'الطَّالِبَيْنِ', id: "Ya' Nun (Mutsanna)" }, { ar: 'الطَّالِبِينَ', id: "Ya' Nun (Jamak)" }] }
 };
@@ -1172,13 +1206,13 @@ const REMINDER_QUESTIONS = [
   { q: "Khabar wajib didahulukan jika berupa syibhul jumlah dan mubtada' berupa nakirah tanpa keterangan.", a: true, e: "Benar." },
   { q: "Isim mudzakkar yang berakhiran biasa, diubah mutsanna dengan menambahkan: ـَانِ ketika marfu'.", a: true, e: "Benar." },
   { q: "Khabar mufrad adalah khabar yang berupa satu kata.", a: true, e: "Benar. Sudah jelas." },
-  { q: "Pola dasar jumlah ismiyah yang dipelajari adalah (خَبَرٌ + مُبْتَدَأٌ).", a: true, e: "Salah. Pola dasar: mubtada' + khabar." },
+  { q: "Pola dasar jumlah ismiyah yang dipelajari adalah (خَبَرٌ + مُبْتَدَأٌ).", a: true, e: "Benar. Pola dasar: mubtada' + khabar." },
   { q: "Jamak Muannats Sālim adalah Jamak yang umumnya dibentuk dengan mengganti akhiran ta' marbuthah (ة) menjadi alif dan ta' (ات).", a: true, e: "Benar." },
   { q: "Khabar adalah informasi yang diberikan tentang mubtada'.", a: true, e: "Benar." },
   { q: "Khabar ghairu mufrad adalah khabar yang tidak berupa satu kata tunggal, melainkan berupa susunan yang lebih kompleks.", a: true, e: "Benar." },
   { q: "Jamak Mudzakkar Sālim adalah Jamak yang umumnya digunakan untuk kelompok laki-laki berakal dan dibentuk dengan akhiran tertentu.", a: true, e: "Benar." },
   { q: "Na'at mengikuti man'ut dalam empat hal: Ma'rifah atau nakirah, Mudzakkar atau muannats, Mufrad, mutsanna, atau jamak, I'rab.", a: true, e: "Benar." },
-  { q: "Yang termasuk Ma'rifat diantaranya isim Isyaroh, isim yg diawali ال, Nama, & Dhomir.", a: true, e: "Benar." },
+  { q: "Yang termasuk Ma'rifat di antaranya isim Isyaroh, isim yg diawali ال, Nama, & Dhomir.", a: true, e: "Benar." },
   { q: "Man'ut (الْمَنْعُوتُ) adalah kata yang diterangkan sifatnya oleh na'at.", a: true, e: "Benar." },
   { q: "Ketika كَانَ masuk ke dalam jumlah ismiyah, Mubtada' berubah kedudukannya menjadi Isim كَانَ dan tetap dibaca marfu'.", a: true, e: "Benar." },
   { q: "Ketika كَانَ masuk ke dalam jumlah ismiyah, Khabar berubah kedudukannya menjadi Khabar كَانَ dan dibaca manshub.", a: true, e: "Benar." },
@@ -1556,7 +1590,7 @@ function showLessonResult() {
         '<span class="pass-title">Selamat, kamu lulus!</span>' +
         '<p>Nilai kamu <strong>' + pct + '%</strong> — di atas batas kelulusan 70%.</p>' +
         '<div class="btn-row btn-center" style="justify-content:center;margin-top:16px">' +
-          '<a class="btn primary" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/002a">Lanjut ke Pelajaran Berikutnya ➜</a>' +
+          '<a class="btn primary" href="https://muin123-dr.github.io/Belajar/bhsArab/dasar/002">Lanjut ke Pelajaran Berikutnya ➜</a>' +
         '</div>' +
       '</div>';
     }
@@ -1623,3 +1657,4 @@ document.getElementById('lessonTotal').textContent = LESSON_QUESTIONS.length;
 </script>
 </body>
 </html>
+```[cite: 1, 2]
